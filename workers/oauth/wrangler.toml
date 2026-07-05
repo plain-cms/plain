@@ -1,0 +1,20 @@
+# plain — optional OAuth Worker (cms-spec §3, §12 M6).
+# Stateless GitHub OAuth code-for-token exchange. Deploy with `wrangler deploy`.
+
+name = "plain-oauth"
+main = "worker.js"
+compatibility_date = "2024-11-01"
+
+# --- Required secrets — NOT committed. Set each with `wrangler secret put`: ---
+#   wrangler secret put GITHUB_CLIENT_ID       # OAuth App client id
+#   wrangler secret put GITHUB_CLIENT_SECRET   # OAuth App client secret
+#   wrangler secret put ALLOWED_ORIGIN         # e.g. https://you.github.io
+#
+# GITHUB_CLIENT_ID / GITHUB_CLIENT_SECRET come from the GitHub OAuth App
+# (see README). ALLOWED_ORIGIN is the exact origin of your admin SPA — the only
+# origin the Worker will postMessage the token to (scheme + host, no path).
+#
+# These are secrets, so they are intentionally NOT placed in a [vars] block
+# (which would be plaintext in this committed file). `wrangler secret put`
+# stores them encrypted in Cloudflare. During local dev, put non-production
+# values in a git-ignored `.dev.vars` file instead.

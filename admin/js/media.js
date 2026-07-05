@@ -63,8 +63,6 @@ export async function uploadMedia(file) {
   throw new Error('A few files already have that name — rename yours and try again.');
 }
 
-// --- media library screen -------------------------------------------------------
-
 export async function mediaScreen() {
   const files = (await listTree('media/')).filter((f) => !f.path.endsWith('.gitkeep'));
   const grid = h('div', { class: 'media-grid' });

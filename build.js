@@ -8,7 +8,7 @@ import path from 'node:path';
 import http from 'node:http';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 import { render } from './lib/template.js';
-import { slugify } from './lib/util.js';
+import { slugify, deepMerge } from './lib/util.js';
 import { renderMarkdown } from './lib/markdown.js';
 import { makeItem, sortItems, validateConfig, ContentError } from './lib/content.js';
 import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles, searchIndex, llmsTxt } from './lib/outputs.js';
@@ -41,21 +41,13 @@ function loadContent(root, config) {
 function loadTheme(root, themeName) {
   const themeDir = path.join(root, 'themes', themeName);
   const templatesDir = path.join(themeDir, 'templates');
-  if (!fs.existsSync(templatesDir)) {
-    throw new ContentError(`themes/${themeName}`, null, `theme "${themeName}" not found — check "site.theme" in site.config.json or create themes/${themeName}/templates/`);
-  }
-  const templates = {};
-  for (const entry of fs.readdirSync(templatesDir)) {
-    if (entry.endsWith('.html')) templates[entry.slice(0, -5)] = fs.readFileSync(path.join(templatesDir, entry), 'utf8');
-  }
-  const partials = {};
-  const partialsDir = path.join(templatesDir, 'partials');
-  if (fs.existsSync(partialsDir)) {
-    for (const entry of fs.readdirSync(partialsDir)) {
-      if (entry.endsWith('.html')) partials[entry.slice(0, -5)] = fs.readFileSync(path.join(partialsDir, entry), 'utf8');
-    }
-  }
-  return { themeDir, templates, partials };
+  if (!fs.existsSync(templatesDir)) throw new ContentError(`themes/${themeName}`, null, `theme "${themeName}" not found — check "site.theme" in site.config.json or create themes/${themeName}/templates/`);
+  const readHtml = (dir) => {
+    const out = {};
+    if (fs.existsSync(dir)) for (const e of fs.readdirSync(dir)) if (e.endsWith('.html')) out[e.slice(0, -5)] = fs.readFileSync(path.join(dir, e), 'utf8');
+    return out;
+  };
+  return { themeDir, templates: readHtml(templatesDir), partials: readHtml(path.join(templatesDir, 'partials')) };
 }
 
 /** Read every data/*.json into { navigation: …, redirects: …, … }. */
@@ -94,7 +86,11 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
 
   const configPath = path.join(root, 'site.config.json');
   if (!fs.existsSync(configPath)) throw new ContentError('site.config.json', null, 'not found — every site needs one at the repo root');
-  const config = validateConfig(JSON.parse(fs.readFileSync(configPath, 'utf8')));
+  // Engine defaults (§14.3): the user's sparse config layers over config.defaults.json,
+  // so new features ship with working defaults without ever editing the user's file.
+  const defaultsPath = path.join(root, 'config.defaults.json');
+  const defaults = fs.existsSync(defaultsPath) ? JSON.parse(fs.readFileSync(defaultsPath, 'utf8')) : {};
+  const config = validateConfig(deepMerge(defaults, JSON.parse(fs.readFileSync(configPath, 'utf8'))));
   const site = config.site;
   const plugins = await loadPlugins(root, config);
   const assets = clientAssets(plugins);
@@ -262,11 +258,8 @@ function copyAdmin(root, outDir) {
 }
 
 function dirSize(dir) {
-  let total = 0;
-  for (const entry of fs.readdirSync(dir, { withFileTypes: true, recursive: true })) {
-    if (entry.isFile()) total += fs.statSync(path.join(entry.parentPath, entry.name)).size;
-  }
-  return total;
+  return fs.readdirSync(dir, { withFileTypes: true, recursive: true })
+    .filter((e) => e.isFile()).reduce((total, e) => total + fs.statSync(path.join(e.parentPath, e.name)).size, 0);
 }
 
 function printReport(report, outDir) {
@@ -311,11 +304,7 @@ function watch(root, outDir) {
     clearTimeout(timer);
     timer = setTimeout(async () => {
       console.log(`\nchanged: ${file}`);
-      try {
-        await build({ root, outDir });
-      } catch (err) {
-        console.error(`✖ ${err.message}`); // keep watching; the next save may fix it
-      }
+      await build({ root, outDir }).catch((err) => console.error(`✖ ${err.message}`)); // keep watching
     }, 100);
   });
   console.log('watching for changes…');
@@ -325,12 +314,7 @@ const isMain = process.argv[1] && import.meta.url === pathToFileURL(process.argv
 if (isMain) {
   const root = process.cwd();
   const outDir = path.join(root, 'dist');
-  try {
-    await build({ root, outDir });
-  } catch (err) {
-    console.error(`✖ build failed\n  ${err.message}`);
-    process.exit(1);
-  }
+  await build({ root, outDir }).catch((err) => { console.error(`✖ build failed\n  ${err.message}`); process.exit(1); });
   if (process.argv.includes('--watch')) {
     serve(outDir, Number(process.env.PORT) || 4000);
     watch(root, outDir);

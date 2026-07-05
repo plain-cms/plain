@@ -51,8 +51,6 @@ async function gh(path, { method = 'GET', body, raw = false } = {}) {
 
 const repoPath = (path) => `/repos/${auth.repo}/${path}`;
 
-// --- base64 helpers (UTF-8 safe, chunked for large files) ------------------
-
 export function bytesToBase64(bytes) {
   let binary = '';
   for (let i = 0; i < bytes.length; i += 0x8000) {
@@ -67,8 +65,6 @@ function decodeText(base64) {
   const binary = atob(base64.replace(/\n/g, ''));
   return new TextDecoder().decode(Uint8Array.from(binary, (c) => c.charCodeAt(0)));
 }
-
-// --- files ------------------------------------------------------------------
 
 /** Validate the token + repo pair; returns repo metadata. */
 export const repoInfo = () => gh(repoPath('').slice(0, -1));
@@ -132,8 +128,6 @@ export async function fileObjectUrl(path) {
   return URL.createObjectURL(blob);
 }
 
-// --- history & builds --------------------------------------------------------
-
 /** Commits touching a path, newest first. Pass '' for the whole site. */
 export async function commitsFor(path, perPage = 30) {
   const params = new URLSearchParams({ sha: auth.branch, per_page: perPage });
@@ -151,4 +145,15 @@ export async function commitsFor(path, perPage = 30) {
 export async function runFor(commitSha) {
   const { workflow_runs: runs } = await gh(repoPath(`actions/runs?head_sha=${commitSha}&per_page=1`));
   return runs[0] || null;
+}
+
+/** Trigger a workflow_dispatch run (used by the update banner, §14.5). */
+export const dispatchWorkflow = (file, ref = auth.branch) =>
+  gh(repoPath(`actions/workflows/${file}/dispatches`), { method: 'POST', body: { ref } });
+
+/** Compare dotted semver strings a and b. Returns -1 / 0 / 1. */
+export function cmpVersion(a, b) {
+  const pa = String(a).split('.').map(Number), pb = String(b).split('.').map(Number);
+  for (let i = 0; i < 3; i++) if ((pa[i] || 0) !== (pb[i] || 0)) return (pa[i] || 0) < (pb[i] || 0) ? -1 : 1;
+  return 0;
 }

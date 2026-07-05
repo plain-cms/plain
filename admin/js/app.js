@@ -3,7 +3,7 @@
 // content metadata; writes through the GitHub API (see github.js).
 // UI language rule: never "commit/push/branch" — always "save/publish/history".
 
-import { auth, repoInfo, getFile, putFile, listDir, commitsFor, runFor } from './github.js';
+import { auth, repoInfo, getFile, putFile, listDir, commitsFor, runFor, dispatchWorkflow, cmpVersion } from './github.js';
 import { h, show, toast, timeAgo, watchBuild, ask } from './ui.js';
 import { editorScreen } from './editor.js';
 import { mediaScreen } from './media.js';
@@ -24,8 +24,6 @@ export async function collectionIndex(name) {
 
 export const singular = (name) => (name.endsWith('s') ? name.slice(0, -1) : name);
 
-// --- shell ---------------------------------------------------------------
-
 function shell(active, ...content) {
   const collections = Object.entries(siteInfo?.collections || {});
   const link = (href, label, key) =>
@@ -45,8 +43,6 @@ function shell(active, ...content) {
     h('main', { class: 'screen' }, ...content),
   );
 }
-
-// --- sign in ----------------------------------------------------------------
 
 function guessRepo() {
   const host = location.hostname;
@@ -93,8 +89,6 @@ function signinScreen() {
         h('li', {}, 'Generate, copy the token, and paste it above. You won’t need to do this again on this device.'))),
   );
 }
-
-// --- dashboard ----------------------------------------------------------------
 
 async function statusCard() {
   const card = h('section', { class: 'card' }, h('h2', {}, 'Site'), h('p', { class: 'muted' }, 'Checking…'));
@@ -156,15 +150,32 @@ async function collectionCard(name, def) {
   );
 }
 
+// Update banner (§14.5): compare our engine.json to upstream's raw file; if
+// upstream is newer, offer to trigger the update.yml workflow (which opens a PR).
+const UPSTREAM_ENGINE = 'https://raw.githubusercontent.com/plain-cms/plain/main/engine.json';
+async function updateCard() {
+  const [here, there] = await Promise.all([
+    getFile('engine.json').then((f) => JSON.parse(f.text)).catch(() => null),
+    fetch(UPSTREAM_ENGINE).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+  ]);
+  if (!here || !there || cmpVersion(there.version, here.version) <= 0) return null;
+  return h('section', { class: 'card update' },
+    h('h2', {}, `Update available — v${there.version}`),
+    h('p', { class: 'muted' }, `You’re on v${here.version}. The update arrives as a pull request you can review, merge to apply, or revert to undo.`),
+    h('button', { class: 'primary', onclick: async (e) => {
+      e.target.disabled = true;
+      try { await dispatchWorkflow('update.yml'); toast('Preparing your update — a pull request will appear in a minute or two.', 'success'); }
+      catch (error) { toast(error.message, 'error'); e.target.disabled = false; }
+    } }, 'Prepare update'));
+}
+
 async function dashboardScreen() {
-  const cards = [await statusCard(), await checklistCard()];
+  const cards = [await statusCard(), await updateCard(), await checklistCard()];
   for (const [name, def] of Object.entries(siteInfo.collections)) cards.push(await collectionCard(name, def));
   return shell('dashboard',
     h('header', { class: 'screen-head' }, h('h1', {}, 'Dashboard')),
     h('div', { class: 'cards' }, cards.filter(Boolean)));
 }
-
-// --- collection list -----------------------------------------------------------
 
 async function collectionScreen(name) {
   const def = siteInfo.collections[name];
@@ -188,8 +199,6 @@ async function collectionScreen(name) {
       : h('p', { class: 'empty big' }, `No ${def.label.toLowerCase()} yet. Your first one takes about two minutes. `,
           h('a', { href: `#/new/${name}` }, `Write the first ${singular(name)}`)));
 }
-
-// --- navigation editor -----------------------------------------------------------
 
 async function navigationScreen() {
   let sha = null;
@@ -232,8 +241,6 @@ async function navigationScreen() {
     h('button', { onclick: () => list.append(rowFor({ label: '', url: '' })) }, '+ Add link'));
 }
 
-// --- settings -----------------------------------------------------------------
-
 async function settingsScreen() {
   const { text, sha } = await getFile('site.config.json');
   const config = JSON.parse(text);
@@ -252,11 +259,8 @@ async function settingsScreen() {
   async function save() {
     aiSettings.key = aiKey.value.trim();      // stays on this device — never committed
     aiSettings.model = aiModel.value;
-    Object.assign(config.site, {
-      title: title.value.trim(), description: description.value.trim(),
-      url: url.value.trim().replace(/\/$/, ''), language: language.value.trim() || 'en',
-      theme: theme.value,
-    });
+    Object.assign(config.site, { title: title.value.trim(), description: description.value.trim(),
+      url: url.value.trim().replace(/\/$/, ''), language: language.value.trim() || 'en', theme: theme.value });
     try {
       const { commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', 'settings: update site settings', sha);
       toast('Settings saved — publishing now.', 'success');
@@ -287,8 +291,6 @@ async function settingsScreen() {
         }
       } }, 'Sign out')));
 }
-
-// --- router ---------------------------------------------------------------------
 
 const routes = {
   '': dashboardScreen,

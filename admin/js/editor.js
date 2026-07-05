@@ -39,8 +39,9 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     ({ data, body } = parseFrontmatter(file.text, `${slug}.md`));
     wasPublished = data.draft !== true;
   } else {
-    // Content templates (§8.5): pre-structured starts from the theme.
-    const found = await listDir(`themes/${siteInfo.site.theme}/content-templates`);
+    // Content templates (§8.5): pre-structured starts from the theme. Optional —
+    // a lookup failure just means "no templates", never a broken editor.
+    const found = await listDir(`themes/${siteInfo.site.theme}/content-templates`).catch(() => []);
     const options = found.filter((e) => e.name.endsWith('.md'));
     if (options.length) {
       const pick = await ask({ title: 'Start from…', actions: [{ label: 'Blank', value: null },
@@ -138,8 +139,8 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     });
     if (alt === null) return;
     try {
-      const path = await uploadMedia(file);
-      edit((v, a) => [`${v.slice(0, a)}![${alt}](${path})${v.slice(a)}`, a]);
+      const url = await uploadMedia(file);
+      edit((v, a) => [`${v.slice(0, a)}![${alt}](${url})${v.slice(a)}`, a]);
       toast('Image added.', 'success');
     } catch (error) { toast(error.message, 'error'); }
   }
@@ -254,11 +255,12 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     const newSlug = slugify(slugInput.value || next.title || '');
     if (!newSlug) return toast('Give it a title first — the address is made from it.', 'error');
     const file = `${def.path}/${newSlug}.md`;
-    try { validateFields(next, def.fields, `${newSlug}.md`); } catch (error) { return toast(error.message, 'error'); }
     let text;
-    try { text = serializeFrontmatter(next, `\n${bodyInput.value.trimEnd()}\n`, def.fields.map((f) => f.name)); } catch (error) { return toast(error.message, 'error'); }
-    const verb = publish ? (wasPublished ? 'edit' : 'publish') : 'save draft';
-    const message = `${kind}: ${verb} "${next.title || newSlug}"`;
+    try {
+      validateFields(next, def.fields, `${newSlug}.md`);
+      text = serializeFrontmatter(next, `\n${bodyInput.value.trimEnd()}\n`, def.fields.map((f) => f.name));
+    } catch (error) { return toast(error.message, 'error'); }
+    const message = `${kind}: ${publish ? (wasPublished ? 'edit' : 'publish') : 'save draft'} "${next.title || newSlug}"`;
     try {
       if (!isNew && newSlug !== slug) return await renameAndSave(file, newSlug, text, message);
       const result = await putFile(file, text, message, sha ?? undefined);

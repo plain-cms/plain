@@ -66,6 +66,20 @@ Five starters ship in the box: **Journal** (blog), **Toolbox** (trades & local s
 
 A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim. Good first plugins: analytics snippet, giscus comments, image gallery, table of contents.
 
+## Moving an existing blog in
+
+Already have a site? The importers under `tools/migrate/` convert it — content, media, and a complete old→new redirect map so your URLs (and your SEO) survive the move. Run one on your machine:
+
+```sh
+node tools/migrate/jekyll.js /path/to/your-jekyll-site
+```
+
+It writes `content/`, `media/`, and `data/redirects.json` into `./plain-import/` (never touching your working tree) plus a migration report of anything that needs a human eye. Copy those folders into your plain repo and build. Jekyll ships today; Hugo, Eleventy, and WordPress are on the roadmap (§15).
+
+## Staying up to date
+
+plain follows [semver](https://semver.org). Engine files (`build.js`, `lib/`, `admin/`, `themes/default/`) are upstream-owned; your content, config, and custom themes are yours. When a new version ships, the admin shows an **Update available** banner: click it and a pull request appears with the changelog and any files you'd customized flagged for review. **Merge to upgrade, revert to roll back** — never a surprise. An optional weekly workflow opens that PR on its own, so even an unattended site keeps getting security fixes as reviewable PRs. See §14 for the mechanism.
+
 ## Local development
 
 ```sh
@@ -73,22 +87,27 @@ npm install
 node build.js            # build into dist/
 node build.js --watch    # serve on http://localhost:4000, rebuild on change
 node --test tests/       # run the test suite
+node tools/engine-manifest.js   # regenerate engine.json before a release
 ```
 
 ## Layout
 
 ```
 site.config.json   all configuration: site info, collections, plugins
+config.defaults.json  engine-owned defaults, merged under your config
 content/           your words (Markdown, one file per page/post)
 data/              navigation, redirects (JSON)
 media/             images and files
-themes/default/    templates + theme.css (design tokens at the top)
+themes/            five starters ship in the box; add your own
 plugins/           a plugin is a folder; install = copy + enable in config
-build.js + lib/    the whole engine (~1,000 lines, MIT)
+admin/             the browser editor (static, vanilla ES modules)
+tools/migrate/     importers (Jekyll today)
+workers/oauth/     optional "Sign in with GitHub" worker (v1 uses a token)
+build.js + lib/    the whole engine — under 2,500 lines, one dependency, MIT
 ```
 
-The full product specification lives in [`cms-spec.md`](cms-spec.md); instructions for AI agents in [`CLAUDE.md`](CLAUDE.md).
+The full product specification lives in [`cms-spec.md`](cms-spec.md); instructions for AI agents (and how to add collections, plugins, themes) in [`CLAUDE.md`](CLAUDE.md). To contribute, read [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 
-[MIT](LICENSE).
+[MIT](LICENSE) — open source from day one. Themes, plugins, and importers are the adoption engine; the core will never be closed.

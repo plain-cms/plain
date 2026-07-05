@@ -1,6 +1,6 @@
 {
   "name": "plain",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "A Git-native CMS: the repository is the database, static files are the API, and AI is the admin.",
   "type": "module",
   "private": true,
@@ -11,7 +11,8 @@
   "scripts": {
     "build": "node build.js",
     "dev": "node build.js --watch",
-    "test": "node --test tests/"
+    "test": "node --test tests/",
+    "manifest": "node tools/engine-manifest.js"
   },
   "dependencies": {
     "marked": "^15.0.0"

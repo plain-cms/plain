@@ -107,8 +107,6 @@ export async function applyStarter(theme, siteInfo, { site = {}, tokens = {}, na
   return last.commitSha;
 }
 
-// --- the Appearance screen -----------------------------------------------------
-
 const DEVICES = { Phone: '390px', Tablet: '768px', Desktop: '100%' };
 
 export async function appearanceScreen(siteInfo) {
