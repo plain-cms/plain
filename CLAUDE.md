@@ -56,6 +56,8 @@ Collections are defined in `site.config.json`. A collection = a folder of `.md` 
 
 Field types: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (needs `options`). The admin renders its edit forms from this schema, so **adding a field to config is the whole job** — no code changes.
 
+**`site.basePath`** (optional): serve under a subpath, e.g. GitHub *project* Pages at `/<repo>/`. The build prefixes every root-relative `href`/`src` (and redirect target) with it; set `site.url` to the full base too (`https://user.github.io/<repo>`). Leave it empty (default) for a site served at the domain root — user Pages, Cloudflare/Netlify, or a custom domain.
+
 **To add a collection:** add an entry to `collections`, create its folder under `content/`, and make sure the theme has the template it names. That's all.
 
 ### Content files

@@ -5,6 +5,9 @@ const root = document.getElementById('search-app');
 if (root) {
   const options = JSON.parse(document.getElementById('plugin-options')?.textContent || '{}').search || {};
   const maxResults = options.maxResults || 8;
+  // Works at the site root or under a subpath (GitHub project Pages): derive
+  // the base from this module's own URL (…/plugins/search/client.js).
+  const base = new URL('../../', import.meta.url).pathname.replace(/\/$/, '');
 
   const input = document.createElement('input');
   input.type = 'search';
@@ -17,7 +20,7 @@ if (root) {
 
   let index = null;
   const load = async () => {
-    if (!index) index = await fetch('/search-index.json').then((r) => r.json());
+    if (!index) index = await fetch(`${base}/search-index.json`).then((r) => r.json());
     return index;
   };
 
@@ -45,7 +48,7 @@ if (root) {
     results.replaceChildren(...entries.map(({ entry }) => {
       const li = document.createElement('li');
       const a = document.createElement('a');
-      a.href = entry.url;
+      a.href = base + entry.url;
       a.textContent = entry.title;
       const p = document.createElement('p');
       p.textContent = entry.description || entry.text.slice(0, 140);

@@ -57,11 +57,8 @@ function loadData(root) {
   if (!fs.existsSync(dir)) return data;
   for (const entry of fs.readdirSync(dir)) {
     if (!entry.endsWith('.json')) continue;
-    try {
-      data[entry.slice(0, -5)] = JSON.parse(fs.readFileSync(path.join(dir, entry), 'utf8'));
-    } catch (err) {
-      throw new ContentError(`data/${entry}`, null, `invalid JSON — ${err.message}`);
-    }
+    try { data[entry.slice(0, -5)] = JSON.parse(fs.readFileSync(path.join(dir, entry), 'utf8')); }
+    catch (err) { throw new ContentError(`data/${entry}`, null, `invalid JSON — ${err.message}`); }
   }
   return data;
 }
@@ -69,9 +66,7 @@ function loadData(root) {
 /** Render one page: its own template, then the result into base.html's {{{ body }}} slot. */
 function renderPage(theme, templateName, context) {
   const source = theme.templates[templateName];
-  if (!source) {
-    throw new ContentError(`themes/${context.site.theme || ''}/templates/${templateName}.html`, null, `template "${templateName}" not found in the theme`);
-  }
+  if (!source) throw new ContentError(`themes/${context.site.theme || ''}/templates/${templateName}.html`, null, `template "${templateName}" not found in the theme`);
   const body = render(source, context, theme.partials);
   return render(theme.templates.base, { ...context, body }, theme.partials);
 }
@@ -100,7 +95,13 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   if (tokens.length) {
     assets.head += `<style id="theme-tokens">:root{${tokens.map(([name, value]) => `${name}:${value}`).join(';')}}</style>\n`;
   }
-  const inject = (html) => html.replace('</head>', `${assets.head}</head>`).replace('</body>', `${assets.body}</body>`);
+  // basePath (§6, C6): serve under a subpath, e.g. GitHub project Pages at
+  // /<repo>/. Prefixes root-relative href/src (not protocol-relative "//").
+  const basePath = (site.basePath || '').replace(/\/$/, '');
+  const inject = (html) => {
+    html = html.replace('</head>', `${assets.head}</head>`).replace('</body>', `${assets.body}</body>`);
+    return basePath ? html.replace(/\b(href|src)="\/(?!\/)/g, `$1="${basePath}/`) : html;
+  };
   const data = loadData(root);
   const theme = loadTheme(root, site.theme);
   if (!theme.templates.base) throw new ContentError(`themes/${site.theme}/templates/base.html`, null, 'not found — every theme needs a base.html with a {{{ body }}} slot');
@@ -194,7 +195,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   }
   const redirects = data.redirects || {};
   for (const [from, to] of Object.entries(redirects)) {
-    pages.set(path.join(from.slice(1), 'index.html'), redirectHtml(to));
+    pages.set(path.join(from.slice(1), 'index.html'), redirectHtml(basePath + to));
   }
 
   // Non-HTML outputs, including the static read-only JSON API (§6 step 8).

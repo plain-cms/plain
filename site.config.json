@@ -1,8 +1,9 @@
 {
   "site": {
-    "title": "My Site",
-    "url": "https://example.com",
-    "description": "A site published with plain — the Git-native CMS.",
+    "title": "plain — sample site",
+    "url": "https://victorantos.github.io/kiln",
+    "basePath": "/kiln",
+    "description": "The sample site that ships with plain, the Git-native CMS. Served from GitHub project Pages under /kiln/.",
     "language": "en",
     "theme": "default"
   },

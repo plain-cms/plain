@@ -64,3 +64,23 @@ test('build fails loudly on schema violations, naming file and field', async () 
   );
   fs.rmSync(brokenRoot, { recursive: true, force: true });
 });
+
+test('site.basePath prefixes root-relative href/src (C6: project-subpath hosts)', async () => {
+  const baseRoot = path.join(here, '.tmp-base');
+  const baseOut = path.join(baseRoot, 'dist');
+  fs.rmSync(baseRoot, { recursive: true, force: true });
+  fs.cpSync(fixtureRoot, baseRoot, { recursive: true });
+  const config = JSON.parse(fs.readFileSync(path.join(baseRoot, 'site.config.json'), 'utf8'));
+  config.site.basePath = '/sub';
+  fs.writeFileSync(path.join(baseRoot, 'site.config.json'), JSON.stringify(config));
+
+  await build({ root: baseRoot, outDir: baseOut, quiet: true });
+  const home = fs.readFileSync(path.join(baseOut, 'index.html'), 'utf8');
+  assert.match(home, /href="\/sub\/blog\/rss\.xml"/, 'root-relative asset links prefixed');
+  assert.match(home, /href="\/sub\/blog\/"/, 'internal nav prefixed');
+  assert.doesNotMatch(home, /href="\/sub\/sub\//, 'not double-prefixed');
+  assert.doesNotMatch(home, /(href|src)="\/sub\/\//, 'protocol-relative URLs untouched');
+  // Redirect fallback targets are prefixed too.
+  assert.match(fs.readFileSync(path.join(baseOut, 'old/index.html'), 'utf8'), /url=\/sub\/about\//);
+  fs.rmSync(baseRoot, { recursive: true, force: true });
+});
