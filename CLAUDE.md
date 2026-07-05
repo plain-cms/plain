@@ -106,6 +106,33 @@ Variables available in every template:
 
 Every page template renders into `base.html`'s `{{{ body }}}` slot.
 
+## The admin (`admin/`)
+
+A vanilla single-page app served at `/admin/` on the published site. It reads
+the static API (`/api/site.json` for the schema, `/api/<collection>/index.json`
+for published items) and writes through the GitHub contents API — every save
+is a commit; there is no other backend.
+
+- `js/github.js` — GitHub REST calls, token in localStorage (never sent anywhere but api.github.com)
+- `js/app.js` — router + dashboard, collection lists, navigation editor, settings, sign-in
+- `js/editor.js` — the schema-driven editor: fields come from config, preview renders with `lib/markdown.js`
+- `js/media.js` — media library + uploads to `media/YYYY/MM/` (≤5 MB, resize offer over 1 MB)
+- `js/ui.js` — DOM helpers, toasts, dialogs, the build-status pill
+
+The build copies `admin/` plus the isomorphic lib modules and `marked` into
+`dist/admin/` — the editor preview and the build share one renderer (§10.2).
+UI language rule: never show Git words. Say Save / Publish / History / Restore.
+Commit messages it writes: `post: publish "Title"`, `page: edit "About"`,
+`media: add lake.jpg`, `navigation: update menu`, `settings: update site settings`.
+
+## The static API (`dist/api/`)
+
+- `api/site.json` — `{site, collections, plugins, navigation}` (the machine-readable content model)
+- `api/<collection>/index.json` — `{items: [...]}`, sorted like the site
+- `api/<collection>/<slug>.json` — one item: frontmatter fields + `url`, `slug`, `file`, `body` (Markdown), `content` (HTML)
+
+Drafts never appear in the API. Any script or agent can consume these without a server.
+
 ## Themes
 
 A theme is `themes/<name>/` with `templates/` (`base.html`, plus whatever templates collections name), optional `templates/partials/`, and `assets/` (copied to `/assets/`). All design decisions are CSS custom properties in one `:root` block at the top of `theme.css` — restyle by editing tokens, never selectors. Quality floor: semantic HTML, WCAG AA, visible focus, light + dark scheme, print stylesheet, no external requests.

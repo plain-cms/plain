@@ -1,0 +1,11 @@
+{
+  "title": "Home",
+  "description": "The fixture home page.",
+  "draft": false,
+  "slug": "index",
+  "url": "/",
+  "file": "content/pages/index.md",
+  "collection": "pages",
+  "body": "\nHello **home**. Visit the [blog](/blog/).\n",
+  "content": "<p>Hello <strong>home</strong>. Visit the <a href=\"/blog/\">blog</a>.</p>\n"
+}

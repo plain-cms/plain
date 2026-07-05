@@ -18,6 +18,23 @@ Your whole website is a folder of plain files: Markdown for content, JSON for se
 
 Every later change is the same loop: edit → commit → live in ~30s. Nothing is ever lost; any version of any page can be restored from Git history.
 
+## The admin — publish from your browser
+
+Your live site includes an editor at **`/admin/`** — a clean writing screen with Save draft / Publish buttons, live preview, image uploads, and per-page History with one-click restore. No Git knowledge needed.
+
+Sign in once with a GitHub access token (it stays on that device):
+
+1. On GitHub: **Settings → Developer settings → Fine-grained tokens → Generate new token**.
+2. Repository access: **Only select repositories** → pick your site's repo.
+3. Permissions → Repository permissions: **Contents: Read and write**, **Actions: Read-only**.
+4. Generate, copy, and paste it into the admin's sign-in screen.
+
+The token never leaves the browser except to api.github.com. Editors who prefer files can keep editing files — the admin and direct edits coexist happily.
+
+## The API — your content as JSON
+
+Every build also publishes a read-only JSON API: `/api/site.json`, `/api/posts/index.json`, `/api/posts/<slug>.json` — plain static files any script, app, or AI agent can consume. No keys, no rate limits, cached by the CDN.
+
 ## Writing content
 
 A post is a Markdown file in `content/posts/`. The filename is the URL: `hello-world.md` → `/blog/hello-world/`.

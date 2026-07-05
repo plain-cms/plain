@@ -6,12 +6,35 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { render } from './lib/template.js';
 import { slugify } from './lib/util.js';
 import { renderMarkdown } from './lib/markdown.js';
-import { loadContent, validateConfig, ContentError } from './lib/content.js';
-import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml } from './lib/outputs.js';
+import { makeItem, sortItems, validateConfig, ContentError } from './lib/content.js';
+import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles } from './lib/outputs.js';
+
+/** Scan every collection folder on disk into validated, sorted items. Drafts are excluded. */
+function loadContent(root, config) {
+  const collections = {};
+  let draftCount = 0;
+  for (const [name, def] of Object.entries(config.collections)) {
+    const dir = path.join(root, def.path);
+    if (!fs.existsSync(dir)) {
+      throw new ContentError(def.path, null, `folder not found — create it (mkdir -p ${def.path}) or fix the "path" of collection "${name}" in site.config.json`);
+    }
+    const items = [];
+    for (const entry of fs.readdirSync(dir).sort()) {
+      if (!entry.endsWith('.md')) continue;
+      const file = `${def.path}/${entry}`;
+      const source = fs.readFileSync(path.join(root, file), 'utf8');
+      const item = makeItem(source, { file, slug: entry.slice(0, -3), collection: name, def, language: config.site.language });
+      if (item.draft === true) draftCount++;
+      else items.push(item);
+    }
+    collections[name] = sortItems(items, def);
+  }
+  return { collections, draftCount };
+}
 
 /** Read every *.html template in a theme into { name: source }. */
 function loadTheme(root, themeName) {
@@ -149,7 +172,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
     pages.set(path.join(from.slice(1), 'index.html'), redirectHtml(to));
   }
 
-  // Non-HTML outputs.
+  // Non-HTML outputs, including the static read-only JSON API (§6 step 8).
   const files = new Map(pages);
   files.set('sitemap.xml', sitemapXml(sitemapEntries));
   files.set('robots.txt', robotsTxt(site.url));
@@ -157,6 +180,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   for (const feed of feeds) {
     files.set(path.join(feed.feedUrl.slice(1)), rssXml(site, feed.feedUrl, feed.listUrl, collections[feed.name]));
   }
+  for (const [file, json] of apiFiles(config, data, collections)) files.set(file, json);
 
   // Everything rendered without errors — only now touch dist/ (§5.2: never half-deploy).
   fs.rmSync(outDir, { recursive: true, force: true });
@@ -169,6 +193,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   if (fs.existsSync(assetsDir)) fs.cpSync(assetsDir, path.join(outDir, 'assets'), { recursive: true });
   const mediaDir = path.join(root, 'media');
   if (fs.existsSync(mediaDir)) fs.cpSync(mediaDir, path.join(outDir, 'media'), { recursive: true });
+  copyAdmin(root, outDir);
 
   const report = {
     pages: pages.size,
@@ -180,6 +205,24 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   };
   if (!quiet) printReport(report, outDir);
   return report;
+}
+
+/**
+ * Copy the admin app into dist/, plus the isomorphic lib modules and the
+ * marked ESM bundle it imports — so the editor's preview renders with the
+ * exact code the build uses (§10.2).
+ */
+function copyAdmin(root, outDir) {
+  const adminDir = path.join(root, 'admin');
+  if (!fs.existsSync(adminDir)) return;
+  fs.cpSync(adminDir, path.join(outDir, 'admin'), { recursive: true });
+  fs.mkdirSync(path.join(outDir, 'admin', 'lib'), { recursive: true });
+  for (const module of ['util.js', 'template.js', 'markdown.js', 'content.js']) {
+    fs.copyFileSync(path.join(root, 'lib', module), path.join(outDir, 'admin', 'lib', module));
+  }
+  const marked = fileURLToPath(import.meta.resolve('marked'));
+  fs.mkdirSync(path.join(outDir, 'admin', 'vendor'), { recursive: true });
+  fs.copyFileSync(marked, path.join(outDir, 'admin', 'vendor', 'marked.esm.js'));
 }
 
 function dirSize(dir) {

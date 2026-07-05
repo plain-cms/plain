@@ -1,0 +1,131 @@
+// admin/js/ui.js — small DOM helpers shared by every admin screen.
+// No framework: h() builds elements, and a few widgets (toast, dialog,
+// build-status pill) cover everything the screens need.
+
+import { runFor } from './github.js';
+
+/**
+ * Build a DOM element: h('button', {class: 'primary', onclick}, 'Save').
+ * Props starting with "on" become listeners; children may be strings,
+ * nodes, arrays, or null/undefined (skipped).
+ */
+export function h(tag, props = {}, ...children) {
+  const el = document.createElement(tag);
+  for (const [key, value] of Object.entries(props || {})) {
+    if (value == null) continue;
+    if (key.startsWith('on')) el.addEventListener(key.slice(2), value);
+    else if (key === 'dataset') Object.assign(el.dataset, value);
+    else el.setAttribute(key, value);
+  }
+  el.append(...[children].flat(Infinity).filter((c) => c != null));
+  return el;
+}
+
+/** Replace #app's content with the given element(s). */
+export function show(...elements) {
+  const app = document.getElementById('app');
+  app.replaceChildren(...elements);
+}
+
+/** "2026-07-05T10:00:00Z" → "2 hours ago" / "3 days ago". */
+export function timeAgo(iso) {
+  const seconds = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
+  const steps = [[60, 'second'], [60, 'minute'], [24, 'hour'], [7, 'day'], [4.35, 'week'], [12, 'month'], [Infinity, 'year']];
+  let value = seconds, unit = 'second';
+  for (const [size, name] of steps) {
+    unit = name;
+    if (value < size) break;
+    value /= size;
+  }
+  const n = Math.floor(value);
+  return n <= 0 ? 'just now' : `${n} ${unit}${n > 1 ? 's' : ''} ago`;
+}
+
+/** Transient message, bottom center. type: 'info' | 'error' | 'success'. */
+export function toast(message, type = 'info') {
+  const el = h('div', { class: `toast toast-${type}`, role: 'status' }, message);
+  document.body.append(el);
+  setTimeout(() => el.classList.add('visible'), 10);
+  setTimeout(() => { el.classList.remove('visible'); setTimeout(() => el.remove(), 300); }, type === 'error' ? 8000 : 4000);
+}
+
+/**
+ * Modal question. actions: [{label, value, kind: 'primary'|'danger'|''}].
+ * Resolves with the chosen value, or null if dismissed with Escape.
+ */
+export function ask({ title, message, actions }) {
+  return new Promise((resolve) => {
+    const dialog = h('dialog', { class: 'ask' },
+      h('h2', {}, title),
+      message ? h('p', {}, message) : null,
+      h('div', { class: 'ask-actions' }, actions.map((action) =>
+        h('button', { class: action.kind || '', onclick: () => { dialog.returnValue = 'x'; dialog.close(); resolve(action.value); } }, action.label))),
+    );
+    dialog.addEventListener('close', () => { dialog.remove(); if (!dialog.returnValue) resolve(null); });
+    document.body.append(dialog);
+    dialog.showModal();
+  });
+}
+
+/** One-line text prompt as a modal. Resolves with the string or null. */
+export function askText({ title, message, placeholder = '', value = '' }) {
+  return new Promise((resolve) => {
+    const input = h('input', { type: 'text', placeholder, value });
+    const done = (result) => { dialog.returnValue = 'x'; dialog.close(); resolve(result); };
+    const dialog = h('dialog', { class: 'ask' },
+      h('h2', {}, title),
+      message ? h('p', {}, message) : null,
+      input,
+      h('div', { class: 'ask-actions' },
+        h('button', { onclick: () => done(null) }, 'Cancel'),
+        h('button', { class: 'primary', onclick: () => done(input.value) }, 'OK')),
+    );
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') done(input.value); });
+    dialog.addEventListener('close', () => { dialog.remove(); if (!dialog.returnValue) resolve(null); });
+    document.body.append(dialog);
+    dialog.showModal();
+    input.focus();
+  });
+}
+
+// --- build-status pill --------------------------------------------------------
+// After a publish, poll the Actions API and narrate: Building… → Live ✓.
+// Never says "commit", "push" or any other Git word (cms-spec.md §8.2).
+
+let pillEl = null;
+let pollTimer = null;
+
+function setPill(className, ...children) {
+  if (!pillEl) { pillEl = h('div', { class: 'pill' }); document.body.append(pillEl); }
+  pillEl.className = `pill visible ${className}`;
+  pillEl.replaceChildren(...children);
+}
+
+export function hidePill() {
+  clearTimeout(pollTimer);
+  pillEl?.classList.remove('visible');
+}
+
+/** Watch the build for a commit and keep the pill in sync. */
+export function watchBuild(commitSha, siteUrl) {
+  clearTimeout(pollTimer);
+  setPill('building', h('span', { class: 'dot' }), 'Saving…');
+  const startedAt = Date.now();
+  const poll = async () => {
+    let run = null;
+    try { run = await runFor(commitSha); } catch { /* transient network error — keep polling */ }
+    if (run?.status === 'completed') {
+      if (run.conclusion === 'success') {
+        setPill('live', '✓ Live — ', h('a', { href: siteUrl || '/', target: '_blank', rel: 'noopener' }, 'view site'));
+        pollTimer = setTimeout(hidePill, 15000);
+      } else {
+        setPill('failed', 'Publishing hit a snag — ', h('a', { href: run.html_url, target: '_blank', rel: 'noopener' }, 'see details'));
+      }
+      return;
+    }
+    if (run) setPill('building', h('span', { class: 'dot' }), 'Building your site…');
+    if (Date.now() - startedAt > 5 * 60 * 1000) { hidePill(); return; } // give up quietly after 5 min
+    pollTimer = setTimeout(poll, 5000);
+  };
+  pollTimer = setTimeout(poll, 3000);
+}
