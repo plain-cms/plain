@@ -50,6 +50,11 @@
     "themes/default/templates/post.html": "ee75ec69f5e9b14e064356d2366aca75f20a58eef819dede3b2bfec61deffee1",
     "themes/default/theme.json": "5dc09803cb2238c0cdde0bf52abdcf9349a6b172657ad5e3e2dcbdd2fdd2f42c",
     "tools/engine-manifest.js": "0729bfcccb8c727ae2c1752153c83d436f3b1a1747280aeab4145d66160ed435",
+    "tools/migrate/fixtures/chirpy/_config.yml": "cc6ff43879eb06c43af5dad8aa05e30a1882544ce234ec7fcdd75b699d1fdf23",
+    "tools/migrate/fixtures/chirpy/_posts/2024-05-01-a-chirpy-post.md": "16f2ae45a802a9f435ea4be8fbbcca5af8cf29aef38d87e1bb6384c1642a3da7",
+    "tools/migrate/fixtures/chirpy/_tabs/about.md": "04b8e800395ed531770f92cf1fef3ae461c8f45f7d62320b99c21dcf6d1adf83",
+    "tools/migrate/fixtures/chirpy/_tabs/archives.md": "32b2119b0b9f3e658bd28da78655e17a5aeea05a278e16c04cd15c46f5473596",
+    "tools/migrate/fixtures/chirpy/assets/img/diagram.svg": "312dbf6cff6fcb6edf228f0aa1da8c190a704f88acb137599c67f81d6756b008",
     "tools/migrate/fixtures/jekyll/_config.yml": "d9deb1627acf184eebfd7b40f330a6f87fab3365ed3985690881bb79fa515e58",
     "tools/migrate/fixtures/jekyll/_posts/2023-01-15-hello-world.md": "7672fdc039ae7f81a1f78a5e6f7a6bdb58922eee44abf45ee1006f6aa292b2fe",
     "tools/migrate/fixtures/jekyll/_posts/2023-02-20-ruby-highlighting.md": "4b52b812d8bbd687157ea7a0113acb598bbca93ac6d81ac447f198300f1f317e",
@@ -57,7 +62,7 @@
     "tools/migrate/fixtures/jekyll/about.md": "5974a3968e8f70ff52a2d3849a01aca7089f7065667174e6dd544bdc34e47f98",
     "tools/migrate/fixtures/jekyll/assets/logo.svg": "3e9b8a339b4f386c3dbb8fd1c79658dd4938e19fa468604983200fcb44496c62",
     "tools/migrate/fixtures/jekyll/contact.html": "24ec62c75913e3d28ef50ffbc4d220f56acffe81477c60f50619fb9a26077d47",
-    "tools/migrate/jekyll.js": "2aa22af5ce5f00da5fcdaebede1d145c759eb26b71beb9e82735b86eb8971f5c",
+    "tools/migrate/jekyll.js": "34529f8e5cf3028586482e68c3077eb032ada6332e8a4f7f70fa939e9e8e1203",
     "tools/update.js": "7d2b47566f7c16251f74749e59cdc08dea1f8147d799e964f0b8df9020608d54"
   }
 }

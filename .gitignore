@@ -4,3 +4,4 @@ tests/.tmp-dist/
 tests/.tmp-broken/
 .DS_Store
 tests/.tmp-update/
+tests/.tmp-jekyll/
