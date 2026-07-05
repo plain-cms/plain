@@ -11,7 +11,7 @@ import { render } from './lib/template.js';
 import { slugify } from './lib/util.js';
 import { renderMarkdown } from './lib/markdown.js';
 import { makeItem, sortItems, validateConfig, ContentError } from './lib/content.js';
-import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles, searchIndex } from './lib/outputs.js';
+import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles, searchIndex, llmsTxt } from './lib/outputs.js';
 import { loadPlugins, runHook, runRenderHook, clientAssets } from './lib/plugins.js';
 
 /** Scan every collection folder on disk into validated, sorted items. Drafts are excluded. */
@@ -205,6 +205,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   }
   for (const [file, json] of apiFiles(config, data, collections)) files.set(file, json);
   files.set('search-index.json', searchIndex(collections));
+  files.set('llms.txt', llmsTxt(config, collections));
 
   // Everything rendered without errors — only now touch dist/ (§5.2: never half-deploy).
   fs.rmSync(outDir, { recursive: true, force: true });

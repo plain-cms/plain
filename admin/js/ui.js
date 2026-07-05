@@ -67,8 +67,11 @@ export function ask({ title, message, actions }) {
   });
 }
 
-/** One-line text prompt as a modal. Resolves with the string or null. */
-export function askText({ title, message, placeholder = '', value = '' }) {
+/**
+ * One-line text prompt as a modal. Resolves with the string or null.
+ * Optional suggest: {label, run} adds a button that fills the input (AI assist).
+ */
+export function askText({ title, message, placeholder = '', value = '', suggest = null }) {
   return new Promise((resolve) => {
     const input = h('input', { type: 'text', placeholder, value });
     const done = (result) => { dialog.returnValue = 'x'; dialog.close(); resolve(result); };
@@ -77,6 +80,11 @@ export function askText({ title, message, placeholder = '', value = '' }) {
       message ? h('p', {}, message) : null,
       input,
       h('div', { class: 'ask-actions' },
+        suggest ? h('button', { onclick: async (e) => {
+          e.target.disabled = true;
+          try { input.value = await suggest.run(); } catch (error) { toast(error.message, 'error'); }
+          e.target.disabled = false;
+        } }, suggest.label) : null,
         h('button', { onclick: () => done(null) }, 'Cancel'),
         h('button', { class: 'primary', onclick: () => done(input.value) }, 'OK')),
     );

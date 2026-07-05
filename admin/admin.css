@@ -130,6 +130,14 @@ input[type="checkbox"] { width: auto; }
 .preview blockquote { border-left: 3px solid var(--accent); margin-left: 0; padding-left: 1rem; color: var(--muted); }
 .preview table { border-collapse: collapse; } .preview td, .preview th { border: 1px solid var(--border); padding: 0.3rem 0.6rem; }
 
+.ai-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+.ai-row button { font-size: 0.85rem; }
+dialog.ai-review { max-width: 44rem; width: 90vw; }
+.ai-diff { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.ai-diff h3 { margin: 0 0 0.25rem; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+.ai-diff p { white-space: pre-wrap; margin: 0; max-height: 50vh; overflow-y: auto; }
+@media (max-width: 700px) { .ai-diff { grid-template-columns: 1fr; } }
+
 .coach { display: flex; align-items: center; gap: 1rem; background: var(--accent); color: var(--accent-ink); border-radius: var(--radius); padding: 0.6rem 1rem; margin-bottom: 1rem; }
 .coach p { margin: 0; flex: 1; }
 .coach button { background: var(--surface); color: var(--text); border: 0; }

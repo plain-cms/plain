@@ -7,6 +7,7 @@ import { auth, repoInfo, getFile, putFile, listDir, commitsFor, runFor } from '.
 import { h, show, toast, timeAgo, watchBuild, ask } from './ui.js';
 import { editorScreen } from './editor.js';
 import { mediaScreen } from './media.js';
+import { aiSettings } from './ai.js';
 
 let siteInfo = null;             // parsed /api/site.json (schema + site block)
 const indexCache = new Map();    // collection name → published items
@@ -247,7 +248,13 @@ async function settingsScreen() {
   const language = h('input', { type: 'text', value: config.site.language || 'en' });
   const theme = h('select', {}, themes.map((name) => h('option', { value: name, selected: name === config.site.theme ? '' : null }, name)));
 
+  const aiKey = h('input', { type: 'password', value: aiSettings.key, placeholder: 'sk-ant-…', autocomplete: 'off' });
+  const aiModel = h('select', {}, ['claude-opus-4-8', 'claude-sonnet-4-6', 'claude-haiku-4-5'].map((id) =>
+    h('option', { value: id, selected: id === aiSettings.model ? '' : null }, id)));
+
   async function save() {
+    aiSettings.key = aiKey.value.trim();      // stays on this device — never committed
+    aiSettings.model = aiModel.value;
     Object.assign(config.site, {
       title: title.value.trim(), description: description.value.trim(),
       url: url.value.trim().replace(/\/$/, ''), language: language.value.trim() || 'en',
@@ -269,6 +276,12 @@ async function settingsScreen() {
       field('Site address (URL)', url),
       field('Language code', language),
       field('Theme', theme)),
+    h('hr'),
+    h('h2', {}, 'AI assist'),
+    h('p', { class: 'muted' }, 'Optional. Paste an Anthropic API key to enable the ✨ buttons in the editor. The key stays in this browser and is sent only to Anthropic.'),
+    h('div', { class: 'form' },
+      field('Anthropic API key', aiKey),
+      field('Model', aiModel)),
     h('hr'),
     h('p', { class: 'muted' }, `Signed in to ${auth.repo}. `,
       h('button', { class: 'linklike', onclick: async () => {

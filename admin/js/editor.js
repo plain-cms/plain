@@ -8,8 +8,27 @@ import { h, show, toast, timeAgo, watchBuild, ask, askText } from './ui.js';
 import { parseFrontmatter, serializeFrontmatter, validateFields, urlFor } from '../lib/content.js';
 import { renderMarkdown } from '../lib/markdown.js';
 import { slugify } from '../lib/util.js';
-import { uploadMedia } from './media.js';
+import { uploadMedia, toBase64 } from './media.js';
+import { hasKey, NO_KEY_HINT, assist } from './ai.js';
 import { singular } from './app.js';
+
+/** Before/after review — every AI action requires this explicit Apply (§8.3). */
+function aiReview({ title, before, after }) {
+  return new Promise((resolve) => {
+    const done = (value) => { dialog.returnValue = 'x'; dialog.close(); resolve(value); };
+    const dialog = h('dialog', { class: 'ask ai-review' },
+      h('h2', {}, title),
+      h('div', { class: 'ai-diff' },
+        h('div', {}, h('h3', {}, 'Before'), h('p', { class: 'muted' }, before || '(empty)')),
+        h('div', {}, h('h3', {}, 'After'), h('p', {}, after))),
+      h('div', { class: 'ask-actions' },
+        h('button', { onclick: () => done(false) }, 'Cancel'),
+        h('button', { class: 'primary', onclick: () => done(true) }, 'Apply')));
+    dialog.addEventListener('close', () => { dialog.remove(); if (!dialog.returnValue) resolve(false); });
+    document.body.append(dialog);
+    dialog.showModal();
+  });
+}
 
 export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   const def = siteInfo.collections[collection];
@@ -104,7 +123,12 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     return [v.slice(0, start) + block + v.slice(b), b + prefix.length];
   });
   async function insertImage(file) {
-    const alt = await askText({ title: 'Describe this image', message: 'Alt text is what screen readers speak and search engines read. One short sentence.', placeholder: 'e.g. A rowboat on a misty lake' });
+    const alt = await askText({
+      title: 'Describe this image',
+      message: 'Alt text is what screen readers speak and search engines read. One short sentence.',
+      placeholder: 'e.g. A rowboat on a misty lake',
+      suggest: hasKey() ? { label: '✨ Suggest', run: async () => assist.altText(toBase64(await file.arrayBuffer()), file.type) } : null,
+    });
     if (alt === null) return;
     try {
       const path = await uploadMedia(file);
@@ -125,6 +149,59 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     h('button', { type: 'button', title: 'Bullet list', onclick: () => prefixLines('- ') }, '••'),
     h('button', { type: 'button', title: 'Insert image', onclick: () => imagePicker.click() }, '🖼'),
     imagePicker);
+
+  // --- AI assist (§8.3) — buttons, not chat; nothing applies without review ---
+
+  const aiButton = (label, action) => h('button', { type: 'button', class: 'ai', onclick: async (event) => {
+    if (!hasKey()) return toast(NO_KEY_HINT);
+    const button = event.currentTarget;
+    button.disabled = true;
+    try { await action(); } catch (error) { toast(error.message, 'error'); }
+    button.disabled = false;
+  } }, `✨ ${label}`);
+
+  const aiRow = h('div', { class: 'ai-row' },
+    aiButton('Improve writing', async () => {
+      const { selectionStart: from, selectionEnd: to } = bodyInput;
+      const selected = from !== to;
+      const source = selected ? bodyInput.value.slice(from, to) : bodyInput.value;
+      if (!source.trim()) return toast('Write something first — then I can help tighten it.');
+      const improved = await assist.improve(source);
+      if (await aiReview({ title: 'Improve writing', before: source, after: improved })) {
+        if (selected) edit((v) => [v.slice(0, from) + improved + v.slice(to), from + improved.length]);
+        else { bodyInput.value = improved; renderPreview(); }
+      }
+    }),
+    aiButton('Suggest title', async () => {
+      if (!bodyInput.value.trim()) return toast('Write the post first — titles come from the words.');
+      const options = await assist.titles(bodyInput.value);
+      const chosen = await ask({ title: 'Pick a title', actions: [...options.map((o) => ({ label: o, value: o })), { label: 'Keep mine', value: null }] });
+      const titleInput = inputs.get('title');
+      if (chosen && titleInput) { titleInput.value = chosen; titleInput.dispatchEvent(new Event('input')); }
+    }),
+    aiButton('Describe', async () => {
+      const input = inputs.get('description');
+      if (!input) return toast('This collection has no "description" field.');
+      if (!bodyInput.value.trim()) return toast('Write the post first — the description comes from it.');
+      const suggestion = await assist.describe(bodyInput.value);
+      if (await aiReview({ title: 'Meta description', before: input.value, after: suggestion })) input.value = suggestion;
+    }),
+    aiButton('Translate…', async () => {
+      const language = await askText({ title: 'Translate this page', message: 'A translated copy will be saved as a new draft next to this one — nothing is published.', placeholder: 'e.g. French' });
+      if (!language) return;
+      const baseSlug = slugify(slugInput.value || inputs.get('title')?.value || '');
+      if (!baseSlug) return toast('Give it a title first.');
+      const next = collect();
+      if (next.title) next.title = await assist.translate(next.title, language);
+      next.draft = true;
+      const translated = await assist.translate(bodyInput.value, language);
+      const newSlug = `${baseSlug}-${slugify(language)}`;
+      const text = serializeFrontmatter(next, `\n${translated.trimEnd()}\n`, def.fields.map((f) => f.name));
+      await putFile(`${def.path}/${newSlug}.md`, text, `${kind}: add ${language} draft of "${next.title || baseSlug}"`);
+      onSaved?.();
+      toast(`Saved as a draft: ${newSlug}. Review it before publishing.`, 'success');
+    }),
+  );
 
   bodyInput.addEventListener('paste', (e) => {
     const file = [...(e.clipboardData?.files || [])].find((f) => f.type.startsWith('image/'));
@@ -291,7 +368,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     h('div', { class: 'editor-fields' }, ...fieldRows,
       h('label', { class: 'field' }, 'Address (from the title)', slugInput)),
     h('div', { class: 'editor-split' },
-      h('div', { class: 'editor-write' }, toolbar, bodyInput),
+      h('div', { class: 'editor-write' }, toolbar, bodyInput, aiRow),
       preview),
   );
 }

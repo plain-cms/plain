@@ -133,6 +133,14 @@ Commit messages it writes: `post: publish "Title"`, `page: edit "About"`,
 
 Drafts never appear in the API. Any script or agent can consume these without a server.
 
+The build also emits `llms.txt` (title, summary, and a link list per collection — the llms.txt convention) so AI agents can survey the site in one request.
+
+## AI assist (admin/js/ai.js)
+
+Editor-facing AI (§8.3): a provider interface `complete(prompt, content) → text` with an Anthropic adapter calling `/v1/messages` directly from the browser (BYOK — key pasted in Settings, kept in localStorage, sent only to api.anthropic.com). Five actions in `assist`: `improve`, `describe`, `titles`, `altText` (vision), `translate`. Rules: every action shows a before/after review and requires an explicit Apply — never auto-apply; without a key the buttons explain how to add one; no `temperature`/`thinking` params (removed on current models — they 400).
+
+Because content is plain files, **any agent workflow works with zero integration**: Claude Code writing a weekly post, an Action drafting a changelog PR, a scheduled agent updating a prices page. The tests protect this — an agent that breaks the schema gets a failing build with a clear message, not a broken site.
+
 ## Themes
 
 A theme is `themes/<name>/` with `templates/` (`base.html`, plus whatever templates collections name), optional `templates/partials/`, and `assets/` (copied to `/assets/`). All design decisions are CSS custom properties in one `:root` block at the top of `theme.css` — restyle by editing tokens, never selectors. Quality floor: semantic HTML, WCAG AA, visible focus, light + dark scheme, print stylesheet, no external requests.
@@ -201,7 +209,7 @@ Rules:
 
 ## Build pipeline (build.js)
 
-config → load plugins → data → `init` hooks → content (validate) → `transformContent` hooks → Markdown → templates → client-asset injection → `renderPage` hooks → outputs (`sitemap.xml`, per-collection `rss.xml`, `robots.txt`, `_redirects` + fallback pages, `404.html`, `api/`, `search-index.json`) → copy `media/` + theme assets + plugin client assets + admin → `afterBuild` hooks. The build is deterministic: same files in, same bytes out (golden tests depend on this — never use the current time in outputs).
+config → load plugins → data → `init` hooks → content (validate) → `transformContent` hooks → Markdown → templates → client-asset injection → `renderPage` hooks → outputs (`sitemap.xml`, per-collection `rss.xml`, `robots.txt`, `_redirects` + fallback pages, `404.html`, `api/`, `search-index.json`, `llms.txt`) → copy `media/` + theme assets + plugin client assets + admin → `afterBuild` hooks. The build is deterministic: same files in, same bytes out (golden tests depend on this — never use the current time in outputs).
 
 ## Errors are teaching moments
 

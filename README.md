@@ -31,6 +31,8 @@ Sign in once with a GitHub access token (it stays on that device):
 
 The token never leaves the browser except to api.github.com. Editors who prefer files can keep editing files — the admin and direct edits coexist happily.
 
+**AI assist (optional, BYOK):** paste an Anthropic API key in Settings and the editor grows ✨ buttons — improve writing, suggest titles, generate the meta description, write image alt text, translate a page into a new draft. Every suggestion shows a before/after and asks before applying. The key stays in your browser and is sent only to Anthropic.
+
 ## The API — your content as JSON
 
 Every build also publishes a read-only JSON API: `/api/site.json`, `/api/posts/index.json`, `/api/posts/<slug>.json` — plain static files any script, app, or AI agent can consume. No keys, no rate limits, cached by the CDN.
