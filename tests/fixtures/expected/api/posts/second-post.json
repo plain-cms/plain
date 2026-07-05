@@ -13,6 +13,7 @@
   "collection": "posts",
   "body": "\nPlain body.\n",
   "dateFormatted": "February 2, 2026",
+  "words": 2,
   "content": "<p>Plain body.</p>\n",
   "tagLinks": [
     {

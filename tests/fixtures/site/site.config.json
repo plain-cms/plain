@@ -37,5 +37,8 @@
       ]
     }
   },
-  "plugins": []
+  "plugins": ["stamp"],
+  "pluginOptions": {
+    "stamp": { "note": "from-config" }
+  }
 }

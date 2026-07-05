@@ -129,7 +129,7 @@ Commit messages it writes: `post: publish "Title"`, `page: edit "About"`,
 
 - `api/site.json` — `{site, collections, plugins, navigation}` (the machine-readable content model)
 - `api/<collection>/index.json` — `{items: [...]}`, sorted like the site
-- `api/<collection>/<slug>.json` — one item: frontmatter fields + `url`, `slug`, `file`, `body` (Markdown), `content` (HTML)
+- `api/<collection>/<slug>.json` — one item: frontmatter fields + `url`, `slug`, `file`, `body` (Markdown), `content` (HTML). Exception: an item named `index.md` has no per-item file (it would collide with the listing above, which carries every item in full).
 
 Drafts never appear in the API. Any script or agent can consume these without a server.
 
@@ -137,11 +137,71 @@ Drafts never appear in the API. Any script or agent can consume these without a 
 
 A theme is `themes/<name>/` with `templates/` (`base.html`, plus whatever templates collections name), optional `templates/partials/`, and `assets/` (copied to `/assets/`). All design decisions are CSS custom properties in one `:root` block at the top of `theme.css` — restyle by editing tokens, never selectors. Quality floor: semantic HTML, WCAG AA, visible focus, light + dark scheme, print stylesheet, no external requests.
 
+## Plugins — the AI extension surface
+
+**A plugin is a folder in `plugins/`. Install = copy the folder + add its name to `"plugins"` in `site.config.json`.** No npm, no registry, no build step. This section is the complete API.
+
+```
+plugins/my-plugin/
+├── plugin.json     # manifest (required)
+├── index.js        # build-time hooks (optional)
+├── client.js       # browser module, auto-injected into every page (optional)
+└── client.css      # stylesheet, auto-injected into every page (optional)
+```
+
+`plugin.json`:
+
+```json
+{
+  "name": "my-plugin",
+  "version": "1.0.0",
+  "description": "One sentence.",
+  "hooks": ["transformContent"],
+  "client": { "js": "client.js", "css": "client.css" },
+  "options": { "someOption": "default value" }
+}
+```
+
+Only `name`, `version`, `description` are required. `hooks` is documentation (the loader inspects `index.js` itself). Declare `client` entries only for files that exist.
+
+`index.js` default-exports an object of hooks. All are optional; each may be sync or async. **Every hook receives the plugin's resolved options as its last argument** (manifest `options` overridden by the site's `pluginOptions.<name>` in `site.config.json`):
+
+```js
+export default {
+  // After config load, before content is scanned. site = {config, data, collections: null}.
+  init(site, options) {},
+
+  // Once per content item, after frontmatter parsing, BEFORE Markdown rendering.
+  // Mutate the item freely: item.body is raw Markdown; fields (title, date, …)
+  // are set; item.url/slug/file/collection too. Anything you add rides along
+  // into templates and the JSON API (e.g. item.readingTime = …).
+  transformContent(item, site, options) {},
+
+  // Once per rendered HTML page (items, list pages, the 404). Return a string
+  // to replace the page's HTML; return nothing to leave it unchanged.
+  // page = the template context's page object (item or {title, url}).
+  renderPage(page, html, site, options) { return html; },
+
+  // After everything is written to dist/. Emit extra files here.
+  // site.renderPage(templateName, context) renders a themed page for you:
+  //   site.renderPage('page', {page: {title: 'X', url: '/x/', content: '<p>…</p>'}})
+  afterBuild(distPath, site, options) {},
+};
+```
+
+Rules:
+- `site` is `{config, data, collections, renderPage}` — `collections` is filled after `init`.
+- A plugin that throws fails the whole build, with the plugin's name in the error.
+- Client assets publish to `/plugins/<name>/…` and are injected into every page in config order (`css` before `</head>`, `js` as a module before `</body>`). Client code reads its options from the injected JSON: `JSON.parse(document.getElementById('plugin-options').textContent)["my-plugin"]`.
+- Client JS must be progressive enhancement — the page must work without it (C5).
+- The build also emits `search-index.json` (`[{url, title, description, tags, text}]`) — plugins may consume it.
+- Study `plugins/search/` (afterBuild + client) and `plugins/contact-form/` (renderPage + options) as reference implementations.
+
+**Checklist for a new plugin:** create the folder + `plugin.json` (+ `index.js`/client files) → add its name to `"plugins"` in `site.config.json` → `node build.js` → check the output in `dist/` → `node --test tests/`.
+
 ## Build pipeline (build.js)
 
-config → data → content (validate) → Markdown → templates → outputs (`sitemap.xml`, per-collection `rss.xml`, `robots.txt`, `_redirects` + fallback pages, `404.html`) → copy `media/` + theme assets. The build is deterministic: same files in, same bytes out (golden tests depend on this — never use the current time in outputs).
-
-Plugin hooks (`lib/plugins.js`) arrive in Milestone 3 and will be documented here.
+config → load plugins → data → `init` hooks → content (validate) → `transformContent` hooks → Markdown → templates → client-asset injection → `renderPage` hooks → outputs (`sitemap.xml`, per-collection `rss.xml`, `robots.txt`, `_redirects` + fallback pages, `404.html`, `api/`, `search-index.json`) → copy `media/` + theme assets + plugin client assets + admin → `afterBuild` hooks. The build is deterministic: same files in, same bytes out (golden tests depend on this — never use the current time in outputs).
 
 ## Errors are teaching moments
 

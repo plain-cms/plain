@@ -69,7 +69,9 @@
       ]
     }
   },
-  "plugins": [],
+  "plugins": [
+    "stamp"
+  ],
   "navigation": [
     {
       "label": "Home",

@@ -54,6 +54,10 @@ Body in **Markdown**. Images by path: ![A lake](/media/lake.jpg)
 
 Set `draft: true` and the post is saved but not published. Pages work the same in `content/pages/` (`about.md` → `/about/`; `index.md` is the homepage). Menus live in `data/navigation.json`; renamed URLs get an entry in `data/redirects.json`.
 
+## Plugins
+
+A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim. Good first plugins: analytics snippet, giscus comments, image gallery, table of contents.
+
 ## Local development
 
 ```sh

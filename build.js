@@ -11,7 +11,8 @@ import { render } from './lib/template.js';
 import { slugify } from './lib/util.js';
 import { renderMarkdown } from './lib/markdown.js';
 import { makeItem, sortItems, validateConfig, ContentError } from './lib/content.js';
-import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles } from './lib/outputs.js';
+import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles, searchIndex } from './lib/outputs.js';
+import { loadPlugins, runHook, runRenderHook, clientAssets } from './lib/plugins.js';
 
 /** Scan every collection folder on disk into validated, sorted items. Drafts are excluded. */
 function loadContent(root, config) {
@@ -95,10 +96,16 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   if (!fs.existsSync(configPath)) throw new ContentError('site.config.json', null, 'not found — every site needs one at the repo root');
   const config = validateConfig(JSON.parse(fs.readFileSync(configPath, 'utf8')));
   const site = config.site;
+  const plugins = await loadPlugins(root, config);
+  const assets = clientAssets(plugins);
+  const inject = (html) => html.replace('</head>', `${assets.head}</head>`).replace('</body>', `${assets.body}</body>`);
   const data = loadData(root);
   const theme = loadTheme(root, site.theme);
   if (!theme.templates.base) throw new ContentError(`themes/${site.theme}/templates/base.html`, null, 'not found — every theme needs a base.html with a {{{ body }}} slot');
+  const siteApi = { config, data, collections: null }; // the object every hook receives
+  await runHook(plugins, 'init', siteApi);
   const { collections, draftCount } = loadContent(root, config);
+  siteApi.collections = collections;
   const warnings = [];
 
   // Feeds, rendered Markdown, tag links — computed before any page renders.
@@ -107,6 +114,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
     .map(([name, def]) => ({ name, listUrl: def.listUrl || '/', feedUrl: `${def.listUrl || '/'}rss.xml` }));
   for (const [name, def] of Object.entries(config.collections)) {
     for (const item of collections[name]) {
+      await runHook(plugins, 'transformContent', item, siteApi); // plugins may mutate items
       item.content = renderMarkdown(item.body);
       if (Array.isArray(item.tags) && def.listUrl) {
         item.tagLinks = item.tags.map((tag) => ({ name: tag, url: `${def.listUrl}tag/${slugify(tag)}/` }));
@@ -120,14 +128,21 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   const baseContext = { site, data, collections, feeds: feeds.map((f) => f.feedUrl) };
   const navFor = (url) => navigation.map((entry) => ({ ...entry, current: entry.url === url }));
 
-  const pages = new Map(); // output path (dist-relative) → html
-  const emit = (url, html) => pages.set(path.join(url.slice(1), 'index.html'), html);
+  const pages = new Map();    // output path (dist-relative) → html
+  const pageMeta = new Map(); // output path → page context (for renderPage hooks)
+  const emit = (url, html, page) => {
+    const file = path.join(url.slice(1), 'index.html');
+    pages.set(file, html);
+    if (page) pageMeta.set(file, page);
+  };
   const sitemapEntries = [];
+  siteApi.renderPage = (templateName, context) => // lets plugins emit themed pages
+    inject(renderPage(theme, templateName, { ...baseContext, nav: navFor(context.page?.url ?? null), ...context }));
 
   // Item pages.
   for (const [name, def] of Object.entries(config.collections)) {
     for (const item of collections[name]) {
-      emit(item.url, renderPage(theme, def.template, { ...baseContext, page: item, nav: navFor(item.url) }));
+      emit(item.url, renderPage(theme, def.template, { ...baseContext, page: item, nav: navFor(item.url) }), item);
       sitemapEntries.push({ loc: site.url + item.url, lastmod: item.date });
     }
   }
@@ -159,14 +174,22 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
           pagination,
           tag: list.tag,
         };
-        emit(url, renderPage(theme, def.listTemplate, context));
+        emit(url, renderPage(theme, def.listTemplate, context), context.page);
         sitemapEntries.push({ loc: site.url + url });
       }
     }
   }
 
   // 404 page and redirect fallbacks.
-  pages.set('404.html', renderPage(theme, '404', { ...baseContext, page: { title: 'Page not found' }, nav: navFor(null) }));
+  const notFoundPage = { title: 'Page not found' };
+  pages.set('404.html', renderPage(theme, '404', { ...baseContext, page: notFoundPage, nav: navFor(null) }));
+  pageMeta.set('404.html', notFoundPage);
+
+  // Inject plugin client assets, then let renderPage hooks post-process each page.
+  for (const [file, html] of pages) {
+    if (!pageMeta.has(file)) continue; // redirect fallbacks aren't real pages
+    pages.set(file, await runRenderHook(plugins, pageMeta.get(file), inject(html), siteApi));
+  }
   const redirects = data.redirects || {};
   for (const [from, to] of Object.entries(redirects)) {
     pages.set(path.join(from.slice(1), 'index.html'), redirectHtml(to));
@@ -181,6 +204,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
     files.set(path.join(feed.feedUrl.slice(1)), rssXml(site, feed.feedUrl, feed.listUrl, collections[feed.name]));
   }
   for (const [file, json] of apiFiles(config, data, collections)) files.set(file, json);
+  files.set('search-index.json', searchIndex(collections));
 
   // Everything rendered without errors — only now touch dist/ (§5.2: never half-deploy).
   fs.rmSync(outDir, { recursive: true, force: true });
@@ -193,7 +217,12 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   if (fs.existsSync(assetsDir)) fs.cpSync(assetsDir, path.join(outDir, 'assets'), { recursive: true });
   const mediaDir = path.join(root, 'media');
   if (fs.existsSync(mediaDir)) fs.cpSync(mediaDir, path.join(outDir, 'media'), { recursive: true });
+  for (const { from, to } of assets.copies) {
+    fs.mkdirSync(path.dirname(path.join(outDir, to)), { recursive: true });
+    fs.copyFileSync(from, path.join(outDir, to));
+  }
   copyAdmin(root, outDir);
+  await runHook(plugins, 'afterBuild', outDir, siteApi);
 
   const report = {
     pages: pages.size,
