@@ -43,6 +43,12 @@ test('fixture site builds to exactly the expected files', async () => {
   }
 
   assert.equal(report.draftCount, 1, 'the draft post must be skipped');
+
+  // §10.5: customizer tokens from config.theme.tokens are injected after the
+  // theme CSS, so theme upgrades never overwrite user tweaks.
+  const home = fs.readFileSync(path.join(outDir, 'index.html'), 'utf8');
+  assert.match(home, /<style id="theme-tokens">:root\{--color-accent:#c0ffee;--measure:70ch\}<\/style>/);
+
   fs.rmSync(outDir, { recursive: true, force: true });
 });
 

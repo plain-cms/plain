@@ -53,7 +53,7 @@ const repoPath = (path) => `/repos/${auth.repo}/${path}`;
 
 // --- base64 helpers (UTF-8 safe, chunked for large files) ------------------
 
-function bytesToBase64(bytes) {
+export function bytesToBase64(bytes) {
   let binary = '';
   for (let i = 0; i < bytes.length; i += 0x8000) {
     binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
@@ -80,10 +80,8 @@ export async function getFile(path) {
 }
 
 /** Read a text file as it was at a specific version. */
-export async function getFileAt(path, ref) {
-  const file = await gh(repoPath(`contents/${path}?ref=${ref}`));
-  return decodeText(file.content);
-}
+export const getFileAt = async (path, ref) =>
+  decodeText((await gh(repoPath(`contents/${path}?ref=${ref}`))).content);
 
 /**
  * Create or update a file — one commit. Pass `sha` when updating; a stale

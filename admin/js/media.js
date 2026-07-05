@@ -3,9 +3,11 @@
 // Hard limit 5 MB; images over 1 MB get an offer to resize in the browser
 // (canvas, max 2000px) — the repo stays lean with no server pipeline.
 
-import { putFile, listTree, fileObjectUrl } from './github.js';
+import { putFile, listTree, fileObjectUrl, bytesToBase64 } from './github.js';
 import { h, toast, ask } from './ui.js';
 import { slugify } from '../lib/util.js';
+
+export const toBase64 = (buffer) => bytesToBase64(new Uint8Array(buffer));
 
 const MB = 1024 * 1024;
 
@@ -26,13 +28,6 @@ function resizeImage(file, maxSize = 2000) {
     img.onerror = () => reject(new Error('Could not read the image.'));
     img.src = URL.createObjectURL(file);
   });
-}
-
-export function toBase64(buffer) {
-  const bytes = new Uint8Array(buffer);
-  let binary = '';
-  for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-  return btoa(binary);
 }
 
 /**
@@ -79,15 +74,11 @@ export async function mediaScreen() {
     const isImage = /\.(png|jpe?g|gif|webp|svg|avif)$/i.test(name);
     const thumb = h('div', { class: 'thumb' }, isImage ? '' : '📄');
     if (isImage) {
-      fileObjectUrl(file.path).then((url) => {
-        thumb.replaceChildren(h('img', { src: url, alt: '', loading: 'lazy' }));
-      }).catch(() => thumb.replaceChildren('🖼'));
+      fileObjectUrl(file.path).then((url) => thumb.replaceChildren(h('img', { src: url, alt: '', loading: 'lazy' })))
+        .catch(() => thumb.replaceChildren('🖼'));
     }
-    grid.append(h('figure', { class: 'media-item' },
-      thumb,
-      h('figcaption', {},
-        h('span', { class: 'media-name', title: file.path }, name),
-        h('span', { class: 'muted' }, ` ${(file.size / 1024).toFixed(0)} KB`)),
+    grid.append(h('figure', { class: 'media-item' }, thumb,
+      h('figcaption', {}, h('span', { class: 'media-name', title: file.path }, name), h('span', { class: 'muted' }, ` ${(file.size / 1024).toFixed(0)} KB`)),
       h('button', { onclick: () => {
         navigator.clipboard.writeText(`/${file.path}`);
         toast('Path copied. When you place it, describe the image in the alt text — screen readers depend on it.');
@@ -97,10 +88,7 @@ export async function mediaScreen() {
   const picker = h('input', { type: 'file', multiple: '', hidden: '' });
   picker.addEventListener('change', async () => {
     for (const file of picker.files) {
-      try {
-        const path = await uploadMedia(file);
-        toast(`Added ${path}`, 'success');
-      } catch (error) { toast(error.message, 'error'); }
+      try { toast(`Added ${await uploadMedia(file)}`, 'success'); } catch (error) { toast(error.message, 'error'); }
     }
     location.reload();
   });

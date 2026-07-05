@@ -8,11 +8,13 @@ import { h, show, toast, timeAgo, watchBuild, ask } from './ui.js';
 import { editorScreen } from './editor.js';
 import { mediaScreen } from './media.js';
 import { aiSettings } from './ai.js';
+import { appearanceScreen } from './appearance.js';
+import { wizardScreen } from './wizard.js';
 
 let siteInfo = null;             // parsed /api/site.json (schema + site block)
 const indexCache = new Map();    // collection name → published items
 
-async function collectionIndex(name) {
+export async function collectionIndex(name) {
   if (!indexCache.has(name)) {
     const items = await fetch(`../api/${name}/index.json`).then((r) => (r.ok ? r.json() : { items: [] })).then((d) => d.items).catch(() => []);
     indexCache.set(name, items);
@@ -35,6 +37,7 @@ function shell(active, ...content) {
       collections.map(([name, def]) => link(`#/collection/${name}`, def.label, `collection:${name}`)),
       link('#/media', 'Media', 'media'),
       link('#/navigation', 'Navigation', 'navigation'),
+      link('#/appearance', 'Appearance', 'appearance'),
       link('#/settings', 'Settings', 'settings'),
       h('div', { class: 'sidebar-foot' },
         h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'View site ↗')),
@@ -96,17 +99,12 @@ function signinScreen() {
 async function statusCard() {
   const card = h('section', { class: 'card' }, h('h2', {}, 'Site'), h('p', { class: 'muted' }, 'Checking…'));
   commitsFor('', 1).then(async ([last]) => {
-    const lines = [];
-    if (last) {
-      const run = await runFor(last.sha).catch(() => null);
-      const state = run == null || (run.status === 'completed' && run.conclusion === 'success') ? '● Live'
-        : run.status === 'completed' ? '● Last publish failed'
-        : '◌ Building…';
-      lines.push(h('p', { class: run?.conclusion === 'failure' ? 'status bad' : 'status good' }, state));
-      lines.push(h('p', { class: 'muted' }, `Last change ${timeAgo(last.date)}`));
-    }
-    lines.push(h('p', {}, h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'Open your site ↗')));
-    card.replaceChildren(h('h2', {}, 'Site'), ...lines);
+    const run = last && await runFor(last.sha).catch(() => null);
+    const failed = run?.status === 'completed' && run.conclusion !== 'success';
+    card.replaceChildren(h('h2', {}, 'Site'),
+      last ? h('p', { class: failed ? 'status bad' : 'status good' }, failed ? '● Last publish failed' : run && run.status !== 'completed' ? '◌ Building…' : '● Live') : null,
+      last ? h('p', { class: 'muted' }, `Last change ${timeAgo(last.date)}`) : null,
+      h('p', {}, h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'Open your site ↗')));
   }).catch((error) => card.replaceChildren(h('h2', {}, 'Site'), h('p', { class: 'muted' }, error.message)));
   return card;
 }
@@ -181,8 +179,7 @@ async function collectionScreen(name) {
       h('span', { class: 'row-title' }, item?.title || slug, item?.example ? h('span', { class: 'badge' }, 'Example') : null, item ? null : h('span', { class: 'badge draft' }, 'Draft')),
       h('span', { class: 'muted' }, item?.date || ''));
   });
-  // newest first, matching the site
-  rows.sort((a, b) => (a.lastChild.textContent < b.lastChild.textContent ? 1 : -1));
+  rows.sort((a, b) => (a.lastChild.textContent < b.lastChild.textContent ? 1 : -1)); // newest first
   return shell(`collection:${name}`,
     h('header', { class: 'screen-head' },
       h('h1', {}, def.label),
@@ -205,9 +202,9 @@ async function navigationScreen() {
 
   const list = h('div', { class: 'nav-rows' });
   const rowFor = (entry) => {
-    const label = h('input', { type: 'text', value: entry.label, placeholder: 'Label' });
-    const url = h('input', { type: 'text', value: entry.url, placeholder: '/page/' });
-    const row = h('div', { class: 'nav-row' }, label, url,
+    const row = h('div', { class: 'nav-row' },
+      h('input', { type: 'text', value: entry.label, placeholder: 'Label' }),
+      h('input', { type: 'text', value: entry.url, placeholder: '/page/' }),
       h('button', { title: 'Move up', onclick: () => row.previousElementSibling?.before(row) }, '↑'),
       h('button', { title: 'Move down', onclick: () => row.nextElementSibling?.after(row) }, '↓'),
       h('button', { title: 'Remove', onclick: () => row.remove() }, '✕'));
@@ -300,7 +297,9 @@ const routes = {
   new: (name) => editorScreen({ siteInfo, collection: name, slug: null, onSaved: () => indexCache.delete(name) }),
   media: async () => shell('media', await mediaScreen()),
   navigation: navigationScreen,
+  appearance: async () => shell('appearance', await appearanceScreen(siteInfo)),
   settings: settingsScreen,
+  welcome: () => wizardScreen(siteInfo, () => { location.hash = '#/'; route(); }),
 };
 
 async function route() {
@@ -322,10 +321,12 @@ async function route() {
 async function boot() {
   siteInfo = await fetch('../api/site.json').then((r) => (r.ok ? r.json() : null)).catch(() => null);
   if (!siteInfo) {
-    show(h('div', { class: 'error-screen' },
-      h('h1', {}, 'The site hasn’t been built yet'),
+    return show(h('div', { class: 'error-screen' }, h('h1', {}, 'The site hasn’t been built yet'),
       h('p', {}, 'The admin reads your site’s published data (api/site.json), which isn’t there yet. Once the first build finishes, reload this page.')));
-    return;
+  }
+  // First run (§8.5): the template placeholder title means a fresh install.
+  if (auth.signedIn && siteInfo.site.title === 'My Site' && !localStorage.getItem('plain.wizard')) {
+    location.hash = '#/welcome';
   }
   window.addEventListener('hashchange', route);
   route();

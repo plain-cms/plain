@@ -40,5 +40,11 @@
   "plugins": ["stamp"],
   "pluginOptions": {
     "stamp": { "note": "from-config" }
+  },
+  "theme": {
+    "tokens": {
+      "--color-accent": "#c0ffee",
+      "--measure": "70ch"
+    }
   }
 }

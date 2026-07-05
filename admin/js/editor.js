@@ -3,8 +3,8 @@
 // a toolbar and a live preview rendered by the same lib/markdown.js the build
 // uses — what you see is what deploys.
 
-import { getFile, getFileAt, putFile, deleteFile, commitsFor } from './github.js';
-import { h, show, toast, timeAgo, watchBuild, ask, askText } from './ui.js';
+import { getFile, getFileAt, putFile, deleteFile, commitsFor, listDir } from './github.js';
+import { h, show, toast, timeAgo, watchBuild, ask, askText, modal } from './ui.js';
 import { parseFrontmatter, serializeFrontmatter, validateFields, urlFor } from '../lib/content.js';
 import { renderMarkdown } from '../lib/markdown.js';
 import { slugify } from '../lib/util.js';
@@ -13,22 +13,15 @@ import { hasKey, NO_KEY_HINT, assist } from './ai.js';
 import { singular } from './app.js';
 
 /** Before/after review — every AI action requires this explicit Apply (§8.3). */
-function aiReview({ title, before, after }) {
-  return new Promise((resolve) => {
-    const done = (value) => { dialog.returnValue = 'x'; dialog.close(); resolve(value); };
-    const dialog = h('dialog', { class: 'ask ai-review' },
-      h('h2', {}, title),
-      h('div', { class: 'ai-diff' },
-        h('div', {}, h('h3', {}, 'Before'), h('p', { class: 'muted' }, before || '(empty)')),
-        h('div', {}, h('h3', {}, 'After'), h('p', {}, after))),
-      h('div', { class: 'ask-actions' },
-        h('button', { onclick: () => done(false) }, 'Cancel'),
-        h('button', { class: 'primary', onclick: () => done(true) }, 'Apply')));
-    dialog.addEventListener('close', () => { dialog.remove(); if (!dialog.returnValue) resolve(false); });
-    document.body.append(dialog);
-    dialog.showModal();
-  });
-}
+const aiReview = ({ title, before, after }) => modal('ask ai-review', (done) => [
+  h('h2', {}, title),
+  h('div', { class: 'ai-diff' },
+    h('div', {}, h('h3', {}, 'Before'), h('p', { class: 'muted' }, before || '(empty)')),
+    h('div', {}, h('h3', {}, 'After'), h('p', {}, after))),
+  h('div', { class: 'ask-actions' },
+    h('button', { onclick: () => done(false) }, 'Cancel'),
+    h('button', { class: 'primary', onclick: () => done(true) }, 'Apply')),
+]);
 
 export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   const def = siteInfo.collections[collection];
@@ -45,6 +38,20 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     sha = file.sha;
     ({ data, body } = parseFrontmatter(file.text, `${slug}.md`));
     wasPublished = data.draft !== true;
+  } else {
+    // Content templates (§8.5): pre-structured starts from the theme.
+    const found = await listDir(`themes/${siteInfo.site.theme}/content-templates`);
+    const options = found.filter((e) => e.name.endsWith('.md'));
+    if (options.length) {
+      const pick = await ask({ title: 'Start from…', actions: [{ label: 'Blank', value: null },
+        ...options.map((o) => ({ label: o.name.slice(0, -3).replaceAll('-', ' '), value: o.path }))] });
+      if (pick) {
+        const parsed = parseFrontmatter((await getFile(pick)).text, pick);
+        ({ body } = parsed);
+        data = parsed.data;
+        delete data.example;
+      }
+    }
   }
 
   // --- fields (schema-driven) -----------------------------------------------
@@ -138,17 +145,19 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   }
   const imagePicker = h('input', { type: 'file', accept: 'image/*', hidden: '' });
   imagePicker.addEventListener('change', () => imagePicker.files[0] && insertImage(imagePicker.files[0]));
-  const toolbar = h('div', { class: 'toolbar', role: 'toolbar' },
-    h('button', { type: 'button', title: 'Bold', onclick: () => wrap('**') }, h('b', {}, 'B')),
-    h('button', { type: 'button', title: 'Italic', onclick: () => wrap('*') }, h('i', {}, 'I')),
-    h('button', { type: 'button', title: 'Heading', onclick: () => prefixLines('## ') }, 'H'),
-    h('button', { type: 'button', title: 'Link', onclick: async () => {
+  const TOOLS = [
+    ['Bold', h('b', {}, 'B'), () => wrap('**')],
+    ['Italic', h('i', {}, 'I'), () => wrap('*')],
+    ['Heading', 'H', () => prefixLines('## ')],
+    ['Link', '🔗', async () => {
       const url = await askText({ title: 'Link address', placeholder: 'https://… or /page/' });
       if (url) edit((v, a, b) => [`${v.slice(0, a)}[${v.slice(a, b) || 'link text'}](${url})${v.slice(b)}`, b + url.length + 4]);
-    } }, '🔗'),
-    h('button', { type: 'button', title: 'Bullet list', onclick: () => prefixLines('- ') }, '••'),
-    h('button', { type: 'button', title: 'Insert image', onclick: () => imagePicker.click() }, '🖼'),
-    imagePicker);
+    }],
+    ['Bullet list', '••', () => prefixLines('- ')],
+    ['Insert image', '🖼', () => imagePicker.click()],
+  ];
+  const toolbar = h('div', { class: 'toolbar', role: 'toolbar' },
+    TOOLS.map(([title, label, onclick]) => h('button', { type: 'button', title, onclick }, label)), imagePicker);
 
   // --- AI assist (§8.3) — buttons, not chat; nothing applies without review ---
 
@@ -188,16 +197,16 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     }),
     aiButton('Translate…', async () => {
       const language = await askText({ title: 'Translate this page', message: 'A translated copy will be saved as a new draft next to this one — nothing is published.', placeholder: 'e.g. French' });
+      const baseSlug = language && slugify(slugInput.value || inputs.get('title')?.value || '');
       if (!language) return;
-      const baseSlug = slugify(slugInput.value || inputs.get('title')?.value || '');
       if (!baseSlug) return toast('Give it a title first.');
-      const next = collect();
+      const next = { ...collect(), draft: true };
       if (next.title) next.title = await assist.translate(next.title, language);
-      next.draft = true;
       const translated = await assist.translate(bodyInput.value, language);
       const newSlug = `${baseSlug}-${slugify(language)}`;
-      const text = serializeFrontmatter(next, `\n${translated.trimEnd()}\n`, def.fields.map((f) => f.name));
-      await putFile(`${def.path}/${newSlug}.md`, text, `${kind}: add ${language} draft of "${next.title || baseSlug}"`);
+      await putFile(`${def.path}/${newSlug}.md`,
+        serializeFrontmatter(next, `\n${translated.trimEnd()}\n`, def.fields.map((f) => f.name)),
+        `${kind}: add ${language} draft of "${next.title || baseSlug}"`);
       onSaved?.();
       toast(`Saved as a draft: ${newSlug}. Review it before publishing.`, 'success');
     }),
@@ -228,13 +237,10 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
         if (!restore) return localStorage.removeItem(autosaveKey);
         const saved = JSON.parse(stored);
         bodyInput.value = saved.body;
-        for (const field of def.fields) {
-          const input = inputs.get(field.name);
-          if (!input) continue;
-          const value = saved.data[field.name];
-          if (field.type === 'boolean') input.checked = Boolean(value);
-          else if (field.type === 'list') input.value = (value || []).join(', ');
-          else input.value = value || '';
+        for (const [name, input] of inputs) {
+          const value = saved.data[name];
+          if (input.type === 'checkbox') input.checked = Boolean(value);
+          else input.value = Array.isArray(value) ? value.join(', ') : (value || '');
         }
         renderPreview();
       });
@@ -325,13 +331,12 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
           show(await editorScreen({ siteInfo, collection, slug, onSaved }));
         }
       } }, 'Restore')));
-    const dialog = h('dialog', { class: 'ask history' }, h('h2', {}, 'History'),
+    modal('ask history', (done) => [
+      h('h2', {}, 'History'),
       h('p', { class: 'muted' }, 'Every save is kept forever. Restoring makes a new version — nothing is destroyed.'),
       rows.length ? rows : h('p', {}, 'No saves yet.'),
-      h('div', { class: 'ask-actions' }, h('button', { onclick: () => dialog.close() }, 'Close')));
-    dialog.addEventListener('close', () => dialog.remove());
-    document.body.append(dialog);
-    dialog.showModal();
+      h('div', { class: 'ask-actions' }, h('button', { onclick: () => done(null) }, 'Close')),
+    ]);
   }
 
   // --- coach marks (first editor open only) --------------------------------------
@@ -344,13 +349,10 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     ];
     let step = 0;
     const text = h('p', {}, tips[0]);
-    const nextButton = h('button', { class: 'primary', onclick: () => {
-      step += 1;
-      if (step >= tips.length) { localStorage.setItem('plain.coach', 'done'); coach.remove(); return; }
+    const coach = h('div', { class: 'coach' }, text, h('button', { class: 'primary', onclick: () => {
+      if (++step >= tips.length) { localStorage.setItem('plain.coach', 'done'); return coach.remove(); }
       text.textContent = tips[step];
-      if (step === tips.length - 1) nextButton.textContent = 'Got it';
-    } }, 'Next');
-    const coach = h('div', { class: 'coach' }, text, nextButton);
+    } }, 'Next'));
     setTimeout(() => document.querySelector('.editor')?.prepend(coach), 100);
   }
 

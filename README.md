@@ -56,6 +56,12 @@ Body in **Markdown**. Images by path: ![A lake](/media/lake.jpg)
 
 Set `draft: true` and the post is saved but not published. Pages work the same in `content/pages/` (`about.md` → `/about/`; `index.md` is the homepage). Menus live in `data/navigation.json`; renamed URLs get an entry in `data/redirects.json`.
 
+## Themes & starters
+
+First sign in and the admin greets you with a five-step wizard: pick what you're building, name it, see it (a live preview already wearing your name), write your first words, and go live. Under the hood it applies a **starter** — a theme plus the right content types, menu, and example content.
+
+Five starters ship in the box: **Journal** (blog), **Toolbox** (trades & local services), **Studio** (portfolio), **Bistro** (restaurant), and **Manual** (documentation). The Appearance screen lets you try any of them on *your own pages* — with device widths and a light/dark toggle — before committing, and a customizer exposes each theme's colors and fonts as live controls. Your tweaks survive theme updates.
+
 ## Plugins
 
 A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim. Good first plugins: analytics snippet, giscus comments, image gallery, table of contents.

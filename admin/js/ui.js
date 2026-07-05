@@ -29,13 +29,11 @@ export function show(...elements) {
 
 /** "2026-07-05T10:00:00Z" → "2 hours ago" / "3 days ago". */
 export function timeAgo(iso) {
-  const seconds = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000);
-  const steps = [[60, 'second'], [60, 'minute'], [24, 'hour'], [7, 'day'], [4.35, 'week'], [12, 'month'], [Infinity, 'year']];
-  let value = seconds, unit = 'second';
-  for (const [size, name] of steps) {
-    unit = name;
+  let value = Math.max(0, (Date.now() - new Date(iso).getTime()) / 1000), unit = 'second';
+  for (const [size, name] of [[60, 'minute'], [60, 'hour'], [24, 'day'], [7, 'week'], [4.35, 'month'], [12, 'year']]) {
     if (value < size) break;
     value /= size;
+    unit = name;
   }
   const n = Math.floor(value);
   return n <= 0 ? 'just now' : `${n} ${unit}${n > 1 ? 's' : ''} ago`;
@@ -50,32 +48,37 @@ export function toast(message, type = 'info') {
 }
 
 /**
- * Modal question. actions: [{label, value, kind: 'primary'|'danger'|''}].
- * Resolves with the chosen value, or null if dismissed with Escape.
+ * Modal scaffold shared by every dialog: build(done) returns the children;
+ * calling done(value) closes and resolves; Escape resolves null.
  */
-export function ask({ title, message, actions }) {
+export function modal(className, build) {
   return new Promise((resolve) => {
-    const dialog = h('dialog', { class: 'ask' },
-      h('h2', {}, title),
-      message ? h('p', {}, message) : null,
-      h('div', { class: 'ask-actions' }, actions.map((action) =>
-        h('button', { class: action.kind || '', onclick: () => { dialog.returnValue = 'x'; dialog.close(); resolve(action.value); } }, action.label))),
-    );
+    const done = (value) => { dialog.returnValue = 'x'; dialog.close(); resolve(value); };
+    const dialog = h('dialog', { class: className }, build(done));
     dialog.addEventListener('close', () => { dialog.remove(); if (!dialog.returnValue) resolve(null); });
     document.body.append(dialog);
     dialog.showModal();
   });
 }
 
+/** Question with buttons. actions: [{label, value, kind}]. Resolves the chosen value. */
+export const ask = ({ title, message, actions }) => modal('ask', (done) => [
+  h('h2', {}, title),
+  message ? h('p', {}, message) : null,
+  h('div', { class: 'ask-actions' }, actions.map((action) =>
+    h('button', { class: action.kind || '', onclick: () => done(action.value) }, action.label))),
+]);
+
 /**
- * One-line text prompt as a modal. Resolves with the string or null.
+ * One-line text prompt. Resolves with the string or null.
  * Optional suggest: {label, run} adds a button that fills the input (AI assist).
  */
 export function askText({ title, message, placeholder = '', value = '', suggest = null }) {
-  return new Promise((resolve) => {
-    const input = h('input', { type: 'text', placeholder, value });
-    const done = (result) => { dialog.returnValue = 'x'; dialog.close(); resolve(result); };
-    const dialog = h('dialog', { class: 'ask' },
+  const input = h('input', { type: 'text', placeholder, value });
+  setTimeout(() => input.focus());
+  return modal('ask', (done) => {
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') done(input.value); });
+    return [
       h('h2', {}, title),
       message ? h('p', {}, message) : null,
       input,
@@ -87,12 +90,7 @@ export function askText({ title, message, placeholder = '', value = '', suggest 
         } }, suggest.label) : null,
         h('button', { onclick: () => done(null) }, 'Cancel'),
         h('button', { class: 'primary', onclick: () => done(input.value) }, 'OK')),
-    );
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') done(input.value); });
-    dialog.addEventListener('close', () => { dialog.remove(); if (!dialog.returnValue) resolve(null); });
-    document.body.append(dialog);
-    dialog.showModal();
-    input.focus();
+    ];
   });
 }
 
@@ -109,10 +107,7 @@ function setPill(className, ...children) {
   pillEl.replaceChildren(...children);
 }
 
-export function hidePill() {
-  clearTimeout(pollTimer);
-  pillEl?.classList.remove('visible');
-}
+export function hidePill() { clearTimeout(pollTimer); pillEl?.classList.remove('visible'); }
 
 /** Watch the build for a commit and keep the pill in sync. */
 export function watchBuild(commitSha, siteUrl) {

@@ -1,10 +1,7 @@
 // admin/js/ai.js — AI assist (cms-spec.md §8.3). BYOK: the key is pasted once
-// in Settings, lives in localStorage, and is sent nowhere except the provider.
-// Buttons, not chat — and every action shows before/after with an explicit
-// Apply; nothing is ever auto-applied.
-//
-// Provider interface: complete(prompt, content) → text. Ships with an
-// Anthropic adapter calling /v1/messages directly from the browser.
+// in Settings, lives in localStorage, and goes only to the provider. Provider
+// interface complete(prompt, content) → text, with an Anthropic adapter
+// calling /v1/messages directly from the browser. Buttons, not chat.
 
 const KEYS = { key: 'plain.aiKey', model: 'plain.aiModel' };
 

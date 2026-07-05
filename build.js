@@ -98,6 +98,12 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   const site = config.site;
   const plugins = await loadPlugins(root, config);
   const assets = clientAssets(plugins);
+  // Customizer tokens (§10.5): user overrides from config.theme.tokens are
+  // injected after theme.css, so theme upgrades never touch user tweaks.
+  const tokens = Object.entries(config.theme?.tokens || {});
+  if (tokens.length) {
+    assets.head += `<style id="theme-tokens">:root{${tokens.map(([name, value]) => `${name}:${value}`).join(';')}}</style>\n`;
+  }
   const inject = (html) => html.replace('</head>', `${assets.head}</head>`).replace('</body>', `${assets.body}</body>`);
   const data = loadData(root);
   const theme = loadTheme(root, site.theme);
@@ -274,12 +280,10 @@ function printReport(report, outDir) {
 // Dev server + watch mode (only used by `node build.js --watch`).
 
 const MIME = {
-  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8',
-  '.js': 'text/javascript; charset=utf-8', '.json': 'application/json',
-  '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8',
-  '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg',
-  '.jpeg': 'image/jpeg', '.gif': 'image/gif', '.webp': 'image/webp',
-  '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.pdf': 'application/pdf',
+  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.json': 'application/json', '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8',
+  '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif',
+  '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.pdf': 'application/pdf',
 };
 
 function serve(outDir, port) {
