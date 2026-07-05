@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="Abstract paper boats on a calm gradient sea">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e8edfb"/>
+      <stop offset="1" stop-color="#c9d6f2"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1743c7"/>
+      <stop offset="1" stop-color="#0e2a80"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#sky)"/>
+  <rect y="380" width="1200" height="250" fill="url(#sea)"/>
+  <path d="M0 380 Q 150 360 300 380 T 600 380 T 900 380 T 1200 380 V 630 H 0 Z" fill="url(#sea)" opacity="0.6"/>
+  <g fill="#fdfdfb">
+    <path d="M340 400 l60 -70 v70 z M400 330 l60 70 h-60 z M320 400 h160 l-25 30 h-110 z"/>
+    <path d="M760 430 l40 -48 v48 z M800 382 l40 48 h-40 z M746 430 h108 l-17 20 h-74 z" opacity="0.85"/>
+    <path d="M580 470 l26 -32 v32 z M606 438 l26 32 h-26 z M570 470 h72 l-11 14 h-50 z" opacity="0.7"/>
+  </g>
+</svg>

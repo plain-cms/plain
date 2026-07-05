@@ -1,0 +1,5 @@
+node_modules/
+dist/
+tests/.tmp-dist/
+tests/.tmp-broken/
+.DS_Store
