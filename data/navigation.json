@@ -1,18 +1,10 @@
 [
   {
-    "label": "Home",
-    "url": "/"
-  },
-  {
-    "label": "Services",
-    "url": "/services/"
+    "label": "Work",
+    "url": "/work/"
   },
   {
     "label": "About",
     "url": "/about/"
-  },
-  {
-    "label": "Contact",
-    "url": "/contact/"
   }
 ]
