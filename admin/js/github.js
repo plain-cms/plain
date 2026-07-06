@@ -31,15 +31,8 @@ const FRIENDLY = {
 
 /** Call the GitHub API. Throws GitHubError with a plain-language message. */
 async function gh(path, { method = 'GET', body, raw = false } = {}) {
-  const response = await fetch(`https://api.github.com${path}`, {
-    method,
-    headers: {
-      Authorization: `Bearer ${auth.token}`,
-      Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28',
-    },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
+  const headers = { Authorization: `Bearer ${auth.token}`, 'X-GitHub-Api-Version': '2022-11-28', Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json' };
+  const response = await fetch(`https://api.github.com${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
   if (!response.ok) {
     let detail = '';
     try { detail = (await response.json()).message || ''; } catch { /* not JSON */ }
@@ -53,9 +46,7 @@ const repoPath = (path) => `/repos/${auth.repo}/${path}`;
 
 export function bytesToBase64(bytes) {
   let binary = '';
-  for (let i = 0; i < bytes.length; i += 0x8000) {
-    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
-  }
+  for (let i = 0; i < bytes.length; i += 0x8000) binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
   return btoa(binary);
 }
 
@@ -85,23 +76,13 @@ export const getFileAt = async (path, ref) =>
  * @param {string|{base64: string}} content - text, or pre-encoded binary
  */
 export async function putFile(path, content, message, sha) {
-  const result = await gh(repoPath(`contents/${path}`), {
-    method: 'PUT',
-    body: {
-      message,
-      branch: auth.branch,
-      content: typeof content === 'string' ? encodeText(content) : content.base64,
-      ...(sha ? { sha } : {}),
-    },
-  });
+  const body = { message, branch: auth.branch, content: typeof content === 'string' ? encodeText(content) : content.base64, ...(sha ? { sha } : {}) };
+  const result = await gh(repoPath(`contents/${path}`), { method: 'PUT', body });
   return { sha: result.content.sha, commitSha: result.commit.sha };
 }
 
 export async function deleteFile(path, message, sha) {
-  const result = await gh(repoPath(`contents/${path}`), {
-    method: 'DELETE',
-    body: { message, branch: auth.branch, sha },
-  });
+  const result = await gh(repoPath(`contents/${path}`), { method: 'DELETE', body: { message, branch: auth.branch, sha } });
   return { commitSha: result.commit.sha };
 }
 
@@ -133,12 +114,7 @@ export async function commitsFor(path, perPage = 30) {
   const params = new URLSearchParams({ sha: auth.branch, per_page: perPage });
   if (path) params.set('path', path);
   const commits = await gh(repoPath(`commits?${params}`));
-  return commits.map((c) => ({
-    sha: c.sha,
-    date: c.commit.committer.date,
-    message: c.commit.message.split('\n')[0],
-    author: c.commit.author?.name || c.author?.login || '',
-  }));
+  return commits.map((c) => ({ sha: c.sha, date: c.commit.committer.date, message: c.commit.message.split('\n')[0], author: c.commit.author?.name || c.author?.login || '' }));
 }
 
 /** The workflow run building a commit, or null if none has started yet. */

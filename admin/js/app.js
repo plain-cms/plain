@@ -52,41 +52,64 @@ function guessRepo() {
   return segments.length >= 2 ? `${owner}/${segments[0]}` : `${owner}/${host}`;
 }
 
+/** Open the OAuth Worker's popup and resolve with the token it postMessages back (§3 v2). */
+function oauthPopup(oauthUrl) {
+  return new Promise((resolve, reject) => {
+    const origin = new URL(oauthUrl).origin;
+    const win = window.open(`${oauthUrl.replace(/\/$/, '')}/login`, 'plain-oauth', 'width=700,height=800');
+    if (!win) return reject(new Error('Your browser blocked the sign-in window — allow popups for this site and try again.'));
+    const done = () => { clearInterval(poll); removeEventListener('message', onMsg); };
+    const onMsg = (e) => { if (e.origin === origin && e.data?.type === 'plain-oauth') { done(); resolve(e.data.token); } };
+    const poll = setInterval(() => { if (win.closed) { done(); reject(new Error('Sign-in was cancelled.')); } }, 500);
+    addEventListener('message', onMsg);
+  });
+}
+
 function signinScreen() {
+  const oauthUrl = siteInfo?.site.oauthUrl;   // set → offer "Sign in with GitHub" (worker deployed)
   const repo = h('input', { type: 'text', placeholder: 'owner/repository', value: auth.repo || guessRepo(), autocomplete: 'off' });
   const token = h('input', { type: 'password', placeholder: 'github_pat_…', autocomplete: 'off' });
   const branch = h('input', { type: 'text', value: auth.branch });
-  const button = h('button', { class: 'primary', onclick: signIn }, 'Sign in');
-  async function signIn() {
-    if (!/^[\w.-]+\/[\w.-]+$/.test(repo.value.trim())) return toast('The repository should look like owner/name — you can copy it from the repository page URL.', 'error');
-    if (!token.value.trim()) return toast('Paste an access token — see “Where do I get a token?” below.', 'error');
-    button.disabled = true;
-    auth.save({ repo: repo.value.trim(), token: token.value.trim(), branch: branch.value.trim() || 'main' });
-    try {
-      await repoInfo();
-      toast('Welcome!', 'success');
-      location.hash = '#/';
-      route();
-    } catch (error) {
-      auth.clear();
-      button.disabled = false;
-      toast(error.message, 'error');
-    }
+
+  // Shared tail: store the token, verify it against the repo, and enter the app.
+  async function finish(accessToken, reEnable) {
+    if (!/^[\w.-]+\/[\w.-]+$/.test(repo.value.trim())) { reEnable(); return toast('Set the repository as owner/name — copy it from the repository page URL.', 'error'); }
+    auth.save({ repo: repo.value.trim(), token: accessToken, branch: branch.value.trim() || 'main' });
+    try { await repoInfo(); toast('Welcome!', 'success'); location.hash = '#/'; route(); }
+    catch (error) { auth.clear(); reEnable(); toast(error.message, 'error'); }
   }
-  return h('div', { class: 'signin' },
-    h('h1', {}, 'Welcome back'),
-    h('p', {}, 'Sign in once with a GitHub access token — it stays on this device.'),
+
+  const ghButton = oauthUrl ? h('button', { class: 'primary gh', onclick: async () => {
+    if (!repo.value.trim()) repo.value = guessRepo();
+    ghButton.disabled = true;
+    try { await finish(await oauthPopup(oauthUrl), () => { ghButton.disabled = false; }); }
+    catch (error) { ghButton.disabled = false; toast(error.message, 'error'); }
+  } }, 'Sign in with GitHub') : null;
+
+  const patButton = h('button', { class: 'primary', onclick: () => {
+    if (!token.value.trim()) return toast('Paste an access token — see “Where do I get a token?” below.', 'error');
+    patButton.disabled = true; finish(token.value.trim(), () => { patButton.disabled = false; });
+  } }, 'Sign in');
+
+  const tokenForm = h('div', {},
     h('label', {}, 'Repository', repo),
     h('label', {}, 'Access token', token),
     h('details', {}, h('summary', {}, 'Advanced: branch'), h('label', {}, 'Branch', branch)),
-    button,
+    patButton,
     h('details', { class: 'help' },
       h('summary', {}, 'Where do I get a token?'),
       h('ol', {},
         h('li', {}, 'On GitHub, open Settings → Developer settings → Fine-grained tokens → Generate new token.'),
         h('li', {}, 'Under “Repository access”, choose Only select repositories and pick this site’s repository.'),
         h('li', {}, 'Under “Permissions → Repository permissions”, set Contents to Read and write, and Actions to Read-only.'),
-        h('li', {}, 'Generate, copy the token, and paste it above. You won’t need to do this again on this device.'))),
+        h('li', {}, 'Generate, copy the token, and paste it above. You won’t need to do this again on this device.'))));
+
+  return h('div', { class: 'signin' },
+    h('h1', {}, 'Welcome back'),
+    oauthUrl
+      ? h('div', {}, h('p', {}, 'Sign in with your GitHub account to publish and manage content.'), ghButton,
+          h('details', { class: 'token-alt' }, h('summary', {}, 'or use an access token'), tokenForm))
+      : h('div', {}, h('p', {}, 'Sign in once with a GitHub access token — it stays on this device.'), tokenForm),
   );
 }
 

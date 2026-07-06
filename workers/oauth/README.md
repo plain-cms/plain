@@ -61,21 +61,30 @@ If that host differs from what you guessed in step 1, update the OAuth App's
 
 ### 5. Point the admin at it
 
-In plain's admin, set the **"Sign in with GitHub"** button to open the Worker's
-`/login` URL in a popup, and listen for the token:
+The admin already knows how to do the popup + `postMessage` flow — it just needs
+the Worker's URL. Add one field to `site.config.json` and rebuild:
 
-```js
-window.addEventListener("message", (e) => {
-  if (e.origin !== WORKER_ORIGIN) return;          // trust only the Worker
-  if (e.data?.type === "plain-oauth" && e.data.token) {
-    localStorage.setItem("gh_token", e.data.token); // same slot as the v1 PAT
+```json
+{
+  "site": {
+    "title": "…",
+    "url": "https://you.github.io/your-repo",
+    "oauthUrl": "https://plain-oauth.<your-subdomain>.workers.dev"
   }
-});
-window.open(`${WORKER_ORIGIN}/login`, "plain-oauth", "width=640,height=720");
+}
 ```
 
-(Wiring the admin UI is out of scope for the Worker itself — this snippet is the
-reference contract.)
+On the next build, the sign-in screen shows a **"Sign in with GitHub"** button
+(the access-token form stays available under *"or use an access token"*). Leave
+`oauthUrl` out to keep the token-only sign-in.
+
+### 6. Give your writers access
+
+"Sign in with GitHub" gives a writer a token, but they can only publish if their
+GitHub account can write to the repo. On GitHub, open the repo → **Settings →
+Collaborators → Add people**, and invite each writer with **Write** access. They
+then open `/admin/`, click **Sign in with GitHub**, authorize the OAuth App once,
+and can publish — no token to generate or paste.
 
 ## The flow
 

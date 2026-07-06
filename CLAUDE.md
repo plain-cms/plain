@@ -58,6 +58,8 @@ Field types: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (n
 
 **`site.basePath`** (optional): serve under a subpath, e.g. GitHub *project* Pages at `/<repo>/`. The build prefixes every root-relative `href`/`src` (and redirect target) with it; set `site.url` to the full base too (`https://user.github.io/<repo>`). Leave it empty (default) for a site served at the domain root — user Pages, Cloudflare/Netlify, or a custom domain.
 
+**`site.oauthUrl`** (optional): the deployed OAuth Worker URL (`workers/oauth/`). When set, the admin sign-in screen shows a **"Sign in with GitHub"** button (the paste-a-token form moves under "or use an access token"); writers with repo write access click it, authorize once, and publish — no PAT. Leave it out for token-only sign-in (v1). The admin opens `<oauthUrl>/login` in a popup and accepts the token only from a `postMessage` matching that origin.
+
 **To add a collection:** add an entry to `collections`, create its folder under `content/`, and make sure the theme has the template it names. That's all.
 
 ### Content files
