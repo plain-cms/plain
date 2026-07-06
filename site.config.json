@@ -70,40 +70,6 @@
         }
       ]
     },
-    "services": {
-      "path": "content/services",
-      "urlPattern": "/services/:slug/",
-      "template": "service",
-      "listUrl": "/services/",
-      "listTemplate": "list",
-      "label": "Services",
-      "sortBy": "title",
-      "sortOrder": "asc",
-      "fields": [
-        {
-          "name": "title",
-          "type": "text",
-          "required": true
-        },
-        {
-          "name": "description",
-          "type": "text"
-        },
-        {
-          "name": "priceFrom",
-          "type": "text"
-        },
-        {
-          "name": "included",
-          "type": "list"
-        },
-        {
-          "name": "draft",
-          "type": "boolean",
-          "default": false
-        }
-      ]
-    },
     "projects": {
       "path": "content/projects",
       "urlPattern": "/work/:slug/",
