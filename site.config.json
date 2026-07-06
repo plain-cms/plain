@@ -5,7 +5,7 @@
     "basePath": "/kiln",
     "description": "The sample site that ships with plain, the Git-native CMS. Served from GitHub project Pages under /kiln/.",
     "language": "en",
-    "theme": "default"
+    "theme": "bistro"
   },
   "collections": {
     "pages": {
@@ -61,6 +61,47 @@
         {
           "name": "tags",
           "type": "list"
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "default": false
+        }
+      ]
+    },
+    "menu": {
+      "path": "content/menu",
+      "urlPattern": "/menu/:slug/",
+      "template": "menu-item",
+      "listUrl": "/menu/",
+      "listTemplate": "menu",
+      "label": "Menu",
+      "sortBy": "section",
+      "sortOrder": "asc",
+      "pageSize": 100,
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "price",
+          "type": "text"
+        },
+        {
+          "name": "section",
+          "type": "select",
+          "options": [
+            "Starters",
+            "Mains",
+            "Desserts",
+            "Drinks"
+          ]
+        },
+        {
+          "name": "description",
+          "type": "text"
         },
         {
           "name": "draft",
