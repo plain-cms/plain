@@ -60,7 +60,7 @@ Set `draft: true` and the post is saved but not published. Pages work the same i
 
 First sign in and the admin greets you with a five-step wizard: pick what you're building, name it, see it (a live preview already wearing your name), write your first words, and go live. Under the hood it applies a **starter** — a theme plus the right content types, menu, and example content.
 
-Five starters ship in the box: **Journal** (blog), **Toolbox** (trades & local services), **Studio** (portfolio), **Bistro** (restaurant), and **Manual** (documentation). The Appearance screen lets you try any of them on *your own pages* — with device widths and a light/dark toggle — before committing, and a customizer exposes each theme's colors and fonts as live controls. Your tweaks survive theme updates.
+Fifteen starters ship in the box: **Journal** (blog), **Toolbox** (trades & local services), **Studio** (portfolio), **Bistro** (restaurant), **Manual** (documentation), **Terminal** (developer blog), **Letters** (newsletter & essays), **Launch** (startup/SaaS), **Gazette** (local news & magazine), **Folio** (résumé/CV), **Keys** (real estate), **Cause** (nonprofit), **Practice** (clinic), **Form** (fitness studio), and **Encore** (band & artist). The Appearance screen lets you try any of them on *your own pages* — with device widths and a light/dark toggle — before committing, and a customizer exposes each theme's colors and fonts as live controls. Your tweaks survive theme updates.
 
 ## Plugins
 
@@ -98,7 +98,7 @@ config.defaults.json  engine-owned defaults, merged under your config
 content/           your words (Markdown, one file per page/post)
 data/              navigation, redirects (JSON)
 media/             images and files
-themes/            five starters ship in the box; add your own
+themes/            fifteen starters ship in the box; add your own
 plugins/           a plugin is a folder; install = copy + enable in config
 admin/             the browser editor (static, vanilla ES modules)
 tools/migrate/     importers (Jekyll today)
