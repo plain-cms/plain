@@ -281,8 +281,7 @@ async function settingsScreen() {
   const theme = h('select', {}, themes.map((name) => h('option', { value: name, selected: name === config.site.theme ? '' : null }, name)));
 
   const aiKey = h('input', { type: 'password', value: aiSettings.key, placeholder: 'sk-ant-…', autocomplete: 'off' });
-  const aiModel = h('select', {}, ['claude-opus-4-8', 'claude-sonnet-4-6', 'claude-haiku-4-5'].map((id) =>
-    h('option', { value: id, selected: id === aiSettings.model ? '' : null }, id)));
+  const aiModel = h('select', {}, ['claude-opus-4-8', 'claude-sonnet-4-6', 'claude-haiku-4-5'].map((id) => h('option', { value: id, selected: id === aiSettings.model ? '' : null }, id)));
 
   async function save() {
     aiSettings.key = aiKey.value.trim();      // stays on this device — never committed

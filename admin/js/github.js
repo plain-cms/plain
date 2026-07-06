@@ -67,8 +67,7 @@ export async function getFile(path) {
 }
 
 /** Read a text file as it was at a specific version. */
-export const getFileAt = async (path, ref) =>
-  decodeText((await gh(repoPath(`contents/${path}?ref=${ref}`))).content);
+export const getFileAt = async (path, ref) => decodeText((await gh(repoPath(`contents/${path}?ref=${ref}`))).content);
 
 /**
  * Create or update a file — one commit. Pass `sha` when updating; a stale
@@ -103,6 +102,25 @@ export async function listTree(prefix) {
   return tree.filter((entry) => entry.type === 'blob' && entry.path.startsWith(prefix));
 }
 
+/**
+ * Write many files in ONE atomic commit (git data API) — all-or-nothing, so a
+ * half-run never leaves the repo half-updated. Each file is either {path, sha}
+ * (reference an existing blob — byte-exact copy of text or binary) or
+ * {path, content} (new text). @returns {{commitSha: string}}
+ */
+export async function commitFiles(files, message) {
+  const parent = (await gh(repoPath(`git/ref/heads/${auth.branch}`))).object.sha;
+  const baseTree = (await gh(repoPath(`git/commits/${parent}`))).tree.sha;
+  const tree = await Promise.all(files.map(async (f) => {
+    const sha = f.sha ?? (await gh(repoPath('git/blobs'), { method: 'POST', body: { content: f.base64 ?? bytesToBase64(new TextEncoder().encode(f.content)), encoding: 'base64' } })).sha;
+    return { path: f.path, mode: '100644', type: 'blob', sha };
+  }));
+  const newTree = await gh(repoPath('git/trees'), { method: 'POST', body: { base_tree: baseTree, tree } });
+  const commit = await gh(repoPath('git/commits'), { method: 'POST', body: { message, tree: newTree.sha, parents: [parent] } });
+  await gh(repoPath(`git/refs/heads/${auth.branch}`), { method: 'PATCH', body: { sha: commit.sha } });
+  return { commitSha: commit.sha };
+}
+
 /** Fetch a repo file as a blob object URL (for previewing not-yet-deployed media). */
 export async function fileObjectUrl(path) {
   const blob = await gh(repoPath(`contents/${path}?ref=${auth.branch}`), { raw: true });
@@ -124,8 +142,7 @@ export async function runFor(commitSha) {
 }
 
 /** Trigger a workflow_dispatch run (used by the update banner, §14.5). */
-export const dispatchWorkflow = (file, ref = auth.branch) =>
-  gh(repoPath(`actions/workflows/${file}/dispatches`), { method: 'POST', body: { ref } });
+export const dispatchWorkflow = (file, ref = auth.branch) => gh(repoPath(`actions/workflows/${file}/dispatches`), { method: 'POST', body: { ref } });
 
 /** Compare dotted semver strings a and b. Returns -1 / 0 / 1. */
 export function cmpVersion(a, b) {

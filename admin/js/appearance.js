@@ -3,7 +3,7 @@
 // the browser, using the same lib/template.js the build uses — what you
 // preview is what deploys. Nothing is committed until Apply.
 
-import { auth, getFile, putFile, listDir, listTree } from './github.js';
+import { auth, getFile, putFile, listDir, listTree, commitFiles } from './github.js';
 import { h, toast, ask, watchBuild } from './ui.js';
 import { render } from '../lib/template.js';
 import { collectionIndex } from './app.js';
@@ -65,36 +65,26 @@ export async function applyStarter(theme, siteInfo, { site = {}, tokens = {}, na
   const starter = theme.starter || { starter: theme.name, collections: {} };
   log('Updating settings…');
   const configFile = await getFile('site.config.json');
+  // Gather every change — config, navigation, and all sample files (copied by
+  // their existing blob SHA, so binary covers survive) — into ONE atomic commit.
   const config = JSON.parse(configFile.text);
   Object.assign(config.site, site, { theme: theme.name });
   config.collections = { ...config.collections, ...starter.collections };
   if (Object.keys(tokens).length) config.theme = { ...(config.theme || {}), tokens };
-  let last = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n',
-    `settings: apply the ${starter.starter} starter`, configFile.sha);
-
-  if (navigation && starter.navigation?.length) {
-    log('Setting up the menu…');
-    const nav = await getFile('data/navigation.json').catch(() => ({ sha: undefined }));
-    last = await putFile('data/navigation.json', JSON.stringify(starter.navigation, null, 2) + '\n', 'navigation: set starter menu', nav.sha);
-  }
+  const files = [{ path: 'site.config.json', content: JSON.stringify(config, null, 2) + '\n' }];
+  if (navigation && starter.navigation?.length) files.push({ path: 'data/navigation.json', content: JSON.stringify(starter.navigation, null, 2) + '\n' });
 
   const prefix = starter.sampleContent ? `themes/${theme.name}/${starter.sampleContent.replace(/\/$/, '')}/` : null;
-  const sampleFiles = prefix ? await listTree(prefix) : [];
-  if (samples && sampleFiles.length) {
-    for (const file of sampleFiles) {
-      const target = file.path.slice(prefix.length); // content/…, data/…, media/…
-      if (!navigation && target === 'data/navigation.json') continue;
-      log(`Adding ${target}…`);
-      const text = (await getFile(file.path)).text;
-      const existing = await getFile(target).catch(() => ({ sha: undefined }));
-      last = await putFile(target, text, `content: install ${starter.starter} example ${target.split('/').pop()}`, existing.sha);
-    }
-  } else { // no samples: the build still needs each new collection's folder to exist
-    for (const def of Object.values(starter.collections || {})) {
-      if (!await getFile(`${def.path}/.gitkeep`).catch(() => null)) last = await putFile(`${def.path}/.gitkeep`, '', `content: create ${def.path}/`);
-    }
+  const sampleFiles = (samples && prefix) ? await listTree(prefix) : [];
+  for (const f of sampleFiles) {
+    const target = f.path.slice(prefix.length); // content/…, data/…, media/…
+    if (target === 'data/navigation.json' && files.some((x) => x.path === target)) continue; // config's nav wins
+    files.push({ path: target, sha: f.sha });
   }
-  return last.commitSha;
+  if (!sampleFiles.length) for (const def of Object.values(starter.collections || {})) files.push({ path: `${def.path}/.gitkeep`, content: '' });
+
+  log('Publishing…');
+  return (await commitFiles(files, `settings: apply the ${starter.starter} starter`)).commitSha;
 }
 
 const DEVICES = { Phone: '390px', Tablet: '768px', Desktop: '100%' };
@@ -198,8 +188,7 @@ async function tryOn(theme, siteInfo) {
   const overlay = h('div', { class: 'tryon' },
     h('header', { class: 'tryon-bar' },
       h('strong', {}, theme.title),
-      h('span', { class: 'tryon-group' }, ...Object.entries(DEVICES).map(([label, width]) =>
-        button(label, () => { iframe.style.width = width; }))),
+      h('span', { class: 'tryon-group' }, ...Object.entries(DEVICES).map(([label, width]) => button(label, () => { iframe.style.width = width; }))),
       button('Light/Dark', () => { state.scheme = state.scheme === 'light' ? 'dark' : 'light'; refresh(); }),
       latestPost ? button('Home/Post', () => { state.page = state.page ? null : latestPost; refresh(); }) : null,
       button('Customize', () => { customizer.hidden = !customizer.hidden; }),

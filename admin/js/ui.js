@@ -65,8 +65,7 @@ export function modal(className, build) {
 export const ask = ({ title, message, actions }) => modal('ask', (done) => [
   h('h2', {}, title),
   message ? h('p', {}, message) : null,
-  h('div', { class: 'ask-actions' }, actions.map((action) =>
-    h('button', { class: action.kind || '', onclick: () => done(action.value) }, action.label))),
+  h('div', { class: 'ask-actions' }, actions.map((action) => h('button', { class: action.kind || '', onclick: () => done(action.value) }, action.label))),
 ]);
 
 /**
