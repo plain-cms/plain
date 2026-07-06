@@ -24,10 +24,14 @@ export async function collectionIndex(name) {
 
 export const singular = (name) => (name.endsWith('s') ? name.slice(0, -1) : name);
 
+/** Confirm, then clear the stored credentials and return to the sign-in screen. */
+async function signOut() {
+  if (await ask({ title: 'Sign out?', message: 'You’ll sign in again next time. Nothing is lost — your work lives in GitHub.', actions: [{ label: 'Stay', value: null }, { label: 'Sign out', value: true, kind: 'danger' }] })) { auth.clear(); route(); }
+}
+
 function shell(active, ...content) {
   const collections = Object.entries(siteInfo?.collections || {});
-  const link = (href, label, key) =>
-    h('a', { href, class: key === active ? 'current' : '' }, label);
+  const link = (href, label, key) => h('a', { href, class: key === active ? 'current' : '' }, label);
   return h('div', { class: 'layout' },
     h('nav', { class: 'sidebar' },
       h('a', { class: 'brand', href: '#/' }, siteInfo?.site.title || 'Admin'),
@@ -38,7 +42,8 @@ function shell(active, ...content) {
       link('#/appearance', 'Appearance', 'appearance'),
       link('#/settings', 'Settings', 'settings'),
       h('div', { class: 'sidebar-foot' },
-        h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'View site ↗')),
+        h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'View site ↗'),
+        h('button', { class: 'linklike signout', onclick: signOut }, `Sign out${auth.repo ? ` (${auth.repo})` : ''}`)),
     ),
     h('main', { class: 'screen' }, ...content),
   );
@@ -308,11 +313,7 @@ async function settingsScreen() {
       field('Model', aiModel)),
     h('hr'),
     h('p', { class: 'muted' }, `Signed in to ${auth.repo}. `,
-      h('button', { class: 'linklike', onclick: async () => {
-        if (await ask({ title: 'Sign out?', message: 'You’ll need the access token to sign back in.', actions: [{ label: 'Stay', value: null }, { label: 'Sign out', value: true, kind: 'danger' }] })) {
-          auth.clear(); route();
-        }
-      } }, 'Sign out')));
+      h('button', { class: 'linklike', onclick: signOut }, 'Sign out')));
 }
 
 const routes = {

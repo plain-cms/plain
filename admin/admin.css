@@ -63,7 +63,10 @@ input[type="checkbox"] { width: auto; }
 .sidebar a:hover { background: var(--bg); }
 .sidebar a.current { background: var(--bg); font-weight: 600; }
 .sidebar .brand { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.75rem; }
-.sidebar-foot { margin-top: auto; font-size: 0.85rem; }
+.sidebar-foot { margin-top: auto; font-size: 0.85rem; display: flex; flex-direction: column; gap: 0.35rem; align-items: flex-start; }
+.sidebar-foot .signout { color: var(--muted); text-decoration: none; }
+.sidebar-foot .signout:hover { color: var(--danger); text-decoration: underline; }
+@media (max-width: 760px) { .sidebar-foot { flex-direction: row; gap: 1rem; } }
 .screen { padding: 1.5rem 2rem 4rem; max-width: 70rem; }
 .screen-head { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.25rem; }
 .screen-head h1 { margin-right: auto; }
