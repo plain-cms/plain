@@ -5,7 +5,7 @@
     "basePath": "/kiln",
     "description": "The sample site that ships with plain, the Git-native CMS. Served from GitHub project Pages under /kiln/.",
     "language": "en",
-    "theme": "bistro"
+    "theme": "toolbox"
   },
   "collections": {
     "pages": {
@@ -102,6 +102,40 @@
         {
           "name": "description",
           "type": "text"
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "default": false
+        }
+      ]
+    },
+    "services": {
+      "path": "content/services",
+      "urlPattern": "/services/:slug/",
+      "template": "service",
+      "listUrl": "/services/",
+      "listTemplate": "list",
+      "label": "Services",
+      "sortBy": "title",
+      "sortOrder": "asc",
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "priceFrom",
+          "type": "text"
+        },
+        {
+          "name": "included",
+          "type": "list"
         },
         {
           "name": "draft",
