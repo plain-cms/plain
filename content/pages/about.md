@@ -1,22 +1,17 @@
 ---
 title: About
-description: Who we are, what we promise, and why half our work comes from repeat customers.
+description: Who we are, how we work, and how to start a project with us.
 example: true
 ---
 
-*Replace this: your story, in plain words. Customers hire the people, not the vans.*
+The studio was founded in 2021 by Mara Ellison and Tomas Okafor — a graphic designer and a photographer who kept borrowing each other's tools until it made more sense to share a room. We are deliberately small: every project is led by the two of us, start to finish.
 
-We started with one van and a pager in 2008. Today it's still a family business: two of us are father and son, the third served his apprenticeship with us and never left. About half of every month's work comes from people we've worked for before, or their neighbours — which we reckon is the only review that matters.
+## How we work
 
-## What we promise
+We take on a handful of projects a year, and we take them whole — research, design, and production. We would rather do the packaging *and* the photography than hand either to someone who wasn't in the room when the idea happened.
 
-- **A firm price before work starts.** The number we quote is the number you pay. If we open something up and find a bigger problem, we stop and talk to you before going on.
-- **We turn up when we say.** If we're running late, you get a call, not silence.
-- **Tidy work.** Boot covers on, floors sheeted, old parts and packaging taken away.
-- **A written guarantee.** Twelve months on workmanship, on paper, every job.
+Every case study on this site follows the same honest shape: the challenge as the client described it, the approach we actually took, and the outcome as it can be measured. No retouched mockups, no invented metrics.
 
-## Qualifications and insurance
+## Working with us
 
-*Replace this: your license number, certifications, and insurance cover. Customers rarely ask — but the serious ones always do.*
-
-Fully licensed and insured for domestic and light commercial plumbing and heating work. Certificates available on request — just ask when you call.
+A project usually starts with a one-hour conversation and ends somewhere between six weeks and six months later. If you have something that needs a careful eye and an unhurried process, write to us at hello@example.com — a paragraph about what you're making is the perfect introduction.
