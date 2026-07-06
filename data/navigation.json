@@ -4,11 +4,15 @@
     "url": "/"
   },
   {
-    "label": "Menu",
-    "url": "/menu/"
+    "label": "Services",
+    "url": "/services/"
   },
   {
-    "label": "Visit",
-    "url": "/visit/"
+    "label": "About",
+    "url": "/about/"
+  },
+  {
+    "label": "Contact",
+    "url": "/contact/"
   }
 ]
