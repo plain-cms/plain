@@ -71,7 +71,20 @@ export async function applyStarter(theme, siteInfo, { site = {}, tokens = {}, na
   Object.assign(config.site, site, { theme: theme.name });
   config.collections = { ...config.collections, ...starter.collections };
   if (Object.keys(tokens).length) config.theme = { ...(config.theme || {}), tokens };
-  const files = [{ path: 'site.config.json', content: JSON.stringify(config, null, 2) + '\n' }];
+  const files = [];
+
+  // Replace, don't accumulate: a collection whose template the new theme lacks
+  // was left by a previous theme's starter — drop it + delete its content (pages/
+  // posts and user collections use universal templates, so they're never touched).
+  const templates = new Set((await listDir(`themes/${theme.name}/templates`)).filter((e) => e.name.endsWith('.html')).map((e) => e.name.slice(0, -5)));
+  for (const [name, def] of Object.entries(config.collections)) {
+    if (!def.template || templates.has(def.template)) continue;
+    log(`Removing the leftover ${name} collection…`);
+    delete config.collections[name];
+    for (const f of await listTree(`${def.path}/`)) files.push({ path: f.path, delete: true });
+  }
+
+  files.unshift({ path: 'site.config.json', content: JSON.stringify(config, null, 2) + '\n' });
   if (navigation && starter.navigation?.length) files.push({ path: 'data/navigation.json', content: JSON.stringify(starter.navigation, null, 2) + '\n' });
 
   const prefix = starter.sampleContent ? `themes/${theme.name}/${starter.sampleContent.replace(/\/$/, '')}/` : null;

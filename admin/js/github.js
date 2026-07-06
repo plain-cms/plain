@@ -104,14 +104,15 @@ export async function listTree(prefix) {
 
 /**
  * Write many files in ONE atomic commit (git data API) — all-or-nothing, so a
- * half-run never leaves the repo half-updated. Each file is either {path, sha}
- * (reference an existing blob — byte-exact copy of text or binary) or
- * {path, content} (new text). @returns {{commitSha: string}}
+ * half-run never leaves the repo half-updated. Each entry is {path, sha}
+ * (reference an existing blob — byte-exact for text or binary), {path, content}
+ * (new text), or {path, delete: true} (remove it). @returns {{commitSha}}
  */
 export async function commitFiles(files, message) {
   const parent = (await gh(repoPath(`git/ref/heads/${auth.branch}`))).object.sha;
   const baseTree = (await gh(repoPath(`git/commits/${parent}`))).tree.sha;
   const tree = await Promise.all(files.map(async (f) => {
+    if (f.delete) return { path: f.path, mode: '100644', type: 'blob', sha: null };
     const sha = f.sha ?? (await gh(repoPath('git/blobs'), { method: 'POST', body: { content: f.base64 ?? bytesToBase64(new TextEncoder().encode(f.content)), encoding: 'base64' } })).sha;
     return { path: f.path, mode: '100644', type: 'blob', sha };
   }));
