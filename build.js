@@ -111,6 +111,16 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   siteApi.collections = collections;
   const warnings = [];
 
+  // A theme change must never break the build (§10.4): a collection naming a
+  // template this theme lacks falls back to a generic one + warns, not fails.
+  for (const [name, def] of Object.entries(config.collections)) {
+    for (const [key, fallback] of [['template', 'page'], ['listTemplate', 'list']]) {
+      if (!def[key] || theme.templates[def[key]]) continue;
+      warnings.push(`collection "${name}": theme "${site.theme}" has no "${def[key]}" template — rendering with "${fallback}". Left over from another theme's starter? Remove the collection or switch themes back.`);
+      def[key] = fallback;
+    }
+  }
+
   // Feeds, rendered Markdown, tag links — computed before any page renders.
   const feeds = Object.entries(config.collections)
     .filter(([, def]) => def.rss)

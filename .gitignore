@@ -6,3 +6,4 @@ tests/.tmp-broken/
 tests/.tmp-update/
 tests/.tmp-jekyll/
 tests/.tmp-base/
+tests/.tmp-fallback/

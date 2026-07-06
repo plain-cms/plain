@@ -65,6 +65,20 @@ test('build fails loudly on schema violations, naming file and field', async () 
   fs.rmSync(brokenRoot, { recursive: true, force: true });
 });
 
+test('a collection whose template the theme lacks falls back + warns, not fails (§10.4)', async () => {
+  const fbRoot = path.join(here, '.tmp-fallback');
+  fs.rmSync(fbRoot, { recursive: true, force: true });
+  fs.cpSync(fixtureRoot, fbRoot, { recursive: true });
+  const config = JSON.parse(fs.readFileSync(path.join(fbRoot, 'site.config.json'), 'utf8'));
+  config.collections.posts.template = 'gone-with-a-theme';   // e.g. left over from another starter
+  fs.writeFileSync(path.join(fbRoot, 'site.config.json'), JSON.stringify(config));
+
+  const report = await build({ root: fbRoot, outDir: path.join(fbRoot, 'dist'), quiet: true });
+  assert.ok(report.pages > 0, 'still builds instead of throwing');
+  assert.ok(report.warnings.some((w) => w.includes('gone-with-a-theme') && w.includes('page')), 'warns and names the fallback');
+  fs.rmSync(fbRoot, { recursive: true, force: true });
+});
+
 test('site.basePath prefixes root-relative href/src (C6: project-subpath hosts)', async () => {
   const baseRoot = path.join(here, '.tmp-base');
   const baseOut = path.join(baseRoot, 'dist');

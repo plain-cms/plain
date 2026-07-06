@@ -33,9 +33,7 @@ export async function themePreview(themeName, siteInfo, { page, tokens = {}, sch
   const base = `themes/${themeName}`;
   const load = async (dir) => {
     const files = {};
-    for (const entry of (await listDir(dir)).filter((e) => e.name.endsWith('.html'))) {
-      files[entry.name.slice(0, -5)] = (await getFile(`${dir}/${entry.name}`)).text;
-    }
+    for (const e of (await listDir(dir)).filter((x) => x.name.endsWith('.html'))) files[e.name.slice(0, -5)] = (await getFile(`${dir}/${e.name}`)).text;
     return files;
   };
   const [templates, partials, cssFile] = await Promise.all([
@@ -47,20 +45,12 @@ export async function themePreview(themeName, siteInfo, { page, tokens = {}, sch
   const collections = {};
   for (const name of Object.keys(siteInfo.collections)) collections[name] = await collectionIndex(name);
   if (!page) page = collections.pages?.find((p) => p.slug === 'index') || { title: siteInfo.site.title, url: '/', content: '<p>Welcome.</p>', collection: 'pages' };
-  const context = {
-    site: siteInfo.site,
-    page,
-    nav: (siteInfo.navigation || []).map((e) => ({ ...e, current: e.url === page.url })),
-    data: { navigation: siteInfo.navigation || [] },
-    collections,
-    feeds: [],
-  };
+  const nav = (siteInfo.navigation || []).map((e) => ({ ...e, current: e.url === page.url }));
+  const context = { site: siteInfo.site, page, nav, data: { navigation: siteInfo.navigation || [] }, collections, feeds: [] };
   const templateName = siteInfo.collections[page.collection]?.template || 'page';
   const body = render(templates[templateName] || templates.page, context, partials);
-  let html = render(templates.base, { ...context, body }, partials);
-  const tokenCss = Object.keys(tokens).length
-    ? `<style>:root{${Object.entries(tokens).map(([k, v]) => `${k}:${v}`).join(';')}}</style>` : '';
-  return html
+  const tokenCss = Object.keys(tokens).length ? `<style>:root{${Object.entries(tokens).map(([k, v]) => `${k}:${v}`).join(';')}}</style>` : '';
+  return render(templates.base, { ...context, body }, partials)
     .replace(/<link[^>]*\/assets\/theme\.css[^>]*>/, `<style>${css}</style>${tokenCss}`)
     .replace(/<script[^>]*enhance\.js[^>]*><\/script>/, '')
     .replace(/<link rel="icon"[^>]*>\n?/, '');
