@@ -6,7 +6,7 @@
     "oauthUrl": "https://plain-oauth.victorantos.workers.dev",
     "description": "The sample site that ships with plain, the Git-native CMS. Served from GitHub project Pages under /kiln/.",
     "language": "en",
-    "theme": "toolbox"
+    "theme": "studio"
   },
   "collections": {
     "pages": {
@@ -95,6 +95,50 @@
         },
         {
           "name": "included",
+          "type": "list"
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "default": false
+        }
+      ]
+    },
+    "projects": {
+      "path": "content/projects",
+      "urlPattern": "/work/:slug/",
+      "template": "project",
+      "listUrl": "/work/",
+      "listTemplate": "projects",
+      "label": "Work",
+      "sortBy": "date",
+      "sortOrder": "desc",
+      "pageSize": 12,
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "cover",
+          "type": "image"
+        },
+        {
+          "name": "client",
+          "type": "text"
+        },
+        {
+          "name": "services",
           "type": "list"
         },
         {
