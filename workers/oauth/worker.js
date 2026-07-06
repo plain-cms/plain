@@ -1,6 +1,6 @@
-// plain — optional OAuth Worker (cms-spec §3 auth, §12 M6).
+// plain — optional auth Worker (cms-spec §3 auth, §12 M6).
 //
-// Stateless GitHub OAuth "web flow" code-for-token exchange, so editors can
+// Stateless GitHub "user authorization" code-for-token exchange, so editors can
 // click "Sign in with GitHub" instead of pasting a fine-grained PAT (v1). The
 // Worker holds NO state: the CSRF nonce lives in a short-lived cookie, never on
 // a server, and the token is handed straight to the admin page and forgotten.
@@ -8,10 +8,17 @@
 // Secrets (set with `wrangler secret put`, never committed):
 //   GITHUB_CLIENT_ID · GITHUB_CLIENT_SECRET · ALLOWED_ORIGIN
 //
-// Scope note: OAuth Apps can only issue *classic* scopes, so the web flow
-// requests `repo`. Fine-grained tokens (single-repo, contents r/w) are
-// preferable and are what the v1 PAT sign-in uses — they just aren't
-// obtainable through this OAuth flow.
+// Built for a GitHub **App** (recommended): the user-to-server token it issues
+// is scoped to the App's installed permissions on the installed repos only —
+// Contents-only, this-repo-only — not the OAuth App's broad classic `repo`.
+// Apps don't use OAuth scopes, so no `scope` param is sent. (For an OAuth App
+// instead, add `authorize.searchParams.set("scope", "repo")` below.)
+//
+// Token lifetime follows the App's setting. With non-expiring user tokens
+// (recommended for simplicity) the token works until revoked, exactly like v1.
+// If you enable expiring tokens, the exchange also returns a refresh token this
+// Worker does not use — the writer just clicks "Sign in with GitHub" again
+// (one click while logged in) when the ~8h token lapses.
 
 const COOKIE = "plain_oauth_state";
 
@@ -28,8 +35,7 @@ export default {
       const authorize = new URL("https://github.com/login/oauth/authorize");
       authorize.searchParams.set("client_id", env.GITHUB_CLIENT_ID);
       authorize.searchParams.set("redirect_uri", redirectUri);
-      authorize.searchParams.set("scope", "repo");
-      authorize.searchParams.set("state", state);
+      authorize.searchParams.set("state", state);   // no `scope`: a GitHub App's permissions govern the token
       return new Response(null, {
         status: 302,
         headers: {

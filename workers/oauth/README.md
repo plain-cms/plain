@@ -1,8 +1,8 @@
-# plain — OAuth Worker (optional)
+# plain — auth Worker (optional)
 
-A tiny (~60-line), **stateless** Cloudflare Worker that performs the GitHub
-OAuth web flow so editors can click **"Sign in with GitHub"** instead of pasting
-a Personal Access Token.
+A tiny (~60-line), **stateless** Cloudflare Worker that runs the GitHub
+"user authorization" flow so editors can click **"Sign in with GitHub"** instead
+of pasting a Personal Access Token.
 
 > **This is opt-in.** plain's default sign-in (v1) is a GitHub fine-grained PAT
 > pasted into the admin and kept in `localStorage` — no Worker, no server. This
@@ -12,24 +12,32 @@ a Personal Access Token.
 ## What it does
 
 The Worker's only job is the one step the browser can't do safely on its own:
-swapping a GitHub OAuth `code` for an access token (that exchange requires the
-client *secret*, which must never ship to a browser). It stores nothing.
+swapping a GitHub `code` for an access token (that exchange requires the client
+*secret*, which must never ship to a browser). It stores nothing.
+
+## GitHub App vs OAuth App
+
+Use a **GitHub App** (recommended). An App issues *user-to-server* tokens scoped
+to its installed permissions on the repos it's installed on — for plain that's
+**Contents-only, on your content repo only**. An OAuth App can only issue a
+broad classic `repo` token (every repo the user can touch). Same click for the
+writer; far tighter blast radius. The Worker is built for a GitHub App as-is;
+for an OAuth App, add `scope=repo` back (see the note in `worker.js`).
 
 ## Deploy
 
-### 1. Create a GitHub OAuth App
+### 1. Create a GitHub App
 
-GitHub → **Settings → Developer settings → OAuth Apps → New OAuth App**:
+GitHub → **Settings → Developer settings → GitHub Apps → New GitHub App**:
 
-- **Application name:** anything (e.g. `plain admin`).
-- **Homepage URL:** your admin/site URL (e.g. `https://you.github.io`).
-- **Authorization callback URL:** your Worker's `/callback` URL —
-  `https://plain-oauth.<your-subdomain>.workers.dev/callback`
-  (you'll know the exact host after the first `wrangler deploy`; you can edit
-  this field afterwards).
+- **Name / Homepage URL:** anything (e.g. `plain admin`, your site URL).
+- **Callback URL:** your Worker's `/callback` — `https://plain-oauth.<your-subdomain>.workers.dev/callback` (you'll know the exact host after the first `wrangler deploy`; edit it afterwards). Tick **Request user authorization (OAuth) during installation** is optional.
+- **Expiring user tokens:** *uncheck* to keep it simple (tokens work like v1). Leave checked for tighter security — writers just re-click "Sign in" every ~8h.
+- **Webhook:** uncheck **Active** (plain doesn't use webhooks).
+- **Permissions → Repository:** **Contents: Read and write**, **Metadata: Read-only** (mandatory), **Actions: Read-only** (so the admin's build-status pill works). Add **Actions: Read and write** only if you also want the admin's in-app "Update available" button to trigger updates — otherwise skip it.
+- **Where can this App be installed?** *Only on this account.*
 
-Click **Register application**, then note the **Client ID** and generate a
-**Client secret**.
+Click **Create**, then: note the **Client ID**, generate a **Client secret**, and — importantly — **Install App** (left menu) onto your content repo (e.g. `victorantos/kiln`), granting it that repo.
 
 ### 2. Install Wrangler
 
@@ -41,13 +49,13 @@ wrangler login
 ### 3. Set the secrets (never committed)
 
 ```sh
-wrangler secret put GITHUB_CLIENT_ID       # paste the OAuth App Client ID
-wrangler secret put GITHUB_CLIENT_SECRET   # paste the OAuth App Client secret
+wrangler secret put GITHUB_CLIENT_ID       # paste the GitHub App Client ID
+wrangler secret put GITHUB_CLIENT_SECRET   # paste the GitHub App Client secret
 wrangler secret put ALLOWED_ORIGIN         # your admin origin, e.g. https://you.github.io
 ```
 
-`ALLOWED_ORIGIN` is scheme + host only (no trailing path). It is the **only**
-origin the Worker will hand a token to.
+`ALLOWED_ORIGIN` is scheme + host only (no trailing path — e.g. `https://you.github.io`,
+not `.../your-repo`). It is the **only** origin the Worker will hand a token to.
 
 ### 4. Deploy
 
@@ -56,8 +64,8 @@ wrangler deploy
 ```
 
 Wrangler prints the Worker URL (e.g. `https://plain-oauth.<sub>.workers.dev`).
-If that host differs from what you guessed in step 1, update the OAuth App's
-**Authorization callback URL** to `<that URL>/callback`.
+If that host differs from what you set in step 1, update the App's **Callback
+URL** to `<that URL>/callback`.
 
 ### 5. Point the admin at it
 
@@ -80,11 +88,16 @@ On the next build, the sign-in screen shows a **"Sign in with GitHub"** button
 
 ### 6. Give your writers access
 
-"Sign in with GitHub" gives a writer a token, but they can only publish if their
-GitHub account can write to the repo. On GitHub, open the repo → **Settings →
-Collaborators → Add people**, and invite each writer with **Write** access. They
-then open `/admin/`, click **Sign in with GitHub**, authorize the OAuth App once,
-and can publish — no token to generate or paste.
+A writer's token can only touch what **both** the writer and the App can reach.
+So each writer needs repo write access, and the App must be installed on the repo
+(step 1):
+
+1. Repo → **Settings → Collaborators → Add people** → invite each writer with **Write**.
+2. Make sure the App is **installed** on that repo (step 1's *Install App*).
+
+Then a writer opens `/admin/`, clicks **Sign in with GitHub**, authorizes the App
+once, and can publish — no token to generate or paste, and the token they get is
+scoped to just this repo's contents.
 
 ## The flow
 
