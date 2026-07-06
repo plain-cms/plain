@@ -3,6 +3,7 @@
     "title": "plain — sample site",
     "url": "https://victorantos.github.io/kiln",
     "basePath": "/kiln",
+    "oauthUrl": "https://plain-oauth.victorantos.workers.dev",
     "description": "The sample site that ships with plain, the Git-native CMS. Served from GitHub project Pages under /kiln/.",
     "language": "en",
     "theme": "toolbox"
