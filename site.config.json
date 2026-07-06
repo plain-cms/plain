@@ -1,10 +1,10 @@
 {
   "site": {
     "title": "plain — sample site",
-    "url": "https://victorantos.github.io/kiln",
-    "basePath": "/kiln",
+    "url": "https://plain-cms.com",
+    "repo": "plain-cms/plain",
     "oauthUrl": "https://plain-oauth.victorantos.workers.dev",
-    "description": "The sample site that ships with plain, the Git-native CMS. Served from GitHub project Pages under /kiln/.",
+    "description": "The sample site that ships with plain, the Git-native CMS.",
     "language": "en",
     "theme": "manual"
   },
