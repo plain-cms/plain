@@ -72,7 +72,7 @@ function oauthPopup(oauthUrl) {
 
 function signinScreen() {
   const oauthUrl = siteInfo?.site.oauthUrl;   // set → offer "Sign in with GitHub" (worker deployed)
-  const repo = h('input', { type: 'text', placeholder: 'owner/repository', value: auth.repo || guessRepo(), autocomplete: 'off' });
+  const repo = h('input', { type: 'text', placeholder: 'owner/repository', value: auth.repo || guessRepo() || siteInfo?.site.repo || '', autocomplete: 'off' });
   const token = h('input', { type: 'password', placeholder: 'github_pat_…', autocomplete: 'off' });
   const branch = h('input', { type: 'text', value: auth.branch });
 
@@ -85,7 +85,7 @@ function signinScreen() {
   }
 
   const ghButton = oauthUrl ? h('button', { class: 'primary gh', onclick: async () => {
-    if (!repo.value.trim()) repo.value = guessRepo();
+    if (!repo.value.trim()) repo.value = guessRepo() || siteInfo?.site.repo || '';
     ghButton.disabled = true;
     try { await finish(await oauthPopup(oauthUrl), () => { ghButton.disabled = false; }); }
     catch (error) { ghButton.disabled = false; toast(error.message, 'error'); }

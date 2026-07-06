@@ -37,7 +37,7 @@ GitHub → **Settings → Developer settings → GitHub Apps → New GitHub App*
 - **Permissions → Repository:** **Contents: Read and write**, **Metadata: Read-only** (mandatory), **Actions: Read-only** (so the admin's build-status pill works). Add **Actions: Read and write** only if you also want the admin's in-app "Update available" button to trigger updates — otherwise skip it.
 - **Where can this App be installed?** *Only on this account.*
 
-Click **Create**, then: note the **Client ID**, generate a **Client secret**, and — importantly — **Install App** (left menu) onto your content repo (e.g. `victorantos/kiln`), granting it that repo.
+Click **Create**, then: note the **Client ID**, generate a **Client secret**, and — importantly — **Install App** (left menu) onto your content repo (e.g. `plain-cms/plain`), granting it that repo.
 
 ### 2. Install Wrangler
 

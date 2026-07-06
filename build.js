@@ -236,6 +236,9 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
     fs.copyFileSync(from, path.join(outDir, to));
   }
   copyAdmin(root, outDir);
+  // A custom domain (anything but *.github.io) needs a CNAME in the output so Pages serves it (C6).
+  const host = new URL(site.url).host;
+  if (host && !host.endsWith('.github.io')) fs.writeFileSync(path.join(outDir, 'CNAME'), `${host}\n`);
   await runHook(plugins, 'afterBuild', outDir, siteApi);
 
   const report = {
