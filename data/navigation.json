@@ -4,8 +4,16 @@
     "url": "/"
   },
   {
-    "label": "Docs",
-    "url": "/docs/"
+    "label": "Blog",
+    "url": "/blog/"
+  },
+  {
+    "label": "About",
+    "url": "/about/"
+  },
+  {
+    "label": "Contact",
+    "url": "/contact/"
   },
   {
     "label": "Search",

@@ -16,7 +16,7 @@ Open `site.config.json` and change the title and description. They appear in the
 
 ## 2. The words
 
-Rewrite the [About](/about/) page — it's a placeholder on purpose. Then write one real post and delete the examples (each one says `example: true` at the top, so they're easy to find).
+Rewrite [About](/about/) and [Contact](/contact/) — they are placeholders on purpose. Then write one real post and delete the examples (each one says `example: true` at the top, so they're easy to find).
 
 ## 3. The look
 

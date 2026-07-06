@@ -1,12 +1,12 @@
 {
   "site": {
-    "title": "plain — sample site",
+    "title": "plain \u2014 sample site",
     "url": "https://plain-cms.com",
     "repo": "plain-cms/plain",
     "oauthUrl": "https://plain-oauth.victorantos.workers.dev",
     "description": "The sample site that ships with plain, the Git-native CMS.",
     "language": "en",
-    "theme": "manual"
+    "theme": "default"
   },
   "collections": {
     "pages": {
@@ -62,52 +62,6 @@
         {
           "name": "tags",
           "type": "list"
-        },
-        {
-          "name": "draft",
-          "type": "boolean",
-          "default": false
-        }
-      ]
-    },
-    "docs": {
-      "path": "content/docs",
-      "urlPattern": "/docs/:slug/",
-      "template": "doc",
-      "listUrl": "/docs/",
-      "listTemplate": "list",
-      "label": "Documentation",
-      "sortBy": "order",
-      "sortOrder": "asc",
-      "fields": [
-        {
-          "name": "title",
-          "type": "text",
-          "required": true
-        },
-        {
-          "name": "order",
-          "type": "text"
-        },
-        {
-          "name": "description",
-          "type": "text"
-        },
-        {
-          "name": "prev",
-          "type": "text"
-        },
-        {
-          "name": "next",
-          "type": "text"
-        },
-        {
-          "name": "prevTitle",
-          "type": "text"
-        },
-        {
-          "name": "nextTitle",
-          "type": "text"
         },
         {
           "name": "draft",
