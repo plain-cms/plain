@@ -1,12 +1,11 @@
 {
   "site": {
     "title": "plain \u2014 sample site",
-    "url": "https://plain-cms.com",
-    "repo": "plain-cms/plain",
-    "oauthUrl": "https://plain-oauth.victorantos.workers.dev",
+    "url": "https://plain-cms.github.io/plain",
     "description": "The sample site that ships with plain, the Git-native CMS.",
     "language": "en",
-    "theme": "default"
+    "theme": "default",
+    "basePath": "/plain"
   },
   "collections": {
     "pages": {
