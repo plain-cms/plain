@@ -154,7 +154,7 @@ async function registrySource(entry) {
   const tree = await fetch(`https://api.github.com/repos/${repo}/git/trees/${ref}?recursive=1`).then((r) => r.json()).then((t) => t.tree || []);
   return {
     read: (p) => fetch(`https://raw.githubusercontent.com/${repo}/${ref}/${prefix}/${p}`).then((r) => { if (!r.ok) throw new Error(p); return r.text(); }),
-    list: (d) => tree.filter((f) => f.path.startsWith(`${prefix}/${d}/`) && !f.path.slice(prefix.length + d.length + 2).includes('/')).map((f) => f.path.split('/').pop()),
+    list: async (d) => tree.filter((f) => f.path.startsWith(`${prefix}/${d}/`) && !f.path.slice(prefix.length + d.length + 2).includes('/')).map((f) => f.path.split('/').pop()),
   };
 }
 
