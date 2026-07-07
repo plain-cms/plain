@@ -1,4 +1,7 @@
-# plain
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+  <img src=".github/logo.svg" alt="plain" width="340">
+</picture>
 
 **A Git-native CMS for the AI age.** The repository is the database, static files are the API, and AI is the admin.
 
