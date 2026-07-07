@@ -385,11 +385,11 @@ A "Customize" panel beside the try-on exposes the theme's tokens as real control
 
 ### 10.6 Starter registry (a marketplace with no backend)
 
-Core repo ships **five launch starters**; the official `<name>-starters` repo hosts the rest. Its `registry.json` (static file) lists id, category, description, screenshot URL, engine compat. The admin's "Browse more" fetches it raw from GitHub; **Install** copies the starter folder into the user's repo via the GitHub contents API — same copy-a-folder story as plugins, zero servers. Community starters arrive by PR and must pass the §10.1 quality floor plus sample content in CI.
+Core repo ships **fifteen starters** (the five launch starters plus the ten most-requested fields from the catalog below); the official `<name>-starters` repo hosts the rest. Its `registry.json` (static file) lists id, category, description, screenshot URL, engine compat. The admin's "Browse more" fetches it raw from GitHub; **Install** copies the starter folder into the user's repo via the GitHub contents API — same copy-a-folder story as plugins, zero servers. Community starters arrive by PR and must pass the §10.1 quality floor plus sample content in CI.
 
 ### 10.7 Starter catalog — 20 fields, each done properly
 
-Launch five marked ★. Each line = audience → structure it ships → its signature.
+Shipped in core marked ★ (the original five launch starters, plus ten more built since). Each line = audience → structure it ships → its signature.
 
 1. ★ **Journal** — personal blog (the default). Pure reading experience; characterful display face over a humanist body, ~65ch measure. Signature: typography itself.
 2. ★ **Toolbox** — trades & local services (plumber, electrician). Services + service-area pages, testimonials, before/after gallery. Signature: sticky call-now bar on mobile.
@@ -397,20 +397,20 @@ Launch five marked ★. Each line = audience → structure it ships → its sign
 4. ★ **Bistro** — restaurant/café. Menu collection with tabular-number price alignment, hours + map + reserve CTA above the fold. Signature: the menu as a designed object.
 5. ★ **Manual** — documentation. Sidebar tree from collection structure, prominent search, prev/next. Signature: never lets you feel lost.
 6. **Civic** — government/municipality. GOV.UK-inspired: system type, AAA contrast, service cards, document lists, crest slot. Signature: radical clarity — boring is the feature.
-7. **Practice** — medical/dental clinic. Calm two-color palette, oversized legible type, services collection, appointment CTA. Signature: persistent hours/phone/emergency strip.
+7. ★ **Practice** — medical/dental clinic. Calm two-color palette, oversized legible type, services collection, appointment CTA. Signature: persistent hours/phone/emergency strip.
 8. **Chambers** — law firm. Practice-area collection, attorney profiles, restrained serif authority, zero decoration. Signature: confidence through omission.
-9. **Cause** — nonprofit/charity. Mission hero, programs collection, donate CTA, impact numbers from a data file. Signature: one human photograph, one number, one verb.
+9. ★ **Cause** — nonprofit/charity. Mission hero, programs collection, donate CTA, impact numbers from a data file. Signature: one human photograph, one number, one verb.
 10. **Parish** — church/community org. Service-times block, events collection, sermon archive with audio embeds. Signature: the welcome, not the institution.
 11. **Campus** — school/kindergarten. Announcements + term calendar first, staff directory, parent-first navigation. Signature: "what parents need this week" panel.
-12. **Launch** — startup/SaaS. Product hero with real screenshot slot, feature sections, pricing from a data file, changelog collection. Signature: the changelog as proof of life.
-13. **Terminal** — developer blog. Dark-first, best-in-class code blocks, TOC, keyboard navigation. Signature: code presented better than GitHub.
-14. **Letters** — newsletter/essayist. Essay-first type, subscribe slot, archive with excerpts. Signature: the archive reads like a book's contents.
+12. ★ **Launch** — startup/SaaS. Product hero with real screenshot slot, feature sections, pricing from a data file, changelog collection. Signature: the changelog as proof of life.
+13. ★ **Terminal** — developer blog. Dark-first, best-in-class code blocks, TOC, keyboard navigation. Signature: code presented better than GitHub.
+14. ★ **Letters** — newsletter/essayist. Essay-first type, subscribe slot, archive with excerpts. Signature: the archive reads like a book's contents.
 15. **Vows** — wedding/event. One-pager sections, countdown, RSVP via form plugin, schedule + travel. Signature: names set like an invitation.
-16. **Keys** — real-estate agent. Listings collection (price/rooms/area fields), photo-card grid, inquiry CTA. Signature: the listing card.
-17. **Form** — fitness/yoga studio. Class schedule from a data file, instructor collection, trial CTA. Signature: the timetable, legible at arm's length on a phone.
-18. **Encore** — band/artist. Shows collection (date/venue/tickets), streaming embeds, press-kit page, dark stage aesthetic. Signature: the tour-dates list.
-19. **Gazette** — local news/magazine. Multi-column front page, category sections, dateline typography. Signature: hierarchy that lets 12 stories breathe.
-20. **Folio** — résumé/CV. Single hire-me page, experience collection, print-perfect PDF styles. Signature: prints beautifully on one sheet of A4.
+16. ★ **Keys** — real-estate agent. Listings collection (price/rooms/area fields), photo-card grid, inquiry CTA. Signature: the listing card.
+17. ★ **Form** — fitness/yoga studio. Class schedule from a data file, instructor collection, trial CTA. Signature: the timetable, legible at arm's length on a phone.
+18. ★ **Encore** — band/artist. Shows collection (date/venue/tickets), streaming embeds, press-kit page, dark stage aesthetic. Signature: the tour-dates list.
+19. ★ **Gazette** — local news/magazine. Multi-column front page, category sections, dateline typography. Signature: hierarchy that lets 12 stories breathe.
+20. ★ **Folio** — résumé/CV. Single hire-me page, experience collection, print-perfect PDF styles. Signature: prints beautifully on one sheet of A4.
 
 ---
 
