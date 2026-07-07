@@ -3,7 +3,7 @@
 // the browser, using the same lib/template.js the build uses — what you
 // preview is what deploys. Nothing is committed until Apply.
 
-import { auth, getFile, putFile, listDir, listTree, commitFiles } from './github.js';
+import { auth, getFile, putFile, listDir, listTree, commitFiles, bytesToBase64 } from './github.js';
 import { h, toast, ask, watchBuild } from './ui.js';
 import { render } from '../lib/template.js';
 import { renderMarkdown } from '../lib/markdown.js';
@@ -141,7 +141,7 @@ export async function appearanceScreen(siteInfo) {
     h('p', { class: 'muted' }, 'Try any look with your own pages before changing anything. Switching back is one click, and your content is never modified by a theme change.'),
     h('div', { class: 'cards' }, cards),
     h('h2', { class: 'browse-more' }, 'Browse more'),
-    await registrySection(siteInfo));
+    await registrySection(siteInfo, new Set(themes.map((t) => t.name))));
 }
 
 // Starter registry (§10.6): a static registry.json in the community starters
@@ -158,9 +158,9 @@ async function registrySource(entry) {
   };
 }
 
-async function registrySection(siteInfo) {
-  const entries = await fetch(`https://raw.githubusercontent.com/${REGISTRY_REPO}/main/registry.json`)
-    .then((r) => (r.ok ? r.json() : [])).catch(() => []);
+async function registrySection(siteInfo, installed = new Set()) {
+  const entries = (await fetch(`https://raw.githubusercontent.com/${REGISTRY_REPO}/main/registry.json`)
+    .then((r) => (r.ok ? r.json() : [])).catch(() => [])).filter((e) => !installed.has(e.id));
   if (!entries.length) return h('p', { class: 'muted' }, 'Community starters will appear here as they’re published.');
   return h('div', { class: 'cards' }, entries.map((entry) => h('section', { class: 'card theme-card' },
     themeThumb(() => registrySource(entry).then((s) => themePreview(null, siteInfo, { sample: true, source: s })), entry.title || entry.id),
@@ -171,13 +171,13 @@ async function registrySection(siteInfo) {
       try {
         const repo = entry.repo || REGISTRY_REPO, ref = entry.ref || 'main', prefix = entry.path || entry.id;
         const { tree } = await fetch(`https://api.github.com/repos/${repo}/git/trees/${ref}?recursive=1`).then((r) => r.json());
+        toast(`Installing ${entry.title || entry.id}…`);
+        const files = [];
         for (const file of tree.filter((f) => f.type === 'blob' && f.path.startsWith(`${prefix}/`))) {
-          const text = await fetch(`https://raw.githubusercontent.com/${repo}/${ref}/${file.path}`).then((r) => r.text());
-          const target = `themes/${entry.id}/${file.path.slice(prefix.length + 1)}`;
-          toast(`Adding ${target}…`);
-          const existing = await getFile(target).catch(() => ({ sha: undefined }));
-          await putFile(target, text, `themes: install the ${entry.id} starter`, existing.sha);
+          const buf = await fetch(`https://raw.githubusercontent.com/${repo}/${ref}/${file.path}`).then((r) => r.arrayBuffer());
+          files.push({ path: `themes/${entry.id}/${file.path.slice(prefix.length + 1)}`, base64: bytesToBase64(new Uint8Array(buf)) });
         }
+        await commitFiles(files, `themes: install the ${entry.id} starter`);
         toast(`${entry.title || entry.id} installed — reload this screen to preview it.`, 'success');
       } catch (error) { toast(error.message, 'error'); e.target.disabled = false; }
     } }, 'Install')))));
