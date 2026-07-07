@@ -34,9 +34,9 @@ async function gh(path, { method = 'GET', body, raw = false } = {}) {
   const headers = { Authorization: `Bearer ${auth.token}`, 'X-GitHub-Api-Version': '2022-11-28', Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json' };
   const response = await fetch(`https://api.github.com${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
   if (!response.ok) {
-    let detail = '';
-    try { detail = (await response.json()).message || ''; } catch { /* not JSON */ }
-    throw new GitHubError(response.status, FRIENDLY[response.status] || `GitHub error ${response.status}: ${detail}`);
+    const detail = await response.json().then((d) => d.message || '').catch(() => '');
+    const friendly = FRIENDLY[response.status] || `GitHub error ${response.status}: ${detail}`;
+    throw new GitHubError(response.status, detail && !friendly.includes(detail) ? `${friendly} (GitHub said: ${detail})` : friendly);
   }
   if (response.status === 204) return null;
   return raw ? response.blob() : response.json();
