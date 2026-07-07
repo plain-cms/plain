@@ -60,6 +60,8 @@ Field types: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (n
 
 **`site.oauthUrl`** (optional): the deployed OAuth Worker URL (`workers/oauth/`). When set, the admin sign-in screen shows a **"Sign in with GitHub"** button (the paste-a-token form moves under "or use an access token"); writers with repo write access click it, authorize once, and publish — no PAT. Leave it out for token-only sign-in (v1). The admin opens `<oauthUrl>/login` in a popup and accepts the token only from a `postMessage` matching that origin.
 
+**`site.favicon` / `site.appleTouchIcon` / `site.socialImage`** (optional): per-site branding without editing a theme. `favicon` swaps the icon link away from the theme's `/assets/favicon.svg`; `appleTouchIcon` adds an iOS home-screen icon link; `socialImage` is the site-wide share image — every theme emits it as `og:image` + `twitter:card` for pages that have no `cover`. Values are root-relative paths served from `media/` (e.g. `/media/brand/og-image.png`); meta tags absolutize them with `site.url`. The project's brand kit (SVG masters + generator + platform rasters) lives in the site repo, `victorantos/plain-cms.com`, under `assets/` — this engine repo ships only the default favicon and the README logos in `.github/`.
+
 **To add a collection:** add an entry to `collections`, create its folder under `content/`, and make sure the theme has the template it names. That's all.
 
 ### Content files

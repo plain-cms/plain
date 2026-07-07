@@ -130,7 +130,10 @@ Defined in `site.config.json`. A collection = a folder of Markdown files + a sch
     "url": "https://example.com",
     "description": "…",
     "language": "en",
-    "theme": "default"
+    "theme": "default",
+    "favicon": "/media/brand/favicon.svg",
+    "appleTouchIcon": "/media/brand/apple-touch-icon.png",
+    "socialImage": "/media/brand/og-image.png"
   },
   "collections": {
     "pages": {
@@ -165,6 +168,8 @@ Defined in `site.config.json`. A collection = a folder of Markdown files + a sch
   "plugins": ["search"]
 }
 ```
+
+`site.favicon`, `site.appleTouchIcon`, and `site.socialImage` are optional branding overrides: the theme links `favicon` in place of its own `/assets/favicon.svg`, adds the touch-icon link, and uses `socialImage` as the `og:image`/`twitter:card` fallback for pages without a `cover` image. All three are root-relative paths, typically under `media/`.
 
 Field `type` drives the admin form control: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (with `options`). The admin renders forms **from this schema** — adding a field to config instantly adds it to the editor. This is the core trick that makes the CMS extensible without code.
 
