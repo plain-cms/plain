@@ -3,6 +3,7 @@ title: Keeper's cottage sale collapses; trust granted six months to raise £310,
 date: 2026-06-18
 section: News
 standfirst: The private buyer withdrew over access rights. The civic trust now has until December to match the price and open the point to walkers.
+description: The private buyer withdrew over access rights. The civic trust now has until December to match the price and open the point to walkers.
 byline: Ana Serrano
 example: true
 ---

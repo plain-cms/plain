@@ -3,6 +3,7 @@ title: First oyster harvest in sixty years as the estuary beds come back
 date: 2026-06-08
 section: Business
 standfirst: The restoration co-op lifted 4,000 oysters last week — small, slow money, but the cleanest water readings the estuary has had since testing began.
+description: The restoration co-op lifted 4,000 oysters last week — small, slow money, but the cleanest water readings the estuary has had since testing began.
 byline: Ana Serrano
 example: true
 ---

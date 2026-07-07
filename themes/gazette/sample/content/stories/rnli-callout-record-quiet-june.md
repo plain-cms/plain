@@ -3,6 +3,7 @@ title: Lifeboat crew logs its quietest June in forty years, credits the flag sys
 date: 2026-05-22
 section: Sport
 standfirst: Two callouts all month, both minor. The volunteer coxswain points to the new bathing flags — and to swimmers finally reading them.
+description: Two callouts all month, both minor. The volunteer coxswain points to the new bathing flags — and to swimmers finally reading them.
 byline: Micky Deane
 example: true
 ---

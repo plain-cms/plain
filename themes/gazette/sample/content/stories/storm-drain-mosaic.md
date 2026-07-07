@@ -3,6 +3,7 @@ title: Anonymous mosaicist strikes again — this time on the Foundry Lane storm
 date: 2026-05-27
 section: Culture
 standfirst: The town's most wanted artist has tiled a seventh piece of neglected infrastructure. The council's position has softened from "vandalism" to "please just tell us the grout spec."
+description: The town's most wanted artist has tiled a seventh piece of neglected infrastructure. The council's position has softened from "vandalism" to "please just tell us the grout spec."
 byline: Dan Okafor
 example: true
 ---

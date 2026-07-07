@@ -3,6 +3,7 @@ title: Quay market rents frozen for two years after traders pack the gallery
 date: 2026-06-25
 section: Business
 standfirst: Facing forty stallholders in the public seats, the harbor board shelved a 22% rise and ordered an independent review.
+description: Facing forty stallholders in the public seats, the harbor board shelved a 22% rise and ordered an independent review.
 byline: Rosa Imrie
 example: true
 ---

@@ -3,6 +3,7 @@ title: New harbor ferry will be built three streets from where it will sail
 date: 2026-06-28
 section: News
 standfirst: The council's £4.2m contract goes to Wren & Daughters, the last working boatyard on the east quay — beating two overseas bids.
+description: The council's £4.2m contract goes to Wren & Daughters, the last working boatyard on the east quay — beating two overseas bids.
 byline: Rosa Imrie
 featured: true
 example: true

@@ -3,6 +3,7 @@ title: "Rovers promoted on the final day: 2–1, then twenty minutes nobody brea
 date: 2026-06-15
 section: Sport
 standfirst: A 89th-minute header sent Westhaven up — then the whole ground stood listening to a radio for the result from Carden Vale.
+description: A 89th-minute header sent Westhaven up — then the whole ground stood listening to a radio for the result from Carden Vale.
 byline: Micky Deane
 example: true
 ---

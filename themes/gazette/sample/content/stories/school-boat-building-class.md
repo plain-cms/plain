@@ -3,6 +3,7 @@ title: The school that teaches boat-building is oversubscribed for the first tim
 date: 2026-06-01
 section: News
 standfirst: Harbor Academy's wooden-boat elective, nearly cut in 2022, now has a waiting list — and its graduates have a hiring pipeline to the quay.
+description: Harbor Academy's wooden-boat elective, nearly cut in 2022, now has a waiting list — and its graduates have a hiring pipeline to the quay.
 byline: Micky Deane
 example: true
 ---
