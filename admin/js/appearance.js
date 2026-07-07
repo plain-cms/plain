@@ -6,6 +6,8 @@
 import { auth, getFile, putFile, listDir, listTree, commitFiles } from './github.js';
 import { h, toast, ask, watchBuild } from './ui.js';
 import { render } from '../lib/template.js';
+import { renderMarkdown } from '../lib/markdown.js';
+import { parseFrontmatter } from '../lib/content.js';
 import { collectionIndex } from './app.js';
 
 /** Every theme in the repo: {name, title, description, starter?}. */
@@ -25,35 +27,56 @@ export function parseTokens(css) {
   return [...root[1].matchAll(/(--[\w-]+)\s*:\s*([^;]+);/g)].map((m) => ({ name: m[1], value: m[2].trim() }));
 }
 
-/**
- * Render one of the user's own pages with a candidate theme — client side,
- * byte-compatible with the build. Returns a self-contained HTML document.
- */
-export async function themePreview(themeName, siteInfo, { page, tokens = {}, scheme = 'light' } = {}) {
-  const base = `themes/${themeName}`;
+const installedSource = (name) => ({
+  read: (p) => getFile(`themes/${name}/${p}`).then((f) => f.text),
+  list: (d) => listDir(`themes/${name}/${d}`).then((es) => es.map((e) => e.name)),
+});
+
+async function sampleHome(src) {
+  const md = await src.read('sample/content/pages/index.md').catch(() => null);
+  if (!md) return null;
+  const { data, body } = parseFrontmatter(md, 'index.md');
+  return { ...data, url: '/', slug: 'index', collection: 'pages', content: renderMarkdown(body) };
+}
+
+/** Render a theme to a self-contained HTML doc (client-side, byte-identical to the build). source reads
+ *  its files (default: installed themeName); sample:true → the theme's own sample home (thumbnails). */
+export async function themePreview(themeName, siteInfo, { page, tokens = {}, scheme = 'light', sample = false, source } = {}) {
+  const src = source || installedSource(themeName);
   const load = async (dir) => {
     const files = {};
-    for (const e of (await listDir(dir)).filter((x) => x.name.endsWith('.html'))) files[e.name.slice(0, -5)] = (await getFile(`${dir}/${e.name}`)).text;
+    for (const n of (await src.list(dir).catch(() => [])).filter((x) => x.endsWith('.html'))) files[n.slice(0, -5)] = await src.read(`${dir}/${n}`);
     return files;
   };
-  const [templates, partials, cssFile] = await Promise.all([
-    load(`${base}/templates`), load(`${base}/templates/partials`), getFile(`${base}/assets/theme.css`),
-  ]);
-  let css = cssFile.text;
-  if (scheme === 'dark') css = css.replaceAll('@media (prefers-color-scheme: dark)', '@media all');
-
+  const [templates, partials, css0] = await Promise.all([load('templates'), load('templates/partials'), src.read('assets/theme.css')]);
+  const css = scheme === 'dark' ? css0.replaceAll('@media (prefers-color-scheme: dark)', '@media all') : css0;
   const collections = {};
-  for (const name of Object.keys(siteInfo.collections)) collections[name] = await collectionIndex(name);
-  if (!page) page = collections.pages?.find((p) => p.slug === 'index') || { title: siteInfo.site.title, url: '/', content: '<p>Welcome.</p>', collection: 'pages' };
-  const nav = (siteInfo.navigation || []).map((e) => ({ ...e, current: e.url === page.url }));
-  const context = { site: siteInfo.site, page, nav, data: { navigation: siteInfo.navigation || [] }, collections, feeds: [] };
-  const templateName = siteInfo.collections[page.collection]?.template || 'page';
-  const body = render(templates[templateName] || templates.page, context, partials);
+  let nav = siteInfo.navigation || [];
+  if (sample) {
+    page = await sampleHome(src);
+    nav = await src.read('sample/data/navigation.json').then(JSON.parse).catch(() => nav);
+  } else {
+    for (const name of Object.keys(siteInfo.collections)) collections[name] = await collectionIndex(name);
+    page = page || collections.pages?.find((p) => p.slug === 'index');
+  }
+  if (!page) page = { title: siteInfo.site.title, url: '/', content: '<p>Welcome.</p>', collection: 'pages' };
+  nav = nav.map((e) => ({ ...e, current: e.url === page.url }));
+  const context = { site: siteInfo.site, page, nav, data: { navigation: nav }, collections, feeds: [] };
+  const body = render(templates[siteInfo.collections[page.collection]?.template || 'page'] || templates.page, context, partials);
   const tokenCss = Object.keys(tokens).length ? `<style>:root{${Object.entries(tokens).map(([k, v]) => `${k}:${v}`).join(';')}}</style>` : '';
   return render(templates.base, { ...context, body }, partials)
     .replace(/<link[^>]*\/assets\/theme\.css[^>]*>/, `<style>${css}</style>${tokenCss}`)
-    .replace(/<script[^>]*enhance\.js[^>]*><\/script>/, '')
-    .replace(/<link rel="icon"[^>]*>\n?/, '');
+    .replace(/<script[^>]*enhance\.js[^>]*><\/script>/, '').replace(/<link rel="icon"[^>]*>\n?/, '');
+}
+
+/** A lazy, non-interactive thumbnail that live-renders a theme when scrolled into view. */
+function themeThumb(getHtml, label) {
+  const frame = h('iframe', { class: 'theme-thumb-frame', tabindex: '-1', 'aria-hidden': 'true', title: `Preview of ${label}` });
+  const box = h('div', { class: 'thumb theme-thumb' }, frame);
+  new IntersectionObserver((es, io) => es[0].isIntersecting && (io.disconnect(), getHtml()
+    .then((html) => { frame.srcdoc = html; box.classList.add('ready'); })
+    .catch(() => { box.classList.add('ready'); box.replaceChildren('🎨'); }))).observe(box);
+  return box;
 }
 
 /**
@@ -106,7 +129,8 @@ export async function appearanceScreen(siteInfo) {
   const themes = await loadThemes();
   themes.sort((a, b) => (a.name === siteInfo.site.theme ? -1 : b.name === siteInfo.site.theme ? 1 : 0));
 
-  const cards = themes.map((theme) => h('section', { class: 'card' },
+  const cards = themes.map((theme) => h('section', { class: 'card theme-card' },
+    themeThumb(() => themePreview(theme.name, siteInfo, { sample: true }), theme.title),
     h('h2', {}, theme.title, theme.name === siteInfo.site.theme ? h('span', { class: 'badge' }, 'Active') : null),
     h('p', { class: 'muted' }, theme.description),
     h('div', { class: 'card-actions' },
@@ -124,11 +148,22 @@ export async function appearanceScreen(siteInfo) {
 // repo; Install copies the starter folder into this repo — no servers.
 const REGISTRY_REPO = 'plain-cms/starters';
 
+/** Reads a not-yet-installed registry theme's files straight from its repo (raw = CDN, no API-rate cost). */
+async function registrySource(entry) {
+  const repo = entry.repo || REGISTRY_REPO, ref = entry.ref || 'main', prefix = entry.path || entry.id;
+  const tree = await fetch(`https://api.github.com/repos/${repo}/git/trees/${ref}?recursive=1`).then((r) => r.json()).then((t) => t.tree || []);
+  return {
+    read: (p) => fetch(`https://raw.githubusercontent.com/${repo}/${ref}/${prefix}/${p}`).then((r) => { if (!r.ok) throw new Error(p); return r.text(); }),
+    list: (d) => tree.filter((f) => f.path.startsWith(`${prefix}/${d}/`) && !f.path.slice(prefix.length + d.length + 2).includes('/')).map((f) => f.path.split('/').pop()),
+  };
+}
+
 async function registrySection(siteInfo) {
   const entries = await fetch(`https://raw.githubusercontent.com/${REGISTRY_REPO}/main/registry.json`)
     .then((r) => (r.ok ? r.json() : [])).catch(() => []);
   if (!entries.length) return h('p', { class: 'muted' }, 'Community starters will appear here as they’re published.');
-  return h('div', { class: 'cards' }, entries.map((entry) => h('section', { class: 'card' },
+  return h('div', { class: 'cards' }, entries.map((entry) => h('section', { class: 'card theme-card' },
+    themeThumb(() => registrySource(entry).then((s) => themePreview(null, siteInfo, { sample: true, source: s })), entry.title || entry.id),
     h('h2', {}, entry.title || entry.id),
     h('p', { class: 'muted' }, `${entry.category ? `${entry.category} — ` : ''}${entry.description || ''}`),
     h('div', { class: 'card-actions' }, h('button', { class: 'primary', onclick: async (e) => {

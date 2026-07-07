@@ -131,12 +131,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     return [v.slice(0, start) + block + v.slice(b), b + prefix.length];
   });
   async function insertImage(file) {
-    const alt = await askText({
-      title: 'Describe this image',
-      message: 'Alt text is what screen readers speak and search engines read. One short sentence.',
-      placeholder: 'e.g. A rowboat on a misty lake',
-      suggest: hasKey() ? { label: '✨ Suggest', run: async () => assist.altText(toBase64(await file.arrayBuffer()), file.type) } : null,
-    });
+    const alt = await askText({ title: 'Describe this image', message: 'Alt text is what screen readers speak and search engines read. One short sentence.', placeholder: 'e.g. A rowboat on a misty lake', suggest: hasKey() ? { label: '✨ Suggest', run: async () => assist.altText(toBase64(await file.arrayBuffer()), file.type) } : null });
     if (alt === null) return;
     try {
       const url = await uploadMedia(file);
@@ -275,11 +270,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   async function renameAndSave(file, newSlug, text, message) {
     const oldUrl = urlFor(def.urlPattern, slug);
     const newUrl = urlFor(def.urlPattern, newSlug);
-    const addRedirect = await ask({
-      title: 'The address is changing',
-      message: `“${oldUrl}” will become “${newUrl}”. Links to the old address would break — forward visitors to the new one?`,
-      actions: [{ label: 'Cancel', value: 'cancel' }, { label: 'Just rename', value: false }, { label: 'Rename & forward', value: true, kind: 'primary' }],
-    });
+    const addRedirect = await ask({ title: 'The address is changing', message: `“${oldUrl}” will become “${newUrl}”. Links to the old address would break — forward visitors to the new one?`, actions: [{ label: 'Cancel', value: 'cancel' }, { label: 'Just rename', value: false }, { label: 'Rename & forward', value: true, kind: 'primary' }] });
     if (addRedirect === 'cancel' || addRedirect === null) return;
     const result = await putFile(file, text, message);
     await deleteFile(`${def.path}/${slug}.md`, `${kind}: remove old copy of "${slug}"`, sha);
@@ -305,11 +296,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   }
 
   async function conflict(publish) {
-    const choice = await ask({
-      title: 'This was edited elsewhere',
-      message: 'It changed since you opened it — maybe in another tab, or by someone else. Your text is still here in the editor.',
-      actions: [{ label: 'Cancel', value: null }, { label: 'Load their version (discards mine)', value: 'reload' }, { label: 'Keep mine (overwrites theirs)', value: 'mine', kind: 'danger' }],
-    });
+    const choice = await ask({ title: 'This was edited elsewhere', message: 'It changed since you opened it — maybe in another tab, or by someone else. Your text is still here in the editor.', actions: [{ label: 'Cancel', value: null }, { label: 'Load their version (discards mine)', value: 'reload' }, { label: 'Keep mine (overwrites theirs)', value: 'mine', kind: 'danger' }] });
     if (choice === 'reload') { clearInterval(autosaveTimer); show(await editorScreen({ siteInfo, collection, slug, onSaved })); }
     if (choice === 'mine') {
       ({ sha } = await getFile(`${def.path}/${slug}.md`));

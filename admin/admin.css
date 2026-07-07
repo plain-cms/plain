@@ -167,6 +167,12 @@ dialog.ai-review { max-width: 44rem; width: 90vw; }
 .thumb:empty { animation: thumb-pulse 1.1s ease-in-out infinite; }
 .media-name { display: block; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* Theme thumbnails — a lazy, scaled-down live render of each theme's homepage. */
+.theme-thumb { aspect-ratio: 4 / 3; position: relative; margin-bottom: 0.85rem; background: var(--bg); animation: thumb-pulse 1.1s ease-in-out infinite; }
+.theme-thumb.ready { animation: none; }
+.theme-thumb-frame { position: absolute; inset: 0; width: 500%; height: 1500px; border: 0; transform: scale(0.2); transform-origin: top left; pointer-events: none; background: #fff; opacity: 0; transition: opacity 0.2s; }
+.theme-thumb.ready .theme-thumb-frame { opacity: 1; }
+
 /* Try-on & wizard --------------------------------------------------------------- */
 
 .tryon { position: fixed; inset: 0; z-index: 40; display: flex; flex-direction: column; background: var(--bg); }

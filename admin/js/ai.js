@@ -19,18 +19,8 @@ export const NO_KEY_HINT = 'To use the AI buttons, paste an Anthropic API key on
 async function complete(prompt, content, maxTokens = 1024) {
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
-    headers: {
-      'x-api-key': aiSettings.key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: aiSettings.model,
-      max_tokens: maxTokens,
-      system: prompt,
-      messages: [{ role: 'user', content }],
-    }),
+    headers: { 'x-api-key': aiSettings.key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true', 'content-type': 'application/json' },
+    body: JSON.stringify({ model: aiSettings.model, max_tokens: maxTokens, system: prompt, messages: [{ role: 'user', content }] }),
   });
   if (!response.ok) {
     const detail = await response.json().catch(() => ({}));
