@@ -34,6 +34,8 @@ Sign in once with a GitHub access token (it stays on that device):
 
 The token never leaves the browser except to api.github.com. Editors who prefer files can keep editing files — the admin and direct edits coexist happily.
 
+Prefer a button to a paste? Deploy the optional ~60-line [OAuth Worker](workers/oauth/README.md) (free on Cloudflare, backed by a free GitHub App) and the sign-in screen gains **"Sign in with GitHub"** — one click, and each writer gets a token scoped to just that repo's contents.
+
 **AI assist (optional, BYOK):** paste an Anthropic API key in Settings and the editor grows ✨ buttons — improve writing, suggest titles, generate the meta description, write image alt text, translate a page into a new draft. Every suggestion shows a before/after and asks before applying. The key stays in your browser and is sent only to Anthropic.
 
 ## The API — your content as JSON
