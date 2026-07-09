@@ -37,6 +37,8 @@
     "plugins/goatcounter/plugin.json": "41f212d04e753c0b307f865a34a5820fc0cbd08f8e39fc0263f2f253ac4c60cc",
     "plugins/reading-time/index.js": "e3fd89b64b4b0ca2dcd857d8d47f8bb94af0d4dacc2894ed597de729965d630d",
     "plugins/reading-time/plugin.json": "8b357ed8b12ac6e5205b9e661c288ffdd63e183c730cb3bfd99da87cf5ffc439",
+    "plugins/reset-sw/index.js": "59203861e714411c6d2b40101f8ba8f09c28112a853d7217a437ee58ce45a233",
+    "plugins/reset-sw/plugin.json": "57c42720175c3a290b3bf472808b9387de96f4b9fef02b71b0d07d7c92f47d52",
     "plugins/search/client.css": "8d5a0eb8738bb64c638e48771f96208b4a2b0ba373699d2d02c42a409da9203f",
     "plugins/search/client.js": "d47b946b0281dd70217026f33cc694f71158175ef84cd669c332feb6135d2f70",
     "plugins/search/index.js": "cf06547ac82542e05d97c439ed2ccc2588e5d3c416a036004911aff6bae9bede",
@@ -56,7 +58,7 @@
     "themes/default/templates/partials/post-card.html": "d158bb289e39361909f9d561594b4011d8e766743bf0d0a274064a34e2b0cf54",
     "themes/default/templates/post.html": "ee75ec69f5e9b14e064356d2366aca75f20a58eef819dede3b2bfec61deffee1",
     "themes/default/theme.json": "5dc09803cb2238c0cdde0bf52abdcf9349a6b172657ad5e3e2dcbdd2fdd2f42c",
-    "tools/engine-manifest.js": "720f85dee178eb0957158fb547ccef29d3570a986591dbbf691145dd658453ef",
+    "tools/engine-manifest.js": "31d3588c4becb088448b12d6ef3941e55e1c5e6430969073be84a3676f4ced72",
     "tools/migrate/README.md": "9e751ba193cef59327dc111d5ea9784e3cc23444ae96ff51aebd414794c886eb",
     "tools/migrate/fixtures/chirpy/_config.yml": "cc6ff43879eb06c43af5dad8aa05e30a1882544ce234ec7fcdd75b699d1fdf23",
     "tools/migrate/fixtures/chirpy/_posts/2024-05-01-a-chirpy-post.md": "ac3aafa305d129dc7df0610d62d2048fde34ba808fe64bc15babb4639894c5a3",
@@ -80,7 +82,7 @@
     "tools/migrate/fixtures/vuepress/jobs/April-2026/Acme-Corp-NewYork-NY-Full-Time.md": "6e8e571e6be8399fcd067eff56ae76e9cb1e6483207b60e638cb4b9eb09246ff",
     "tools/migrate/fixtures/vuepress/jobs/May-2026/Acme-Corp-NewYork-NY-Full-Time.md": "11bf89ce45eb8798532adab3e376359f74e5643b39cb47a97208b89096bb485c",
     "tools/migrate/fixtures/vuepress/jobs/README.md": "5c8d46b80f5d7bd6878f02c89fb0f53f6a684f721d66b35c52eb58cc3840ca9a",
-    "tools/migrate/jekyll.js": "c8fb5944a4763c938c58a112c19668ee620def499d9bb856f7ee41d016c20df9",
+    "tools/migrate/jekyll.js": "b83c0d24289a20b1e7b60c70b0b0a92d63002b08b85d9e995b8105db9e61c4df",
     "tools/migrate/vuepress.js": "be6c51ea40f216ea999be6326f9ce6b4154fb9c8037ad7d024ee376f545a23e8",
     "tools/update.js": "7d2b47566f7c16251f74749e59cdc08dea1f8147d799e964f0b8df9020608d54"
   }
