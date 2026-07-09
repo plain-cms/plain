@@ -22,10 +22,7 @@ export function h(tag, props = {}, ...children) {
 }
 
 /** Replace #app's content with the given element(s). */
-export function show(...elements) {
-  const app = document.getElementById('app');
-  app.replaceChildren(...elements);
-}
+export function show(...elements) { document.getElementById('app').replaceChildren(...elements); }
 
 /** "2026-07-05T10:00:00Z" → "2 hours ago" / "3 days ago". */
 export function timeAgo(iso) {

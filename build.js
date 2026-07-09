@@ -89,7 +89,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   const config = validateConfig(deepMerge(defaults, JSON.parse(fs.readFileSync(configPath, 'utf8'))));
   const site = config.site;
   const plugins = await loadPlugins(root, config);
-  const assets = clientAssets(plugins);
+  const assets = clientAssets(plugins, config.services);
   // Customizer tokens (§10.5): user overrides from config.theme.tokens are
   // injected after theme.css, so theme upgrades never touch user tweaks.
   const tokens = Object.entries(config.theme?.tokens || {});

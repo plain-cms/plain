@@ -42,3 +42,11 @@ test('clientAssets builds injection HTML in config order and exposes options', a
   assert.match(head, /"note":"default-note"/); // options JSON for client code
   assert.match(body, /<script type="module" src="\/plugins\/stamp\/client.js"><\/script>/);
 });
+
+test('clientAssets exposes named services under the reserved $services key', async () => {
+  const plugins = await loadPlugins(fixtureRoot, { plugins: ['stamp'] });
+  const { head } = clientAssets(plugins, { backend: 'https://api.x.test' });
+  assert.match(head, /"\$services":\{"backend":"https:\/\/api\.x\.test"\}/);
+  assert.doesNotMatch(clientAssets(plugins).head, /\$services/);     // no services → no key
+  assert.doesNotMatch(clientAssets(plugins, {}).head, /\$services/); // empty map too
+});

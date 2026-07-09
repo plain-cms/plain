@@ -21,7 +21,8 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const ENGINE_FILES = ['build.js', 'config.defaults.json', 'package.json',
   '.github/workflows/build-deploy.yml', '.github/workflows/update.yml'];
 export const ENGINE_DIRS = ['lib', 'admin', 'tools', 'migrations',
-  'themes/default', 'plugins/search', 'plugins/contact-form', 'plugins/reading-time'];
+  'themes/default', 'plugins/search', 'plugins/contact-form', 'plugins/reading-time',
+  'plugins/api-form', 'plugins/goatcounter'];
 
 /** Every engine-owned file path (repo-relative, POSIX separators), sorted. */
 export function engineFiles(base = root) {

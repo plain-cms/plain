@@ -69,6 +69,21 @@ test('field validation: required, types, defaults, select options', () => {
   assert.throws(() => validateFields({ title: 'x', kind: 'c' }, fields, 'f.md'), /one of: a, b/);
 });
 
+test('services: https URLs only, trailing slash normalized, defaults to {}', () => {
+  const withServices = goodConfig();
+  withServices.services = { backend: 'https://api.t.test/' };
+  assert.equal(validateConfig(withServices).services.backend, 'https://api.t.test');
+  assert.deepEqual(validateConfig(goodConfig()).services, {});
+
+  const insecure = goodConfig();
+  insecure.services = { backend: 'http://api.t.test' };
+  assert.throws(() => validateConfig(insecure), /"services\.backend" must be an https:\/\/ URL/);
+
+  const notAString = goodConfig();
+  notAString.services = { backend: { url: 'https://api.t.test', key: 'oops' } };
+  assert.throws(() => validateConfig(notAString), /never put keys or secrets/);
+});
+
 test('urlFor: pattern substitution, index collapse, trailing slash', () => {
   assert.equal(urlFor('/blog/:slug/', 'hello'), '/blog/hello/');
   assert.equal(urlFor('/:slug/', 'about'), '/about/');
