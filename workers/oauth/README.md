@@ -15,6 +15,18 @@ The Worker's only job is the one step the browser can't do safely on its own:
 swapping a GitHub `code` for an access token (that exchange requires the client
 *secret*, which must never ship to a browser). It stores nothing.
 
+## Everything here is yours (and free)
+
+There is **no central plain auth service** — you don't need access to anyone
+else's settings, and nobody's infrastructure sits between your writers and
+GitHub. You create **your own** GitHub App (any GitHub account can, free),
+deploy **your own** copy of this Worker (Cloudflare free plan), and hold your
+own secrets. Your writers see *your* app's name on the authorize screen, and
+their tokens travel only between their browser, your Worker, and GitHub.
+That's deliberate: a shared auth service would mean one party holding a
+secret that can mint tokens for every plain site's repo. Nobody should have
+that — so nobody does.
+
 ## GitHub App vs OAuth App
 
 Use a **GitHub App** (recommended). An App issues *user-to-server* tokens scoped
