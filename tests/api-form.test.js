@@ -63,6 +63,14 @@ test('a declared form with a bad path fails the build with a teaching error', ()
     /"path" starting with "\/"/);
 });
 
+test('hidden values resolve {page.field} tokens at build time', () => {
+  const tokens = { forms: { t: { path: '/x', hidden: { url: 'https://x.test{page.url}', author: '{page.author}', missing: '{page.nope}' } } } };
+  const html = apiForm.renderPage({ url: '/jobs/a/', title: 'A', author: 'acme "quoted"' }, '[[form:t]]', site, tokens);
+  assert.match(html, /name="url" value="https:\/\/x\.test\/jobs\/a\/"/);
+  assert.match(html, /name="author" value="acme &quot;quoted&quot;"/, 'resolved values are escaped');
+  assert.match(html, /name="missing" value=""/, 'unknown fields resolve to empty');
+});
+
 test('closes: static deadline line + data attributes for the client gate', () => {
   const closing = { forms: { ends: { path: '/x', closes: '2026-08-01', closedMessage: 'Too late!' } } };
   const html = apiForm.renderPage(page, '[[form:ends]]', site, closing);
