@@ -41,6 +41,7 @@
 <footer class="colophon">
   <div class="container">
     <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
+    {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
   </div>
 </footer>
 <script type="module" src="/assets/enhance.js"></script>

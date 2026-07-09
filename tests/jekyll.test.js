@@ -51,6 +51,13 @@ test('Chirpy: _tabs pages are imported and Chirpy chrome is stripped', () => {
   assert.equal(r.redirects['/about/'], undefined);
 });
 
+test('asset paths are rewritten to media/ in Markdown, src/href, and CSS url()', () => {
+  const r = run('chirpy');
+  const post = r.post('a-chirpy-post');
+  assert.match(post, /!\[A diagram\]\(\/media\/assets\/img\/diagram\.png\)/, 'markdown image rewritten');
+  assert.match(post, /url\('\/media\/assets\/img\/hero\.png'\)/, 'inline-style url() rewritten');
+});
+
 test('Chirpy: post frontmatter is clean and schema-valid; chrome keys gone', () => {
   const r = run('chirpy');
   const post = r.post('a-chirpy-post');

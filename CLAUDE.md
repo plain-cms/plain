@@ -91,7 +91,7 @@ Rules:
 
 ### Data files
 
-Every `data/*.json` is available to templates as `data.<filename>` (e.g. `{{#each data.navigation as entry}}`). `navigation.json` is a list of `{label, url}`; `redirects.json` maps old → new URLs and produces both a `_redirects` file and meta-refresh fallback pages.
+Every `data/*.json` is available to templates as `data.<filename>` (e.g. `{{#each data.navigation as entry}}`). `navigation.json` is a list of `{label, url}`; `redirects.json` maps old → new URLs and produces both a `_redirects` file and meta-refresh fallback pages. `footer.json` is `{ "html": "…" }` — every shipped theme prints it at the bottom of every page (raw site-owner HTML), and the admin's Settings screen edits it (commit message `settings: update footer`).
 
 ## Template syntax (lib/template.js — the complete list)
 
