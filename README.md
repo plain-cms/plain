@@ -79,7 +79,7 @@ Already have a site? The importers under `tools/migrate/` convert it — content
 node tools/migrate/jekyll.js /path/to/your-jekyll-site
 ```
 
-It writes `content/`, `media/`, and `data/redirects.json` into `./plain-import/` (never touching your working tree) plus a migration report of anything that needs a human eye. Copy those folders into your plain repo and build. Jekyll ships today; Hugo, Eleventy, and WordPress are on the roadmap (§15).
+It writes `content/`, `media/`, and `data/redirects.json` into `./plain-import/` (never touching your working tree) plus a migration report of anything that needs a human eye. Copy those folders into your plain repo and build. Jekyll and VuePress ship today; VitePress, Hugo, Eleventy, and WordPress are on the roadmap (§15).
 
 The full step-by-step walkthrough — keeping your URLs, wiring forms and analytics, the cutover checklist — is [`tools/migrate/README.md`](tools/migrate/README.md).
 
@@ -108,7 +108,7 @@ media/             images and files
 themes/            fifteen starters ship in the box; add your own
 plugins/           a plugin is a folder; install = copy + enable in config
 admin/             the browser editor (static, vanilla ES modules)
-tools/migrate/     importers (Jekyll today)
+tools/migrate/     importers (Jekyll, VuePress)
 workers/oauth/     optional "Sign in with GitHub" worker (v1 uses a token)
 build.js + lib/    the whole engine — under 2,500 lines, one dependency, MIT
 ```

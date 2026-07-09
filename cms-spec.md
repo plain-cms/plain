@@ -456,7 +456,7 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 
 **M6 — Open-source polish.** README with 5-minute quickstart + screenshots, CONTRIBUTING, template-repo setup ("Use this template" button), demo site, optional OAuth Worker (separate folder `workers/oauth/`, ~60 lines, deploy instructions), and the **upgrade system** (§14: `engine.json` manifest, `update.yml` workflow, admin update banner), plus the **Jekyll importer** (§15) as the launch switch-story. *Done when:* a stranger can go from README to their own live site without asking a question, a site on v1.0 upgrades to v1.1 by merging one auto-generated PR, and a real Jekyll blog converts with working redirects.
 
-**M7 (optional/backlog):** i18n conventions, CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), WordPress / VuePress / Joomla importers (§15).
+**M7 (optional/backlog):** i18n conventions, CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), WordPress / Joomla importers (§15).
 
 **Out of scope, permanently (use plugins or other tools):** user accounts on the published site, comments backend, e-commerce, page-builder drag-and-drop, server-side rendering, databases.
 
@@ -497,7 +497,7 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 Per source:
 
 - **Jekyll / Hugo / Eleventy** — already Markdown + frontmatter in Git: remap frontmatter keys, strip or convert Liquid/shortcodes, move assets, map permalinks. A pure file transform — the easy, high-volume win, and the launch switch-story.
-- **VuePress / VitePress** — Markdown with embedded Vue components and JS config: convert what maps to plain HTML, flag components for the review queue.
+- **VuePress / VitePress** — Markdown with embedded Vue components and JS config: convert what maps to plain HTML, flag components for the review queue. Ships for VuePress: `tools/migrate/vuepress.js` (nested frontmatter flattened, components stripped or substituted via `--component`, containers → blockquotes, `.vuepress/public` → `media/public`). VitePress differs in config layout (`.vitepress/`) — adapt the importer, or wait for the roadmap.
 - **WordPress** — input: WXR export (Tools → Export) or the REST API. Convert post/page HTML (including Gutenberg block markup) to Markdown, fetch `wp-content/uploads` media referenced in content, map categories/tags, preserve slugs or emit redirects. Comments export to a static JSON archive (a plugin can render "archived comments").
 - **Joomla** — no standard export: read a database dump (`#__content` tables) or crawl the rendered site. Messiest path; expect the largest review queue.
 

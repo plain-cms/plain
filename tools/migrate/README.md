@@ -6,10 +6,10 @@ wondering about the similar name? That folder holds the engine's own upgrade
 scripts, run automatically when plain itself updates — this one is for
 *your* site.)
 
-Jekyll ships today; Hugo, Eleventy, and WordPress are on the roadmap
-(cms-spec.md §15). The whole importer is one dependency-free file —
-`jekyll.js`, ~580 lines — so adapting it to another generator is a realistic
-afternoon project, or a one-prompt task for an AI agent.
+Jekyll and VuePress ship today; Hugo, Eleventy, and WordPress are on the
+roadmap (cms-spec.md §15). Each importer is one dependency-free file
+(`jekyll.js`, `vuepress.js`) — so adapting one to another generator is a
+realistic afternoon project, or a one-prompt task for an AI agent.
 
 ## Before you start
 
@@ -40,6 +40,29 @@ the flags:
 ```sh
 node tools/migrate/jekyll.js ~/blog --pages=business
 ```
+
+**Coming from VuePress?** Same shape, different flags — point it at the
+folder that contains `.vuepress/`:
+
+```sh
+node tools/migrate/vuepress.js /path/to/site/src
+```
+
+- `--collections=jobs,docs` — which top-level folders become collections
+  (default: any folder holding 2+ pages). Subfolders flatten into the
+  collection with a `section` field and a matching tag, so plain's tag pages
+  replace per-folder index pages.
+- `--component='JobApplication=[[form:apply]]'` — what to put where a Vue
+  component stood (repeatable; default strips it and lists it in the report's
+  components table so you can rerun with a substitution).
+- `--base=/subpath/` — only if your `.vuepress/config` sets a `base` the
+  importer can't read.
+
+VuePress notes: plain URLs always end in `/`, so `.html` URLs can never be
+preserved — the generated redirect map is the answer, not a loss. `::: tip`
+containers become blockquotes; nested frontmatter (e.g. `author: {name,
+url}`) is flattened to `author` + `authorUrl`; `.vuepress/public/` assets
+move to `/media/public/` with references rewritten.
 
 ## Step 2 — read the report
 
@@ -134,6 +157,7 @@ Static sites lean on services for the moving parts. Where each goes:
 | Contact form | `contact-form` plugin → Formspree or your own endpoint |
 | Forms posting to your own backend | `api-form` plugin + a `"services"` entry (CLAUDE.md, "services") |
 | Analytics | `goatcounter` plugin (opt-in), or leave analytics out |
+| Vue components in Markdown | `--component` substitutions (forms → `api-form`) or the report's review queue |
 | Comments | giscus (GitHub Discussions) as a plugin, or a static archive |
 | Search, RSS, sitemap, tag pages | built in — nothing to do |
 
@@ -168,6 +192,9 @@ node --test tests/
   Jekyll are kept as raw HTML and deserve a skim.
 - **A post is dated 1970-01-01** — the source had no date anywhere; set one
   in its frontmatter.
+- **A page lost its hero/landing layout** — VuePress `home: true` layouts are
+  theme features, not content; the review queue quotes the dropped hero
+  values so you can rebuild them as plain Markdown/HTML.
 - **Coming from Hugo, Eleventy, or WordPress?** Export to Markdown with
   frontmatter and the Jekyll importer gets you most of the way — or adapt
-  `jekyll.js` to read your generator's layout directly.
+  `jekyll.js`/`vuepress.js` to read your generator's layout directly.

@@ -14,7 +14,7 @@
 //   "pluginOptions": { "api-form": { "forms": { "signup": {
 //     "path": "/signups", "encoding": "json", "button": "Sign up",
 //     "fields": [{ "name": "email", "type": "email", "label": "Email", "required": true }],
-//     "hidden": { "source": "site" }, "success": "You're in!", "storageKey": "signedUp",
+//     "hidden": { "source": "site", "job": "{page.title}" }, "success": "You're in!", "storageKey": "signedUp",
 //     "closes": "2026-08-01", "closedMessage": "Sign-ups are closed."
 //   } } } }
 //
@@ -36,9 +36,14 @@ function fieldHtml(field) {
   return `  <label>${escapeHtml(field.label || field.name)} ${input}</label>`;
 }
 
-function formHtml(form, base, language) {
+function formHtml(form, base, language, page) {
+  // Hidden values may reference the page they render on with {page.field}
+  // tokens ("{page.url}", "{page.title}", …) — resolved at build time, so a
+  // form on many pages (e.g. a job board's apply form) carries per-page
+  // context without per-page config.
+  const fill = (value) => String(value).replace(/\{page\.([A-Za-z][\w-]*)\}/g, (_m, key) => page?.[key] ?? '');
   const hidden = Object.entries(form.hidden || {})
-    .map(([key, value]) => `  <input type="hidden" name="${escapeHtml(key)}" value="${escapeHtml(value)}">`);
+    .map(([key, value]) => `  <input type="hidden" name="${escapeHtml(key)}" value="${escapeHtml(fill(value))}">`);
   const storage = form.storageKey ? ` data-storage-key="${escapeHtml(form.storageKey)}"` : '';
   const closes = form.closes ? ` data-closes="${form.closes}" data-closed-message="${escapeHtml(form.closedMessage || 'Sign-ups are closed.')}"` : '';
   return [
@@ -67,7 +72,7 @@ export default {
       }
       if (!/^\//.test(form.path || '')) throw new Error(`form "${name}" needs a "path" starting with "/" — e.g. "path": "/signups" under pluginOptions.api-form.forms.${name} in site.config.json`);
       if (form.closes && !isIsoDate(form.closes)) throw new Error(`form "${name}" has "closes": ${JSON.stringify(form.closes)} — use an ISO date like "2026-08-01"`);
-      return formHtml(form, base, site.config.site?.language);
+      return formHtml(form, base, site.config.site?.language, page);
     });
   },
 };
