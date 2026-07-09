@@ -67,7 +67,7 @@ Fifteen starters ship in the box: **Journal** (blog), **Toolbox** (trades & loca
 
 ## Plugins
 
-A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim. Good first plugins: analytics snippet, giscus comments, image gallery, table of contents.
+A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim — plus **api-form** (forms declared in config, POSTing to your own backend via the `"services"` map) and **goatcounter** (opt-in page-view counts). Good first plugins: giscus comments, image gallery, table of contents.
 
 ## Moving an existing blog in
 
@@ -78,6 +78,8 @@ node tools/migrate/jekyll.js /path/to/your-jekyll-site
 ```
 
 It writes `content/`, `media/`, and `data/redirects.json` into `./plain-import/` (never touching your working tree) plus a migration report of anything that needs a human eye. Copy those folders into your plain repo and build. Jekyll ships today; Hugo, Eleventy, and WordPress are on the roadmap (§15).
+
+The full step-by-step walkthrough — keeping your URLs, wiring forms and analytics, the cutover checklist — is [`tools/migrate/README.md`](tools/migrate/README.md).
 
 ## Staying up to date
 

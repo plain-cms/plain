@@ -40,6 +40,7 @@
   <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
   {{#if data.band.bookingEmail}}<p class="colophon-line">Bookings: <a href="mailto:{{ data.band.bookingEmail }}">{{ data.band.bookingEmail }}</a>{{#if data.band.pressEmail}} · Press: <a href="mailto:{{ data.band.pressEmail }}">{{ data.band.pressEmail }}</a>{{/if}}</p>
   {{/if}}
+  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

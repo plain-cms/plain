@@ -1,5 +1,11 @@
 # migrations/
 
+> **Moving an existing blog into plain?** You want the importers — see
+> [`tools/migrate/README.md`](../tools/migrate/README.md) for the
+> step-by-step guide. This folder is different: it holds the engine's own
+> upgrade scripts, run automatically by `tools/update.js` when plain itself
+> updates. You never run these by hand.
+
 Breaking changes ship as idempotent scripts here (cms-spec.md §14.4). The
 updater (`tools/update.js`) runs every migration whose number is greater than
 the installed engine's migration level and not greater than the target's.

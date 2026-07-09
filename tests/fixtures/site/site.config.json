@@ -41,6 +41,9 @@
   "pluginOptions": {
     "stamp": { "note": "from-config" }
   },
+  "services": {
+    "backend": "https://backend.fixture.test"
+  },
   "theme": {
     "tokens": {
       "--color-accent": "#c0ffee",

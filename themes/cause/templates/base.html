@@ -40,6 +40,7 @@
   <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
   {{#if data.impact.donatePrompt}}<p class="colophon-prompt">{{ data.impact.donatePrompt }} <a href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">Donate</a>.</p>
   {{/if}}
+  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

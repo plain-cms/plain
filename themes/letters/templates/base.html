@@ -39,6 +39,7 @@
 {{> subscribe}}
 <footer class="colophon">
   <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
+  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

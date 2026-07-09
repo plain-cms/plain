@@ -41,6 +41,7 @@
   <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
   {{#if data.schedule.trialNote}}<p class="colophon-trial">{{ data.schedule.trialNote }} <a href="/schedule/">See the schedule</a>.</p>
   {{/if}}
+  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

@@ -72,6 +72,9 @@
   "plugins": [
     "stamp"
   ],
+  "services": {
+    "backend": "https://backend.fixture.test"
+  },
   "navigation": [
     {
       "label": "Home",

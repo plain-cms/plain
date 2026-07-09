@@ -231,11 +231,7 @@ async function collectionScreen(name) {
 async function navigationScreen() {
   let sha = null;
   let entries = siteInfo?.navigation || [];
-  try {
-    const file = await getFile('data/navigation.json');
-    entries = JSON.parse(file.text);
-    sha = file.sha;
-  } catch { /* file may not exist yet — start empty */ }
+  try { const file = await getFile('data/navigation.json'); entries = JSON.parse(file.text); sha = file.sha; } catch { /* file may not exist yet — start empty */ }
 
   const list = h('div', { class: 'nav-rows' });
   const rowFor = (entry) => {
@@ -279,6 +275,8 @@ async function settingsScreen() {
   const url = h('input', { type: 'text', value: config.site.url });
   const language = h('input', { type: 'text', value: config.site.language || 'en' });
   const theme = h('select', {}, themes.map((name) => h('option', { value: name, selected: name === config.site.theme ? '' : null }, name)));
+  const footerFile = await getFile('data/footer.json').catch(() => ({ text: '{}', sha: undefined })); // may not exist yet
+  const footer = h('input', { type: 'text', value: JSON.parse(footerFile.text).html || '', placeholder: 'Powered by <a href="…">…</a>' });
 
   const aiKey = h('input', { type: 'password', value: aiSettings.key, placeholder: 'sk-ant-…', autocomplete: 'off' });
   const aiModel = h('select', {}, ['claude-opus-4-8', 'claude-sonnet-4-6', 'claude-haiku-4-5'].map((id) => h('option', { value: id, selected: id === aiSettings.model ? '' : null }, id)));
@@ -289,6 +287,7 @@ async function settingsScreen() {
     Object.assign(config.site, { title: title.value.trim(), description: description.value.trim(),
       url: url.value.trim().replace(/\/$/, ''), language: language.value.trim() || 'en', theme: theme.value });
     try {
+      if (footer.value.trim() !== (JSON.parse(footerFile.text).html || '')) await putFile('data/footer.json', JSON.stringify({ html: footer.value.trim() }, null, 2) + '\n', 'settings: update footer', footerFile.sha);
       const { commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', 'settings: update site settings', sha);
       toast('Settings saved — publishing now.', 'success');
       watchBuild(commitSha, config.site.url);
@@ -303,7 +302,8 @@ async function settingsScreen() {
       field('One-line description', description),
       field('Site address (URL)', url),
       field('Language code', language),
-      field('Theme', theme)),
+      field('Theme', theme),
+      field('Footer note (HTML, shown on every page)', footer)),
     h('hr'),
     h('h2', {}, 'AI assist'),
     h('p', { class: 'muted' }, 'Optional. Paste an Anthropic API key to enable the ✨ buttons in the editor. The key stays in this browser and is sent only to Anthropic.'),
