@@ -268,6 +268,12 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   }
 
   async function renameAndSave(file, newSlug, text, message) {
+    // A data-only item (render: false) has no URL — renaming just moves the file, no redirect.
+    if (!def.urlPattern) {
+      const result = await putFile(file, text, message);
+      await deleteFile(`${def.path}/${slug}.md`, `${kind}: remove old copy of "${slug}"`, sha);
+      return afterSave(result, newSlug, collect(), true);
+    }
     const oldUrl = urlFor(def.urlPattern, slug);
     const newUrl = urlFor(def.urlPattern, newSlug);
     const addRedirect = await ask({ title: 'The address is changing', message: `“${oldUrl}” will become “${newUrl}”. Links to the old address would break — forward visitors to the new one?`, actions: [{ label: 'Cancel', value: 'cancel' }, { label: 'Just rename', value: false }, { label: 'Rename & forward', value: true, kind: 'primary' }] });
@@ -291,7 +297,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     localStorage.removeItem(autosaveKey);
     onSaved?.();
     toast(publish ? 'Published — your site is updating.' : 'Draft saved. Only you can see it.', 'success');
-    if (publish) watchBuild(result.commitSha, siteInfo.site.url + urlFor(def.urlPattern, newSlug));
+    if (publish) watchBuild(result.commitSha, siteInfo.site.url + (urlFor(def.urlPattern, newSlug) || '')); // data-only items open the site root
     if (isNew || newSlug !== slug) { location.hash = `#/edit/${collection}/${newSlug}`; }
   }
 

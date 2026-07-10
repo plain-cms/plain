@@ -178,6 +178,8 @@ Defined in `site.config.json`. A collection = a folder of Markdown files + a sch
 
 Field `type` drives the admin form control: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (with `options`). The admin renders forms **from this schema** — adding a field to config instantly adds it to the editor. This is the core trick that makes the CMS extensible without code.
 
+A collection may set `"render": false` to become **data-only** (page-less): its items are scanned, validated, sorted, admin-editable, and exposed to templates as `collections.<name>`, but the build emits no item or list pages for it — so `urlPattern`/`template`/`listUrl` are not required. This is how repeated home-page sections (feature cards, FAQ, testimonials, pricing tiers) become one-file-per-entry editable content instead of a nested "repeater" field type (which the flat frontmatter model deliberately avoids). Data-only items keep a `null` `url`, still emit `api/<name>/…` JSON, and are excluded from the sitemap, search index, and `llms.txt`.
+
 ### 5.2 Content files
 
 Markdown with YAML-style frontmatter (parse by hand: `key: value`, lists as `- item`, booleans, ISO dates — a deliberately small subset, documented; no YAML library):

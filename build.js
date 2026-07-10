@@ -133,7 +133,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
       if (Array.isArray(item.tags) && def.listUrl) {
         item.tagLinks = item.tags.map((tag) => ({ name: tag, url: `${def.listUrl}tag/${slugify(tag)}/` }));
       }
-      if (!item.description) warnings.push(`${item.file}: no "description" — search engines and link previews will improvise one`);
+      if (def.render && !item.description) warnings.push(`${item.file}: no "description" — search engines and link previews will improvise one`);
     }
   }
 
@@ -153,8 +153,10 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   siteApi.renderPage = (templateName, context) => // lets plugins emit themed pages
     inject(renderPage(theme, templateName, { ...baseContext, nav: navFor(context.page?.url ?? null), ...context }));
 
-  // Item pages.
+  // Item pages. Data-only collections (render: false) emit none — their items
+  // stay in the `collections` context for templates but have no URL of their own.
   for (const [name, def] of Object.entries(config.collections)) {
+    if (!def.render) continue;
     for (const item of collections[name]) {
       emit(item.url, renderPage(theme, def.template, { ...baseContext, page: item, nav: navFor(item.url) }), item);
       sitemapEntries.push({ loc: site.url + item.url, lastmod: item.date });
