@@ -3,7 +3,7 @@
   "migration": 0,
   "files": {
     ".github/workflows/build-deploy.yml": "90811800dfc4f35a4f25d8c3f05a410ebba669e7b976f1cddbb33ac49910c697",
-    ".github/workflows/update.yml": "94a33369e3b6c5e99892dc4f1d76d3c1c7c1f8db23db8d690ed49a50e42e1d54",
+    ".github/workflows/update.yml": "82ee20799b42ec6dad049538b04775fdab410ff38d69112a7e4e595ad8f6356e",
     "admin/admin.css": "fe84de31463508ecbf5fabed53fee4d02fecfa6bdfb5c2d2b907682daa33d54f",
     "admin/favicon.svg": "dd3765de5afd1751a09be814fc072b74c4aa8e67a672acf44a5352d6ec59d703",
     "admin/index.html": "6a2ed8a855ac3ef011b58207fd4267644344ba6106ae56dbf278b8d861b48bda",
