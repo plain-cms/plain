@@ -6,6 +6,7 @@
 import { getFile, getFileAt, putFile, deleteFile, commitsFor, listDir } from './github.js';
 import { h, show, toast, timeAgo, watchBuild, ask, askText, modal } from './ui.js';
 import { parseFrontmatter, serializeFrontmatter, validateFields, urlFor } from '../lib/content.js';
+import { activeLanguages, splitLangSuffix } from '../lib/i18n.js';
 import { renderMarkdown } from '../lib/markdown.js';
 import { slugify } from '../lib/util.js';
 import { uploadMedia, toBase64 } from './media.js';
@@ -28,6 +29,15 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   if (!def) throw new Error(`Unknown collection "${collection}".`);
   const isNew = slug == null;
   const kind = singular(collection);
+  // Translations are sibling files (about.fr.md, §5.4): split the language
+  // suffix off so slug edits touch only the base — never "about-fr".
+  const languages = siteInfo.site.languages || [];
+  const pageLang = splitLangSuffix(slug || '', languages).lang;
+  const pageUrl = (name) => { // the page's public URL, /<lang>/-prefixed for translations
+    const { base, lang } = splitLangSuffix(name, languages);
+    const url = urlFor(def.urlPattern, base);
+    return url && lang ? `/${lang}${url}` : url;
+  };
   let sha = null;
   let data = {};
   let body = '';
@@ -84,7 +94,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     return h('label', { class: 'field' }, `${field.name[0].toUpperCase()}${field.name.slice(1)}${field.required ? '' : ' (optional)'}`, element);
   });
 
-  const slugInput = h('input', { type: 'text', value: slug || '', placeholder: 'from-the-title' });
+  const slugInput = h('input', { type: 'text', value: splitLangSuffix(slug || '', languages).base, placeholder: 'from-the-title' });
   let slugTouched = !isNew;
   slugInput.addEventListener('input', () => { slugTouched = true; });
   inputs.get('title')?.addEventListener('input', () => {
@@ -192,17 +202,20 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
       if (await aiReview({ title: 'Meta description', before: input.value, after: suggestion })) input.value = suggestion;
     }),
     aiButton('Translate…', async () => {
-      const language = await askText({ title: 'Translate this page', message: 'A translated copy will be saved as a new draft next to this one — nothing is published.', placeholder: 'e.g. French' });
-      const baseSlug = language && slugify(slugInput.value || inputs.get('title')?.value || '');
-      if (!language) return;
+      const targets = activeLanguages(siteInfo.site).filter((l) => l !== siteInfo.site.language);
+      if (!targets.length) return toast('Set "languages" under "site" in site.config.json first — e.g. ["en", "fr"] — so translations get their own pages.');
+      const languageName = (code) => { try { return new Intl.DisplayNames([siteInfo.site.language], { type: 'language' }).of(code); } catch { return code; } };
+      const lang = await ask({ title: 'Translate this page', message: 'A translated copy will be saved as a new draft next to this one — nothing is published.', actions: [...targets.map((l) => ({ label: languageName(l), value: l })), { label: 'Cancel', value: null }] });
+      const baseSlug = lang && slugify(slugInput.value || inputs.get('title')?.value || '');
+      if (!lang) return;
       if (!baseSlug) return toast('Give it a title first.');
       const next = { ...collect(), draft: true };
-      if (next.title) next.title = await assist.translate(next.title, language);
-      const translated = await assist.translate(bodyInput.value, language);
-      const newSlug = `${baseSlug}-${slugify(language)}`;
+      if (next.title) next.title = await assist.translate(next.title, languageName(lang));
+      const translated = await assist.translate(bodyInput.value, languageName(lang));
+      const newSlug = `${baseSlug}.${lang}`;
       await putFile(`${def.path}/${newSlug}.md`,
         serializeFrontmatter(next, `\n${translated.trimEnd()}\n`, def.fields.map((f) => f.name)),
-        `${kind}: add ${language} draft of "${next.title || baseSlug}"`);
+        `${kind}: add ${languageName(lang)} draft of "${next.title || baseSlug}"`);
       onSaved?.();
       toast(`Saved as a draft: ${newSlug}. Review it before publishing.`, 'success');
     }),
@@ -247,8 +260,9 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   async function save(publish, { force = false } = {}) {
     const next = collect();
     next.draft = !publish;
-    const newSlug = slugify(slugInput.value || next.title || '');
-    if (!newSlug) return toast('Give it a title first — the address is made from it.', 'error');
+    const newBase = slugify(slugInput.value || next.title || '');
+    if (!newBase) return toast('Give it a title first — the address is made from it.', 'error');
+    const newSlug = pageLang ? `${newBase}.${pageLang}` : newBase;
     const file = `${def.path}/${newSlug}.md`;
     let text;
     try {
@@ -274,8 +288,8 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
       await deleteFile(`${def.path}/${slug}.md`, `${kind}: remove old copy of "${slug}"`, sha);
       return afterSave(result, newSlug, collect(), true);
     }
-    const oldUrl = urlFor(def.urlPattern, slug);
-    const newUrl = urlFor(def.urlPattern, newSlug);
+    const oldUrl = pageUrl(slug);
+    const newUrl = pageUrl(newSlug);
     const addRedirect = await ask({ title: 'The address is changing', message: `“${oldUrl}” will become “${newUrl}”. Links to the old address would break — forward visitors to the new one?`, actions: [{ label: 'Cancel', value: 'cancel' }, { label: 'Just rename', value: false }, { label: 'Rename & forward', value: true, kind: 'primary' }] });
     if (addRedirect === 'cancel' || addRedirect === null) return;
     const result = await putFile(file, text, message);
@@ -297,7 +311,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     localStorage.removeItem(autosaveKey);
     onSaved?.();
     toast(publish ? 'Published — your site is updating.' : 'Draft saved. Only you can see it.', 'success');
-    if (publish) watchBuild(result.commitSha, siteInfo.site.url + (urlFor(def.urlPattern, newSlug) || '')); // data-only items open the site root
+    if (publish) watchBuild(result.commitSha, siteInfo.site.url + (pageUrl(newSlug) || '')); // data-only items open the site root
     if (isNew || newSlug !== slug) { location.hash = `#/edit/${collection}/${newSlug}`; }
   }
 
