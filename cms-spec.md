@@ -359,6 +359,8 @@ const base = (opts.$services || {}).backend;   // site.config.json "services"
 
 **Ships with:** `search` (enabled — a `/search/` page + input consuming `search-index.json`, no dependencies), `contact-form` (disabled reference — progressive-enhancement form POSTing to a configurable endpoint), `reading-time` (disabled — `transformContent` adding `item.readingTime`), `api-form` (disabled — forms declared in config, POSTing to a named service; works without JavaScript when the backend accepts regular form posts), and `goatcounter` (disabled — opt-in page-view counts; loads a third-party script, so never enabled by default). Good first community plugins to list in README: giscus comments, image gallery, table of contents.
 
+**Optional plugins & the registry (§10.6).** Beyond the built-ins, community plugins install from a **curated** registry (`plain-cms/plugins`, mirroring the starters registry) via the admin's **Plugins** screen (`admin/js/plugins.js`): Install copies the plugin folder into `plugins/<id>/` and enables it in `site.config.json` — one commit; Configure edits `pluginOptions.<id>`; Remove reverses both. Because a plugin runs code (`index.js` in the build/CI, `client.js` in visitors' browsers), each registry entry declares `runsAt` (`client` | `build` | `both`) and the admin shows provenance (author, source repo) with a "plugins run code" note. Installed community plugins are user-owned (never in `engine.json`) and survive upgrades. Starters may bundle plugins by id (`starter.json` `"plugins"`, §10.3).
+
 ---
 
 ## 10. Theming, starters & the theme gallery
@@ -394,6 +396,8 @@ The best restaurant "theme" is not a color palette — it's a menu collection wi
 
 Applying a starter merges its collections into `site.config.json`, installs sample content (all `example: true`), and sets navigation — each step shown and confirmable. Applying only a *theme* to an existing site changes appearance and touches nothing else.
 
+A starter may also declare `"plugins": ["github-stars", …]` (bare ids, or `{ "id", "options" }`): on apply, each is enabled in `site.config.json` and — if not already present — its folder is fetched from the plugins registry (§10.6) into `plugins/<id>/`, in the same commit. So a developer-blog starter like `terminal` ships with `github-stars` already on. If a bundled plugin can't be fetched, it's skipped (never enabled without its files, which would break the build).
+
 ### 10.4 Gallery & try-on UX
 
 The admin's **Appearance** screen: a screenshot grid, filterable by category, "currently active" pinned first. Selecting a theme opens a full-screen **try-on**: the user's *own* homepage and latest post rendered client-side (§10.2) with the candidate theme, with device-width toggles (mobile/tablet/desktop) and a light/dark switch. Nothing is committed during try-on. **Apply** = one config commit → rebuild → status pill; **switching back is the same one click**, and content is never modified by a theme change — the UI says so.
@@ -405,6 +409,8 @@ A "Customize" panel beside the try-on exposes the theme's tokens as real control
 ### 10.6 Starter registry (a marketplace with no backend)
 
 Core repo ships **fifteen starters** (the five launch starters plus the ten most-requested fields from the catalog below); the official `<name>-starters` repo hosts the rest. Its `registry.json` (static file) lists id, category, description, screenshot URL, engine compat. The admin's "Browse more" fetches it raw from GitHub; **Install** copies the starter folder into the user's repo via the GitHub contents API — same copy-a-folder story as plugins, zero servers. Community starters arrive by PR and must pass the §10.1 quality floor plus sample content in CI.
+
+**The plugins registry** (`plain-cms/plugins`) mirrors this exactly for optional plugins: a static `registry.json` array of `{ id, title, category, description, runsAt, author }`, one folder per plugin, installed from the admin's **Plugins** screen by the same copy-a-folder mechanism. It's curated — plugins run code, so each is reviewed by PR before listing, and the admin shows a `runsAt` badge (`client` | `build` | `both`) and provenance at install. Bundled-in-a-starter plugins (§10.3) fetch from here too.
 
 ### 10.7 Starter catalog — 20 fields, each done properly
 
