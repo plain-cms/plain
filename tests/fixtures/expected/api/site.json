@@ -4,7 +4,8 @@
     "url": "https://fixture.test",
     "description": "A tiny site for golden-file tests.",
     "language": "en",
-    "theme": "plain"
+    "theme": "plain",
+    "languages": []
   },
   "collections": {
     "pages": {
