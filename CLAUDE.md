@@ -231,7 +231,7 @@ Upgrades are pull requests built by **wholesale file replacement**, never a merg
 
 ## Importers (§15) — `tools/migrate/`
 
-Local CLIs, plain Node, outside the core dependency budget. `node tools/migrate/<source>.js <input> [outDir]` writes `content/`, `media/`, and — non-negotiably — a complete old→new `data/redirects.json`, plus a migration report. `tools/migrate/jekyll.js` is the reference (Jekyll → plain: frontmatter remap, Liquid stripping, permalink-based redirects). Every importer must emit redirects; silently changing URLs destroys SEO.
+Local CLIs, plain Node, outside the core dependency budget. `node tools/migrate/<source>.js <input> [outDir]` writes `content/`, `media/`, and — non-negotiably — a complete old→new `data/redirects.json`, plus a migration report. `tools/migrate/jekyll.js` is the reference (Jekyll → plain: frontmatter remap, Liquid stripping, permalink-based redirects); `tools/migrate/joomla.js` covers the crawl path (live site → Markdown via its own dependency-free HTML parser; tests run it against a fixture site served by a local HTTP server — never the network). Every importer must emit redirects; silently changing URLs destroys SEO.
 
 ## Errors are teaching moments
 
