@@ -1,0 +1,8 @@
+{
+  "name": "backend-admin",
+  "version": "1.0.0",
+  "description": "Personal reference — victorantos.com backend dashboard as a plugin; copy to your own site repo and adapt before enabling.",
+  "hooks": ["afterBuild"],
+  "client": { "js": "client.js", "css": "client.css" },
+  "options": { "service": "backend", "path": "/dashboard/", "title": "Dashboard" }
+}

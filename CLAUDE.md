@@ -56,9 +56,15 @@ Collections are defined in `site.config.json`. A collection = a folder of `.md` 
 
 Field types: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (needs `options`). The admin renders its edit forms from this schema, so **adding a field to config is the whole job** — no code changes.
 
+**`render: false`** (optional) makes a **data-only collection**: scanned, schema-validated, sorted, and admin-editable exactly like any other, and exposed to templates as `collections.<name>`, but it emits **no** item pages or list page — so it needs no `urlPattern`, `template`, or `listUrl`. Use it for repeated home-page sections (feature cards, FAQ entries, testimonials, pricing tiers) where each entry is one editable `.md` file with no URL of its own. Items still get `api/<name>/…` JSON (their `url` is `null`) but are excluded from the sitemap, search index, and `llms.txt`. Order them with a numeric `order` field plus `"sortBy": "order", "sortOrder": "asc"`; render them with `{{#each collections.<name> as item}}…{{/each}}` in the page template that needs them.
+
 **`site.basePath`** (optional): serve under a subpath, e.g. GitHub *project* Pages at `/<repo>/`. The build prefixes every root-relative `href`/`src` (and redirect target) with it; set `site.url` to the full base too (`https://user.github.io/<repo>`). Leave it empty (default) for a site served at the domain root — user Pages, Cloudflare/Netlify, or a custom domain.
 
 **`site.oauthUrl`** (optional): the deployed OAuth Worker URL (`workers/oauth/`). When set, the admin sign-in screen shows a **"Sign in with GitHub"** button (the paste-a-token form moves under "or use an access token"); writers with repo write access click it, authorize once, and publish — no PAT. Leave it out for token-only sign-in (v1). The admin opens `<oauthUrl>/login` in a popup and accepts the token only from a `postMessage` matching that origin.
+
+**`site.favicon` / `site.appleTouchIcon` / `site.socialImage`** (optional): per-site branding without editing a theme. `favicon` swaps the icon link away from the theme's `/assets/favicon.svg`; `appleTouchIcon` adds an iOS home-screen icon link; `socialImage` is the site-wide share image — every theme emits it as `og:image` + `twitter:card` for pages that have no `cover`. Values are root-relative paths served from `media/` (e.g. `/media/brand/og-image.png`); meta tags absolutize them with `site.url`. The project's brand kit (SVG masters + generator + platform rasters) lives in the site repo, `victorantos/plain-cms.com`, under `assets/` — this engine repo ships only the default favicon and the README logos in `.github/`.
+
+**`services`** (optional, top-level beside `plugins` — not inside `site`): the site's named backend endpoints, e.g. `"services": { "backend": "https://api.example.com" }`. Plugins resolve a service by name instead of hardcoding URLs: build hooks read `site.config.services`, client code reads the reserved `$services` key of the injected plugin-options JSON (see Plugins below). Values must be `https://` URL strings (validated; trailing slash stripped) and are public three times over — committed in the repo, injected into every page that loads plugin JS, served in `api/site.json`. **Endpoints only, never keys or secrets**; anything private follows the BYOK/localStorage pattern (§8.3, `admin/js/ai.js`). `plugins/api-form/` is the reference consumer.
 
 **To add a collection:** add an entry to `collections`, create its folder under `content/`, and make sure the theme has the template it names. That's all.
 
@@ -87,7 +93,7 @@ Rules:
 
 ### Data files
 
-Every `data/*.json` is available to templates as `data.<filename>` (e.g. `{{#each data.navigation as entry}}`). `navigation.json` is a list of `{label, url}`; `redirects.json` maps old → new URLs and produces both a `_redirects` file and meta-refresh fallback pages.
+Every `data/*.json` is available to templates as `data.<filename>` (e.g. `{{#each data.navigation as entry}}`). `navigation.json` is a list of `{label, url}`; `redirects.json` maps old → new URLs and produces both a `_redirects` file and meta-refresh fallback pages. `footer.json` is `{ "html": "…" }` — every shipped theme prints it at the bottom of every page (raw site-owner HTML), and the admin's Settings screen edits it (commit message `settings: update footer`).
 
 ## Template syntax (lib/template.js — the complete list)
 
@@ -131,7 +137,7 @@ Commit messages it writes: `post: publish "Title"`, `page: edit "About"`,
 
 ## The static API (`dist/api/`)
 
-- `api/site.json` — `{site, collections, plugins, navigation}` (the machine-readable content model)
+- `api/site.json` — `{site, collections, plugins, services, navigation}` (the machine-readable content model)
 - `api/<collection>/index.json` — `{items: [...]}`, sorted like the site
 - `api/<collection>/<slug>.json` — one item: frontmatter fields + `url`, `slug`, `file`, `body` (Markdown), `content` (HTML). Exception: an item named `index.md` has no per-item file (it would collide with the listing above, which carries every item in full).
 
@@ -208,10 +214,11 @@ export default {
 Rules:
 - `site` is `{config, data, collections, renderPage}` — `collections` is filled after `init`.
 - A plugin that throws fails the whole build, with the plugin's name in the error.
-- Client assets publish to `/plugins/<name>/…` and are injected into every page in config order (`css` before `</head>`, `js` as a module before `</body>`). Client code reads its options from the injected JSON: `JSON.parse(document.getElementById('plugin-options').textContent)["my-plugin"]`.
+- Client assets publish to `/plugins/<name>/…` and are injected into every page in config order (`css` before `</head>`, `js` as a module before `</body>`). Client code reads its options from the injected JSON: `JSON.parse(document.getElementById('plugin-options').textContent)["my-plugin"]`. The site's named backend endpoints ride along under the reserved `$services` key — resolve a service as `(opts.$services || {})[opts["my-plugin"]?.service || "backend"]`; never hardcode a backend URL in a plugin.
 - Client JS must be progressive enhancement — the page must work without it (C5).
 - The build also emits `search-index.json` (`[{url, title, description, tags, text}]`) — plugins may consume it.
-- Study `plugins/search/` (afterBuild + client) and `plugins/contact-form/` (renderPage + options) as reference implementations.
+- Study `plugins/search/` (afterBuild + client), `plugins/contact-form/` (renderPage + options), and `plugins/api-form/` (config-declared forms POSTing to a named service, `services` + progressive enhancement) as reference implementations.
+- `plugins/backend-admin/` is a parked **user-owned** draft (the victorantos.com backend dashboard) awaiting migration to that site's repo — not engine-owned, not in `engine.json`, never enabled in this repo's config.
 
 **Checklist for a new plugin:** create the folder + `plugin.json` (+ `index.js`/client files) → add its name to `"plugins"` in `site.config.json` → `node build.js` → check the output in `dist/` → `node --test tests/`.
 
@@ -221,7 +228,7 @@ config → load plugins → data → `init` hooks → content (validate) → `tr
 
 ## Upgrade system (§14) — `tools/`, `migrations/`, `engine.json`
 
-Upgrades are pull requests built by **wholesale file replacement**, never a merge. Ownership contract (§14.1): engine-owned = `build.js`, `lib/`, `admin/`, `themes/default/`, `config.defaults.json`, the workflows, `tools/`, `migrations/`, `plugins/{search,contact-form,reading-time}`. User-owned = `content/`, `data/`, `media/`, `site.config.json`, custom themes/plugins. Never hand-edit an engine file in a user's site — copy the default theme to `themes/custom/` first.
+Upgrades are pull requests built by **wholesale file replacement**, never a merge. Ownership contract (§14.1): engine-owned = `build.js`, `lib/`, `admin/`, `themes/default/`, `config.defaults.json`, the workflows, `tools/`, `migrations/`, `plugins/{search,contact-form,reading-time,api-form,goatcounter,reset-sw}`. User-owned = `content/`, `data/`, `media/`, `site.config.json`, custom themes/plugins. Never hand-edit an engine file in a user's site — copy the default theme to `themes/custom/` first.
 
 - `engine.json` — `{version, migration, files: {path: sha256}}`, generated by `node tools/engine-manifest.js`. **Regenerate it whenever you change an engine file, before a release.**
 - `config.defaults.json` — engine defaults deep-merged *under* the user's sparse `site.config.json` at build time (§14.3, `deepMerge` in `lib/util.js`). New features ship with working defaults without touching the user's file.
@@ -231,7 +238,7 @@ Upgrades are pull requests built by **wholesale file replacement**, never a merg
 
 ## Importers (§15) — `tools/migrate/`
 
-Local CLIs, plain Node, outside the core dependency budget. `node tools/migrate/<source>.js <input> [outDir]` writes `content/`, `media/`, and — non-negotiably — a complete old→new `data/redirects.json`, plus a migration report. `tools/migrate/jekyll.js` is the reference (Jekyll → plain: frontmatter remap, Liquid stripping, permalink-based redirects); `tools/migrate/joomla.js` covers the crawl path (live site → Markdown via its own dependency-free HTML parser; tests run it against a fixture site served by a local HTTP server — never the network). Every importer must emit redirects; silently changing URLs destroys SEO.
+Local CLIs, plain Node, outside the core dependency budget. `node tools/migrate/<source>.js <input> [outDir]` writes `content/`, `media/`, and — non-negotiably — a complete old→new `data/redirects.json`, plus a migration report. `tools/migrate/jekyll.js` is the reference (Jekyll → plain: frontmatter remap, Liquid stripping, permalink-based redirects); `tools/migrate/joomla.js` covers the crawl path (live site → Markdown via its own dependency-free HTML parser; tests run it against a fixture site served by a local HTTP server — never the network). Every importer must emit redirects; silently changing URLs destroys SEO. The user-facing step-by-step guide is `tools/migrate/README.md` — keep it current when importer flags or behavior change (not to be confused with `migrations/`, the engine's own upgrade scripts).
 
 ## Errors are teaching moments
 

@@ -74,7 +74,8 @@ input[type="checkbox"] { width: auto; }
 
 @media (max-width: 760px) {
   .layout { grid-template-columns: 1fr; }
-  .sidebar { flex-direction: row; flex-wrap: wrap; align-items: center; border-right: 0; border-bottom: 1px solid var(--border); }
+  .sidebar { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0.15rem 0.4rem; border-right: 0; border-bottom: 1px solid var(--border); }
+  .sidebar .brand { flex-basis: 100%; margin-bottom: 0.1rem; }
   .sidebar-foot { margin: 0; }
   .screen { padding: 1rem; }
 }
@@ -162,7 +163,15 @@ dialog.ai-review { max-width: 44rem; width: 90vw; }
 .media-item { margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem; }
 .thumb { aspect-ratio: 4/3; display: grid; place-items: center; background: var(--bg); border-radius: 4px; overflow: hidden; font-size: 2rem; }
 .thumb img { width: 100%; height: 100%; object-fit: cover; }
+@keyframes thumb-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.thumb:empty { animation: thumb-pulse 1.1s ease-in-out infinite; }
 .media-name { display: block; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* Theme thumbnails — a lazy, scaled-down live render of each theme's homepage. */
+.theme-thumb { aspect-ratio: 4 / 3; position: relative; margin-bottom: 0.85rem; background: var(--bg); animation: thumb-pulse 1.1s ease-in-out infinite; }
+.theme-thumb.ready { animation: none; }
+.theme-thumb-frame { position: absolute; inset: 0; width: 500%; height: 1500px; border: 0; transform: scale(0.2); transform-origin: top left; pointer-events: none; background: #fff; opacity: 0; transition: opacity 0.2s; }
+.theme-thumb.ready .theme-thumb-frame { opacity: 1; }
 
 /* Try-on & wizard --------------------------------------------------------------- */
 

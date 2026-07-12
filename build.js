@@ -7,6 +7,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
 import { pathToFileURL, fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
 import { render } from './lib/template.js';
 import { slugify, deepMerge } from './lib/util.js';
 import { renderMarkdown } from './lib/markdown.js';
@@ -88,7 +89,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   const config = validateConfig(deepMerge(defaults, JSON.parse(fs.readFileSync(configPath, 'utf8'))));
   const site = config.site;
   const plugins = await loadPlugins(root, config);
-  const assets = clientAssets(plugins);
+  const assets = clientAssets(plugins, config.services);
   // Customizer tokens (§10.5): user overrides from config.theme.tokens are
   // injected after theme.css, so theme upgrades never touch user tweaks.
   const tokens = Object.entries(config.theme?.tokens || {});
@@ -132,7 +133,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
       if (Array.isArray(item.tags) && def.listUrl) {
         item.tagLinks = item.tags.map((tag) => ({ name: tag, url: `${def.listUrl}tag/${slugify(tag)}/` }));
       }
-      if (!item.description) warnings.push(`${item.file}: no "description" — search engines and link previews will improvise one`);
+      if (def.render && !item.description) warnings.push(`${item.file}: no "description" — search engines and link previews will improvise one`);
     }
   }
 
@@ -152,8 +153,10 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   siteApi.renderPage = (templateName, context) => // lets plugins emit themed pages
     inject(renderPage(theme, templateName, { ...baseContext, nav: navFor(context.page?.url ?? null), ...context }));
 
-  // Item pages.
+  // Item pages. Data-only collections (render: false) emit none — their items
+  // stay in the `collections` context for templates but have no URL of their own.
   for (const [name, def] of Object.entries(config.collections)) {
+    if (!def.render) continue;
     for (const item of collections[name]) {
       emit(item.url, renderPage(theme, def.template, { ...baseContext, page: item, nav: navFor(item.url) }), item);
       sitemapEntries.push({ loc: site.url + item.url, lastmod: item.date });
@@ -172,13 +175,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
       const pageCount = Math.max(1, Math.ceil(list.items.length / def.pageSize));
       for (let n = 1; n <= pageCount; n++) {
         const url = n === 1 ? list.url : `${list.url}page/${n}/`;
-        const pagination = {
-          page: n,
-          totalPages: pageCount,
-          multiple: pageCount > 1,
-          newer: n > 1 ? (n === 2 ? list.url : `${list.url}page/${n - 1}/`) : null,
-          older: n < pageCount ? `${list.url}page/${n + 1}/` : null,
-        };
+        const pagination = { page: n, totalPages: pageCount, multiple: pageCount > 1, newer: n > 1 ? (n === 2 ? list.url : `${list.url}page/${n - 1}/`) : null, older: n < pageCount ? `${list.url}page/${n + 1}/` : null };
         const context = {
           ...baseContext,
           page: { title: list.title, url },
@@ -240,15 +237,9 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   const host = new URL(site.url).host;
   if (host && !host.endsWith('.github.io')) fs.writeFileSync(path.join(outDir, 'CNAME'), `${host}\n`);
   await runHook(plugins, 'afterBuild', outDir, siteApi);
+  stampCacheBust(outDir);
 
-  const report = {
-    pages: pages.size,
-    files: files.size,
-    draftCount,
-    warnings,
-    bytes: dirSize(outDir),
-    ms: Math.round(performance.now() - started),
-  };
+  const report = { pages: pages.size, files: files.size, draftCount, warnings, bytes: dirSize(outDir), ms: Math.round(performance.now() - started) };
   if (!quiet) printReport(report, outDir);
   return report;
 }
@@ -276,6 +267,18 @@ function dirSize(dir) {
     .filter((e) => e.isFile()).reduce((total, e) => total + fs.statSync(path.join(e.parentPath, e.name)).size, 0);
 }
 
+/** Cache-bust (§6): version every CSS/JS URL with a content hash so browsers refetch changed assets without a hard refresh. Deterministic: same assets → same v. */
+function stampCacheBust(outDir) {
+  const files = fs.readdirSync(outDir, { withFileTypes: true, recursive: true }).filter((e) => e.isFile()).map((e) => path.join(e.parentPath, e.name)).sort();
+  const hash = createHash('sha256');
+  for (const p of files) if (/\.(css|js)$/.test(p)) hash.update(fs.readFileSync(p));
+  const v = hash.digest('hex').slice(0, 8);
+  const bust = (s, p) => p.endsWith('.html')
+    ? s.replace(/\b(href|src)="([^"]+\.(?:css|js))"/g, `$1="$2?v=${v}"`).replace(/(["'])(\.?\/[^"']*marked\.esm\.js)(["'])/g, `$1$2?v=${v}$3`)
+    : s.replace(/(\bfrom\s*["'])((?:\.\.?\/)[^"']+\.js)(["'])/g, `$1$2?v=${v}$3`);
+  for (const p of files) if (p.endsWith('.html') || (p.includes(`${path.sep}admin${path.sep}`) && p.endsWith('.js'))) fs.writeFileSync(p, bust(fs.readFileSync(p, 'utf8'), p));
+}
+
 function printReport(report, outDir) {
   const size = report.bytes < 1024 * 1024 ? `${(report.bytes / 1024).toFixed(1)} KB` : `${(report.bytes / 1024 / 1024).toFixed(1)} MB`;
   console.log(`✓ built ${report.pages} pages (${report.files} files, ${size}) into ${path.relative(process.cwd(), outDir) || '.'} in ${report.ms}ms`);
@@ -287,10 +290,8 @@ function printReport(report, outDir) {
 // Dev server + watch mode (only used by `node build.js --watch`).
 
 const MIME = {
-  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
-  '.json': 'application/json', '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8',
-  '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif',
-  '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.pdf': 'application/pdf',
+  '.html': 'text/html; charset=utf-8', '.css': 'text/css; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.json': 'application/json', '.xml': 'application/xml', '.txt': 'text/plain; charset=utf-8',
+  '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.gif': 'image/gif', '.webp': 'image/webp', '.ico': 'image/x-icon', '.woff2': 'font/woff2', '.pdf': 'application/pdf',
 };
 
 function serve(outDir, port) {

@@ -15,6 +15,18 @@ The Worker's only job is the one step the browser can't do safely on its own:
 swapping a GitHub `code` for an access token (that exchange requires the client
 *secret*, which must never ship to a browser). It stores nothing.
 
+## Everything here is yours (and free)
+
+There is **no central plain auth service** — you don't need access to anyone
+else's settings, and nobody's infrastructure sits between your writers and
+GitHub. You create **your own** GitHub App (any GitHub account can, free),
+deploy **your own** copy of this Worker (Cloudflare free plan), and hold your
+own secrets. Your writers see *your* app's name on the authorize screen, and
+their tokens travel only between their browser, your Worker, and GitHub.
+That's deliberate: a shared auth service would mean one party holding a
+secret that can mint tokens for every plain site's repo. Nobody should have
+that — so nobody does.
+
 ## GitHub App vs OAuth App
 
 Use a **GitHub App** (recommended). An App issues *user-to-server* tokens scoped
@@ -98,6 +110,57 @@ So each writer needs repo write access, and the App must be installed on the rep
 Then a writer opens `/admin/`, clicks **Sign in with GitHub**, authorizes the App
 once, and can publish — no token to generate or paste, and the token they get is
 scoped to just this repo's contents.
+
+## What it costs
+
+Nothing. A sign-in is a handful of Worker requests — far inside Cloudflare's
+free plan — and GitHub Apps are free to create and install. No server to
+rent, nothing to maintain.
+
+## A second site (or many)
+
+One Worker serves **one** site: `ALLOWED_ORIGIN` is deliberately a single
+origin so a token can never be handed to the wrong site. To add GitHub
+sign-in to another plain site:
+
+1. **Reuse the same GitHub App** — no need for a new one:
+   - App settings → add the new Worker's `/callback` as an extra **Callback
+     URL** (GitHub Apps allow up to 10).
+   - If the new site's repo lives under a different account than the App,
+     set **Advanced → Where can this App be installed → Any account**, then
+     **Install App** on that account and grant it the site's repo.
+2. **Deploy a second Worker instance** from this same folder — its own name,
+   its own secrets (secrets never copy between Workers):
+
+   ```sh
+   wrangler deploy --name plain-oauth-mysite
+   wrangler secret put GITHUB_CLIENT_ID --name plain-oauth-mysite       # the same App's ID
+   wrangler secret put GITHUB_CLIENT_SECRET --name plain-oauth-mysite   # the same App's secret
+   wrangler secret put ALLOWED_ORIGIN --name plain-oauth-mysite         # the new site's origin
+   ```
+
+3. Set the new site's `site.oauthUrl` to the new Worker's URL and rebuild.
+
+Never point two sites at one Worker — the second site's popup would try to
+deliver its token to the other site's origin and silently fail.
+
+## Troubleshooting
+
+- **No "Sign in with GitHub" button on `/admin/`** — `site.oauthUrl` is
+  missing from `site.config.json`, or the site hasn't been rebuilt since you
+  added it. The button is config-gated; installing the GitHub App alone
+  doesn't enable it.
+- **Can't find the Client ID** — it lives on the App's *developer settings*
+  page (GitHub → the account that **owns** the App → Settings → Developer
+  settings → GitHub Apps → your App), not on the "Applications"
+  authorization page you see as an installer.
+- **GitHub errors about the redirect URI** — the Worker's URL isn't among the
+  App's Callback URLs. Add `<worker-url>/callback`.
+- **Popup completes but the admin stays signed out** — `ALLOWED_ORIGIN`
+  doesn't exactly match the admin's origin (scheme + host only — no path, no
+  trailing slash).
+- **Signed in but saves fail** — the App isn't installed on the content repo,
+  or the writer lacks Write access (step 6).
 
 ## The flow
 

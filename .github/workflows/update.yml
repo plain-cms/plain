@@ -43,6 +43,12 @@ jobs:
       - name: Verify
         run: |
           npm ci
+          # Refresh the golden fixtures first: tests/ is not engine-managed (it
+          # isn't in engine.json), so the updater never replaces the frozen
+          # goldens — any release that changes build output (e.g. a new api/
+          # site.json key) would otherwise fail the golden test here and block
+          # the PR. Regenerating keeps every other assertion in the suite honest.
+          node tests/update-goldens.js
           npm test
           node build.js
 

@@ -130,7 +130,10 @@ Defined in `site.config.json`. A collection = a folder of Markdown files + a sch
     "url": "https://example.com",
     "description": "…",
     "language": "en",
-    "theme": "default"
+    "theme": "default",
+    "favicon": "/media/brand/favicon.svg",
+    "appleTouchIcon": "/media/brand/apple-touch-icon.png",
+    "socialImage": "/media/brand/og-image.png"
   },
   "collections": {
     "pages": {
@@ -162,11 +165,20 @@ Defined in `site.config.json`. A collection = a folder of Markdown files + a sch
       ]
     }
   },
-  "plugins": ["search"]
+  "plugins": ["search"],
+  "services": {
+    "backend": "https://api.example.com"
+  }
 }
 ```
 
+`"services"` (optional) names the site's backend endpoints: a map of name → `https://` URL that plugins resolve by name instead of hardcoding URLs (`"backend"` is the conventional default). Build hooks read `site.config.services`; client code reads the reserved `$services` key of the injected plugin-options JSON (§9). Endpoints only, never secrets — the values are committed in the repo, injected into every page that loads plugin JS, and served in `api/site.json`. Credentials follow the BYOK/localStorage pattern (§8.3) instead.
+
+`site.favicon`, `site.appleTouchIcon`, and `site.socialImage` are optional branding overrides: the theme links `favicon` in place of its own `/assets/favicon.svg`, adds the touch-icon link, and uses `socialImage` as the `og:image`/`twitter:card` fallback for pages without a `cover` image. All three are root-relative paths, typically under `media/`.
+
 Field `type` drives the admin form control: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (with `options`). The admin renders forms **from this schema** — adding a field to config instantly adds it to the editor. This is the core trick that makes the CMS extensible without code.
+
+A collection may set `"render": false` to become **data-only** (page-less): its items are scanned, validated, sorted, admin-editable, and exposed to templates as `collections.<name>`, but the build emits no item or list pages for it — so `urlPattern`/`template`/`listUrl` are not required. This is how repeated home-page sections (feature cards, FAQ, testimonials, pricing tiers) become one-file-per-entry editable content instead of a nested "repeater" field type (which the flat frontmatter model deliberately avoids). Data-only items keep a `null` `url`, still emit `api/<name>/…` JSON, and are excluded from the sitemap, search index, and `llms.txt`.
 
 ### 5.2 Content files
 
@@ -338,7 +350,14 @@ export default {
 
 Rules: plugins read options from `site.config.json` under `pluginOptions.<name>`; a throwing plugin fails the build with its name in the error; client assets are injected into `base.html` automatically in config order. Document the hook API exhaustively in `CLAUDE.md` — it is the AI extension surface.
 
-**Ships with:** `search` (enabled — a `/search/` page + input consuming `search-index.json`, no dependencies) and `contact-form` (disabled reference — progressive-enhancement form POSTing to a configurable endpoint). Good first community plugins to list in README: analytics snippet, giscus comments, image gallery, reading time, table of contents.
+Client code reads its options — and the site's named backend endpoints (§5.1 `"services"`) under the reserved `$services` key — from the injected plugin-options JSON; never hardcode a backend URL in a plugin:
+
+```js
+const opts = JSON.parse(document.getElementById('plugin-options')?.textContent || '{}');
+const base = (opts.$services || {}).backend;   // site.config.json "services"
+```
+
+**Ships with:** `search` (enabled — a `/search/` page + input consuming `search-index.json`, no dependencies), `contact-form` (disabled reference — progressive-enhancement form POSTing to a configurable endpoint), `reading-time` (disabled — `transformContent` adding `item.readingTime`), `api-form` (disabled — forms declared in config, POSTing to a named service; works without JavaScript when the backend accepts regular form posts), and `goatcounter` (disabled — opt-in page-view counts; loads a third-party script, so never enabled by default). Good first community plugins to list in README: giscus comments, image gallery, table of contents.
 
 ---
 
@@ -439,7 +458,7 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 
 **M6 — Open-source polish.** README with 5-minute quickstart + screenshots, CONTRIBUTING, template-repo setup ("Use this template" button), demo site, optional OAuth Worker (separate folder `workers/oauth/`, ~60 lines, deploy instructions), and the **upgrade system** (§14: `engine.json` manifest, `update.yml` workflow, admin update banner), plus the **Jekyll importer** (§15) as the launch switch-story. *Done when:* a stranger can go from README to their own live site without asking a question, a site on v1.0 upgrades to v1.1 by merging one auto-generated PR, and a real Jekyll blog converts with working redirects.
 
-**M7 (optional/backlog):** i18n conventions, CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), WordPress / VuePress importers (§15; Joomla ships — crawl-based, `tools/migrate/joomla.js`).
+**M7 (optional/backlog):** i18n conventions, CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), WordPress / VitePress importers (§15; VuePress and Joomla ship).
 
 **Out of scope, permanently (use plugins or other tools):** user accounts on the published site, comments backend, e-commerce, page-builder drag-and-drop, server-side rendering, databases.
 
@@ -455,7 +474,7 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 
 **Principle: upgrades are pull requests, not merges — and definitely not magic.** A bare `git merge upstream/main` is not the mechanism: template repos share no history with upstream, and forks conflict the moment the user has customized config or a theme. Instead, make merging unnecessary by construction:
 
-**14.1 Ownership contract.** Every path belongs to exactly one party. Engine-owned (upstream may change, user must never edit): `build.js`, `lib/`, `admin/`, `themes/default/`, `config.defaults.json`, `.github/workflows/build-deploy.yml`, `engine.json`. User-owned (upstream never touches): `content/`, `data/`, `media/`, `site.config.json`, `themes/<custom>/`, `plugins/<user's>/`. Customizing the default theme means copying it to `themes/custom/` first — the admin and docs enforce this norm.
+**14.1 Ownership contract.** Every path belongs to exactly one party. Engine-owned (upstream may change, user must never edit): `build.js`, `lib/`, `admin/`, `themes/default/`, `config.defaults.json`, `plugins/{search,contact-form,reading-time,api-form,goatcounter}`, `.github/workflows/build-deploy.yml`, `engine.json`. User-owned (upstream never touches): `content/`, `data/`, `media/`, `site.config.json`, `themes/<custom>/`, `plugins/<user's>/`. Customizing the default theme means copying it to `themes/custom/` first — the admin and docs enforce this norm.
 
 **14.2 Engine manifest.** Each release ships `engine.json`: `{ "version": "1.4.2", "files": { "lib/content.js": "<sha256>", … } }`. Because engine files are never hand-edited, the updater **replaces them wholesale** — no three-way merge, so no conflicts are possible. Files whose hash doesn't match the installed manifest were modified by the user: the updater leaves them, lists them in the PR as "locally modified, needs manual/AI merge", and continues.
 
@@ -480,11 +499,13 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 Per source:
 
 - **Jekyll / Hugo / Eleventy** — already Markdown + frontmatter in Git: remap frontmatter keys, strip or convert Liquid/shortcodes, move assets, map permalinks. A pure file transform — the easy, high-volume win, and the launch switch-story.
-- **VuePress / VitePress** — Markdown with embedded Vue components and JS config: convert what maps to plain HTML, flag components for the review queue.
+- **VuePress / VitePress** — Markdown with embedded Vue components and JS config: convert what maps to plain HTML, flag components for the review queue. Ships for VuePress: `tools/migrate/vuepress.js` (nested frontmatter flattened, components stripped or substituted via `--component`, containers → blockquotes, `.vuepress/public` → `media/public`). VitePress differs in config layout (`.vitepress/`) — adapt the importer, or wait for the roadmap.
 - **WordPress** — input: WXR export (Tools → Export) or the REST API. Convert post/page HTML (including Gutenberg block markup) to Markdown, fetch `wp-content/uploads` media referenced in content, map categories/tags, preserve slugs or emit redirects. Comments export to a static JSON archive (a plugin can render "archived comments").
 - **Joomla** — no standard export: read a database dump (`#__content` tables) or crawl the rendered site. Messiest path; expect the largest review queue. **Ships** (`tools/migrate/joomla.js`): crawls the live site (dependency-free — its own small HTML parser and HTML→Markdown converter), recognizes article markup across templates via itemprop microdata and Joomla body classes, merges categories + tags, extracts the main menu into `data/navigation.json`, downloads in-content images, and maps every imported page's old URL — path-shaped URLs into `data/redirects.json`; non-SEF `index.php?…` routes into the report as ready-to-paste host-level rules, since static redirect files can't match query strings. Component pages with no static equivalent (login, contact, search) are skipped and accounted for in the dynamic-feature table.
 
 **Two universal requirements.** (1) **Redirects are non-negotiable** — every importer emits a complete old→new URL map; silently changing URLs is how migrations destroy SEO. (2) **Honest scoping** — the report includes a dynamic-feature mapping table: forms → `contact-form` plugin, comments → archive/giscus, search → built-in, e-commerce/memberships → explicitly out of scope for a static CMS.
+
+**The user-facing guide** is `tools/migrate/README.md`: a step-by-step walkthrough (run the importer → review the report → copy content in → keep or redirect URLs → config, navigation, dynamic features → verify → cut over), cross-linked from `migrations/README.md` so the similar folder name never strands anyone.
 
 **AI for the long tail.** The converter is deterministic and should handle ~80% of real sites. The remaining 20% — unknown shortcodes, page-builder markup, inline widgets, malformed HTML — is exactly what makes migrations expensive, and it becomes agent work: the report lists each item as a ready-to-run task, `CLAUDE.md` gains a migration section, and a verification pass diffs the extracted text of old vs new pages so nothing silently disappears.
 

@@ -35,11 +35,25 @@
         { "name": "tags", "type": "list" },
         { "name": "draft", "type": "boolean", "default": false }
       ]
+    },
+    "features": {
+      "path": "content/features",
+      "render": false,
+      "sortBy": "order",
+      "sortOrder": "asc",
+      "label": "Features",
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "order", "type": "text" }
+      ]
     }
   },
   "plugins": ["stamp"],
   "pluginOptions": {
     "stamp": { "note": "from-config" }
+  },
+  "services": {
+    "backend": "https://backend.fixture.test"
   },
   "theme": {
     "tokens": {

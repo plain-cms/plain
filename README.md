@@ -1,4 +1,7 @@
-# plain
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/logo-dark.svg">
+  <img src=".github/logo.svg" alt="plain" width="340">
+</picture>
 
 **A Git-native CMS for the AI age.** The repository is the database, static files are the API, and AI is the admin.
 
@@ -30,6 +33,8 @@ Sign in once with a GitHub access token (it stays on that device):
 4. Generate, copy, and paste it into the admin's sign-in screen.
 
 The token never leaves the browser except to api.github.com. Editors who prefer files can keep editing files — the admin and direct edits coexist happily.
+
+Prefer a button to a paste? Deploy the optional ~60-line [OAuth Worker](workers/oauth/README.md) (free on Cloudflare, backed by a free GitHub App) and the sign-in screen gains **"Sign in with GitHub"** — one click, and each writer gets a token scoped to just that repo's contents.
 
 **AI assist (optional, BYOK):** paste an Anthropic API key in Settings and the editor grows ✨ buttons — improve writing, suggest titles, generate the meta description, write image alt text, translate a page into a new draft. Every suggestion shows a before/after and asks before applying. The key stays in your browser and is sent only to Anthropic.
 
@@ -64,7 +69,7 @@ Fifteen starters ship in the box: **Journal** (blog), **Toolbox** (trades & loca
 
 ## Plugins
 
-A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim. Good first plugins: analytics snippet, giscus comments, image gallery, table of contents.
+A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim — plus **api-form** (forms declared in config, POSTing to your own backend via the `"services"` map) and **goatcounter** (opt-in page-view counts). Good first plugins: giscus comments, image gallery, table of contents.
 
 ## Moving an existing blog in
 
@@ -72,10 +77,13 @@ Already have a site? The importers under `tools/migrate/` convert it — content
 
 ```sh
 node tools/migrate/jekyll.js /path/to/your-jekyll-site
+node tools/migrate/vuepress.js /path/to/your-vuepress-site
 node tools/migrate/joomla.js https://your-joomla-site.example   # crawls the live site
 ```
 
-Each writes `content/`, `media/`, and `data/redirects.json` (Joomla also `data/navigation.json`) into `./plain-import/` — never touching your working tree — plus a migration report of anything that needs a human eye, from unconvertible markup to old query-string URLs that need a redirect rule at your host. Copy those folders into your plain repo, work the report's review queue, and build. Jekyll and Joomla ship today; Hugo, Eleventy, and WordPress are on the roadmap (§15).
+Each writes `content/`, `media/`, and `data/redirects.json` (Joomla also `data/navigation.json`) into `./plain-import/` — never touching your working tree — plus a migration report of anything that needs a human eye, from unconvertible markup to old query-string URLs that need a redirect rule at your host. Copy those folders into your plain repo, work the report's review queue, and build. Jekyll, VuePress, and Joomla ship today; VitePress, Hugo, Eleventy, and WordPress are on the roadmap (§15).
+
+The full step-by-step walkthrough — keeping your URLs, wiring forms and analytics, the cutover checklist — is [`tools/migrate/README.md`](tools/migrate/README.md).
 
 ## Staying up to date
 
@@ -102,7 +110,7 @@ media/             images and files
 themes/            fifteen starters ship in the box; add your own
 plugins/           a plugin is a folder; install = copy + enable in config
 admin/             the browser editor (static, vanilla ES modules)
-tools/migrate/     importers (Jekyll and Joomla today)
+tools/migrate/     importers (Jekyll, VuePress, Joomla)
 workers/oauth/     optional "Sign in with GitHub" worker (v1 uses a token)
 build.js + lib/    the whole engine — under 2,500 lines, one dependency, MIT
 ```

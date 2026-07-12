@@ -72,6 +72,10 @@
   },
   "plugins": [
     "search",
-    "reading-time"
-  ]
+    "reading-time",
+    "goatcounter"
+  ],
+  "pluginOptions": {
+    "goatcounter": { "code": "plain" }
+  }
 }
