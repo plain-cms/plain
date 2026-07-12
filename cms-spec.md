@@ -205,6 +205,16 @@ Rules:
 
 Anything that isn't a page: `data/navigation.json` (array of `{label, url}` trees), `data/redirects.json`. Templates can access all data files as `{{data.navigation}}` etc. The admin exposes a simple menu editor for navigation.
 
+### 5.4 Multilingual sites (i18n)
+
+Off by default. `site.language` stays the default language; i18n activates only when `site.languages` lists 2+ lowercase codes **and** includes `site.language` (`"languages": ["en", "fr"]`). Every i18n code path short-circuits when the list is empty — a monolingual build's output is byte-identical to pre-i18n output.
+
+- **Sibling-file translations.** `about.fr.md` lives next to `about.md`; the slug is the filename minus `.<lang>.md`. Translated pages render to `/<lang>/<default-path>/` (`/fr/about/`, `/fr/blog/hello/`); default-language URLs never change. Errors are teaching moments: a suffix that isn't a configured language, a translation without its original, or a default-language slug that shadows a language code (a page slugged `fr`) each stop the build naming the file. A drafted original drafts its translations.
+- **No ghost pages.** `/fr/about/` exists only if `about.fr.md` does. List and tag pages stay default-language only. But when a page renders in language L, `collections.<name>` is a merged per-language view — the L variant where one exists, else the default-language item, in the default order — so lists and data-only collections (features, FAQ, steps) are always complete. Nav URLs localize per entry only when the target translation exists. `base.html` emits one `hreflang` alternate link per available language version of the page (via the `alternates` template variable).
+- **UI strings.** Templates say `{{ strings.readMore }}` — plain dot-paths, no template-engine change. The dictionary merges per key: engine defaults (`lib/i18n.js`) ← the theme's optional `strings.json` ← `data/strings.<default>.json` ← `data/strings.<lang>.json`, so missing keys fall back to the default language. The default theme uses `{{ strings.* }}`; the other shipped themes keep hardcoded English until converted.
+- **Outputs.** The sitemap includes translated URLs. Translated items publish as `api/<collection>/<slug>.<lang>.json`; when i18n is active every API item carries `language`, default items with translations carry a `translations: ["fr", …]` pointer list, and search-index entries gain `lang`. RSS and `llms.txt` stay default-language only. Dates format in the item's language.
+- **Admin.** The editor's Translate button offers the configured languages and writes the `slug.<lang>.md` sibling as a draft; the slug field edits only the base name, so a translation's suffix survives renames. A language-switcher UI is deliberately not core — a theme or plugin concern.
+
 ---
 
 ## 6. Build engine (`build.js`)
@@ -275,7 +285,7 @@ An `ai.js` module with a provider interface (`complete(prompt, text) → text`).
 - **Generate description** (SEO meta from body)
 - **Suggest title** (3 options)
 - **Alt text** for images (sends the image)
-- **Translate page** (creates a sibling file, groundwork for i18n)
+- **Translate page** (writes the `slug.<lang>.md` sibling for a configured language, §5.4)
 
 Every AI action shows a diff-style before/after and requires an explicit "Apply". Never auto-apply. If no key is configured, the buttons explain how to add one in one sentence.
 
@@ -458,7 +468,7 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 
 **M6 — Open-source polish.** README with 5-minute quickstart + screenshots, CONTRIBUTING, template-repo setup ("Use this template" button), demo site, optional OAuth Worker (separate folder `workers/oauth/`, ~60 lines, deploy instructions), and the **upgrade system** (§14: `engine.json` manifest, `update.yml` workflow, admin update banner), plus the **Jekyll importer** (§15) as the launch switch-story. *Done when:* a stranger can go from README to their own live site without asking a question, a site on v1.0 upgrades to v1.1 by merging one auto-generated PR, and a real Jekyll blog converts with working redirects.
 
-**M7 (optional/backlog):** i18n conventions, CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), WordPress / Joomla importers (§15).
+**M7 (optional/backlog):** CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), WordPress / Joomla importers (§15). Shipped from this list: i18n conventions (§5.4).
 
 **Out of scope, permanently (use plugins or other tools):** user accounts on the published site, comments backend, e-commerce, page-builder drag-and-drop, server-side rendering, databases.
 
