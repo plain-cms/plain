@@ -136,9 +136,11 @@ export async function commitsFor(path, perPage = 30) {
   return commits.map((c) => ({ sha: c.sha, date: c.commit.committer.date, message: c.commit.message.split('\n')[0], author: c.commit.author?.name || c.author?.login || '' }));
 }
 
-/** The workflow run building a commit, or null if none has started yet. */
+/** The deploy run building a commit, or null if none has started yet.
+    Scoped to build-deploy.yml — other workflows (like the weekly update check)
+    also run on the head commit and must not be mistaken for a publish. */
 export async function runFor(commitSha) {
-  const { workflow_runs: runs } = await gh(repoPath(`actions/runs?head_sha=${commitSha}&per_page=1`));
+  const { workflow_runs: runs } = await gh(repoPath(`actions/workflows/build-deploy.yml/runs?head_sha=${commitSha}&per_page=1`));
   return runs[0] || null;
 }
 
