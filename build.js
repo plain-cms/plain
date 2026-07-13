@@ -12,7 +12,7 @@ import { render } from './lib/template.js';
 import { slugify, deepMerge } from './lib/util.js';
 import { renderMarkdown } from './lib/markdown.js';
 import { makeItem, sortItems, validateConfig, ContentError } from './lib/content.js';
-import { activeLanguages, splitLangSuffix, stringsFor, localizedCollections } from './lib/i18n.js';
+import { activeLanguages, splitLangSuffix, stringsFor, localizedCollections, localizedNav } from './lib/i18n.js';
 import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles, searchIndex, llmsTxt } from './lib/outputs.js';
 import { loadPlugins, runHook, runRenderHook, clientAssets } from './lib/plugins.js';
 
@@ -210,7 +210,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
       collections: localizedCollections(collections, translations, lang),
     };
     const urls = new Set(Object.values(translations).flat().filter((t) => t.language === lang).map((t) => t.url));
-    const localNav = navigation.map((entry) => (urls.has(`/${lang}${entry.url}`) ? { ...entry, url: `/${lang}${entry.url}` } : entry));
+    const localNav = localizedNav(navigation, data[`navigation.${lang}`], lang, urls);
     for (const [name, def] of Object.entries(config.collections)) {
       if (!def.render) continue;
       for (const item of translations[name].filter((t) => t.language === lang)) {
