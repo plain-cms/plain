@@ -13,7 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { build } from '../build.js';
 import { validateConfig } from '../lib/content.js';
-import { DEFAULT_STRINGS, activeLanguages, splitLangSuffix, stringsFor, localizedCollections } from '../lib/i18n.js';
+import { DEFAULT_STRINGS, activeLanguages, splitLangSuffix, stringsFor, localizedCollections, localizedNav } from '../lib/i18n.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const fixtureRoot = path.join(here, 'fixtures', 'site');
@@ -65,6 +65,19 @@ test('localizedCollections: per-slug substitution, default order, fallback to de
   const translations = { posts: [{ slug: 'b', title: 'B-fr', language: 'fr' }, { slug: 'a', title: 'A-ro', language: 'ro' }] };
   assert.deepEqual(localizedCollections(collections, translations, 'fr').posts.map((i) => i.title), ['A', 'B-fr']);
   assert.deepEqual(localizedCollections(collections, translations, 'ro').posts.map((i) => i.title), ['A-ro', 'B']);
+});
+
+test('localizedNav: labels from the language file, urls localized where translated, per-entry fallback', () => {
+  const nav = [{ label: 'Home', url: '/' }, { label: 'About', url: '/about/' }, { label: 'Blog', url: '/blog/' }];
+  const deNav = [{ label: 'Startseite', url: '/' }, { label: 'Über', url: '/about/' }];
+  const translated = new Set(['/de/', '/de/about/']); // '/' and '/about/' have German versions; '/blog/' does not
+  assert.deepEqual(localizedNav(nav, deNav, 'de', translated), [
+    { label: 'Startseite', url: '/de/' },
+    { label: 'Über', url: '/de/about/' },
+    { label: 'Blog', url: '/blog/' }, // no language entry → default label; no translation → default url
+  ]);
+  // no language file → labels unchanged, urls still localized
+  assert.deepEqual(localizedNav(nav, undefined, 'de', translated).map((e) => e.label), ['Home', 'About', 'Blog']);
 });
 
 test('config: site.languages defaults to [] and is validated', () => {

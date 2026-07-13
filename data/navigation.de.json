@@ -1,0 +1,7 @@
+[
+  { "label": "Startseite", "url": "/" },
+  { "label": "Blog", "url": "/blog/" },
+  { "label": "Über", "url": "/about/" },
+  { "label": "Kontakt", "url": "/contact/" },
+  { "label": "Suche", "url": "/search/" }
+]
