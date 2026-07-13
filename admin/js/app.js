@@ -9,6 +9,7 @@ import { editorScreen } from './editor.js';
 import { mediaScreen } from './media.js';
 import { aiSettings } from './ai.js';
 import { appearanceScreen } from './appearance.js';
+import { pluginsScreen } from './plugins.js';
 import { wizardScreen } from './wizard.js';
 
 let siteInfo = null;             // parsed /api/site.json (schema + site block)
@@ -40,6 +41,7 @@ function shell(active, ...content) {
       link('#/media', 'Media', 'media'),
       link('#/navigation', 'Navigation', 'navigation'),
       link('#/appearance', 'Appearance', 'appearance'),
+      link('#/plugins', 'Plugins', 'plugins'),
       link('#/settings', 'Settings', 'settings'),
       h('div', { class: 'sidebar-foot' },
         h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'View site ↗'),
@@ -323,6 +325,7 @@ const routes = {
   media: async () => shell('media', await mediaScreen()),
   navigation: navigationScreen,
   appearance: async () => shell('appearance', await appearanceScreen(siteInfo)),
+  plugins: async () => shell('plugins', await pluginsScreen(siteInfo)),
   settings: settingsScreen,
   welcome: () => wizardScreen(siteInfo, () => { location.hash = '#/'; route(); }),
 };

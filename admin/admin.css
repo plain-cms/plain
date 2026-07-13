@@ -229,3 +229,11 @@ dialog.history { max-width: 34rem; width: 90vw; }
 .pill .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
 @keyframes pulse { 50% { opacity: 0.3; } }
 @media (prefers-reduced-motion: reduce) { .pill .dot { animation: none; } .toast { transition: opacity 0.25s; } }
+
+/* Plugins screen */
+.provenance { display: flex; flex-wrap: wrap; gap: 0.6rem; margin: 0.4rem 0 0; font-size: 0.8rem; color: var(--muted); }
+.provenance a { color: inherit; }
+.badge.runs { color: var(--muted); }
+.badge.runs-build, .badge.runs-both { color: var(--accent); border-color: var(--accent); }
+.plugin-note { margin: 0.5rem 0 1rem; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); }
+dialog.plugin-config { width: min(28rem, 92vw); }

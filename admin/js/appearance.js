@@ -9,6 +9,7 @@ import { render } from '../lib/template.js';
 import { renderMarkdown } from '../lib/markdown.js';
 import { parseFrontmatter } from '../lib/content.js';
 import { collectionIndex } from './app.js';
+import { fetchPluginFiles } from './plugins.js';
 
 /** Every theme in the repo: {name, title, description, starter?}. */
 export async function loadThemes() {
@@ -95,6 +96,19 @@ export async function applyStarter(theme, siteInfo, { site = {}, tokens = {}, na
   config.collections = { ...config.collections, ...starter.collections };
   if (Object.keys(tokens).length) config.theme = { ...(config.theme || {}), tokens };
   const files = [];
+
+  // Bundled plugins (§10.3): enable each; if not already in the repo, fetch it from the registry.
+  for (const entry of starter.plugins || []) {
+    const spec = typeof entry === 'string' ? { id: entry } : entry;
+    const present = (await listDir(`plugins/${spec.id}`).catch(() => [])).length > 0;
+    if (!present) {
+      log(`Fetching the ${spec.id} plugin…`);
+      try { const { files: pluginFiles } = await fetchPluginFiles(spec); if (!pluginFiles.length) throw new Error('empty'); files.push(...pluginFiles); }
+      catch { log(`Skipped the ${spec.id} plugin (not found in the registry).`); continue; }
+    }
+    config.plugins = [...new Set([...(config.plugins || []), spec.id])];
+    if (spec.options) config.pluginOptions = { ...(config.pluginOptions || {}), [spec.id]: { ...((config.pluginOptions || {})[spec.id] || {}), ...spec.options } };
+  }
 
   // Replace, don't accumulate: a collection whose template the new theme lacks
   // was left by a previous theme's starter — drop it + delete its content (pages/
