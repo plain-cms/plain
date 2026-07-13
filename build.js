@@ -12,12 +12,16 @@ import { render } from './lib/template.js';
 import { slugify, deepMerge } from './lib/util.js';
 import { renderMarkdown } from './lib/markdown.js';
 import { makeItem, sortItems, validateConfig, ContentError } from './lib/content.js';
+import { activeLanguages, splitLangSuffix, stringsFor, localizedCollections } from './lib/i18n.js';
 import { sitemapXml, rssXml, robotsTxt, redirectsFile, redirectHtml, apiFiles, searchIndex, llmsTxt } from './lib/outputs.js';
 import { loadPlugins, runHook, runRenderHook, clientAssets } from './lib/plugins.js';
 
-/** Scan every collection folder on disk into validated, sorted items. Drafts are excluded. */
+/** Scan every collection folder on disk into validated, sorted items. Drafts are
+    excluded. Translations (about.fr.md, §5.4) load beside their default items. */
 function loadContent(root, config) {
+  const languages = activeLanguages(config.site);
   const collections = {};
+  const translations = {}; // collection name → translated items (language ≠ default)
   let draftCount = 0;
   for (const [name, def] of Object.entries(config.collections)) {
     const dir = path.join(root, def.path);
@@ -25,17 +29,41 @@ function loadContent(root, config) {
       throw new ContentError(def.path, null, `folder not found — create it (mkdir -p ${def.path}) or fix the "path" of collection "${name}" in site.config.json`);
     }
     const items = [];
+    const translated = [];
+    const defaultSlugs = new Set(); // includes drafts — for the orphan check below
     for (const entry of fs.readdirSync(dir).sort()) {
       if (!entry.endsWith('.md')) continue;
       const file = `${def.path}/${entry}`;
       const source = fs.readFileSync(path.join(root, file), 'utf8');
-      const item = makeItem(source, { file, slug: entry.slice(0, -3), collection: name, def, language: config.site.language });
-      if (item.draft === true) draftCount++;
-      else items.push(item);
+      const { base, lang } = splitLangSuffix(entry.slice(0, -3), languages);
+      if (lang === config.site.language) throw new ContentError(file, null, `"${lang}" is the default language — it lives in ${base}.md; delete or rename this file`);
+      if (!lang && languages.length && base.includes('.')) throw new ContentError(file, null, `".${base.split('.').pop()}" is not one of site.languages (${languages.join(', ')}) — add the code there or rename the file`);
+      const item = makeItem(source, { file, slug: base, collection: name, def, language: lang || config.site.language });
+      if (languages.length) item.language = lang || config.site.language;
+      if (lang) {
+        if (item.url) item.url = `/${lang}${item.url}`;
+        if (item.draft === true) draftCount++; else translated.push(item);
+      } else {
+        defaultSlugs.add(base);
+        if (languages.length && item.url && languages.includes(item.url.split('/')[1])) {
+          throw new ContentError(file, null, `its URL ${item.url} starts with the language code "${item.url.split('/')[1]}" — that path belongs to translated pages; rename the file`);
+        }
+        if (item.draft === true) draftCount++; else items.push(item);
+      }
     }
+    for (const t of translated) {
+      if (!defaultSlugs.has(t.slug)) throw new ContentError(t.file, null, `translation without an original — create ${def.path}/${t.slug}.md or rename this file`);
+    }
+    const published = new Set(items.map((i) => i.slug));
+    translations[name] = translated.filter((t) => published.has(t.slug)); // a drafted original drafts its translations too
+    draftCount += translated.length - translations[name].length;
     collections[name] = sortItems(items, def);
+    for (const item of collections[name]) {
+      const langs = translations[name].filter((t) => t.slug === item.slug).map((t) => t.language).sort();
+      if (langs.length) item.translations = langs;
+    }
   }
-  return { collections, draftCount };
+  return { collections, translations, draftCount };
 }
 
 /** Read every *.html template in a theme into { name: source }. */
@@ -48,7 +76,9 @@ function loadTheme(root, themeName) {
     if (fs.existsSync(dir)) for (const e of fs.readdirSync(dir)) if (e.endsWith('.html')) out[e.slice(0, -5)] = fs.readFileSync(path.join(dir, e), 'utf8');
     return out;
   };
-  return { themeDir, templates: readHtml(templatesDir), partials: readHtml(path.join(templatesDir, 'partials')) };
+  const stringsPath = path.join(themeDir, 'strings.json');
+  const strings = fs.existsSync(stringsPath) ? JSON.parse(fs.readFileSync(stringsPath, 'utf8')) : {};
+  return { themeDir, templates: readHtml(templatesDir), partials: readHtml(path.join(templatesDir, 'partials')), strings };
 }
 
 /** Read every data/*.json into { navigation: …, redirects: …, … }. */
@@ -108,7 +138,8 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   if (!theme.templates.base) throw new ContentError(`themes/${site.theme}/templates/base.html`, null, 'not found — every theme needs a base.html with a {{{ body }}} slot');
   const siteApi = { config, data, collections: null }; // the object every hook receives
   await runHook(plugins, 'init', siteApi);
-  const { collections, draftCount } = loadContent(root, config);
+  const languages = activeLanguages(site);
+  const { collections, translations, draftCount } = loadContent(root, config);
   siteApi.collections = collections;
   const warnings = [];
 
@@ -127,7 +158,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
     .filter(([, def]) => def.rss)
     .map(([name, def]) => ({ name, listUrl: def.listUrl || '/', feedUrl: `${def.listUrl || '/'}rss.xml` }));
   for (const [name, def] of Object.entries(config.collections)) {
-    for (const item of collections[name]) {
+    for (const item of [...collections[name], ...translations[name]]) {
       await runHook(plugins, 'transformContent', item, siteApi); // plugins may mutate items
       item.content = renderMarkdown(item.body);
       if (Array.isArray(item.tags) && def.listUrl) {
@@ -139,8 +170,13 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
 
   // Shared template context. `nav` gets a per-page copy with `current` set.
   const navigation = Array.isArray(data.navigation) ? data.navigation : [];
-  const baseContext = { site, data, collections, feeds: feeds.map((f) => f.feedUrl) };
-  const navFor = (url) => navigation.map((entry) => ({ ...entry, current: entry.url === url }));
+  const strings = stringsFor(site.language, site.language, theme.strings, data);
+  const baseContext = { site, data, collections, strings, feeds: feeds.map((f) => f.feedUrl) };
+  const navFor = (url, entries = navigation) => entries.map((entry) => ({ ...entry, current: entry.url === url }));
+  // hreflang alternates (§5.4): every language version of a page, incl. itself —
+  // only for pages that actually have translations, so monolingual output is untouched.
+  const alternatesFor = (item) => item?.translations
+    && [{ lang: site.language, url: item.url }, ...item.translations.map((l) => ({ lang: l, url: `/${l}${item.url}` }))];
 
   const pages = new Map();    // output path (dist-relative) → html
   const pageMeta = new Map(); // output path → page context (for renderPage hooks)
@@ -158,8 +194,30 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   for (const [name, def] of Object.entries(config.collections)) {
     if (!def.render) continue;
     for (const item of collections[name]) {
-      emit(item.url, renderPage(theme, def.template, { ...baseContext, page: item, nav: navFor(item.url) }), item);
+      emit(item.url, renderPage(theme, def.template, { ...baseContext, page: item, nav: navFor(item.url), alternates: alternatesFor(item) }), item);
       sitemapEntries.push({ loc: site.url + item.url, lastmod: item.date });
+    }
+  }
+
+  // Translated item pages (§5.4): /<lang>/<default-path>/, only where a translation
+  // file exists — no ghost pages. Each renders with that language's strings, a merged
+  // per-language collections view, and nav URLs localized per entry when translated.
+  for (const lang of languages.filter((l) => l !== site.language)) {
+    const localized = {
+      ...baseContext,
+      site: { ...site, language: lang }, // so <html lang="{{ site.language }}"> is right
+      strings: stringsFor(lang, site.language, theme.strings, data),
+      collections: localizedCollections(collections, translations, lang),
+    };
+    const urls = new Set(Object.values(translations).flat().filter((t) => t.language === lang).map((t) => t.url));
+    const localNav = navigation.map((entry) => (urls.has(`/${lang}${entry.url}`) ? { ...entry, url: `/${lang}${entry.url}` } : entry));
+    for (const [name, def] of Object.entries(config.collections)) {
+      if (!def.render) continue;
+      for (const item of translations[name].filter((t) => t.language === lang)) {
+        const original = collections[name].find((i) => i.slug === item.slug);
+        emit(item.url, renderPage(theme, def.template, { ...localized, page: item, nav: navFor(item.url, localNav), alternates: alternatesFor(original) }), item);
+        sitemapEntries.push({ loc: site.url + item.url, lastmod: item.date });
+      }
     }
   }
 
@@ -191,7 +249,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   }
 
   // 404 page and redirect fallbacks.
-  const notFoundPage = { title: 'Page not found' };
+  const notFoundPage = { title: strings.notFoundTitle };
   pages.set('404.html', renderPage(theme, '404', { ...baseContext, page: notFoundPage, nav: navFor(null) }));
   pageMeta.set('404.html', notFoundPage);
 
@@ -213,8 +271,8 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   for (const feed of feeds) {
     files.set(path.join(feed.feedUrl.slice(1)), rssXml(site, feed.feedUrl, feed.listUrl, collections[feed.name]));
   }
-  for (const [file, json] of apiFiles(config, data, collections)) files.set(file, json);
-  files.set('search-index.json', searchIndex(collections));
+  for (const [file, json] of apiFiles(config, data, collections, translations)) files.set(file, json);
+  files.set('search-index.json', searchIndex(collections, translations));
   files.set('llms.txt', llmsTxt(config, collections));
 
   // Everything rendered without errors — only now touch dist/ (§5.2: never half-deploy).
@@ -254,7 +312,7 @@ function copyAdmin(root, outDir) {
   if (!fs.existsSync(adminDir)) return;
   fs.cpSync(adminDir, path.join(outDir, 'admin'), { recursive: true });
   fs.mkdirSync(path.join(outDir, 'admin', 'lib'), { recursive: true });
-  for (const module of ['util.js', 'template.js', 'markdown.js', 'content.js']) {
+  for (const module of ['util.js', 'template.js', 'markdown.js', 'content.js', 'i18n.js']) {
     fs.copyFileSync(path.join(root, 'lib', module), path.join(outDir, 'admin', 'lib', module));
   }
   const marked = fileURLToPath(import.meta.resolve('marked'));

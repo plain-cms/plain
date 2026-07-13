@@ -20,7 +20,7 @@ A red test or a failed build must never be committed. The golden-file test compa
 - Core (`build.js` + `lib/` + admin JS) stays under 2,500 lines; no file over 400. Too big → make it a plugin.
 - No database. All state is files in this repo.
 - The published site must work with JavaScript disabled.
-- `lib/util.js`, `lib/template.js`, `lib/markdown.js` are **isomorphic**: they must never import `node:*` — the admin runs them in the browser so previews match the build exactly.
+- `lib/util.js`, `lib/template.js`, `lib/markdown.js`, `lib/i18n.js` are **isomorphic**: they must never import `node:*` — the admin runs them in the browser so previews match the build exactly.
 
 ## Commands
 
@@ -95,6 +95,17 @@ Rules:
 
 Every `data/*.json` is available to templates as `data.<filename>` (e.g. `{{#each data.navigation as entry}}`). `navigation.json` is a list of `{label, url}`; `redirects.json` maps old → new URLs and produces both a `_redirects` file and meta-refresh fallback pages. `footer.json` is `{ "html": "…" }` — every shipped theme prints it at the bottom of every page (raw site-owner HTML), and the admin's Settings screen edits it (commit message `settings: update footer`).
 
+### Multilingual sites (i18n — spec §5.4, `lib/i18n.js`)
+
+Off by default: i18n activates only when `site.languages` lists 2+ lowercase codes **and** includes `site.language` (e.g. `"languages": ["en", "fr"]`; `config.defaults.json` ships `[]`). Every i18n code path short-circuits when the list is empty — a monolingual build is byte-identical.
+
+- **Translations are sibling files:** `about.fr.md` next to `about.md` (slug = filename minus `.<lang>.md`) renders to `/fr/about/`; default-language URLs never change. No ghost pages: `/fr/about/` exists only if `about.fr.md` does; list/tag pages, RSS, `llms.txt`, and the 404 stay default-language only.
+- **Merged views:** a page rendering in language L sees `collections.<name>` with each item's L variant where one exists, else the default item — lists and data-only collections are always complete. Nav URLs localize per entry only when the target translation exists. `base.html` emits an `hreflang` link per available language version (the `alternates` variable).
+- **UI strings:** themes say `{{ strings.readMore }}`; the dictionary merges per key: engine defaults in `lib/i18n.js` ← theme `strings.json` ← `data/strings.<default>.json` ← `data/strings.<lang>.json` (missing keys fall back to the default language). Only `themes/default/` is converted; other themes keep hardcoded English until converted.
+- **Outputs when active:** sitemap gains translated URLs; API items carry `language`; translated items publish as `api/<collection>/<slug>.<lang>.json` and originals list `translations: ["fr", …]`; search-index entries gain `lang`. Dates format per item language.
+- **Build errors (all name the file):** unknown language suffix, translation without an original, a default slug that shadows a language code (a page slugged `fr`). A drafted original drafts its translations.
+- **Admin:** the editor's Translate button offers the configured languages and writes `slug.<lang>.md` as a draft; the slug field edits only the base name so the suffix survives renames.
+
 ## Template syntax (lib/template.js — the complete list)
 
 ```
@@ -112,6 +123,7 @@ Variables available in every template:
 - `nav` — navigation entries with `current: true` on the active one
 - `data` — all data files; `collections` — all items by collection name
 - `feeds` — RSS feed URLs (for `<link rel="alternate">`)
+- `strings` — the UI-string dictionary for the page's language (see i18n above); `alternates` — `[{lang, url}]` hreflang links, only on pages with translations
 - List templates also get: `items` (this page's slice), `pagination` (`page`, `totalPages`, `multiple`, `newer`, `older`), `tag` (on tag pages)
 
 Every page template renders into `base.html`'s `{{{ body }}}` slot.
