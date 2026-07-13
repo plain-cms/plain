@@ -487,7 +487,11 @@ async function fetchPage(url) {
   return { url, finalUrl: url, status: 0, error: String(lastError) };
 }
 
-/** Minimal robots.txt: Disallow prefixes from the "User-agent: *" group. */
+/**
+ * Minimal robots.txt: Disallow rules from the "User-agent: *" group. Rules
+ * are compiled so the two robots wildcards work — "*" matches any run of
+ * characters, a trailing "$" anchors the match to the end of the URL.
+ */
 async function loadRobots(origin) {
   let body;
   try {
@@ -509,15 +513,23 @@ async function loadRobots(origin) {
       inAgentRun = true;
     } else {
       inAgentRun = false;
-      if (key === 'disallow' && applies && m[2].trim()) disallow.push(m[2].trim());
+      if (key === 'disallow' && applies && m[2].trim()) disallow.push(robotsMatcher(m[2].trim()));
     }
   }
   return disallow;
 }
 
+/** One Disallow value → RegExp over pathname+query. */
+function robotsMatcher(rule) {
+  const anchored = rule.endsWith('$');
+  const parts = (anchored ? rule.slice(0, -1) : rule).split('*')
+    .map((part) => part.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  return new RegExp('^' + parts.join('.*') + (anchored ? '$' : ''));
+}
+
 const isDisallowed = (disallow, url) => {
   const p = pathOf(url);
-  return disallow.some((prefix) => p.startsWith(prefix));
+  return disallow.some((rule) => rule.test(p));
 };
 
 /**
@@ -526,8 +538,8 @@ const isDisallowed = (disallow, url) => {
  *            nonHtml: number, uncrawled: number}}
  */
 async function crawl(startUrl, opts, log) {
-  const origin = new URL(startUrl).origin;
-  const startNorm = normalizeUrl(startUrl, startUrl, origin);
+  let origin = new URL(startUrl).origin;
+  let startNorm = normalizeUrl(startUrl, startUrl, origin);
   const queue = [startNorm];
   const enqueued = new Set(queue);
   const seenPages = new Set();
@@ -536,7 +548,7 @@ async function crawl(startUrl, opts, log) {
   const errors = [];
   let robotsSkipped = 0;
   let nonHtml = 0;
-  const disallow = await loadRobots(origin);
+  let disallow = await loadRobots(origin);
 
   while (queue.length && pages.length < opts.maxPages) {
     const url = queue.shift();
@@ -547,9 +559,25 @@ async function crawl(startUrl, opts, log) {
     if (res.status >= 400) { errors.push({ url, problem: `HTTP ${res.status}` }); continue; }
     if (res.text == null) { nonHtml += 1; continue; }
 
-    // The server may have redirected (Joomla loves redirecting non-SEF URLs
-    // to their SEF form). The final URL is the page's identity; the requested
-    // one becomes an alias so redirects still cover it.
+    // The server may have redirected. Same-origin redirects are routine
+    // (Joomla loves redirecting non-SEF URLs to their SEF form): the final
+    // URL is the page's identity; the requested one becomes an alias so
+    // redirects still cover it. A redirect to ANOTHER origin is either the
+    // site's canonical host (naked → www, http → https — adopt it and crawl
+    // there) or genuinely external content, which must not be imported.
+    let finalOrigin = origin;
+    try { finalOrigin = new URL(res.finalUrl, url).origin; } catch { /* keep ours */ }
+    if (finalOrigin !== origin) {
+      if (pages.length === 0) {                                // only the start URL can be first
+        origin = finalOrigin;
+        startNorm = normalizeUrl(res.finalUrl, url, origin) || startNorm;
+        disallow = await loadRobots(origin);
+        log(`  the site redirected to ${origin} — importing from there`);
+      } else {
+        errors.push({ url, problem: `redirects off-site to ${res.finalUrl} — not imported` });
+        continue;
+      }
+    }
     const finalNorm = normalizeUrl(res.finalUrl, url, origin) || url;
     if (finalNorm !== url) aliases.set(url, finalNorm);
     if (seenPages.has(finalNorm)) continue;
@@ -570,7 +598,7 @@ async function crawl(startUrl, opts, log) {
       queue.push(n);
     }
   }
-  return { pages, aliases, errors, robotsSkipped, nonHtml, uncrawled: queue.length };
+  return { pages, aliases, errors, robotsSkipped, nonHtml, uncrawled: queue.length, origin };
 }
 
 // ---------------------------------------------------------------------------
@@ -723,7 +751,10 @@ function mediaRelOf(url) {
   // A stray "%" (e.g. /images/50%off.jpg) makes decodeURIComponent throw —
   // keep the raw path in that case rather than killing the whole import.
   try { pathname = decodeURIComponent(pathname); } catch { /* keep raw */ }
-  return pathname.split('/').filter((s) => s && s !== '.' && s !== '..').join('/');
+  // Split on backslashes too: a decoded "%5C.." segment must never survive
+  // into the path.join() that places the file on disk (Windows would treat
+  // it as a directory-traversal separator).
+  return pathname.split(/[/\\]+/).filter((s) => s && s !== '.' && s !== '..').join('/');
 }
 
 // ---------------------------------------------------------------------------
@@ -762,12 +793,18 @@ async function main() {
     process.exit(1);
   }
 
-  const origin = start.origin;
+  // crawl() may have adopted a different canonical host (naked → www,
+  // http → https); every link from here on resolves against the origin the
+  // pages actually came from.
+  const origin = crawled.origin;
   const generator = metaByName(crawled.pages[0].tree, 'generator');
   if (!/joomla/i.test(generator)) {
     log(`Note: no Joomla generator meta found (saw "${generator || 'nothing'}") — importing anyway; heuristics may be weaker on non-Joomla sites.`);
   }
   const homeOgImage = metaByProp(crawled.pages[0].tree, 'og:image');
+  // Read the main menu off the homepage now — extractArticle prunes
+  // nav/header out of any tree it processes, including this one.
+  const menu = extractMenu(crawled.pages[0].tree);
 
   // ---- classify & extract ---------------------------------------------------
   const review = [];                                          // {file, notes: []} — file = old URL
@@ -801,7 +838,15 @@ async function main() {
     }
     const key = dedupKeyOf(art, page.url);
     const existing = dedup.get(key);
-    if (existing) { existing.aliasUrls.push(page.url); continue; }
+    if (existing) {
+      existing.aliasUrls.push(page.url);
+      // A canonical-keyed merge is the same article by declaration; a
+      // title+date match is only a strong guess — say so, never silently.
+      if (!(art.canonical && normalizeUrl(art.canonical, page.url, origin))) {
+        noteFor(pathOf(page.url)).push(`Merged into \`${pathOf(existing.url)}\` — same title${art.date ? ' and date' : ''}, and neither page declares a canonical URL. If they were genuinely different pages, copy the missing content over by hand.`);
+      }
+      continue;
+    }
     const record = { url: page.url, ...art, aliasUrls: [] };
     dedup.set(key, record);
     records.push(record);
@@ -812,10 +857,10 @@ async function main() {
       noteFor(pathOf(page.url)).push('Article container not clearly identifiable — imported the whole page body. Compare against the original and trim site chrome.');
     }
   }
-  // Only the extracted regions (and pages[0], for the menu) are needed from
-  // here on — release the full page trees so the serialize/media/report
-  // phases don't hold every crawled page in memory on large sites.
-  for (const page of crawled.pages.slice(1)) page.tree = null;
+  // Only the extracted regions are needed from here on — release the full
+  // page trees so the serialize/media/report phases don't hold every crawled
+  // page in memory on large sites.
+  for (const page of crawled.pages) page.tree = null;
 
   // ---- slugs & the old→new URL map -------------------------------------------
   const isHome = (url) => pathOf(url) === '/';
@@ -923,7 +968,6 @@ async function main() {
   fs.writeFileSync(path.join(outputDir, 'data', 'redirects.json'), JSON.stringify(sortedRedirects, null, 2) + '\n');
 
   // ---- navigation ---------------------------------------------------------------
-  const menu = extractMenu(crawled.pages[0].tree);
   const navigation = [];
   for (const { label, href } of menu) {
     const n = normalizeUrl(href, crawled.pages[0].url, origin);
@@ -948,8 +992,12 @@ async function main() {
       try {
         const res = await fetch(abs, { signal: AbortSignal.timeout(30000) });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        // Check the declared size before buffering the body, so a linked
+        // archive can't pull hundreds of MB into memory first.
+        const cap = 20 * 1024 * 1024;
+        if (Number(res.headers.get('content-length')) > cap) throw new Error('larger than 20 MB');
         const buf = Buffer.from(await res.arrayBuffer());
-        if (buf.length > 20 * 1024 * 1024) throw new Error('larger than 20 MB');
+        if (buf.length > cap) throw new Error('larger than 20 MB');
         const target = path.join(outputDir, 'media', rel);
         fs.mkdirSync(path.dirname(target), { recursive: true });
         fs.writeFileSync(target, buf);

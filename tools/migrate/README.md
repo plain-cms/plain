@@ -81,7 +81,10 @@ node tools/migrate/joomla.js https://your-joomla-site.example
   multi-section sites).
 - `--no-media` — rewrite image references without downloading the files.
 
-Joomla notes: dated articles become posts, dateless ones become pages;
+Joomla notes: if the site redirects to its canonical address (http → https,
+naked → www), the crawl follows it and imports from there — pages that
+redirect to a *different* site are skipped and listed under fetch errors.
+Dated articles become posts, dateless ones become pages;
 categories and tags merge into each post's `tags` list; your main menu is
 extracted into `data/navigation.json` (review it in Step 6 instead of writing
 one from scratch). Old non-SEF URLs (`index.php?option=…`) can't live in a
