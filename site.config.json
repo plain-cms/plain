@@ -4,6 +4,7 @@
     "url": "https://plain-cms.github.io/plain",
     "description": "The sample site that ships with plain, the Git-native CMS.",
     "language": "en",
+    "languages": ["en", "de", "fr"],
     "theme": "default",
     "basePath": "/plain"
   },
@@ -73,7 +74,8 @@
   "plugins": [
     "search",
     "reading-time",
-    "goatcounter"
+    "goatcounter",
+    "language-switcher"
   ],
   "pluginOptions": {
     "goatcounter": { "code": "plain" }
