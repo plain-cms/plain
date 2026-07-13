@@ -1,0 +1,7 @@
+{
+  "name": "language-switcher",
+  "version": "1.0.0",
+  "description": "A footer language switcher built from the page's hreflang links. Progressive enhancement — appears only on multilingual sites, on pages that have translations. Client-only; theme-agnostic.",
+  "client": { "js": "client.js", "css": "client.css" },
+  "options": { "labels": {} }
+}
