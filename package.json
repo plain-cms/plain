@@ -1,6 +1,6 @@
 {
   "name": "plain",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "A Git-native CMS: the repository is the database, static files are the API, and AI is the admin.",
   "type": "module",
   "private": true,
