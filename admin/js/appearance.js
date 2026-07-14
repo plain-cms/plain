@@ -3,7 +3,7 @@
 // the browser, using the same lib/template.js the build uses — what you
 // preview is what deploys. Nothing is committed until Apply.
 
-import { auth, getFile, putFile, listDir, listTree, commitFiles, bytesToBase64 } from './github.js';
+import { auth, getFile, updateFile, listDir, listTree, commitFiles, bytesToBase64 } from './github.js';
 import { h, toast, ask, watchBuild } from './ui.js';
 import { render } from '../lib/template.js';
 import { renderMarkdown } from '../lib/markdown.js';
@@ -234,14 +234,15 @@ async function tryOn(theme, siteInfo) {
       if (starter) {
         commitSha = await applyStarter(theme, siteInfo, { tokens: state.tokens, log: (m) => toast(m) });
       } else {
-        const file = await getFile('site.config.json');
-        const config = JSON.parse(file.text);
-        config.site.theme = theme.name;
-        if (Object.keys(state.tokens).length) config.theme = { ...(config.theme || {}), tokens: state.tokens };
-        ({ commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', `settings: switch theme to "${theme.name}"`, file.sha));
+        ({ commitSha } = await updateFile('site.config.json', (text) => {
+          const config = JSON.parse(text);
+          config.site.theme = theme.name;
+          if (Object.keys(state.tokens).length) config.theme = { ...(config.theme || {}), tokens: state.tokens };
+          return JSON.stringify(config, null, 2) + '\n';
+        }, `settings: switch theme to "${theme.name}"`));
       }
       toast('Applied — your site is updating. Switching back is just as easy.', 'success');
-      watchBuild(commitSha, siteInfo.site.url);
+      if (commitSha) watchBuild(commitSha, siteInfo.site.url);
       overlay.remove();
     } catch (error) { toast(error.message, 'error'); }
   }
