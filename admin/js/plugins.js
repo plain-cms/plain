@@ -6,7 +6,7 @@
 // the starter registry (appearance.js). Plugins are code, so cards show
 // provenance and where the plugin runs, and nothing is installed silently.
 
-import { getFile, putFile, listTree, commitFiles, bytesToBase64 } from './github.js';
+import { getFile, putFile, listDir, listTree, commitFiles, bytesToBase64 } from './github.js';
 import { h, toast, ask, modal, watchBuild } from './ui.js';
 
 export const REGISTRY_REPO = 'plain-cms/plugins';
@@ -39,11 +39,21 @@ async function loadInstalled() {
   return names.map((name, i) => ({ name, manifest: manifests[i], options: (config.pluginOptions || {})[name] || {} }));
 }
 
+/** Plugins that ship in plugins/ but aren't enabled — so newly shipped built-ins
+ *  (and anything you removed from the list) stay discoverable and one click to turn on. */
+async function loadAvailableLocal(enabled) {
+  const dirs = (await listDir('plugins')).filter((e) => e.type === 'dir' && !enabled.has(e.name));
+  const manifests = await Promise.all(dirs.map((d) =>
+    getFile(`plugins/${d.name}/plugin.json`).then((f) => JSON.parse(f.text)).catch(() => null)));
+  return dirs.map((d, i) => ({ name: d.name, manifest: manifests[i] })).filter((p) => p.manifest);
+}
+
 const hasOptions = (p) => Object.keys({ ...(p.manifest.options || {}), ...p.options }).length > 0;
 
 export async function pluginsScreen(siteInfo) {
   const installed = await loadInstalled();
   const names = new Set(installed.map((p) => p.name));
+  const available = await loadAvailableLocal(names);
 
   const cards = installed.map((p) => h('section', { class: 'card plugin-card' },
     h('h2', {}, p.manifest.title || p.name, p.manifest.version ? h('span', { class: 'badge' }, `v${p.manifest.version}`) : null),
@@ -52,10 +62,19 @@ export async function pluginsScreen(siteInfo) {
       hasOptions(p) ? h('button', { onclick: () => configurePlugin(p, siteInfo) }, 'Configure') : null,
       h('button', { class: 'danger', onclick: () => removePlugin(p, siteInfo) }, 'Remove'))));
 
+  const builtinCards = available.map((p) => h('section', { class: 'card plugin-card' },
+    h('h2', {}, p.manifest.title || p.name, p.manifest.version ? h('span', { class: 'badge' }, `v${p.manifest.version}`) : null),
+    h('p', { class: 'muted' }, p.manifest.description || ''),
+    h('div', { class: 'card-actions' },
+      h('button', { class: 'primary', onclick: (e) => enablePlugin(p, siteInfo, e.target) }, 'Enable'))));
+
   return h('div', {},
     h('header', { class: 'screen-head' }, h('h1', {}, 'Plugins')),
     h('p', { class: 'muted' }, 'Optional features for your site. Installing copies the plugin into your repository and turns it on; removing reverses both.'),
     installed.length ? h('div', { class: 'cards' }, cards) : h('p', { class: 'empty' }, 'No plugins installed.'),
+    available.length ? h('h2', { class: 'browse-more' }, 'Built-in — not enabled') : null,
+    available.length ? h('p', { class: 'muted' }, 'These ship with plain but aren’t turned on for this site yet. Enabling one just adds it to your config.') : null,
+    available.length ? h('div', { class: 'cards' }, builtinCards) : null,
     h('h2', { class: 'browse-more' }, 'Add a plugin'),
     h('p', { class: 'plugin-note' }, 'Plugins run code on your site — some in your visitors’ browsers, some when your site builds. Install only ones you trust; every plugin below is reviewed before it’s listed.'),
     await registrySection(siteInfo, names));
@@ -103,6 +122,24 @@ async function installPlugin(entry, siteInfo, button) {
     watchBuild(commitSha, siteInfo.site.url);
     refresh();
   } catch (error) { toast(error.message, 'error'); button.disabled = false; }
+}
+
+/** Turn on a plugin that already ships in plugins/ — just add it to the config. */
+async function enablePlugin(p, siteInfo, button) {
+  button.disabled = true;
+  try {
+    const cfg = await getFile('site.config.json');
+    const config = JSON.parse(cfg.text);
+    config.plugins = [...new Set([...(config.plugins || []), p.name])];
+    if (p.manifest?.options && Object.keys(p.manifest.options).length) {
+      config.pluginOptions = config.pluginOptions || {};
+      config.pluginOptions[p.name] = { ...p.manifest.options, ...(config.pluginOptions[p.name] || {}) };
+    }
+    const { commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', `plugins: enable ${p.name}`, cfg.sha);
+    toast(`${p.manifest.title || p.name} enabled — publishing now.`, 'success');
+    watchBuild(commitSha, siteInfo.site.url);
+    refresh();
+  } catch (error) { toast(error.message, 'error'); }
 }
 
 /** Delete plugins/<name>/ and turn it off in site.config.json — one commit. */
