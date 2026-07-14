@@ -97,7 +97,7 @@ Every `data/*.json` is available to templates as `data.<filename>` (e.g. `{{#eac
 
 ### Multilingual sites (i18n — spec §5.4, `lib/i18n.js`)
 
-Off by default: i18n activates only when `site.languages` lists 2+ lowercase codes **and** includes `site.language` (e.g. `"languages": ["en", "fr"]`; `config.defaults.json` ships `[]`). Every i18n code path short-circuits when the list is empty — a monolingual build is byte-identical.
+Off by default: i18n activates only when `site.languages` lists 2+ lowercase codes **and** includes `site.language` (e.g. `"languages": ["en", "fr"]`; `config.defaults.json` ships `[]`). Set them in the admin's **Settings → Additional languages** (or by hand). Every i18n code path short-circuits when the list is empty — a monolingual build is byte-identical.
 
 - **Translations are sibling files:** `about.fr.md` next to `about.md` (slug = filename minus `.<lang>.md`) renders to `/fr/about/`; default-language URLs never change. No ghost pages: `/fr/about/` exists only if `about.fr.md` does; list/tag pages, RSS, `llms.txt`, and the 404 stay default-language only.
 - **Merged views:** a page rendering in language L sees `collections.<name>` with each item's L variant where one exists, else the default item — lists and data-only collections are always complete. Nav URLs localize per entry only when the target translation exists; nav **labels** translate via `data/navigation.<lang>.json` (a per-language `[{label, url}]` matched on the default url, per-entry fallback). `base.html` emits an `hreflang` link per available language version (the `alternates` variable).
@@ -196,7 +196,7 @@ plugins/my-plugin/
 }
 ```
 
-Only `name`, `version`, `description` are required. `hooks` is documentation (the loader inspects `index.js` itself). Declare `client` entries only for files that exist.
+Only `name`, `version`, `description` are required. `hooks` is documentation (the loader inspects `index.js` itself). Declare `client` entries only for files that exist. An optional `note` string is shown on the plugin's admin card — use it to state a prerequisite (e.g. language-switcher's "needs 2+ languages — set them in Settings").
 
 **Installing from the registry.** Authoring a plugin needs no registry — but for *sharing*, the admin's **Plugins** screen (`admin/js/plugins.js`) installs community plugins from the curated `plain-cms/plugins` registry: Install copies the folder into `plugins/<id>/` + enables it in `site.config.json` (one commit), Configure edits `pluginOptions.<id>`, Remove reverses both. It also surfaces **built-in plugins present in `plugins/` but not enabled** (a new one shipped by an update, or any where the site's own `plugins` array overrides the defaults) with a one-click **Enable**. Registry entries carry `runsAt` (`client`|`build`|`both`) + `author` so the UI shows where a plugin runs and its provenance (plugins are code — the screen says so). Community plugins are user-owned (never in `engine.json`) and survive upgrades. Starters bundle plugins by id (see Themes & starters); `admin/js/appearance.js` `applyStarter()` fetches any that aren't already installed.
 

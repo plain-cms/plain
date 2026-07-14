@@ -276,6 +276,7 @@ async function settingsScreen() {
   const description = h('input', { type: 'text', value: config.site.description || '' });
   const url = h('input', { type: 'text', value: config.site.url });
   const language = h('input', { type: 'text', value: config.site.language || 'en' });
+  const languages = h('input', { type: 'text', value: (config.site.languages || []).filter((l) => l !== (config.site.language || 'en')).join(' '), placeholder: 'de fr' });
   const theme = h('select', {}, themes.map((name) => h('option', { value: name, selected: name === config.site.theme ? '' : null }, name)));
   const footerFile = await getFile('data/footer.json').catch(() => ({ text: '{}', sha: undefined })); // may not exist yet
   const footer = h('input', { type: 'text', value: JSON.parse(footerFile.text).html || '', placeholder: 'Powered by <a href="…">…</a>' });
@@ -286,8 +287,11 @@ async function settingsScreen() {
   async function save() {
     aiSettings.key = aiKey.value.trim();      // stays on this device — never committed
     aiSettings.model = aiModel.value;
+    const defaultLang = language.value.trim() || 'en';
+    const extra = [...new Set(languages.value.trim().split(/[\s,]+/).map((c) => c.toLowerCase()).filter(Boolean))].filter((c) => c !== defaultLang);
     Object.assign(config.site, { title: title.value.trim(), description: description.value.trim(),
-      url: url.value.trim().replace(/\/$/, ''), language: language.value.trim() || 'en', theme: theme.value });
+      url: url.value.trim().replace(/\/$/, ''), language: defaultLang, theme: theme.value,
+      languages: extra.length ? [defaultLang, ...extra] : [] });
     try {
       if (footer.value.trim() !== (JSON.parse(footerFile.text).html || '')) await putFile('data/footer.json', JSON.stringify({ html: footer.value.trim() }, null, 2) + '\n', 'settings: update footer', footerFile.sha);
       const { commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', 'settings: update site settings', sha);
@@ -304,8 +308,10 @@ async function settingsScreen() {
       field('One-line description', description),
       field('Site address (URL)', url),
       field('Language code', language),
+      field('Additional languages', languages),
       field('Theme', theme),
       field('Footer note (HTML, shown on every page)', footer)),
+    h('p', { class: 'muted' }, 'Add “Additional languages” (codes like de fr) to make the site multilingual: translations live in sibling files (about.de.md), the editor’s Translate button writes them, and the language-switcher plugin shows a footer switcher.'),
     h('hr'),
     h('h2', {}, 'AI assist'),
     h('p', { class: 'muted' }, 'Optional. Paste an Anthropic API key to enable the ✨ buttons in the editor. The key stays in this browser and is sent only to Anthropic.'),
