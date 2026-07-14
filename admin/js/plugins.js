@@ -58,6 +58,7 @@ export async function pluginsScreen(siteInfo) {
   const cards = installed.map((p) => h('section', { class: 'card plugin-card' },
     h('h2', {}, p.manifest.title || p.name, p.manifest.version ? h('span', { class: 'badge' }, `v${p.manifest.version}`) : null),
     h('p', { class: 'muted' }, p.manifest.description || ''),
+    p.manifest.note ? h('p', { class: 'plugin-hint' }, p.manifest.note) : null,
     h('div', { class: 'card-actions' },
       hasOptions(p) ? h('button', { onclick: () => configurePlugin(p, siteInfo) }, 'Configure') : null,
       h('button', { class: 'danger', onclick: () => removePlugin(p, siteInfo) }, 'Remove'))));
@@ -65,6 +66,7 @@ export async function pluginsScreen(siteInfo) {
   const builtinCards = available.map((p) => h('section', { class: 'card plugin-card' },
     h('h2', {}, p.manifest.title || p.name, p.manifest.version ? h('span', { class: 'badge' }, `v${p.manifest.version}`) : null),
     h('p', { class: 'muted' }, p.manifest.description || ''),
+    p.manifest.note ? h('p', { class: 'plugin-hint' }, p.manifest.note) : null,
     h('div', { class: 'card-actions' },
       h('button', { class: 'primary', onclick: (e) => enablePlugin(p, siteInfo, e.target) }, 'Enable'))));
 
