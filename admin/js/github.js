@@ -70,14 +70,44 @@ export async function getFile(path) {
 export const getFileAt = async (path, ref) => decodeText((await gh(repoPath(`contents/${path}?ref=${ref}`))).content);
 
 /**
- * Create or update a file — one commit. Pass `sha` when updating; a stale
- * sha throws GitHubError(409): the caller shows the conflict choices.
+ * Create or update a file — one commit. Pass `sha` when updating; a stale sha
+ * throws GitHubError(409). For config edits use `updateFile`, which re-reads and
+ * re-applies on a 409 instead of dead-ending on the conflict.
  * @param {string|{base64: string}} content - text, or pre-encoded binary
  */
 export async function putFile(path, content, message, sha) {
   const body = { message, branch: auth.branch, content: typeof content === 'string' ? encodeText(content) : content.base64, ...(sha ? { sha } : {}) };
   const result = await gh(repoPath(`contents/${path}`), { method: 'PUT', body });
   return { sha: result.content.sha, commitSha: result.commit.sha };
+}
+
+/**
+ * Read a text file, transform it, and write it back as one commit — safe against
+ * concurrent edits. `mutate(text)` receives the file's CURRENT contents (null if
+ * it doesn't exist yet) and returns the new contents; return null or the same
+ * string to write nothing. On a 409 (someone committed in between) the file is
+ * re-read and `mutate` re-applied to the fresh version — so an unrelated
+ * concurrent change (e.g. a plugin just toggled on) is preserved, never clobbered.
+ * This is why the admin never dead-ends on "edited elsewhere": it reconciles.
+ * `io` is injectable so the retry logic can be unit-tested without the network.
+ * @param {(text: string|null) => string|null} mutate
+ * @returns {Promise<{commitSha: string|null, unchanged?: boolean}>}
+ */
+export async function updateFile(path, mutate, message, { retries = 5, io = { getFile, putFile } } = {}) {
+  for (let attempt = 0; ; attempt++) {
+    let text = null, sha;
+    try { ({ text, sha } = await io.getFile(path)); }
+    catch (error) { if (error.status !== 404) throw error; } // absent → create
+    const next = mutate(text);
+    if (next == null || next === text) return { commitSha: null, unchanged: true };
+    try {
+      const { commitSha } = await io.putFile(path, next, message, sha);
+      return { commitSha };
+    } catch (error) {
+      if (error.status === 409 && attempt < retries) continue; // stale — re-read and re-apply
+      throw error;
+    }
+  }
 }
 
 export async function deleteFile(path, message, sha) {

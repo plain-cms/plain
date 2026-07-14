@@ -6,7 +6,7 @@
 // the starter registry (appearance.js). Plugins are code, so cards show
 // provenance and where the plugin runs, and nothing is installed silently.
 
-import { getFile, putFile, listDir, listTree, commitFiles, bytesToBase64 } from './github.js';
+import { getFile, updateFile, listDir, listTree, commitFiles, bytesToBase64 } from './github.js';
 import { h, toast, ask, modal, watchBuild } from './ui.js';
 
 export const REGISTRY_REPO = 'plain-cms/plugins';
@@ -130,16 +130,17 @@ async function installPlugin(entry, siteInfo, button) {
 async function enablePlugin(p, siteInfo, button) {
   button.disabled = true;
   try {
-    const cfg = await getFile('site.config.json');
-    const config = JSON.parse(cfg.text);
-    config.plugins = [...new Set([...(config.plugins || []), p.name])];
-    if (p.manifest?.options && Object.keys(p.manifest.options).length) {
-      config.pluginOptions = config.pluginOptions || {};
-      config.pluginOptions[p.name] = { ...p.manifest.options, ...(config.pluginOptions[p.name] || {}) };
-    }
-    const { commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', `plugins: enable ${p.name}`, cfg.sha);
+    const { commitSha } = await updateFile('site.config.json', (text) => {
+      const config = JSON.parse(text);
+      config.plugins = [...new Set([...(config.plugins || []), p.name])];
+      if (p.manifest?.options && Object.keys(p.manifest.options).length) {
+        config.pluginOptions = config.pluginOptions || {};
+        config.pluginOptions[p.name] = { ...p.manifest.options, ...(config.pluginOptions[p.name] || {}) };
+      }
+      return JSON.stringify(config, null, 2) + '\n';
+    }, `plugins: enable ${p.name}`);
     toast(`${p.manifest.title || p.name} enabled — publishing now.`, 'success');
-    watchBuild(commitSha, siteInfo.site.url);
+    if (commitSha) watchBuild(commitSha, siteInfo.site.url);
     refresh();
   } catch (error) { toast(error.message, 'error'); }
 }
@@ -193,11 +194,12 @@ async function configurePlugin(p, siteInfo) {
     }
   } catch { return toast('One field has invalid JSON — fix it and try again.', 'error'); }
   try {
-    const cfg = await getFile('site.config.json');
-    const config = JSON.parse(cfg.text);
-    config.pluginOptions = { ...(config.pluginOptions || {}), [p.name]: next };
-    const { commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', `plugins: configure ${p.name}`, cfg.sha);
+    const { commitSha } = await updateFile('site.config.json', (text) => {
+      const config = JSON.parse(text);
+      config.pluginOptions = { ...(config.pluginOptions || {}), [p.name]: next };
+      return JSON.stringify(config, null, 2) + '\n';
+    }, `plugins: configure ${p.name}`);
     toast('Saved — publishing now.', 'success');
-    watchBuild(commitSha, siteInfo.site.url);
+    if (commitSha) watchBuild(commitSha, siteInfo.site.url);
   } catch (error) { toast(error.message, 'error'); }
 }

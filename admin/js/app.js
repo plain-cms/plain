@@ -3,7 +3,7 @@
 // content metadata; writes through the GitHub API (see github.js).
 // UI language rule: never "commit/push/branch" — always "save/publish/history".
 
-import { auth, repoInfo, getFile, putFile, listDir, commitsFor, runFor, dispatchWorkflow, cmpVersion } from './github.js';
+import { auth, repoInfo, getFile, updateFile, listDir, commitsFor, runFor, dispatchWorkflow, cmpVersion } from './github.js';
 import { h, show, toast, timeAgo, watchBuild, ask } from './ui.js';
 import { editorScreen } from './editor.js';
 import { mediaScreen } from './media.js';
@@ -231,9 +231,8 @@ async function collectionScreen(name) {
 }
 
 async function navigationScreen() {
-  let sha = null;
   let entries = siteInfo?.navigation || [];
-  try { const file = await getFile('data/navigation.json'); entries = JSON.parse(file.text); sha = file.sha; } catch { /* file may not exist yet — start empty */ }
+  try { const file = await getFile('data/navigation.json'); entries = JSON.parse(file.text); } catch { /* file may not exist yet — start empty */ }
 
   const list = h('div', { class: 'nav-rows' });
   const rowFor = (entry) => {
@@ -251,10 +250,10 @@ async function navigationScreen() {
     const next = [...list.children].map((row) => ({ label: row.children[0].value.trim(), url: row.children[1].value.trim() }))
       .filter((e) => e.label && e.url);
     try {
-      const { commitSha } = await putFile('data/navigation.json', JSON.stringify(next, null, 2) + '\n', 'navigation: update menu', sha);
+      const { commitSha } = await updateFile('data/navigation.json', () => JSON.stringify(next, null, 2) + '\n', 'navigation: update menu');
       checklistState.set({ menu: true });
       toast('Menu saved — publishing now.', 'success');
-      watchBuild(commitSha, siteInfo?.site.url);
+      if (commitSha) watchBuild(commitSha, siteInfo?.site.url);
       route();
     } catch (error) { toast(error.message, 'error'); }
   }
@@ -268,7 +267,7 @@ async function navigationScreen() {
 }
 
 async function settingsScreen() {
-  const { text, sha } = await getFile('site.config.json');
+  const { text } = await getFile('site.config.json');
   const config = JSON.parse(text);
   const themes = (await listDir('themes')).filter((e) => e.type === 'dir').map((e) => e.name);
   const field = (label, input) => h('label', { class: 'field' }, label, input);
@@ -289,14 +288,24 @@ async function settingsScreen() {
     aiSettings.model = aiModel.value;
     const defaultLang = language.value.trim() || 'en';
     const extra = [...new Set(languages.value.trim().split(/[\s,]+/).map((c) => c.toLowerCase()).filter(Boolean))].filter((c) => c !== defaultLang);
-    Object.assign(config.site, { title: title.value.trim(), description: description.value.trim(),
-      url: url.value.trim().replace(/\/$/, ''), language: defaultLang, theme: theme.value,
-      languages: extra.length ? [defaultLang, ...extra] : [] });
+    const siteUrl = url.value.trim().replace(/\/$/, '');
+    const wantedFooter = footer.value.trim();
     try {
-      if (footer.value.trim() !== (JSON.parse(footerFile.text).html || '')) await putFile('data/footer.json', JSON.stringify({ html: footer.value.trim() }, null, 2) + '\n', 'settings: update footer', footerFile.sha);
-      const { commitSha } = await putFile('site.config.json', JSON.stringify(config, null, 2) + '\n', 'settings: update site settings', sha);
+      // Re-read + re-apply on each write, so enabling a plugin (or any other edit)
+      // between opening Settings and saving is preserved here, never clobbered.
+      const foot = await updateFile('data/footer.json', (text) =>
+        wantedFooter === (JSON.parse(text || '{}').html || '') ? text : JSON.stringify({ html: wantedFooter }, null, 2) + '\n',
+        'settings: update footer');
+      const { commitSha } = await updateFile('site.config.json', (text) => {
+        const cfg = JSON.parse(text);
+        Object.assign(cfg.site, { title: title.value.trim(), description: description.value.trim(),
+          url: siteUrl, language: defaultLang, theme: theme.value,
+          languages: extra.length ? [defaultLang, ...extra] : [] });
+        return JSON.stringify(cfg, null, 2) + '\n';
+      }, 'settings: update site settings');
       toast('Settings saved — publishing now.', 'success');
-      watchBuild(commitSha, config.site.url);
+      const built = commitSha || foot.commitSha;
+      if (built) watchBuild(built, siteUrl);
     } catch (error) { toast(error.message, 'error'); }
   }
 
