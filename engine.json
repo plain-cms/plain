@@ -1,5 +1,5 @@
 {
-  "version": "1.11.0",
+  "version": "1.11.1",
   "migration": 0,
   "files": {
     ".github/workflows/build-deploy.yml": "90811800dfc4f35a4f25d8c3f05a410ebba669e7b976f1cddbb33ac49910c697",
@@ -10,9 +10,9 @@
     "admin/js/ai.js": "b359402786eb5036c763ce19019a75ffa2a18a1cd3a340110e2ea7062a5e84db",
     "admin/js/app.js": "8fc4aa224918b972cad0270413847cfdf185c3d98b60e8f53a8b5bbfaae9f09f",
     "admin/js/appearance.js": "0022cfc89fe86cd4fc41f068adacfbec475e84c296dafd6b97d32c3e91888a0a",
-    "admin/js/backend.js": "ac835140a1e18e75cec3b3c4fd0322f3942ddbe8e89eac9f5815cb2b542980e2",
+    "admin/js/backend.js": "af3e4b8642273c623f06a2119f63fa652c8ffdd7cc452f59e95323f91bbf7af4",
     "admin/js/editor.js": "163caf5745124747f8cb7f5128ca751da10a979db556563e741a8f1f77cb67b1",
-    "admin/js/github.js": "89694b0a41257c77d16457cb816ddfeb00b2ae3201c4038e47be1232d6e4d8dc",
+    "admin/js/github.js": "9a4cb2aa7a49bb2e3dbe8a8813d6fec6e8f7eb320155a8db7b242ca9abd02fbe",
     "admin/js/layout.js": "e9b81e1b5362dca8c66d70dc7c9795730a6b5071c4d111727473bdc79deb1b47",
     "admin/js/media.js": "5c88be6f990d597c61e36b8d6ac1f643531c844795250d181e3f157fb32645b5",
     "admin/js/plugins.js": "7ac320dd95a0aaf2d62b2dd3d0a3a3951c69847965bfee4af5771e87ab31fa34",
@@ -28,7 +28,7 @@
     "lib/template.js": "be04a1959246ea539eb53774c745bf7f8f5997f063d6c42ee2c68e22c660f238",
     "lib/util.js": "4289864d171420a33924b66ee014da635720ed391bb8e2a26a6f60acbe0d6f70",
     "migrations/README.md": "a81001cc60e3024a5858894af766c2dd0c1ea8b64c57b52ffaf8dcc3ba371a33",
-    "package.json": "66a911dda212537e87263e63ab3862d9d13cfafc5a2290c391b35b7e446c88ec",
+    "package.json": "99649db1d4acd53c9f2178b2e3fc67ab0e20a33d3ebe359f01db6ed53a6e8589",
     "plugins/api-form/client.css": "da4733c33816d8705e6f316c6c487cd98766dcd0d3fb322d0547b0ada93ac2a7",
     "plugins/api-form/client.js": "a25f07c6feaeca54e77f2247387b2e06a493f26bf1307dab33a3ef1ce0f30c8d",
     "plugins/api-form/index.js": "110d29f1439a2671e60cb83036b8a415d270dace64ce155ecc29e4d0188e9957",
