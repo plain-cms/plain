@@ -32,7 +32,10 @@ const FRIENDLY = {
 /** Call the GitHub API. Throws GitHubError with a plain-language message. */
 async function gh(path, { method = 'GET', body, raw = false } = {}) {
   const headers = { Authorization: `Bearer ${auth.token}`, 'X-GitHub-Api-Version': '2022-11-28', Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json' };
-  const response = await fetch(`https://api.github.com${path}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+  // no-store: GitHub sends `Cache-Control: private, max-age=60`, so without this the
+  // browser serves a stale file sha on a re-read — which made updateFile's 409 retry
+  // loop on the same old sha and surface "edited elsewhere" instead of reconciling.
+  const response = await fetch(`https://api.github.com${path}`, { method, headers, cache: 'no-store', body: body === undefined ? undefined : JSON.stringify(body) });
   if (!response.ok) {
     const detail = await response.json().then((d) => d.message || '').catch(() => '');
     const friendly = FRIENDLY[response.status] || `GitHub error ${response.status}: ${detail}`;
