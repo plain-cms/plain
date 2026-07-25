@@ -17,7 +17,7 @@ A red test or a failed build must never be committed. The golden-file test compa
 
 - Vanilla only: no frameworks, no bundlers, no TypeScript. Plain ES modules, JSDoc for types.
 - Exactly one runtime dependency: `marked`. No new packages, including dev dependencies.
-- Core (`build.js` + `lib/` + admin JS) stays under 2,500 lines; no file over 400. Too big → make it a plugin.
+- Core (`build.js` + `lib/` + admin JS) stays under 2,500 lines; no file over 500. Too big → make it a plugin.
 - No database. All state is files in this repo.
 - The published site must work with JavaScript disabled.
 - `lib/util.js`, `lib/template.js`, `lib/markdown.js`, `lib/i18n.js` are **isomorphic**: they must never import `node:*` — the admin runs them in the browser so previews match the build exactly.

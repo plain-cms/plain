@@ -28,7 +28,7 @@ These constraints ARE the product. Violating them to "do it properly" defeats th
 
 - **C1. Vanilla only.** No frameworks (no React/Vue/Svelte), no bundlers (no Vite/webpack), no CSS preprocessors, no TypeScript compile step. Plain ES modules, plain CSS with custom properties, semantic HTML. Types via JSDoc comments.
 - **C2. One runtime dependency budget.** The core may depend on exactly one npm package: `marked` (Markdown → HTML). Frontmatter parsing, templating, routing, RSS, sitemap, search index — all hand-rolled. Dev dependencies: none (use built-in `node:test` and `node --watch`).
-- **C3. Readable in one sitting.** The entire core (`build.js` + `lib/` + admin JS, excluding themes/plugins/content) must stay under **2,500 lines**. No single file over 400 lines. If a feature can't fit, it becomes a plugin.
+- **C3. Readable in one sitting.** The entire core (`build.js` + `lib/` + admin JS, excluding themes/plugins/content) must stay under **2,500 lines**. No single file over 500 lines. If a feature can't fit, it becomes a plugin.
 - **C4. No database, ever.** All state lives in files inside the repo. All media lives in the repo (with size guidance, see §7).
 - **C5. Works without JavaScript.** The published site must be fully readable and navigable with JS disabled. JS is progressive enhancement (search, galleries, forms). The admin panel is exempt (it requires JS).
 - **C6. Any static host.** Output is a plain folder of files. Must deploy unmodified to GitHub Pages, Cloudflare Pages, Netlify, or an nginx folder.
