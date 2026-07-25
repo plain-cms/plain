@@ -105,6 +105,31 @@ test('a collection whose template the theme lacks falls back + warns, not fails 
   fs.rmSync(fbRoot, { recursive: true, force: true });
 });
 
+test('a page overrides its collection template with `template:` (unknown name falls back, no throw)', async () => {
+  const root = path.join(here, '.tmp-tmpl');
+  fs.rmSync(root, { recursive: true, force: true });
+  fs.cpSync(fixtureRoot, root, { recursive: true });
+  fs.writeFileSync(path.join(root, 'content/pages/lp.md'),
+    '---\ntitle: LP\ntemplate: landing\nheroCtaLabel: Buy\nheroCtaUrl: https://x.test/buy\n---\nBody.\n');
+  fs.writeFileSync(path.join(root, 'content/pages/oops.md'),
+    '---\ntitle: Oops\ntemplate: does-not-exist\n---\nBody.\n');
+
+  const report = await build({ root, outDir: path.join(root, 'dist'), quiet: true });
+  assert.ok(report.pages > 0, 'still builds');
+
+  const lp = fs.readFileSync(path.join(root, 'dist/lp/index.html'), 'utf8');
+  assert.match(lp, /class="landing"/, 'template: landing renders with the landing template');
+  assert.match(lp, /data-cta="hero"/, 'and its CTA carries the tracking hook');
+
+  const oops = fs.readFileSync(path.join(root, 'dist/oops/index.html'), 'utf8');
+  assert.doesNotMatch(oops, /class="landing"/, 'an unknown template falls back to the collection default, not a failure');
+
+  const api = JSON.parse(fs.readFileSync(path.join(root, 'dist/api/pages/lp.json'), 'utf8'));
+  assert.equal(api.template, 'landing', 'the template override rides into the JSON API');
+
+  fs.rmSync(root, { recursive: true, force: true });
+});
+
 test('site.basePath prefixes root-relative href/src (C6: project-subpath hosts)', async () => {
   const baseRoot = path.join(here, '.tmp-base');
   const baseOut = path.join(baseRoot, 'dist');

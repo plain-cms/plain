@@ -2,6 +2,7 @@
   "name": "launch",
   "title": "Launch",
   "description": "A startup & SaaS marketing theme: product hero with a real screenshot slot in a CSS browser frame, feature sections, pricing from a data file. The signature is the changelog timeline — proof of life, one node per release.",
+  "layouts": ["page", "landing"],
   "tokens": {
     "--font-sans": "all interface and body text (geometric-feeling system sans)",
     "--font-mono": "version chips, dates, code (the release-notes voice)",
