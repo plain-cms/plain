@@ -191,9 +191,6 @@ export async function updatePull() {
 /** Merge a PR with a merge commit — the update lands on the branch and rebuilds the site. */
 export const mergePull = (number) => gh(repoPath(`pulls/${number}/merge`), { method: 'PUT', body: { merge_method: 'merge' } });
 
-/** Create a repo from a template repo ("owner/name"); needs a token that can create repos. */
-export const createFromTemplate = (template, opts) => gh(`/repos/${template}/generate`, { method: 'POST', body: { ...opts, private: false } });
-
 /** Compare dotted semver strings a and b. Returns -1 / 0 / 1. */
 export function cmpVersion(a, b) {
   const pa = String(a).split('.').map(Number), pb = String(b).split('.').map(Number);
