@@ -180,6 +180,17 @@ export async function runFor(commitSha) {
 /** Trigger a workflow_dispatch run (used by the update banner, §14.5). */
 export const dispatchWorkflow = (file, ref = auth.branch) => gh(repoPath(`actions/workflows/${file}/dispatches`), { method: 'POST', body: { ref } });
 
+/** The open engine-update PR the update.yml workflow opens (full object, so it
+    carries `mergeable` and the report `body`), or null if there isn't one yet. */
+export async function updatePull() {
+  const prs = await gh(repoPath('pulls?state=open&per_page=20'));
+  const found = prs.find((p) => /^Update plain to /.test(p.title));
+  return found ? gh(repoPath(`pulls/${found.number}`)) : null;
+}
+
+/** Merge a PR with a merge commit — the update lands on the branch and rebuilds the site. */
+export const mergePull = (number) => gh(repoPath(`pulls/${number}/merge`), { method: 'PUT', body: { merge_method: 'merge' } });
+
 /** Compare dotted semver strings a and b. Returns -1 / 0 / 1. */
 export function cmpVersion(a, b) {
   const pa = String(a).split('.').map(Number), pb = String(b).split('.').map(Number);
