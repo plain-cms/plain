@@ -1,6 +1,30 @@
 {
   "starter": "launch",
   "collections": {
+    "pages": {
+      "path": "content/pages",
+      "urlPattern": "/:slug/",
+      "template": "page",
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "description", "type": "text" },
+        { "name": "heroTagline", "type": "textarea", "showFor": "landing" },
+        { "name": "heroCtaLabel", "type": "text", "showFor": "landing" },
+        { "name": "heroCtaUrl", "type": "text", "showFor": "landing" },
+        { "name": "heroSecondaryLabel", "type": "text", "showFor": "landing" },
+        { "name": "heroSecondaryUrl", "type": "text", "showFor": "landing" },
+        { "name": "heroImage", "type": "image", "showFor": "landing" },
+        { "name": "heroAlt", "type": "text", "showFor": "landing" },
+        { "name": "featuresHeading", "type": "text", "showFor": "landing" },
+        { "name": "pricingHeading", "type": "text", "showFor": "landing" },
+        { "name": "testimonialsHeading", "type": "text", "showFor": "landing" },
+        { "name": "faqHeading", "type": "text", "showFor": "landing" },
+        { "name": "ctaHeading", "type": "text", "showFor": "landing" },
+        { "name": "ctaLabel", "type": "text", "showFor": "landing" },
+        { "name": "ctaUrl", "type": "text", "showFor": "landing" },
+        { "name": "draft", "type": "boolean", "default": false }
+      ]
+    },
     "changelog": {
       "path": "content/changelog",
       "urlPattern": "/changelog/:slug/",
@@ -18,6 +42,40 @@
         { "name": "tag", "type": "select", "options": ["New", "Improved", "Fixed"] },
         { "name": "description", "type": "text" },
         { "name": "draft", "type": "boolean", "default": false }
+      ]
+    },
+    "features": {
+      "path": "content/features",
+      "render": false,
+      "sortBy": "order",
+      "sortOrder": "asc",
+      "label": "Features",
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "order", "type": "text" }
+      ]
+    },
+    "testimonials": {
+      "path": "content/testimonials",
+      "render": false,
+      "sortBy": "order",
+      "sortOrder": "asc",
+      "label": "Testimonials",
+      "fields": [
+        { "name": "author", "type": "text" },
+        { "name": "role", "type": "text" },
+        { "name": "order", "type": "text" }
+      ]
+    },
+    "faq": {
+      "path": "content/faq",
+      "render": false,
+      "sortBy": "order",
+      "sortOrder": "asc",
+      "label": "FAQ",
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "order", "type": "text" }
       ]
     }
   },

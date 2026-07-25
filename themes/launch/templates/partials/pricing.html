@@ -10,7 +10,7 @@
       {{#each plan.features as feature}}<li>{{ feature }}</li>
       {{/each}}
     </ul>
-    {{/if}}{{#if plan.url}}<a class="btn{{#if plan.featured}} btn-primary{{else}} btn-quiet{{/if}}" href="{{ plan.url }}">{{#if plan.cta}}{{ plan.cta }}{{else}}Choose {{ plan.name }}{{/if}}</a>
+    {{/if}}{{#if plan.url}}<a class="btn{{#if plan.featured}} btn-primary{{else}} btn-quiet{{/if}}" data-cta="plan-{{ plan.name }}" href="{{ plan.url }}">{{#if plan.cta}}{{ plan.cta }}{{else}}Choose {{ plan.name }}{{/if}}</a>
     {{/if}}
   </li>
   {{/each}}

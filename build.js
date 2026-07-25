@@ -189,12 +189,17 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
   siteApi.renderPage = (templateName, context) => // lets plugins emit themed pages
     inject(renderPage(theme, templateName, { ...baseContext, nav: navFor(context.page?.url ?? null), ...context }));
 
+  // A page may override its collection's template with a frontmatter `template:`
+  // (e.g. `template: landing`); an unknown or reserved name falls back to the
+  // collection's template — never fails, like the theme-mismatch fallback above (§10.4).
+  const templateFor = (item, def) => item.template && item.template !== 'base' && theme.templates[item.template] ? item.template : def.template;
+
   // Item pages. Data-only collections (render: false) emit none — their items
   // stay in the `collections` context for templates but have no URL of their own.
   for (const [name, def] of Object.entries(config.collections)) {
     if (!def.render) continue;
     for (const item of collections[name]) {
-      emit(item.url, renderPage(theme, def.template, { ...baseContext, page: item, nav: navFor(item.url), alternates: alternatesFor(item) }), item);
+      emit(item.url, renderPage(theme, templateFor(item, def), { ...baseContext, page: item, nav: navFor(item.url), alternates: alternatesFor(item) }), item);
       sitemapEntries.push({ loc: site.url + item.url, lastmod: item.date });
     }
   }
@@ -215,7 +220,7 @@ export async function build({ root = process.cwd(), outDir, quiet = false } = {}
       if (!def.render) continue;
       for (const item of translations[name].filter((t) => t.language === lang)) {
         const original = collections[name].find((i) => i.slug === item.slug);
-        emit(item.url, renderPage(theme, def.template, { ...localized, page: item, nav: navFor(item.url, localNav), alternates: alternatesFor(original) }), item);
+        emit(item.url, renderPage(theme, templateFor(item, def), { ...localized, page: item, nav: navFor(item.url, localNav), alternates: alternatesFor(original) }), item);
         sitemapEntries.push({ loc: site.url + item.url, lastmod: item.date });
       }
     }
