@@ -1,0 +1,9 @@
+{
+  "name": "sales-analytics",
+  "version": "1.0.0",
+  "description": "Views and CTA-click counts for landing pages, sent to your own API; an /insights/ dashboard reads them back. Progressive enhancement — the page and its CTAs work with JavaScript off.",
+  "hooks": ["afterBuild"],
+  "client": { "js": "client.js", "css": "client.css" },
+  "options": { "service": "backend", "dashboardPath": "/insights/", "dashboardTitle": "Insights" },
+  "note": "Needs a `services` endpoint (your API) implementing POST /events + GET /reports — see the plugin README. Without one, tracking stays inert and the dashboard says so."
+}
