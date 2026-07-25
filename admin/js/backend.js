@@ -3,7 +3,7 @@
 // connects one: copy-paste setup for the reference backends, a health check,
 // and a field that writes services.backend into site.config.json.
 
-import { updateFile } from './github.js';
+import { updateFile, auth, createFromTemplate } from './github.js';
 import { h, toast, watchBuild } from './ui.js';
 
 // Enabled plugins that talk to services.backend, and what each uses it for.
@@ -14,15 +14,23 @@ const CONSUMERS = {
   'api-form': 'config-declared forms (POST to your endpoint)',
 };
 
-// The reference backends (plain-cms/backend) — same API, pick a stack.
-const RUN = {
-  '.NET 10': 'git clone https://github.com/plain-cms/backend\ncd backend/dotnet && dotnet run',
-  Node: 'git clone https://github.com/plain-cms/backend\ncd backend/node && npm install && npm start',
-};
-
 export async function backendScreen(siteInfo) {
   const current = (siteInfo.services || {}).backend || '';
   const consumers = Object.entries(CONSUMERS).filter(([id]) => (siteInfo.plugins || []).includes(id));
+
+  // One-click: generate a backend repo in the writer's account from the plain-cms/backend template.
+  const [owner, repoName = 'site'] = (auth.repo || '/').split('/');
+  const created = h('span', { class: 'muted' });
+  const create = h('button', { class: 'primary', onclick: async (event) => {
+    const btn = event.currentTarget; btn.disabled = true; btn.textContent = 'Creating…';
+    try {
+      const repo = await createFromTemplate('plain-cms/backend', { owner, name: `${repoName}-backend`, description: `Backend for ${repoName} (plain CMS)` });
+      created.replaceChildren('Created ', h('a', { href: repo.html_url, target: '_blank', rel: 'noopener' }, repo.full_name), ' — deploy its dotnet/ or node/ folder, then paste its URL below.'); btn.remove();
+    } catch (error) {
+      btn.disabled = false; btn.textContent = 'Create backend repo';
+      created.textContent = error.status === 422 ? `You already have ${repoName}-backend — deploy it, then paste its URL.` : `Couldn’t create it (${error.message}).`;
+    }
+  } }, 'Create backend repo');
 
   const health = h('span', { class: 'muted' });
   const check = h('button', { onclick: async () => {
@@ -57,8 +65,8 @@ export async function backendScreen(siteInfo) {
           : h('p', { class: 'muted' }, 'No backend connected. Plugins that need one stay inert until you add it below.')),
       h('section', { class: 'card' },
         h('h2', {}, 'Connect a backend'),
-        h('p', { class: 'muted' }, 'Run one of the reference backends from plain-cms/backend (SQLite, one file), then paste its public URL — both expose the same API.'),
-        ...Object.entries(RUN).map(([name, cmd]) => h('div', { class: 'backend-run' }, h('strong', {}, name), h('pre', {}, cmd))),
+        h('p', { class: 'muted' }, 'Plugins like analytics, contact, and feedback send data to a backend. Create one in your account from ', h('a', { href: 'https://github.com/plain-cms/backend', target: '_blank', rel: 'noopener' }, 'plain-cms/backend'), ' (.NET or Node, both SQLite and the same API), deploy it, then paste its URL below.'),
+        h('p', { class: 'update-actions' }, create, created),
         h('label', { class: 'field' }, 'Backend URL', url),
         save),
       consumers.length ? h('section', { class: 'card' },
