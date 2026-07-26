@@ -23,7 +23,7 @@ export class GitHubError extends Error {
 }
 
 const FRIENDLY = {
-  401: 'GitHub did not accept the access token. It may have expired — sign out and paste a fresh one.',
+  401: 'GitHub didn’t accept the access token (expired, revoked, or mistyped) — please sign in again.',
   403: 'GitHub refused the request. The token may lack access to this repository, or the rate limit is reached — wait a minute and try again.',
   404: 'Not found on GitHub. Check that the repository name is right and the token can read it.',
   409: 'This was edited elsewhere since you opened it.',
@@ -38,6 +38,9 @@ async function gh(path, { method = 'GET', body, raw = false } = {}) {
   const response = await fetch(`https://api.github.com${path}`, { method, headers, cache: 'no-store', body: body === undefined ? undefined : JSON.stringify(body) });
   if (!response.ok) {
     const detail = await response.json().then((d) => d.message || '').catch(() => '');
+    // 401 = the stored token is dead (expired/revoked). Clear it and signal the app so
+    // it returns to the sign-in screen, instead of dead-ending on an error toast.
+    if (response.status === 401) { auth.clear(); dispatchEvent(new Event('plain:signed-out')); }
     const friendly = FRIENDLY[response.status] || `GitHub error ${response.status}: ${detail}`;
     throw new GitHubError(response.status, detail && !friendly.includes(detail) ? `${friendly} (GitHub said: ${detail})` : friendly);
   }
