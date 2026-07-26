@@ -84,6 +84,21 @@ input[type="checkbox"] { width: auto; }
 
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; box-shadow: var(--shadow); }
+
+/* Backend data views (Feedback inbox + Insights) — admin/js/backend-data.js */
+.data-view { overflow-x: auto; }
+.data-auth { display: flex; flex-direction: column; gap: 0.5rem; max-width: 30rem; }
+.feedback-list { display: flex; flex-direction: column; gap: 0.7rem; }
+.feedback-item { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.7rem 0.9rem; }
+.feedback-msg { margin: 0 0 0.35rem; white-space: pre-wrap; word-break: break-word; }
+.feedback-meta { margin: 0; font-size: 0.85rem; color: var(--muted); }
+.stats { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; }
+.stat { border: 1px solid var(--border); border-radius: var(--radius); padding: 0.6rem 1rem; min-width: 7rem; }
+.stat-value { font-size: 1.5rem; font-weight: 600; line-height: 1.1; }
+.stat-label { font-size: 0.8rem; color: var(--muted); }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { text-align: left; padding: 0.4rem 0.55rem; border-bottom: 1px solid var(--border); }
+.data-table .num { text-align: right; font-variant-numeric: tabular-nums; }
 .card-actions { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
 .update-actions { display: flex; gap: 0.9rem; align-items: center; flex-wrap: wrap; margin: 0.75rem 0 0; }
 .card .recent { list-style: none; margin: 0.5rem 0; padding: 0; }
