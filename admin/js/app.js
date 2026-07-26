@@ -405,6 +405,7 @@ async function boot() {
     location.hash = '#/welcome';
   }
   window.addEventListener('hashchange', route);
+  window.addEventListener('plain:signed-out', route); // gh() fires this on a 401 (dead token) → back to sign-in
   route();
 }
 
