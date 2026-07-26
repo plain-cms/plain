@@ -11,6 +11,7 @@ import { aiSettings } from './ai.js';
 import { appearanceScreen } from './appearance.js';
 import { pluginsScreen } from './plugins.js';
 import { backendScreen } from './backend.js';
+import { feedbackScreen, insightsScreen } from './backend-data.js';
 import { wizardScreen } from './wizard.js';
 
 let siteInfo = null;             // parsed /api/site.json (schema + site block)
@@ -44,6 +45,8 @@ function shell(active, ...content) {
       link('#/appearance', 'Appearance', 'appearance'),
       link('#/plugins', 'Plugins', 'plugins'),
       link('#/backend', 'Backend', 'backend'),
+      (siteInfo?.plugins || []).includes('feedback') ? link('#/feedback', 'Feedback', 'feedback') : null,
+      (siteInfo?.plugins || []).includes('sales-analytics') ? link('#/insights', 'Insights', 'insights') : null,
       link('#/settings', 'Settings', 'settings'),
       h('div', { class: 'sidebar-foot' },
         h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'View site ↗'),
@@ -374,6 +377,8 @@ const routes = {
   appearance: async () => shell('appearance', await appearanceScreen(siteInfo)),
   plugins: async () => shell('plugins', await pluginsScreen(siteInfo)),
   backend: async () => shell('backend', await backendScreen(siteInfo)),
+  feedback: () => shell('feedback', feedbackScreen(siteInfo)),
+  insights: () => shell('insights', insightsScreen(siteInfo)),
   settings: settingsScreen,
   welcome: () => wizardScreen(siteInfo, () => { location.hash = '#/'; route(); }),
 };
