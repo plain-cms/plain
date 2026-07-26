@@ -15,7 +15,9 @@ export const auth = {
     localStorage.setItem(KEYS.token, token);
     localStorage.setItem(KEYS.branch, branch || 'main');
   },
-  clear() { Object.values(KEYS).forEach((key) => localStorage.removeItem(key)); },
+  // Sign out = drop the token (the secret). Keep repo + branch so the sign-in screen
+  // prefills them next time — they're not sensitive and save re-typing owner/name.
+  clear() { localStorage.removeItem(KEYS.token); },
 };
 
 export class GitHubError extends Error {
