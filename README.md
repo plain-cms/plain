@@ -3,7 +3,18 @@
   <img src=".github/logo.svg" alt="plain" width="340">
 </picture>
 
-**A Git-native CMS for the AI age.** The repository is the database, static files are the API, and AI is the admin.
+[![Build and deploy](https://github.com/plain-cms/plain/actions/workflows/build-deploy.yml/badge.svg)](https://github.com/plain-cms/plain/actions/workflows/build-deploy.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/github/v/release/plain-cms/plain?sort=semver)](https://github.com/plain-cms/plain/releases)
+[![Dependencies](https://img.shields.io/badge/dependencies-1-brightgreen.svg)](package.json)
+
+**A CMS that lives in your Git repo.** Markdown files in, static site out, edited in the browser — no database, no server, nothing to patch.
+
+**[Website](https://plain-cms.com)** · **[Live demo](https://plain-cms.github.io/plain/)** · **[Quickstart](#quickstart-5-minutes)** · **[Contributing](CONTRIBUTING.md)**
+
+![The plain admin editor — Markdown on the left, live preview on the right, with Save draft, Publish and History buttons](.github/screenshot-editor.png)
+
+Every site built with plain ships this editor at `/admin/`: Markdown with live preview, drafts and publishing, image uploads, and per-page History with one-click restore. It is static files inside your own build — there is no second service to deploy, and nothing extra to pay for.
 
 Your whole website is a folder of plain files: Markdown for content, JSON for settings. Git gives you versioning, collaboration, and hosting hooks for free. The build turns it into a fast static site — HTML pages plus a read-only JSON API — that deploys anywhere for $0/month.
 
@@ -11,6 +22,15 @@ Your whole website is a folder of plain files: Markdown for content, JSON for se
 - **Vanilla by design.** No frameworks, no bundlers. One dependency: [`marked`](https://github.com/markedjs/marked). The entire engine is a few small, readable files.
 - **Works without JavaScript.** JS is progressive enhancement only.
 - **AI-operable.** Deterministic layout, machine-readable content model, and a [`CLAUDE.md`](CLAUDE.md) so agents (or Claude Code) can edit content, add collections, and write plugins safely.
+
+![The admin sidebar, with the post list for a collection](.github/screenshot-admin.png)
+
+## Try it locally (about 20 seconds)
+
+```bash
+git clone https://github.com/plain-cms/plain.git && cd plain
+npm install && npm run dev     # → http://localhost:4000, admin at /admin/
+```
 
 ## Quickstart (5 minutes)
 
@@ -21,9 +41,7 @@ Your whole website is a folder of plain files: Markdown for content, JSON for se
 
 Every later change is the same loop: edit → commit → live in ~30s. Nothing is ever lost; any version of any page can be restored from Git history.
 
-## The admin — publish from your browser
-
-Your live site includes an editor at **`/admin/`** — a clean writing screen with Save draft / Publish buttons, live preview, image uploads, and per-page History with one-click restore. No Git knowledge needed.
+## Signing in to the admin
 
 Sign in once with a GitHub access token (it stays on that device):
 
