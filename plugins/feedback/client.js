@@ -29,6 +29,20 @@ function mount() {
     </div>`;
   document.body.append(root);
 
+  // showOnScroll: true (default 200px) or a pixel threshold — keep the widget
+  // hidden until the visitor scrolls down that far, then reveal it for good.
+  if (cfg.showOnScroll) {
+    const threshold = typeof cfg.showOnScroll === 'number' ? cfg.showOnScroll : 200;
+    root.classList.add('pf-waiting');
+    const reveal = () => {
+      if (window.scrollY < threshold) return;
+      root.classList.remove('pf-waiting');
+      window.removeEventListener('scroll', reveal);
+    };
+    window.addEventListener('scroll', reveal, { passive: true });
+    reveal();
+  }
+
   const toggle = root.querySelector('.pf-toggle');
   const panel = root.querySelector('.pf-panel');
   const open = (yes) => {

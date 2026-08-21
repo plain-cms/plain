@@ -6,10 +6,11 @@
 // the starter registry (appearance.js). Plugins are code, so cards show
 // provenance and where the plugin runs, and nothing is installed silently.
 
-import { getFile, updateFile, listDir, listTree, commitFiles, bytesToBase64 } from './github.js';
+import { getFile, updateFile, listDir, listTree, commitFiles, bytesToBase64, cmpVersion } from './github.js';
 import { h, toast, ask, modal, watchBuild } from './ui.js';
 
 export const REGISTRY_REPO = 'plain-cms/plugins';
+const ENGINE_REPO = 'plain-cms/plain';
 const RUNS = { client: 'client-only', build: 'build-time', both: 'build + client' };
 const refresh = () => setTimeout(() => dispatchEvent(new HashChangeEvent('hashchange')), 700);
 
@@ -50,18 +51,81 @@ async function loadAvailableLocal(enabled) {
 
 const hasOptions = (p) => Object.keys({ ...(p.manifest.options || {}), ...p.options }).length > 0;
 
+/** The community registry — one fetch, [] when unreachable. */
+const loadRegistry = () => fetch(`https://raw.githubusercontent.com/${REGISTRY_REPO}/main/registry.json`)
+  .then((r) => (r.ok ? r.json() : [])).catch(() => []);
+
+/** Where an installed plugin's published copy lives: its registry entry, or the
+ *  engine repo for built-ins. A purely local plugin resolves to a 404 later and
+ *  simply never offers updates. */
+function updateSource(name, registry) {
+  const entry = registry.find((e) => e.id === name);
+  if (entry) return { id: name, repo: entry.repo || REGISTRY_REPO, ref: entry.ref, path: entry.path };
+  return { id: name, repo: ENGINE_REPO, path: `plugins/${name}` };
+}
+
+/** Installed plugins whose published plugin.json carries a newer version —
+ *  checked in parallel against raw.githubusercontent.com (no API quota). */
+async function pluginUpdates(installed, registry) {
+  const checks = installed.map(async (p) => {
+    if (!p.manifest.version) return null;
+    const source = updateSource(p.name, registry);
+    const raw = `https://raw.githubusercontent.com/${source.repo}/${source.ref || 'main'}/${source.path || source.id}/plugin.json`;
+    const latest = await fetch(raw).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+    if (!latest?.version || cmpVersion(latest.version, p.manifest.version) <= 0) return null;
+    return { name: p.name, title: p.manifest.title || p.name, current: p.manifest.version, latest: latest.version, source };
+  });
+  return (await Promise.all(checks)).filter(Boolean);
+}
+
+/** Dashboard notice (§14.5 for plugins): which installed plugins have a newer
+ *  published version, linking to the plugins screen to apply them. */
+export async function pluginUpdatesCard() {
+  let updates = [];
+  try { updates = await pluginUpdates(await loadInstalled(), await loadRegistry()); } catch { return null; }
+  if (!updates.length) return null;
+  return h('section', { class: 'card update' },
+    h('h2', {}, updates.length === 1 ? `Plugin update available — ${updates[0].title} v${updates[0].latest}` : `Plugin updates available (${updates.length})`),
+    h('p', { class: 'muted' }, `${updates.map((u) => `${u.title} v${u.current} → v${u.latest}`).join(', ')}. Each update is one commit you can revert.`),
+    h('p', { class: 'update-actions' }, h('a', { class: 'button primary', href: '#/plugins' }, 'Review & update')));
+}
+
+/** Replace plugins/<name>/ with the latest published copy — one commit; your
+ *  settings live in site.config.json and are untouched. */
+async function updatePlugin(p, update, siteInfo, button) {
+  if (!await ask({ title: `Update ${update.title} to v${update.latest}?`,
+    message: `This replaces the plugin's files with the latest published version (you're on v${update.current}). Your settings are kept; revert the commit to roll back.`,
+    actions: [{ label: 'Cancel', value: null }, { label: 'Update', value: true, kind: 'primary' }] })) return;
+  button.disabled = true;
+  try {
+    const { files } = await fetchPluginFiles(update.source);
+    if (!files.length) throw new Error('The published copy of this plugin has no files.');
+    const keep = new Set(files.map((f) => f.path));
+    for (const f of await listTree(`plugins/${p.name}/`)) if (!keep.has(f.path)) files.push({ path: f.path, delete: true });
+    const { commitSha } = await commitFiles(files, `plugins: update ${p.name} to v${update.latest}`);
+    toast(`${update.title} updated to v${update.latest} — publishing now.`, 'success');
+    watchBuild(commitSha, siteInfo.site.url);
+    refresh();
+  } catch (error) { toast(error.message, 'error'); button.disabled = false; }
+}
+
 export async function pluginsScreen(siteInfo) {
   const installed = await loadInstalled();
   const names = new Set(installed.map((p) => p.name));
-  const available = await loadAvailableLocal(names);
+  const [available, registry] = await Promise.all([loadAvailableLocal(names), loadRegistry()]);
+  const updates = new Map((await pluginUpdates(installed, registry)).map((u) => [u.name, u]));
 
-  const cards = installed.map((p) => h('section', { class: 'card plugin-card' },
-    h('h2', {}, p.manifest.title || p.name, p.manifest.version ? h('span', { class: 'badge' }, `v${p.manifest.version}`) : null),
-    h('p', { class: 'muted' }, p.manifest.description || ''),
-    p.manifest.note ? h('p', { class: 'plugin-hint' }, p.manifest.note) : null,
-    h('div', { class: 'card-actions' },
-      hasOptions(p) ? h('button', { onclick: () => configurePlugin(p, siteInfo) }, 'Configure') : null,
-      h('button', { class: 'danger', onclick: () => removePlugin(p, siteInfo) }, 'Remove'))));
+  const cards = installed.map((p) => {
+    const update = updates.get(p.name);
+    return h('section', { class: 'card plugin-card' },
+      h('h2', {}, p.manifest.title || p.name, p.manifest.version ? h('span', { class: 'badge' }, `v${p.manifest.version}`) : null),
+      h('p', { class: 'muted' }, p.manifest.description || ''),
+      p.manifest.note ? h('p', { class: 'plugin-hint' }, p.manifest.note) : null,
+      h('div', { class: 'card-actions' },
+        update ? h('button', { class: 'primary', onclick: (e) => updatePlugin(p, update, siteInfo, e.target) }, `Update to v${update.latest}`) : null,
+        hasOptions(p) ? h('button', { onclick: () => configurePlugin(p, siteInfo) }, 'Configure') : null,
+        h('button', { class: 'danger', onclick: () => removePlugin(p, siteInfo) }, 'Remove')));
+  });
 
   const builtinCards = available.map((p) => h('section', { class: 'card plugin-card' },
     h('h2', {}, p.manifest.title || p.name, p.manifest.version ? h('span', { class: 'badge' }, `v${p.manifest.version}`) : null),
@@ -79,12 +143,11 @@ export async function pluginsScreen(siteInfo) {
     available.length ? h('div', { class: 'cards' }, builtinCards) : null,
     h('h2', { class: 'browse-more' }, 'Add a plugin'),
     h('p', { class: 'plugin-note' }, 'Plugins run code on your site — some in your visitors’ browsers, some when your site builds. Install only ones you trust; every plugin below is reviewed before it’s listed.'),
-    await registrySection(siteInfo, names));
+    registrySection(siteInfo, names, registry));
 }
 
-async function registrySection(siteInfo, installed) {
-  const entries = (await fetch(`https://raw.githubusercontent.com/${REGISTRY_REPO}/main/registry.json`)
-    .then((r) => (r.ok ? r.json() : [])).catch(() => [])).filter((e) => e.id && !installed.has(e.id));
+function registrySection(siteInfo, installed, registry) {
+  const entries = registry.filter((e) => e.id && !installed.has(e.id));
   if (!entries.length) return h('p', { class: 'muted' }, 'Community plugins will appear here as they’re published.');
   return h('div', { class: 'cards' }, entries.map((entry) => {
     const src = entry.repo || REGISTRY_REPO;

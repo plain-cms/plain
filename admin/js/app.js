@@ -9,7 +9,7 @@ import { editorScreen } from './editor.js';
 import { mediaScreen } from './media.js';
 import { aiSettings } from './ai.js';
 import { appearanceScreen } from './appearance.js';
-import { pluginsScreen } from './plugins.js';
+import { pluginsScreen, pluginUpdatesCard } from './plugins.js';
 import { backendScreen } from './backend.js';
 import { feedbackScreen, insightsScreen } from './backend-data.js';
 import { wizardScreen } from './wizard.js';
@@ -235,7 +235,7 @@ async function updateCard() {
 }
 
 async function dashboardScreen() {
-  const cards = [await statusCard(), await updateCard(), await checklistCard()];
+  const cards = [await statusCard(), await updateCard(), await pluginUpdatesCard(), await checklistCard()];
   for (const [name, def] of Object.entries(siteInfo.collections)) cards.push(await collectionCard(name, def));
   return shell('dashboard',
     h('header', { class: 'screen-head' }, h('h1', {}, 'Dashboard')),

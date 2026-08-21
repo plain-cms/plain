@@ -8,6 +8,13 @@
   z-index: 9999;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   font-size: 15px;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.plain-feedback.pf-waiting {
+  opacity: 0;
+  transform: translateY(0.75rem);
+  pointer-events: none;
+  visibility: hidden;
 }
 
 .pf-toggle {
