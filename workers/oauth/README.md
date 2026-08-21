@@ -31,7 +31,7 @@ that — so nobody does.
 
 Use a **GitHub App** (recommended). An App issues *user-to-server* tokens scoped
 to its installed permissions on the repos it's installed on — for plain that's
-**Contents-only, on your content repo only**. An OAuth App can only issue a
+**a handful of repo permissions, on your content repo only**. An OAuth App can only issue a
 broad classic `repo` token (every repo the user can touch). Same click for the
 writer; far tighter blast radius. The Worker is built for a GitHub App as-is;
 for an OAuth App, add `scope=repo` back (see the note in `worker.js`).
@@ -46,7 +46,8 @@ GitHub → **Settings → Developer settings → GitHub Apps → New GitHub App*
 - **Callback URL:** your Worker's `/callback` — `https://plain-oauth.<your-subdomain>.workers.dev/callback` (you'll know the exact host after the first `wrangler deploy`; edit it afterwards). Tick **Request user authorization (OAuth) during installation** is optional.
 - **Expiring user tokens:** *uncheck* to keep it simple (tokens work like v1). Leave checked for tighter security — writers just re-click "Sign in" every ~8h.
 - **Webhook:** uncheck **Active** (plain doesn't use webhooks).
-- **Permissions → Repository:** **Contents: Read and write**, **Metadata: Read-only** (mandatory), **Actions: Read-only** (so the admin's build-status pill works). Add **Actions: Read and write** only if you also want the admin's in-app "Update available" button to trigger updates — otherwise skip it.
+- **Permissions → Repository:** **Contents: Read and write**, **Metadata: Read-only** (mandatory), **Actions: Read-only** (so the admin's build-status pill works), **Pull requests: Read and write** (the admin's "Update available" banner lists the open engine-update PR and offers one-click merge; without this those calls 403 with "Resource not accessible by integration"). Add **Actions: Read and write** only if you also want the admin's in-app "Prepare update" button to trigger the update workflow — otherwise skip it.
+- Changing permissions later? After you **Save changes** on the App, GitHub asks the *installation* to approve the new permissions: **Settings → Installations → Configure** (accept the pending request), then sign out/in of the admin for a fresh token.
 - **Where can this App be installed?** *Only on this account.*
 
 Click **Create**, then: note the **Client ID**, generate a **Client secret**, and — importantly — **Install App** (left menu) onto your content repo (e.g. `plain-cms/plain`), granting it that repo.
