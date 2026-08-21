@@ -1,6 +1,6 @@
 {
   "name": "feedback",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A floating feedback widget — a popup where visitors send a short message to your backend. Progressive enhancement; the page works without it.",
   "client": { "js": "client.js", "css": "client.css" },
   "options": { "service": "backend", "title": "Send feedback", "buttonLabel": "Feedback", "showOnScroll": false },
