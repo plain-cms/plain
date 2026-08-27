@@ -25,6 +25,24 @@ const aiReview = ({ title, before, after }) => modal('ask ai-review', (done) => 
     h('button', { class: 'primary', onclick: () => done(true) }, 'Apply')),
 ]);
 
+const FOLD_AFTER = 4; // empty optional fields before they're folded away
+
+/**
+ * The preview's own document: the site's theme stylesheet, its plugins', and
+ * whatever the page names in `stylesheet:`, wrapped in the markup themes style
+ * their pages with. Nothing here runs — the iframe is sandboxed without scripts.
+ */
+function previewDocument(siteInfo, pageStylesheet) {
+  const sheets = ['/assets/theme.css', ...(siteInfo.plugins || []).map((name) => `/plugins/${name}/client.css`)];
+  if (typeof pageStylesheet === 'string' && pageStylesheet.startsWith('/')) sheets.push(pageStylesheet);
+  const links = sheets.map((href) => `<link rel="stylesheet" href="${escapeAttr(href)}">`).join('');
+  return `<!doctype html><html><head><meta charset="utf-8"><base href="/">${links}` +
+    '<style>body{margin:0;padding:1rem 1.5rem}</style></head>' +
+    '<body><main><article class="page"><div class="prose"></div></article></main></body></html>';
+}
+
+const escapeAttr = (value) => String(value).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
 export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
   const def = siteInfo.collections[collection];
   if (!def) throw new Error(`Unknown collection "${collection}".`);
@@ -94,18 +112,35 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
     }
   }
   const condRows = []; // [field, rowEl] for fields shown only under some layouts
-  const fieldRows = def.fields.filter((f) => f.name !== 'draft').map((field) => {
+  const extraRows = [];  // optional and empty — folded away unless there are only a few
+  const fieldRows = [];
+  for (const field of def.fields.filter((f) => f.name !== 'draft')) {
     const [element, input] = control(field);
     inputs.set(field.name, input);
     const row = h('label', { class: 'field' }, `${field.name[0].toUpperCase()}${field.name.slice(1)}${field.required ? '' : ' (optional)'}`, element);
     if (field.showFor) { row.hidden = !showsFor(field, currentTemplate); condRows.push([field, row]); }
-    return row;
-  });
+    const filled = field.type === 'boolean' ? input.checked : String(input.value ?? '').trim() !== '';
+    (field.required || filled ? fieldRows : extraRows).push(row);
+  }
+  // A schema with a long tail of optional fields — landing-page heroes, say —
+  // makes every ordinary page look like a form to fill in. Fold the empty ones
+  // away, but only once there are enough of them to be in the way.
+  const folded = extraRows.length >= FOLD_AFTER;
+  if (!folded) fieldRows.push(...extraRows);
+  const countLabel = () => `More fields (${extraRows.filter((row) => !row.hidden).length})`;
+  const summary = folded ? h('summary', {}, countLabel()) : null;
+  const moreFields = folded
+    ? h('details', { class: 'more-fields' }, summary, h('div', { class: 'editor-fields' }, extraRows))
+    : null;
   // The picker writes `template:` (cleared at the collection default) and re-filters showFor fields live.
   const layoutField = layoutPicker(layouts, currentTemplate, def.template, (template) => {
     currentTemplate = template;
     data.template = template === def.template ? undefined : template;
     condRows.forEach(([field, row]) => { row.hidden = !showsFor(field, currentTemplate); });
+    if (summary) summary.textContent = countLabel();
+    // Picking a layout is asking for its fields — show them rather than making
+    // the reader go looking for what just appeared.
+    if (moreFields && condRows.some(([, row]) => !row.hidden)) moreFields.open = true;
   });
   const slugInput = h('input', { type: 'text', value: splitLangSuffix(slug || '', languages).base, placeholder: 'from-the-title' });
   let slugTouched = !isNew;
@@ -133,11 +168,26 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
 
   const bodyInput = h('textarea', { class: 'body-input', placeholder: 'Write here. Formatting is optional — plain paragraphs are perfectly good posts.' });
   bodyInput.value = body.replace(/^\n/, '');
-  const preview = h('div', { class: 'preview prose' });
+  // The preview runs the build's renderer inside the build's stylesheets: an
+  // iframe carrying the theme's CSS, every plugin's, and any stylesheet the
+  // page names in its frontmatter. Its document is written once and its content
+  // patched in place, so typing never reloads or scrolls the pane.
+  const preview = h('iframe', {
+    class: 'preview',
+    title: 'Preview',
+    sandbox: 'allow-same-origin', // same-origin so we can write into it; no scripts
+    srcdoc: previewDocument(siteInfo, data.stylesheet),
+  });
   let previewTimer = null;
-  const renderPreview = () => { preview.innerHTML = renderMarkdown(bodyInput.value); };
+  const renderPreview = () => {
+    const target = preview.contentDocument?.querySelector('.prose');
+    if (!target) return;
+    target.innerHTML = renderMarkdown(bodyInput.value);
+    const doc = preview.contentDocument.documentElement;
+    preview.style.height = `${doc.scrollHeight}px`;
+  };
+  preview.addEventListener('load', renderPreview);
   bodyInput.addEventListener('input', () => { clearTimeout(previewTimer); previewTimer = setTimeout(renderPreview, 250); });
-  renderPreview();
 
   function edit(transform) {
     const { selectionStart: from, selectionEnd: to, value } = bodyInput;
@@ -393,6 +443,7 @@ export async function editorScreen({ siteInfo, collection, slug, onSaved }) {
       layoutField,
       ...fieldRows,
       h('label', { class: 'field' }, 'Address (from the title)', slugInput)),
+    moreFields,
     h('div', { class: 'editor-split' },
       h('div', { class: 'editor-write' }, toolbar, bodyInput, aiRow),
       preview),

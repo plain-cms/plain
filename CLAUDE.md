@@ -155,7 +155,7 @@ is a commit; there is no other backend.
 
 - `js/github.js` — GitHub REST calls, token in localStorage (never sent anywhere but api.github.com)
 - `js/app.js` — router + dashboard, collection lists, navigation editor, settings, sign-in
-- `js/editor.js` — the schema-driven editor: fields come from config, preview renders with `lib/markdown.js`
+- `js/editor.js` — the schema-driven editor: fields come from config (empty optional ones fold into “More fields”), preview renders with `lib/markdown.js` inside an iframe carrying the site's theme + plugin CSS, so it looks like the page it will become
 - `js/media.js` — media library + uploads to `media/YYYY/MM/` (≤5 MB, resize offer over 1 MB)
 - `js/ui.js` — DOM helpers, toasts, dialogs, the build-status pill
 

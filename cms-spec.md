@@ -265,7 +265,7 @@ A single-page vanilla app. Design goal: **a smart but non-technical person publi
 
 1. **Sign in** — v1: paste a GitHub fine-grained token (one-time; setup guide with screenshots is part of README; the site owner typically does this once on the editor's machine). Stored in `localStorage`. v2: "Sign in with GitHub" via the OAuth Worker.
 2. **Dashboard** — collections as cards, recent items, site status (last publish time via commits API), "New post" front and center.
-3. **Editor** — schema-driven form (fields from config) + Markdown body with: formatting toolbar (bold, heading, link, image, list — inserts Markdown, no contenteditable rich-text in v1), live side-by-side preview (rendered with the same `marked`), autosave to `localStorage` every 5s, image upload by drag-drop or paste.
+3. **Editor** — schema-driven form (fields from config) + Markdown body with: formatting toolbar (bold, heading, link, image, list — inserts Markdown, no contenteditable rich-text in v1), live side-by-side preview (rendered with the same `marked`, inside an iframe wearing the site's own stylesheets), autosave to `localStorage` every 5s, image upload by drag-drop or paste.
 4. **Media library** — grid of `media/`, upload, copy-path, alt-text prompts.
 5. **Navigation editor** — reorder/add/remove menu items (writes `data/navigation.json`).
 6. **Settings** — form over `site.config.json` site block (title, description, language, theme picker).

@@ -51,6 +51,10 @@ input, textarea, select {
   border: 1px solid var(--border); border-radius: var(--radius);
   padding: 0.45rem 0.6rem; width: 100%;
 }
+/* The browser hides [hidden] from its own stylesheet, which any author rule for
+   `display` outranks — including the one below. Say it here so a hidden field
+   (layout.js) is actually hidden. */
+[hidden] { display: none !important; }
 label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 0.75rem; }
 label input, label textarea, label select { margin-top: 0.25rem; font-weight: 400; }
 input[type="checkbox"] { width: auto; }
@@ -148,12 +152,13 @@ input[type="checkbox"] { width: auto; }
 .toolbar { display: flex; gap: 0.25rem; margin-bottom: 0.4rem; }
 .toolbar button { padding: 0.25rem 0.6rem; min-width: 2.2rem; }
 .body-input { min-height: 60vh; font-family: var(--mono); font-size: 0.9rem; line-height: 1.6; resize: vertical; }
-.preview { min-height: 60vh; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.5rem; overflow-wrap: break-word; }
-.preview img { max-width: 100%; height: auto; }
-.preview pre { overflow-x: auto; background: var(--bg); padding: 0.75rem; border-radius: var(--radius); }
-.preview code { font-family: var(--mono); font-size: 0.9em; }
-.preview blockquote { border-left: 3px solid var(--accent); margin-left: 0; padding-left: 1rem; color: var(--muted); }
-.preview table { border-collapse: collapse; } .preview td, .preview th { border: 1px solid var(--border); padding: 0.3rem 0.6rem; }
+/* The preview is an iframe wearing the site's own stylesheets (editor.js), so
+   the only styling it needs from here is the frame around it. */
+.preview { width: 100%; min-height: 60vh; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); color-scheme: normal; }
+.more-fields { margin-bottom: 0.75rem; }
+.more-fields summary { cursor: pointer; font-size: 0.85rem; font-weight: 600; color: var(--muted); padding: 0.35rem 0; }
+.more-fields summary:hover { color: var(--text); }
+.more-fields[open] summary { margin-bottom: 0.5rem; }
 
 .ai-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
 .ai-row button { font-size: 0.85rem; }
