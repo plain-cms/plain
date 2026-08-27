@@ -107,6 +107,18 @@ The full step-by-step walkthrough — keeping your URLs, wiring forms and analyt
 
 plain follows [semver](https://semver.org). Engine files (`build.js`, `lib/`, `admin/`, `themes/default/`) are upstream-owned; your content, config, and custom themes are yours. When a new version ships, the admin shows an **Update available** banner: click it and a pull request appears with the changelog and any files you'd customized flagged for review. **Merge to upgrade, revert to roll back** — never a surprise. An optional weekly workflow opens that PR on its own, so even an unattended site keeps getting security fixes as reviewable PRs. See §14 for the mechanism.
 
+## The rest of the org
+
+plain is one repo — the engine you clone. Three sibling repos in the [plain-cms](https://github.com/plain-cms) organization extend it, and you only need them when you want what they offer:
+
+| Repo | What it is | When you need it |
+| ---- | ---------- | ---------------- |
+| [**plain-cms/plugins**](https://github.com/plain-cms/plugins) | Curated registry of optional plugins — comments, table of contents, lightbox, related posts, GitHub stars, CV. Every entry is reviewed, because plugins are code that runs in your build or your visitors' browsers. | The admin's **Plugins** screen reads this registry: Install copies the folder into your `plugins/` and enables it in `site.config.json`, as one commit. |
+| [**plain-cms/starters**](https://github.com/plain-cms/starters) | Catalog of community themes and starters beyond the fifteen in the box — each entry points at a theme folder in some repo. | **Appearance → Browse more** in the admin: preview a theme on your own pages, then Install to copy it into your site. |
+| [**plain-cms/backend**](https://github.com/plain-cms/backend) | Two interchangeable reference backends (.NET 10 and vanilla Node), same API, one SQLite file. Deploy one and point your site's `services.backend` at it. | Only for the handful of opt-in plugins that need somewhere to send data — analytics beacons, contact submissions, feedback. Everything else stays fully static. |
+
+Adding to any of them is a pull request: a plugin folder (see the plugins repo's [CONTRIBUTING.md](https://github.com/plain-cms/plugins/blob/main/CONTRIBUTING.md)), a registry entry that passes the theme quality floor, or a backend route.
+
 ## Local development
 
 ```sh
