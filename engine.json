@@ -54,7 +54,7 @@
     "plugins/sales-analytics/client.js": "6347ba9e852bffeaf45606adac11dd077c756ac2dbd73d6d50551de14ce6f8f8",
     "plugins/sales-analytics/plugin.json": "d823409fb302ed874b2fb0f734cf30eb9525bf65eb1b2b4d7846769fbb1c8da2",
     "plugins/search/client.css": "8d5a0eb8738bb64c638e48771f96208b4a2b0ba373699d2d02c42a409da9203f",
-    "plugins/search/client.js": "d47b946b0281dd70217026f33cc694f71158175ef84cd669c332feb6135d2f70",
+    "plugins/search/client.js": "0d7c65c5d1414ea6c446c6fa997a915037c434a71c411295606212c175be0f47",
     "plugins/search/index.js": "cf06547ac82542e05d97c439ed2ccc2588e5d3c416a036004911aff6bae9bede",
     "plugins/search/plugin.json": "7871f2e2126e88e0e20c34b722e82cafce832e969813e0e3f60a54e65ab68929",
     "plugins/static-root/index.js": "fa42109e0d7e7eb56ae03ed897fb03a538c303e632e8597aada05e1502d3f6ee",
