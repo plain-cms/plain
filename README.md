@@ -10,7 +10,7 @@
 
 **A CMS that lives in your Git repo.** Markdown files in, static site out, edited in the browser — no database, no server, nothing to patch.
 
-**[Website](https://plain-cms.com)** · **[Live demo](https://plain-cms.github.io/plain/)** · **[Quickstart](#quickstart-5-minutes)** · **[Contributing](CONTRIBUTING.md)**
+**[Website](https://plain-cms.com)** · **[Try the editor](https://plain-cms.github.io/plain/admin/?demo=1)** · **[Live demo](https://plain-cms.github.io/plain/)** · **[Quickstart](#quickstart-5-minutes)** · **[Contributing](CONTRIBUTING.md)**
 
 ![The plain admin editor — Markdown on the left, live preview on the right, with Save draft, Publish and History buttons](.github/screenshot-editor.png)
 
@@ -40,6 +40,12 @@ npm install && npm run dev     # → http://localhost:4000, admin at /admin/
 4. Push (or edit on github.com and commit). About 30 seconds later, your site is live.
 
 Every later change is the same loop: edit → commit → live in ~30s. Nothing is ever lost; any version of any page can be restored from Git history.
+
+## Try the admin without installing anything
+
+**[Open the editor →](https://plain-cms.github.io/plain/admin/?demo=1)** — no account, no sign-up. You get a copy of the demo site in your browser: write a post, publish it, watch the build, open History and restore an older version. Everything works; nothing leaves your tab, and closing it throws it away.
+
+It is not a mock-up. The demo is the real admin talking to a repository that lives in the browser, seeded from the site's own published JSON API. Add `"demo": true` to the `site` block of your `site.config.json` to offer the same thing on your site.
 
 ## Signing in to the admin
 

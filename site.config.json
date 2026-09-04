@@ -6,6 +6,7 @@
     "language": "en",
     "languages": ["en", "de", "fr"],
     "theme": "default",
+    "demo": true,
     "basePath": "/plain"
   },
   "collections": {

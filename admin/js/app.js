@@ -3,7 +3,7 @@
 // content metadata; writes through the GitHub API (see github.js).
 // UI language rule: never "commit/push/branch" — always "save/publish/history".
 
-import { auth, repoInfo, getFile, updateFile, listDir, commitsFor, runFor, dispatchWorkflow, updatePull, mergePull, cmpVersion } from './github.js';
+import { auth, inDemo, repoInfo, getFile, updateFile, listDir, commitsFor, runFor, dispatchWorkflow, updatePull, mergePull, cmpVersion } from './github.js';
 import { h, show, toast, timeAgo, watchBuild, ask } from './ui.js';
 import { editorScreen } from './editor.js';
 import { mediaScreen } from './media.js';
@@ -27,8 +27,23 @@ export async function collectionIndex(name) {
 
 export const singular = (name) => (name.endsWith('s') ? name.slice(0, -1) : name);
 
+/**
+ * Start (or resume) the demo: seed the in-browser repository and raise the
+ * standing "this is a demo" strip. Loaded on demand — a signed-in site never
+ * fetches demo.js at all.
+ */
+async function enterDemo() {
+  const { demo, mountBanner } = await import('./demo.js');
+  await (demo.active ? demo.resume(siteInfo) : demo.enter(siteInfo));
+  mountBanner({
+    onReset: async () => { await demo.reset(siteInfo); indexCache.clear(); location.hash = '#/'; route(); toast('Back to the published site — your demo edits are gone.', 'success'); },
+    onExit: () => { demo.exit(); indexCache.clear(); route(); },
+  });
+}
+
 /** Confirm, then clear the stored credentials and return to the sign-in screen. */
 async function signOut() {
+  if (inDemo()) { (await import('./demo.js')).demo.exit(); indexCache.clear(); return route(); }
   if (await ask({ title: 'Sign out?', message: 'You’ll sign in again next time. Nothing is lost — your work lives in GitHub.', actions: [{ label: 'Stay', value: null }, { label: 'Sign out', value: true, kind: 'danger' }] })) { auth.clear(); route(); }
 }
 
@@ -50,7 +65,7 @@ function shell(active, ...content) {
       link('#/settings', 'Settings', 'settings'),
       h('div', { class: 'sidebar-foot' },
         h('a', { href: siteInfo?.site.url || '/', target: '_blank', rel: 'noopener' }, 'View site ↗'),
-        h('button', { class: 'linklike signout', onclick: signOut }, `Sign out${auth.repo ? ` (${auth.repo})` : ''}`)),
+        h('button', { class: 'linklike signout', onclick: signOut }, inDemo() ? 'Exit demo' : `Sign out${auth.repo ? ` (${auth.repo})` : ''}`)),
     ),
     h('main', { class: 'screen' }, ...content),
   );
@@ -116,8 +131,22 @@ function signinScreen() {
         h('li', {}, 'Under “Permissions → Repository permissions”, set Contents to Read and write, and Actions to Read-only.'),
         h('li', {}, 'Generate, copy the token, and paste it above. You won’t need to do this again on this device.'))));
 
+  // A site with "demo": true offers the whole editor with no account at all
+  // (§8.6) — the first thing a visitor should be able to do is try it.
+  const demoButton = siteInfo?.site.demo ? h('div', { class: 'demo-offer' },
+    h('button', { class: 'primary', onclick: async (event) => {
+      event.target.disabled = true;
+      event.target.textContent = 'Setting up your demo…';
+      try { await enterDemo(); location.hash = '#/'; route(); }
+      catch (error) { event.target.disabled = false; event.target.textContent = 'Try the editor'; toast(error.message, 'error'); }
+    } }, 'Try the editor'),
+    h('p', { class: 'muted' }, 'No account, no sign-up. You get a copy of this site in your browser: write, publish, browse the history. Nothing you do here is saved anywhere.')) : null;
+
   return h('div', { class: 'signin' },
-    h('h1', {}, 'Welcome back'),
+    // "Welcome back" is right for the site's own writers; a first-time visitor
+    // (nobody has signed in on this device) is more likely here to look around.
+    h('h1', {}, auth.repo ? 'Welcome back' : siteInfo?.site.title || 'Welcome'),
+    demoButton,
     oauthUrl
       ? h('div', {}, h('p', {}, 'Sign in with your GitHub account to publish and manage content.'), ghButton,
           h('details', { class: 'token-alt' }, h('summary', {}, 'or use an access token'), tokenForm))
@@ -405,8 +434,11 @@ async function boot() {
     return show(h('div', { class: 'error-screen' }, h('h1', {}, 'The site hasn’t been built yet'),
       h('p', {}, 'The admin reads your site’s published data (api/site.json), which isn’t there yet. Once the first build finishes, reload this page.')));
   }
+  // "Try the editor" (§8.6): ?demo=1 drops a visitor straight in — that is the
+  // link to hand out — and a demo already running survives a reload of the tab.
+  if (siteInfo.site.demo && (new URLSearchParams(location.search).has('demo') || inDemo())) await enterDemo().catch(() => {});
   // First run (§8.5): the template placeholder title means a fresh install.
-  if (auth.signedIn && siteInfo.site.title === 'My Site' && !localStorage.getItem('plain.wizard')) {
+  if (auth.signedIn && !inDemo() && siteInfo.site.title === 'My Site' && !localStorage.getItem('plain.wizard')) {
     location.hash = '#/welcome';
   }
   window.addEventListener('hashchange', route);

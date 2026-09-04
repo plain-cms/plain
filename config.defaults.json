@@ -1,6 +1,7 @@
 {
   "site": {
     "language": "en",
+    "demo": false,
     "languages": [],
     "theme": "default"
   },

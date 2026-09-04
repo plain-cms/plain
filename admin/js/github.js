@@ -5,11 +5,18 @@
 
 const KEYS = { repo: 'plain.repo', token: 'plain.token', branch: 'plain.branch' };
 
+// "Try the editor" mode (demo.js): the same calls, answered from a repository
+// that lives in the browser tab. The flag is sessionStorage, so it is per tab
+// and a demo visitor never disturbs a real sign-in on the same device.
+export const DEMO_REPO = 'demo/your-site';
+export const DEMO_FLAG = 'plain.demo';
+export const inDemo = () => { try { return sessionStorage.getItem(DEMO_FLAG) === '1'; } catch { return false; } };
+
 export const auth = {
-  get repo() { return localStorage.getItem(KEYS.repo) || ''; },
-  get token() { return localStorage.getItem(KEYS.token) || ''; },
+  get repo() { return inDemo() ? DEMO_REPO : localStorage.getItem(KEYS.repo) || ''; },
+  get token() { return inDemo() ? 'demo' : localStorage.getItem(KEYS.token) || ''; },
   get branch() { return localStorage.getItem(KEYS.branch) || 'main'; },
-  get signedIn() { return Boolean(this.repo && this.token); },
+  get signedIn() { return inDemo() || Boolean(this.repo && this.token); },
   save({ repo, token, branch }) {
     localStorage.setItem(KEYS.repo, repo);
     localStorage.setItem(KEYS.token, token);
@@ -33,6 +40,8 @@ const FRIENDLY = {
 
 /** Call the GitHub API. Throws GitHubError with a plain-language message. */
 async function gh(path, { method = 'GET', body, raw = false } = {}) {
+  // Loaded only for demo visitors — a signed-in site never fetches demo.js.
+  if (inDemo()) return (await import('./demo.js')).request(path, { method, body, raw });
   const headers = { Authorization: `Bearer ${auth.token}`, 'X-GitHub-Api-Version': '2022-11-28', Accept: raw ? 'application/vnd.github.raw+json' : 'application/vnd.github+json' };
   // no-store: GitHub sends `Cache-Control: private, max-age=60`, so without this the
   // browser serves a stale file sha on a re-read — which made updateFile's 409 retry

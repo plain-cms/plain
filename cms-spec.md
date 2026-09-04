@@ -326,6 +326,36 @@ The product must teach itself. No manual, no video, no docs required to reach th
 
 ---
 
+### 8.6 Demo mode (the try-before-anything screen)
+
+The admin's one real barrier is the sign-in: to see what plain *is*, a stranger
+has to create a GitHub token first. Demo mode removes it. A site opts in with
+`"demo": true` in the `site` block of `site.config.json`; its sign-in screen then
+leads with **Try the editor**, and `/admin/?demo=1` drops a visitor straight into
+the dashboard.
+
+The mechanism is deliberately small. Every call the admin makes to GitHub goes
+through one function (`gh()` in `admin/js/github.js`), so the demo is a stand-in
+for that one function: `admin/js/demo.js` answers the same REST paths from a
+repository that lives in the browser tab, seeded from the site's own published
+JSON API — `api/site.json` for the config and menu, `api/<collection>/index.json`
+for one Markdown file per item (those already carry the raw `body`, §9). Media
+that the content references is listed and previewed straight from the published
+site. Nothing is simulated at the UI level: edits rewrite files, saves make
+commits, the publish pill runs, History lists versions and Restore restores them.
+
+Rules:
+
+- **Per tab, never persisted anywhere else.** State lives in `sessionStorage`; a
+  new tab starts clean, and a demo visitor never touches the stored credentials
+  of someone who is actually signed in on that device (§11).
+- **Never in doubt.** A standing strip across the top of every screen says it is
+  a demo and offers *Start over*, *Exit demo*, and the way to run it for real.
+- **Zero cost to the site.** No GitHub API calls, no keys, nothing to rate-limit:
+  the demo reads static JSON the site already publishes.
+- **Off by default.** Sites that don't set the flag behave exactly as before, and
+  `demo.js` is never even fetched.
+
 ## 9. Plugin system
 
 **A plugin is a folder. Install = copy the folder + add its name to config. No npm, no registry, no build step.** This makes "write me a plugin that does X" a one-prompt AI task.

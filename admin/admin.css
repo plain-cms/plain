@@ -259,3 +259,22 @@ dialog.history { max-width: 34rem; width: 90vw; }
 .plugin-note { margin: 0.5rem 0 1rem; padding: 0.6rem 0.9rem; font-size: 0.85rem; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--accent); border-radius: var(--radius); }
 .plugin-hint { margin: 0.35rem 0 0; font-size: 0.85rem; color: var(--accent); }
 dialog.plugin-config { width: min(28rem, 92vw); }
+
+/* Demo mode (§8.6): a standing strip so "this isn't your site" is never in doubt. */
+#demo-bar {
+  position: fixed; inset: 0 0 auto 0; z-index: 60;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+  padding: 0.4rem 0.9rem; font-size: 0.85rem;
+  color: var(--accent-ink); background: var(--accent);
+  box-shadow: var(--shadow);
+}
+#demo-bar span { margin-right: auto; }
+#demo-bar button, #demo-bar a {
+  font: inherit; color: inherit; background: transparent;
+  border: 1px solid currentColor; border-radius: var(--radius);
+  padding: 0.1rem 0.6rem; cursor: pointer; text-decoration: none;
+}
+#demo-bar a { border-style: dashed; }
+body.demo-mode { padding-top: 2.1rem; }
+.signin .demo-offer { margin: 0.5rem 0 1.25rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+.signin .demo-offer p { margin: 0; font-size: 0.85rem; }

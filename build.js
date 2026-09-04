@@ -338,7 +338,8 @@ function stampCacheBust(outDir) {
   const v = hash.digest('hex').slice(0, 8);
   const bust = (s, p) => p.endsWith('.html')
     ? s.replace(/\b(href|src)="([^"]+\.(?:css|js))"/g, `$1="$2?v=${v}"`).replace(/(["'])(\.?\/[^"']*marked\.esm\.js)(["'])/g, `$1$2?v=${v}$3`)
-    : s.replace(/(\bfrom\s*["'])((?:\.\.?\/)[^"']+\.js)(["'])/g, `$1$2?v=${v}$3`);
+    // Static imports and the one dynamic import (the demo module, loaded on demand).
+    : s.replace(/(\b(?:from|import)\s*\(?\s*["'])((?:\.\.?\/)[^"']+\.js)(["'])/g, `$1$2?v=${v}$3`);
   for (const p of files) if (p.endsWith('.html') || (p.includes(`${path.sep}admin${path.sep}`) && p.endsWith('.js'))) fs.writeFileSync(p, bust(fs.readFileSync(p, 'utf8'), p));
 }
 
