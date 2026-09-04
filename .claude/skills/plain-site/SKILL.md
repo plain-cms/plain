@@ -19,7 +19,8 @@ into and no settings database — you edit JSON and Markdown, then push.
 | Images and files | `media/` |
 | The writing itself | `content/` (see `plain-post`) |
 
-After **any** change here: `node --test tests/ && node build.js`, then commit and push.
+After **any** change here: `node --test tests/ && node build.js`, then commit and
+push. A site with no `tests/` folder runs just the build.
 
 ## Images and media
 

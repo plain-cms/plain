@@ -82,9 +82,11 @@ worth copying from.
 node --test tests/ && node build.js
 ```
 
-Both must be green. A content mistake stops the build with `file:line — problem —
-fix`; read it literally, it names the fix. A red test or a failed build must never
-be committed.
+Both must be green. If the site has no `tests/` folder — `tests/` is user-owned,
+so not every site carries one — then `node build.js` alone is the gate, and it
+must still pass. A content mistake stops the build with `file:line — problem —
+fix`; read it literally, it names the fix. A red test or a failed build must
+never be committed.
 
 Optional local preview: `npm run dev` serves the site on :4000 (admin at `/admin/`).
 
@@ -129,8 +131,8 @@ translation with it.
 
 ## Gotchas that will bite you
 
-- `node --test tests/` and `node build.js` are both required before a commit —
-  the golden-file test compares built output byte for byte.
+- Never commit without a green `node build.js`, plus `node --test tests/` wherever
+  the site has tests — the golden-file test compares built output byte for byte.
 - Don't hand-edit engine files (`build.js`, `lib/`, `admin/`, `themes/default/`)
   to make a post work — that breaks upgrades. Content problems are content-shaped.
 - An unknown frontmatter key is *allowed* — it rides into templates and the JSON

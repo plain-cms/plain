@@ -132,4 +132,5 @@ node --test tests/ && node build.js
 ```
 
 If the output changed on purpose, `node tests/update-goldens.js` and review the
-diff before committing. A red test or a failed build must never be committed.
+diff before committing. A site with no `tests/` folder runs just the build. A red
+test or a failed build must never be committed.

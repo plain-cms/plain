@@ -3,9 +3,9 @@
   "migration": 0,
   "files": {
     ".claude/settings.json": "0e9f0c421e52d76094df3135e7103785d788ac4499b76684a905001d9ea42e6b",
-    ".claude/skills/plain-extend/SKILL.md": "07e6dc5f70cd892b325d5d57a9dbb4d04569957aa4f9d1be1c192f63609d6bf5",
-    ".claude/skills/plain-post/SKILL.md": "ade57c518030b2539d1a6c3f914631c3cb29ab41fb452b8ab548e16765ac766d",
-    ".claude/skills/plain-site/SKILL.md": "bb1e207390c57be52b91d49c4e13b0f432abd7d8174a7cefce87e902ecb02904",
+    ".claude/skills/plain-extend/SKILL.md": "324bb985459107f007a4d866e1ef2b1b114d3c7988e7f7115bb493e9d06b73f9",
+    ".claude/skills/plain-post/SKILL.md": "f0832ab8ab631f6bed2bd8425b1f85d19c2827a2ed1d27b2bff9f62a562effd9",
+    ".claude/skills/plain-site/SKILL.md": "d2bd2bf1814ce1a91a9a6a1de8629b65678853ba55d3e570485efcb63b62f2cb",
     ".github/workflows/build-deploy.yml": "90811800dfc4f35a4f25d8c3f05a410ebba669e7b976f1cddbb33ac49910c697",
     ".github/workflows/update.yml": "82ee20799b42ec6dad049538b04775fdab410ff38d69112a7e4e595ad8f6356e",
     "admin/admin.css": "725b96b7fb5137c9fbcebe5a0d48c14a6bd46a723648faf88a3031d9ee60ac91",
