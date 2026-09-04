@@ -119,6 +119,18 @@ First sign in and the admin greets you with a five-step wizard: pick what you're
 
 Fifteen starters ship in the box: **Journal** (blog), **Toolbox** (trades & local services), **Studio** (portfolio), **Bistro** (restaurant), **Manual** (documentation), **Terminal** (developer blog), **Letters** (newsletter & essays), **Launch** (startup/SaaS), **Gazette** (local news & magazine), **Folio** (résumé/CV), **Keys** (real estate), **Cause** (nonprofit), **Practice** (clinic), **Form** (fitness studio), and **Encore** (band & artist). The Appearance screen lets you try any of them on *your own pages* — with device widths and a light/dark toggle — before committing, and a customizer exposes each theme's colors and fonts as live controls. Your tweaks survive theme updates.
 
+## Sites running plain
+
+| Site | What it is | What it shows |
+| ---- | ---------- | ------------- |
+| [plain-cms.com](https://plain-cms.com) | the project's own website | the default theme, published in four languages (en / de / fr / ro) |
+| [plain-cms.github.io/plain](https://plain-cms.github.io/plain) | the live demo | this repo's sample content, built and deployed by the workflow in `.github/workflows/` |
+| [angjobs.com](https://angjobs.com) | a job board | a custom `jobs` collection and a custom theme, deployed to its own server instead of GitHub Pages |
+| [victorantos.com](https://victorantos.com) | personal portfolio + blog | the **Terminal** starter with landing-page sections (features, testimonials, FAQ) |
+| [antofica.com](https://antofica.com) | a personal blog in five languages | Romanian, English, Russian, German and French from one repo of sibling `.md` files |
+
+Built something with plain? Open a pull request adding it to this list.
+
 ## Plugins
 
 A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved — link a theme search box straight to `/search/?q=…`) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim — plus **api-form** (forms declared in config, POSTing to your own backend via the `"services"` map) and **goatcounter** (opt-in page-view counts). Good first plugins: giscus comments, image gallery, table of contents.
