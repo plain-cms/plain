@@ -21,7 +21,7 @@ Your whole website is a folder of plain files: Markdown for content, JSON for se
 - **No database, no server, nothing to patch.** All state lives in this repo.
 - **Vanilla by design.** No frameworks, no bundlers. One dependency: [`marked`](https://github.com/markedjs/marked). The entire engine is a few small, readable files.
 - **Works without JavaScript.** JS is progressive enhancement only.
-- **AI-operable.** Deterministic layout, machine-readable content model, and a [`CLAUDE.md`](CLAUDE.md) so agents (or Claude Code) can edit content, add collections, and write plugins safely.
+- **AI-operable.** Deterministic layout, a machine-readable content model, and [Claude Code skills in the box](#writing-from-your-terminal) so “write a post about X” is a one-line job that ends in a verified build.
 
 ![The admin sidebar, with the post list for a collection](.github/screenshot-admin.png)
 
@@ -78,6 +78,40 @@ Body in **Markdown**. Images by path: ![A lake](/media/lake.jpg)
 ```
 
 Set `draft: true` and the post is saved but not published. Pages work the same in `content/pages/` (`about.md` → `/about/`; `index.md` is the homepage). Menus live in `data/navigation.json`; renamed URLs get an entry in `data/redirects.json`.
+
+## Writing from your terminal
+
+Your site is a folder of files, so an AI coding agent can run it. Open the repo
+in [Claude Code](https://claude.com/claude-code) and say what you want:
+
+> *"Write a post about the three things I learned launching this site, then publish it."*
+
+Every site made from this template ships three skills in `.claude/skills/`, which
+Claude Code picks up automatically:
+
+| Skill | What it knows how to do |
+| ----- | ----------------------- |
+| **plain-post** | write, edit, publish, unpublish, or translate a post or page |
+| **plain-site** | images, the menu, the footer, settings, redirects, themes, plugins, languages, deploys |
+| **plain-extend** | add a field or a whole content type, a landing page, a plugin, a starter |
+
+They are recipes, not magic. `plain-post` tells the agent to read your
+collection's fields out of `site.config.json` before writing a line, so the
+frontmatter is right the first time; to keep filenames as slugs, because the
+filename *is* the URL; to add a redirect whenever a URL changes; and to run the
+tests and a build before anything is committed. If the content is wrong, the
+build stops with the file, the line, the problem, and the fix — so a bad post
+never reaches your readers.
+
+What you'll see: the agent writes the Markdown file, runs `node --test tests/`
+and `node build.js`, and shows you the result. **Publishing is still your call** —
+the permission allowlist in `.claude/settings.json` covers building and
+inspecting, never `git commit` or `git push`. Say the word and it commits with
+the same message style the admin uses (`post: publish "Title"`), pushes, and your
+site is live about thirty seconds later.
+
+Using a different agent? The skills are plain Markdown — point any tool at
+`.claude/skills/` and it gets the same instructions.
 
 ## Themes & starters
 
@@ -140,12 +174,13 @@ media/             images and files
 themes/            fifteen starters ship in the box; add your own
 plugins/           a plugin is a folder; install = copy + enable in config
 admin/             the browser editor (static, vanilla ES modules)
+.claude/skills/    recipes for Claude Code: write a post, run the site, extend it
 tools/migrate/     importers (Jekyll, VuePress, Joomla)
 workers/oauth/     optional "Sign in with GitHub" worker (v1 uses a token)
 build.js + lib/    the whole engine — under 2,500 lines, one dependency, MIT
 ```
 
-The full product specification lives in [`cms-spec.md`](cms-spec.md); instructions for AI agents (and how to add collections, plugins, themes) in [`CLAUDE.md`](CLAUDE.md). To contribute, read [`CONTRIBUTING.md`](CONTRIBUTING.md).
+The full product specification lives in [`cms-spec.md`](cms-spec.md); instructions for AI agents (and how to add collections, plugins, themes) in [`CLAUDE.md`](CLAUDE.md) and [`.claude/skills/`](.claude/skills/). To contribute, read [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 

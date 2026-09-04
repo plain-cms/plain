@@ -111,6 +111,9 @@ Dynamic needs (contact forms, comments) are plugins that point at third-party en
 │   ├── admin.css
 │   └── js/                  # es modules: github.js, editor.js, media.js, ai.js, app.js
 ├── tests/                   # node:test golden-file tests
+├── .claude/
+│   ├── settings.json        # permission allowlist: build, test, inspect
+│   └── skills/              # plain-post, plain-site, plain-extend (§8.4)
 └── .github/workflows/
     └── build-deploy.yml     # build + deploy to Pages on push to main
 ```
@@ -292,6 +295,7 @@ Every AI action shows a diff-style before/after and requires an explicit "Apply"
 ### 8.4 Agent-facing AI (the deeper half)
 
 - `CLAUDE.md` at repo root: how content is structured, how to add a collection, how to write a plugin, the schema of `site.config.json`, the rule "run `node build.js` and `node --test` before committing".
+- **Skills at `.claude/skills/`** — the terminal half of "AI is the admin". `CLAUDE.md` is the engine reference and is loaded in full, every session; a person whose repo is their *blog* needs a recipe instead, and shouldn't pay for the plugin hook API in context to get it. Three skills load only when the task matches: `plain-post` (write / edit / publish / unpublish / translate), `plain-site` (media, menu, settings, redirects, theme, plugins, languages, deploys), `plain-extend` (fields, collections, layouts, plugins, starters, upgrades, imports). Each ends at the same gate the humans use — `node --test tests/` then `node build.js` — so "write a post about X" ends with a verified build, not just a file. `.claude/settings.json` ships a build-and-inspect permission allowlist (never commit, never push: publishing stays the user's call). Both are engine-owned, so an existing site gains them on its next update PR, and `tests/skills.test.js` fails the build when a skill names a path or script that no longer exists.
 - Because content = files, **any** agent workflow works with zero integration: Claude Code writing a weekly post, an Action that drafts a changelog PR, a scheduled agent updating a prices page. The spec should state this as an explicit supported use case, and `tests/` must protect it: an agent that breaks the schema gets a failing build with a clear message, not a broken site.
 
 ---

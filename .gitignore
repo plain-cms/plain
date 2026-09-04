@@ -7,3 +7,4 @@ tests/.tmp-update/
 tests/.tmp-jekyll/
 tests/.tmp-base/
 tests/.tmp-fallback/
+.claude/settings.local.json
