@@ -134,6 +134,7 @@ Fifteen starters ship in the box: **Journal** (blog), **Toolbox** (trades & loca
 | [angjobs.com](https://angjobs.com) | a job board | a custom `jobs` collection and a custom theme, deployed to its own server instead of GitHub Pages |
 | [victorantos.com](https://victorantos.com) | personal portfolio + blog | the **Terminal** starter with landing-page sections (features, testimonials, FAQ) |
 | [antofica.com](https://antofica.com) | a personal blog in five languages | Romanian, English, Russian, German and French from one repo of sibling `.md` files |
+| [niche.careers](https://niche.careers) | a SaaS landing site | data-only collections (`render: false`) composing a single landing page, and `api-form` posting leads to its own backend |
 
 Built something with plain? Open a pull request adding it to this list.
 
