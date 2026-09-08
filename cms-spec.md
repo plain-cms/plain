@@ -366,6 +366,7 @@ plugins/search/
 ├── index.js         # build-time hooks (optional)
 └── client.js        # browser module (optional), auto-injected
 └── client.css       # (optional), auto-injected
+└── admin.js         # admin screens (optional), imported on demand
 ```
 
 `plugin.json`:
@@ -394,6 +395,12 @@ export default {
 
 Rules: plugins read options from `site.config.json` under `pluginOptions.<name>`; a throwing plugin fails the build with its name in the error; client assets are injected into `base.html` automatically in config order. Document the hook API exhaustively in `CLAUDE.md` — it is the AI extension surface.
 
+**Admin screens.** A plugin may also contribute a screen to the admin, declared as `"admin": { "js": "admin.js", "screens": [{ "id": "ops", "label": "Operations" }] }`. This exists because `admin/` is engine-owned and replaced wholesale on upgrade (§14.1): without it, every view over a site's own backend data would have to be merged into core by the upstream author, which does not scale and cannot be done by a site owner at all. The build publishes `admin.js` to `/plugins/<name>/admin.js` and lists the screens in `api/site.json`; the admin builds its sidebar and routes from that list and imports the module when a screen is first opened.
+
+`admin.js` default-exports `{ screens: { <id>: (ctx) => Element } }`. The context carries `h` (the admin's element helper — it sets strings as `textContent`, so backend data is inert), `dataScreen(spec)` (resolve a named service, fetch it with the operator's GitHub sign-in, and get loading, 401 re-prompting, error and refresh handling for free), `siteInfo`, and the plugin's resolved `options`. **A plugin is never handed the GitHub token** — `dataScreen` uses it on the plugin's behalf, so an admin plugin cannot exfiltrate the operator's credential simply by being installed. `feedback` and `sales-analytics` ship their own screens this way and are the reference implementations.
+
+Because such a plugin runs code in the admin's origin rather than a visitor's page, its registry entry declares `runsAt: "admin"` and the Plugins screen flags it more loudly than a `client` plugin.
+
 Client code reads its options — and the site's named backend endpoints (§5.1 `"services"`) under the reserved `$services` key — from the injected plugin-options JSON; never hardcode a backend URL in a plugin:
 
 ```js
@@ -403,7 +410,7 @@ const base = (opts.$services || {}).backend;   // site.config.json "services"
 
 **Ships with:** `search` (enabled — a `/search/` page + input consuming `search-index.json`, no dependencies; it reads `?q=` on arrival and keeps the URL in step as you type, so a theme can point a plain `<form action="/search/" method="get">` with a `q` field at it and searches stay shareable), `contact-form` (disabled reference — progressive-enhancement form POSTing to a configurable endpoint), `reading-time` (disabled — `transformContent` adding `item.readingTime`), `api-form` (disabled — forms declared in config, POSTing to a named service; works without JavaScript when the backend accepts regular form posts), and `goatcounter` (disabled — opt-in page-view counts; loads a third-party script, so never enabled by default). Good first community plugins to list in README: giscus comments, image gallery, table of contents.
 
-**Optional plugins & the registry (§10.6).** Beyond the built-ins, community plugins install from a **curated** registry (`plain-cms/plugins`, mirroring the starters registry) via the admin's **Plugins** screen (`admin/js/plugins.js`): Install copies the plugin folder into `plugins/<id>/` and enables it in `site.config.json` — one commit; Configure edits `pluginOptions.<id>`; Remove reverses both. Built-in plugins that ship in `plugins/` but aren't enabled — one added by an engine update, or any where the site overrides the `plugins` list — are listed under **Built-in — not enabled** with a one-click **Enable**. Because a plugin runs code (`index.js` in the build/CI, `client.js` in visitors' browsers), each registry entry declares `runsAt` (`client` | `build` | `both`) and the admin shows provenance (author, source repo) with a "plugins run code" note. Installed community plugins are user-owned (never in `engine.json`) and survive upgrades. Starters may bundle plugins by id (`starter.json` `"plugins"`, §10.3).
+**Optional plugins & the registry (§10.6).** Beyond the built-ins, community plugins install from a **curated** registry (`plain-cms/plugins`, mirroring the starters registry) via the admin's **Plugins** screen (`admin/js/plugins.js`): Install copies the plugin folder into `plugins/<id>/` and enables it in `site.config.json` — one commit; Configure edits `pluginOptions.<id>`; Remove reverses both. Built-in plugins that ship in `plugins/` but aren't enabled — one added by an engine update, or any where the site overrides the `plugins` list — are listed under **Built-in — not enabled** with a one-click **Enable**. Because a plugin runs code (`index.js` in the build/CI, `client.js` in visitors' browsers), each registry entry declares `runsAt` (`client` | `build` | `both` | `admin`) and the admin shows provenance (author, source repo) with a "plugins run code" note. Installed community plugins are user-owned (never in `engine.json`) and survive upgrades. Starters may bundle plugins by id (`starter.json` `"plugins"`, §10.3).
 
 ---
 

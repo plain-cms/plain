@@ -229,7 +229,8 @@ plugins/my-plugin/
 ├── plugin.json     # manifest (required)
 ├── index.js        # build-time hooks (optional)
 ├── client.js       # browser module, auto-injected into every page (optional)
-└── client.css      # stylesheet, auto-injected into every page (optional)
+├── client.css      # stylesheet, auto-injected into every page (optional)
+└── admin.js        # admin screens this plugin contributes (optional)
 ```
 
 `plugin.json`:
@@ -241,13 +242,14 @@ plugins/my-plugin/
   "description": "One sentence.",
   "hooks": ["transformContent"],
   "client": { "js": "client.js", "css": "client.css" },
+  "admin": { "js": "admin.js", "screens": [{ "id": "ops", "label": "Operations" }] },
   "options": { "someOption": "default value" }
 }
 ```
 
 Only `name`, `version`, `description` are required. `hooks` is documentation (the loader inspects `index.js` itself). Declare `client` entries only for files that exist. An optional `note` string is shown on the plugin's admin card — use it to state a prerequisite (e.g. language-switcher's "needs 2+ languages — set them in Settings").
 
-**Installing from the registry.** Authoring a plugin needs no registry — but for *sharing*, the admin's **Plugins** screen (`admin/js/plugins.js`) installs community plugins from the curated `plain-cms/plugins` registry: Install copies the folder into `plugins/<id>/` + enables it in `site.config.json` (one commit), Configure edits `pluginOptions.<id>`, Remove reverses both. It also surfaces **built-in plugins present in `plugins/` but not enabled** (a new one shipped by an update, or any where the site's own `plugins` array overrides the defaults) with a one-click **Enable**. Registry entries carry `runsAt` (`client`|`build`|`both`) + `author` so the UI shows where a plugin runs and its provenance (plugins are code — the screen says so). Community plugins are user-owned (never in `engine.json`) and survive upgrades. Starters bundle plugins by id (see Themes & starters); `admin/js/appearance.js` `applyStarter()` fetches any that aren't already installed.
+**Installing from the registry.** Authoring a plugin needs no registry — but for *sharing*, the admin's **Plugins** screen (`admin/js/plugins.js`) installs community plugins from the curated `plain-cms/plugins` registry: Install copies the folder into `plugins/<id>/` + enables it in `site.config.json` (one commit), Configure edits `pluginOptions.<id>`, Remove reverses both. It also surfaces **built-in plugins present in `plugins/` but not enabled** (a new one shipped by an update, or any where the site's own `plugins` array overrides the defaults) with a one-click **Enable**. Registry entries carry `runsAt` (`client`|`build`|`both`|`admin`) + `author` so the UI shows where a plugin runs and its provenance (plugins are code — the screen says so). Community plugins are user-owned (never in `engine.json`) and survive upgrades. Starters bundle plugins by id (see Themes & starters); `admin/js/appearance.js` `applyStarter()` fetches any that aren't already installed.
 
 `index.js` default-exports an object of hooks. All are optional; each may be sync or async. **Every hook receives the plugin's resolved options as its last argument** (manifest `options` overridden by the site's `pluginOptions.<name>` in `site.config.json`):
 
@@ -282,6 +284,48 @@ Rules:
 - The build also emits `search-index.json` (`[{url, title, description, tags, text}]`) — plugins may consume it.
 - Study `plugins/search/` (afterBuild + client), `plugins/contact-form/` (renderPage + options), and `plugins/api-form/` (config-declared forms POSTing to a named service, `services` + progressive enhancement) as reference implementations.
 - `plugins/backend-admin/` is a parked **user-owned** draft (the victorantos.com backend dashboard) awaiting migration to that site's repo — not engine-owned, not in `engine.json`, never enabled in this repo's config.
+
+### Admin screens (`admin.js`)
+
+A plugin can add its own screen to the admin — a sidebar link and a route —
+without touching `admin/`, which is engine-owned and replaced wholesale on
+upgrade (§14.1). Declare it in the manifest and export it from `admin.js`:
+
+```js
+export default {
+  screens: {
+    ops: ({ h, dataScreen, siteInfo, options }) => dataScreen({
+      title: 'Operations',
+      path: '/applications',
+      service: options.service || 'backend',   // a name from "services", never a URL
+      hint: 'Shown if the backend rejects your sign-in.',
+      render: (data) => h('ul', {}, data.items.map((i) => h('li', {}, i.title))),
+    }),
+  },
+};
+```
+
+The screen id becomes the route (`#/ops`) and the sidebar link. The context is:
+
+- `h(tag, attrs, ...children)` — the same element helper the admin uses. It sets
+  strings as `textContent`, so backend data is inert in the DOM; no escaping needed.
+- `dataScreen(spec)` — resolves a named service, fetches with the operator's
+  GitHub sign-in (falling back to a pasted backend token), and handles loading,
+  401 re-prompting, errors and a Refresh button. **A plugin never receives the
+  GitHub token itself** — `dataScreen` uses it on the plugin's behalf.
+- `siteInfo` — the parsed `api/site.json`.
+- `options` — the plugin's resolved options.
+
+A screen may also return a plain element built with `h` if it needs no backend.
+
+`admin.js` is published to `/plugins/<name>/admin.js` like a client asset but is
+**never injected into the published site** — the admin imports it on demand when
+its screen is first opened. Two shipped plugins are the reference: `feedback`
+and `sales-analytics`.
+
+Because an admin screen runs in the admin's origin, registry entries for such a
+plugin must declare `"runsAt": "admin"` (see the registry note above) — it is
+strictly more sensitive than a `client` plugin.
 
 **Checklist for a new plugin:** create the folder + `plugin.json` (+ `index.js`/client files) → add its name to `"plugins"` in `site.config.json` → `node build.js` → check the output in `dist/` → `node --test tests/`.
 
