@@ -14,6 +14,43 @@ import { h } from './ui.js';
 import { auth } from './github.js';
 
 const TOKEN_KEY = 'plain.backend.token';   // fallback static token for backends not in GitHub mode
+
+// The one place either credential is read. A pasted backend token wins when
+// present (static-token backends); otherwise the GitHub sign-in is used.
+function backendToken() {
+  try { return localStorage.getItem(TOKEN_KEY) || auth.token; } catch { return auth.token; }
+}
+
+/**
+ * Call a named service with the operator's credentials attached, and hand back
+ * the raw Response.
+ *
+ * `dataScreen` covers reading. This covers everything else — uploading a file,
+ * deleting a record — which a screen otherwise could not do, because a plugin
+ * is deliberately never given the GitHub token. It gets this instead: the
+ * credential is attached here and never exposed to the caller.
+ *
+ * Content-Type is left alone so a FormData body keeps its multipart boundary;
+ * set it yourself for JSON.
+ *
+ * @param {object} siteInfo   parsed api/site.json
+ * @param {string} path       path on the service, e.g. '/api/admin/cv/'
+ * @param {object} [init]     fetch init, plus `service` (default 'backend')
+ * @returns {Promise<Response>}
+ */
+export async function apiFetch(siteInfo, path, { service = 'backend', headers, ...init } = {}) {
+  const api = (siteInfo.services || {})[service] || '';
+  if (!api) throw new Error(`No "${service}" service is set — add it to "services" in site.config.json.`);
+  const token = backendToken();
+  const response = await fetch(`${api}${path}`, {
+    ...init,
+    headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(headers || {}) },
+  });
+  if (response.status === 401 || response.status === 403) {
+    throw new Error('Your backend refused that request — sign in again, or set its admin token on a screen that reads from it.');
+  }
+  return response;
+}
 const num = (n) => Number(n || 0).toLocaleString('en-US');
 const pct = (a, b) => `${b ? Math.round((a / b) * 1000) / 10 : 0}%`;
 const when = (s) => { const d = new Date(s); return isNaN(d) ? String(s || '') : d.toLocaleString(); };
@@ -52,8 +89,7 @@ export function dataScreen(siteInfo, { title, path, hint, render, service = 'bac
   }
   async function load() {
     body.replaceChildren(h('p', { class: 'muted' }, 'Loading…'));
-    // Prefer a manually-pasted token (static-token backends); else the GitHub login token.
-    let token = auth.token; try { token = localStorage.getItem(TOKEN_KEY) || auth.token; } catch { /* private mode */ }
+    const token = backendToken();
     try {
       const res = await fetch(`${api}${path}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
       if (res.status === 401 || res.status === 403) return askToken();
