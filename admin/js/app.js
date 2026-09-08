@@ -11,7 +11,7 @@ import { aiSettings } from './ai.js';
 import { appearanceScreen } from './appearance.js';
 import { pluginsScreen, pluginUpdatesCard } from './plugins.js';
 import { backendScreen } from './backend.js';
-import { dataScreen } from './backend-data.js';
+import { dataScreen, apiFetch } from './backend-data.js';
 import { wizardScreen } from './wizard.js';
 
 let siteInfo = null;             // parsed /api/site.json (schema + site block)
@@ -427,6 +427,7 @@ async function pluginScreen(entry) {
     h,
     siteInfo,
     dataScreen: (spec) => dataScreen(siteInfo, spec),
+    apiFetch: (path, init) => apiFetch(siteInfo, path, init),
     options: (siteInfo?.pluginOptions || {})[entry.plugin] || {},
   }));
 }

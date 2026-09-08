@@ -17,6 +17,18 @@ const withAdmin = (dir) => ({
   manifest: { admin: { js: 'admin.js', screens: [{ id: 'ops', label: 'Operations' }] } },
 });
 
+
+/** Load backend-data.js with just enough browser to import cleanly. */
+async function loadBackendData(store) {
+  globalThis.localStorage = {
+    getItem: (k) => (k in store ? store[k] : null),
+    setItem: (k, v) => { store[k] = String(v); },
+    removeItem: (k) => { delete store[k]; },
+  };
+  globalThis.document = { createElement: () => ({ setAttribute() {}, append() {}, addEventListener() {} }) };
+  return import(`../admin/js/backend-data.js?t=${Math.random()}`);
+}
+
 test('a plugin can declare an admin screen', () => {
   const screens = adminScreens([withAdmin('/nowhere')]);
   assert.deepEqual(screens, [
@@ -58,4 +70,39 @@ test('the shipped feedback and sales-analytics plugins declare their screens', (
   const read = (n) => JSON.parse(fs.readFileSync(new URL(`../plugins/${n}/plugin.json`, import.meta.url), 'utf8'));
   assert.deepEqual(read('feedback').admin.screens, [{ id: 'feedback', label: 'Feedback' }]);
   assert.deepEqual(read('sales-analytics').admin.screens, [{ id: 'insights', label: 'Insights' }]);
+});
+
+// --- apiFetch: the write half of the plugin API ---------------------------
+// It is deliberately not a screen factory: a plugin gets a function that
+// attaches the operator's credential, never the credential itself.
+
+test('apiFetch resolves the named service and attaches the credential', async () => {
+  const { apiFetch } = await loadBackendData({ 'plain.token': 'gho_abc' });
+  const calls = [];
+  globalThis.fetch = async (url, init) => { calls.push({ url, init }); return new Response('{}', { status: 200 }); };
+
+  await apiFetch({ services: { ops: 'https://ops.test' } }, '/applications', { service: 'ops' });
+  assert.equal(calls[0].url, 'https://ops.test/applications');
+  assert.equal(calls[0].init.headers.Authorization, 'Bearer gho_abc');
+});
+
+test('apiFetch leaves Content-Type alone so FormData keeps its boundary', async () => {
+  const { apiFetch } = await loadBackendData({ 'plain.token': 't' });
+  let seen;
+  globalThis.fetch = async (_url, init) => { seen = init; return new Response('{}', { status: 200 }); };
+
+  await apiFetch({ services: { backend: 'https://b.test' } }, '/cv/', { method: 'POST', body: 'x' });
+  assert.equal(seen.headers['Content-Type'], undefined);
+  assert.equal(seen.method, 'POST');
+});
+
+test('apiFetch names an unset service instead of fetching undefined', async () => {
+  const { apiFetch } = await loadBackendData({});
+  await assert.rejects(() => apiFetch({ services: {} }, '/x', { service: 'ops' }), /No "ops" service is set/);
+});
+
+test('apiFetch turns a refused request into a readable error', async () => {
+  const { apiFetch } = await loadBackendData({ 'plain.token': 't' });
+  globalThis.fetch = async () => new Response('', { status: 403 });
+  await assert.rejects(() => apiFetch({ services: { backend: 'https://b.test' } }, '/x'), /refused that request/);
 });

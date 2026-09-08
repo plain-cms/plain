@@ -313,6 +313,11 @@ The screen id becomes the route (`#/ops`) and the sidebar link. The context is:
   GitHub sign-in (falling back to a pasted backend token), and handles loading,
   401 re-prompting, errors and a Refresh button. **A plugin never receives the
   GitHub token itself** — `dataScreen` uses it on the plugin's behalf.
+- `apiFetch(path, init)` — call the same service for anything that is not a
+  plain read: `apiFetch('/api/admin/cv/', { method: 'POST', body: formData })`
+  returns the raw `Response`. It attaches the operator's credential and throws a
+  readable error on 401/403; the plugin still never sees the token.
+  `Content-Type` is left alone so a `FormData` body keeps its boundary.
 - `siteInfo` — the parsed `api/site.json`.
 - `options` — the plugin's resolved options.
 
