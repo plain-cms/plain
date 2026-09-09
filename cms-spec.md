@@ -535,6 +535,8 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 
 **14.2 Engine manifest.** Each release ships `engine.json`: `{ "version": "1.4.2", "files": { "lib/content.js": "<sha256>", … } }`. Because engine files are never hand-edited, the updater **replaces them wholesale** — no three-way merge, so no conflicts are possible. Files whose hash doesn't match the installed manifest were modified by the user: the updater leaves them, lists them in the PR as "locally modified, needs manual/AI merge", and continues.
 
+A release may also bring a path under engine ownership that sites already have their own copy of. The installed manifest holds no hash for it, so the "did the user edit this?" test has nothing to compare against and would read every such file as modified — stranding the tree it was meant to deliver. The updater takes upstream's copy instead and lists these apart, as "newly engine-owned"; the PR diff still shows every byte, and reverting rolls it back. Because the updater that runs an upgrade is the *installed* one, this rule only reaches releases after the one introducing it — an ownership change ships with a migration (14.4) to cover its own transition.
+
 **14.3 Config never conflicts.** The engine reads `config.defaults.json` (engine-owned) deep-merged under the user's sparse `site.config.json`. New features arrive with working defaults without ever writing to the user's file.
 
 **14.4 Migrations.** Breaking changes ship as idempotent scripts in `migrations/NNN-description.js` (plain Node, no deps). The updater runs every migration between the installed and target version — e.g. renaming a config key, moving a folder. `engine.json` records the last applied migration.
