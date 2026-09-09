@@ -1,5 +1,5 @@
 {
-  "version": "1.20.1",
+  "version": "1.20.2",
   "migration": 1,
   "files": {
     ".claude/settings.json": "0e9f0c421e52d76094df3135e7103785d788ac4499b76684a905001d9ea42e6b",
@@ -35,7 +35,7 @@
     "lib/util.js": "4289864d171420a33924b66ee014da635720ed391bb8e2a26a6f60acbe0d6f70",
     "migrations/001-adopt-engine-tests.js": "8c5e758e7b7d9b31a353366b75dc74e9eb275d77b3ee7face6b0f2bbcf0dc209",
     "migrations/README.md": "a81001cc60e3024a5858894af766c2dd0c1ea8b64c57b52ffaf8dcc3ba371a33",
-    "package.json": "b290a13ae8aab62a00664643de76768ca59e5673e46461adfb66f2aaa0db01b7",
+    "package.json": "3614a1cbc13d1d9f12cfa907d9b2ac7dc5b6ebd47dc685b65a27feae310e3ec6",
     "plugins/api-form/client.css": "da4733c33816d8705e6f316c6c487cd98766dcd0d3fb322d0547b0ada93ac2a7",
     "plugins/api-form/client.js": "a25f07c6feaeca54e77f2247387b2e06a493f26bf1307dab33a3ef1ce0f30c8d",
     "plugins/api-form/index.js": "110d29f1439a2671e60cb83036b8a415d270dace64ce155ecc29e4d0188e9957",
@@ -139,7 +139,7 @@
     "tests/plugin-admin.test.js": "8c0000bf3addea6e19052d97700d532ca413dd35e9fb994204c8242254ec1aaf",
     "tests/plugins.test.js": "f3581f4656bc5d56c61b3a566622aba08412753d2a3d2cfdad632030451fbcac",
     "tests/sales-analytics.test.js": "8d7c8c5d625acaea21a8947a01cd8d38057a24124734911dcfd4e9d606b23fc4",
-    "tests/skills.test.js": "6c7668b5a537fa1666db6fc3784808dc31a60591acc792455bd33ef05ab6a072",
+    "tests/skills.test.js": "9a462cd72c67b27097935ded3b972c78c2b3f3eaa769a37ff49b4d3ea7799834",
     "tests/template.test.js": "3902718402745c53b3f471b11b109cf5ee24282cb19115728bfe60e2168c8f09",
     "tests/update-goldens.js": "e16fda04bc1f5fe7e3da3022b417f6577a65fca6af6a51a5948ee38b55e21c34",
     "tests/update.test.js": "5ca83c5cf1e7f4168656151c7acfe076f9383244ad663be69917a24b8f8cb967",
