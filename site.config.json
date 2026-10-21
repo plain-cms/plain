@@ -74,6 +74,7 @@
   },
   "plugins": [
     "search",
+    "structured-data",
     "reading-time",
     "goatcounter",
     "language-switcher"
