@@ -232,7 +232,7 @@ Pipeline (target: < 2s for 500 pages):
 4. Render Markdown bodies with `marked` (GFM tables, code fences with language classes; external links get `rel="noopener"`; heading anchors auto-generated).
 5. Render each item through its template (see §6.1) into `dist/`, plus collection list pages with pagination (`page/2/`), plus tag pages for collections with `tags`.
 6. Run `renderPage(page, html, site)` hooks (plugins may post-process HTML — e.g., inject scripts).
-7. Emit outputs: `sitemap.xml`, `rss.xml` per RSS-enabled collection, `robots.txt`, `_redirects` (from `data/redirects.json`, Cloudflare/Netlify format) **and** meta-refresh HTML fallbacks for GitHub Pages, `404.html`.
+7. Emit outputs: `sitemap.xml`, `rss.xml` per RSS-enabled collection, `robots.txt`, `_redirects` (from `data/redirects.json`, Cloudflare/Netlify format) **and** meta-refresh HTML fallbacks for GitHub Pages, `404.html`. With `site.noindex: true` (a preview or staging site) every page carries `<meta name="robots" content="noindex">` and `robots.txt` names no sitemap.
 8. Emit the **static API**: `api/site.json` (config + nav), `api/<collection>/index.json` (all items, body as both markdown and rendered HTML), `api/<collection>/<slug>.json`.
 9. Emit `search-index.json` (slug, title, description, tags, plain-text body truncated to ~2000 chars) and `llms.txt` (site summary + link list, per the llms.txt convention).
 10. Copy `media/`, theme assets, admin folder, plugin client assets into `dist/`.
