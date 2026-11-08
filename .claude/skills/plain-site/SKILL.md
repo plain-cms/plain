@@ -122,6 +122,11 @@ files (`about.fr.md` → `/fr/about/`), menu labels come from
 `data/navigation.fr.json`, and UI strings from `data/strings.fr.json`. With one
 language the build is byte-identical to a site with no i18n at all.
 
+Dates print in each page's language code, so English pages read "July 5, 2026".
+For British or Irish style, map the language to a fuller locale in `site`:
+`"locales": { "en": "en-GB" }` (or `"en-IE"`). URLs and file suffixes keep `en`;
+only dates change. The key must be one of the site's languages.
+
 ## Publishing and checking a deploy
 
 ```sh
