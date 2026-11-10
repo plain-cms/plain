@@ -1,5 +1,5 @@
 ---
-title: Become a tutor
+title: Volunteer as a tutor
 description: Four evenings of training, one hour a week, one learner who keeps showing up because you do — no teaching background needed.
 example: true
 ---
@@ -23,6 +23,5 @@ we have never once needed a grammar expert.
 of preparation, for at least a year. Learners are asked to be brave;
 tutors are asked to be reliable. It's a fair trade.
 
-**Next training:** dates go to the waiting list first — email
-[volunteer@example.org](mailto:volunteer@example.org) and we'll hold you a
-seat.
+**Next training:** four evenings in January, April, July, and October.
+Seats go to the waiting list first, so write early.

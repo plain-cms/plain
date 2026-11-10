@@ -1,18 +1,16 @@
 ---
 title: About Page & Chapter
-description: Founded by a librarian in 2011, run by two staff and 160 volunteers, audited in public — who we are and how we're accountable.
+description: Founded by a librarian in 2011, run by two staff and 160 volunteers, with accounts anyone can read — who we are and how we answer for the money.
 example: true
 ---
-
-*Replace with your organization's real story, people, and accounts. The
-accountability section matters most — donors trust what they can check.*
 
 Page & Chapter started in 2011 when a children's librarian noticed the same
 parents, week after week, memorizing picture books rather than reading them
 — and asked whether anyone taught adults. Nobody did. She did.
 
 Today we're two paid staff, 160 volunteer tutors, and around 380 active
-learners at five locations. The founder still tutors on Tuesdays.
+learners at five locations. Since that first winter, 1,142 adults have
+learned to read at our tables. The founder still tutors on Tuesdays.
 
 ## The people
 
@@ -24,8 +22,15 @@ it is just practice.
 
 ## Accountability
 
-Our accounts are filed publicly every year and summarized on one page: last
-year, 81p of every pound went to programs, 12p to fundraising, 7p to
-running the organization. The full accounts, our safeguarding policy, and
-our trustee list are available on request — and the answer to "can I visit
-a session?" is yes, with a learner's permission, always.
+Our accounts are filed publicly every year and summarized on one page. Last
+year, of every dollar we were given:
+
+| Share | Where it went |
+| --- | --- |
+| 81¢ | Programs — books, rooms, tutor training, childcare |
+| 12¢ | Fundraising |
+| 7¢ | Running the organization |
+
+The full accounts, our safeguarding policy, and our board list are available
+on request — and the answer to "can I visit a session?" is yes, with a
+learner's permission, always.

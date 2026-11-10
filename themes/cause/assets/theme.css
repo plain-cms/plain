@@ -2,7 +2,8 @@
    Trust through warmth and clarity: white page, charcoal ink, deep teal for
    action, and one warm ochre reserved for a single number. The signature is
    the homepage hero — one human photograph, one number, one verb — and the
-   restraint is the design: nothing decorative, everything content.
+   restraint is the design: nothing decorative, everything content. The
+   photograph is optional; without it the hero stands on the number alone.
    All design decisions live in the tokens below; restyle by editing tokens,
    never selectors (cms-spec.md §10.1). */
 
@@ -16,10 +17,14 @@
   --text-l: 1.3125rem;
   --text-xl: 1.625rem;
   --text-xxl: clamp(1.875rem, 4.5vw, 2.5rem);
-  --text-impact: clamp(3.5rem, 10vw, 5.5rem);
+  --text-impact: clamp(4.5rem, 20vw, 12rem);
   --leading-body: 1.65;
+  --leading-lede: 1.45;
   --leading-tight: 1.15;
   --tracking-caps: 0.08em;
+  --tracking-display: -0.015em;
+  --weight-display: 700;
+  --weight-impact: 800;
 
   /* Color — light scheme */
   --color-bg: #ffffff;
@@ -42,6 +47,8 @@
   --space-5: 3.5rem;
   --hero-photo-height: clamp(16rem, 45vw, 26rem);
   --radius: 6px;
+  --rule-accent: 3px;
+  --focus-ring: 2px;
   --tap-target: 3rem;
 }
 
@@ -50,10 +57,10 @@
     --color-bg: #171c1b;
     --color-text: #e6e7e5;
     --color-muted: #a0a7a4;
-    --color-accent: #4fb3a7;
-    --color-accent-ink: #10201d;
-    --color-number: #e0a44b;
-    --color-border: #2c3432;
+    --color-accent: #45a599;
+    --color-accent-ink: #0d1a18;
+    --color-number: #e8ab4e;
+    --color-border: #303937;
     --color-panel: #1f2725;
     --color-photo: #26302e;
   }
@@ -76,15 +83,20 @@ body {
   background: var(--color-bg);
 }
 
-::selection { background: var(--color-panel); }
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+}
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: 2px; }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: var(--focus-ring) solid var(--color-accent);
+  outline-offset: var(--focus-ring);
 }
 
 .skip-link {
@@ -102,26 +114,30 @@ a:hover { text-decoration-thickness: 2px; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-3) 0;
+  gap: 0 var(--space-4);
+  padding: var(--space-2) 0;
   border-bottom: 1px solid var(--color-border);
 }
 
 .site-title {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
   font-family: var(--font-display);
   font-size: var(--text-l);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display);
   color: var(--color-text);
   text-decoration: none;
 }
 .site-title:hover { color: var(--color-accent); }
 
+.masthead nav { flex: 1 1 auto; }
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-3);
+  gap: 0 var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -135,31 +151,41 @@ a:hover { text-decoration-thickness: 2px; }
   min-height: var(--tap-target);
 }
 .masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
-.masthead nav a[aria-current="page"] { color: var(--color-text); font-weight: 600; }
+.masthead nav a[aria-current="page"] { color: var(--color-text); font-weight: var(--weight-display); }
 
 /* The last navigation entry is the action (Donate in the starter): it wears
-   the button. */
+   the button and sits at the far edge, apart from the links. */
+.masthead nav li:last-child { margin-left: auto; }
 .masthead nav li:last-child a {
   background: var(--color-accent);
   color: var(--color-accent-ink);
   padding: 0 var(--space-3);
   border-radius: var(--radius);
-  font-weight: 600;
-  min-height: calc(var(--tap-target) - 0.5rem);
+  font-weight: var(--weight-display);
+  min-height: calc(var(--tap-target) - var(--space-2));
 }
 .masthead nav li:last-child a:hover { text-decoration: none; filter: brightness(1.08); }
-.masthead nav li:last-child a[aria-current="page"] { color: var(--color-accent-ink); }
+.masthead nav li:last-child a[aria-current="page"] {
+  color: var(--color-accent-ink);
+  text-decoration: underline;
+  text-decoration-thickness: var(--focus-ring);
+  text-underline-offset: 0.3em;
+}
 
 main { min-height: 60vh; }
 
 .colophon {
+  display: grid;
+  gap: var(--space-2) var(--space-5);
   margin-top: var(--space-5);
-  padding: var(--space-3) 0 var(--space-4);
+  padding: var(--space-4) 0;
   border-top: 1px solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
 }
-.colophon-prompt { margin: var(--space-2) 0 0; }
+.colophon p { margin: 0; }
+.colophon strong { color: var(--color-text); }
+.colophon a { white-space: nowrap; }
 
 /* Buttons ----------------------------------------------------------------- */
 
@@ -172,102 +198,119 @@ main { min-height: 60vh; }
   background: var(--color-accent);
   color: var(--color-accent-ink);
   border-radius: var(--radius);
-  font-weight: 600;
+  font-weight: var(--weight-display);
   text-decoration: none;
 }
 .btn-donate:hover { filter: brightness(1.08); text-decoration: none; }
 .btn-large { font-size: var(--text-l); }
 
-.donate-prompt { color: var(--color-muted); font-size: var(--text-s); margin-left: var(--space-2); }
+.donate-prompt { color: var(--color-muted); font-size: var(--text-s); }
 
-/* Hero — one photograph, one number, one verb ------------------------------ */
+/* Hero — one photograph, one number, one verb ------------------------------
+   The number is the only loud thing on the site; the headline steps down
+   beside it. With no photograph the number takes the wide column the photo
+   would, and a figure too long for that column takes the whole row; one too
+   long for the row breaks onto a second line rather than spilling off the
+   page. Beside a photograph it shrinks to fit its narrow column. */
 
-.hero { margin: var(--space-4) 0 var(--space-5); }
+.hero {
+  margin: var(--space-5) 0;
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
 
 .hero-photo {
-  margin: 0;
+  position: relative;
+  margin: 0 0 var(--space-4);
   height: var(--hero-photo-height);
   background: var(--color-photo);
   border-radius: var(--radius);
   overflow: hidden;
 }
-.hero-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 
-.impact {
-  margin: var(--space-4) 0 0;
-  line-height: 1;
-}
+.impact { margin: 0 0 var(--space-4); }
 .impact-number {
   display: block;
+  margin-left: -0.04em;
   font-family: var(--font-display);
   font-size: var(--text-impact);
-  font-weight: 800;
-  letter-spacing: -0.02em;
+  font-weight: var(--weight-impact);
+  line-height: 0.9;
+  letter-spacing: calc(var(--tracking-display) * 2);
   color: var(--color-number);
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: lining-nums;
+  overflow-wrap: break-word;
 }
+.hero-has-photo .impact { container-type: inline-size; }
+.hero-has-photo .impact-number { font-size: min(var(--text-impact), 24cqi); }
 .impact-what {
   display: block;
-  margin-top: var(--space-2);
-  font-size: var(--text-l);
-  color: var(--color-text);
-}
-
-.hero-mission { max-width: var(--measure); margin-top: var(--space-4); }
-.hero-mission h1 {
-  font-family: var(--font-display);
-  font-size: var(--text-xxl);
+  margin-top: var(--space-3);
+  font-size: var(--text-xl);
   line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
-  margin: 0 0 var(--space-2);
   text-wrap: balance;
 }
-.mission { font-size: var(--text-l); color: var(--color-muted); margin: 0 0 var(--space-3); }
+.impact-unit { color: var(--color-muted); }
+.impact-verb { font-weight: var(--weight-display); letter-spacing: var(--tracking-display); }
 
-.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-3) 0 0; }
+.hero-mission { max-width: var(--measure); }
+.hero-mission h1 { font-size: var(--text-xxl); margin: 0 0 var(--space-3); }
+.mission { font-size: var(--text-l); line-height: var(--leading-lede); margin: 0; }
+.hero-has-stat h1 { font-size: var(--text-xl); margin-bottom: var(--space-2); }
+.hero-has-stat .mission { font-size: var(--text-m); line-height: var(--leading-body); }
+
+.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; }
 
 @media (min-width: 900px) {
-  .hero {
+  .hero .impact, .hero .hero-photo { margin-bottom: 0; }
+  .hero-has-stat, .hero-has-photo { gap: var(--space-4) var(--space-5); }
+
+  /* Number and mission share a row while the number fits three fifths. */
+  .hero-has-stat {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+  .hero-has-stat .impact { flex: 999 1 auto; min-width: 0; }
+  /* Only the figure decides whether the row is shared, never the words under it. */
+  .hero-has-stat .impact-what { width: 0; min-width: 100%; }
+  .hero-has-stat .hero-mission { flex: 1 0 calc((100% - var(--space-5)) * 0.4); }
+
+  .hero-has-photo {
     display: grid;
     grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
-    gap: var(--space-4) var(--space-5);
+    grid-template-rows: auto 1fr;
     align-items: end;
   }
-  .hero-photo { grid-row: 1 / span 2; }
-  .impact { margin-top: 0; }
-  .hero-mission { margin-top: 0; }
+  .hero-has-photo .hero-photo { grid-row: 1 / span 2; align-self: stretch; height: auto; min-height: var(--hero-photo-height); }
+  .hero-has-photo .impact { align-self: start; min-width: 0; }
+  .hero-has-photo .hero-mission { grid-row: 2; }
+  .hero-has-photo:not(.hero-has-stat) .hero-mission { grid-row: 1 / span 2; align-self: center; }
 }
 
 /* Headers ---------------------------------------------------------------- */
 
 .page-header { margin: var(--space-5) 0 var(--space-4); max-width: var(--measure); }
-
-.page-header h1 {
-  font-family: var(--font-display);
-  font-size: var(--text-xxl);
-  line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
-  margin: 0 0 var(--space-2);
-  text-wrap: balance;
-}
+.page-header h1 { font-size: var(--text-xxl); margin: 0; }
 
 .eyebrow {
   margin: 0 0 var(--space-1);
   font-size: var(--text-s);
-  font-weight: 600;
+  font-weight: var(--weight-display);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   color: var(--color-accent);
 }
 
-.lede { font-size: var(--text-l); color: var(--color-muted); margin: 0; }
+.lede { font-size: var(--text-l); line-height: var(--leading-lede); margin: var(--space-3) 0 0; }
 
 .meta, .post-date { color: var(--color-muted); font-size: var(--text-s); }
 
-.page-actions { margin: 0 0 var(--space-4); display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); }
+.page-actions { margin: 0 0 var(--space-4); display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-3) var(--space-4); }
 
-.tags { margin: var(--space-2) 0 0; }
-.tag { display: inline-block; margin-right: var(--space-2); color: var(--color-accent); text-decoration: none; }
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.tag { text-decoration: none; }
 .tag::before { content: "#"; opacity: 0.6; }
 .tag:hover { text-decoration: underline; }
 
@@ -275,13 +318,7 @@ main { min-height: 60vh; }
 
 .prose { max-width: var(--measure); }
 
-.prose h2, .prose h3, .prose h4 {
-  font-family: var(--font-display);
-  line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
-  margin: var(--space-4) 0 var(--space-2);
-  text-wrap: balance;
-}
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); }
 .prose h2 { font-size: var(--text-xl); }
 .prose h3 { font-size: var(--text-l); }
 
@@ -292,7 +329,7 @@ main { min-height: 60vh; }
 .prose blockquote {
   margin: var(--space-3) 0;
   padding: var(--space-2) var(--space-3);
-  border-left: 3px solid var(--color-accent);
+  border-left: var(--rule-accent) solid var(--color-accent);
   background: var(--color-panel);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
@@ -311,26 +348,41 @@ main { min-height: 60vh; }
   padding: var(--space-3);
   border-radius: var(--radius);
   overflow-x: auto;
-  line-height: 1.5;
+  line-height: var(--leading-lede);
 }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
+/* Tables are where a charity shows its sums: the first column is the figure
+   (a gift, a share, a year), set as a figure; the rest explains it. */
 .prose table {
   border-collapse: collapse;
   width: 100%;
-  margin: 0 0 var(--space-3);
+  margin: var(--space-4) 0;
   font-variant-numeric: tabular-nums;
+  border-top: 1px solid var(--color-border);
 }
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
+  vertical-align: baseline;
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
   border-bottom: 1px solid var(--color-border);
 }
-.prose th { font-size: var(--text-s); }
+.prose th:first-child, .prose td:first-child { padding-left: 0; white-space: nowrap; }
+.prose th {
+  font-size: var(--text-s);
+  font-weight: var(--weight-display);
+  color: var(--color-muted);
+}
+.prose td:first-child {
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: var(--weight-display);
+  letter-spacing: var(--tracking-display);
+}
 
 .prose hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-4) 0; }
 
-.cover { width: 100%; height: auto; border-radius: var(--radius); margin: 0 0 var(--space-4); }
+.cover { display: block; width: 100%; height: auto; border-radius: var(--radius); margin: 0 0 var(--space-4); }
 
 /* Program page ------------------------------------------------------------ */
 
@@ -339,40 +391,64 @@ main { min-height: 60vh; }
   margin: var(--space-5) 0 0;
   padding: var(--space-4);
   background: var(--color-panel);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius);
 }
-.get-involved h2 {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
-  margin: 0 0 var(--space-2);
-}
+.get-involved h2 { font-size: var(--text-xl); margin: 0 0 var(--space-2); }
 .get-involved p { margin: 0 0 var(--space-3); }
-.give-line { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2); margin: 0; }
+.get-involved a { overflow-wrap: anywhere; }
+.give-line { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2) var(--space-3); }
+.get-involved .give-line { margin: 0; }
 
 .back-link { margin: var(--space-4) 0 0; font-size: var(--text-s); }
 
+/* On a wide screen the ask sits beside the story, not under it. */
+@media (min-width: 900px) {
+  .program {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    column-gap: var(--space-5);
+  }
+  .program > * { grid-column: 1; }
+  .program > .page-header { grid-column: 1 / -1; }
+  .program > .get-involved {
+    grid-column: 2;
+    grid-row: 2 / span 3;
+    align-self: start;
+    position: sticky;
+    top: var(--space-4);
+    margin: 0;
+  }
+}
+
 /* Lists ------------------------------------------------------------------- */
 
-.entry-list { list-style: none; margin: 0; padding: 0; max-width: var(--measure); }
+.entry-list { list-style: none; margin: 0; padding: 0; }
 
 .entry-card { padding: var(--space-4) 0; border-top: 1px solid var(--color-border); }
-.entry-card:first-child { border-top: 0; }
 
 .entry-card time { color: var(--color-muted); font-size: var(--text-s); }
 
-.entry-card h2 {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
-  margin: var(--space-1) 0;
-  text-wrap: balance;
-}
-.entry-card h2 a { color: var(--color-text); text-decoration: none; }
-.entry-card h2 a:hover { color: var(--color-accent); text-decoration: underline; }
+.entry-card h2 { font-size: var(--text-xl); margin: 0 0 var(--space-2); }
+.entry-card h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); text-underline-offset: 0.2em; }
+.entry-card h2 a:hover { color: var(--color-accent); }
 
-.entry-card p { margin: 0; color: var(--color-muted); }
+.entry-card p { margin: 0; max-width: var(--measure); color: var(--color-muted); }
+
+/* Wide screens: name on the left, what it is on the right — a ledger row on
+   the same two columns as the hero, the program page and the footer. */
+@media (min-width: 900px) {
+  .entry-card article {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    column-gap: var(--space-5);
+    align-items: baseline;
+  }
+  .entry-card time, .entry-card h2 { grid-column: 1; }
+  .entry-card h2 { margin: 0; }
+  .entry-card p { grid-column: 2; grid-row: 1 / span 2; }
+  .colophon { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); }
+}
 
 .pagination {
   display: flex;
@@ -392,11 +468,27 @@ main { min-height: 60vh; }
 }
 
 @media print {
-  body { max-width: none; font-size: 11pt; color: #000; background: #fff; }
-  .masthead nav, .colophon, .skip-link, .btn-donate, .hero-actions,
-  .get-involved, .back-link, .pagination { display: none; }
-  a { color: inherit; }
-  .impact-number { color: #000; }
-  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-accent-ink: #000;
+    --color-number: #000;
+    --color-border: #999;
+    --color-panel: #fff;
+    --color-photo: #fff;
+  }
+  body { max-width: none; font-size: 11pt; }
+  main { min-height: 0; }
+  .masthead nav, .skip-link, .back-link, .pagination, .not-found .page-actions,
+  .btn-donate:not([href^="http"]) { display: none; }
+  /* A donate button that leaves the site prints as its address. */
+  .btn-donate { display: inline; padding: 0; background: none; font-size: inherit; }
+  .btn-donate::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-weight: 400; }
+  .get-involved { position: static; margin-top: var(--space-4); }
+  .hero-actions, .page-actions, .give-line { display: block; }
+  h1, h2, h3 { break-after: avoid; }
+  .entry-card, .get-involved, tr { break-inside: avoid; }
   .prose pre { white-space: pre-wrap; }
 }

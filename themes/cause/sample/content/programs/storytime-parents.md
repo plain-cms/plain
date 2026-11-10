@@ -12,7 +12,7 @@ Storytime flips the order. The learning materials are the child's own
 favorite books — memorized already, which turns out to be a superpower:
 when you know what the words say, learning to see *how* they say it comes
 twice as fast. Parents meet in pairs with a tutor while the children are in
-the library's story corner, ten meters and one glass wall away.
+the library's story corner, thirty feet and one glass wall away.
 
 **Who it serves:** parents and grandparents of under-eights, at any reading
 level. This is also our lowest-threshold program — many learners join here
@@ -22,6 +22,6 @@ and move to one-to-one tutoring once the fear is gone.
 central library and two school sites. No childcare needed — the children
 are the point.
 
-**What it costs us:** £3 per learner-hour, plus a copy of each learner's
+**What it costs us:** $3 per learner-hour, plus a copy of each learner's
 "graduation book" — the first one they read aloud at bedtime, theirs to
 keep.

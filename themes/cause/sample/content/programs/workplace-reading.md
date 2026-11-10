@@ -22,7 +22,7 @@ employers; nobody's boss is told who signed up beyond a headcount.
 hour a week per learner, reviewed with the employer quarterly on numbers
 only — never names.
 
-**What it costs us:** £2 per learner-hour after employer contributions —
+**What it costs us:** $2 per learner-hour after employer contributions —
 our cheapest program per learner, and the hardest to start. Introductions
 to employers are worth more than money here; if you can make one,
 [write to us](mailto:hello@example.org).
