@@ -120,8 +120,9 @@ enable any plugins it lists.
   site repo** — copy to a custom theme/plugin instead.
 - **If you change an engine file in this repo**, regenerate the manifest:
   `node tools/engine-manifest.js`.
-- **Import an old site:** `node tools/migrate/<source>.js <input>` (jekyll,
-  joomla, vuepress). Every importer must emit a complete old→new
+- **Import an old site:** `node tools/migrate/<source>.js <input>` (wordpress,
+  jekyll, joomla, vuepress; WordPress's input is its Tools → Export `.xml` file).
+  Every importer must emit a complete old→new
   `data/redirects.json` — silently changing URLs destroys SEO. The step-by-step
   guide is `tools/migrate/README.md`.
 

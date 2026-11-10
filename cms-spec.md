@@ -515,7 +515,7 @@ Shipped in core marked ★ (the original five launch starters, plus ten more bui
 
 **M6 — Open-source polish.** README with 5-minute quickstart + screenshots, CONTRIBUTING, template-repo setup ("Use this template" button), demo site, optional OAuth Worker (separate folder `workers/oauth/`, ~60 lines, deploy instructions), and the **upgrade system** (§14: `engine.json` manifest, `update.yml` workflow, admin update banner), plus the **Jekyll importer** (§15) as the launch switch-story. *Done when:* a stranger can go from README to their own live site without asking a question, a site on v1.0 upgrades to v1.1 by merging one auto-generated PR, and a real Jekyll blog converts with working redirects.
 
-**M7 (optional/backlog):** CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), WordPress / VitePress importers (§15; VuePress and Joomla ship). Shipped from this list: i18n conventions (§5.4).
+**M7 (optional/backlog):** CI image variants, scheduled publishing (Action cron builds; items with future dates excluded until due), roles via CODEOWNERS + PR-based publish for teams, remaining §10.7 starters (community-driven), VitePress importer (§15; WordPress, VuePress and Joomla ship). Shipped from this list: i18n conventions (§5.4).
 
 **Out of scope, permanently (use plugins or other tools):** user accounts on the published site, comments backend, e-commerce, page-builder drag-and-drop, server-side rendering, databases.
 

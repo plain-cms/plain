@@ -12,6 +12,44 @@
 
 **[Website](https://plain-cms.com)** · **[Try the editor](https://plain-cms.github.io/plain/admin/?demo=1)** · **[Live demo](https://plain-cms.github.io/plain/)** · **[Quickstart](#quickstart-5-minutes)** · **[Contributing](CONTRIBUTING.md)**
 
+## Moving an existing site in
+
+> **NEW: WordPress migration.** Bring your whole WordPress site over with one command — posts, pages, images, menu, comments, and every old URL redirected.
+
+**From WordPress, in three steps:**
+
+1. In your WordPress dashboard: **Tools → Export → All content → Download Export File.** You get one `.xml` file.
+2. In your plain repo, run:
+
+   ```sh
+   node tools/migrate/wordpress.js ~/Downloads/yoursite.WordPress.xml
+   ```
+
+3. Copy the result in and build:
+
+   ```sh
+   cp -R plain-import/content/. content/
+   cp -R plain-import/media/. media/
+   cp plain-import/data/redirects.json data/redirects.json
+   node build.js
+   ```
+
+What comes across: posts (to `/blog/<slug>/`) and pages (to `/<slug>/`, your static front page becomes the home page), Gutenberg and classic-editor content as clean Markdown (captions, galleries, code, footnotes, reusable blocks), categories and tags, featured images and SEO descriptions, every image your posts use (downloaded into `media/YYYY/MM/` — or copied from a backup with `--uploads=…/wp-content/uploads`), your main menu, an archive of approved comments (no e-mail addresses), and a redirect for every old address — posts, pages, categories, tags, date archives and `/feed/` — so search rankings and shared links survive. Drafts, private and scheduled posts arrive as drafts. Anything the importer can't convert with confidence lands in `plain-import/MIGRATION-REPORT.md` as a short to-do list — nothing is dropped silently.
+
+**What plain doesn't do — by design.** plain has **no database and no server**: your site is static files, which is why it's fast, free to host, and has nothing to patch. So WordPress features that run code on every visit don't come along as-is: plugins like WooCommerce, memberships and logins, live comment forms, and page-builder layouts (Elementor, Divi — the text imports, the layout doesn't). Revisions, widgets and theme settings aren't imported either.
+
+**Need a backend anyway?** Connect one in the admin: **Backend** in the sidebar → paste your API's URL (or click **Create backend repo** to start from the template). It's saved as `services.backend` in `site.config.json`, and plugins such as `contact-form`, `api-form`, `feedback` and `sales-analytics` send their data there — forms, comments and analytics without putting a server inside your site.
+
+**Coming from somewhere else?** Jekyll, VuePress and Joomla importers ship too:
+
+```sh
+node tools/migrate/jekyll.js /path/to/your-jekyll-site
+node tools/migrate/vuepress.js /path/to/your-vuepress-site
+node tools/migrate/joomla.js https://your-joomla-site.example   # crawls the live site
+```
+
+Every importer writes into `./plain-import/` (never your working tree), keeps your URLs alive with a complete old→new redirect map, and produces the same migration report. VitePress, Hugo and Eleventy are on the roadmap (§15). The full step-by-step guide — options, keeping your URLs, the cutover checklist — is [`tools/migrate/README.md`](tools/migrate/README.md).
+
 ![The plain admin editor — Markdown on the left, live preview on the right, with Save draft, Publish and History buttons](.github/screenshot-editor.png)
 
 Every site built with plain ships this editor at `/admin/`: Markdown with live preview, drafts and publishing, image uploads, and per-page History with one-click restore. It is static files inside your own build — there is no second service to deploy, and nothing extra to pay for.
@@ -24,6 +62,31 @@ Your whole website is a folder of plain files: Markdown for content, JSON for se
 - **AI-operable.** Deterministic layout, a machine-readable content model, and [Claude Code skills in the box](#writing-from-your-terminal) so “write a post about X” is a one-line job that ends in a verified build.
 
 ![The admin sidebar, with the post list for a collection](.github/screenshot-admin.png)
+
+## Signing in to the admin
+
+Once your content is in (imported or brand new), you manage it at **`https://<your-site>/admin/`**. plain has no accounts and no passwords: every Save is a commit to your GitHub repository, so "signing in" just means giving the admin permission to write to that one repository. Pick one of two ways.
+
+### Option A — paste a GitHub token (two minutes, nothing to deploy)
+
+1. On GitHub, open **Settings → Developer settings → Personal access tokens → Fine-grained tokens** and click **Generate new token**. (Direct link: [github.com/settings/personal-access-tokens/new](https://github.com/settings/personal-access-tokens/new).)
+2. **Token name:** anything, e.g. `my-site admin`. **Expiration:** your choice. When it runs out, you generate a new one and paste it again.
+3. **Repository access:** choose **Only select repositories** and pick your site's repository. Nothing else.
+4. **Permissions → Repository permissions:**
+   - **Contents: Read and write**: lets the admin save, publish and upload images.
+   - **Actions: Read-only**: lets the admin show whether your site finished building.
+5. Click **Generate token** and copy it (it starts with `github_pat_`). GitHub shows it only once.
+6. Open your site's `/admin/`, check the repository box (`owner/repository`), paste the token, and click **Sign in**.
+
+That's it, and you're publishing. The token is stored only in that browser and is sent only to `api.github.com`; it never touches your site or any server. Each writer signs in once per device with their own token. Editors who prefer files can keep editing files: the admin and direct edits work side by side.
+
+### Option B — a "Sign in with GitHub" button (one click for every writer)
+
+If pasting tokens is awkward (a team, or a client), deploy the optional ~60-line [OAuth Worker](workers/oauth/README.md). It runs free on Cloudflare, backed by a free GitHub App, and you own both parts. Then add `"oauthUrl": "https://<your-worker>.workers.dev"` to the `site` block of `site.config.json` and rebuild. The sign-in screen gains a **Sign in with GitHub** button, and the token form moves under "or use an access token". Each writer clicks once, approves on GitHub, and gets a token scoped to just that repository's contents.
+
+A plain-language walkthrough of both options, including the GitHub App screens and the one-Worker-per-site gotcha: **[Signing in to Plain: a pasted token, or one click with GitHub](https://victorantos.com/posts/two-ways-to-sign-in-to-your-plain-admin/)**.
+
+**AI assist (optional, BYOK):** paste an Anthropic API key in Settings and the editor grows ✨ buttons — improve writing, suggest titles, generate the meta description, write image alt text, translate a page into a new draft. Every suggestion shows a before/after and asks before applying. The key stays in your browser and is sent only to Anthropic.
 
 ## Try it locally (about 20 seconds)
 
@@ -46,21 +109,6 @@ Every later change is the same loop: edit → commit → live in ~30s. Nothing i
 **[Open the editor →](https://plain-cms.github.io/plain/admin/?demo=1)** — no account, no sign-up. You get a copy of the demo site in your browser: write a post, publish it, watch the build, open History and restore an older version. Everything works; nothing leaves your tab, and closing it throws it away.
 
 It is not a mock-up. The demo is the real admin talking to a repository that lives in the browser, seeded from the site's own published JSON API. Add `"demo": true` to the `site` block of your `site.config.json` to offer the same thing on your site.
-
-## Signing in to the admin
-
-Sign in once with a GitHub access token (it stays on that device):
-
-1. On GitHub: **Settings → Developer settings → Fine-grained tokens → Generate new token**.
-2. Repository access: **Only select repositories** → pick your site's repo.
-3. Permissions → Repository permissions: **Contents: Read and write**, **Actions: Read-only**.
-4. Generate, copy, and paste it into the admin's sign-in screen.
-
-The token never leaves the browser except to api.github.com. Editors who prefer files can keep editing files — the admin and direct edits coexist happily.
-
-Prefer a button to a paste? Deploy the optional ~60-line [OAuth Worker](workers/oauth/README.md) (free on Cloudflare, backed by a free GitHub App) and the sign-in screen gains **"Sign in with GitHub"** — one click, and each writer gets a token scoped to just that repo's contents.
-
-**AI assist (optional, BYOK):** paste an Anthropic API key in Settings and the editor grows ✨ buttons — improve writing, suggest titles, generate the meta description, write image alt text, translate a page into a new draft. Every suggestion shows a before/after and asks before applying. The key stays in your browser and is sent only to Anthropic.
 
 ## The API — your content as JSON
 
@@ -142,20 +190,6 @@ Built something with plain? Open a pull request adding it to this list.
 
 A plugin is a folder — install one by copying it into `plugins/` and adding its name to `"plugins"` in `site.config.json`. Ships with **search** (enabled: a `/search/` page over a prebuilt index, no services involved — link a theme search box straight to `/search/?q=…`) and **contact-form** (disabled reference: write `[[contact-form]]` in any page, point it at a Formspree-style endpoint). The full hook API is documented in [`CLAUDE.md`](CLAUDE.md) — it's small enough that "write me a plugin that adds reading time" is a one-prompt job for an AI agent. Also included: **reading-time** (enabled) — written by an AI agent from the docs alone, in one prompt, as proof of that claim — plus **api-form** (forms declared in config, POSTing to your own backend via the `"services"` map) **goatcounter** (opt-in page-view counts) and **structured-data** (enabled: Schema.org JSON-LD for every page, built from the fields you already write — nothing to fill in, no script in the browser). Good first plugins: giscus comments, image gallery, table of contents.
 
-## Moving an existing blog in
-
-Already have a site? The importers under `tools/migrate/` convert it — content, media, and a complete old→new redirect map so your URLs (and your SEO) survive the move. Run one on your machine:
-
-```sh
-node tools/migrate/jekyll.js /path/to/your-jekyll-site
-node tools/migrate/vuepress.js /path/to/your-vuepress-site
-node tools/migrate/joomla.js https://your-joomla-site.example   # crawls the live site
-```
-
-Each writes `content/`, `media/`, and `data/redirects.json` (Joomla also `data/navigation.json`) into `./plain-import/` — never touching your working tree — plus a migration report of anything that needs a human eye, from unconvertible markup to old query-string URLs that need a redirect rule at your host. Copy those folders into your plain repo, work the report's review queue, and build. Jekyll, VuePress, and Joomla ship today; VitePress, Hugo, Eleventy, and WordPress are on the roadmap (§15).
-
-The full step-by-step walkthrough — keeping your URLs, wiring forms and analytics, the cutover checklist — is [`tools/migrate/README.md`](tools/migrate/README.md).
-
 ## Staying up to date
 
 plain follows [semver](https://semver.org). Engine files (`build.js`, `lib/`, `admin/`, `themes/default/`) are upstream-owned; your content, config, and custom themes are yours. When a new version ships, the admin shows an **Update available** banner: click it and a pull request appears with the changelog and any files you'd customized flagged for review. **Merge to upgrade, revert to roll back** — never a surprise. An optional weekly workflow opens that PR on its own, so even an unattended site keeps getting security fixes as reviewable PRs. See §14 for the mechanism.
@@ -194,7 +228,7 @@ themes/            fifteen starters ship in the box; add your own
 plugins/           a plugin is a folder; install = copy + enable in config
 admin/             the browser editor (static, vanilla ES modules)
 .claude/skills/    recipes for Claude Code: write a post, run the site, extend it
-tools/migrate/     importers (Jekyll, VuePress, Joomla)
+tools/migrate/     importers (WordPress, Jekyll, VuePress, Joomla)
 workers/oauth/     optional "Sign in with GitHub" worker (v1 uses a token)
 build.js + lib/    the whole engine — under 2,500 lines, one dependency, MIT
 ```
