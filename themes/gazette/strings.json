@@ -1,0 +1,16 @@
+{
+  "mainNav": "Main",
+  "footerNav": "Footer",
+  "pagination": "Pages",
+  "rssFeed": "RSS feed",
+  "by": "By",
+  "inBrief": "In brief",
+  "allStories": "All stories →",
+  "backToFront": "← Front page",
+  "nothingHere": "Nothing on the wire yet.",
+  "notFoundKicker": "Corrections desk",
+  "notFoundTitle": "This story was never filed.",
+  "notFoundBody": "There is no page at this address. It may have moved, or the link may be mistyped.",
+  "notFoundHint": "Our archive holds no record of it.",
+  "goHome": "Back to the front page"
+}

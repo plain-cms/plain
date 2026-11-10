@@ -6,7 +6,8 @@
 <title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
 {{#if page.standfirst}}<meta name="description" content="{{ page.standfirst }}">
 {{else}}{{#if page.description}}<meta name="description" content="{{ page.description }}">
-{{/if}}{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+{{else}}{{#if site.description}}<meta name="description" content="{{ site.description }}">
+{{/if}}{{/if}}{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 {{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
 {{#if page.standfirst}}<meta property="og:description" content="{{ page.standfirst }}">
@@ -25,10 +26,14 @@
 {{/if}}<link rel="stylesheet" href="/assets/theme.css">
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
 <header class="masthead">
-  <a class="site-title" href="/">{{ site.title }}</a>
-  <nav class="section-nav" aria-label="Main">
+  <div class="masthead-top">
+    <a class="site-title" href="/">{{ site.title }}</a>
+    {{#if site.description}}<p class="masthead-motto">{{ site.description }}</p>
+    {{/if}}
+  </div>
+  <nav class="section-nav" aria-label="{{ strings.mainNav }}">
     <ul>
       {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
       {{/each}}
@@ -39,8 +44,18 @@
 {{{ body }}}
 </main>
 <footer class="colophon">
-  <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
-  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
+  <div class="colophon-inner">
+    <p class="colophon-title">{{ site.title }}</p>
+    <nav aria-label="{{ strings.footerNav }}">
+      <ul class="colophon-links">
+        {{#each nav as entry}}<li><a href="{{ entry.url }}">{{ entry.label }}</a></li>
+        {{/each}}{{#each feeds as feed}}<li><a href="{{ feed }}">{{ strings.rssFeed }}</a></li>
+        {{/each}}
+      </ul>
+    </nav>
+    {{#if data.footer.html}}<div class="colophon-note">{{{ data.footer.html }}}</div>
+    {{/if}}
+  </div>
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

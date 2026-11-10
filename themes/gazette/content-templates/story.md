@@ -1,30 +1,28 @@
 ---
-title: Put the news in the headline — a verb, a fact, no cleverness yet
-date: 2026-01-01
+title: Harbour car park stays free on Sundays after councillors drop the £2 charge
+date: 2026-01-12
 section: News
-standfirst: One sentence with the story's second-best fact in it — this is what shows on the front page under the headline.
-byline: Your Name
+standfirst: The council voted 7–4 to abandon the Sunday charge after quay traders warned it would empty the market.
+description: The council voted 7–4 to abandon the Sunday charge after quay traders warned it would empty the market.
+byline: Rosa Imrie
 featured: false
 draft: true
 ---
 
-*Fill in the story, then delete these instructions. Pick the `section` from
-News, Business, Culture, Sport, or Opinion; set `featured: true` for the
-handful of stories that should lead the front page; flip `draft: false` to
-publish.*
+WESTHAVEN — Parking at the harbour will stay free on Sundays. Councillors
+voted 7–4 on Thursday night to drop a proposed £2 charge, three weeks
+before it was due to begin.
 
-TOWN NAME — *Replace this: the first paragraph carries who, what, where, and
-when — a reader who stops here should still know what happened.*
+The charge was expected to raise £38,000 a year towards resurfacing the
+quay road. A survey by the traders’ association found that one Sunday
+visitor in three would have gone elsewhere.
 
-*Second paragraph: the number, the price, the vote count, the score. News is
-specific.*
+“Sunday is the day people come down without a reason,” said Ted Halloran,
+who chairs the association. “Give them a reason to stay away and they
+will take it.”
 
-*Then a quote from someone who was there, with their name and why they're
-worth hearing:* "Like this," said Firstname Lastname, who has run the thing
-in question for twenty years.
+The resurfacing will now be paid for from the reserve, which stands at
+£410,000. The two councillors who proposed the charge said the reserve was
+meant for storm damage, not routine repairs.
 
-*Middle paragraphs: how it came to happen, what it changes, who disagrees —
-shortest version that's fair.*
-
-*Last paragraph: what happens next, with a date if one exists. End on a
-fact, not a flourish.*
+The road closes for the work on 2 March and is due to reopen before Easter.
