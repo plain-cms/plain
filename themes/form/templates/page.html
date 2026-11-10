@@ -4,9 +4,8 @@
     {{#if page.description}}<p class="lede">{{ page.description }}</p>
     {{/if}}
   </header>
-  <div class="prose">
+  {{#if page.showSchedule}}{{> schedule}}
+  {{/if}}<div class="prose">
 {{{ page.content }}}
   </div>
-  {{#if page.showSchedule}}{{> schedule}}
-  {{/if}}
 </article>

@@ -2,22 +2,26 @@
    Chalk off-white, deep charcoal ink, one saturated coral-red accent with
    gym-signage energy. The one loud element is the timetable: big tabular
    times you can read at arm's length on a phone, day blocks that never
-   scroll sideways, and a print layout that pins to the fridge.
+   scroll sideways, and a print layout that pins to the fridge. Everything
+   else is rules and plain text so the times stay the largest thing in view.
    All design decisions live in the tokens below. Restyle by editing tokens,
    never selectors (cms-spec.md §10.1). */
 
 :root {
-  /* Type — strong geometric display, quiet humanist body */
-  --font-display: "Avenir Next", Avenir, Futura, "Century Gothic", "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
+  /* Type — strong geometric display, quiet humanist body. The display stack
+     names a truly heavy face per platform (Avenir Next, Segoe UI, Roboto). */
+  --font-display: "Avenir Next", Avenir, Futura, "Century Gothic", "Segoe UI", Roboto, system-ui, "Trebuchet MS", sans-serif;
   --font-body: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
+  --weight-display: 800;
+  --weight-strong: 600;
   --text-xs: 0.75rem;
   --text-s: 0.875rem;
   --text-m: 1.0625rem;
   --text-l: 1.25rem;
   --text-xl: 1.625rem;
   --text-xxl: clamp(2.25rem, 6vw, 3.5rem);
-  --text-time: clamp(1.25rem, 4vw, 1.5rem); /* the number people scan for */
+  --text-time: clamp(1.5rem, 7.5vw, 2rem); /* the number people scan for */
   --leading-body: 1.6;
   --leading-tight: 1.08;
   --tracking-heads: -0.015em;
@@ -32,32 +36,38 @@
   --color-on-accent: #ffffff;
   --color-accent-tint: #f7e3dd;
   --color-border: #e2dbd1;
+  --color-rule: #26221f;
 
   /* Layout */
   --measure: 62ch;
   --page-width: 68rem;
+  --card-min: 17rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
   --space-4: 2rem;
   --space-5: 4rem;
   --radius: 4px;
+  --border-hairline: 1px;
   --border-strong: 2px;
+  --rule-accent: 3px;
   --tap-target: 3rem;
-  --photo-ratio: 4 / 5;
+  --photo-ratio: 0.8;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Warm charcoal, coral lifted — still AA */
-    --color-bg: #211d1a;
-    --color-panel: #2c2620;
-    --color-text: #ece5dc;
+    /* Warm charcoal; day blocks sit a clear step above the page, the heavy
+       rules drop to a mid neutral so the times are the brightest thing. */
+    --color-bg: #1b1815;
+    --color-panel: #2b2520;
+    --color-text: #f1ebe3;
     --color-muted: #b5aa9d;
     --color-accent: #ff8f75;
     --color-on-accent: #2a120b;
-    --color-accent-tint: #3a2b24;
-    --color-border: #443c34;
+    --color-accent-tint: #46302a;
+    --color-border: #4a4138;
+    --color-rule: #8c8175;
   }
 }
 
@@ -80,12 +90,12 @@ body {
 
 ::selection { background: var(--color-accent-tint); }
 
-a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
-a:hover { text-decoration-thickness: 2px; }
+a { color: var(--color-accent); text-decoration-thickness: var(--border-hairline); text-underline-offset: 0.15em; }
+a:hover { text-decoration-thickness: var(--border-strong); }
 
 :focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: var(--rule-accent) solid var(--color-accent);
+  outline-offset: var(--border-strong);
   border-radius: var(--radius);
 }
 
@@ -101,21 +111,32 @@ a:hover { text-decoration-thickness: 2px; }
 
 main { min-height: 60vh; }
 
-/* Masthead ----------------------------------------------------------------- */
+.print-only { display: none; }
+
+/* Masthead -----------------------------------------------------------------
+   Phone: name and the trial button share row one, the menu sits on the heavy
+   rule below. Wide: one row. */
 
 .masthead {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-3) 0;
-  border-bottom: var(--border-strong) solid var(--color-text);
+  column-gap: var(--space-3);
+  padding-top: var(--space-2);
+  border-bottom: var(--border-strong) solid var(--color-rule);
+}
+.masthead nav { grid-column: 1 / -1; grid-row: 2; }
+
+@media (min-width: 60em) {
+  .masthead { grid-template-columns: auto 1fr auto; column-gap: var(--space-4); padding: var(--space-3) 0; }
+  .masthead nav { grid-column: 2; grid-row: 1; }
 }
 
 .site-title {
   font-family: var(--font-display);
   font-size: var(--text-l);
-  font-weight: 800;
+  font-weight: var(--weight-display);
+  line-height: var(--leading-tight);
   letter-spacing: var(--tracking-heads);
   text-transform: uppercase;
   color: var(--color-text);
@@ -126,43 +147,43 @@ main { min-height: 60vh; }
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
-  margin: 0;
+  gap: 0 var(--space-2);
+  margin: 0 calc(-1 * var(--space-2));
   padding: 0;
   list-style: none;
 }
 .masthead nav a {
-  display: inline-block;
-  padding: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  padding: 0 var(--space-2);
   color: var(--color-muted);
   text-decoration: none;
   font-size: var(--text-s);
-  font-weight: 600;
+  font-weight: var(--weight-strong);
 }
 .masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
 .masthead nav a[aria-current="page"] {
   color: var(--color-text);
-  box-shadow: inset 0 -3px var(--color-accent);
+  box-shadow: inset 0 calc(-1 * var(--rule-accent)) var(--color-accent);
 }
 
-/* The trial CTA — the only filled element in the chrome */
+/* The trial button — outlined, so nothing in the chrome outweighs a class time */
 .btn-trial {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-3);
   font-family: var(--font-display);
   font-size: var(--text-m);
-  font-weight: 700;
-  letter-spacing: var(--tracking-heads);
+  font-weight: var(--weight-strong);
   text-decoration: none;
-  color: var(--color-on-accent);
-  background: var(--color-accent);
+  color: var(--color-accent);
+  border: var(--border-strong) solid var(--color-accent);
   border-radius: var(--radius);
 }
-.btn-trial:hover { filter: brightness(1.08); }
-.masthead .btn-trial { margin-left: auto; }
+.btn-trial:hover { color: var(--color-on-accent); background: var(--color-accent); }
 
 /* Headers ------------------------------------------------------------------ */
 
@@ -171,7 +192,7 @@ main { min-height: 60vh; }
 .page-header h1 {
   font-family: var(--font-display);
   font-size: var(--text-xxl);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-heads);
   margin: 0 0 var(--space-2);
@@ -181,7 +202,7 @@ main { min-height: 60vh; }
 .eyebrow {
   font-family: var(--font-display);
   font-size: var(--text-s);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   color: var(--color-accent);
@@ -197,8 +218,8 @@ main { min-height: 60vh; }
 
 .discipline {
   font-family: var(--font-display);
-  font-size: var(--text-m);
-  font-weight: 600;
+  font-size: var(--text-s);
+  font-weight: var(--weight-strong);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   color: var(--color-muted);
@@ -218,7 +239,7 @@ main { min-height: 60vh; }
 
 .prose h2, .prose h3, .prose h4 {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-heads);
   margin: var(--space-4) 0 var(--space-2);
@@ -236,7 +257,7 @@ main { min-height: 60vh; }
   margin: var(--space-4) 0;
   padding: var(--space-3);
   background: var(--color-panel);
-  border-left: 4px solid var(--color-accent);
+  border-left: var(--rule-accent) solid var(--color-accent);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
 .prose blockquote p:last-child { margin-bottom: 0; }
@@ -245,20 +266,20 @@ main { min-height: 60vh; }
   font-family: var(--font-mono);
   font-size: 0.9em;
   background: var(--color-panel);
-  border: 1px solid var(--color-border);
+  border: var(--border-hairline) solid var(--color-border);
   padding: 0.1em 0.35em;
   border-radius: var(--radius);
 }
 .prose pre {
   background: var(--color-panel);
-  border: 1px solid var(--color-border);
+  border: var(--border-hairline) solid var(--color-border);
   padding: var(--space-3);
   border-radius: var(--radius);
   overflow-x: auto;
-  line-height: 1.5;
 }
 .prose pre code { background: none; border: 0; padding: 0; font-size: var(--text-s); }
 
+/* Price lists and opening hours: figures line up like the timetable's */
 .prose table {
   border-collapse: collapse;
   width: 100%;
@@ -267,8 +288,15 @@ main { min-height: 60vh; }
 }
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: var(--border-hairline) solid var(--color-border);
+}
+.prose th {
+  font-family: var(--font-display);
+  font-size: var(--text-s);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  border-bottom: var(--border-strong) solid var(--color-rule);
 }
 
 .prose hr {
@@ -282,38 +310,23 @@ main { min-height: 60vh; }
 /* THE SIGNATURE: the timetable ---------------------------------------------
    Legible at arm's length on a phone. One column of day blocks on mobile —
    never a sideways-scrolling table; a grid of day blocks on wide screens.
-   The TIME leads every row, big and bold in tabular figures, because "when
-   can I come?" is the whole reason the page exists. */
+   The TIME leads every row and is the largest type in the block (the day
+   name is only a label), because "when can I come?" is the whole reason the
+   page exists. It comes before the page's prose for the same reason. */
 
 .timetable { margin: var(--space-4) 0; }
-
-.trial-note {
-  max-width: var(--measure);
-  margin: 0 0 var(--space-4);
-  padding: var(--space-3);
-  font-family: var(--font-display);
-  font-size: var(--text-l);
-  font-weight: 700;
-  letter-spacing: var(--tracking-heads);
-  color: var(--color-accent);
-  background: var(--color-accent-tint);
-  border-left: 4px solid var(--color-accent);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  text-wrap: pretty;
-}
 
 .week {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-3);
-  align-items: start;
 }
 @media (min-width: 44em) { .week { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 66em) { .week { grid-template-columns: 1fr 1fr 1fr; } }
 
 .day {
   background: var(--color-panel);
-  border: 1px solid var(--color-border);
+  border: var(--border-hairline) solid var(--color-border);
   border-radius: var(--radius);
   overflow: clip;
 }
@@ -323,107 +336,145 @@ main { min-height: 60vh; }
   position: sticky;
   top: 0;
   z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
   margin: 0;
   padding: var(--space-2) var(--space-3);
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 800;
+  font-size: var(--text-m);
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-heads);
+  letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   background: var(--color-panel);
-  border-bottom: var(--border-strong) solid var(--color-text);
+  border-bottom: var(--border-strong) solid var(--color-rule);
 }
 
-.classes { list-style: none; margin: 0; padding: 0; }
+/* One time column per day block: every class name starts on the same line,
+   whether the owner writes 07:00 or 7:00 AM */
+.classes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+}
 
 .session {
+  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
-  gap: var(--space-2) var(--space-3);
+  gap: 0 var(--space-3);
   padding: var(--space-2) var(--space-3);
-  border-top: 1px solid var(--color-border);
+  border-top: var(--border-hairline) solid var(--color-border);
 }
 .session:first-child { border-top: 0; }
+@supports (grid-template-columns: subgrid) { .session { grid-template-columns: subgrid; } }
 
 .session-time {
   font-family: var(--font-display);
   font-size: var(--text-time);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-heads);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
   color: var(--color-text); /* the time stays ink-dark: it carries the page */
 }
 
-.session-what { display: flex; flex-direction: column; }
-.session-name { font-weight: 600; line-height: 1.3; }
-.session-who { font-size: var(--text-s); color: var(--color-muted); }
+.session-what { display: flex; flex-direction: column; overflow-wrap: break-word; }
+.session-name { font-weight: var(--weight-strong); line-height: 1.3; }
+/* Teacher and level share a line when they fit. The dot hangs in the gap, so
+   when the level wraps to its own line the dot falls outside and is clipped. */
+.session-meta {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 1em;
+  overflow: hidden;
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.session-who, .session-level { min-width: 0; }
+.session-who + .session-level { position: relative; }
+.session-who + .session-level::before { content: "·"; position: absolute; left: -0.65em; }
 
-.chip {
-  justify-self: end;
+/* A day with no classes: one quiet line, full width when it closes the week */
+.day-closed { display: flex; align-items: baseline; background: none; color: var(--color-muted); }
+.day-closed .day-name { position: static; background: none; border: 0; }
+.day-closed p { margin: 0; font-size: var(--text-s); }
+.day-closed:last-child { grid-column: 1 / -1; }
+
+.trial-note {
+  margin: var(--space-3) 0 0;
+  padding-left: var(--space-3);
   font-family: var(--font-display);
-  font-size: var(--text-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
-  color: var(--color-accent);
-  background: var(--color-accent-tint);
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius);
-  white-space: nowrap;
+  font-weight: var(--weight-strong);
+  border-left: var(--rule-accent) solid var(--color-accent);
+  text-wrap: pretty;
 }
 
-/* Today, marked client-side by enhance.js — pure sugar, absent without JS */
-.day.is-today { border-color: var(--color-accent); border-width: var(--border-strong); }
-.day.is-today .day-name { border-bottom-color: var(--color-accent); }
-.day.is-today .day-name::after {
-  content: "Today";
-  margin-left: var(--space-2);
-  vertical-align: middle;
+.today-flag {
   font-size: var(--text-xs);
-  letter-spacing: var(--tracking-caps);
   color: var(--color-on-accent);
   background: var(--color-accent);
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius);
 }
 
-/* Instructors ---------------------------------------------------------------- */
+/* Today, marked by enhance.js — pure sugar, absent without JS and on paper.
+   The ring is a shadow, so the block never shifts. Classes already under way
+   fade; the next one takes the accent. */
+@media screen {
+  .day.is-today { border-color: var(--color-accent); box-shadow: 0 0 0 var(--border-hairline) var(--color-accent); }
+  .day.is-today .day-name { background: var(--color-accent-tint); border-bottom-color: var(--color-accent); }
+  .session.is-past .session-time { color: var(--color-muted); }
+  .session.is-next .session-time { color: var(--color-accent); }
+}
+
+/* Instructors — ruled, not boxed: only the timetable gets panels ------------- */
 
 .card-list {
   list-style: none;
   margin: 0 0 var(--space-4);
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
-  gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--card-min), 100%), 1fr));
+  gap: var(--space-4) var(--space-3);
 }
 
 .card {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-1);
-  padding: var(--space-3);
-  background: var(--color-panel);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-content: start;
+  row-gap: var(--space-1);
+  padding-top: var(--space-3);
+  border-top: var(--border-strong) solid var(--color-rule);
 }
+.card > * { grid-column: 1; }
 .card h2 {
   font-family: var(--font-display);
-  font-size: var(--text-l);
-  font-weight: 700;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-heads);
   margin: 0;
 }
-.card h2 a { color: var(--color-text); text-decoration: none; }
-.card h2 a:hover { color: var(--color-accent); text-decoration: underline; }
-.card .discipline { font-size: var(--text-s); }
-.card .summary { margin: 0; font-size: var(--text-s); color: var(--color-muted); }
+.card h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.card h2 a:hover { color: var(--color-accent); }
+.card .summary { margin: var(--space-1) 0 0; color: var(--color-muted); }
 
-.card-photo-link { margin: 0 0 var(--space-2); }
+/* An optional portrait sits beside the text, so a list where only some
+   instructors have photos still lines up. */
+.card-photo-link {
+  grid-column: 2;
+  grid-row: 1 / span 4;
+  align-self: start;
+  width: calc(var(--card-min) / 3);
+  margin-left: var(--space-3);
+}
 .card-photo, .instructor-photo {
   width: 100%;
   aspect-ratio: var(--photo-ratio);
@@ -432,26 +483,32 @@ main { min-height: 60vh; }
   display: block;
 }
 
-.instructor-photo { max-width: 20rem; margin: 0 0 var(--space-4); }
+.instructor-photo { max-width: var(--card-min); margin: 0 0 var(--space-4); }
 
 .catch-classes {
   max-width: var(--measure);
   margin: var(--space-5) 0 var(--space-4);
-  padding: var(--space-4);
-  background: var(--color-panel);
-  border: var(--border-strong) solid var(--color-text);
-  border-radius: var(--radius);
+  padding-top: var(--space-3);
+  border-top: var(--border-strong) solid var(--color-rule);
 }
-.catch-classes h2 {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 800;
-  line-height: var(--leading-tight);
-  letter-spacing: var(--tracking-heads);
-  margin: 0 0 var(--space-2);
+.catch-classes h2 { margin: 0 0 var(--space-2); color: var(--color-text); }
+.catch-classes p { margin: 0 0 var(--space-3); }
+
+/* Wide screens: the bio keeps its measure; the portrait (if any) and the
+   timetable pointer sit beside it */
+@media (min-width: 60em) {
+  .instructor {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: var(--space-5);
+    align-items: start;
+  }
+  .instructor > .page-header { grid-column: 1 / -1; }
+  .instructor > .prose { grid-column: 1; grid-row: 2 / span 2; }
+  .instructor-photo { grid-column: 2; grid-row: 2; max-width: none; }
+  .catch-classes { grid-column: 2; grid-row: 3; margin: 0; }
 }
-.catch-classes p { margin: 0 0 var(--space-3); color: var(--color-muted); }
-.catch-classes p:last-child { margin-bottom: 0; }
 
 /* Pagination ------------------------------------------------------------------ */
 
@@ -469,11 +526,10 @@ main { min-height: 60vh; }
   align-items: center;
   min-height: var(--tap-target);
   padding: 0 var(--space-3);
-  background: var(--color-panel);
-  border: 1px solid var(--color-border);
+  border: var(--border-hairline) solid var(--color-border);
   border-radius: var(--radius);
   text-decoration: none;
-  font-weight: 600;
+  font-weight: var(--weight-strong);
 }
 .pagination a:hover { border-color: var(--color-accent); }
 
@@ -482,14 +538,20 @@ main { min-height: 60vh; }
 /* Colophon --------------------------------------------------------------------- */
 
 .colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
   margin-top: var(--space-5);
   padding: var(--space-3) 0 var(--space-4);
   border-top: var(--border-strong) solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
 }
-.colophon p { margin: 0 0 var(--space-1); }
-.colophon-trial { font-weight: 600; }
+.colophon p { margin: 0; }
+.colophon-name { font-weight: var(--weight-strong); color: var(--color-text); }
+.colophon-note { flex-basis: 100%; }
+.colophon-note > * { margin: 0 0 var(--space-1); }
 
 /* Motion ------------------------------------------------------------------------- */
 
@@ -498,22 +560,41 @@ main { min-height: 60vh; }
   .btn-trial:active { transform: translateY(1px); }
 }
 
-/* Print — the schedule pins to the fridge ------------------------------------------ */
+/* Print — the schedule pins to the fridge ------------------------------------------
+   Ink on paper whatever scheme the screen is in: the colour tokens are reset
+   here, with html in the selector so a site's own token overrides do not win. */
 
 @media print {
-  body { max-width: none; padding: 0; font-size: 10pt; color: #000; background: #fff; }
+  html:root {
+    --color-bg: #fff;
+    --color-panel: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-on-accent: #fff;
+    --color-accent-tint: #fff;
+    --color-border: #000;
+    --color-rule: #000;
+  }
+  body { max-width: none; padding: 0; font-size: 10pt; }
+  main { min-height: 0; }
+  .masthead { padding: 0 0 var(--space-2); }
   .masthead nav, .masthead .btn-trial, .skip-link, .pagination, .colophon,
-  .catch-classes, .day.is-today .day-name::after { display: none; }
+  .catch-classes, .today-flag { display: none; }
+  .print-only { display: block; margin: var(--space-2) 0 0; }
   a { color: inherit; text-decoration: none; }
-  .page-header { margin: 0 0 var(--space-3); }
-  .trial-note { margin-bottom: var(--space-3); padding: var(--space-2); border: 1pt solid #000; border-left-width: 4pt; background: none; color: #000; font-size: var(--text-m); }
+  .page-header { margin: var(--space-3) 0; }
+  .page-header h1 { font-size: var(--text-xl); }
+  .lede { font-size: var(--text-m); }
+  .timetable { margin: var(--space-3) 0; }
+  .timetable .eyebrow { display: none; }
   .week { grid-template-columns: 1fr 1fr 1fr; gap: var(--space-2); }
-  .day { break-inside: avoid; border-color: #000; }
-  .day-name { position: static; font-size: var(--text-m); border-bottom-color: #000; }
-  .session { padding: var(--space-1) var(--space-2); }
-  .session-time { font-size: var(--text-m); }
-  .session-name, .session-who, .chip { font-size: var(--text-xs); }
-  .chip { background: none; border: 1pt solid #000; color: #000; }
+  .day { break-inside: avoid; }
+  .day-name { position: static; font-size: var(--text-s); padding: var(--space-1) var(--space-2); }
+  .session { padding: var(--space-1) var(--space-2); gap: 0 var(--space-2); }
+  .session-time { font-size: var(--text-l); }
+  .session-name { font-size: var(--text-s); }
+  .session-meta { font-size: var(--text-xs); }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .prose pre { white-space: pre-wrap; }
 }

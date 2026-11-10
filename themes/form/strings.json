@@ -1,0 +1,17 @@
+{
+  "mainNav": "Main",
+  "tryAClass": "Try a class",
+  "seeSchedule": "See the schedule",
+  "thisWeek": "This week",
+  "today": "Today",
+  "withInstructor": "with",
+  "noClasses": "No classes",
+  "catchClasses": "On the timetable",
+  "catchClassesBody": "Every class, every day of the week, on one page.",
+  "pagination": "Pages",
+  "newer": "← Previous",
+  "older": "Next →",
+  "notFoundTitle": "Nothing to stretch here.",
+  "notFoundBody": "This page doesn’t exist — the link may be old or mistyped. Breathe out, then try one of these:",
+  "seeThisWeek": "See this week’s schedule"
+}
