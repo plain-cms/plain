@@ -1,22 +1,22 @@
 ---
 title: Check-ups & cleaning
-description: A gentle look at everything, a proper clean, and a plain-words summary of anything worth watching.
+description: A gentle look at everything, a thorough cleaning, and a plain-words summary of anything worth watching.
 preparation:
   - Bring a list of any medicines you take
-  - Arrive five minutes early for a cup of tea and the one-page form
+  - Arrive five minutes early for the one-page form
   - Eat normally beforehand — there's nothing to prepare
 example: true
 ---
 
 A check-up at Alder Street takes thirty unhurried minutes. The dentist looks
 at every tooth, your gums, and the soft parts of your mouth, and the
-hygienist finishes with a thorough clean and polish.
+hygienist finishes with a thorough cleaning and polish.
 
 ## What happens
 
 You'll sit down, we'll ask how things have been, and then we look — carefully
 and without commentary you can't follow. X-rays only when there's a reason,
-and we'll show you the pictures and point at what we see. The clean comes
+and we'll show you the pictures and point at what we see. The cleaning comes
 last: scaling, polish, and honest advice about the one spot your brush keeps
 missing.
 

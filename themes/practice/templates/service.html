@@ -1,6 +1,6 @@
 <article class="service">
   <header class="page-header">
-    <p class="eyebrow">Care</p>
+    <p class="eyebrow"><a href="/care/">{{ strings.backToCare }}</a></p>
     <h1>{{ page.title }}</h1>
     {{#if page.description}}<p class="lede">{{ page.description }}</p>
     {{/if}}
@@ -9,8 +9,8 @@
 {{{ page.content }}}
   </div>
   {{#if page.preparation}}
-  <section class="preparation" aria-label="Before your visit">
-    <h2>Before your visit</h2>
+  <section class="preparation" aria-labelledby="preparation-heading">
+    <h2 id="preparation-heading">{{ strings.beforeYourVisit }}</h2>
     <ul>
       {{#each page.preparation as step}}<li>{{ step }}</li>
       {{/each}}

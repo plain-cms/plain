@@ -25,7 +25,7 @@ and why.
 
 A fixed price by tooth (front teeth are simpler than molars), quoted in
 writing before treatment begins. If the tooth would honestly be better
-removed, we'll say that instead — the plan is for your mouth, not our diary.
+removed, we'll say that instead — the plan is for your mouth, not our schedule.
 
 ## Afterwards
 

@@ -1,6 +1,6 @@
 ---
 title: Crowns & bridges
-description: A new outer shell for a broken tooth, or a fixed replacement for a missing one — matched to your smile, not a catalogue.
+description: A new outer shell for a broken tooth, or a fixed replacement for a missing one — matched to your smile, not a catalog.
 preparation:
   - Eat beforehand; you'll be numb for a couple of hours
   - Think about shade — bring a photo of your smile from a few years back if you'd like us to match it
@@ -27,6 +27,6 @@ pay.
 
 ## How long they last
 
-Ten to fifteen years is normal; longer with good gums and a nightguard if you
+Ten to fifteen years is normal; longer with good gums and a night guard if you
 grind. When we check your crown each year, we'll tell you honestly how it's
 wearing.

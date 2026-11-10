@@ -1,29 +1,28 @@
 ---
-title: Name the treatment the way a patient would say it
-description: One calm sentence on what this visit does and how it will feel — reassurance first, dentistry second.
+title: Teeth whitening
+description: A gentle, dentist-supervised way to lift stains, with an honest word first on how much difference it will make.
 preparation:
-  - Replace with something practical to do beforehand, e.g. eat a normal meal
-  - Replace with a second, e.g. bring a list of your medicines
+  - Have a check-up first if it has been more than a year
+  - Tell us about any sensitive teeth
 draft: true
 ---
 
-*Fill in each section in plain words — no jargon a patient would have to look
-up. The `preparation` list becomes a "Before your visit" checklist on the
-page. Set `draft: false` when you're ready to publish.*
+Whitening lightens the natural color of your teeth. It works well on stains
+from coffee, tea and time, and not at all on crowns or fillings — we'll tell
+you before you pay what to expect.
 
 ## What happens
 
-*Replace this: walk through the visit from sitting down to leaving — how long
-it takes, what they'll feel, when they can ask you to stop. The reader is
-often nervous; write like you're answering the question they're afraid to
-ask.*
+We take a mold of your teeth and make thin trays that fit only you. You wear
+them at home with a mild gel for an hour a day, for about two weeks, and
+come back once so we can check your gums and the shade.
 
 ## What it costs
 
-*Replace this: how the pricing works. Fixed fee or quoted at check-up? What's
-included? When could it cost more, and how will they know before it does?*
+One fixed price that covers the trays, the gel and the follow-up visit, told
+to you before we start. Top-up gel later is sold at cost.
 
 ## Afterwards
 
-*Replace this: what's normal in the hours and days after, what isn't, and
-exactly when to call you.*
+Teeth can feel sensitive to cold for a day or two; it passes. If it doesn't,
+stop and call us.
