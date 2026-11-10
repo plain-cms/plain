@@ -1,12 +1,16 @@
 <article class="dish-page">
-  <p class="dish-page-back"><a href="/menu/">← Back to the menu</a></p>
-  <header class="dish-page-header">
-    {{#if page.section}}<p class="dish-course">{{ page.section }}</p>{{/if}}
-    <h1>{{ page.title }}</h1>
-    {{#if page.price}}<p class="dish-page-price">{{ page.price }}</p>{{/if}}
-  </header>
-  {{#if page.description}}<p class="dish-page-standfirst">{{ page.description }}</p>{{/if}}
-  <div class="prose">
+  <div class="carte">
+    <header class="dish-page-header">
+      {{#if page.section}}<p class="dish-course">{{ page.section }}</p>{{/if}}
+      <div class="dish-line">
+        <h1 class="dish-what"><span class="dish-name">{{ page.title }}</span>{{#if page.price}}<span class="dish-leader" aria-hidden="true"></span>{{/if}}</h1>
+        {{#if page.price}}<p class="dish-price dish-page-price">{{ page.price }}</p>{{/if}}
+      </div>
+      {{#if page.description}}<p class="dish-page-standfirst">{{ page.description }}</p>{{/if}}
+    </header>
+    <div class="prose">
 {{{ page.content }}}
+    </div>
   </div>
+  <p class="dish-page-back"><a href="/menu/">{{ strings.backToMenu }}</a></p>
 </article>

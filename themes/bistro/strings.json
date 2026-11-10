@@ -1,0 +1,13 @@
+{
+  "mainNav": "Main",
+  "pagination": "Pages",
+  "notFoundTitle": "Off the menu",
+  "notFoundBody": "There’s no dish at this table. The page may have moved, or the link may be mistyped.",
+  "goHome": "Back to the front door",
+  "seeMenu": "See the menu",
+  "menuEmpty": "The menu is being written. Check back soon.",
+  "menuPrevious": "← Previous",
+  "menuMore": "More →",
+  "backToMenu": "← Back to the menu",
+  "carteNote": "Please tell us about any allergies before you order."
+}

@@ -4,30 +4,36 @@
 
 :root {
   /* Type — condensed signage caps over a warm text serif */
-  --font-display: "Arial Narrow", "Helvetica Neue Condensed", "Roboto Condensed", ui-sans-serif, sans-serif;
+  --font-display: "Arial Narrow", "Avenir Next Condensed", "Roboto Condensed", sans-serif-condensed, "Helvetica Neue Condensed", Bahnschrift, ui-sans-serif, sans-serif;
   --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
   --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.6;
+  --tracking-display: 0.04em;
+  --tracking-caps: 0.12em;
 
   /* Colour — light: linen tablecloth, bottle green, a glass of wine */
-  --color-bg: #f6f2ea;
+  --color-bg: #f3eee4;
   --color-text: #23201b;
   --color-muted: #63594c;
   --color-accent: #1e4d39;
   --color-cta: #7a1f2b;
   --color-cta-hover: #611620;
   --color-cta-ink: #fbf9f4;
-  --color-paper: #fcfaf5;
+  --color-paper: #fdfbf6;
   --color-frame: #1e4d39;
-  --color-leader: #bcae9c;
-  --color-border: #e2dbcc;
-  --color-code-bg: #efe9dd;
+  --color-leader: #8fa598;
+  --color-border: #ddd5c4;
+  --color-code-bg: #ebe4d6;
   --color-mark: #f2d99a;
-  --shadow-carte: 0 1px 2px rgb(30 40 30 / 0.06), 0 12px 32px rgb(30 40 30 / 0.10);
+  --shadow-carte: 0 1px 1px rgba(30,40,30,0.10), 0 3px 8px rgba(30,40,30,0.08);
 
   /* Layout */
   --measure: 62ch;
   --measure-carte: 42rem;
   --radius: 3px;
+  --rule: 2px;
+  --frame-gap: 4px;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
@@ -37,21 +43,21 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* After hours — the chalkboard */
-    --color-bg: #191c18;
+    /* After hours — chalk on a green slate board, hung on a dark wall */
+    --color-bg: #151412;
     --color-text: #ece7dd;
-    --color-muted: #a79f90;
-    --color-accent: #82bb9d;
-    --color-cta: #c76b76;
-    --color-cta-hover: #d9808a;
-    --color-cta-ink: #191c18;
-    --color-paper: #22261f;
-    --color-frame: #82bb9d;
-    --color-leader: #454b40;
-    --color-border: #343a30;
-    --color-code-bg: #20241d;
+    --color-muted: #b0a999;
+    --color-accent: #a9cdb7;
+    --color-cta: #9c2f3c;
+    --color-cta-hover: #b23a48;
+    --color-cta-ink: #fbf4ec;
+    --color-paper: #20302a;
+    --color-frame: #8f9488;
+    --color-leader: #66756b;
+    --color-border: #383c36;
+    --color-code-bg: #262521;
     --color-mark: #4a3f16;
-    --shadow-carte: 0 1px 2px rgb(0 0 0 / 0.4), 0 16px 40px rgb(0 0 0 / 0.5);
+    --shadow-carte: 0 1px 0 rgba(0,0,0,0.5), 0 10px 28px rgba(0,0,0,0.45);
   }
 }
 
@@ -61,22 +67,26 @@
 html { color-scheme: light dark; }
 
 body {
-  margin: 0 auto;
+  margin: 0;
   padding: 0 var(--space-3);
-  max-width: calc(var(--measure) + 2 * var(--space-3));
   font-family: var(--font-body);
-  font-size: 1.0625rem;
-  line-height: 1.6;
+  font-size: var(--text-base);
+  line-height: var(--leading);
   color: var(--color-text);
   background: var(--color-bg);
 }
+
+/* One text column; only the menu page is allowed to be wider. */
+.masthead, .colophon, main > * { max-width: var(--measure); margin-inline: auto; }
+main > .menu-page { max-width: var(--measure-carte); }
+main { min-height: 60vh; }
 
 ::selection { background: var(--color-mark); color: var(--color-text); }
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: 2px; }
 
-:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; border-radius: var(--radius); }
 
 .skip-link {
   position: absolute;
@@ -87,31 +97,34 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .skip-link:focus { left: var(--space-2); }
 
-/* The signage voice — display caps */
-.eyebrow, .dish-course, .masthead nav a, .dish-page-price, .menu-course-legend {
+/* The signage voice — condensed display caps */
+.site-title, .masthead nav a, .page-header h1, .hero h1, .prose h2, .prose h3, .post-card h2, .eyebrow,
+.hours-card dt, .btn-reserve, .dish-line, .dish-course, .colophon-name, .prose a[href^="tel:"] {
   font-family: var(--font-display);
+  font-stretch: condensed;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: var(--tracking-display);
 }
+.masthead nav a, .hours-card dt, .btn-reserve, .dish-course { letter-spacing: var(--tracking-caps); }
 
 /* Masthead & footer ------------------------------------------------------ */
 
+/* The carte's thick-and-thin rule, echoed once under the masthead and once
+   above the footer: a hairline sits one frame-gap away from the heavy rule. */
 .masthead {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-4) 0 var(--space-3);
-  border-bottom: 2px solid var(--color-frame);
+  gap: 0 var(--space-4);
+  padding: var(--space-4) 0 var(--space-2);
+  border-bottom: var(--rule) solid var(--color-frame);
+  box-shadow: 0 var(--frame-gap) 0 var(--color-bg), 0 calc(var(--frame-gap) + 1px) 0 var(--color-frame);
 }
 
 .site-title {
-  font-family: var(--font-display);
   font-size: clamp(1.6rem, 4vw, 2.1rem);
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--color-text);
   text-decoration: none;
 }
@@ -120,39 +133,40 @@ a:hover { text-decoration-thickness: 2px; }
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: 0 var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .masthead nav a {
-  font-size: 0.82rem;
+  display: block;
+  padding: var(--space-2) 0;
+  font-size: 0.85rem;
   color: var(--color-muted);
   text-decoration: none;
 }
-.masthead nav a:hover { color: var(--color-accent); }
-.masthead nav a[aria-current="page"] { color: var(--color-accent); border-bottom: 2px solid var(--color-accent); }
-
-main { min-height: 60vh; }
+.masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
+.masthead nav a[aria-current="page"] { color: var(--color-accent); box-shadow: inset 0 calc(-1 * var(--rule)) 0 var(--color-cta); }
 
 .colophon {
   margin-top: var(--space-5);
   padding: var(--space-3) 0 var(--space-4);
-  border-top: 2px solid var(--color-frame);
+  border-top: var(--rule) solid var(--color-frame);
+  box-shadow: 0 calc(-1 * var(--frame-gap)) 0 var(--color-bg), 0 calc(-1 * var(--frame-gap) - 1px) 0 var(--color-frame);
   color: var(--color-muted);
-  font-size: 0.9rem;
 }
+.colophon > * { font-size: 0.9rem; } /* not on .colophon: its width is measured in its own ch */
+.colophon p { margin: 0 0 var(--space-1); }
+.colophon a { color: inherit; white-space: nowrap; }
+.colophon-name { font-weight: 700; color: var(--color-text); }
 
 /* Page headers & prose --------------------------------------------------- */
 
 .page-header { margin: var(--space-5) 0 var(--space-4); }
 
 .page-header h1 {
-  font-family: var(--font-display);
   font-size: clamp(2rem, 6vw, 3rem);
   font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
   line-height: 1.05;
   margin: 0;
   text-wrap: balance;
@@ -160,22 +174,17 @@ main { min-height: 60vh; }
 
 .meta { color: var(--color-muted); font-size: 0.9rem; margin: var(--space-2) 0 0; }
 
-.prose h2, .prose h3 {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  line-height: 1.15;
-  margin: var(--space-4) 0 var(--space-2);
-}
+.prose h2, .prose h3 { line-height: 1.15; margin: var(--space-4) 0 calc(var(--space-2) + var(--space-1)); }
 .prose h2 { font-size: 1.5rem; }
 .prose h3 { font-size: 1.2rem; }
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
+.prose a[href^="tel:"] { font-size: 1.1em; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 .prose blockquote {
   margin: var(--space-3) 0;
   padding: 0 var(--space-3);
-  border-left: 3px solid var(--color-accent);
+  border-left: var(--rule) solid var(--color-accent);
   color: var(--color-muted);
   font-style: italic;
 }
@@ -197,49 +206,146 @@ main { min-height: 60vh; }
 .prose pre code { background: none; padding: 0; font-size: 0.9rem; }
 
 .prose table { border-collapse: collapse; width: 100%; margin: 0 0 var(--space-3); font-variant-numeric: tabular-nums; }
-.prose th, .prose td { text-align: left; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--color-border); }
+.prose th, .prose td { text-align: left; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-border); }
 
 .cover { width: 100%; height: auto; border-radius: var(--radius); margin-bottom: var(--space-4); }
 
-/* Home hero — hours + reserve above the fold ----------------------------- */
+/* A centred opening some home pages write by hand:
+   <div class="hero"><h1>…</h1><p class="hero-tagline">…</p></div> */
+.hero { margin: var(--space-5) 0 var(--space-4); text-align: center; }
+.hero h1 { font-size: clamp(2.4rem, 8vw, 4rem); line-height: 1; margin: 0 0 var(--space-2); }
+.hero-tagline { margin: 0 auto var(--space-4); max-width: 40ch; font-size: 1.2rem; font-style: italic; color: var(--color-muted); }
 
-.hero {
-  margin: var(--space-5) 0 var(--space-4);
-  text-align: center;
-}
-.hero h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2.4rem, 8vw, 4rem);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  margin: 0 0 var(--space-2);
-}
-.hero-tagline { font-size: 1.2rem; color: var(--color-muted); font-style: italic; margin: 0 auto var(--space-4); max-width: 40ch; }
+/* THE CARTE — the signature designed object ------------------------------
+   A printed card: paper, a heavy rule at its edge and a hairline just inside.
+   The house card (.hours-card, written in page content) is cut from the
+   same stock, so the home page carries the signature too. */
 
-.hours-card {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-3) var(--space-5);
-  margin: var(--space-4) auto;
-  padding: var(--space-3) var(--space-4);
-  max-width: var(--measure-carte);
+.carte, .hours-card {
   background: var(--color-paper);
-  border: 1px solid var(--color-border);
+  border: var(--rule) solid var(--color-frame);
+  outline: 1px solid var(--color-frame);
+  outline-offset: calc(-1 * (var(--rule) + var(--frame-gap) + 1px));
   border-radius: var(--radius);
   box-shadow: var(--shadow-carte);
 }
-.hours-card dl { margin: 0; text-align: left; }
-.hours-card dt { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.75rem; color: var(--color-muted); }
-.hours-card dd { margin: 0; font-variant-numeric: tabular-nums; }
+
+.carte { margin: var(--space-4) 0; padding: clamp(1.5rem, 6vw, 3rem); }
+.carte .page-header { margin: 0 0 var(--space-3); text-align: center; }
+.carte .prose > :last-child { margin-bottom: 0; }
+.menu-standfirst { font-style: italic; color: var(--color-muted); margin: var(--space-2) auto 0; max-width: 44ch; }
+
+/* Courses are sorted by name in the page; `order` seats them in service
+   order (enhance.js then moves them in the document to match). */
+.carte-list { display: flex; flex-direction: column; gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
+.dish { order: 5; }
+.dish[data-course="Starters"] { order: 1; }
+.dish[data-course="Mains"] { order: 2; }
+.dish[data-course="Desserts"] { order: 3; }
+.dish[data-course="Drinks"] { order: 4; }
+
+/* dish name … price: the dots follow the last word of the name, however it
+   wraps; a price too long to share the line drops below, right-aligned */
+.dish-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-2);
+  margin: 0;
+  font-size: clamp(1rem, 4.2vw, 1.15rem);
+  font-weight: 700;
+  line-height: 1.3;
+}
+/* The left padding keeps the name's focus ring inside the clipped box; the
+   right padding is the shortest leader a name that fills the line can get. */
+.dish-what {
+  flex: 1 1 60%;
+  min-width: 0;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  margin: calc(-1 * var(--space-1)) 0 calc(-1 * var(--space-1)) calc(-1 * var(--space-1));
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-1);
+  font: inherit;
+  letter-spacing: inherit;
+}
+.dish-name { color: var(--color-text); text-decoration: none; }
+a.dish-name:hover { color: var(--color-accent); text-decoration: underline; }
+/* takes no room on the line, so it never wraps away from the last word */
+.dish-leader {
+  display: inline-block;
+  position: relative;
+  left: var(--space-2);
+  width: 100rem;
+  margin-right: -100rem;
+  border-bottom: var(--rule) dotted var(--color-leader);
+}
+.dish-price {
+  min-width: 2.4em;
+  margin: 0 0 0 auto;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+  overflow-wrap: anywhere;
+}
+
+.dish-desc { margin: var(--space-1) 0 0; color: var(--color-muted); font-style: italic; max-width: 52ch; }
+
+/* The course: a small label by default; on the carte, the first dish of
+   each course carries it as the course heading and the rest stay silent. */
+.dish-course { margin: 0 0 var(--space-1); font-size: 0.75rem; font-weight: 400; color: var(--color-muted); }
+.dish:is([data-course="Starters"], [data-course="Mains"], [data-course="Desserts"], [data-course="Drinks"]) .dish-course {
+  margin: var(--space-3) 0;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-accent);
+}
+.dish:is([data-course="Starters"], [data-course="Mains"], [data-course="Desserts"], [data-course="Drinks"]) .dish-course::after {
+  content: "";
+  display: block;
+  width: var(--space-4);
+  height: var(--rule);
+  margin: var(--space-2) auto 0;
+  background: var(--color-cta);
+}
+.dish[data-course="Starters"] ~ .dish[data-course="Starters"] .dish-course,
+.dish[data-course="Mains"] ~ .dish[data-course="Mains"] .dish-course,
+.dish[data-course="Desserts"] ~ .dish[data-course="Desserts"] .dish-course,
+.dish[data-course="Drinks"] ~ .dish[data-course="Drinks"] .dish-course { display: none; }
+
+.carte-note {
+  margin: var(--space-4) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-border);
+  text-align: center;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--color-muted);
+}
+
+/* Single dish page & the 404 — small cards from the same stock */
+.dish-page .carte, .not-found .carte { margin-top: var(--space-5); }
+.dish-page-header { margin: 0 0 var(--space-3); }
+.dish-page .dish-line { font-size: clamp(1.4rem, 4.5vw, 1.9rem); line-height: 1.15; }
+.dish-page .dish-price { min-width: 0; }
+.dish-page-standfirst { margin: var(--space-2) 0 0; font-size: 1.15rem; font-style: italic; color: var(--color-muted); }
+.dish-page-back { margin: 0; font-size: 0.9rem; }
+.not-found .carte { text-align: center; }
+
+/* The house card — hours, address, reserve (class names used in page content) */
+.hours-card { margin: var(--space-4) 0; padding: clamp(1.25rem, 5vw, 2rem); }
+/* label … value on one line; a value too long for that drops whole to the next line */
+.hours-card dl { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); margin: 0 0 var(--space-2); }
+.hours-card dt { flex: 1 0 40%; display: flex; align-items: baseline; gap: var(--space-2); font-size: 0.8rem; color: var(--color-muted); white-space: nowrap; }
+.hours-card dt::after { content: ""; flex: 1; min-width: var(--space-3); border-bottom: var(--rule) dotted var(--color-leader); }
+.hours-card dd { margin: 0 0 0 auto; min-width: 0; text-align: right; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+/* one list holding several label/value pairs: a row per pair, never two on a line */
+.hours-card dl:has(dt ~ dt) { display: grid; grid-template-columns: 1fr auto; gap: var(--space-2); }
+.hours-card > :last-child { margin-bottom: 0; }
 
 .btn-reserve {
   display: inline-block;
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
   font-size: 1rem;
   padding: 0.7em 2em;
   color: var(--color-cta-ink);
@@ -247,99 +353,32 @@ main { min-height: 60vh; }
   border-radius: var(--radius);
   text-decoration: none;
 }
-.btn-reserve:hover { background: var(--color-cta-hover); color: var(--color-cta-ink); text-decoration: none; }
-
-/* THE CARTE — the signature designed object ------------------------------ */
-
-.menu-header { text-align: center; }
-.menu-standfirst { font-style: italic; color: var(--color-muted); margin: var(--space-2) auto 0; max-width: 44ch; }
-
-.carte {
-  max-width: var(--measure-carte);
-  margin: var(--space-4) auto;
-  padding: clamp(1.5rem, 5vw, 3rem);
-  background: var(--color-paper);
-  border: 1px solid var(--color-frame);
-  outline: 1px solid var(--color-frame);
-  outline-offset: 5px;
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-carte);
-}
-
-.carte-list { list-style: none; margin: 0; padding: 0; }
-
-.dish { padding: var(--space-3) 0; border-bottom: 1px dotted var(--color-border); }
-.dish:first-child { padding-top: 0; }
-.dish:last-child { border-bottom: 0; padding-bottom: 0; }
-
-/* dish name … price, with a real dot leader between them */
-.dish-line {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  margin: 0;
-}
-.dish-name {
-  font-family: var(--font-display);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--color-text);
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.dish-name:hover { color: var(--color-accent); }
-.dish-leader {
-  flex: 1;
-  align-self: flex-end;
-  height: 0;
-  border-bottom: 2px dotted var(--color-leader);
-  transform: translateY(-0.28em);
-  min-width: 1.5rem;
-}
-.dish-price {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.1rem;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: 0.02em;
-  color: var(--color-accent);
-  white-space: nowrap;
-}
-
-.dish-desc { margin: var(--space-1) 0 0; color: var(--color-muted); font-style: italic; max-width: 52ch; }
-.dish-course { margin: var(--space-1) 0 0; font-size: 0.68rem; color: var(--color-muted); }
-
-/* Single dish page */
-.dish-page { max-width: var(--measure); margin: 0 auto; }
-.dish-page-back { margin: var(--space-4) 0 0; font-size: 0.9rem; }
-.dish-page-header { margin: var(--space-3) 0 var(--space-3); border-bottom: 2px solid var(--color-frame); padding-bottom: var(--space-3); }
-.dish-page-header h1 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.03em; font-size: clamp(1.8rem, 5vw, 2.6rem); margin: var(--space-1) 0; }
-.dish-page-price { font-size: 1.3rem; color: var(--color-accent); font-variant-numeric: tabular-nums; margin: 0; }
-.dish-page-standfirst { font-size: 1.2rem; font-style: italic; color: var(--color-muted); }
+.btn-reserve:hover { background: var(--color-cta-hover); }
+.prose .reserve { margin: var(--space-4) 0; text-align: center; }
+.hours-card .reserve { margin: calc(var(--space-3) + var(--space-2)) 0 0; }
+/* pages written before .reserve existed centred the button with a style attribute */
+.prose p:not(.reserve):has(> .btn-reserve:only-child) { margin: var(--space-4) 0; text-align: center; }
 
 /* Post list & pagination ------------------------------------------------- */
 
 .post-list { list-style: none; margin: 0; padding: 0; }
 .post-card { padding: var(--space-4) 0; border-bottom: 1px solid var(--color-border); }
 .post-card:last-child { border-bottom: 0; }
-.post-card h2 { font-family: var(--font-display); text-transform: uppercase; letter-spacing: 0.04em; font-size: 1.4rem; margin: 0 0 var(--space-1); }
+.post-card h2 { font-size: 1.4rem; line-height: 1.2; margin: 0 0 var(--space-1); }
 .post-card h2 a { color: var(--color-text); text-decoration: none; }
-.post-card h2 a:hover { color: var(--color-accent); }
+.post-card h2 a:hover { color: var(--color-accent); text-decoration: underline; }
 .post-card .summary { margin: var(--space-2) 0 0; }
 
 .pagination {
   display: flex;
+  align-items: baseline;
   justify-content: space-between;
   gap: var(--space-3);
-  max-width: var(--measure-carte);
-  margin: var(--space-4) auto 0;
+  margin: var(--space-4) 0 0;
   color: var(--color-muted);
-  font-size: 0.85rem;
+  font-size: 0.9rem;
 }
+.pagination a { padding: var(--space-2) 0; }
 
 .empty { color: var(--color-muted); text-align: center; }
 
@@ -350,10 +389,25 @@ main { min-height: 60vh; }
 }
 
 @media print {
-  body { max-width: none; color: #000; background: #fff; font-size: 11pt; }
-  .masthead nav, .colophon, .skip-link, .btn-reserve, .dish-page-back { display: none; }
+  /* ink on white, whichever scheme the screen was in */
+  :root {
+    --color-bg: #fff;
+    --color-paper: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-cta: #000;
+    --color-frame: #000;
+    --color-leader: #777;
+    --color-border: #999;
+    --color-code-bg: #fff;
+    --shadow-carte: none;
+  }
+  body { font-size: 11pt; }
+  .masthead, .colophon, main > *, main > .menu-page { max-width: none; }
+  main { min-height: 0; }
+  .masthead nav, .skip-link, .btn-reserve, .dish-page-back, .pagination { display: none; }
   a { color: inherit; text-decoration: none; }
-  .carte { box-shadow: none; outline: none; border: 1.5pt solid #000; page-break-inside: avoid; }
-  .dish-leader { border-bottom-color: #999; }
-  .dish { page-break-inside: avoid; }
+  .dish, .hours-card { break-inside: avoid; }
+  .dish-course { break-after: avoid; }
 }

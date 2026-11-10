@@ -3,7 +3,7 @@
     <h1>{{ page.title }}</h1>
   </header>
   {{#if items}}
-  <ol class="post-list" reversed>
+  <ol class="post-list" role="list" reversed>
     {{#each items as item}}<li class="post-card">
       <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
       {{#if item.dateFormatted}}<p class="meta"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>{{/if}}
@@ -12,13 +12,13 @@
     {{/each}}
   </ol>
   {{else}}
-  <p class="empty">Nothing here yet.</p>
+  <p class="empty">{{ strings.nothingHere }}</p>
   {{/if}}
   {{#if pagination.multiple}}
-  <nav class="pagination" aria-label="Pages">
-    {{#if pagination.newer}}<a href="{{ pagination.newer }}">← Newer</a>{{/if}}
-    <span>Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
-    {{#if pagination.older}}<a href="{{ pagination.older }}">Older →</a>{{/if}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
   </nav>
   {{/if}}
 </section>
