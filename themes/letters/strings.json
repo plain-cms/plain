@@ -1,0 +1,18 @@
+{
+  "nothingHere": "Nothing written yet — the first letter is on its way.",
+  "notFoundTitle": "This page was never written.",
+  "notFoundBody": "A moved essay, a mistyped address — whatever sent you here, there is no letter at this one.",
+  "goHome": "Start from the beginning",
+  "mainNav": "Main",
+  "pagination": "Pages",
+  "browseArchive": "Browse the archive",
+  "backToArchive": "Back to the archive",
+  "filedUnder": "Filed under",
+  "minRead": "min read",
+  "subscribePrompt": "Get new letters by email.",
+  "emailAddress": "Email address",
+  "emailPlaceholder": "you@example.com",
+  "subscribe": "Subscribe",
+  "feedPrompt": "New letters, the day they are finished.",
+  "followFeed": "Follow by RSS"
+}

@@ -2,12 +2,17 @@
   <header class="essay-header">
     <h1 class="essay-title">{{ page.title }}</h1>
     {{#if page.description}}<p class="essay-subtitle">{{ page.description }}</p>
-    {{/if}}<p class="essay-meta">
-      <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{#if page.tagLinks}}<span class="tags">{{#each page.tagLinks as tag}} <a class="tag" href="{{ tag.url }}">{{ tag.name }}</a>{{/each}}</span>{{/if}}
-    </p>
+    {{/if}}<div class="essay-meta" data-read-label="{{ strings.minRead }}">
+      <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>
+      {{#if page.tagLinks}}<ul class="tags" aria-label="{{ strings.filedUnder }}">
+        {{#each page.tagLinks as tag}}<li><a class="tag" href="{{ tag.url }}">{{ tag.name }}</a></li>
+        {{/each}}
+      </ul>{{/if}}
+    </div>
   </header>
-  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" decoding="async">
   {{/if}}<div class="prose essay-body">
 {{{ page.content }}}
   </div>
+  <p class="essay-back"><a href="/blog/">{{ strings.backToArchive }}</a></p>
 </article>

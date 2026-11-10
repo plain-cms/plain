@@ -1,19 +1,13 @@
 ---
 title: Subscribe
-description: New letters by email, the morning they're finished. Nothing else, ever.
+description: New letters by email, the morning they’re finished. Nothing else, ever.
 example: true
 ---
 
-New letters arrive by email the morning they're finished — every few weeks,
-occasionally sooner, never more than one at a time. No digests, no
-announcements, no "just checking in." Unsubscribing is one click and no hard
-feelings.
+New letters arrive by email the morning they’re finished — every four or five weeks, occasionally sooner, never more than one at a time. No digests, no announcements, no “just checking in.” Leaving is one line back to me and no hard feelings.
 
-If the form below isn't showing, the newsletter isn't wired up yet: open
-`data/newsletter.json` and set `formAction` to your email provider's form
-endpoint — Buttondown (`https://buttondown.com/api/emails/embed-subscribe/you`),
-Mailchimp's embedded-form URL, or any service that accepts a plain HTML form
-POST with an `email` field. The prompt and button label live in the same file.
+To be added to the list, write to [nell@example.com](mailto:nell@example.com?subject=Subscribe) with the word *subscribe* — or anything else you’d like to say — and the next letter will come to the address you wrote from. I add every name by hand, which is slow, and which I like.
 
-Prefer a feed reader? The [RSS feed](/blog/rss.xml) carries every letter in
-full, the moment it's published.
+Prefer a feed reader? The [RSS feed](/blog/rss.xml) lists every new letter the moment it’s published.
+
+Every letter takes replies. Answer one and it comes to me, not to a machine.

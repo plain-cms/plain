@@ -6,7 +6,7 @@
       {{#if page.tagLinks}}<span class="tags">{{#each page.tagLinks as tag}}<a class="tag" href="{{ tag.url }}">{{ tag.name }}</a>{{/each}}</span>{{/if}}
     </p>
   </header>
-  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" decoding="async">
   {{/if}}<div class="prose">
 {{{ page.content }}}
   </div>

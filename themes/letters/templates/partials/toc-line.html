@@ -1,8 +1,7 @@
 <li class="toc-entry">
   <a class="toc-link" href="{{ item.url }}">
-    <span class="toc-title">{{ item.title }}</span>
-    <span class="toc-leader" aria-hidden="true"></span>
-    <time class="toc-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+    <span class="toc-title"><span>{{ item.title }}</span></span>
+    <span class="toc-when"><time class="toc-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time></span>
   </a>
   {{#if item.description}}<p class="toc-excerpt">{{ item.description }}</p>
   {{/if}}

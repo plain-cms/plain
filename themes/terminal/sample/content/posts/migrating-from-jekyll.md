@@ -23,7 +23,22 @@ node tools/migrate/jekyll.js ~/src/old-blog .
 # 214 redirects written to data/redirects.json
 ```
 
-Frontmatter came across nearly untouched — `title`, `date`, `tags` mean the same thing in both worlds. Three things needed hand-work:
+Frontmatter came across nearly untouched — `title`, `date`, `tags` mean the same thing in both worlds. A typical post changed by five lines:
+
+```diff
+ ---
+-layout: post
+ title: "Postgres EXPLAIN, explained"
+-date: 2015-04-02 09:14:00 +0100
+-categories: [databases, postgres]
++date: 2015-04-02
++tags:
++  - databases
++  - postgres
+ ---
+```
+
+Three things needed hand-work:
 
 - **Liquid tags.** A dozen posts used `{% highlight %}` blocks; the importer converts them to fenced code, but two had `{% raw %}` nesting it flagged for review instead of guessing.
 - **Drafts.** Jekyll's `_drafts/` folder became `draft: true` frontmatter. Eleven drafts from 2019 did not survive the editorial review they never deserved.
@@ -33,11 +48,12 @@ Frontmatter came across nearly untouched — `title`, `date`, `tags` mean the sa
 
 That third point is the one that matters. Eleven years of inbound links point at the old URL shape, and silently changing URLs torches your search traffic and everyone's bookmarks. The importer's non-negotiable output is a complete old→new map:
 
-```sh
-head -3 data/redirects.json
-# {
-#   "/2015/03/hello-world/": "/blog/hello-world/",
-#   "/2015/04/postgres-explain/": "/blog/postgres-explain/",
+```json
+{
+  "/2015/03/hello-world/": "/blog/hello-world/",
+  "/2015/04/postgres-explain/": "/blog/postgres-explain/",
+  "/2016/11/what-i-learned-running-a-status-page-during-an-outage/": "/blog/status-page-during-an-outage/"
+}
 ```
 
 plain turns that into a `_redirects` file for the host plus meta-refresh fallback pages, so the redirects work even on dumb static hosting. I spot-checked the twenty most-trafficked URLs from analytics; all 301 correctly.

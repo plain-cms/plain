@@ -3,5 +3,6 @@
   <div class="post-row-body">
     <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
     {{#if item.description}}<p class="post-row-desc">{{ item.description }}</p>{{/if}}
+    {{#if item.tagLinks}}<ul class="tags" aria-label="{{ strings.tags }}">{{#each item.tagLinks as entry}}<li><a class="tag" href="{{ entry.url }}">{{ entry.name }}</a></li>{{/each}}</ul>{{/if}}
   </div>
 </li>

@@ -1,34 +1,28 @@
 ---
 title: Say the useful thing in the title, numbers welcome
 date: 2026-01-01
-description: One sentence a search result would show — what the reader gets, not what the post is "about".
+description: One sentence a search result would show — what the reader gets, not what the post is about.
 tags:
-  - replace-me
+  - notes
 draft: true
 ---
 
-*Fill in each section, then delete these instructions. Set the date, swap the
-tags for real ones, and flip `draft: false` when it's ready.*
+Open with the situation in two or three sentences: what you were trying to do, and what got in the way. Write it for the developer who hits the same thing next month and lands here from a search.
 
-## The problem, in one paragraph
+## What I did
 
-*Replace this: what were you trying to do, and what got in the way? Write it
-for a developer who hits this next month and lands here from a search.*
+The actual approach, in the order it happened. Show the code that runs, in a fenced block with its language after the backticks — it becomes the tab on the frame:
 
-## What you did
-
-*Replace this: the actual approach. Show real code in fenced blocks with a
-language tag — the theme gives them a badge and a copy button:*
-
-```js
-// real code beats pseudocode — paste the thing that runs
+```sh
+make deploy
 ```
 
-*Tables work well for numbers (latency, cost, before/after). Use `##` and
-`###` headings — posts with more than three get a table of contents
-automatically.*
+Numbers read best as a table:
 
-## What you'd tell someone starting today
+| Measure | Before | After |
+| ------- | ------ | ----- |
+| p95 latency | 210 ms | 48 ms |
 
-*Replace this: the transferable lesson. If a post has no opinion in the last
-section, it's documentation — also fine, but say which one you're writing.*
+## What I'd tell someone starting today
+
+The lesson that carries over to other projects. A post with more than three headings gets a table of contents on its own.

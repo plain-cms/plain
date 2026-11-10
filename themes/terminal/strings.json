@@ -1,0 +1,21 @@
+{
+  "mainNav": "Main",
+  "tags": "Tags",
+  "allPosts": "← all posts",
+  "nothingHere": "0 entries — nothing here yet.",
+  "pagination": "Pages",
+  "newer": "← newer",
+  "older": "older →",
+  "page": "page",
+  "rssFeed": "RSS feed",
+  "copy": "copy",
+  "copied": "copied",
+  "contents": "Contents",
+  "notFoundCode": "exit code 404",
+  "notFoundCmd": "open",
+  "notFoundArg": "this-page",
+  "notFoundShellError": "No such file or directory",
+  "notFoundList": "ls",
+  "notFoundBody": "Whatever was here has moved, or the address is mistyped. Everything that exists is listed above.",
+  "goHome": "Start over at the homepage."
+}

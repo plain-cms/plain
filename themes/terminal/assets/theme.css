@@ -1,9 +1,10 @@
 /* Terminal — a dark-first developer blog theme.
-   Deep blue-charcoal ground, warm off-white prose, amber CRT-phosphor accent.
+   Blue-charcoal ground, warm off-white prose, amber CRT-phosphor accent.
    Mono for the chrome (masthead, nav, meta, dates); a humanist sans for the
-   reading column. The signature is the code: framed blocks with an amber top
-   edge, a language bar, and a visible, styled scrollbar — code blocks stay
-   dark in the light scheme, like a terminal window on a desk.
+   reading column. The signature is the code: terminal-window frames with an
+   amber top edge, a language tab hanging from it and a title bar — wider than
+   the text around them, and dark in both schemes, like a terminal on a desk.
+   Amber means two things only: a link, or code.
    All design decisions are tokens below. Restyle by editing tokens,
    never selectors (cms-spec.md §10.1). */
 
@@ -22,26 +23,28 @@
   --leading-tight: 1.2;
   --tracking-label: 0.08em;
 
-  /* Color — dark scheme first (amber phosphor on blue-charcoal) */
-  --color-bg: #151c24;
-  --color-surface: #1b232e;
-  --color-text: #e9e5dc;
-  --color-muted: #9aa5b1;
-  --color-accent: #e8a03e;
-  --color-accent-soft: #f0b45c;
-  --color-accent-wash: rgba(232, 160, 62, 0.12);
-  --color-border: #2a3441;
+  /* Color — the light scheme (paper and ink); the dark scheme, which the
+     theme is designed around, overrides the same names just below */
+  --color-bg: #f5f4f0;
+  --color-surface: #eceae4;
+  --color-text: #222933;
+  --color-muted: #5b6572;
+  --color-accent: #8a5a10;
+  --color-accent-soft: #8a5a10;
+  --color-accent-wash: rgba(232, 160, 62, 0.18);
+  --color-border: #d9d6cd;
 
-  /* The code frame — constant across schemes: a terminal is always dark */
-  --color-code-bg: #10151b;
+  /* The code frame — the same in both schemes: a terminal is always dark */
+  --color-code-bg: #0d1217;
   --color-code-text: #e9e5dc;
   --color-code-muted: #9aa5b1;
   --color-code-bar: #1a222c;
-  --color-code-border: #2a3441;
-  --color-code-edge: #e8a03e;
+  --color-code-border: #36414f;
+  --color-code-edge: #c07f1e;
 
   /* Layout */
   --measure: 70ch;
+  --measure-prose: 58ch;
   --date-col: 7.5rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -51,19 +54,20 @@
   --radius: 6px;
   --radius-s: 3px;
   --edge: 2px;
+  --rule: 1px;
 }
 
-@media (prefers-color-scheme: light) {
+@media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #f5f4f0;
-    --color-surface: #eceae4;
-    --color-text: #222933;
-    --color-muted: #5b6572;
-    --color-accent: #8a5a10;
-    --color-accent-soft: #8a5a10;
-    --color-accent-wash: rgba(232, 160, 62, 0.18);
-    --color-border: #d9d6cd;
-    --color-code-edge: #c07f1e;
+    --color-bg: #151c24;
+    --color-surface: #1b232e;
+    --color-text: #e9e5dc;
+    --color-muted: #9aa5b1;
+    --color-accent: #e8a03e;
+    --color-accent-soft: #f0b45c;
+    --color-accent-wash: rgba(232, 160, 62, 0.12);
+    --color-border: #2a3441;
+    --color-code-edge: #e8a03e;
   }
 }
 
@@ -84,10 +88,10 @@ body {
   background: var(--color-bg);
 }
 
-::selection { background: var(--color-accent-wash); color: inherit; }
+::selection { background: var(--color-accent); color: var(--color-bg); }
 
-a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
-a:hover { text-decoration-thickness: var(--edge); }
+a { color: var(--color-accent); text-decoration-thickness: var(--rule); text-underline-offset: 0.18em; }
+a:hover { color: var(--color-accent-soft); text-decoration-thickness: var(--edge); }
 
 :focus-visible {
   outline: var(--edge) solid var(--color-accent);
@@ -101,6 +105,7 @@ a:hover { text-decoration-thickness: var(--edge); }
   top: var(--space-2);
   background: var(--color-surface);
   color: var(--color-text);
+  border: var(--rule) solid var(--color-muted);
   padding: var(--space-2) var(--space-3);
   font-family: var(--font-mono);
   font-size: var(--text-s);
@@ -113,9 +118,9 @@ a:hover { text-decoration-thickness: var(--edge); }
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-4) 0 var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-4) 0 var(--space-2);
+  border-bottom: var(--rule) solid var(--color-border);
   font-family: var(--font-mono);
 }
 
@@ -131,12 +136,14 @@ a:hover { text-decoration-thickness: var(--edge); }
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-3);
+  gap: 0 var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .masthead nav a {
+  display: inline-block;
+  padding: var(--space-1) 0;
   color: var(--color-muted);
   text-decoration: none;
   font-size: var(--text-s);
@@ -152,23 +159,29 @@ a:hover { text-decoration-thickness: var(--edge); }
 main { min-height: 60vh; }
 
 .colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
   margin-top: var(--space-5);
   padding: var(--space-3) 0 var(--space-4);
-  border-top: 1px solid var(--color-border);
+  border-top: var(--rule) solid var(--color-border);
   color: var(--color-muted);
   font-family: var(--font-mono);
   font-size: var(--text-s);
 }
-.colophon p { margin: 0 0 var(--space-2); }
+.colophon p { margin: 0 0 var(--space-1); }
+.colophon a { color: inherit; }
+.colophon a + a { margin-left: var(--space-3); }
+.colophon a:hover { color: var(--color-accent); }
 
-/* Keyboard hint — created by enhance.js, absent without JavaScript */
-.kbd-hint { font-size: var(--text-xs); color: var(--color-muted); margin: 0; }
-.kbd-hint kbd {
-  font-family: inherit;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-s);
-  padding: 0 var(--space-1);
+/* A star count baked in by the github-stars plugin (and refreshed by its script) */
+[data-gh-stars] {
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+  white-space: nowrap;
 }
 
 /* Headers ---------------------------------------------------------------- */
@@ -181,19 +194,21 @@ main { min-height: 60vh; }
   letter-spacing: -0.015em;
   line-height: var(--leading-tight);
   margin: 0;
+  overflow-wrap: break-word;
   text-wrap: balance;
 }
 
 .meta {
   font-family: var(--font-mono);
   font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
   color: var(--color-muted);
   margin: 0 0 var(--space-2);
 }
 .meta-sep { margin: 0 var(--space-2); }
-.meta a { color: var(--color-accent); }
 
 .lede {
+  max-width: var(--measure-prose);
   margin: var(--space-3) 0 0;
   font-size: var(--text-l);
   line-height: var(--leading-tight);
@@ -201,18 +216,33 @@ main { min-height: 60vh; }
   text-wrap: balance;
 }
 
-.tags { margin: var(--space-3) 0 0; font-family: var(--font-mono); font-size: var(--text-s); }
+/* Tags are quiet: grey mono with a hash, amber only under the pointer */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+}
 .tag {
   display: inline-block;
-  margin-right: var(--space-3);
-  color: var(--color-accent);
+  padding: var(--space-1) 0;
+  color: var(--color-muted);
   text-decoration: none;
 }
-.tag::before { content: "#"; opacity: 0.65; }
-.tag:hover { text-decoration: underline; }
-.tag-name { color: var(--color-accent); }
+.tag::before { content: "#"; }
+.tag:hover { color: var(--color-accent); text-decoration: underline; }
 
 /* Prose ------------------------------------------------------------------ */
+
+.prose { overflow-wrap: break-word; }
+
+/* Text keeps a book measure; code frames and tables take the whole column,
+   so the code is the widest thing on the page. */
+.prose > :is(p, ul, ol, dl, blockquote, h2, h3, h4) { max-width: var(--measure-prose); }
 
 .prose h2, .prose h3, .prose h4 {
   font-weight: 700;
@@ -221,13 +251,15 @@ main { min-height: 60vh; }
   margin: var(--space-4) 0 var(--space-2);
   text-wrap: balance;
 }
-.prose h2 { font-size: var(--text-xl); }
+.prose h2 { font-size: var(--text-xl); margin-top: calc(var(--space-4) + var(--space-2)); }
 .prose h3 { font-size: var(--text-l); }
 .prose h4 { font-size: var(--text-m); }
+.prose :target { background: var(--color-accent-wash); }
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
 .prose li { margin-bottom: var(--space-1); }
-.prose li::marker { color: var(--color-accent); }
+.prose li::marker { color: var(--color-muted); }
+.prose mark { background: var(--color-accent-wash); color: inherit; }
 
 .prose img {
   max-width: 100%;
@@ -238,7 +270,7 @@ main { min-height: 60vh; }
 .prose blockquote {
   margin: var(--space-3) 0;
   padding: var(--space-1) var(--space-3);
-  border-left: var(--edge) solid var(--color-accent);
+  border-left: var(--edge) solid var(--color-muted);
   color: var(--color-muted);
 }
 .prose blockquote p:last-child { margin-bottom: 0; }
@@ -255,7 +287,7 @@ main { min-height: 60vh; }
 .prose th, .prose td {
   text-align: left;
   padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--rule) solid var(--color-border);
   white-space: nowrap;
 }
 .prose th {
@@ -268,7 +300,7 @@ main { min-height: 60vh; }
 
 .prose hr {
   border: 0;
-  border-top: 1px solid var(--color-border);
+  border-top: var(--rule) solid var(--color-border);
   margin: var(--space-4) 0;
 }
 
@@ -279,86 +311,125 @@ main { min-height: 60vh; }
   margin-bottom: var(--space-4);
 }
 
+/* The search page's field (search plugin) — a border you can see */
+main #search-app input[type="search"] { border-color: var(--color-muted); font-family: var(--font-mono); }
+
 /* Code — the signature ---------------------------------------------------- */
 
-.prose code {
+/* Inline code and key caps are neutral, so they never read as links */
+.prose code, .prose kbd {
   font-family: var(--font-mono);
   font-size: 0.88em;
-  background: var(--color-accent-wash);
-  color: var(--color-accent-soft);
-  padding: 0.08em 0.35em;
+  background: var(--color-surface);
+  border: var(--rule) solid var(--color-border);
+  padding: 0.05em 0.3em;
   border-radius: var(--radius-s);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
+/* The frame. Its top padding is the title bar, drawn by ::before, so the
+   block has the same height with and without enhance.js. */
 .prose pre {
+  position: relative;
+  margin: var(--space-4) 0;
+  padding: var(--space-4) 0 0;
   background: var(--color-code-bg);
   color: var(--color-code-text);
-  border: 1px solid var(--color-code-border);
-  border-top: var(--edge) solid var(--color-code-edge);
+  border: var(--rule) solid var(--color-code-border);
+  border-top: calc(var(--edge) + var(--rule)) solid var(--color-code-edge);
   border-radius: var(--radius);
-  margin: var(--space-4) 0;
-  padding: 0;
-  overflow-x: auto;
   line-height: var(--leading-code);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-code-muted) var(--color-code-bg);
+  tab-size: 4;
+  overflow: hidden;
 }
-.prose pre::-webkit-scrollbar { height: var(--space-2); }
-.prose pre::-webkit-scrollbar-track { background: var(--color-code-bg); border-radius: var(--radius); }
-.prose pre::-webkit-scrollbar-thumb { background: var(--color-code-muted); border-radius: var(--radius); }
+.prose pre::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: var(--space-4);
+  background: var(--color-code-bar);
+  border-bottom: var(--rule) solid var(--color-code-border);
+}
 
-.prose pre code {
+/* The code scrolls sideways inside the frame; the bar and tab stay put. */
+.prose pre > code {
   display: block;
-  width: max-content;
-  min-width: 100%;
+  overflow-x: auto;
   padding: var(--space-3);
   background: none;
-  color: inherit;
-  font-size: var(--text-s);
+  border: 0;
   border-radius: 0;
+  font-size: var(--text-s);
+}
+.prose pre > code::-webkit-scrollbar { height: var(--space-2); }
+.prose pre > code::-webkit-scrollbar-track { background: var(--color-code-bar); }
+.prose pre > code::-webkit-scrollbar-thumb { background: var(--color-code-muted); border-radius: var(--radius); }
+@supports not selector(::-webkit-scrollbar) {
+  .prose pre > code { scrollbar-width: thin; scrollbar-color: var(--color-code-muted) var(--color-code-bar); }
 }
 
-/* The title bar enhance.js prepends inside each fenced block.
-   position: sticky pins it to the visible edge while the code scrolls. */
-.code-bar {
-  position: sticky;
-  left: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-1) var(--space-2) var(--space-1) var(--space-3);
-  background: var(--color-code-bar);
-  border-bottom: 1px solid var(--color-code-border);
-  font-family: var(--font-mono);
+/* The language tab, with no script: attr() prints the fence's class
+   ("language-sh") and the indent pulls the nine characters of "language-"
+   out of sight — exact, because the face is monospace. Side borders stand in
+   for padding (overflow clips at the padding edge, so padding would show
+   the hyphen). */
+.prose pre > code[class^="language-"]::before {
+  content: attr(class);
+  position: absolute;
+  top: 0;
+  left: var(--space-3);
+  max-width: 60%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-indent: -9ch;
+  background: var(--color-code-edge);
+  border: 0 solid var(--color-code-edge);
+  border-width: 0 var(--space-2) var(--space-1);
+  border-radius: 0 0 var(--radius-s) var(--radius-s);
+  color: var(--color-code-bg);
   font-size: var(--text-xs);
-  color: var(--color-code-muted);
+  font-weight: 700;
   line-height: var(--leading-body);
 }
-.code-lang { text-transform: uppercase; letter-spacing: var(--tracking-label); }
 
+/* The copy button enhance.js adds, in the bar's reserved space */
 .copy-code {
-  font: inherit;
-  color: var(--color-code-muted);
-  background: none;
-  border: 1px solid var(--color-code-border);
-  border-radius: var(--radius-s);
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  min-height: calc(var(--space-4) - 2 * var(--space-1));
   padding: 0 var(--space-2);
+  font: inherit;
+  font-size: var(--text-xs);
+  line-height: 1;
+  color: var(--color-code-muted);
+  background: var(--color-code-bg);
+  border: var(--rule) solid var(--color-code-border);
+  border-radius: var(--radius-s);
   cursor: pointer;
+  user-select: none;
 }
+.copy-code::after { content: ""; position: absolute; inset: calc(-1 * var(--space-2)); }
 .copy-code:hover { color: var(--color-code-edge); border-color: var(--color-code-edge); }
 
-/* The 404 shell transcript — same frame, never gets a bar or copy button */
+.prose pre :focus-visible { outline-color: var(--color-code-edge); }
+.prose pre > code:focus-visible { outline-offset: calc(-1 * var(--edge)); }
+
+/* The 404 transcript: the same frame, but output rather than code — it wraps */
+.prose pre.static > code { white-space: pre-wrap; overflow-wrap: anywhere; }
+.prose pre a { color: var(--color-code-edge); }
 .shell-arg { color: var(--color-code-edge); }
+.shell-prompt { color: var(--color-code-muted); user-select: none; }
 
 /* Table of contents — built by enhance.js on longer posts ----------------- */
 
 .toc {
+  max-width: var(--measure-prose);
   margin: var(--space-4) 0;
   padding: var(--space-3);
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-left: var(--edge) solid var(--color-accent);
+  border: var(--rule) solid var(--color-border);
   border-radius: var(--radius);
   font-family: var(--font-mono);
   font-size: var(--text-s);
@@ -376,30 +447,41 @@ main { min-height: 60vh; }
 .toc a { color: var(--color-text); text-decoration: none; }
 .toc a:hover { color: var(--color-accent); text-decoration: underline; }
 
-/* Archive — the changelog list -------------------------------------------- */
+/* Archive — the changelog ------------------------------------------------- */
 
+/* Date in the gutter, then a rail with one amber tick per entry */
 .post-list { list-style: none; margin: 0; padding: 0; }
 
-.post-row {
-  display: grid;
-  grid-template-columns: var(--date-col) 1fr;
-  column-gap: var(--space-3);
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-border);
-}
-.post-row:last-child { border-bottom: 0; }
+.post-row { display: grid; grid-template-columns: var(--date-col) 1fr; }
 
 .post-row-date {
   font-family: var(--font-mono);
   font-size: var(--text-s);
   font-variant-numeric: tabular-nums;
   color: var(--color-muted);
-  padding-top: var(--space-1);
+  padding-top: 0.15em;
+}
+
+.post-row-body {
+  position: relative;
+  padding: 0 0 var(--space-4) var(--space-4);
+  border-left: var(--rule) solid var(--color-border);
+  overflow-wrap: break-word;
+}
+.post-row:last-child .post-row-body { padding-bottom: var(--space-2); }
+.post-row-body::before {
+  content: "";
+  position: absolute;
+  top: 0.75em;
+  left: calc(-1 * var(--space-2));
+  width: var(--space-3);
+  height: var(--edge);
+  background: var(--color-code-edge);
 }
 
 .post-row h2 {
   font-size: var(--text-l);
-  font-weight: 700;
+  font-weight: 600;
   line-height: var(--leading-tight);
   margin: 0;
   text-wrap: balance;
@@ -407,18 +489,32 @@ main { min-height: 60vh; }
 .post-row h2 a { color: var(--color-text); text-decoration: none; }
 .post-row h2 a:hover { color: var(--color-accent); text-decoration: underline; }
 
-.post-row-desc { margin: var(--space-1) 0 0; color: var(--color-muted); font-size: var(--text-s); }
+.post-row-desc {
+  max-width: var(--measure-prose);
+  margin: var(--space-1) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-s);
+}
+.post-row .tags { margin-top: 0; font-size: var(--text-xs); }
 
 @media (max-width: 34rem) {
-  .post-row { grid-template-columns: 1fr; row-gap: var(--space-1); }
-  .post-row-date { padding-top: 0; }
+  .post-row {
+    position: relative;
+    grid-template-columns: 1fr;
+    padding: 0 0 var(--space-4) var(--space-3);
+    border-left: var(--rule) solid var(--color-border);
+  }
+  .post-row:last-child { padding-bottom: var(--space-2); }
+  .post-row-date { padding: 0 0 var(--space-1); }
+  .post-row-body, .post-row:last-child .post-row-body { position: static; padding: 0; border: 0; }
+  .prose pre > code { font-size: var(--text-xs); }
 }
 
-.pagination {
+.pagination, .post-nav {
   display: flex;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
+  margin-top: var(--space-4);
   font-family: var(--font-mono);
   font-size: var(--text-s);
   color: var(--color-muted);
@@ -426,38 +522,40 @@ main { min-height: 60vh; }
 
 .empty { color: var(--color-muted); font-family: var(--font-mono); }
 
-/* 404 ---------------------------------------------------------------------- */
-
-.not-found pre {
-  background: var(--color-code-bg);
-  color: var(--color-code-text);
-  border: 1px solid var(--color-code-border);
-  border-top: var(--edge) solid var(--color-code-edge);
-  border-radius: var(--radius);
-  padding: var(--space-3);
-  overflow-x: auto;
-  font-family: var(--font-mono);
-  font-size: var(--text-s);
-  line-height: var(--leading-code);
-}
-
 /* Motion & print ------------------------------------------------------------ */
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
 }
 
+/* Paper: every colour token becomes black on white, whatever the scheme or
+   the site's own token overrides (hence the extra "html"). */
 @media print {
-  body { max-width: none; font-size: 11pt; color: #000; background: #fff; }
-  .masthead nav, .colophon, .skip-link, .copy-code, .kbd-hint { display: none; }
-  a { color: inherit; }
-  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
-  .prose pre, .not-found pre {
-    background: #fff;
-    color: #000;
-    border-color: #000;
-    white-space: pre-wrap;
+  html:root {
+    --color-bg: #fff;
+    --color-surface: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-accent-soft: #000;
+    --color-accent-wash: #fff;
+    --color-border: #999;
+    --color-code-bg: #fff;
+    --color-code-text: #000;
+    --color-code-muted: #333;
+    --color-code-bar: #fff;
+    --color-code-border: #999;
+    --color-code-edge: #000;
   }
-  .prose pre code { width: auto; white-space: pre-wrap; }
-  .prose code { background: none; color: #000; }
+  body { max-width: none; font-size: 11pt; }
+  .masthead nav, .colophon, .skip-link, .copy-code, .pagination, .post-nav, .toc { display: none; }
+  main { min-height: 0; }
+  .page-header { margin-top: var(--space-4); }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; overflow-wrap: anywhere; }
+  .prose pre > code { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .prose pre > code[class^="language-"]::before { background: none; border-color: transparent; color: var(--color-code-text); }
+  .prose table { display: table; }
+  .prose th, .prose td { white-space: normal; }
+  .prose pre, .post-row { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
 }
