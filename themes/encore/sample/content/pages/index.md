@@ -1,22 +1,30 @@
 ---
-title: The Low Bridge
-description: Four-piece soul from the wrong end of the river. New record out now; on the road all summer — dates, music, and the press kit live here.
+title: Small Hours is out. The spring tour is on sale.
+description: Four-piece soul from the wrong end of the river. Ten new songs, eight rooms between April and June, and two of them have already gone.
 example: true
 ---
 
-*Replace this page with your band's own front door. Keep it short — the
-shows are the point, and the [shows page](/shows/) is one click away.*
-
 We're The Low Bridge: four people, one van, horn charts we argue about,
 and a second record — **Small Hours** — out now everywhere that plays
-music. The [shows page](/shows/) has the summer; when a date's gone it
-gets struck through, not deleted, because the struck ones are how the
-list earns your trust.
+music.
 
-New here? Start with the song called *Riverside* and stand near the back;
-it finds you. Then come see it live — that's the actual band. Records are
-just the flyer.
+## On the road
 
-Promoters and press: everything you need — bios in three lengths, photos,
-stage plot — is on the [press kit](/press/) page, no login, no zip file
-drama.
+Eight nights this spring, from a ninety-capacity basement to the main
+stage at Crane Yard. Two have sold out already. When a date's gone it gets
+struck through, not deleted, because the struck ones are how the list
+earns your trust.
+
+[See every date and get tickets](/shows/)
+
+## New here?
+
+Start with the song called *Riverside* and stand near the back; it finds
+you. Then come see it live — that's the actual band. Records are just the
+flyer. Both albums and the first EP are on the [music page](/music/).
+
+## Promoters & press
+
+Bios in three lengths, photos on request and the stage plot are on the
+[press kit](/press/) page. No login, no zip-file drama, and a person
+answers the email.

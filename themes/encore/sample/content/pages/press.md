@@ -1,12 +1,8 @@
 ---
 title: Press kit
-description: Bios in three lengths, photos, stage plot, and a human who answers press email — everything a promoter needs on one page.
+description: Bios in three lengths, photos on request, the stage plot, and a human who answers press email — everything a promoter needs on one page.
 example: true
 ---
-
-*Replace with your own kit. The three-length bio format below is the whole
-trick — venues paste the short one, magazines take the long one, and
-nobody has to write anything the night before doors.*
 
 ## One line
 
@@ -44,10 +40,12 @@ Marsh (drums), Ini (bass, arrangements), and Cole (keys, horns, denial).
 
 ## Assets & practicalities
 
-- **Photos:** print-quality live and posed shots in [/media/press/](/media/)
-  — credit "T. Okafor" on the live set
-- **Stage plot & tech:** four inputs of honesty and a real Leslie — the
-  PDF is in [/media/press/](/media/); the Leslie is non-negotiable
-- **Contact:** [press@example.com](mailto:press@example.com) for
-  interviews, [bookings@example.com](mailto:bookings@example.com) for
-  dates — both answered by a person, usually Ada, usually same day
+- **Photos:** print-quality live and posed shots, sent by email on
+  request — ask at [press@example.com](mailto:press@example.com) and
+  credit "T. Okafor" on the live set
+- **Stage plot & tech rider:** one PDF, sent with the booking
+  confirmation. Four inputs of honesty and a real Leslie; the Leslie is
+  non-negotiable
+- **Interviews:** [press@example.com](mailto:press@example.com)
+- **Dates:** [bookings@example.com](mailto:bookings@example.com) — both
+  answered by a person, usually Ada, usually same day

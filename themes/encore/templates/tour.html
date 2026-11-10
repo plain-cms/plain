@@ -5,33 +5,34 @@
     {{/if}}
   </header>
   {{#if items}}
-  <ol class="show-list" reversed>
+  {{#if pagination.newer}}{{else}}<p class="empty no-ahead" hidden>{{ strings.noShows }}</p>
+  {{/if}}<ul class="show-list" role="list">
     {{#each items as item}}
     <li class="show-row" data-status="{{ item.status }}">
       <time class="show-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
       <div class="show-where">
-        {{#if item.city}}<span class="show-city">{{ item.city }}</span>
-        {{/if}}{{#if item.venue}}<span class="show-venue">{{ item.venue }}</span>
-        {{/if}}{{#if item.support}}<span class="show-support">with {{ item.support }}</span>
+        <a class="show-city" href="{{ item.url }}">{{#if item.city}}{{ item.city }}{{else}}{{ item.title }}{{/if}}</a>
+        {{#if item.venue}}<span class="show-venue">{{ item.venue }}</span>
+        {{/if}}{{#if item.support}}<span class="show-support">{{ strings.withSupport }} {{ item.support }}</span>
         {{/if}}
       </div>
       <div class="show-action">
-        {{#if item.ticketsUrl}}<a class="btn-tickets" href="{{ item.ticketsUrl }}">Tickets</a>
-        {{else}}{{#if item.status}}<span class="status-chip">{{ item.status }}</span>
-        {{/if}}{{/if}}
-        <a class="show-more" href="{{ item.url }}">Details</a>
+        {{#if item.ticketsUrl}}<a class="btn-tickets" href="{{ item.ticketsUrl }}" aria-label="{{ strings.tickets }}: {{ item.title }}">{{ strings.tickets }}</a>
+        {{/if}}{{#if item.status}}<span class="status-chip">{{ item.status }}</span>
+        {{/if}}
       </div>
     </li>
     {{/each}}
-  </ol>
+    <li class="show-divider" hidden>{{ strings.playedShows }}</li>
+  </ul>
   {{else}}
-  <p class="empty">No shows on the board. The next one you publish lands here.</p>
+  <p class="empty">{{ strings.noShows }}</p>
   {{/if}}
   {{#if pagination.multiple}}
-  <nav class="pagination" aria-label="Pages">
-    {{#if pagination.newer}}<a href="{{ pagination.newer }}">← Later</a>{{/if}}
-    <span>Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
-    {{#if pagination.older}}<a href="{{ pagination.older }}">Earlier →</a>{{/if}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.laterShows }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.earlierShows }}</a>{{/if}}
   </nav>
   {{/if}}
 </section>

@@ -1,6 +1,6 @@
 ---
 title: Harbor lights — free summer series
-date: 2026-05-30
+date: 2027-05-30
 city: Riverside
 venue: Harbor Steps
 status: Free entry

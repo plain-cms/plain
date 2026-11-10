@@ -1,6 +1,6 @@
 ---
 title: Crane Yard Festival — main stage
-date: 2026-06-13
+date: 2027-06-12
 city: Docklands
 venue: Crane Yard
 ticketsUrl: https://tickets.example.com/craneyard

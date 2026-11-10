@@ -1,11 +1,11 @@
 /* Encore — the band & artist theme.
-   Stage light on black-painted wood: warm near-black, one hot magenta, dim
-   amber house lights for everything secondary. Dark-first — the :root IS
-   the dark scheme; the light scheme below is the day off. The signature is
-   the tour-dates list: big scannable rows, tickets on the right, sold-out
-   rows dimmed like a struck setlist line. All design decisions live in the
-   tokens below; restyle by editing tokens, never selectors
-   (cms-spec.md §10.1). */
+   Stage light on black-painted wood: one hot magenta, warm near-black on
+   stage and warm paper on the day off, dim amber house lights for everything
+   secondary. The signature is the tour-dates list: a date block, the city in
+   heavy capitals, tickets on the right, and a magenta strike through every
+   sold-out show — a setlist line already played. Everything else stays
+   quiet. All design decisions live in the tokens below; restyle by editing
+   tokens, never selectors (cms-spec.md §10.1). */
 
 :root {
   /* Type */
@@ -15,46 +15,51 @@
   --text-s: 0.875rem;
   --text-m: 1.0625rem;
   --text-l: 1.3125rem;
-  --text-xl: clamp(1.5rem, 4vw, 2rem);
-  --text-xxl: clamp(2rem, 6vw, 3rem);
+  --text-xl: clamp(1.75rem, 5vw, 2.75rem);
+  --text-xxl: clamp(2.25rem, 7vw, 4rem);
   --leading-body: 1.6;
   --leading-tight: 1.05;
   --tracking-caps: 0.14em;
   --tracking-display: -0.02em;
+  --weight-display: 800;
 
-  /* Color — the stage (dark scheme, default) */
-  --color-bg: #16120f;
-  --color-panel: #221c18;
-  --color-text: #f3ede6;
-  --color-muted: #a89a88;
-  --color-accent: #f0447c;
-  --color-accent-ink: #1c0710;
-  --color-border: #352c25;
-  --color-code-bg: #241e19;
+  /* Color — the day off (light scheme) */
+  --color-bg: #faf7f3;
+  --color-panel: #f1ebe3;
+  --color-text: #241d17;
+  --color-muted: #6d6155;
+  --color-accent: #c2185b;
+  --color-accent-ink: #ffffff;
+  --color-border: #e2d9cd;
+  --color-code-bg: #f0eae1;
 
   /* Layout */
   --measure: 62ch;
   --page-width: 62rem;
+  --date-col: 11rem;
+  --action-col: 9.5rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
   --space-4: 2rem;
   --space-5: 4rem;
   --radius: 6px;
+  --radius-pill: 999px;
+  --rule-heavy: 4px;
   --tap-target: 3rem;
 }
 
-/* The day off — a real light scheme, not an afterthought. */
-@media (prefers-color-scheme: light) {
+/* The stage — the scheme the theme was drawn in. */
+@media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #faf7f3;
-    --color-panel: #f1ebe3;
-    --color-text: #241d17;
-    --color-muted: #6d6155;
-    --color-accent: #c2185b;
-    --color-accent-ink: #ffffff;
-    --color-border: #e2d9cd;
-    --color-code-bg: #f0eae1;
+    --color-bg: #16120f;
+    --color-panel: #221c18;
+    --color-text: #f3ede6;
+    --color-muted: #a89a88;
+    --color-accent: #f0447c;
+    --color-accent-ink: #1c0710;
+    --color-border: #352c25;
+    --color-code-bg: #241e19;
   }
 }
 
@@ -73,6 +78,7 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  overflow-wrap: break-word;
 }
 
 ::selection { background: var(--color-accent); color: var(--color-accent-ink); }
@@ -80,11 +86,7 @@ body {
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: 2px; }
 
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 .skip-link {
   position: absolute;
@@ -95,21 +97,33 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .skip-link:focus { left: var(--space-2); }
 
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 /* Masthead & footer ------------------------------------------------------ */
 
 .masthead {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-4) 0 var(--space-3);
+  gap: 0 var(--space-4);
+  padding-top: var(--space-3);
   border-bottom: 1px solid var(--color-border);
 }
 
 .site-title {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
   font-family: var(--font-display);
   font-size: var(--text-l);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
   color: var(--color-text);
@@ -120,23 +134,26 @@ a:hover { text-decoration-thickness: 2px; }
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: 0 var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
 }
+/* The current page stands on the header rule under a bar of stage light. */
 .masthead nav a {
-  color: var(--color-muted);
-  text-decoration: none;
-  font-size: var(--text-s);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-target);
+  margin-bottom: -1px;
+  border-block: var(--rule-heavy) solid transparent;
+  color: var(--color-muted);
+  font-size: var(--text-s);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  text-decoration: none;
 }
 .masthead nav a:hover { color: var(--color-accent); }
-.masthead nav a[aria-current="page"] { color: var(--color-text); }
+.masthead nav a[aria-current="page"] { color: var(--color-text); border-bottom-color: var(--color-accent); }
 
 main { min-height: 60vh; }
 
@@ -147,23 +164,31 @@ main { min-height: 60vh; }
   color: var(--color-muted);
   font-size: var(--text-s);
 }
-.colophon-line { margin: var(--space-1) 0 0; }
+.colophon p { margin: 0 0 var(--space-3); }
+.colophon-line { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4); }
+.contact { display: flex; flex-direction: column; }
+.contact-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
 
 /* Headers ---------------------------------------------------------------- */
 
-.page-header { margin: var(--space-5) 0 var(--space-4); max-width: var(--measure); }
+.page-header { margin: var(--space-4) 0; }
 
 .page-header h1 {
   font-family: var(--font-display);
   font-size: var(--text-xxl);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-display);
-  margin: 0 0 var(--space-2);
+  text-transform: uppercase;
+  margin: 0 0 var(--space-3);
   text-wrap: balance;
 }
 
-.lede { font-size: var(--text-l); color: var(--color-muted); margin: 0; }
+.lede { max-width: var(--measure); font-size: var(--text-l); color: var(--color-muted); margin: 0; }
 
 .show-meta {
   display: flex;
@@ -178,16 +203,18 @@ main { min-height: 60vh; }
 
 .tags { margin-left: var(--space-2); }
 .tag { display: inline-block; margin-right: var(--space-2); color: var(--color-accent); text-decoration: none; }
-.tag::before { content: "#"; opacity: 0.6; }
+.tag::before { content: "#"; }
 .tag:hover { text-decoration: underline; }
 
 /* Chips & buttons ----------------------------------------------------------- */
 
 .status-chip {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.2em 0.7em;
   border: 1px solid var(--color-border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--color-panel);
   color: var(--color-muted);
   font-family: var(--font-mono);
@@ -196,18 +223,17 @@ main { min-height: 60vh; }
   letter-spacing: var(--tracking-caps);
   white-space: nowrap;
 }
-[data-status="Free entry"] .status-chip { color: var(--color-text); border-color: var(--color-muted); }
 
 .btn-tickets {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-3);
   background: var(--color-accent);
   color: var(--color-accent-ink);
   border-radius: var(--radius);
-  font-weight: 700;
+  font-weight: var(--weight-display);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   font-size: var(--text-s);
@@ -215,7 +241,11 @@ main { min-height: 60vh; }
   white-space: nowrap;
 }
 .btn-tickets:hover { filter: brightness(1.12); text-decoration: none; }
-.btn-big { font-size: var(--text-m); }
+
+.actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); margin: 0; }
+
+.backlink a, .pagination a, .actions a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+.actions .btn-tickets { padding: 0 var(--space-4); }
 
 /* The tour list — the signature --------------------------------------------- */
 
@@ -223,60 +253,116 @@ main { min-height: 60vh; }
 
 .show-row {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--space-2) var(--space-4);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2) var(--space-3);
   align-items: center;
   padding: var(--space-4) 0;
 }
 .show-row + .show-row { border-top: 1px solid var(--color-border); }
 
-.show-date {
-  font-family: var(--font-mono);
-  font-size: var(--text-l);
-  color: var(--color-text);
-  white-space: nowrap;
+/* The date as the build prints it; enhance.js turns it into the block below. */
+.show-date { font-family: var(--font-mono); font-size: var(--text-m); text-wrap: balance; }
+
+.date-block { display: flex; flex-direction: column; gap: var(--space-1); }
+.date-day {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-display);
+  line-height: 1;
+  letter-spacing: var(--tracking-display);
+  font-variant-numeric: tabular-nums;
 }
+.date-rest {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--text-s);
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+.date-month { color: var(--color-muted); }
+.date-year { display: block; }
 
 .show-where { display: flex; flex-direction: column; gap: var(--space-1); }
 
 .show-city {
+  align-self: flex-start;
+  /* A flex item will not shrink below its longest word unless told to: without
+     this a one-word city ("Wolverhampton") pushes a phone sideways. */
+  max-width: 100%;
+  margin: 0;
   font-family: var(--font-display);
   font-size: var(--text-xl);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-display);
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: var(--color-text);
+  text-decoration: none;
+}
+a.show-city:hover { color: var(--color-accent); }
+
+.show-venue { margin: 0; color: var(--color-muted); font-size: var(--text-m); }
+.show-support { margin: 0; color: var(--color-muted); font-size: var(--text-s); font-style: italic; }
+
+/* One slot, one size: the button, the sold-out stamp and the free-entry
+   stamp all fill the same box, so the right edge of the list is a straight line. */
+.show-action { display: flex; flex-direction: column; gap: var(--space-2); }
+.show-action .status-chip {
+  min-height: var(--tap-target);
+  border: 2px solid var(--color-muted);
+  border-radius: var(--radius);
+  background: none;
+  color: var(--color-text);
+  font-weight: var(--weight-display);
 }
 
-.show-venue { color: var(--color-muted); font-size: var(--text-m); }
-.show-support { color: var(--color-muted); font-size: var(--text-s); font-style: italic; }
-
-.show-action {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
+/* Sold out: the city takes the strike and the slot takes the stamp. Nothing
+   fades — the strike is the boast. */
+.show-list [data-status="Sold out"] .show-city {
+  text-decoration: line-through;
+  text-decoration-thickness: var(--rule-heavy);
+  text-decoration-color: var(--color-accent);
 }
-.show-more { font-size: var(--text-s); color: var(--color-muted); }
-.show-more:hover { color: var(--color-accent); }
+[data-status="Sold out"] .show-date { color: var(--color-muted); }
+[data-status="Sold out"] .btn-tickets,
+[data-status="On sale"] .btn-tickets + .status-chip { display: none; }
+[data-status="Sold out"] .show-action .status-chip { border-color: var(--color-accent); color: var(--color-accent); }
 
-/* Sold out: the whole row dims and the city takes a strike — a setlist line
-   that already happened. */
-.show-row[data-status="Sold out"] .show-city { text-decoration: line-through; text-decoration-thickness: 3px; text-decoration-color: var(--color-accent); }
-.show-row[data-status="Sold out"] .show-date,
-.show-row[data-status="Sold out"] .show-venue { opacity: 0.6; }
+/* Played shows (sorted and marked by enhance.js) go quiet under their own
+   label: house lights up, nothing left to sell. */
+.show-divider {
+  padding: var(--space-4) 0 var(--space-2);
+  border-top: 1px solid var(--color-border);
+  color: var(--color-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+.show-list .played { padding: var(--space-3) 0; }
+.show-list .played .show-city, .played .show-date { color: var(--color-muted); }
+.played .btn-tickets, .played .status-chip { display: none; }
+.played[data-status="Sold out"] .status-chip { display: inline-flex; border-color: var(--color-border); color: var(--color-muted); }
 
-/* Past shows (marked client-side by enhance.js) dim the same way, minus the strike. */
-.show-row.played { opacity: 0.55; }
+@media (max-width: 799.98px) {
+  .show-row { padding: calc(var(--space-3) * 1.5) 0; }
+  .dated { grid-template-columns: calc(var(--date-col) * 0.4) minmax(0, 1fr); align-items: start; }
+  .dated .show-date { grid-row: span 2; }
+  .dated .show-action { grid-column: 2; }
+}
 
 @media (min-width: 800px) {
-  .show-row { grid-template-columns: 11rem minmax(0, 1fr) auto; }
-  .show-action { justify-content: flex-end; }
+  .page-header { margin-top: var(--space-5); }
+  .show-row { grid-template-columns: var(--date-col) minmax(0, 1fr) var(--action-col); gap: var(--space-4); }
+  .date-block { flex-direction: row; align-items: center; gap: var(--space-2); }
+  .date-year { display: inline; }
 }
 
-/* Single show ---------------------------------------------------------------- */
+/* Single show: the same row, opened up ------------------------------------------ */
 
-.show-line { font-size: var(--text-l); margin: 0 0 var(--space-1); }
-.show .show-venue { color: var(--color-text); font-weight: 600; }
-.show-cta { margin: var(--space-3) 0 0; }
+.show-head { align-items: start; margin-top: var(--space-3); }
 
 .backlink { margin: var(--space-4) 0 0; font-size: var(--text-s); }
 
@@ -286,23 +372,25 @@ main { min-height: 60vh; }
 
 .prose h2, .prose h3, .prose h4 {
   font-family: var(--font-display);
-  font-weight: 800;
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-display);
   margin: var(--space-4) 0 var(--space-2);
   text-wrap: balance;
 }
-.prose h2 { font-size: var(--text-xl); }
-.prose h3 { font-size: var(--text-l); }
+.prose h2 { font-size: var(--text-l); text-transform: uppercase; }
+.prose h3 { font-size: var(--text-m); }
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: var(--space-3); }
+.prose li { margin-bottom: var(--space-1); }
 
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
 
 .prose blockquote {
   margin: var(--space-3) 0;
   padding: 0 var(--space-3);
-  border-left: 3px solid var(--color-accent);
+  border-left: var(--rule-heavy) solid var(--color-accent);
   color: var(--color-muted);
 }
 
@@ -319,7 +407,6 @@ main { min-height: 60vh; }
   padding: var(--space-3);
   border-radius: var(--radius);
   overflow-x: auto;
-  line-height: 1.5;
 }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
@@ -340,6 +427,24 @@ main { min-height: 60vh; }
 
 .cover { width: 100%; height: auto; border-radius: var(--radius); margin: 0 0 var(--space-4); }
 
+/* On a wide screen every text page keeps the tour list's grid: section
+   headings hang in the date column, the words run in the city column. */
+@media (min-width: 800px) {
+  .prose {
+    display: grid;
+    grid-template-columns: var(--date-col) minmax(0, var(--measure));
+    column-gap: var(--space-4);
+    align-items: baseline;
+    max-width: none;
+  }
+  .prose > * { grid-column: 2; min-width: 0; }
+  .prose > h2 { grid-column: 1; margin-bottom: 0; hyphens: auto; }
+  .prose > h2 + * { margin-top: var(--space-4); }
+  .prose > h2:first-child, .prose > h2:first-child + * { margin-top: 0; }
+  .prose > hr { grid-column: 1 / -1; }
+  .backlink { margin-left: calc(var(--date-col) + var(--space-4)); }
+}
+
 /* Post list ------------------------------------------------------------------ */
 
 .post-list { list-style: none; margin: 0; padding: 0; max-width: var(--measure); }
@@ -349,8 +454,9 @@ main { min-height: 60vh; }
 
 .post-card h2 {
   font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 800;
+  font-size: var(--text-l);
+  text-transform: uppercase;
+  font-weight: var(--weight-display);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-display);
   margin: 0 0 var(--space-1);
@@ -364,6 +470,7 @@ main { min-height: 60vh; }
 .pagination {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: var(--space-3);
   padding: var(--space-4) 0;
   color: var(--color-muted);
@@ -378,13 +485,28 @@ main { min-height: 60vh; }
   html { scroll-behavior: smooth; }
 }
 
+/* Paper is always daylight: the tokens are reset on body so a dark-scheme
+   visitor (or a customised palette) still prints black on white. */
 @media print {
-  body { max-width: none; font-size: 11pt; color: #000; background: #fff; }
-  .masthead nav, .colophon, .skip-link, .pagination, .backlink, .show-more { display: none; }
+  body {
+    --color-bg: #fff;
+    --color-panel: #fff;
+    --color-code-bg: #fff;
+    --color-text: #000;
+    --color-muted: #444;
+    --color-accent: #000;
+    --color-accent-ink: #000;
+    --color-border: #999;
+    max-width: none;
+    font-size: 11pt;
+  }
+  .masthead nav, .skip-link, .pagination, .backlink, .colophon > :not(.colophon-line) { display: none; }
+  main { min-height: 0; }
+  .page-header { margin-top: var(--space-3); }
   a { color: inherit; text-decoration: none; }
-  .btn-tickets { background: none; color: #000; border: 1px solid #000; }
-  .btn-tickets::after { content: " (" attr(href) ")"; font-size: 0.85em; text-transform: none; letter-spacing: 0; }
-  .show-row.played { opacity: 1; }
-  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .show-row { break-inside: avoid; padding: var(--space-3) 0; }
+  .btn-tickets, .show-action .status-chip { display: block; min-height: 0; padding: 0; border: 0; background: none; white-space: normal; overflow-wrap: anywhere; }
+  .played[data-status="Sold out"] .status-chip { display: block; }
+  .btn-tickets::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; text-transform: none; letter-spacing: 0; }
   .prose pre { white-space: pre-wrap; }
 }

@@ -1,0 +1,19 @@
+{
+  "mainNav": "Main",
+  "bookings": "Bookings",
+  "press": "Press",
+  "tickets": "Tickets",
+  "getTickets": "Get tickets",
+  "withSupport": "with",
+  "playedShows": "Played",
+  "allShows": "← All shows",
+  "laterShows": "← Later",
+  "earlierShows": "Earlier →",
+  "noShows": "No shows on the board right now. New dates land here first.",
+  "pagination": "Pages",
+  "taggedWith": "Everything tagged",
+  "seeShows": "See the shows",
+  "goHome": "Back to the front",
+  "notFoundTitle": "This page left the stage.",
+  "notFoundBody": "The address may be old, or a letter went wrong on the way in. Nothing on your end is broken."
+}
