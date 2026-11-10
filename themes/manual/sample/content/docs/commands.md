@@ -1,11 +1,11 @@
 ---
 title: Commands
-order: "04"
+order: "06"
 description: Every mkweb command and flag — new, dev, build, check, upgrade, and version.
 prev: /docs/configuration/
 prevTitle: Configuration
-next: /docs/troubleshooting/
-nextTitle: Troubleshooting
+next: /docs/deploying/
+nextTitle: Deploying
 example: true
 ---
 

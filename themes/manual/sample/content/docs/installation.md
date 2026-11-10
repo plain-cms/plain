@@ -4,8 +4,8 @@ order: "02"
 description: Install the single mkweb binary on macOS, Linux, or Windows, verify it, and keep it current.
 prev: /docs/getting-started/
 prevTitle: Getting started
-next: /docs/configuration/
-nextTitle: Configuration
+next: /docs/writing-pages/
+nextTitle: Writing pages
 example: true
 ---
 

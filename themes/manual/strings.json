@@ -1,0 +1,23 @@
+{
+  "mainNav": "Main",
+  "breadcrumb": "Breadcrumb",
+  "home": "Home",
+  "docs": "Documentation",
+  "contents": "Contents",
+  "searchManual": "Search the manual",
+  "sequenceNav": "Section sequence",
+  "previous": "← Previous",
+  "next": "Next →",
+  "previousSection": "Previous section",
+  "nextSection": "Next section",
+  "backToContents": "↑ Contents",
+  "tagLabel": "Tag",
+  "entries": "Entries",
+  "pagesNav": "Pages",
+  "notFoundBody": "There’s no page at this address. It may have moved, or the link may be mistyped. Here’s how to get back on course:",
+  "recoveryNav": "Ways back",
+  "lostIndexLabel": "Start at the index",
+  "lostHomeLabel": "Or go back to",
+  "goHome": "The homepage",
+  "lostSearchLabel": "Know what you need?"
+}
