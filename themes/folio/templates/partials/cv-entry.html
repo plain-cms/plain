@@ -5,7 +5,7 @@
     {{/if}}
   </div>
   <div class="cv-what">
-    <h2 class="cv-entry-title"><a href="{{ entry.url }}">{{ entry.title }}</a>{{#if entry.organization}} <span class="cv-org">· {{ entry.organization }}</span>{{/if}}</h2>
+    <h2 class="cv-entry-title">{{#if entry.content}}<a href="{{ entry.url }}">{{ entry.title }}</a>{{else}}{{ entry.title }}{{/if}}{{#if entry.organization}} <span class="cv-org">· {{ entry.organization }}</span>{{/if}}</h2>
     {{#if entry.summary}}<p class="cv-summary">{{ entry.summary }}</p>
     {{/if}}{{#if entry.highlights}}
     <ul class="cv-highlights">

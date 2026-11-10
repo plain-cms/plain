@@ -1,7 +1,7 @@
 /* Folio — the résumé/CV theme.
    A document, set beautifully: white paper, graphite ink, one steel-blue
-   accent, and a print stylesheet that is a first-class design — the
-   /experience/ page prints on one sheet of A4. All design decisions live
+   accent. The signature is the sheet: /experience/ is drawn as a sheet of
+   paper on screen and prints as one sheet of A4. All design decisions live
    in the tokens below; restyle by editing tokens, never selectors
    (cms-spec.md §10.1). */
 
@@ -18,9 +18,11 @@
   --leading-body: 1.6;
   --leading-tight: 1.2;
   --tracking-caps: 0.08em;
+  --tracking-tight: -0.01em;
 
   /* Color — light scheme */
   --color-bg: #ffffff;
+  --color-sheet: #ffffff;
   --color-text: #26282b;
   --color-muted: #5d6167;
   --color-accent: #33689e;
@@ -32,6 +34,8 @@
   --measure: 58ch;
   --page-width: 62rem;
   --rail-width: 15rem;
+  --sheet-width: 48rem;
+  --date-width: 9rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
@@ -44,10 +48,11 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: #1b1d20;
+    --color-sheet: #25282c;
     --color-text: #e6e6e3;
     --color-muted: #a2a6ab;
     --color-accent: #85aed6;
-    --color-border: #33363b;
+    --color-border: #3d4147;
     --color-code-bg: #242629;
     --color-mark: #2c3a49;
   }
@@ -57,9 +62,15 @@
 
 * { box-sizing: border-box; }
 
+[hidden] { display: none !important; }
+
 html { color-scheme: light dark; }
 
+/* A column, so the footer sits at the bottom of short pages. */
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   margin: 0 auto;
   padding: 0 var(--space-3);
   max-width: var(--page-width);
@@ -78,7 +89,7 @@ a:hover { text-decoration-thickness: 2px; }
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius);
 }
 
 kbd {
@@ -105,15 +116,16 @@ kbd {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--space-2) var(--space-4);
-  padding: var(--space-4) 0 var(--space-3);
+  gap: 0 var(--space-4);
+  padding: var(--space-3) 0 var(--space-1);
   border-bottom: 1px solid var(--color-border);
+  font-size: var(--text-s);
 }
 
+/* Quiet on purpose: the rail (or the CV's letterhead) is the one place the
+   name is set large. */
 .site-title {
-  font-size: var(--text-l);
-  font-weight: 700;
-  letter-spacing: -0.01em;
+  font-weight: 600;
   color: var(--color-text);
   text-decoration: none;
 }
@@ -122,51 +134,69 @@ kbd {
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: 0 var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.masthead nav a { color: var(--color-muted); text-decoration: none; font-size: var(--text-s); }
+.masthead nav a {
+  display: inline-block;
+  padding: calc(var(--space-2) + var(--space-1)) 0;
+  color: var(--color-muted);
+  text-decoration: none;
+}
 .masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
 .masthead nav a[aria-current="page"] { color: var(--color-text); font-weight: 600; }
 
-main { min-height: 60vh; }
+.layout { flex: 1 0 auto; }
+
+main { padding-bottom: var(--space-6); }
 
 .colophon {
-  margin-top: var(--space-6);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
   padding: var(--space-3) 0 var(--space-4);
   border-top: 1px solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
 }
+.colophon p { margin: 0; }
+.colophon a { color: inherit; }
+.colophon-note { flex-basis: 100%; margin-top: var(--space-1); }
 
 /* Layout: the identity rail ----------------------------------------------- */
 
-.layout { display: block; }
-
+/* Narrow screens: a two-line letterhead, so the page itself starts on the
+   first screen. The skills list is left to the CV. */
 .rail {
-  padding: var(--space-4) 0 0;
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
 }
 
 .rail-name {
   margin: 0;
   font-size: var(--text-l);
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-tight);
 }
 
-.rail-role { margin: var(--space-1) 0 0; color: var(--color-muted); font-size: var(--text-s); }
+.rail-role { margin: 0; color: var(--color-muted); font-size: var(--text-s); }
 
 .rail-contact,
 .rail-skills {
-  margin: var(--space-3) 0 0;
+  margin: var(--space-1) 0 0;
   padding: 0;
   list-style: none;
   font-size: var(--text-s);
 }
-.rail-contact li + li,
-.rail-skills li + li { margin-top: var(--space-1); }
+.rail-contact { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); }
+.rail-contact a { display: inline-block; padding: var(--space-1) 0; }
+
+.rail-label,
+.rail-skills,
+.rail-cv { display: none; }
 
 .rail-label {
   margin: var(--space-4) 0 0;
@@ -177,37 +207,60 @@ main { min-height: 60vh; }
   color: var(--color-muted);
 }
 
-.rail-skills li { color: var(--color-text); }
+.rail-skills { margin-top: var(--space-2); color: var(--color-muted); }
+.rail-skills li + li { margin-top: var(--space-1); }
 
-@media (min-width: 900px) {
+@media screen and (min-width: 900px) {
   .has-rail {
     display: grid;
     grid-template-columns: var(--rail-width) minmax(0, 1fr);
-    gap: var(--space-6);
-    align-items: start;
   }
   .rail {
     position: sticky;
-    top: var(--space-4);
-    border-right: 1px solid var(--color-border);
-    padding-right: var(--space-4);
-    padding-bottom: var(--space-4);
+    top: 0;
+    align-self: start;
+    padding: var(--space-5) var(--space-4) var(--space-4) 0;
+    border-bottom: 0;
   }
+  /* The divider is the content's edge, so it runs the full height of the page. */
+  .has-rail main {
+    border-left: 1px solid var(--color-border);
+    padding-left: var(--space-6);
+  }
+  .rail-role { margin-top: var(--space-1); }
+  .rail-contact { display: block; margin-top: var(--space-3); }
+  .rail-label,
+  .rail-skills { display: block; }
+  /* The sheet, in small: the way to the CV from every other page. */
+  .rail-cv {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+    font-size: var(--text-s);
+    text-decoration: none;
+  }
+  .rail-cv span + span { text-decoration: underline; text-decoration-thickness: 1px; }
+  .rail-cv:hover span + span { text-decoration-thickness: 2px; }
 }
 
-/* The rail already introduces the person on every page, so the CV page's
-   own identity block is screen-hidden when the rail exists — it returns
-   in print, where the rail (site chrome) disappears. */
-.has-rail .cv-identity { display: none; }
+/* The CV page is the sheet itself and carries its own letterhead, so the
+   rail steps aside there — on screen and on paper. */
+.layout:has(.cv) { display: block; }
+.layout:has(.cv) .rail { display: none; }
+.layout:has(.cv) main { border-left: 0; padding-left: 0; }
 
 /* Headers ---------------------------------------------------------------- */
 
-.page-header { margin: var(--space-5) 0 var(--space-4); }
+.page-header { margin: var(--space-4) 0; }
+@media screen and (min-width: 900px) {
+  .page-header { margin-top: var(--space-5); }
+}
 
 .page-header h1 {
   font-size: var(--text-xxl);
   line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
+  letter-spacing: var(--tracking-tight);
   margin: 0 0 var(--space-2);
   text-wrap: balance;
 }
@@ -218,27 +271,36 @@ main { min-height: 60vh; }
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
-  color: var(--color-accent);
+  color: var(--color-muted);
 }
 
 .meta { color: var(--color-muted); font-size: var(--text-s); margin: 0; }
 
-.lede { font-size: var(--text-l); color: var(--color-muted); margin: 0 0 var(--space-3); max-width: var(--measure); }
+.lede { font-size: var(--text-l); line-height: 1.5; color: var(--color-muted); margin: 0 0 var(--space-3); }
 
 .tags { margin-left: var(--space-2); }
 .tag { display: inline-block; margin-right: var(--space-2); color: var(--color-accent); text-decoration: none; }
-.tag::before { content: "#"; opacity: 0.6; }
+.tag::before { content: "#"; color: var(--color-muted); }
 .tag:hover { text-decoration: underline; }
 
-/* The CV ------------------------------------------------------------------ */
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
 
-.cv-identity { margin: var(--space-5) 0 var(--space-3); }
+/* The CV — the sheet ------------------------------------------------------ */
+
+.cv {
+  margin: 0 calc(-1 * var(--space-3));
+  padding: var(--space-4) var(--space-3);
+  background: var(--color-sheet);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cv-identity { margin: 0 0 var(--space-4); }
 
 .cv-name {
   margin: 0;
   font-size: var(--text-xxl);
   line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
+  letter-spacing: var(--tracking-tight);
 }
 
 .cv-role { margin: var(--space-1) 0 0; color: var(--color-muted); }
@@ -246,75 +308,144 @@ main { min-height: 60vh; }
 .cv-contact {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
+  gap: 0 var(--space-3);
   margin: var(--space-2) 0 0;
   padding: 0;
   list-style: none;
   font-size: var(--text-s);
 }
-
-.cv-print {
-  margin: var(--space-4) 0;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  color: var(--color-muted);
-  font-size: var(--text-s);
-}
+.cv-contact a { display: inline-block; padding: var(--space-1) 0; }
 
 .cv-entries {
-  margin: var(--space-4) 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.cv-entry {
+.cv-entry,
+.cv-skills {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-1) var(--space-4);
-  padding: var(--space-4) 0;
+  margin: 0;
+  padding: calc(var(--space-3) + var(--space-1)) 0;
   border-top: 1px solid var(--color-border);
 }
 
-.cv-when { color: var(--color-muted); font-size: var(--text-s); }
-.cv-period { margin: 0; font-variant-numeric: tabular-nums; }
-.cv-location { margin: var(--space-1) 0 0; }
+.cv-when,
+.cv-skills dt { color: var(--color-muted); font-size: var(--text-s); }
+.cv-when p { display: inline; margin: 0; }
+.cv-period { font-variant-numeric: tabular-nums; }
+.cv-location::before { content: "· "; }
 
 .cv-entry-title {
   margin: 0;
   font-size: var(--text-l);
   line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-tight);
 }
-.cv-entry-title a { color: var(--color-text); text-decoration: none; }
-.cv-entry-title a:hover { color: var(--color-accent); text-decoration: underline; }
+/* An entry with a story behind it links to its own page; the hairline
+   underline is the only hint, and it is dropped on paper. */
+.cv-entry-title a {
+  color: var(--color-text);
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 0.2em;
+}
+.cv-entry-title a:hover { color: var(--color-accent); }
 
 .cv-org { font-weight: 400; color: var(--color-muted); }
 
 .cv-summary { margin: var(--space-2) 0 0; max-width: var(--measure); }
 
+/* One list mark for the whole theme: a hung dash, as on a typed document. */
+.prose ul,
 .cv-highlights {
-  margin: var(--space-2) 0 0;
   padding-left: 1.2em;
-  max-width: var(--measure);
+  list-style: "–  ";
 }
-.cv-highlights li { margin: 0 0 var(--space-1); }
-.cv-highlights li::marker { color: var(--color-accent); }
+.prose ul li::marker,
+.cv-highlights li::marker { color: var(--color-muted); }
 
-.cv-skills {
-  margin: var(--space-4) 0 0;
-  padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
-  font-size: var(--text-s);
-  color: var(--color-muted);
-}
-.cv-skill { color: var(--color-text); }
+.cv-highlights { margin: var(--space-2) 0 0; max-width: var(--measure); }
+.cv-highlights li { margin: 0 0 var(--space-1); }
+
+.cv-skills { padding-bottom: 0; font-size: var(--text-s); }
+.cv-skills dt { font-weight: 600; }
+.cv-skills dd { margin: 0; }
 .cv-skill:not(:last-child)::after { content: " · "; color: var(--color-muted); }
 
-@media (min-width: 700px) {
-  .cv-entry { grid-template-columns: 11rem minmax(0, 1fr); }
-  .cv-when { text-align: left; }
+/* The print note: a small drawn sheet, one sentence, one button. This is
+   where the accent is spent. */
+.cv-print {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: var(--space-4) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-s);
 }
+.cv-print p { flex: 1 1 12rem; margin: 0; }
+
+.sheet-mark {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 2.25rem;
+  aspect-ratio: 210 / 297;
+  border: 1px solid var(--color-accent);
+  background: var(--color-sheet);
+  color: var(--color-accent);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.print-button {
+  min-height: 2.75rem;
+  padding: var(--space-1) var(--space-3);
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.print-button:hover { color: var(--color-bg); background: var(--color-accent); }
+
+@media screen and (min-width: 700px) {
+  .cv {
+    margin: var(--space-4) 0 0;
+    padding: var(--space-5);
+    border: 1px solid var(--color-border);
+  }
+  .cv-entry,
+  .cv-skills { grid-template-columns: var(--date-width) minmax(0, 1fr); }
+  .cv-when p { display: block; }
+  .cv-location::before { content: none; }
+}
+
+/* Wide screens: the note moves into the margin beside the sheet. */
+@media screen and (min-width: 1024px) {
+  .cv-desk {
+    display: grid;
+    grid-template-columns: minmax(0, var(--sheet-width)) minmax(0, 1fr);
+    gap: var(--space-4);
+    align-items: start;
+  }
+  .cv-print {
+    position: sticky;
+    top: var(--space-4);
+    display: block;
+    margin-top: var(--space-4);
+  }
+  .cv-print p { margin: var(--space-2) 0 var(--space-3); }
+}
+
+/* A role's own page ------------------------------------------------------- */
+
+.role-body { max-width: var(--measure); }
+.role-body .cv-highlights { margin: 0 0 var(--space-4); }
 
 .backlink { margin: var(--space-4) 0 0; font-size: var(--text-s); }
 
@@ -324,7 +455,7 @@ main { min-height: 60vh; }
 
 .prose h2, .prose h3, .prose h4 {
   line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-tight);
   margin: var(--space-4) 0 var(--space-2);
   text-wrap: balance;
 }
@@ -332,13 +463,17 @@ main { min-height: 60vh; }
 .prose h3 { font-size: var(--text-l); }
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose li { margin: 0 0 var(--space-1); }
+
+/* A page opens with its most important sentence, set one size up. */
+.page .prose > p:first-child { font-size: var(--text-l); line-height: 1.5; }
 
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
 
 .prose blockquote {
   margin: var(--space-3) 0;
   padding: 0 var(--space-3);
-  border-left: 3px solid var(--color-accent);
+  border-left: 2px solid var(--color-accent);
   color: var(--color-muted);
 }
 
@@ -386,7 +521,7 @@ main { min-height: 60vh; }
 .post-card h2 {
   font-size: var(--text-l);
   line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-tight);
   margin: 0 0 var(--space-1);
 }
 .post-card h2 a { color: var(--color-text); text-decoration: none; }
@@ -398,7 +533,7 @@ main { min-height: 60vh; }
   display: flex;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
+  padding: var(--space-4) 0 0;
   color: var(--color-muted);
   font-size: var(--text-s);
 }
@@ -411,50 +546,64 @@ main { min-height: 60vh; }
   html { scroll-behavior: smooth; }
 }
 
-/* Print — the signature. The /experience/ page is the résumé and fits one
-   sheet of A4: site chrome disappears, the identity block returns, entries
-   never break across pages. ------------------------------------------------ */
+/* Print — the signature. The /experience/ page is the résumé, budgeted for
+   one sheet of A4: black ink whatever the screen scheme, no site chrome,
+   entries that never break across pages. Every other page prints under a
+   one-line letterhead made from the rail, so a loose sheet says whose it is.
+   The screen breakpoints above are "screen and", so paper starts from the
+   narrow layout and sets its own columns in millimetres. ------------------- */
 
 @media print {
-  @page { margin: 14mm; }
+  @page { size: A4; margin: 12mm; }
 
-  body { max-width: none; padding: 0; font-size: 10.5pt; line-height: 1.45; color: #000; background: #fff; }
+  :root {
+    --color-bg: #fff;
+    --color-sheet: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-border: #bbb;
+    --color-code-bg: #fff;
+    --color-mark: #fff;
+  }
 
-  .masthead, .colophon, .skip-link, .rail, .pagination, .backlink,
-  .cv-print, .tags { display: none; }
+  html { font-size: 9.5pt; }
+  body { display: block; min-height: 0; max-width: none; padding: 0; line-height: 1.4; }
 
-  .has-rail { display: block; }
-  .has-rail .cv-identity { display: block; margin: 0 0 4mm; }
+  .masthead, .colophon, .skip-link, .pagination, .backlink,
+  .cv-print, .tags, .actions { display: none; }
 
   a { color: inherit; text-decoration: none; }
-  .cv-contact a[href^="mailto:"]::after,
-  .cv-contact a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  main { padding: 0; }
 
-  .cv-name { font-size: 17pt; }
-  .cv-role { margin-top: 1mm; }
-  .cv-contact { gap: 0 4mm; margin-top: 1.5mm; font-size: 9pt; }
+  .rail { padding: 0 0 3mm; margin: 0 0 6mm; }
+  .rail-cv { display: none; }
+  .rail-contact { gap: 0 4mm; margin: 0; }
+  .rail-contact a, .cv-contact a { padding: 0; }
 
-  .cv-entries { margin: 0; }
-  .cv-entry {
-    grid-template-columns: 34mm minmax(0, 1fr);
-    gap: 0 5mm;
-    padding: 3mm 0;
-    border-top-color: #ccc;
+  .cv { margin: 0; padding: 0; border: 0; }
+  .cv-identity { margin: 0 0 3mm; }
+  .cv-name { font-size: 18pt; }
+  .cv-role { margin-top: 0.5mm; }
+  .cv-contact { gap: 0 4mm; margin-top: 1mm; }
+
+  .cv-entry,
+  .cv-skills {
+    grid-template-columns: 27mm minmax(0, 1fr);
+    gap: 0 4mm;
+    padding: 2.6mm 0;
     break-inside: avoid;
   }
-  .cv-when, .cv-location { font-size: 9pt; color: #333; }
-  .cv-entry-title { font-size: 11.5pt; }
-  .cv-org { color: #333; }
-  .cv-summary, .cv-highlights { max-width: none; margin-top: 1mm; }
-  .cv-highlights { padding-left: 4mm; }
-  .cv-highlights li { margin-bottom: 0.5mm; }
-  .cv-highlights li::marker { color: #000; }
-
-  .cv-skills { margin-top: 3mm; padding-top: 2mm; border-top-color: #ccc; font-size: 9pt; color: #333; }
-  .cv-skill { color: #000; }
+  .cv-skills { padding-bottom: 0; break-before: avoid; }
+  .cv-when p { display: block; }
+  .cv-location::before { content: none; }
+  .cv-entry-title { font-size: 11pt; }
+  .cv-summary, .cv-highlights { max-width: none; margin-top: 0.8mm; }
+  .cv-highlights li { margin-bottom: 0; }
 
   .page-header { margin: 0 0 4mm; }
-  .prose { max-width: none; }
+  .prose, .role-body { max-width: 150mm; }
+  .role-body .cv-highlights { margin-bottom: 4mm; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .prose pre { white-space: pre-wrap; }
 }

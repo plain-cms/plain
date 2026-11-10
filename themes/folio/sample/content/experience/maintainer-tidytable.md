@@ -2,22 +2,22 @@
 title: Open-source maintainer
 date: 2019-01-01
 organization: tidytable
-period: 2019 — present
-location: Nights & weekends
-summary: Maintain a 4k-star data-table library; 120 releases, 200+ contributors, zero unreviewed merges.
-description: Maintain a 4k-star data-table library; 120 releases, 200+ contributors, zero unreviewed merges.
+period: 2019–present
+location: Open source
+summary: Maintain a data-table library with 4,000 GitHub stars, 120 releases and more than 200 contributors.
+description: Sam Kessler has maintained tidytable, a headless data-table library with no dependencies, since releasing it in 2019.
 highlights:
-  - Keep the dependency count at zero and the bundle under 12KB across six years of releases
+  - Kept the dependency count at zero and the bundle under 12KB in every release since the first
 example: true
 ---
 
-tidytable is a headless data-table library I released in 2019 because every
-project I joined had rebuilt the same one badly. It found an audience: 4,000
-stars, use in a few products you've heard of, and a contributor base that
-has outgrown me — which is the goal.
+I released tidytable in 2019 because every project I joined had rebuilt the
+same table component, badly. It found an audience: a few products you have
+heard of use it, and the contributor base has outgrown me, which was the
+goal.
 
-Maintaining it is a second education. Reviewing two hundred strangers' pull
-requests teaches API design the way production incidents teach operations:
-personally. The library's rules — zero dependencies, every breaking change
-gets a codemod, no feature without a failing test first — are the rules I
-bring to paid work now.
+Maintaining it has been a second education. Reviewing pull requests from two
+hundred strangers teaches API design the way production incidents teach
+operations. The library's rules are the ones I now bring to paid work: no
+dependencies, a codemod for every breaking change, and no feature without a
+failing test first.

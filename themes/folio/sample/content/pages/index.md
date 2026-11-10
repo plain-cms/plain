@@ -1,26 +1,25 @@
 ---
-title: Sam Kessler — product engineer
-description: I build web platforms and developer tools, and I make them fast, accessible, and boring to operate. Currently at Fieldnote; open to interesting problems.
+title: I make web products fast, accessible and boring to run
+description: Sam Kessler is a product engineer who builds web platforms and developer tools. Staff engineer at Fieldnote, and open to contract work from January 2027.
 example: true
 ---
 
-*Replace this page with your own hire-me pitch. First person, confident,
-specific — who you are, what you're best at, proof, and how to reach you.*
+**Available for contract work from January 2027.** Remote, in EU time zones,
+three days a week or more.
 
-I'm a product engineer with ten years across startups and scale-ups —
-founding-engineer years included. I'm at my best owning a product surface
-end to end: the editor, the checkout, the pipeline — the part where
-engineering quality is user-visible.
+I'm a product engineer with more than ten years in startups and scale-ups,
+three of them as a first hire. I do my best work owning one product surface
+end to end: the editor, the checkout, the publishing pipeline. Those are the
+places where engineering quality is something users can feel.
 
-What I'm known for, with receipts on the [CV](/experience/):
+What teams bring me in for:
 
-- **Performance as a feature** — checkout times halved, publish latency cut
-  8×, an 11% conversion lift from deleting JavaScript.
-- **Boring architecture that scales** — the Postgres-first platform I drew
-  in 2020 handled 1,000× growth without a rewrite.
-- **Writing as engineering** — design docs, changelogs, and onboarding that
-  get week-one hires shipping.
+- **Performance as a feature.** Checkout load time halved, publish latency
+  cut from 6.1s to 800ms, an 11% conversion lift from deleting JavaScript.
+- **Plain architecture that scales.** The Postgres-first platform I drew on
+  a whiteboard in 2020 handled 1,000× growth without a rewrite.
+- **Writing as engineering.** Design docs, changelogs and onboarding that
+  have new hires shipping in their first week.
 
-Currently at Fieldnote, and always happy to talk about hard product-platform
-problems — [get in touch](/contact/), or print the [CV](/experience/): it
-fits on one sheet of A4, by design.
+The details and the numbers are on the [CV](/experience/), which prints on
+one sheet of A4. If the work sounds like yours, [get in touch](/contact/).

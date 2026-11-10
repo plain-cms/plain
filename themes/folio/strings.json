@@ -1,0 +1,17 @@
+{
+  "notFoundTitle": "Not on this résumé.",
+  "notFoundBody": "There is no page at this address. The link may be old or mistyped; nothing is broken on your end.",
+  "goHome": "Back to the front page",
+  "readTheCv": "Read the CV",
+  "mainNav": "Main",
+  "profile": "Profile",
+  "skills": "Skills",
+  "experience": "Experience",
+  "backToCv": "← Back to the full CV",
+  "noEntries": "No experience listed yet.",
+  "printNote": "This page is the résumé, laid out to print on one sheet of A4.",
+  "printHint": "Press Ctrl+P (⌘P on a Mac).",
+  "printButton": "Print this page",
+  "pagination": "Pages",
+  "tagged": "Tagged"
+}
