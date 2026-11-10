@@ -1,13 +1,14 @@
 /* Toolbox — a theme for trades & local services (cms-spec.md §10.7 #2).
    Workwear navy + hi-vis yellow on steel white; condensed signage headings;
-   job-sheet mono for prices and labels. The one loud element is the sticky
-   call-now bar on mobile — everything else stays quiet and precise.
+   job-sheet mono for prices. The one loud element is the hazard-striped
+   call-now control: a bar fixed to the bottom of every phone screen, a job
+   card beside the text on wide ones. Everything else stays quiet and precise.
    All design decisions live in the tokens below. Restyle by editing tokens,
    never selectors (cms-spec.md §10.1). */
 
 :root {
   /* Type — condensed signage display, humanist body, job-sheet mono */
-  --font-display: "Avenir Next Condensed", "Arial Narrow", "Liberation Sans Narrow", "Segoe UI", system-ui, sans-serif;
+  --font-display: "Avenir Next Condensed", "Arial Narrow", "Liberation Sans Narrow", "Roboto Condensed", sans-serif-condensed, "Segoe UI", system-ui, sans-serif;
   --font-body: system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Liberation Sans", sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
   --text-s: 0.875rem;
@@ -34,6 +35,8 @@
   /* Layout */
   --measure: 62ch;
   --page-width: 64rem;
+  --aside-min: 15rem;
+  --card-min: 16rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
@@ -41,19 +44,26 @@
   --space-5: 4rem;
   --radius: 6px;
   --border-strong: 2px;
+  --focus-width: 3px;
   --tap-target: 3rem;
+
+  /* The hi-vis markings */
+  --rule-hivis: 4px;
+  --stripe-height: 6px;
+  --stripe-width: 10px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: #141a1f;
-    --color-panel: #1d2630;
-    --color-text: #e7ecef;
-    --color-muted: #9db0bc;
-    --color-accent: #7cb8ef;
-    --color-border: #313d47;
-    --color-mark: #5c4d00;
-    /* --color-hivis and --color-on-hivis stay put: hi-vis is hi-vis at night */
+    --color-panel: #212b35;
+    --color-text: #dde3e7;
+    --color-muted: #9fb0bb;
+    --color-accent: #8cc0f0;
+    --color-border: #3a4753;
+    --color-mark: #4a3e00;
+    /* --color-hivis, --color-on-hivis and --color-stripe stay put: hi-vis is
+       hi-vis at night, and it stays the brightest thing on the page */
   }
 }
 
@@ -77,12 +87,11 @@ body {
 ::selection { background: var(--color-mark); }
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
-a:hover { text-decoration-thickness: 2px; }
+a:hover { text-decoration-thickness: var(--border-strong); }
 
 :focus-visible {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: var(--focus-width) solid var(--color-accent);
+  outline-offset: var(--border-strong);
 }
 
 .skip-link {
@@ -108,58 +117,71 @@ main { min-height: 60vh; }
   border-bottom: var(--border-strong) solid var(--color-border);
 }
 
+/* The name wears the same hi-vis rule as prices and quotes */
 .site-title {
   font-family: var(--font-display);
   font-size: var(--text-l);
   font-weight: 700;
+  line-height: var(--leading-tight);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: calc(var(--tracking-caps) / 2);
   color: var(--color-text);
   text-decoration: none;
-  border-bottom: 3px solid var(--color-hivis);
-  padding-bottom: 1px;
+  border-left: var(--rule-hivis) solid var(--color-hivis);
+  padding: var(--space-1) 0 var(--space-1) var(--space-2);
 }
-.site-title:hover { color: var(--color-accent); }
+.site-title:hover { text-decoration: underline; }
 
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
-  margin: 0;
+  gap: 0 var(--space-2);
+  margin: 0 calc(-1 * var(--space-2));
   padding: 0;
   list-style: none;
 }
 .masthead nav a {
-  display: inline-block;
-  padding: var(--space-2);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  padding: 0 var(--space-2);
   color: var(--color-muted);
   text-decoration: none;
   font-size: var(--text-s);
   font-weight: 600;
 }
-.masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
+.masthead nav a:hover { color: var(--color-text); text-decoration: underline; }
+/* A dark hairline under the hi-vis one: yellow alone is too faint on white */
 .masthead nav a[aria-current="page"] {
   color: var(--color-text);
-  box-shadow: inset 0 -3px var(--color-hivis);
+  font-weight: 700;
+  box-shadow: inset 0 -1px var(--color-text), inset 0 calc(-1px - var(--rule-hivis)) var(--color-hivis);
 }
 
-/* Desktop phone link; the call bar takes over on small screens */
-.call-link {
-  margin-left: auto;
+/* Quiet buttons: the phone link in the masthead, the 404 exits, pagination */
+.call-link, .cta-link, .actions a, .pagination a {
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-target);
   padding: 0 var(--space-3);
-  font-family: var(--font-mono);
-  font-size: var(--text-s);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-text);
   text-decoration: none;
   background: var(--color-panel);
-  border: var(--border-strong) solid var(--color-text);
+  border: 1px solid var(--color-muted);
   border-radius: var(--radius);
 }
-.call-link:hover { color: var(--color-accent); border-color: var(--color-accent); }
+.call-link:hover, .cta-link:hover, .actions a:hover, .pagination a:hover { border-color: var(--color-text); text-decoration: underline; }
+
+/* Phone numbers are set like the side of the van */
+.call-link, .btn-call, .prose a[href^="tel:"] {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.call-link { margin-left: auto; }
+.prose a[href^="tel:"] { font-size: var(--text-l); line-height: 1; }
 
 /* Headers ---------------------------------------------------------------- */
 
@@ -174,14 +196,16 @@ main { min-height: 60vh; }
   text-wrap: balance;
 }
 
-.eyebrow {
-  font-family: var(--font-mono);
+.eyebrow, .prose th, .before-after figcaption {
   font-size: var(--text-s);
+  font-weight: 600;
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   color: var(--color-muted);
-  margin: 0 0 var(--space-2);
 }
+.eyebrow { margin: 0 0 var(--space-2); }
+.eyebrow a { color: inherit; text-decoration: none; }
+.eyebrow a:hover { color: var(--color-text); text-decoration: underline; }
 
 .lede {
   font-size: var(--text-l);
@@ -190,16 +214,33 @@ main { min-height: 60vh; }
   text-wrap: pretty;
 }
 
-.price-line {
-  display: inline-block;
-  margin: var(--space-3) 0 0;
-  padding: var(--space-2) var(--space-3);
+/* Two treatments only. Strips (the price, a customer's words) carry the
+   hi-vis rule on the left; panels (cards, the checklist, the call card) are
+   bordered. Both share one inner inset. */
+.price-line, .prose blockquote {
+  padding: var(--space-3);
   background: var(--color-panel);
+  border-left: var(--rule-hivis) solid var(--color-hivis);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.service-card, .included, .call-cta {
+  padding: var(--space-3);
+  background-color: var(--color-panel);
   border: 1px solid var(--color-border);
-  border-left: 4px solid var(--color-hivis);
   border-radius: var(--radius);
 }
-.price-line strong { font-family: var(--font-mono); }
+
+/* The from-price reads like the total line of an estimate */
+.price-line {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  line-height: var(--leading-tight);
+}
+.price-line strong { grid-column: 2; grid-row: 1 / span 2; font-family: var(--font-mono); font-size: var(--text-xl); }
+.price-line small { grid-column: 1; margin-top: var(--space-1); font-size: var(--text-s); color: var(--color-muted); }
 
 .meta {
   font-family: var(--font-mono);
@@ -209,9 +250,9 @@ main { min-height: 60vh; }
 }
 
 .tags { margin-left: var(--space-2); }
-.tag { display: inline-block; margin-right: var(--space-2); color: var(--color-accent); text-decoration: none; }
-.tag::before { content: "#"; opacity: 0.6; }
-.tag:hover { text-decoration: underline; }
+.tag { display: inline-block; margin-right: var(--space-2); color: inherit; text-decoration: none; }
+.tag::before { content: "#"; }
+.tag:hover { color: var(--color-text); text-decoration: underline; }
 
 /* Prose ------------------------------------------------------------------ */
 
@@ -225,28 +266,27 @@ main { min-height: 60vh; }
 }
 .prose h2 { font-size: var(--text-xl); }
 .prose h3 { font-size: var(--text-l); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
 .prose li { margin-bottom: var(--space-1); }
 
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
 
-/* Blockquotes are testimonials here — marked like a note on a job sheet */
-.prose blockquote {
-  margin: var(--space-4) 0;
-  padding: var(--space-3);
-  background: var(--color-panel);
-  border-left: 4px solid var(--color-hivis);
-  border-radius: 0 var(--radius) var(--radius) 0;
-}
+/* Blockquotes are testimonials here: the words a step larger, then a last
+   line for who said it */
+.prose blockquote { margin: var(--space-3) 0 var(--space-4); font-size: var(--text-l); }
+.prose blockquote p { margin-bottom: var(--space-2); text-wrap: pretty; }
 .prose blockquote p:last-child { margin-bottom: 0; }
+.prose blockquote p:last-child:not(:first-child) { font-size: var(--text-s); font-weight: 600; color: var(--color-muted); }
 
 .prose code {
   font-family: var(--font-mono);
   font-size: 0.9em;
   background: var(--color-panel);
   border: 1px solid var(--color-border);
-  padding: 0.1em 0.35em;
+  padding: 0 var(--space-1);
   border-radius: var(--radius);
 }
 .prose pre {
@@ -255,27 +295,25 @@ main { min-height: 60vh; }
   padding: var(--space-3);
   border-radius: var(--radius);
   overflow-x: auto;
-  line-height: 1.5;
 }
 .prose pre code { background: none; border: 0; padding: 0; font-size: var(--text-s); }
 
+/* Tables are price lists and opening hours: label left, figure right */
 .prose table {
   border-collapse: collapse;
   width: 100%;
   margin: 0 0 var(--space-3);
   font-variant-numeric: tabular-nums;
 }
-.prose th {
-  font-family: var(--font-mono);
-  font-size: var(--text-s);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
-}
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
   border-bottom: 1px solid var(--color-border);
 }
+.prose th { border-bottom-color: var(--color-text); }
+.prose :is(th, td):last-child { padding-right: 0; }
+.prose [align="right"] { text-align: right; }
+.prose td[align="right"] { font-family: var(--font-mono); font-weight: 700; }
 
 .prose hr {
   border: 0;
@@ -285,21 +323,14 @@ main { min-height: 60vh; }
 
 .cover { width: 100%; height: auto; border-radius: var(--radius); margin: 0 0 var(--space-4); }
 
-/* Before/after pairs (built by enhance.js from two images in a paragraph) */
+/* Before/after pairs (built by enhance.js from two images on one line) */
 .before-after {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
 }
 .before-after figure { margin: 0; }
-.before-after figcaption {
-  font-family: var(--font-mono);
-  font-size: var(--text-s);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
-  color: var(--color-muted);
-  margin-top: var(--space-1);
-}
+.before-after figcaption { margin-top: var(--space-1); }
 @media (max-width: 30em) {
   .before-after { grid-template-columns: 1fr; }
 }
@@ -311,19 +342,18 @@ main { min-height: 60vh; }
   margin: 0 0 var(--space-4);
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(var(--card-min), 1fr));
   gap: var(--space-3);
 }
 
+/* The whole card is the link: the title's hit area is stretched over it */
 .service-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  padding: var(--space-3);
-  background: var(--color-panel);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
 }
+.service-card:hover { border-color: var(--color-text); }
 .service-card h2 {
   font-family: var(--font-display);
   font-size: var(--text-l);
@@ -331,110 +361,165 @@ main { min-height: 60vh; }
   margin: 0;
 }
 .service-card h2 a { color: var(--color-text); text-decoration: none; }
-.service-card h2 a:hover { color: var(--color-accent); text-decoration: underline; }
+.service-card h2 a::after { content: ""; position: absolute; inset: 0; }
+.service-card:hover h2 a { text-decoration: underline; }
 .service-card .summary { margin: 0; }
 
 /* The price sits on a dashed rule, like the total line of an estimate */
 .service-card .price {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
   margin: auto 0 0;
   padding-top: var(--space-2);
-  border-top: 1px dashed var(--color-border);
+  border-top: 1px dashed var(--color-muted);
   font-family: var(--font-mono);
   font-weight: 700;
 }
 .service-card .price span { color: var(--color-muted); font-weight: 400; font-size: var(--text-s); }
+.service-card .price b { margin-left: auto; font-family: var(--font-body); color: var(--color-muted); }
+.service-card:hover .price b { color: var(--color-text); }
 
 /* "Every visit includes" checklist ---------------------------------------- */
 
-.included {
-  max-width: var(--measure);
-  margin: var(--space-4) 0;
-  padding: var(--space-3) var(--space-4);
-  background: var(--color-panel);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-}
-.included h2 {
+.included { max-width: var(--measure); margin: var(--space-4) 0; }
+.included h2, .call-cta h2 {
   font-family: var(--font-display);
   font-size: var(--text-l);
   line-height: var(--leading-tight);
   margin: 0 0 var(--space-2);
 }
-.included ul { margin: 0; padding-left: var(--space-4); }
-.included li { margin-bottom: var(--space-1); }
-.included li::marker { content: "✓  "; color: var(--color-accent); font-weight: 700; }
+.included ul { margin: 0; padding: 0; list-style: none; }
+.included li { position: relative; margin-bottom: var(--space-1); padding-left: var(--space-4); }
+.included li:last-child { margin-bottom: 0; }
+.included li::before { content: "✓"; position: absolute; left: 0; font-weight: 700; }
 
-/* Call CTA ----------------------------------------------------------------- */
+/* Call card ---------------------------------------------------------------- */
 
+/* The hazard stripe: drawn once per screen, on whichever call control shows */
+.call-bar, .call-cta {
+  background-image: repeating-linear-gradient(-45deg, var(--color-stripe) 0 var(--stripe-width), var(--color-hivis) var(--stripe-width) calc(2 * var(--stripe-width)));
+  background-size: 100% var(--stripe-height);
+  background-repeat: no-repeat;
+}
+
+/* A band under the page by default: words left, number right */
 .call-cta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: var(--space-4);
   max-width: var(--measure);
   margin: var(--space-5) 0 var(--space-4);
-  padding: var(--space-4);
-  background: var(--color-panel);
-  border: var(--border-strong) solid var(--color-text);
-  border-radius: var(--radius);
+  padding-top: calc(var(--space-3) + var(--stripe-height));
+  overflow: hidden; /* clips the stripe to the rounded corners */
 }
-.call-cta h2 {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  line-height: var(--leading-tight);
-  margin: 0 0 var(--space-2);
-  text-wrap: balance;
-}
-.cta-meta { color: var(--color-muted); margin: 0 0 var(--space-3); }
+.list .call-cta { max-width: none; }
+.call-cta > * { grid-column: 1; }
+.call-cta .btn-call, .call-cta .cta-link { grid-column: 2; grid-row: 1 / span 4; }
+.call-cta h2 { margin: 0; text-wrap: balance; }
+.call-cta p { margin: 0; }
+.cta-lead { margin-bottom: var(--space-2); }
+.cta-meta { color: var(--color-muted); font-size: var(--text-s); }
 
 .btn-call {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-4);
-  font-family: var(--font-mono);
-  font-size: var(--text-m);
-  font-weight: 700;
+  padding: 0 var(--space-3);
+  font-size: var(--text-l);
   text-decoration: none;
   color: var(--color-on-hivis);
   background: var(--color-hivis);
   border: var(--border-strong) solid var(--color-on-hivis);
   border-radius: var(--radius);
 }
-.btn-call:hover { background: var(--color-on-hivis); color: var(--color-hivis); }
+.btn-call:hover { background: var(--color-on-hivis); color: var(--color-hivis); border-color: var(--color-hivis); }
 
-/* THE SIGNATURE: the sticky call-now bar. Hidden on wide screens; on mobile
-   it fixes to the bottom edge with a hazard-stripe top border — hi-vis
-   yellow, navy button, one tap from problem to phone call. */
+/* Wide screens: on text pages the call card stands beside the words, in the
+   space the text measure leaves free, and stays in view while you read */
+@media (min-width: 60em) {
+  .page, .service, .post {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) minmax(var(--aside-min), 1fr);
+    grid-template-rows: auto auto auto 1fr;
+    column-gap: var(--space-4);
+    align-items: start;
+  }
+  .page > *, .service > *, .post > * { grid-column: 1; }
+  .page > .call-cta, .service > .call-cta, .post > .call-cta {
+    grid-column: 2;
+    grid-row: 1 / span 4;
+    position: sticky;
+    top: var(--space-3);
+    display: block;
+    margin: var(--space-4) 0;
+  }
+  .page > .call-cta .btn-call, .service > .call-cta .btn-call, .post > .call-cta .btn-call,
+  .page > .call-cta .cta-link, .service > .call-cta .cta-link, .post > .call-cta .cta-link {
+    display: flex;
+    margin: var(--space-3) 0;
+    /* The card is narrow: a long number wraps inside the button, never past it */
+    padding: var(--space-2);
+    line-height: var(--leading-tight);
+    text-align: center;
+    text-wrap: balance;
+    white-space: normal;
+  }
+}
+
+/* THE SIGNATURE: the call-now bar. On phones it fixes to the bottom edge
+   under the hazard stripe: hi-vis yellow, navy button, one tap from problem
+   to phone call. */
 
 .call-bar { display: none; }
 
-@media (max-width: 48em) {
+@media screen and (max-width: 48em) {
+  /* The bar's height, so the page can keep clear of it (derived, not a token) */
+  html {
+    --bar-height: calc(var(--tap-target) + 2 * var(--space-2) + var(--stripe-height) + env(safe-area-inset-bottom, 0px));
+    scroll-padding-bottom: var(--bar-height);
+  }
+  body:has(.call-bar) { padding-bottom: var(--bar-height); }
+  @supports not selector(:has(a)) { body { padding-bottom: var(--bar-height); } }
+
+  /* One row, always. The button is laid out first and never shrinks below
+     its number; if the prompt and hours cannot fit beside it they wrap to a
+     second row, which sits above the bar's edge and is clipped away, leaving
+     the button the full width. No long hours line can squeeze the number. */
   .call-bar {
     position: fixed;
     inset: auto 0 0 0;
     z-index: 10;
     display: flex;
+    flex-flow: row-reverse wrap-reverse;
+    align-content: flex-start;
     align-items: center;
-    justify-content: space-between;
-    gap: var(--space-3);
-    padding: var(--space-2) var(--space-3);
-    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
-    background: var(--color-hivis);
+    gap: var(--tap-target) var(--space-2);
+    height: var(--bar-height);
+    padding: calc(var(--space-2) + var(--stripe-height)) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+    overflow: hidden;
+    background-color: var(--color-hivis);
     color: var(--color-on-hivis);
-    border-top: 6px solid;
-    border-image: repeating-linear-gradient(-45deg, var(--color-stripe) 0 10px, var(--color-hivis) 10px 20px) 6;
   }
-  .call-bar-text { margin: 0; font-size: var(--text-s); line-height: 1.3; }
-  .call-bar-text strong { display: block; font-size: var(--text-m); }
   .call-bar .btn-call {
-    flex-shrink: 0;
+    order: -1;
+    flex: 1 0 auto;
+    padding: 0 var(--space-2);
     background: var(--color-on-hivis);
     color: var(--color-hivis);
   }
+  .call-bar .btn-call:hover { border-color: var(--color-on-hivis); }
+  .call-bar-text { margin: 0; font-size: var(--text-s); line-height: var(--leading-tight); white-space: nowrap; }
+  .call-bar-text strong { display: block; font-size: var(--text-m); }
+  /* The page's focus colour is too close to yellow: use the navy */
+  .call-bar :focus-visible { outline-color: var(--color-on-hivis); }
 
-  /* Keep page content clear of the fixed bar */
-  body:has(.call-bar) { padding-bottom: calc(var(--tap-target) + var(--space-4) + env(safe-area-inset-bottom, 0px)); }
-  .colophon { padding-bottom: var(--space-5); } /* fallback room for browsers without :has() */
-
-  .masthead .call-link { display: none; } /* the bar takes over */
+  /* The bar is the call control here: no second stripe, no second button */
+  .masthead .call-link, .call-cta .btn-call { display: none; }
+  .call-cta { display: block; background-image: none; padding-top: var(--space-3); }
+  .call-cta .cta-link { margin: var(--space-2) 0; }
 }
 
 /* Lists & pagination ------------------------------------------------------- */
@@ -444,50 +529,64 @@ main { min-height: 60vh; }
   justify-content: space-between;
   align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
+  padding: 0 0 var(--space-4);
   font-size: var(--text-s);
   color: var(--color-muted);
 }
-.pagination a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap-target);
-  padding: 0 var(--space-3);
-  background: var(--color-panel);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  text-decoration: none;
-  font-weight: 600;
-}
-.pagination a:hover { border-color: var(--color-accent); }
+
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); margin: 0; }
 
 .empty { color: var(--color-muted); }
 
 /* Colophon ------------------------------------------------------------------ */
 
 .colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
   margin-top: var(--space-5);
   padding: var(--space-3) 0 var(--space-4);
   border-top: var(--border-strong) solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
 }
-.colophon p { margin: 0 0 var(--space-1); }
+.colophon p { margin: 0; }
+.colophon a { color: var(--color-text); }
+.colophon-name strong { display: block; color: var(--color-text); }
+.colophon-contact { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 0 var(--space-3); }
+.colophon-contact a { font-weight: 700; font-variant-numeric: tabular-nums; }
+.colophon-note { flex-basis: 100%; }
+.colophon-note > * { margin: 0 0 var(--space-1); }
 
 /* Motion --------------------------------------------------------------------- */
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
   .btn-call:active { transform: translateY(1px); }
+  .service-card .price b { transition: transform 0.15s; }
+  .service-card:hover .price b { transform: translateX(var(--space-1)); }
 }
 
 /* Print ----------------------------------------------------------------------- */
 
 @media print {
-  body { max-width: none; padding: 0; font-size: 11pt; color: #000; background: #fff; }
-  .masthead nav, .skip-link, .call-bar, .call-link, .pagination { display: none; }
-  a { color: inherit; }
-  .btn-call { background: none; border: 1pt solid #000; color: #000; }
+  /* Ink on paper whatever scheme the screen is in */
+  :root {
+    --color-bg: #fff;
+    --color-panel: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-border: #999;
+  }
+  body { max-width: none; padding: 0; font-size: 11pt; }
+  main { min-height: 0; }
+  .masthead nav, .skip-link, .call-bar, .call-link, .pagination, .actions, .service-card .price b { display: none; }
+  .call-cta { background-image: none; margin-top: var(--space-4); }
+  .btn-call { background: none; }
+  .service-card, .included, .call-cta, .price-line, .prose blockquote, .prose tr { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .prose pre { white-space: pre-wrap; }
 }

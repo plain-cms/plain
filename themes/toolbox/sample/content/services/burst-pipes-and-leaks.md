@@ -1,20 +1,20 @@
 ---
 title: Burst pipes & leak repair
-description: Finding the leak is the job — fixing it is the easy part. We trace, expose, repair, and prove it's dry before we leave.
-priceFrom: $95
+description: Finding the leak is the job. Fixing it is the easy part. We trace it, repair it, and prove it's dry before we leave.
+priceFrom: £85
 included:
-  - Leak traced and shown to you before anything is opened up
+  - The leak traced and shown to you before anything is opened up
   - A firm price agreed before the repair starts
   - The repair pressure-tested and proven dry while you watch
   - Floors sheeted, boot covers on, old parts taken away
 example: true
 ---
 
-Most leaks announce themselves as a stain two rooms away from the actual problem. We carry the kit to trace them properly — moisture meters, thermal camera, and eighteen years of knowing where builders like to hide pipes.
+Most leaks show up as a stain two rooms away from the actual problem. We carry the kit to trace them properly: moisture meters, a thermal camera, and a long memory for where builders like to hide pipes.
 
 ## What we fix
 
-Weeping joints, pinholed copper, split plastic, dripping stopcocks, leaks under baths and showers, and the classic slow drip inside a kitchen kickboard that nobody notices until the cabinet swells.
+Weeping joints, pinholed copper, split plastic, dripping stop taps, leaks under baths and showers, and the slow drip behind a kitchen plinth that nobody notices until the cabinet swells.
 
 ## How the visit goes
 

@@ -1,21 +1,22 @@
 // enhance.js — progressive enhancement only (cms-spec.md C5).
 // The site is fully readable and navigable without this file.
 
-// Before/after gallery: a paragraph holding exactly two images whose alt
-// text starts with "Before" and "After" becomes a labelled side-by-side
-// pair. Without JS the images simply stack — nothing is lost.
+// Before/after pairs: a paragraph in the page text that holds exactly two
+// images and nothing else (in Markdown: two images on one line) becomes a
+// side-by-side pair, each captioned with its own alt text, e.g.
+// "Before: the corroded trap" and "After: new trap and isolating valve".
+// Without JS the images simply stack. Nothing is lost.
 for (const p of document.querySelectorAll('.prose p')) {
-  const imgs = p.querySelectorAll('img');
-  if (imgs.length !== 2 || p.childElementCount !== 2) continue;
-  const first = (imgs[0].alt || '').trim().toLowerCase();
-  const second = (imgs[1].alt || '').trim().toLowerCase();
-  if (!first.startsWith('before') || !second.startsWith('after')) continue;
+  const imgs = [...p.children];
+  if (imgs.length !== 2 || p.textContent.trim() || !imgs.every((el) => el.tagName === 'IMG')) continue;
   p.classList.add('before-after');
-  imgs.forEach((img, index) => {
+  for (const img of imgs) {
     const figure = document.createElement('figure');
-    const caption = document.createElement('figcaption');
-    caption.textContent = index === 0 ? 'Before' : 'After';
     img.replaceWith(figure);
-    figure.append(img, caption);
-  });
+    figure.append(img);
+    if (!img.alt) continue;
+    const caption = document.createElement('figcaption');
+    caption.textContent = img.alt;
+    figure.append(caption);
+  }
 }

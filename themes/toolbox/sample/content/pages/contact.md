@@ -1,14 +1,22 @@
 ---
 title: Contact
-description: Phone, hours, and service area — plus what to tell us so we arrive with the right parts.
+description: One number, answered by a person. Here's when we're in, where we work, and what to tell us so we arrive with the right parts.
 example: true
 ---
 
 ## Call us
 
-**[+1 555 0100](tel:+15550100)** — Mon–Sat, 7am–6pm.
+[01632-960142](tel:01632-960142)
 
-A person answers, not a menu. If it's after hours and water is escaping, call anyway: the emergency line rings through to whoever is on duty.
+A person answers, not a menu. If we're under a sink we'll ring you back within the hour.
+
+## Opening hours
+
+| Day | Hours |
+|:--|:--|
+| Monday to Saturday | 7am to 6pm |
+| Sunday and bank holidays | Emergencies only |
+| After hours | Same number, it rings through to whoever is on duty |
 
 ## What to have ready
 
@@ -16,11 +24,11 @@ Two minutes on the phone saves an hour on the day. If you can, tell us:
 
 - Where the problem is (kitchen, bathroom, outside wall)
 - What it's doing (dripping, pouring, cold, silent)
-- Whether you've found your stop valve — if not, we'll talk you to it
-- A photo helps: *replace this with your text/WhatsApp number if you take pictures*
+- Whether you've found your stop tap. If not, we'll talk you to it.
+- What it looks like. A photo helps, so text one to 07700-900142.
 
 ## Where we work
 
-Springfield and about twenty miles around it.
+Calderbrook and about fifteen miles around it: Marsh Lane, Holme Cross, Netherby and the villages up the valley.
 
-*Replace this: your workshop address if customers can drop by, or delete this line if they can't.*
+The yard is at Unit 4, Canal Yard, Wharf Road, Calderbrook. Someone is in from 7am to 8.30am most mornings if you need to drop off a key. The rest of the day we're out on jobs, so ring first.

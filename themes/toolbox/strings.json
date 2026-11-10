@@ -1,0 +1,19 @@
+{
+  "mainNav": "Main",
+  "call": "Call",
+  "callUs": "Call us",
+  "callBarPrompt": "Need a hand?",
+  "serving": "Serving",
+  "pagination": "Pages",
+  "allServices": "All services",
+  "priceFromLead": "Typical jobs from",
+  "priceFromNote": "Call for a price on your job.",
+  "includedHeading": "Every visit includes",
+  "from": "from",
+  "ctaHeading": "Tell us what’s wrong.",
+  "ctaLead": "We’ll tell you what happens next.",
+  "ctaContactLink": "See how to reach us",
+  "notFoundTitle": "That page isn’t here",
+  "notFoundBody": "The link may be old or mistyped. Nothing is broken on your end.",
+  "seeServices": "See what we do"
+}

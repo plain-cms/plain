@@ -1,25 +1,37 @@
 ---
 title: Honest plumbing, fixed prices
-description: Family-run plumbers serving Springfield and 20 miles around. A firm price before we start, tidy work, and a real person on the phone.
+description: Hartley & Son are family-run plumbers and heating engineers in Calderbrook. A firm price before we start, tidy work, and a real person on the phone.
 example: true
 ---
 
-*Replace this page with your own words. The shape below — who you are, where you work, one customer's voice, how to reach you — is the whole job.*
-
 ## Who turns up
 
-We're a small family firm: two vans, three plumbers, and one phone number that a real person answers. We've fixed burst pipes, tired boilers, and blocked drains around Springfield for eighteen years. Licensed, insured, and tidy — we wear boot covers, we sheet your floors, and we take the old parts away with us.
+We're a small family firm: two vans, three plumbers, and one phone number that a real person answers. We've been fixing burst pipes, tired boilers and blocked drains around Calderbrook since 2008. Gas Safe registered, fully insured, and tidy. We wear boot covers, sheet your floors, and take the old parts away with us.
 
-## Where we work
+## What it costs
 
-Springfield and everywhere within about twenty miles of it. If you're not sure whether that's you, call anyway — if we can't get to you quickly, we'll say so straight away and point you to someone who can.
+You hear the price before we pick up a tool, and the number we quote is the number you pay.
+
+| The job | From |
+|:--|--:|
+| [Emergency call-out](/services/emergency-callout/) | £95 |
+| [Burst pipes & leak repair](/services/burst-pipes-and-leaks/) | £85 |
+| [Boiler service & repair](/services/boiler-service-and-repair/) | £80 |
+| [Drain unblocking](/services/drain-unblocking/) | £75 |
+| [Tap & toilet repairs](/services/tap-and-toilet-repairs/) | £60 |
+
+[See every service and price](/services/)
 
 ## What our customers say
 
 > They found the leak in twenty minutes, gave me the price before touching a spanner, and left the kitchen cleaner than they found it.
 >
-> — Maria D., Elm Street
+> Maria D., Elm Road
+
+## Where we work
+
+Calderbrook and everywhere within about fifteen miles of it, including Marsh Lane, Holme Cross and the villages up the valley. Not sure whether that's you? Call anyway. If we can't get to you quickly we'll say so straight away and point you to someone who can.
 
 ## Something dripping right now?
 
-Don't wait for it to get worse. **[Call +1 555 0100](tel:+15550100)** — Mon–Sat, 7am–6pm — or [see our services and prices](/services/). If it's after hours and water is somewhere it shouldn't be, call anyway: the emergency line rings through.
+Don't wait for it to get worse. Call [01632-960142](tel:01632-960142), Monday to Saturday, 7am to 6pm. After hours, if water is somewhere it shouldn't be, ring the same number and it goes through to whoever is on duty.
