@@ -6,7 +6,7 @@ status: For sale
 beds: "3"
 baths: "2"
 area: "104 m²"
-address: 27b Chandler Street, town center
+address: 27b Chandler Street, town centre
 description: Two floors above the town's best street — three beds, a roof terrace with the church-clock view, and your own staircase to the pavement.
 example: true
 ---
@@ -21,11 +21,11 @@ sensibly), and a kitchen-living room across the whole Chandler Street
 frontage with three sash windows. The roof terrace faces the church clock
 and takes a table for six. Leasehold, 118 years; €70/month.
 
-**The area:** you live over the town center, which is the point: the
+**The area:** you live over the town centre, which is the point: the
 bakery is downstairs-left, the bookshop downstairs-right, and Saturday
 mornings hum from about eight.
 
 **The catch, honestly:** Saturday mornings hum from about eight. The street
-is pedestrianized (loading until 10am), so parking is a permit space in
+is pedestrianised (loading until 10am), so parking is a permit space in
 the Mill Road car park, four minutes away — fine for most, a dealbreaker
 for some, and better to know now.

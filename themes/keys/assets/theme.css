@@ -1,24 +1,27 @@
-/* Keys — the real-estate agent theme.
-   Grounded in the agency-board vernacular: clean white page, deep estate
-   green, photo-first cards. The signature is the listing card — price
-   first and biggest, a status flag on the photo, a spec row in tabular
-   figures. All design decisions live in the tokens below; restyle by
-   editing tokens, never selectors (cms-spec.md §10.1). */
+/* Keys — the estate-agent theme.
+   Grounded in the agency-board vernacular: clean white page, deep board
+   green. The signature is the listing card — a status flag flying from its
+   top-left corner, the price first and biggest, a ruled row of figures along
+   the bottom. With a photo the flag sits on the photo; without one the card
+   is a board slip with a head in the status colour. All design decisions
+   live in the tokens below; restyle by editing tokens, never selectors
+   (cms-spec.md §10.1). */
 
 :root {
   /* Type */
   --font-body: system-ui, "Segoe UI", "Helvetica Neue", Roboto, "Liberation Sans", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
-  --text-xs: 0.75rem;
+  --text-xs: 0.8125rem;
   --text-s: 0.875rem;
   --text-m: 1.0625rem;
   --text-l: 1.3125rem;
   --text-xl: 1.625rem;
   --text-xxl: clamp(1.875rem, 4.5vw, 2.5rem);
-  --text-price: 1.5rem;
+  --text-price: 1.875rem;
   --leading-body: 1.6;
   --leading-tight: 1.15;
   --tracking-caps: 0.07em;
+  --tracking-tight: -0.015em;
 
   /* Color — light scheme */
   --color-bg: #fcfcfa;
@@ -29,7 +32,7 @@
   --color-accent-ink: #ffffff;
   --color-flag-sale: #1e5c46;
   --color-flag-offer: #9a6a10;
-  --color-flag-sold: #5c6560;
+  --color-flag-sold: #454d49;
   --color-flag-ink: #ffffff;
   --color-border: #e3e6e3;
   --color-photo-blank: #dfe7e2;
@@ -50,7 +53,7 @@
   --space-4: 2rem;
   --space-5: 3.5rem;
   --grid-gap: 1.5rem;
-  --card-ratio: 4 / 3;
+  --card-ratio: 1.3333;
   --radius: 10px;
   --radius-s: 5px;
   --tap-target: 3rem;
@@ -58,19 +61,19 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #171d1a;
-    --color-card: #1e2621;
+    --color-bg: #151b18;
+    --color-card: #212a25;
     --color-text: #e5e8e5;
     --color-muted: #a3aca6;
     --color-accent: #66b592;
     --color-accent-ink: #10201a;
-    --color-flag-sale: #66b592;
-    --color-flag-offer: #dfa945;
-    --color-flag-sold: #7c847f;
-    --color-flag-ink: #10201a;
-    --color-border: #2d3630;
-    --color-photo-blank: #26302a;
-    --color-tint: #212b25;
+    --color-flag-sale: #2e8062;
+    --color-flag-offer: #94692a;
+    --color-flag-sold: #6a736e;
+    --color-flag-ink: #ffffff;
+    --color-border: #37423b;
+    --color-photo-blank: #2a352f;
+    --color-tint: #1d2c25;
     --color-code-bg: #232b26;
     --color-mark: #2c4437;
     --shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
@@ -99,17 +102,15 @@ body {
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: 2px; }
+a[href^="tel"] { white-space: nowrap; }
 
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
-}
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
 .skip-link {
   position: absolute;
   left: -100vw;
   top: var(--space-2);
+  z-index: 2;
   background: var(--color-bg);
   padding: var(--space-2) var(--space-3);
 }
@@ -121,26 +122,31 @@ a:hover { text-decoration-thickness: 2px; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: var(--space-2) var(--space-4);
+  gap: var(--space-2) var(--space-3);
   padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-border);
 }
 
+/* The agency's name on its board plate. */
 .site-title {
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  border-radius: var(--radius-s);
   font-size: var(--text-l);
   font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--color-text);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
   text-decoration: none;
 }
-.site-title:hover { color: var(--color-accent); }
+.site-title:hover { text-decoration: underline; }
 
-.masthead nav { margin-right: auto; }
+/* Small screens: name and phone share the first row, the menu takes the second. */
+.masthead nav { order: 3; flex-basis: 100%; }
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
-  margin: 0;
+  margin: 0 calc(-1 * var(--space-2));
   padding: 0;
   list-style: none;
 }
@@ -151,11 +157,18 @@ a:hover { text-decoration-thickness: 2px; }
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-target);
+  padding: 0 var(--space-2);
 }
 .masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
 .masthead nav a[aria-current="page"] { color: var(--color-text); font-weight: 600; }
 
+/* On small screens the phone fills what the name leaves, or its own row if the name is long. */
 .masthead-phone {
+  flex: 1 1 auto;
+  justify-content: center;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-s);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-decoration: none;
@@ -164,19 +177,32 @@ a:hover { text-decoration-thickness: 2px; }
   align-items: center;
   min-height: var(--tap-target);
 }
-.masthead-phone:hover { text-decoration: underline; }
+.masthead-phone:hover { background: var(--color-tint); }
+
+@media (min-width: 640px) {
+  .masthead { gap: var(--space-2) var(--space-4); }
+  .masthead nav { order: 0; flex-basis: auto; margin-right: auto; }
+  .masthead-phone { flex: 0 1 auto; padding: 0 var(--space-3); }
+}
 
 main { min-height: 60vh; }
 
 .colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
   margin-top: var(--space-5);
-  padding: var(--space-3) 0 var(--space-4);
+  padding: var(--space-4) 0;
   border-top: 1px solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
 }
-.colophon-name { margin: 0 0 var(--space-1); font-weight: 700; color: var(--color-text); }
-.colophon-line { margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+.colophon address { font-style: normal; }
+.colophon p { margin: 0; }
+.colophon-name { font-weight: 700; color: var(--color-text); }
+.colophon-note { flex-basis: 100%; }
 
 /* Headers ---------------------------------------------------------------- */
 
@@ -185,8 +211,8 @@ main { min-height: 60vh; }
 .page-header h1 {
   font-size: var(--text-xxl);
   line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
-  margin: 0 0 var(--space-2);
+  letter-spacing: var(--tracking-tight);
+  margin: 0 0 var(--space-3);
   text-wrap: balance;
 }
 
@@ -199,30 +225,61 @@ main { min-height: 60vh; }
   color: var(--color-accent);
 }
 
-.lede { font-size: var(--text-l); color: var(--color-muted); margin: 0; }
+/* Leading sits halfway between heading and body. */
+.lede {
+  margin: 0;
+  font-size: var(--text-l);
+  line-height: calc((var(--leading-body) + var(--leading-tight)) / 2);
+  color: var(--color-muted);
+}
 
 .meta { color: var(--color-muted); font-size: var(--text-s); margin: 0 0 var(--space-1); }
 
 .tags { margin-left: var(--space-2); }
 .tag { display: inline-block; margin-right: var(--space-2); color: var(--color-accent); text-decoration: none; }
-.tag::before { content: "#"; opacity: 0.6; }
+.tag::before { content: "#"; color: var(--color-muted); }
 .tag:hover { text-decoration: underline; }
+
+/* Text column with the inquiry box beside it on wide screens --------------- */
+
+@media (min-width: 1024px) {
+  .with-aside {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) minmax(min-content, 1fr);
+    column-gap: var(--space-5);
+    align-items: start;
+  }
+  .with-aside > * { grid-column: 1; }
+  .with-aside > .inquiry {
+    grid-column: 2;
+    grid-row: 1 / span 5;
+    position: sticky;
+    top: var(--space-3);
+  }
+}
 
 /* Status flags ------------------------------------------------------------- */
 
+/* The status colour, shared by the flag and the head of a card or property page. */
+[data-status] { --_flag: var(--color-flag-sale); }
+[data-status="Under offer"] { --_flag: var(--color-flag-offer); }
+[data-status="Sold"] { --_flag: var(--color-flag-sold); }
+[data-status=""] { --_flag: var(--color-border); }
+
 .status-flag {
-  display: inline-block;
-  padding: 0.2em 0.65em;
-  border-radius: var(--radius-s);
+  width: fit-content;
+  margin: 0;
+  padding: var(--space-2) calc(var(--space-3) + 0.8em) var(--space-2) var(--space-3);
   font-size: var(--text-xs);
   font-weight: 700;
+  line-height: var(--leading-tight);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
-  background: var(--color-flag-sale);
+  background: var(--_flag);
   color: var(--color-flag-ink);
+  /* the swallowtail cut in the flag's fly end */
+  clip-path: polygon(0 0, 100% 0, calc(100% - 0.8em) 50%, 100% 100%, 0 100%);
 }
-[data-status="Under offer"] .status-flag { background: var(--color-flag-offer); }
-[data-status="Sold"] .status-flag { background: var(--color-flag-sold); }
 
 /* The listing card — the signature ----------------------------------------- */
 
@@ -238,28 +295,33 @@ main { min-height: 60vh; }
 @media (min-width: 1024px) { .listing-grid { grid-template-columns: repeat(3, 1fr); } }
 
 .listing-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
   background: var(--color-card);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   overflow: hidden;
   box-shadow: var(--shadow);
 }
+.listing-card:hover { box-shadow: var(--shadow-lift); }
+.listing-card:focus-within { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 @media (prefers-reduced-motion: no-preference) {
   .listing-card { transition: box-shadow 160ms ease, translate 160ms ease; }
-  .listing-card:hover { box-shadow: var(--shadow-lift); translate: 0 -2px; }
+  .listing-card:hover { translate: 0 -2px; }
 }
 
-.card-photo {
-  position: relative;
-  aspect-ratio: var(--card-ratio);
-  background: var(--color-photo-blank);
-}
+/* With a photo: the flag flies from the photo's top-left corner. */
+.card-photo { aspect-ratio: var(--card-ratio); background: var(--color-photo-blank); }
 .card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.card-photo-blank { position: absolute; inset: 0; background: var(--color-photo-blank); }
-.card-photo .status-flag { position: absolute; top: var(--space-2); left: var(--space-2); }
-
+.listing-card .status-flag { position: absolute; top: 0; left: 0; }
 .listing-card[data-status="Sold"] .card-photo img { filter: grayscale(0.75); }
-.listing-card[data-status="Sold"] .card-price { color: var(--color-muted); }
+
+/* Without one: a board slip — a head in the status colour, the flag hanging from it. */
+.listing-card--text::before { content: ""; height: var(--space-1); background: var(--_flag); }
+.listing-card--text .status-flag { position: static; }
+/* Beside photo cards a slip keeps its own height rather than stretching into a hole. */
+.listing-grid:has(.card-photo) .listing-card--text { align-self: start; }
 
 .card-body { padding: var(--space-3); }
 
@@ -267,116 +329,166 @@ main { min-height: 60vh; }
   margin: 0;
   font-size: var(--text-price);
   font-weight: 800;
-  letter-spacing: -0.01em;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
   font-variant-numeric: tabular-nums;
 }
 
 .card-title {
-  margin: var(--space-1) 0 0;
+  margin: var(--space-2) 0 0;
   font-size: var(--text-m);
   font-weight: 600;
   line-height: var(--leading-tight);
 }
 .card-title a { color: var(--color-text); text-decoration: none; }
-.card-title a:hover { color: var(--color-accent); text-decoration: underline; }
+/* The whole card is the link, so the focus ring is drawn on the card. */
+.card-title a::after { content: ""; position: absolute; inset: 0; }
+.card-title a:focus-visible { outline: none; }
+.listing-card:hover .card-title a { color: var(--color-accent); text-decoration: underline; }
 
+.card-address { margin: var(--space-1) 0 0; color: var(--color-muted); font-size: var(--text-s); }
+
+/* The row of figures, ruled, pinned to the bottom of the card. A figure too
+   long for its share drops to a ruled row of its own, and only breaks inside
+   itself when it is longer than the whole row; the outer rules are clipped. */
 .spec-row {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-1) var(--space-3);
-  margin: var(--space-2) 0 0;
+  overflow: hidden;
+  margin: auto 0 0;
   padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
   font-variant-numeric: tabular-nums;
 }
-.spec { white-space: nowrap; }
+.spec-row:empty { display: none; }
+.spec {
+  flex: 1 1 0;
+  margin: 0 0 -1px -1px;
+  padding: var(--space-2) var(--space-3);
+  border-left: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  min-width: fit-content;
+}
+.spec b { color: var(--color-text); font-size: var(--text-m); font-weight: 600; }
 
-.card-address { margin: var(--space-2) 0 0; color: var(--color-muted); font-size: var(--text-s); }
+/* Single listing — the card written large, as a particulars sheet ------------ */
 
-/* Single listing ------------------------------------------------------------ */
-
-.listing-head { margin: var(--space-4) 0; max-width: var(--measure); }
-
-.listing-topline { display: flex; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-2); }
+.listing-head {
+  margin: var(--space-5) 0 var(--space-4);
+  max-width: var(--measure);
+  border-top: var(--space-1) solid var(--_flag, var(--color-flag-sale));
+}
 
 .listing-price {
+  margin: var(--space-3) 0 var(--space-2);
   font-size: var(--text-xxl);
   font-weight: 800;
-  letter-spacing: -0.015em;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
   font-variant-numeric: tabular-nums;
 }
 
 .listing-head h1 {
   font-size: var(--text-xl);
   line-height: var(--leading-tight);
-  margin: 0 0 var(--space-1);
+  letter-spacing: var(--tracking-tight);
+  margin: var(--space-2) 0 var(--space-1);
   text-wrap: balance;
 }
 
-.listing-address { margin: 0 0 var(--space-2); color: var(--color-muted); }
+.listing-address { margin: 0; color: var(--color-muted); }
 
-.spec-strip {
-  padding: var(--space-2) 0;
-  border-top: 1px solid var(--color-border);
-  border-bottom: 1px solid var(--color-border);
-  font-size: var(--text-m);
+.spec-strip { margin-top: var(--space-3); border-bottom: 1px solid var(--color-border); font-size: var(--text-m); }
+/* Each figure is pulled left by its own inset, so the first in every row — wrapped or not — sits flush. */
+.spec-strip .spec {
+  margin-left: calc(-1px - var(--space-3));
+  padding: var(--space-3) calc(2 * var(--space-3)) var(--space-3) var(--space-3);
 }
+.spec-strip .spec b { font-size: var(--text-l); }
+
+.listing-listed { margin: var(--space-2) 0 0; color: var(--color-muted); font-size: var(--text-s); }
 
 .gallery {
   list-style: none;
   margin: 0 0 var(--space-4);
   padding: 0;
+  max-width: var(--measure);
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-2);
 }
-@media (min-width: 640px) { .gallery { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 640px) {
+  .gallery { grid-template-columns: repeat(2, 1fr); }
+  .gallery li:first-child { grid-column: 1 / -1; }
+}
 .gallery img, .gallery-single img {
   width: 100%;
-  height: auto;
+  aspect-ratio: var(--card-ratio);
+  object-fit: cover;
   border-radius: var(--radius-s);
   display: block;
   background: var(--color-photo-blank);
 }
-.gallery-single { margin: 0 0 var(--space-4); }
+.gallery-single { margin: 0 0 var(--space-4); max-width: var(--measure); }
 
 .listing-return { margin: var(--space-4) 0 0; font-size: var(--text-s); }
 
-/* Inquiry CTA ---------------------------------------------------------------- */
+/* Inquiry box ------------------------------------------------------------------ */
 
 .inquiry {
-  max-width: var(--measure);
   margin: var(--space-5) 0 0;
-  padding: var(--space-4);
+  padding: var(--space-4) var(--space-3);
   background: var(--color-tint);
   border-radius: var(--radius);
 }
-.inquiry h2 { margin: 0 0 var(--space-1); font-size: var(--text-xl); line-height: var(--leading-tight); }
-.inquiry-meta { margin: 0 0 var(--space-3); color: var(--color-muted); font-size: var(--text-s); }
-.inquiry-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0 0 var(--space-2); }
-.inquiry-note { margin: 0; color: var(--color-muted); font-size: var(--text-s); }
+.inquiry h2 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  text-wrap: balance;
+}
+.inquiry-meta { margin: 0; color: var(--color-muted); font-size: var(--text-s); font-variant-numeric: tabular-nums; }
+.inquiry-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-3) 0 0; }
+.inquiry-note { margin: var(--space-3) 0 0; color: var(--color-muted); font-size: var(--text-s); }
+.with-aside > .inquiry { max-width: var(--measure); }
+.listings > .inquiry { margin-top: var(--space-4); }
+
+/* Under the grid of listings the box closes the page at full width. */
+@media (min-width: 640px) {
+  .inquiry { padding: var(--space-4); }
+  .listings > .inquiry {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: var(--space-4);
+    align-items: center;
+  }
+  .listings > .inquiry > * { grid-column: 1; }
+  .listings > .inquiry > .inquiry-actions { grid-column: 2; grid-row: 1 / span 3; margin: 0; }
+}
 
 .btn {
+  flex: 1 1 auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-3);
   background: var(--color-accent);
   color: var(--color-accent-ink);
+  border: 1px solid var(--color-accent);
   border-radius: var(--radius-s);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-decoration: none;
+  white-space: nowrap;
 }
-.btn:hover { filter: brightness(1.08); text-decoration: none; }
-.btn-quiet {
-  background: transparent;
-  color: var(--color-accent);
-  border: 1px solid var(--color-accent);
-}
-.btn-quiet:hover { background: var(--color-tint); filter: none; }
+.btn:hover { text-decoration: underline; }
+.btn-quiet { background: transparent; color: var(--color-accent); }
+.btn-quiet:hover { background: var(--color-card); }
 
 /* Prose ------------------------------------------------------------------ */
 
@@ -384,13 +496,14 @@ main { min-height: 60vh; }
 
 .prose h2, .prose h3, .prose h4 {
   line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-tight);
   margin: var(--space-4) 0 var(--space-2);
   text-wrap: balance;
 }
 .prose h2 { font-size: var(--text-xl); }
 .prose h3 { font-size: var(--text-l); }
 
+.prose > :first-child { margin-top: 0; }
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
 
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius-s); }
@@ -398,7 +511,7 @@ main { min-height: 60vh; }
 .prose blockquote {
   margin: var(--space-3) 0;
   padding: 0 var(--space-3);
-  border-left: 3px solid var(--color-accent);
+  border-left: var(--space-1) solid var(--color-accent);
   color: var(--color-muted);
 }
 
@@ -446,6 +559,7 @@ main { min-height: 60vh; }
 .post-card h2 {
   font-size: var(--text-xl);
   line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
   margin: 0 0 var(--space-1);
   text-wrap: balance;
 }
@@ -457,11 +571,13 @@ main { min-height: 60vh; }
 .pagination {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
   color: var(--color-muted);
   font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
 }
+.pagination a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
 
 .empty { color: var(--color-muted); max-width: var(--measure); }
 
@@ -471,13 +587,37 @@ main { min-height: 60vh; }
   html { scroll-behavior: smooth; }
 }
 
+/* A printed listing is the agent's particulars sheet: black on white whatever
+   the screen scheme, with the phone number and the office details kept. */
 @media print {
-  body { max-width: none; font-size: 11pt; color: #000; background: #fff; }
-  .masthead nav, .colophon, .skip-link, .inquiry-actions, .pagination,
-  .listing-return { display: none; }
-  a { color: inherit; text-decoration: none; }
-  .listing-card, .card-photo { box-shadow: none; }
-  .status-flag { border: 1px solid #000; background: none; color: #000; }
+  :root {
+    --color-bg: #ffffff;
+    --color-card: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-accent-ink: #000000;
+    --color-flag-sale: #000000;
+    --color-flag-offer: #000000;
+    --color-flag-sold: #000000;
+    --color-flag-ink: #000000;
+    --color-border: #999999;
+    --color-tint: #ffffff;
+    --color-photo-blank: #ffffff;
+    --color-code-bg: #ffffff;
+    --color-mark: #ffffff;
+    --shadow: none;
+    --shadow-lift: none;
+  }
+  body { max-width: none; font-size: 11pt; }
+  main { min-height: 0; }
+  .masthead nav, .skip-link, .pagination, .listing-return, .btn-quiet { display: none; }
+  a { text-decoration: none; }
+  .site-title, .masthead-phone, .btn { padding: 0; border: 0; background: none; min-height: 0; }
+  .btn { justify-content: flex-start; }
+  .status-flag { padding: var(--space-1) var(--space-2); border: 1px solid; background: var(--color-card); clip-path: none; }
+  .listing-card, .gallery li, .inquiry { break-inside: avoid; }
+  .inquiry { padding: var(--space-3) 0 0; border-top: 1px solid var(--color-border); border-radius: 0; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .prose pre { white-space: pre-wrap; }
 }

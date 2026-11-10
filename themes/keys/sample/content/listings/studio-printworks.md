@@ -12,7 +12,7 @@ example: true
 ---
 
 The top-floor corner of the old Printworks conversion: one room that does
-everything, and does it with a five-meter ceiling and cast-iron windows on
+everything, and does it with a five-metre ceiling and cast-iron windows on
 two walls.
 
 **The facts:** 44 m² studio with a proper sleeping mezzanine (standing

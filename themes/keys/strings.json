@@ -1,0 +1,23 @@
+{
+  "mainNav": "Main",
+  "pagination": "Pages",
+  "filedUnder": "Everything filed under",
+  "notFoundTitle": "No property at this address",
+  "notFoundBody": "The page may have sold, moved, or never existed — links age faster than houses. Nothing on your end is broken.",
+  "goHome": "Start from the homepage",
+  "seeListings": "See what's on the market",
+  "listingsLede": "Everything on our books. The flag on each one tells you where it stands.",
+  "noListings": "Nothing on the market this week. Tell us what you're looking for and you'll hear about the next one before the board goes up.",
+  "beds": "bed",
+  "baths": "bath",
+  "listedOn": "Listed",
+  "propertyPhotos": "Property photos",
+  "allListings": "← All listings",
+  "inquiryHeading": "Ask about this property",
+  "inquiryNote": "Mention the street name and we'll have the file open before you finish the sentence.",
+  "inquiryHeadingAll": "Buying or selling? Talk to a person.",
+  "inquiryNoteAll": "Tell us what you're after and you'll hear about it before the board goes up.",
+  "call": "Call",
+  "emailUs": "Email us",
+  "sendMessage": "Send us a message"
+}

@@ -17,13 +17,13 @@ why.
 
 **The facts:** three bedrooms (two doubles, one single), a bathroom that
 was a 2020 renovation not a refresh, bay-windowed sitting room, and a
-rear garden of nearly 30 meters ending at the old orchard wall — fruit
+rear garden of nearly 30 metres ending at the old orchard wall — fruit
 trees included, ladder negotiable. Garage with an up-and-over door, plus
 driveway for two.
 
 **The area:** the primary school is literally the end of the close, which
 is the entire local economy of this address. The 3 bus at the corner;
-town center twelve minutes on it.
+town centre twelve minutes on it.
 
 **The catch, honestly:** it went under offer in six days, and we're being
 straight with you about the odds. We're keeping a backup list — if you're

@@ -15,14 +15,14 @@ A brick terrace from 1908 on the quiet, tree-lined end of Maple Row, owned
 by the same family for thirty years and looked after the whole time.
 
 **The facts:** three genuine double bedrooms, a bathroom upstairs (redone
-2022), kitchen-diner opening to a south-facing garden of about 14 meters,
+2022), kitchen-diner opening to a south-facing garden of about 14 metres,
 original pine floors under the carpets everywhere we lifted a corner. Gas
 boiler serviced annually; roof re-slated 2019. The loft is boarded, has
 head height, and next door's conversion sets the precedent.
 
 **The area:** Old Mill quarter — the Saturday market is four minutes on
 foot, the primary school around the corner is the one people move for, and
-the 3 bus at the end of the road does the center in twelve minutes.
+the 3 bus at the end of the road does the centre in twelve minutes.
 
 **The catch, honestly:** the kitchen works but is twenty years old, and
 you'll want to budget for it. Street parking is by permit and genuinely
