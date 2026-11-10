@@ -1,0 +1,14 @@
+<section class="hero">
+  <h1 class="hero-headline">{{ page.title }}</h1>
+  {{#if page.heroTagline}}<p class="hero-tagline">{{ page.heroTagline }}</p>
+  {{/if}}{{#if page.heroCtaUrl}}<p class="hero-actions">
+    <a class="btn btn-primary" data-cta="hero" href="{{ page.heroCtaUrl }}">{{#if page.heroCtaLabel}}{{ page.heroCtaLabel }}{{else}}{{ strings.getStarted }}{{/if}}</a>
+    {{#if page.heroSecondaryUrl}}{{> hero-secondary}}{{/if}}
+  </p>
+  {{else}}{{#if page.heroSecondaryUrl}}<p class="hero-actions">{{> hero-secondary}}</p>
+  {{/if}}{{/if}}{{#if page.heroImage}}<figure class="hero-frame">
+    <span class="frame-bar" aria-hidden="true"><span class="frame-dot"></span><span class="frame-dot"></span><span class="frame-dot"></span></span>
+    <img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async">
+  </figure>
+  {{/if}}{{> latest}}
+</section>

@@ -1,6 +1,6 @@
 ---
 author: Dev Sharma
-role: Founder, Tinypaper
+role: Founder, Foldwell
 order: 2
 example: true
 ---

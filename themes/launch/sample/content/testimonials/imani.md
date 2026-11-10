@@ -1,6 +1,6 @@
 ---
 author: Imani Blake
-role: CTO, Fathom Analytics
+role: CTO, Harbourline
 order: 1
 example: true
 ---
