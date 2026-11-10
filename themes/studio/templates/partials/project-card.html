@@ -1,7 +1,12 @@
-<li class="work-card">
+{{#if item.cover}}<li class="work-card">
   <a href="{{ item.url }}">
-    {{#if item.cover}}<img src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
-    {{else}}<span class="work-card-blank" aria-hidden="true"></span>
-    {{/if}}<span class="work-card-label">{{ item.title }}{{#if item.client}}<span class="work-card-client"> — {{ item.client }}</span>{{/if}}</span>
+    <img src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+    <span class="work-card-label"><span><strong>{{ item.title }}</strong>{{#if item.client}} — {{ item.client }}{{/if}}</span> <time class="year" datetime="{{ item.date }}">{{ item.date }}</time></span>
   </a>
-</li>
+</li>{{else}}<li class="work-card work-card-plate">
+  <a href="{{ item.url }}">
+    <span class="work-card-title">{{ item.title }}</span>
+    {{#if item.description}}<span class="work-card-text">{{ item.description }}</span>
+    {{/if}}<span class="work-card-label"><span>{{ item.client }}</span> <time class="year" datetime="{{ item.date }}">{{ item.date }}</time></span>
+  </a>
+</li>{{/if}}

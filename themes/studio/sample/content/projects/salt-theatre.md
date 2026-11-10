@@ -1,5 +1,5 @@
 ---
-title: Salt Theatre
+title: Five plays, two inks
 date: 2025-04-17
 description: A season campaign for a ninety-seat theatre — five plays, one poster system, no photography budget.
 cover: /media/project-salt.svg

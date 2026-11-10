@@ -1,5 +1,5 @@
 ---
-title: Ninebark River Trust
+title: A river through the report
 date: 2025-11-20
 description: An annual report that turned twelve months of river restoration data into a document people actually read.
 cover: /media/project-ninebark.svg

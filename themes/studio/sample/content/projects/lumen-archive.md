@@ -1,5 +1,5 @@
 ---
-title: The Lumen Archive
+title: Twelve at a time
 date: 2025-08-08
 description: A digital exhibition for a rescued archive of 4,000 mid-century street photographs.
 cover: /media/project-lumen.svg

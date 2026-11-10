@@ -1,5 +1,5 @@
 ---
-title: Corvid Coffee Roasters
+title: The ring mark
 date: 2026-05-14
 description: A brand identity and packaging system for a two-person roastery that outgrew its stamped kraft bags.
 cover: /media/project-corvid.svg

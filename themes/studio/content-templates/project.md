@@ -1,26 +1,23 @@
 ---
 title: Project name
 date: 2026-01-01
-description: One sentence on what this project was and why it mattered — this appears on the case study and in link previews.
-cover: /media/your-cover-image.jpg
+description: One sentence on what this was and who it was for. It appears on the project page, on its tile in the grid and in link previews.
 client: Client name
 services:
-  - Discipline one
-  - Discipline two
+  - Identity
+  - Print
 ---
 
-Open with one or two sentences of scene-setting: who the client is, and the moment they came to you. Keep it concrete — the market stall, the three buildings, the archive in boxes.
+Who the client is, and the moment they came to you — two sentences, concrete.
 
 ## The challenge
 
-State the problem as the client experienced it, plus the real constraints (budget, materials, deadline, politics). One honest constraint is worth three paragraphs of context.
+The problem as the client lived it, and the one constraint that shaped everything: the budget, the material, the deadline.
 
 ## The approach
 
-Describe what you actually did and the one idea that organised it. Show, don't decorate — drop images straight into the text and they will display full-width:
-
-![Describe the image for people who can't see it](/media/your-process-image.jpg)
+What you did, and the single idea that organised it.
 
 ## The outcome
 
-End with what changed, in the client's terms: numbers where you have them, observed behaviour where you don't. Delete anything you couldn't say to the client's face.
+What changed, in the client's terms — a number where you have one, something you saw happen where you don't.
