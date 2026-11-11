@@ -118,7 +118,7 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
 /* The small caps line: nav, dates, tags, footer links ---------------------- */
 
 .masthead nav a, .essay-meta, .toc-date, .pagination, .essay-back, .not-found-links,
-.subscribe-feed, .subscribe-button, .prose th {
+.subscribe-feed, .subscribe-label, .subscribe-button, .prose th {
   font-size: var(--text-s);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
@@ -134,19 +134,19 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
 }
 
 .site-title {
-  position: relative;
   display: inline-block;
   font-size: var(--text-xl);
   line-height: var(--leading-tight);
   color: var(--color-text);
   text-decoration: none;
 }
+/* The seal follows the last word and takes no room of its own (its margins
+   cancel its width), so the title stays on the axis however it wraps. */
 .site-title::after {
   content: "";
-  position: absolute;
-  left: 100%;
-  bottom: 0.3em;
-  margin-left: 0.25em;
+  display: inline-block;
+  vertical-align: 0.02em;
+  margin: 0 calc(-0.25em - var(--seal)) 0 0.25em;
   width: var(--seal);
   height: var(--seal);
   border-radius: 50%;
@@ -193,6 +193,12 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
   text-wrap: balance;
 }
 
+/* A word longer than its line breaks with a hyphen where the browser can
+   keep hyphenation to such words; elsewhere it simply breaks. */
+@supports (hyphenate-limit-chars: 20 6 6) {
+  .essay-title, .toc-title, .prose :is(h1, h2, h3, h4) { hyphens: auto; hyphenate-limit-chars: 20 6 6; }
+}
+
 .essay-subtitle {
   font-style: italic;
   font-size: var(--text-l);
@@ -202,23 +208,16 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
   text-wrap: balance;
 }
 
-/* Date, tags and reading time on one line, one separator between them all. */
-.essay-meta, .tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0 var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* Date, tags and reading time run on as one line of text, one separator
+   between them all. Each separator is tied to the item before it, so a
+   wrapped line never opens with one. */
+.essay-meta { margin: var(--space-3) 0 0; color: var(--color-muted); }
+.tags, .tags li { display: inline; margin: 0; padding: 0; list-style: none; }
+.essay-meta time, .read-time { white-space: nowrap; }
+.essay-meta > :not(:last-child, .tags)::after, .tags li:not(:last-child)::after, .tags:not(:last-child) li::after {
+  content: "\00a0·";
+  content: "\00a0·" / "";
 }
-.essay-meta { margin-top: var(--space-3); color: var(--color-muted); }
-.essay-meta > * + *::before, .tags li + li::before {
-  content: "·";
-  content: "·" / "";
-  margin-right: var(--space-2);
-}
-.essay-meta > .tags::before { margin-right: 0; }
 .tag { color: inherit; text-decoration: none; }
 .tag:hover { color: var(--color-wax); text-decoration: underline; }
 
@@ -285,6 +284,9 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
   border-bottom: var(--rule) solid var(--color-border);
 }
 .prose th { font-weight: 400; }
+/* The outer cells sit flush with the text column. */
+.prose :is(th, td):first-child { padding-left: 0; }
+.prose :is(th, td):last-child { padding-right: 0; }
 
 .prose hr {
   border: 0;
@@ -311,6 +313,9 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
    (degrades to nothing — taste over trick). It closes with the wax seal.
    Small caps, not `text-transform`: WebKit ignores that inside ::first-line. */
 
+/* A one-line greeting is shorter than its initial: the paragraph holds the
+   letter, so it never sinks into the paragraph below. */
+.essay-body > p:first-child { display: flow-root; }
 .essay-body > p:first-child::first-line {
   font-variant-caps: all-small-caps;
   letter-spacing: calc(var(--tracking-caps) / 2);
@@ -344,8 +349,10 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
 
 /* The archive — the signature. Each essay is a line in a table of contents:
    its number in wax, the title, a dot leader out to the date, the excerpt
-   beneath. The numbers are the list's own markers, so `<ol reversed>` gives
-   the first letter No. 1 and it keeps that number as the archive grows. ---- */
+   beneath. The numbers are the list's own markers: `<ol reversed>` gives the
+   first letter No. 1. A marker counts only the lines of one page, so the
+   numbers are shown while the archive fits on one and dropped once it
+   paginates — a number that restarts on every page would be a wrong one. -- */
 
 .toc {
   margin: 0;
@@ -355,7 +362,8 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
   line-height: var(--leading-tight);
   font-variant-numeric: tabular-nums;
 }
-/* Tag pages are extracts: the entries keep their leaders but are not numbered. */
+/* Tag pages are extracts and a paginated archive cannot count: the entries
+   keep their leaders but are not numbered. */
 .toc-plain { padding-left: 0; list-style: none; }
 
 .toc-entry { position: relative; padding: var(--space-2) 0 var(--space-3); }
@@ -382,7 +390,7 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
   inset: 0 0 0 calc(-1 * var(--toc-gutter));
 }
 
-.toc-title { padding-right: var(--space-4); text-wrap: balance; }
+.toc-title { min-width: 0; padding-right: var(--space-4); overflow-wrap: anywhere; text-wrap: balance; }
 /* The title's ground covers only the foot of each line, where the leader
    runs — a full-height ground would paint over the descenders of the line
    above when a title wraps. */
@@ -448,8 +456,9 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
 }
 
 /* The subscribe slot — a reply card under every page. With a formAction in
-   data/newsletter.json it carries the e-mail form; without one it is still a
-   finished card that points at the feed. --------------------------------- */
+   data/newsletter.json it carries the e-mail form; with an `email` instead,
+   the address to write to; with neither it is still a finished card that
+   points at the feed. ---------------------------------------------------- */
 
 .subscribe {
   margin-top: var(--space-5);
@@ -469,7 +478,17 @@ a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
   text-wrap: balance;
 }
 
-.subscribe-alt { margin: 0; }
+.subscribe-alt {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0 var(--space-2);
+  margin: 0;
+}
+/* Without a provider the card is an address to write to, set as written. */
+.subscribe-label { color: var(--color-muted); }
+.subscribe-mail { min-width: 0; overflow-wrap: anywhere; }
 
 .subscribe-form {
   display: flex;

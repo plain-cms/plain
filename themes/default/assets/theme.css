@@ -64,6 +64,7 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  overflow-wrap: break-word; /* a word or URL too long for its line breaks instead of widening the page */
 }
 
 ::selection { background: var(--color-mark); }
@@ -112,6 +113,7 @@ a:hover { text-decoration-thickness: 2px; }
   font-weight: 700;
   color: var(--color-text);
   text-decoration: none;
+  min-width: 0;
 }
 .site-title:hover { color: var(--color-accent); }
 
@@ -181,8 +183,6 @@ main { min-height: 60vh; }
 .prose h2 { font-size: var(--text-xl); }
 .prose h3 { font-size: var(--text-l); }
 
-.prose { overflow-wrap: break-word; } /* a long URL wraps instead of running off a phone screen */
-
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
 
 .prose img {
@@ -232,6 +232,9 @@ main { min-height: 60vh; }
   cursor: pointer;
 }
 .copy-code:hover { color: var(--color-accent); border-color: var(--color-accent); }
+/* enhance.js sets this where the first lines would run under the button: the
+   button scrolls with the code, so text beneath it could never be read. */
+.prose pre.copy-clear { padding-top: calc(var(--space-4) + var(--space-3)); }
 
 .prose table {
   border-collapse: collapse;
@@ -245,6 +248,20 @@ main { min-height: 60vh; }
   border-bottom: 1px solid var(--color-border);
 }
 .prose th { font-size: var(--text-s); }
+/* Below the full measure a table too wide for the column scrolls inside itself,
+   with a soft edge on the side where more of it waits. The edges are covered
+   by page-coloured layers that move with the table, so one that fits shows none. */
+@media (max-width: 45rem) {
+  .prose table {
+    display: block;
+    overflow-x: auto;
+    background:
+      linear-gradient(to right, var(--color-bg) 40%, transparent) left / 2rem 100% no-repeat local,
+      linear-gradient(to left, var(--color-bg) 40%, transparent) right / 2rem 100% no-repeat local,
+      linear-gradient(to right, var(--color-border), transparent) left / 0.75rem 100% no-repeat scroll,
+      linear-gradient(to left, var(--color-border), transparent) right / 0.75rem 100% no-repeat scroll;
+  }
+}
 
 .prose hr {
   border: 0;
@@ -288,14 +305,50 @@ main { min-height: 60vh; }
 
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
   padding: var(--space-4) 0;
   color: var(--color-muted);
   font-size: var(--text-s);
 }
 
 .empty { color: var(--color-muted); }
+
+/* The way back from a post, and the subscribe box under every page. Both are
+   printed only on a site that has data/newsletter.json (families/writing.md),
+   so a site from before that file renders exactly as it did. */
+.post-back { margin: var(--space-4) 0 0; font-size: var(--text-s); }
+
+.subscribe {
+  margin-top: var(--space-5);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+.subscribe + .colophon { margin-top: var(--space-4); }
+.subscribe-prompt {
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-3);
+  text-wrap: balance;
+}
+.subscribe-alt { margin: 0; }
+.subscribe-mail { overflow-wrap: anywhere; }
+.subscribe-form { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+/* The field's edge is the muted ink, not the hairline: a control needs 3:1 (WCAG 1.4.11). */
+.subscribe-input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+}
+.subscribe-input::placeholder { color: var(--color-muted); opacity: 1; }
+.subscribe-form .btn { max-width: 100%; }
 
 /* Landing / sales pages --------------------------------------------------- */
 
@@ -410,6 +463,18 @@ main { min-height: 60vh; }
 
 /* Motion & print ---------------------------------------------------------- */
 
+/* A title word too long for a small screen breaks at a syllable, with a hyphen:
+   twenty letters or more on a phone, fourteen on the narrowest ones — and only
+   where the browser can keep shorter words whole. */
+@supports (hyphenate-limit-chars: 20 6 6) {
+  @media (max-width: 45rem) {
+    .page-header h1, .post-card h2, .prose h2, .prose h3, .prose h4 { hyphens: auto; hyphenate-limit-chars: 20 6 6; }
+  }
+  @media (max-width: 24rem) {
+    .page-header h1, .post-card h2 { hyphenate-limit-chars: 14 6 6; }
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
 }
@@ -427,7 +492,9 @@ main { min-height: 60vh; }
   }
   body { max-width: none; font-size: 11pt; }
   main { min-height: 0; }
-  .masthead nav, .colophon, .skip-link, .copy-code, .pagination { display: none; }
+  .masthead nav, .colophon, .skip-link, .copy-code, .pagination, .subscribe, .post-back { display: none; }
+  .prose table { display: table; background: none; }
+  .prose pre.copy-clear { padding-top: var(--space-3); }
   .page-header { margin-top: var(--space-3); }
   .prose a[href^="http"]::after, .btn[href*=":"]::after { content: " (" attr(href) ")"; font-size: 0.85em; font-weight: 400; }
   .prose pre { white-space: pre-wrap; border: 1px solid var(--color-border); }

@@ -5,6 +5,7 @@
 // carried on <body> as data attributes so they translate with the page.
 const { copy, copied } = document.body.dataset;
 if (navigator.clipboard && copy) {
+  const buttons = [];
   for (const code of document.querySelectorAll('pre > code')) {
     const button = document.createElement('button');
     button.type = 'button';
@@ -17,5 +18,20 @@ if (navigator.clipboard && copy) {
       setTimeout(() => { button.textContent = copy; }, 1500);
     });
     code.parentElement.append(button);
+    buttons.push([code, button]);
   }
+
+  // The button sits over the top right corner of the block. Where a line of
+  // code reaches under it, give the block a clear row for the button instead.
+  const makeRoom = () => {
+    for (const [code, button] of buttons) {
+      const pre = code.parentElement;
+      pre.classList.remove('copy-clear');
+      const box = button.getBoundingClientRect();
+      const under = [...code.getClientRects()].some((line) => line.top < box.bottom && line.right + pre.scrollLeft > box.left);
+      pre.classList.toggle('copy-clear', under);
+    }
+  };
+  makeRoom();
+  if (buttons.length) addEventListener('resize', makeRoom);
 }

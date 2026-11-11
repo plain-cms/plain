@@ -4,7 +4,7 @@
     {{#if page.description}}<p class="essay-subtitle">{{ page.description }}</p>
     {{/if}}<div class="essay-meta" data-read-label="{{ strings.minRead }}">
       <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>
-      {{#if page.tagLinks}}<ul class="tags" aria-label="{{ strings.filedUnder }}">
+      {{#if page.tagLinks}}<ul role="list" class="tags" aria-label="{{ strings.filedUnder }}">
         {{#each page.tagLinks as tag}}<li><a class="tag" href="{{ tag.url }}">{{ tag.name }}</a></li>
         {{/each}}
       </ul>{{/if}}

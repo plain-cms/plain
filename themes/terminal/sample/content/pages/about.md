@@ -1,7 +1,6 @@
 ---
 title: About
-description: Who writes this, and why it exists.
-lede: Developer, accidental founder, chronic note-taker.
+description: Dana Whitlock — developer, accidental founder, chronic note-taker — and why this site exists.
 example: true
 ---
 
@@ -18,8 +17,8 @@ Two kinds of writing, deliberately mixed:
 
 ## Elsewhere
 
-The [projects page](/projects/) lists what I've shipped, the [uses page](/uses/) lists the tools, and the [now page](/now/) says what I'm working on this month.
+The [projects page](/projects/) lists what I've shipped and the [uses page](/uses/) lists the tools I ship it with.
 
-The best way to reach me is email — [dana@whitlock.example](mailto:dana@whitlock.example) — and the [contact page](/contact/) says what to send where.
+The best way to reach me is e-mail: [dana@whitlock.example](mailto:dana@whitlock.example). I read all of it and answer most of it within two working days. Corrections get fixed and credited; sponsored posts and link swaps don't get a reply. New posts go out [the same way](/subscribe/).
 
 This site is Markdown files in a Git repository, built with [plain](https://github.com/plain-cms/plain) — there's [a whole post](/blog/migrating-from-jekyll/) about the migration.

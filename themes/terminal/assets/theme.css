@@ -171,9 +171,61 @@ main { min-height: 60vh; }
   font-size: var(--text-s);
 }
 .colophon p { margin: 0 0 var(--space-1); }
+.colophon > * { min-width: 0; overflow-wrap: anywhere; }
 .colophon a { color: inherit; }
 .colophon a + a { margin-left: var(--space-3); }
 .colophon a:hover { color: var(--color-accent); }
+
+/* The subscribe box — a quiet panel between the page and the footer: the
+   prompt on the left, the way in (address, form or feed) on the right, and
+   one under the other when they do not fit side by side. */
+.subscribe {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-5);
+  padding: var(--space-3);
+  background: var(--color-surface);
+  border: var(--rule) solid var(--color-border);
+  border-radius: var(--radius);
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  overflow-wrap: anywhere;
+}
+.subscribe > * { min-width: 0; margin: 0; }
+.subscribe h2 {
+  flex: 1 1 24rem;
+  font-family: var(--font-sans);
+  font-size: var(--text-m);
+  font-weight: 400;
+  line-height: calc((var(--leading-tight) + var(--leading-body)) / 2);
+  text-wrap: balance;
+}
+.subscribe + .colophon { margin-top: var(--space-4); }
+
+.subscribe-form {
+  flex: 1 1 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+}
+.subscribe-form label { flex: 0 0 100%; font-size: var(--text-xs); color: var(--color-muted); }
+.subscribe-form :is(input, button) {
+  min-width: 0;
+  max-width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  font-size: var(--text-m);
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--rule) solid var(--color-muted);
+  border-radius: var(--radius-s);
+}
+.subscribe-form input { flex: 1 1 12rem; }
+.subscribe-form button { color: var(--color-accent); border-color: var(--color-accent); cursor: pointer; }
+.subscribe-form button:hover { background: var(--color-accent-wash); }
 
 /* A star count baked in by the github-stars plugin (and refreshed by its script) */
 [data-gh-stars] {
@@ -186,7 +238,7 @@ main { min-height: 60vh; }
 
 /* Headers ---------------------------------------------------------------- */
 
-.page-header { margin: var(--space-5) 0 var(--space-4); }
+.page-header { margin: var(--space-5) 0 var(--space-4); overflow-wrap: break-word; }
 
 .page-header h1 {
   font-size: var(--text-xxl);
@@ -194,9 +246,20 @@ main { min-height: 60vh; }
   letter-spacing: -0.015em;
   line-height: var(--leading-tight);
   margin: 0;
-  overflow-wrap: break-word;
   text-wrap: balance;
 }
+/* A word too long for the line (a German compound) breaks at a syllable where
+   the browser can hyphenate, and anywhere where it cannot; short words never do. */
+.page-header h1, .post-row h2, .prose td {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  -webkit-hyphenate-limit-before: 6;
+  -webkit-hyphenate-limit-after: 6;
+  hyphenate-limit-chars: 14 6 6;
+}
+/* A tag page: the word above, the tag itself as the title */
+.page-header h1 .meta { display: block; font-weight: 400; letter-spacing: 0; line-height: var(--leading-body); }
+.page-header h1 .hash { color: var(--color-muted); }
 
 .meta {
   font-family: var(--font-mono);
@@ -207,11 +270,13 @@ main { min-height: 60vh; }
 }
 .meta-sep { margin: 0 var(--space-2); }
 
+/* The line under a page title: its description. The measure is the prose
+   measure, counted in this larger face. */
 .lede {
-  max-width: var(--measure-prose);
+  max-width: calc(var(--measure-prose) * 0.8);
   margin: var(--space-3) 0 0;
   font-size: var(--text-l);
-  line-height: var(--leading-tight);
+  line-height: calc((var(--leading-tight) + var(--leading-body)) / 2);
   color: var(--color-muted);
   text-wrap: balance;
 }
@@ -226,7 +291,9 @@ main { min-height: 60vh; }
   list-style: none;
   font-family: var(--font-mono);
   font-size: var(--text-s);
+  overflow-wrap: anywhere;
 }
+.tags li { min-width: 0; }
 .tag {
   display: inline-block;
   padding: var(--space-1) 0;
@@ -288,7 +355,7 @@ main { min-height: 60vh; }
   text-align: left;
   padding: var(--space-2) var(--space-3);
   border-bottom: var(--rule) solid var(--color-border);
-  white-space: nowrap;
+  vertical-align: top;
 }
 .prose th {
   font-family: var(--font-mono);
@@ -452,7 +519,7 @@ main #search-app input[type="search"] { border-color: var(--color-muted); font-f
 /* Date in the gutter, then a rail with one amber tick per entry */
 .post-list { list-style: none; margin: 0; padding: 0; }
 
-.post-row { display: grid; grid-template-columns: var(--date-col) 1fr; }
+.post-row { display: grid; grid-template-columns: var(--date-col) minmax(0, 1fr); }
 
 .post-row-date {
   font-family: var(--font-mono);
@@ -500,7 +567,7 @@ main #search-app input[type="search"] { border-color: var(--color-muted); font-f
 @media (max-width: 34rem) {
   .post-row {
     position: relative;
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     padding: 0 0 var(--space-4) var(--space-3);
     border-left: var(--rule) solid var(--color-border);
   }
@@ -508,10 +575,13 @@ main #search-app input[type="search"] { border-color: var(--color-muted); font-f
   .post-row-date { padding: 0 0 var(--space-1); }
   .post-row-body, .post-row:last-child .post-row-body { position: static; padding: 0; border: 0; }
   .prose pre > code { font-size: var(--text-xs); }
+  .prose th, .prose td { padding: var(--space-2); }
+  .lede { font-size: var(--text-m); }
 }
 
 .pagination, .post-nav {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-3);
   margin-top: var(--space-4);
@@ -548,14 +618,13 @@ main #search-app input[type="search"] { border-color: var(--color-muted); font-f
     --color-code-edge: #000;
   }
   body { max-width: none; font-size: 11pt; }
-  .masthead nav, .colophon, .skip-link, .copy-code, .pagination, .post-nav, .toc { display: none; }
+  .masthead nav, .subscribe, .colophon, .skip-link, .copy-code, .pagination, .post-nav, .toc { display: none; }
   main { min-height: 0; }
   .page-header { margin-top: var(--space-4); }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; overflow-wrap: anywhere; }
   .prose pre > code { white-space: pre-wrap; overflow-wrap: anywhere; }
   .prose pre > code[class^="language-"]::before { background: none; border-color: transparent; color: var(--color-code-text); }
   .prose table { display: table; }
-  .prose th, .prose td { white-space: normal; }
   .prose pre, .post-row { break-inside: avoid; }
   h1, h2, h3 { break-after: avoid; }
 }

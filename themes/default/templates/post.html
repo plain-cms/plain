@@ -9,5 +9,6 @@
   {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" decoding="async">
   {{/if}}<div class="prose">
 {{{ page.content }}}
-  </div>
+  </div>{{#if data.newsletter}}
+  <p class="post-back"><a href="/blog/">{{ strings.backToArchive }}</a></p>{{/if}}
 </article>

@@ -4,10 +4,9 @@
   "plugins": ["github-stars"],
   "navigation": [
     { "label": "Home", "url": "/" },
-    { "label": "Blog", "url": "/blog/" },
-    { "label": "Projects", "url": "/projects/" },
+    { "label": "Archive", "url": "/blog/" },
     { "label": "About", "url": "/about/" },
-    { "label": "Search", "url": "/search/" }
+    { "label": "Subscribe", "url": "/subscribe/" }
   ],
   "sampleContent": "sample/"
 }

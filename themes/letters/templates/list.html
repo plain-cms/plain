@@ -3,7 +3,7 @@
     <h1 class="essay-title">{{#if tag}}{{ strings.filedUnder }} “{{ tag }}”{{else}}{{ page.title }}{{/if}}</h1>
   </header>
   {{#if items}}
-  <ol role="list" class="toc{{#if tag}} toc-plain{{/if}}"{{#if pagination.multiple}}{{else}} reversed{{/if}}>
+  <ol role="list" class="toc{{#if tag}} toc-plain{{else}}{{#if pagination.multiple}} toc-plain{{/if}}{{/if}}"{{#if pagination.multiple}}{{else}} reversed{{/if}}>
     {{#each items as item}}{{> toc-line}}
     {{/each}}
   </ol>

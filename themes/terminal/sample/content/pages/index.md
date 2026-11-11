@@ -1,7 +1,6 @@
 ---
 title: Hello, world
-description: Notes from building software alone — one small SaaS, a few side projects, and the occasional opinion.
-lede: I build software for a living and write about what actually happens when you do.
+description: Notes by Dana Whitlock on building software alone — one small SaaS, a few side projects, the occasional opinion.
 example: true
 ---
 
@@ -25,6 +24,6 @@ Some posts are deep technical dives with real query plans in them. Some are essa
 
 ## Around the site
 
-The [blog](/blog/) has everything in date order. [Projects](/projects/) lists what I've built, [uses](/uses/) lists what I build it with, and [now](/now/) says what I'm in the middle of.
+The [archive](/blog/) has everything in date order, and the [about page](/about/) says who is writing and what else I've built.
 
-New posts land roughly twice a month. There's an [RSS feed](/blog/rss.xml), because of course there is, and I answer email: [dana@whitlock.example](mailto:dana@whitlock.example).
+New posts land roughly twice a month. You can have them [by e-mail](/subscribe/), or from the [RSS feed](/blog/rss.xml), because of course there is one.

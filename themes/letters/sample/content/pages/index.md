@@ -14,6 +14,6 @@ If you’re new, three to start with:
 - [Three Miles an Hour](/blog/three-miles-an-hour/) — the one people forward.
 - [The Reply I Didn’t Send](/blog/the-reply-i-didnt-send/) — the one that gets the most replies.
 
-The whole run is in the [archive](/blog/), set out like a book’s contents and numbered in the order it was written. New letters arrive by [email](/subscribe/) the morning they’re finished, and nothing else ever does.
+The whole run is in the [archive](/blog/), set out like a book’s contents, newest first. New letters arrive by [email](/subscribe/) the morning they’re finished, and nothing else ever does.
 
 — Nell

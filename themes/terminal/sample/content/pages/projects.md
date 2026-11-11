@@ -1,7 +1,6 @@
 ---
 title: Projects
-description: What I've shipped — the business, the side projects, and the tools that escaped.
-lede: One product pays the bills. The rest keep me honest.
+description: What I've shipped — one product that pays the bills, and the side projects and tools that keep me honest.
 example: true
 ---
 
