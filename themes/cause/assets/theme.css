@@ -81,6 +81,8 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  /* A word longer than its line breaks rather than pushing the page sideways. */
+  overflow-wrap: break-word;
 }
 
 h1, h2, h3, h4 {
@@ -91,8 +93,20 @@ h1, h2, h3, h4 {
   text-wrap: balance;
 }
 
+/* Large type and narrow columns break a long word at a syllable where the
+   browser knows the language, and only a long word. */
+h1, h2, h3, h4, .lede, .mission, .impact-what, .entry-card p, .prose th, .prose td {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
+}
+
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: 2px; }
+/* An address has no spaces to break at; a phone number stays in one piece
+   and moves to the next line whole, unless it is longer than the line. */
+a[href^="mailto:"], .prose a { overflow-wrap: anywhere; }
+a[href^="tel:"] { display: inline-block; max-width: 100%; }
 
 :focus-visible {
   outline: var(--focus-ring) solid var(--color-accent);
@@ -185,7 +199,7 @@ main { min-height: 60vh; }
 }
 .colophon p { margin: 0; }
 .colophon strong { color: var(--color-text); }
-.colophon a { white-space: nowrap; }
+.colophon a { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
 
 /* Buttons ----------------------------------------------------------------- */
 
@@ -194,11 +208,13 @@ main { min-height: 60vh; }
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-4);
+  padding: var(--space-2) var(--space-4);
   background: var(--color-accent);
   color: var(--color-accent-ink);
   border-radius: var(--radius);
   font-weight: var(--weight-display);
+  line-height: var(--leading-tight);
+  text-align: center;
   text-decoration: none;
 }
 .btn-donate:hover { filter: brightness(1.08); text-decoration: none; }
@@ -323,6 +339,8 @@ main { min-height: 60vh; }
 .prose h3 { font-size: var(--text-l); }
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li > ul, .prose li > ol { margin-bottom: 0; }
 
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
 
@@ -362,12 +380,15 @@ main { min-height: 60vh; }
   border-top: 1px solid var(--color-border);
 }
 .prose th, .prose td {
-  text-align: left;
   vertical-align: baseline;
   padding: var(--space-2) 0 var(--space-2) var(--space-4);
   border-bottom: 1px solid var(--color-border);
 }
+.prose th:not([align]) { text-align: left; }
+/* The figure stays on one line. The columns that explain it give way before
+   the page does, but keep room for an ordinary word. */
 .prose th:first-child, .prose td:first-child { padding-left: 0; white-space: nowrap; }
+.prose :is(th, td):not(:first-child) { overflow-wrap: anywhere; min-width: calc(6em + var(--space-4)); }
 .prose th {
   font-size: var(--text-s);
   font-weight: var(--weight-display);
@@ -378,6 +399,49 @@ main { min-height: 60vh; }
   font-size: var(--text-l);
   font-weight: var(--weight-display);
   letter-spacing: var(--tracking-display);
+}
+
+/* Four columns or more are a grid of data, not a sum and its explanation:
+   the words stay whole, and a table wider than the text column scrolls in
+   its own box, never the page. */
+.prose table:has(tr > :nth-child(4)) {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
+  /* An edge with more table beyond it is shaded until it is scrolled into view. */
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) 0 0 / var(--space-4) 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) 100% 0 / var(--space-4) 100% no-repeat local,
+    linear-gradient(to right, var(--color-border), transparent) 0 0 / var(--space-3) 100% no-repeat scroll,
+    linear-gradient(to left, var(--color-border), transparent) 100% 0 / var(--space-3) 100% no-repeat scroll;
+}
+.prose table:has(tr > :nth-child(4)) :is(th, td) { overflow-wrap: normal; min-width: 0; -webkit-hyphens: manual; hyphens: manual; }
+.prose table:has(tr > :nth-child(4)) [align="right"] { white-space: nowrap; }
+
+/* Three columns do not fit a phone. Each row keeps its figure and its label
+   on one line and sets the rest beneath: nothing scrolls, nothing is squeezed. */
+@media (max-width: 36em) {
+  .prose table:has(tr > :nth-child(3):last-child),
+  .prose :is(thead, tbody, tfoot):has(> tr > :nth-child(3):last-child) { display: block; }
+  .prose tr:has(> :nth-child(3):last-child) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-3);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .prose tr:has(> :nth-child(3):last-child) > * {
+    flex: 1 1 6em;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+  .prose tr:has(> :nth-child(3):last-child) > :first-child { flex: 0 1 auto; }
+  .prose tr:has(> :nth-child(3):last-child) > :last-child { flex-basis: 100%; }
 }
 
 .prose hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-4) 0; }
@@ -452,8 +516,9 @@ main { min-height: 60vh; }
 
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
   padding: var(--space-4) 0;
   color: var(--color-muted);
   font-size: var(--text-s);
@@ -491,4 +556,5 @@ main { min-height: 60vh; }
   h1, h2, h3 { break-after: avoid; }
   .entry-card, .get-involved, tr { break-inside: avoid; }
   .prose pre { white-space: pre-wrap; }
+  .prose table:has(tr > :nth-child(4)) { display: table; width: 100%; background: none; }
 }

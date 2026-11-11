@@ -20,6 +20,9 @@ them born here, two-thirds learning English alongside reading. What they
 share: they decided to come, which is the bravest part, and everything after
 it is just practice.
 
+- **Ruth Abara**, founder and director
+- **Daniel Osei**, tutor training
+
 ## Accountability
 
 Our accounts are filed publicly every year and summarized on one page. Last
@@ -34,3 +37,13 @@ year, of every dollar we were given:
 The full accounts, our safeguarding policy, and our board list are available
 on request — and the answer to "can I visit a session?" is yes, with a
 learner's permission, always.
+
+Page & Chapter is a registered 501(c)(3) nonprofit, EIN 00-0000000.
+
+## Get in touch
+
+14 Library Row, Millbrook
+
+[+1-555-0142](tel:+15550142)
+
+[hello@example.org](mailto:hello@example.org)

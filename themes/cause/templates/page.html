@@ -1,10 +1,12 @@
 {{#if page.hero}}
 <article class="page has-hero">
-  <section class="hero{{#if page.heroImage}} hero-has-photo{{/if}}{{#if data.impact.stat}} hero-has-stat{{/if}}">
+  <section class="hero{{#if page.heroImage}} hero-has-photo{{/if}}{{#if data.impact.stat.number}} hero-has-stat{{/if}}">
     {{#if page.heroImage}}<figure class="hero-photo"><img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async"></figure>
-    {{/if}}{{#if data.impact.stat}}<p class="impact">
+    {{/if}}{{#if data.impact.stat.number}}<p class="impact">
       <strong class="impact-number">{{ data.impact.stat.number }}</strong>
-      <span class="impact-what"><span class="impact-unit">{{ data.impact.stat.unit }}</span> <span class="impact-verb">{{ data.impact.stat.verb }}</span></span>
+      {{#if data.impact.stat.unit}}<span class="impact-what"><span class="impact-unit">{{ data.impact.stat.unit }}</span>{{#if data.impact.stat.verb}} <span class="impact-verb">{{ data.impact.stat.verb }}</span>{{/if}}</span>
+      {{else}}{{#if data.impact.stat.verb}}<span class="impact-what"><span class="impact-verb">{{ data.impact.stat.verb }}</span></span>
+      {{/if}}{{/if}}
     </p>
     {{/if}}<div class="hero-mission">
       <h1>{{ page.title }}</h1>
