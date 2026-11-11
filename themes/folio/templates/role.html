@@ -10,9 +10,10 @@
       {{#each page.highlights as point}}<li>{{ point }}</li>
       {{/each}}
     </ul>
-    {{/if}}<div class="prose">
+    {{/if}}{{#if page.content}}<div class="prose">
 {{{ page.content }}}
     </div>
+    {{/if}}
   </div>
   <p class="backlink"><a href="/experience/">{{ strings.backToCv }}</a></p>
 </article>

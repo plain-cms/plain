@@ -39,14 +39,15 @@
 <div class="layout{{#if data.profile}} has-rail{{/if}}">
 {{#if data.profile}}
 <aside class="rail" aria-label="{{ strings.profile }}">
-  <p class="rail-name">{{ data.profile.name }}</p>
+  <p class="rail-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</p>
   {{#if data.profile.role}}<p class="rail-role">{{ data.profile.role }}</p>
-  {{/if}}<ul class="rail-contact">
-    {{#if data.profile.email}}<li><a href="mailto:{{ data.profile.email }}">{{ data.profile.email }}</a></li>
-    {{/if}}{{#each data.profile.links as link}}<li><a href="{{ link.url }}">{{ link.label }}</a></li>
-    {{/each}}
+  {{/if}}{{#if data.profile.email}}<ul class="rail-contact">
+    {{> profile-contact}}
   </ul>
-  {{#if data.profile.skills}}
+  {{else}}{{#if data.profile.links}}<ul class="rail-contact">
+    {{> profile-contact}}
+  </ul>
+  {{/if}}{{/if}}{{#if data.profile.skills}}
   <p class="rail-label" id="rail-skills-label">{{ strings.skills }}</p>
   <ul class="rail-skills" aria-labelledby="rail-skills-label">
     {{#each data.profile.skills as skill}}<li>{{ skill }}</li>

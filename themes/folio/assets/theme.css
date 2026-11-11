@@ -79,6 +79,15 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  /* A word longer than its line breaks instead of pushing the page sideways. */
+  overflow-wrap: break-word;
+}
+
+/* Better than a bare break: a long compound word (a German job title, a
+   skill in the side column) is hyphenated, where the browser can keep
+   hyphenation to long words. Short words are never split. */
+@supports (hyphenate-limit-chars: 18) {
+  body { hyphens: auto; hyphenate-limit-chars: 18; }
 }
 
 ::selection { background: var(--color-mark); }
@@ -125,6 +134,7 @@ kbd {
 /* Quiet on purpose: the rail (or the CV's letterhead) is the one place the
    name is set large. */
 .site-title {
+  min-width: 0;
   font-weight: 600;
   color: var(--color-text);
   text-decoration: none;
@@ -162,14 +172,15 @@ main { padding-bottom: var(--space-6); }
   color: var(--color-muted);
   font-size: var(--text-s);
 }
-.colophon p { margin: 0; }
+.colophon p { margin: 0; min-width: 0; }
 .colophon a { color: inherit; }
 .colophon-note { flex-basis: 100%; margin-top: var(--space-1); }
 
 /* Layout: the identity rail ----------------------------------------------- */
 
-/* Narrow screens: a two-line letterhead, so the page itself starts on the
-   first screen. The skills list is left to the CV. */
+/* Narrow screens: a short letterhead, so the page itself starts on the
+   first screen. The skills list is left to the CV, and the way to the CV is
+   a plain link under the contact lines. */
 .rail {
   padding: var(--space-3) 0;
   border-bottom: 1px solid var(--color-border);
@@ -194,9 +205,19 @@ main { padding-bottom: var(--space-6); }
 .rail-contact { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); }
 .rail-contact a { display: inline-block; padding: var(--space-1) 0; }
 
+/* Addresses have no spaces: they may break at any character, so an e-mail
+   address or a web address never sets the width of the column it is in.
+   They are never hyphenated: a hyphen would read as part of the address. */
+.rail-contact,
+.cv-contact,
+.colophon a,
+.prose a { overflow-wrap: anywhere; hyphens: manual; }
+
 .rail-label,
 .rail-skills,
-.rail-cv { display: none; }
+.rail-cv .sheet-mark { display: none; }
+
+.rail-cv { display: inline-block; padding: var(--space-1) 0; font-size: var(--text-s); }
 
 .rail-label {
   margin: var(--space-4) 0 0;
@@ -237,9 +258,10 @@ main { padding-bottom: var(--space-6); }
     align-items: center;
     gap: var(--space-2);
     margin-top: var(--space-4);
-    font-size: var(--text-s);
+    padding: 0;
     text-decoration: none;
   }
+  .rail-cv .sheet-mark { display: grid; }
   .rail-cv span + span { text-decoration: underline; text-decoration-thickness: 1px; }
   .rail-cv:hover span + span { text-decoration-thickness: 2px; }
 }
@@ -478,6 +500,7 @@ main { padding-bottom: var(--space-6); }
 }
 
 .prose code {
+  hyphens: manual;
   font-family: var(--font-mono);
   font-size: 0.9em;
   background: var(--color-code-bg);
@@ -494,18 +517,25 @@ main { padding-bottom: var(--space-6); }
 }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
+/* A table wraps its cells as far as its words allow, then scrolls inside
+   its own box, never the page. */
 .prose table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
-  width: 100%;
   margin: 0 0 var(--space-3);
   font-variant-numeric: tabular-nums;
 }
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
   border-bottom: 1px solid var(--color-border);
 }
-.prose th { font-size: var(--text-s); }
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
+.prose th { font-size: var(--text-s); vertical-align: bottom; }
+.prose td { vertical-align: top; }
 
 .prose hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-4) 0; }
 
@@ -531,6 +561,7 @@ main { padding-bottom: var(--space-6); }
 
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   gap: var(--space-3);
   padding: var(--space-4) 0 0;
@@ -594,7 +625,9 @@ main { padding-bottom: var(--space-6); }
     padding: 2.6mm 0;
     break-inside: avoid;
   }
-  .cv-skills { padding-bottom: 0; break-before: avoid; }
+  /* Like an entry, the skills block is never split: where it does not fit
+     it moves to the next sheet whole. */
+  .cv-skills { padding-bottom: 0; }
   .cv-when p { display: block; }
   .cv-location::before { content: none; }
   .cv-entry-title { font-size: 11pt; }
@@ -606,4 +639,5 @@ main { padding-bottom: var(--space-6); }
   .role-body .cv-highlights { margin-bottom: 4mm; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .prose pre { white-space: pre-wrap; }
+  .prose table { overflow: visible; }
 }
