@@ -2,7 +2,6 @@
 title: The school that teaches boat-building is oversubscribed for the first time
 date: 2026-06-12
 section: News
-standfirst: Harbour Academy’s wooden-boat course, nearly cut in 2022, now has a waiting list, and every recent leaver has found work on the quay.
 description: Harbour Academy’s wooden-boat course, nearly cut in 2022, now has a waiting list, and every recent leaver has found work on the quay.
 byline: Micky Deane
 example: true

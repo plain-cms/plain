@@ -3,7 +3,7 @@ title: The tidal pool reopens after three winters, salt-stained and beloved
 date: 2026-06-21
 section: Culture
 standfirst: Volunteers logged 11,000 hours to reopen the 1934 pool. The first swimmer in was the same woman who was last out in 2023.
-description: Volunteers logged 11,000 hours to reopen the 1934 pool. The first swimmer in was the same woman who was last out in 2023.
+description: Westhaven’s 1934 tidal pool has reopened after a £380,000 restoration run by volunteers, three winters after storms closed it.
 byline: Dan Okafor
 featured: true
 example: true

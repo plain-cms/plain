@@ -3,7 +3,7 @@ title: Keep the station clock four minutes fast
 date: 2026-06-04
 section: Opinion
 standfirst: The rail company wants to “correct” a clock that has been reliably wrong since 1962. Some errors are infrastructure.
-description: The rail company wants to “correct” a clock that has been reliably wrong since 1962. Some errors are infrastructure.
+description: The Editor argues against the rail company’s plan to correct the station clock, which has run four minutes fast since 1962.
 byline: The Editor
 example: true
 ---

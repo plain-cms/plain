@@ -3,7 +3,7 @@ title: Rovers go up on the final day, after twenty minutes when nobody breathed
 date: 2026-05-04
 section: Sport
 standfirst: An 89th-minute header sent Westhaven up. Then the whole ground stood listening to a radio for the result from Carden Vale.
-description: An 89th-minute header sent Westhaven up. Then the whole ground stood listening to a radio for the result from Carden Vale.
+description: Rovers have won promotion to the regional premier division for the first time since 1998, finishing second by a single point.
 byline: Micky Deane
 example: true
 ---

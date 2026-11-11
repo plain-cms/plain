@@ -3,7 +3,7 @@ title: New harbour ferry will be built three streets from where it will sail
 date: 2026-06-26
 section: News
 standfirst: The council’s £4.2m contract goes to Wren & Daughters, the last working boatyard on the east quay, beating two overseas bids.
-description: The council’s £4.2m contract goes to Wren & Daughters, the last working boatyard on the east quay, beating two overseas bids.
+description: Westhaven council has awarded the £4.2m contract for the next harbour ferry to Wren & Daughters, the boatyard on the east quay.
 byline: Rosa Imrie
 featured: true
 example: true

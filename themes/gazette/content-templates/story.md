@@ -2,8 +2,8 @@
 title: Harbour car park stays free on Sundays after councillors drop the £2 charge
 date: 2026-01-12
 section: News
-standfirst: The council voted 7–4 to abandon the Sunday charge after quay traders warned it would empty the market.
-description: The council voted 7–4 to abandon the Sunday charge after quay traders warned it would empty the market.
+standfirst: The council voted 7–4 to abandon the Sunday charge after quay traders warned it would empty the market. The quay road will be resurfaced from the reserve instead.
+description: Westhaven council has dropped a planned £2 Sunday parking charge at the harbour by 7 votes to 4.
 byline: Rosa Imrie
 featured: false
 draft: true

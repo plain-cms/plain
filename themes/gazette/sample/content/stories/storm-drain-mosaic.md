@@ -3,7 +3,7 @@ title: Anonymous mosaicist strikes again, this time on the Foundry Lane storm dr
 date: 2026-05-30
 section: Culture
 standfirst: The town’s most wanted artist has tiled a seventh piece of neglected ironwork. The council’s position has softened from “vandalism” to “please just tell us the grout spec”.
-description: The town’s most wanted artist has tiled a seventh piece of neglected ironwork. The council’s position has softened from “vandalism” to “please just tell us the grout spec”.
+description: A mosaic of a diving cormorant has appeared on the Foundry Lane storm drain, the seventh work by the anonymous tiler known as the Grouter.
 byline: Dan Okafor
 example: true
 ---

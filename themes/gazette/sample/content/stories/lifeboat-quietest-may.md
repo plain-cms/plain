@@ -3,7 +3,7 @@ title: Lifeboat crew logs its quietest May in forty years and credits the flags
 date: 2026-06-02
 section: News
 standfirst: Two callouts all month, both minor. The volunteer coxswain points to the new bathing flags, and to swimmers finally reading them.
-description: Two callouts all month, both minor. The volunteer coxswain points to the new bathing flags, and to swimmers finally reading them.
+description: Westhaven lifeboat station was called out twice in May, its quietest May since 1986, and the crew credits the new bathing flags.
 byline: Rosa Imrie
 example: true
 ---

@@ -2,7 +2,6 @@
 title: Gig crew rows a borrowed boat to the county title, the club’s first since 2011
 date: 2026-06-15
 section: Sport
-standfirst: Westhaven’s women’s crew won the Pelham Cup by half a length on Sunday, in a gig lent by the club they beat.
 description: Westhaven’s women’s crew won the Pelham Cup by half a length on Sunday, in a gig lent by the club they beat.
 byline: Micky Deane
 example: true

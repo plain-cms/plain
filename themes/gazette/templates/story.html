@@ -1,9 +1,10 @@
-<article class="story">
+<article class="story" data-section="{{ page.section }}">
   <header class="story-head">
-    {{#if page.section}}<p class="kicker">{{ page.section }}</p>
+    {{#if page.section}}<p class="kicker">{{> section-labels}}<span class="section-raw">{{ page.section }}</span></p>
     {{/if}}<h1>{{ page.title }}</h1>
     {{#if page.standfirst}}<p class="standfirst">{{ page.standfirst }}</p>
-    {{/if}}<p class="dateline">{{#if page.byline}}<span class="byline">{{ strings.by }} {{ page.byline }}</span> · {{/if}}<time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+    {{else}}{{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}{{/if}}<p class="dateline">{{#if page.byline}}<span class="byline">{{ strings.writtenBy }} {{ page.byline }}</span> · {{/if}}<time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
   </header>
   {{#if page.cover}}<figure class="story-cover">
     <img src="{{ page.cover }}" alt="{{ page.coverAlt }}" decoding="async">

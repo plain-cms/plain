@@ -78,6 +78,8 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  /* A word longer than its column breaks rather than widening the page */
+  overflow-wrap: anywhere;
 }
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
@@ -215,6 +217,19 @@ main {
   color: var(--color-accent);
   margin: 0 0 var(--space-1);
 }
+/* A section is a fixed key. The templates print the five labels (hidden) and
+   the value as written; a known key shows its label in the site's language,
+   an unknown one stays as written. */
+[data-section="News"] .section-news,
+[data-section="Business"] .section-business,
+[data-section="Culture"] .section-culture,
+[data-section="Sport"] .section-sport,
+[data-section="Opinion"] .section-opinion { display: inline; }
+[data-section="News"] .section-raw,
+[data-section="Business"] .section-raw,
+[data-section="Culture"] .section-raw,
+[data-section="Sport"] .section-raw,
+[data-section="Opinion"] .section-raw { display: none; }
 .kicker a { color: var(--color-accent); text-decoration: none; }
 .kicker a:hover { text-decoration: underline; }
 .kicker-tags a { margin-right: var(--space-2); }
@@ -233,6 +248,19 @@ main {
   margin: 0 0 var(--space-2);
   text-wrap: pretty;
 }
+
+/* Long words (twelve letters and up) hyphenate in the page's language, so a
+   compound noun breaks at a syllable before it has to break anywhere */
+.story-card-headline,
+.story-head h1,
+.standfirst,
+.dateline,
+.prose {
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
+}
+/* …but never an address or code: an added hyphen would read as part of it */
+.prose a, .prose code { hyphens: manual; }
 
 /* The front page — the signature --------------------------------------------
    One lead story, five secondaries, then the briefs. All hierarchy is
@@ -256,7 +284,7 @@ main {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   column-gap: var(--front-gap);
 }
 
@@ -314,6 +342,18 @@ main {
 .front-grid > li:first-child .kicker,
 .front-grid > li.is-featured .kicker { color: var(--color-accent); }
 
+/* A paper with no sections has no kicker to sign: its featured stories carry
+   the press-blue square where the kicker would sit */
+.front-grid > li.is-featured[data-section=""]:not(:first-child) article::before {
+  content: "\25A0";
+  content: "\25A0" / "";
+  display: block;
+  font-size: var(--text-xs);
+  line-height: var(--leading-body);
+  color: var(--color-accent);
+  margin-bottom: var(--space-1);
+}
+
 /* Tier 3 — the briefs: one headline and one line of detail each, opened by
    an ink rule and a label (the card's data-tier text) */
 .front-grid > li:nth-child(n+7) { padding-block: var(--space-2) var(--space-3); }
@@ -329,7 +369,8 @@ main {
   font-size: var(--text-m);
   margin-bottom: var(--space-1);
 }
-.front-grid > li:nth-child(n+7) .kicker { margin: 0; }
+.front-grid > li:nth-child(n+7) .kicker,
+.front-grid > li.is-featured[data-section=""]:nth-child(n+7) article::before { margin: 0; }
 .front-grid > li:nth-child(n+7) .standfirst { display: none; }
 /* …except a featured brief, which keeps its secondary size and standfirst */
 .front-grid > li.is-featured:nth-child(n+7) .story-card-headline { font-size: var(--text-l); }
@@ -375,7 +416,7 @@ main {
    the next row, three the row after, and the briefs pair up. A hairline in the
    gutter separates neighbours. */
 @media screen and (min-width: 768px) {
-  .front-grid { grid-template-columns: repeat(6, 1fr); }
+  .front-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .story-card { grid-column: span 3; }
   .front-grid > li:first-child { grid-column: 1 / -1; }
   .front-grid > li:nth-child(n+4):nth-child(-n+6) { grid-column: span 2; }
@@ -408,7 +449,8 @@ main {
 }
 
 @media screen and (min-width: 768px) and (max-width: 1099.98px) {
-  .front-grid > li:nth-child(2):last-child { grid-column: 1 / -1; }
+  .front-grid > li:nth-child(2):last-child,
+  .front-grid > li:nth-child(2n+7):last-child { grid-column: 1 / -1; }
 }
 
 /* Wide screens: the lead takes two thirds of the page and two rows, with two
@@ -425,6 +467,7 @@ main {
   }
   .front-grid > li:first-child article {
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
   }
@@ -454,6 +497,11 @@ main {
 
   .front-grid > li:nth-child(9) { border-top-color: var(--color-text); }
   .front-grid > li:nth-child(9)::before { display: block; }
+
+  /* A last row of one or two briefs fills out, like the rows above it */
+  .front-grid > li:nth-child(3n+7):last-child { grid-column: 1 / -1; }
+  .front-grid > li:nth-child(3n+7):nth-last-child(2),
+  .front-grid > li:nth-child(3n+8):last-child { grid-column: span 3; }
 }
 
 /* Story pages — one column, one left edge ------------------------------------- */
@@ -490,6 +538,7 @@ main {
 
 /* The end mark: a story closes on a small press-blue square */
 .story-copy > p:last-child::after {
+  content: " \25A0";
   content: " \25A0" / "";
   font-size: 0.7em;
   color: var(--color-accent);
@@ -510,6 +559,7 @@ main {
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
 .prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; padding-left: 1.25em; }
 
 /* Crossheads return to the house sans, so structure reads at a glance */
 .prose h2 {
@@ -563,9 +613,12 @@ main {
 }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
+/* A table is as wide as its words need. Cells wrap between words first; a
+   table still too wide for the column scrolls inside its own box. */
 .prose table {
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
-  width: 100%;
   margin: 0 0 var(--space-3);
   font-family: var(--font-sans);
   font-size: var(--text-s);
@@ -573,9 +626,12 @@ main {
 }
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
+  vertical-align: top;
+  overflow-wrap: break-word;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
   border-bottom: var(--rule) solid var(--color-border);
 }
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
 .prose th {
   font-size: var(--text-xs);
   text-transform: uppercase;
@@ -594,9 +650,10 @@ main {
 
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
-  gap: var(--space-4);
+  gap: 0 var(--space-4);
   padding: var(--space-3) 0 var(--space-2);
   border-top: var(--rule) solid var(--color-border);
   font-size: var(--text-s);
@@ -639,6 +696,8 @@ main {
   a { color: inherit; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .prose pre { white-space: pre-wrap; }
+  .prose table { overflow-x: visible; }
+  .prose th, .prose td { overflow-wrap: anywhere; }
   .front-grid { display: block; }
   .story-card, .story-cover, .prose blockquote { break-inside: avoid; }
   h1, h2, h3, .story-card-headline { break-after: avoid; }

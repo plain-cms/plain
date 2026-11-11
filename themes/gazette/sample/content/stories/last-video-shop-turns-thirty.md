@@ -3,7 +3,7 @@ title: The last video shop in the county turns thirty, out of spite
 date: 2026-06-11
 section: Culture
 standfirst: Reel Time has outlived three rental chains, two streaming crazes and every prediction. Its secret, says the owner, is knowing everyone’s taste better than an algorithm.
-description: Reel Time has outlived three rental chains, two streaming crazes and every prediction. Its secret, says the owner, is knowing everyone’s taste better than an algorithm.
+description: Reel Time, the video shop on Foundry Lane, has turned thirty with 1,400 members and a queue out of the door.
 byline: Dan Okafor
 example: true
 ---

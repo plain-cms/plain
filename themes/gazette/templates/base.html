@@ -4,15 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
-{{#if page.standfirst}}<meta name="description" content="{{ page.standfirst }}">
-{{else}}{{#if page.description}}<meta name="description" content="{{ page.description }}">
+{{#if page.description}}<meta name="description" content="{{ page.description }}">
+{{else}}{{#if page.standfirst}}<meta name="description" content="{{ page.standfirst }}">
 {{else}}{{#if site.description}}<meta name="description" content="{{ site.description }}">
 {{/if}}{{/if}}{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 {{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
-{{#if page.standfirst}}<meta property="og:description" content="{{ page.standfirst }}">
-{{else}}{{#if page.description}}<meta property="og:description" content="{{ page.description }}">
-{{/if}}{{/if}}{{#if page.date}}<meta property="og:type" content="article">
+{{#if page.description}}<meta property="og:description" content="{{ page.description }}">
+{{else}}{{#if page.standfirst}}<meta property="og:description" content="{{ page.standfirst }}">
+{{else}}{{#if site.description}}<meta property="og:description" content="{{ site.description }}">
+{{/if}}{{/if}}{{/if}}{{#if page.date}}<meta property="og:type" content="article">
 {{else}}<meta property="og:type" content="website">
 {{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
 <meta name="twitter:card" content="summary_large_image">
