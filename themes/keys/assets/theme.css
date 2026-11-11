@@ -2,13 +2,14 @@
    Grounded in the agency-board vernacular: clean white page, deep board
    green. The signature is the listing card — a status flag flying from its
    top-left corner, the price first and biggest, a ruled row of figures along
-   the bottom. With a photo the flag sits on the photo; without one the card
+   the bottom. The flag has three colours for three states: open (for sale,
+   to let, available), pending (under offer, let agreed), closed (sold,
+   booked). With a photo the flag sits on the photo; without one the card
    is a board slip with a head in the status colour. All design decisions
    live in the tokens below; restyle by editing tokens, never selectors
    (cms-spec.md §10.1). */
 
 :root {
-  /* Type */
   --font-body: system-ui, "Segoe UI", "Helvetica Neue", Roboto, "Liberation Sans", Arial, sans-serif;
   --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace;
   --text-xs: 0.8125rem;
@@ -23,7 +24,6 @@
   --tracking-caps: 0.07em;
   --tracking-tight: -0.015em;
 
-  /* Color — light scheme */
   --color-bg: #fcfcfa;
   --color-card: #ffffff;
   --color-text: #232825;
@@ -40,11 +40,9 @@
   --color-code-bg: #f2f4f2;
   --color-mark: #dcebe2;
 
-  /* Depth */
   --shadow: 0 1px 3px rgba(20, 35, 28, 0.10);
   --shadow-lift: 0 6px 18px rgba(20, 35, 28, 0.14);
 
-  /* Layout */
   --measure: 62ch;
   --page-width: 70rem;
   --space-1: 0.25rem;
@@ -81,8 +79,6 @@
   }
 }
 
-/* Base ------------------------------------------------------------------ */
-
 * { box-sizing: border-box; }
 
 html { color-scheme: light dark; }
@@ -96,13 +92,24 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, .prose, .lede {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  -webkit-hyphenate-limit-before: 5;
+  -webkit-hyphenate-limit-after: 5;
+  hyphenate-limit-chars: 14 5 5;
 }
 
 ::selection { background: var(--color-mark); }
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: 2px; }
-a[href^="tel"] { white-space: nowrap; }
+a[href^="tel"]:not(.btn), .tel { white-space: nowrap; }
+
+a[href^="mailto"], .prose a, .prose code { overflow-wrap: anywhere; -webkit-hyphens: manual; hyphens: manual; }
 
 :focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
 
@@ -116,8 +123,6 @@ a[href^="tel"] { white-space: nowrap; }
 }
 .skip-link:focus { left: var(--space-2); }
 
-/* Masthead & footer ------------------------------------------------------ */
-
 .masthead {
   display: flex;
   flex-wrap: wrap;
@@ -127,7 +132,6 @@ a[href^="tel"] { white-space: nowrap; }
   border-bottom: 1px solid var(--color-border);
 }
 
-/* The agency's name on its board plate. */
 .site-title {
   padding: var(--space-2) var(--space-3);
   background: var(--color-accent);
@@ -141,7 +145,6 @@ a[href^="tel"] { white-space: nowrap; }
 }
 .site-title:hover { text-decoration: underline; }
 
-/* Small screens: name and phone share the first row, the menu takes the second. */
 .masthead nav { order: 3; flex-basis: 100%; }
 .masthead nav ul {
   display: flex;
@@ -162,7 +165,6 @@ a[href^="tel"] { white-space: nowrap; }
 .masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
 .masthead nav a[aria-current="page"] { color: var(--color-text); font-weight: 600; }
 
-/* On small screens the phone fills what the name leaves, or its own row if the name is long. */
 .masthead-phone {
   flex: 1 1 auto;
   justify-content: center;
@@ -188,10 +190,10 @@ a[href^="tel"] { white-space: nowrap; }
 main { min-height: 60vh; }
 
 .colophon {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--space-3) var(--space-5);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-flow: row dense;
+  column-gap: var(--space-5);
   margin-top: var(--space-5);
   padding: var(--space-4) 0;
   border-top: 1px solid var(--color-border);
@@ -199,12 +201,18 @@ main { min-height: 60vh; }
   font-size: var(--text-s);
   font-variant-numeric: tabular-nums;
 }
-.colophon address { font-style: normal; }
 .colophon p { margin: 0; }
 .colophon-name { font-weight: 700; color: var(--color-text); }
-.colophon-note { flex-basis: 100%; }
+.colophon-name ~ .colophon-contact { margin-top: var(--space-3); }
+.colophon-contact ~ .colophon-contact { margin-top: 0; }
+.colophon-note { margin-top: var(--space-3); }
 
-/* Headers ---------------------------------------------------------------- */
+@media (min-width: 640px) {
+  .colophon { grid-template-columns: minmax(0, 1fr) auto; }
+  .colophon > * { grid-column: 1; }
+  .colophon-name ~ .colophon-contact { grid-column: 2; margin-top: 0; text-align: right; }
+  .colophon-note { grid-column: 1 / -1; }
+}
 
 .page-header { margin: var(--space-5) 0 var(--space-4); max-width: var(--measure); }
 
@@ -225,7 +233,6 @@ main { min-height: 60vh; }
   color: var(--color-accent);
 }
 
-/* Leading sits halfway between heading and body. */
 .lede {
   margin: 0;
   font-size: var(--text-l);
@@ -239,8 +246,6 @@ main { min-height: 60vh; }
 .tag { display: inline-block; margin-right: var(--space-2); color: var(--color-accent); text-decoration: none; }
 .tag::before { content: "#"; color: var(--color-muted); }
 .tag:hover { text-decoration: underline; }
-
-/* Text column with the inquiry box beside it on wide screens --------------- */
 
 @media (min-width: 1024px) {
   .with-aside {
@@ -258,12 +263,9 @@ main { min-height: 60vh; }
   }
 }
 
-/* Status flags ------------------------------------------------------------- */
-
-/* The status colour, shared by the flag and the head of a card or property page. */
 [data-status] { --_flag: var(--color-flag-sale); }
-[data-status="Under offer"] { --_flag: var(--color-flag-offer); }
-[data-status="Sold"] { --_flag: var(--color-flag-sold); }
+[data-status="Under offer"], [data-status="Let agreed"] { --_flag: var(--color-flag-offer); }
+[data-status="Sold"], [data-status="Booked"] { --_flag: var(--color-flag-sold); }
 [data-status=""] { --_flag: var(--color-border); }
 
 .status-flag {
@@ -277,22 +279,31 @@ main { min-height: 60vh; }
   letter-spacing: var(--tracking-caps);
   background: var(--_flag);
   color: var(--color-flag-ink);
-  /* the swallowtail cut in the flag's fly end */
+
   clip-path: polygon(0 0, 100% 0, calc(100% - 0.8em) 50%, 100% 100%, 0 100%);
 }
 
-/* The listing card — the signature ----------------------------------------- */
+.status-flag [data-for],
+:is([data-status="For sale"], [data-status="Under offer"], [data-status="Sold"], [data-status="To let"],
+  [data-status="Let agreed"], [data-status="Available"], [data-status="Booked"]) .status-raw { display: none; }
+[data-status="For sale"] [data-for="For sale"],
+[data-status="Under offer"] [data-for="Under offer"],
+[data-status="Sold"] [data-for="Sold"],
+[data-status="To let"] [data-for="To let"],
+[data-status="Let agreed"] [data-for="Let agreed"],
+[data-status="Available"] [data-for="Available"],
+[data-status="Booked"] [data-for="Booked"] { display: inline; }
 
 .listing-grid {
   list-style: none;
   margin: 0 0 var(--space-4);
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--grid-gap);
 }
-@media (min-width: 640px) { .listing-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .listing-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 640px) { .listing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .listing-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 .listing-card {
   position: relative;
@@ -311,16 +322,14 @@ main { min-height: 60vh; }
   .listing-card:hover { translate: 0 -2px; }
 }
 
-/* With a photo: the flag flies from the photo's top-left corner. */
 .card-photo { aspect-ratio: var(--card-ratio); background: var(--color-photo-blank); }
 .card-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .listing-card .status-flag { position: absolute; top: 0; left: 0; }
-.listing-card[data-status="Sold"] .card-photo img { filter: grayscale(0.75); }
+.listing-card:is([data-status="Sold"], [data-status="Booked"]) .card-photo img { filter: grayscale(0.75); }
 
-/* Without one: a board slip — a head in the status colour, the flag hanging from it. */
 .listing-card--text::before { content: ""; height: var(--space-1); background: var(--_flag); }
 .listing-card--text .status-flag { position: static; }
-/* Beside photo cards a slip keeps its own height rather than stretching into a hole. */
+
 .listing-grid:has(.card-photo) .listing-card--text { align-self: start; }
 
 .card-body { padding: var(--space-3); }
@@ -341,16 +350,13 @@ main { min-height: 60vh; }
   line-height: var(--leading-tight);
 }
 .card-title a { color: var(--color-text); text-decoration: none; }
-/* The whole card is the link, so the focus ring is drawn on the card. */
+
 .card-title a::after { content: ""; position: absolute; inset: 0; }
 .card-title a:focus-visible { outline: none; }
 .listing-card:hover .card-title a { color: var(--color-accent); text-decoration: underline; }
 
 .card-address { margin: var(--space-1) 0 0; color: var(--color-muted); font-size: var(--text-s); }
 
-/* The row of figures, ruled, pinned to the bottom of the card. A figure too
-   long for its share drops to a ruled row of its own, and only breaks inside
-   itself when it is longer than the whole row; the outer rules are clipped. */
 .spec-row {
   display: flex;
   flex-wrap: wrap;
@@ -373,8 +379,6 @@ main { min-height: 60vh; }
   min-width: fit-content;
 }
 .spec b { color: var(--color-text); font-size: var(--text-m); font-weight: 600; }
-
-/* Single listing — the card written large, as a particulars sheet ------------ */
 
 .listing-head {
   margin: var(--space-5) 0 var(--space-4);
@@ -402,7 +406,7 @@ main { min-height: 60vh; }
 .listing-address { margin: 0; color: var(--color-muted); }
 
 .spec-strip { margin-top: var(--space-3); border-bottom: 1px solid var(--color-border); font-size: var(--text-m); }
-/* Each figure is pulled left by its own inset, so the first in every row — wrapped or not — sits flush. */
+
 .spec-strip .spec {
   margin-left: calc(-1px - var(--space-3));
   padding: var(--space-3) calc(2 * var(--space-3)) var(--space-3) var(--space-3);
@@ -436,8 +440,6 @@ main { min-height: 60vh; }
 
 .listing-return { margin: var(--space-4) 0 0; font-size: var(--text-s); }
 
-/* Inquiry box ------------------------------------------------------------------ */
-
 .inquiry {
   margin: var(--space-5) 0 0;
   padding: var(--space-4) var(--space-3);
@@ -457,12 +459,11 @@ main { min-height: 60vh; }
 .with-aside > .inquiry { max-width: var(--measure); }
 .listings > .inquiry { margin-top: var(--space-4); }
 
-/* Under the grid of listings the box closes the page at full width. */
 @media (min-width: 640px) {
   .inquiry { padding: var(--space-4); }
   .listings > .inquiry {
     display: grid;
-    grid-template-columns: 1fr auto;
+    grid-template-columns: minmax(0, 1fr) fit-content(50%);
     column-gap: var(--space-4);
     align-items: center;
   }
@@ -473,10 +474,14 @@ main { min-height: 60vh; }
 .btn {
   flex: 1 1 auto;
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
+  align-content: center;
   justify-content: center;
+  gap: 0 0.3em;
+  max-width: 100%;
   min-height: var(--tap-target);
-  padding: 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
   background: var(--color-accent);
   color: var(--color-accent-ink);
   border: 1px solid var(--color-accent);
@@ -484,13 +489,12 @@ main { min-height: 60vh; }
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-decoration: none;
-  white-space: nowrap;
+  text-align: center;
+  line-height: var(--leading-tight);
 }
 .btn:hover { text-decoration: underline; }
 .btn-quiet { background: transparent; color: var(--color-accent); }
 .btn-quiet:hover { background: var(--color-card); }
-
-/* Prose ------------------------------------------------------------------ */
 
 .prose { max-width: var(--measure); }
 
@@ -533,23 +537,31 @@ main { min-height: 60vh; }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
 .prose table {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
-  width: 100%;
   margin: 0 0 var(--space-3);
   font-variant-numeric: tabular-nums;
 }
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
+  vertical-align: top;
+  padding: var(--space-2) var(--space-4) var(--space-2) 0;
   border-bottom: 1px solid var(--color-border);
 }
+.prose :is(th, td):last-child { padding-right: 0; }
 .prose th { font-size: var(--text-s); }
+
+@media (max-width: 639.98px) {
+  .prose table { font-size: var(--text-s); }
+  .prose th, .prose td { padding-right: var(--space-3); }
+}
 
 .prose hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-4) 0; }
 
 .cover { width: 100%; height: auto; border-radius: var(--radius-s); margin: 0 0 var(--space-4); }
-
-/* Post list ------------------------------------------------------------------ */
 
 .post-list { list-style: none; margin: 0; padding: 0; max-width: var(--measure); }
 
@@ -581,14 +593,10 @@ main { min-height: 60vh; }
 
 .empty { color: var(--color-muted); max-width: var(--measure); }
 
-/* Motion & print --------------------------------------------------------------- */
-
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }
 }
 
-/* A printed listing is the agent's particulars sheet: black on white whatever
-   the screen scheme, with the phone number and the office details kept. */
 @media print {
   :root {
     --color-bg: #ffffff;

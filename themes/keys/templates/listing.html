@@ -1,6 +1,6 @@
 <article class="listing with-aside" data-status="{{ page.status }}">
   <header class="listing-head">
-    {{#if page.status}}<p class="status-flag">{{ page.status }}</p>
+    {{#if page.status}}<p class="status-flag"><span class="status-raw">{{ page.status }}</span>{{> status-labels}}</p>
     {{/if}}{{#if page.price}}<p class="listing-price">{{ page.price }}</p>
     {{/if}}<h1>{{ page.title }}</h1>
     {{#if page.address}}<p class="listing-address">{{ page.address }}</p>
@@ -9,7 +9,7 @@
     {{/if}}
   </header>
   {{#if page.photos}}
-  <ul class="gallery" aria-label="{{ strings.propertyPhotos }}">
+  <ul class="gallery" aria-label="{{ strings.photos }}">
     {{#each page.photos as photo}}<li><img src="{{ photo }}" alt="{{ page.title }}" loading="lazy" decoding="async"></li>
     {{/each}}
   </ul>
@@ -19,8 +19,8 @@
   </figure>
   {{/if}}{{/if}}
   <div class="prose">
-{{{ page.content }}}
+{{#if page.body}}{{{ page.content }}}{{else}}{{#if page.description}}<p>{{ page.description }}</p>{{/if}}{{/if}}
   </div>
   {{> inquiry-cta}}
-  <p class="listing-return"><a href="/listings/">{{ strings.allListings }}</a></p>
+  <p class="listing-return"><a href="/listings/">← {{ strings.allListings }}</a></p>
 </article>

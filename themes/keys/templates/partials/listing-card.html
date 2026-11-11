@@ -1,6 +1,6 @@
 <li class="listing-card{{#if item.cover}}{{else}} listing-card--text{{/if}}" data-status="{{ item.status }}">
   {{#if item.cover}}<div class="card-photo"><img src="{{ item.cover }}" alt="" loading="lazy" decoding="async"></div>
-  {{/if}}{{#if item.status}}<p class="status-flag">{{ item.status }}</p>
+  {{/if}}{{#if item.status}}<p class="status-flag"><span class="status-raw">{{ item.status }}</span>{{> status-labels}}</p>
   {{/if}}<div class="card-body">
     {{#if item.price}}<p class="card-price">{{ item.price }}</p>
     {{/if}}<h2 class="card-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>

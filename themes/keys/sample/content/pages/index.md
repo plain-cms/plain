@@ -16,6 +16,13 @@ property goes under offer, its flag changes the same day. Tell us what
 you're actually after — the real list, not the portal filters — and
 you'll hear about houses before the board goes up.
 
+## Renting
+
+We let a few flats for owners we know, and the rule holds there too: the
+listing says what the rent is, what the deposit is, and what is wrong
+with the place. A flat flagged To let can still be viewed; Let agreed
+means a tenant is on the way in.
+
 ## Selling
 
 We photograph honestly, price straight, and answer our own phone.

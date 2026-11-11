@@ -40,19 +40,12 @@
 {{{ body }}}
 </main>
 <footer class="colophon">
-  {{#if data.agency.name}}
-  <div>
-    <p class="colophon-name">{{ data.agency.name }}</p>
-    {{#if data.agency.hours}}<p class="colophon-line">{{ data.agency.hours }}</p>{{/if}}
-  </div>
-  <address>
-    {{#if data.agency.phone}}<p class="colophon-line"><a href="tel:{{ data.agency.phone }}">{{ data.agency.phone }}</a></p>{{/if}}
-    {{#if data.agency.email}}<p class="colophon-line"><a href="mailto:{{ data.agency.email }}">{{ data.agency.email }}</a></p>{{/if}}
-  </address>
-  {{else}}
-  <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
+  <p class="colophon-name">{{#if data.agency.name}}{{ data.agency.name }}{{else}}{{ site.title }}{{/if}}</p>
+  {{#if data.agency.hours}}<p class="colophon-hours">{{ data.agency.hours }}</p>
+  {{/if}}{{#if data.agency.phone}}<p class="colophon-contact"><a href="tel:{{ data.agency.phone }}">{{ data.agency.phone }}</a></p>
+  {{/if}}{{#if data.agency.email}}<p class="colophon-contact"><a href="mailto:{{ data.agency.email }}">{{ data.agency.email }}</a></p>
+  {{/if}}{{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>
   {{/if}}
-  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

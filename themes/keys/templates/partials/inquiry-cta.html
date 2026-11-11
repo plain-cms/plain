@@ -2,11 +2,12 @@
   <h2 id="inquiry-heading">{{#if page.date}}{{ strings.inquiryHeading }}{{else}}{{ strings.inquiryHeadingAll }}{{/if}}</h2>
   {{#if data.agency.hours}}<p class="inquiry-meta">{{ data.agency.hours }}</p>
   {{/if}}<p class="inquiry-actions">
-    {{#if data.agency.phone}}<a class="btn" href="tel:{{ data.agency.phone }}">{{ strings.call }} {{ data.agency.phone }}</a>
+    {{#if data.agency.phone}}<a class="btn" href="tel:{{ data.agency.phone }}">{{ strings.call }} <span class="tel">{{ data.agency.phone }}</span></a>
     {{#if data.agency.email}}<a class="btn btn-quiet" href="mailto:{{ data.agency.email }}">{{ strings.emailUs }}</a>{{/if}}
     {{else}}{{#if data.agency.email}}<a class="btn" href="mailto:{{ data.agency.email }}">{{ strings.emailUs }}</a>
-    {{else}}<a class="btn" href="/contact/">{{ strings.sendMessage }}</a>{{/if}}
+    {{else}}<a class="btn" href="/contact/">{{ strings.contactUs }}</a>{{/if}}
     {{/if}}
   </p>
-  <p class="inquiry-note">{{#if page.date}}{{ strings.inquiryNote }}{{else}}{{ strings.inquiryNoteAll }}{{/if}}</p>
+  {{#if page.date}}<p class="inquiry-note">{{ strings.inquiryNote }}</p>
+  {{/if}}
 </section>
