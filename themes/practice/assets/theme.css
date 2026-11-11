@@ -64,12 +64,30 @@
   }
 }
 
-/* Base ------------------------------------------------------------------ */
+/* Base */
 
 * { box-sizing: border-box; }
 
-/* A long single word breaks rather than spilling out of its column */
-h1, h2, h3, h4 { overflow-wrap: break-word; }
+/* Long words: a compound in a heading or table cell hyphenates where the
+   browser knows the language — in headings only from 14 letters (24 in a
+   wide page title). A bare web address never gains a hyphen; it breaks
+   where it must (overflow-wrap on body). */
+h1, h2, h3, h4, th, td {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  -webkit-hyphenate-limit-before: 6;
+  -webkit-hyphenate-limit-after: 6;
+  hyphenate-limit-chars: 14 6 6;
+}
+th, td {
+  -webkit-hyphenate-limit-before: 3;
+  -webkit-hyphenate-limit-after: 3;
+  hyphenate-limit-chars: 8 3 3;
+}
+td a, th a { -webkit-hyphens: manual; hyphens: manual; }
+@media (min-width: 40em) {
+  .page-header h1 { hyphenate-limit-chars: 24 6 6; }
+}
 
 html { color-scheme: light dark; }
 
@@ -82,6 +100,7 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  overflow-wrap: break-word;
 }
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
@@ -106,7 +125,7 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
 }
 .skip-link:focus { left: var(--space-2); }
 
-/* Masthead ---------------------------------------------------------------- */
+/* Masthead */
 
 .masthead {
   display: flex;
@@ -173,9 +192,10 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-4);
+  padding: var(--space-2) var(--space-4);
   font-size: var(--text-m);
   font-weight: 600;
+  line-height: var(--leading-tight);
   text-align: center;
   text-decoration: none;
   border-radius: var(--radius);
@@ -188,31 +208,27 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
 .btn-book:hover, .btn-call:hover { background: var(--color-accent-deep); color: var(--color-bg); box-shadow: none; }
 .masthead .btn-book { margin-left: auto; }
 
-/* Narrow screens: name and Book share the first row, the menu takes the
-   second — the button never ends up alone on a row of its own */
+/* Narrow screens: name and Book share the first row, the menu the second */
 @media (max-width: 56em) {
   .masthead { gap: 0 var(--space-3); }
   .site-title { flex: 1; }
   .masthead nav { order: 3; flex-basis: 100%; margin: 0 calc(-1 * var(--space-2)); }
 }
 @media (max-width: 40em) {
-  /* On the narrowest phones the label wraps inside the button rather than
-     the button dropping to a row of its own */
+  /* Narrowest phones: the label wraps inside the button */
   .masthead .btn-book {
     flex: 1 1 min-content;
     max-width: max-content;
-    padding: 0 var(--space-3);
+    padding: var(--space-1) var(--space-3);
     font-size: var(--text-s);
-    line-height: var(--leading-tight);
   }
   .masthead nav ul { column-gap: 0; }
 }
 
-/* THE SIGNATURE: the hours / phone / emergency strip. One band directly
-   under the masthead on every page, ruled in the accent — when we're open,
-   the number to call, and the after-hours line in calm red ink, each under
-   its own small label. position: static; it is present, it does not pursue.
-   The 1px gaps over the border color draw the dividers, wrapped or not. */
+/* THE SIGNATURE: the hours / phone / emergency strip. One band under the
+   masthead on every page, ruled in the accent: when we're open, the number
+   to call, the after-hours line in calm red ink. position: static — present,
+   never pursuing. 1px gaps over the border color draw the dividers. */
 
 .care-strip {
   display: flex;
@@ -224,8 +240,12 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
   font-variant-numeric: tabular-nums lining-nums;
 }
 
+/* A site whose practice details are all blank shows no strip at all */
+.care-strip:not(:has(.strip-part)) { display: none; }
+
 .strip-part {
   flex: 1 1 var(--label-col);
+  max-width: 100%;
   margin: 0;
   padding: var(--space-3) var(--space-3) var(--space-2);
   background: var(--color-panel);
@@ -247,7 +267,8 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
   list-style: none;
   line-height: var(--leading-tight);
 }
-.strip-slot { display: flex; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; }
+/* A row too long for its part breaks into day over time */
+.strip-slot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; }
 .strip-slot strong { font-weight: 600; }
 
 .strip-phone, .emergency-link {
@@ -274,22 +295,24 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
     gap: 0 var(--space-3);
     padding: var(--space-2) var(--space-3);
   }
-  /* Nothing in the strip may widen the page: a long hours row breaks into
-     day over time, and a long number shrinks to fit the narrowest phones */
+  /* Nothing in the strip may widen the page: a long number shrinks to fit */
   .strip-hours { width: auto; }
   .colophon .strip-hours { width: fit-content; }
-  .strip-slot { flex-wrap: wrap; }
-  .strip-phone { font-size: min(var(--text-phone), calc((100vw - 4 * var(--space-3)) / 11)); }
+  /* A full week of split sessions is set smaller, so the strip stays a strip */
+  .care-strip .strip-hours:has(> :nth-child(4)) { font-size: var(--text-s); }
+  .care-strip .strip-hours:has(> :nth-child(4)) .strip-slot { padding: calc(var(--space-1) / 2) 0; }
+  .strip-phone { font-size: min(var(--text-phone), calc((100vw - 4 * var(--space-3)) / 12.6)); }
   .emergency-link { font-size: min(var(--text-l), calc((100vw - 4 * var(--space-3)) / 13)); }
 }
-/* Last resort for a number longer than any real format: below this width each
-   part is alone on its row, so it may shrink and the number may wrap */
+/* Last resort for an over-long number: each part is alone on its row here,
+   so the number may wrap */
 @media (max-width: 30em) {
   .strip-part { min-width: 0; }
   .care-strip a[href^="tel:"] { white-space: normal; }
+  .cta-actions a { padding-left: var(--space-3); padding-right: var(--space-3); }
 }
 
-/* Headers ------------------------------------------------------------------ */
+/* Headers */
 
 .page-header { margin: var(--space-5) 0 var(--space-4); max-width: var(--measure); }
 
@@ -340,7 +363,7 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
 .tag::before { content: "#"; color: var(--color-muted); }
 .tag:hover { text-decoration: underline; color: var(--color-accent-deep); }
 
-/* Prose --------------------------------------------------------------------- */
+/* Prose */
 
 .prose { max-width: var(--measure); }
 
@@ -409,7 +432,17 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
   border-bottom: 1px solid var(--color-border);
 }
 .prose td:first-child { font-weight: 600; }
+/* A table never widens the page: a too-long word breaks inside its cell */
+.prose th, .prose td { min-width: min(5em, 22vw); overflow-wrap: anywhere; }
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
+@media (max-width: 40em) {
+  /* Three columns or more on a phone: smaller type buys each one more words */
+  .prose table:has(th:nth-child(3)) { font-size: var(--text-s); }
+  .prose table:has(th:nth-child(3)) :is(th, td) { padding-right: var(--space-2); }
+}
 
+/* A rule drawn by hand above a section heading would double the heading's own */
+.prose hr:has(+ h2) { display: none; }
 .prose hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-4) 0; }
 
 .cover { width: 100%; height: auto; border-radius: var(--radius); margin: 0 0 var(--space-4); }
@@ -469,7 +502,7 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
 .preparation li { margin-bottom: var(--space-2); }
 .preparation li::marker { content: "✓  "; color: var(--color-accent-deep); font-weight: 700; }
 
-/* Appointment block ------------------------------------------------------------- */
+/* Appointment block */
 
 .appointment-cta {
   max-width: var(--measure);
@@ -485,13 +518,12 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
 }
 .cta-meta { color: var(--color-muted); margin: 0 0 var(--space-3); }
 .cta-actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; }
-.cta-actions a { flex: 1 1 auto; max-width: 100%; }
+.cta-actions a { flex: 1 1 auto; max-width: 100%; overflow-wrap: anywhere; }
 
 /* Wide screens: the leaflet layout. Section headings and care names hang in
-   a left-hand column, the words sit in the right — so text, strip and footer
-   share one right edge, and a page of plain text looks set, not poured.
-   A heading starts level with the block after it and may run down beside
-   the next two; one hairline above it crosses both columns. */
+   a left-hand column, the words sit in the right, so text, strip and footer
+   share one right edge. A heading may run down beside the two blocks after
+   it; one hairline above it crosses both columns. */
 
 @media (min-width: 56em) {
   .prose:has(> h2), .care-card, .preparation, .appointment-cta {
@@ -530,7 +562,7 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
   .preparation > h2 { margin-top: var(--space-3); }
 }
 
-/* Pagination ------------------------------------------------------------------------ */
+/* Pagination */
 
 .pagination {
   display: flex;
@@ -569,13 +601,15 @@ a[href^="tel:"] { white-space: nowrap; font-variant-numeric: tabular-nums lining
 .colophon p { margin: 0; }
 .colophon address { font-style: normal; }
 .colophon-cols { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4); margin-bottom: var(--space-4); }
-.colophon-cols > div { flex: 1 1 calc(var(--label-col) * 0.75); }
+.colophon-cols:not(:has(> div)) { display: none; }
+.colophon-cols > div { flex: 1 1 calc(var(--label-col) * 0.75); max-width: 100%; }
 .colophon-cols .strip-label { color: var(--color-text); margin-bottom: var(--space-1); }
+.colophon-cols p + .strip-label { margin-top: var(--space-2); }
 .colophon-cols a { display: inline-block; padding: var(--space-1) 0; font-weight: 600; }
-.colophon .emergency-link { min-height: 0; font-size: inherit; text-decoration: underline; }
+.colophon .emergency-link { min-height: 0; font-size: inherit; line-height: inherit; text-decoration: underline; }
 .colophon-note { margin-top: var(--space-1); }
 
-/* Motion ---------------------------------------------------------------------------------- */
+/* Motion */
 
 @media (prefers-reduced-motion: no-preference) {
   html { scroll-behavior: smooth; }

@@ -81,8 +81,14 @@
     <div>
       <p class="strip-label">{{ strings.callUs }}</p>
       <p><a href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></p>
+      {{#if data.practice.email}}{{> colophon-mail}}
+      {{/if}}
     </div>
-    {{/if}}
+    {{else}}{{#if data.practice.email}}
+    <div>
+      {{> colophon-mail}}
+    </div>
+    {{/if}}{{/if}}
     {{#if data.practice.emergencyPhone}}
     <div>
       <p class="strip-label">{{#if data.practice.emergencyNote}}{{ data.practice.emergencyNote }}{{else}}{{ strings.afterHours }}{{/if}}</p>

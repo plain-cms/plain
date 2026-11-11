@@ -4,8 +4,10 @@
   "emergencyNote": "In pain after hours?",
   "hours": [
     { "days": "Mon–Fri", "time": "8 am – 6 pm" },
-    { "days": "Sat", "time": "9 am – 1 pm" }
+    { "days": "Sat", "time": "9 am – 1 pm" },
+    { "days": "Sun", "time": "Closed" }
   ],
   "address": "14 Alder Street, Fairview",
-  "bookingUrl": ""
+  "bookingUrl": "",
+  "email": "hello@alderstreetdental.example"
 }
