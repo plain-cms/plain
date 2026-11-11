@@ -13,6 +13,7 @@
       "fields": [
         { "name": "title", "type": "text", "required": true },
         { "name": "discipline", "type": "text" },
+        { "name": "description", "type": "text" },
         { "name": "photo", "type": "image" },
         { "name": "draft", "type": "boolean", "default": false }
       ]

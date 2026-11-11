@@ -86,6 +86,7 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  overflow-wrap: break-word; /* a word longer than its line breaks; it never widens the page */
 }
 
 ::selection { background: var(--color-accent-tint); }
@@ -115,21 +116,24 @@ main { min-height: 60vh; }
 
 /* Masthead -----------------------------------------------------------------
    Phone: name and the trial button share row one, the menu sits on the heavy
-   rule below. Wide: one row. */
+   rule below. Wide: one row. A name and a button too long to share a row
+   (a long business name, a long word for "Try a class") take a row each. */
 
 .masthead {
-  display: grid;
-  grid-template-columns: 1fr auto;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  column-gap: var(--space-3);
+  gap: var(--space-1) var(--space-3);
   padding-top: var(--space-2);
   border-bottom: var(--border-strong) solid var(--color-rule);
 }
-.masthead nav { grid-column: 1 / -1; grid-row: 2; }
+.masthead .site-title { flex: 1 1 auto; flex-basis: min-content; min-width: 0; }
+.masthead nav { order: 1; flex: 0 0 100%; }
 
 @media (min-width: 60em) {
-  .masthead { grid-template-columns: auto 1fr auto; column-gap: var(--space-4); padding: var(--space-3) 0; }
-  .masthead nav { grid-column: 2; grid-row: 1; }
+  .masthead { column-gap: var(--space-4); padding: var(--space-3) 0; }
+  .masthead .site-title { flex: 0 1 auto; }
+  .masthead nav { order: 0; flex: 1 1 0; }
 }
 
 .site-title {
@@ -299,6 +303,14 @@ main { min-height: 60vh; }
   border-bottom: var(--border-strong) solid var(--color-rule);
 }
 
+/* A table too wide for its column scrolls inside itself; the page never does.
+   On a wide screen a page's table keeps the full measure (a very wide one runs
+   into the empty margin); an instructor's bio has the timetable pointer there. */
+.instructor .prose table { display: block; overflow-x: auto; }
+@media (max-width: 60em) {
+  .prose table { display: block; overflow-x: auto; }
+}
+
 .prose hr {
   border: 0;
   border-top: var(--border-strong) solid var(--color-border);
@@ -318,11 +330,11 @@ main { min-height: 60vh; }
 
 .week {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-3);
 }
-@media (min-width: 44em) { .week { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 66em) { .week { grid-template-columns: 1fr 1fr 1fr; } }
+@media (min-width: 44em) { .week { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 66em) { .week { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 
 .day {
   background: var(--color-panel);
@@ -348,12 +360,14 @@ main { min-height: 60vh; }
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-caps);
   text-transform: uppercase;
+  overflow-wrap: anywhere;
   background: var(--color-panel);
   border-bottom: var(--border-strong) solid var(--color-rule);
 }
 
 /* One time column per day block: every class name starts on the same line,
-   whether the owner writes 07:00 or 7:00 AM */
+   whether the owner writes 07:00 or 7:00 AM. The column is as wide as the
+   day's longest time, up to the cap on .session-time. */
 .classes {
   list-style: none;
   margin: 0;
@@ -381,11 +395,13 @@ main { min-height: 60vh; }
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-heads);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
+  max-width: 5.25em; /* "12:15 PM" stays on one line; a range or a time in words wraps instead of widening the day */
+  hyphens: auto;
+  hyphenate-limit-chars: auto;
   color: var(--color-text); /* the time stays ink-dark: it carries the page */
 }
 
-.session-what { display: flex; flex-direction: column; overflow-wrap: break-word; }
+.session-what { display: flex; flex-direction: column; }
 .session-name { font-weight: var(--weight-strong); line-height: 1.3; }
 /* Teacher and level share a line when they fit. The dot hangs in the gap, so
    when the level wraps to its own line the dot falls outside and is clipped. */
@@ -417,6 +433,7 @@ main { min-height: 60vh; }
 }
 
 .today-flag {
+  flex: none;
   font-size: var(--text-xs);
   color: var(--color-on-accent);
   background: var(--color-accent);
@@ -447,7 +464,7 @@ main { min-height: 60vh; }
 
 .card {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-content: start;
   row-gap: var(--space-1);
   padding-top: var(--space-3);
@@ -548,10 +565,29 @@ main { min-height: 60vh; }
   color: var(--color-muted);
   font-size: var(--text-s);
 }
+.colophon > * { min-width: 0; }
 .colophon p { margin: 0; }
 .colophon-name { font-weight: var(--weight-strong); color: var(--color-text); }
 .colophon-note { flex-basis: 100%; }
 .colophon-note > * { margin: 0 0 var(--space-1); }
+
+/* Long words --------------------------------------------------------------------
+   Every word breaks rather than widen the page (overflow-wrap on body). Where
+   the browser can keep hyphenation to long words only, compound words in
+   titles, the timetable and body text break at a syllable instead. */
+
+@supports (hyphenate-limit-chars: 14) {
+  .page-header h1, .card h2, .discipline, .timetable, .prose {
+    hyphens: auto;
+    hyphenate-limit-chars: 14;
+  }
+  /* Never inside an address or code: a hyphen there reads as part of it */
+  .trial-note, .prose a, .prose code { hyphens: manual; }
+  /* On the narrowest phones a table fits only if its short words may break too */
+  @media (max-width: 22.5em) {
+    .prose table { hyphenate-limit-chars: auto; }
+  }
+}
 
 /* Motion ------------------------------------------------------------------------- */
 
@@ -588,7 +624,7 @@ main { min-height: 60vh; }
   .lede { font-size: var(--text-m); }
   .timetable { margin: var(--space-3) 0; }
   .timetable .eyebrow { display: none; }
-  .week { grid-template-columns: 1fr 1fr 1fr; gap: var(--space-2); }
+  .week { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
   .day { break-inside: avoid; }
   .day-name { position: static; font-size: var(--text-s); padding: var(--space-1) var(--space-2); }
   .session { padding: var(--space-1) var(--space-2); gap: 0 var(--space-2); }
