@@ -6,13 +6,10 @@
       {{#if page.tag}}<span class="tag-chip">{{ page.tag }}</span>{{/if}}
     </p>
     <h1>{{ page.title }}</h1>
-    {{#if page.description}}<p class="lede">{{ page.description }}</p>
-    {{/if}}
+    {{> lede}}
   </header>
   <div class="prose">
 {{{ page.content }}}
   </div>
-  <nav class="backlink" aria-label="{{ strings.backToChangelog }}">
-    <a href="/changelog/">{{ strings.fullChangelog }}</a>
-  </nav>
+  <p class="backlink"><a href="/changelog/">{{ strings.allReleases }}</a></p>
 </article>

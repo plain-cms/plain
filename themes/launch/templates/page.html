@@ -9,10 +9,9 @@
 <article class="page">
   <header class="page-header">
     <h1>{{ page.title }}</h1>
-    {{#if page.description}}<p class="lede">{{ page.description }}</p>
-    {{/if}}
+    {{> lede}}
   </header>
-  {{#if page.showPricing}}<h2 class="visually-hidden">{{ strings.plans }}</h2>
+  {{#if page.showPricing}}<h2 class="visually-hidden">{{ strings.pricingHeading }}</h2>
   {{> pricing}}
   {{/if}}<div class="prose">
 {{{ page.content }}}

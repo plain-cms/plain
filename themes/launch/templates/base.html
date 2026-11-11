@@ -9,9 +9,8 @@
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 {{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
 {{#if page.description}}<meta property="og:description" content="{{ page.description }}">
-{{/if}}{{#if page.date}}<meta property="og:type" content="article">
-{{else}}<meta property="og:type" content="website">
-{{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
+{{/if}}<meta property="og:type" content="{{#if page.date}}article{{else}}website{{/if}}">
+{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
 <meta name="twitter:card" content="summary_large_image">
 {{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
 <meta name="twitter:card" content="summary_large_image">
@@ -41,12 +40,10 @@
 </main>
 <footer class="colophon">
   <p><strong>{{ site.title }}</strong>{{#if site.description}} — {{ site.description }}{{/if}}</p>
-  <nav aria-label="{{ strings.footerNav }}">
-    <ul>
-      {{#each nav as entry}}<li><a href="{{ entry.url }}">{{ entry.label }}</a></li>
-      {{/each}}
-    </ul>
-  </nav>
+  <ul role="list">
+    {{#each nav as entry}}<li><a href="{{ entry.url }}">{{ entry.label }}</a></li>
+    {{/each}}
+  </ul>
   {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>

@@ -7,11 +7,7 @@
   <ol class="timeline{{#if pagination.newer}}{{else}} is-live{{/if}}" role="list" reversed data-copy-label="{{ strings.copyLink }}">
     {{#each items as item}}
     <li class="release-item" data-tag="{{ item.tag }}">
-      <p class="release-meta">
-        <time datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
-        {{#if item.version}}<span class="version-chip">{{ item.version }}</span>{{/if}}
-        {{#if item.tag}}<span class="tag-chip">{{ item.tag }}</span>{{/if}}
-      </p>
+      {{> release-meta}}
       <h2 class="release-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
       {{#if item.description}}<p class="release-desc">{{ item.description }}</p>
       {{/if}}
@@ -19,7 +15,7 @@
     {{/each}}
   </ol>
   {{else}}
-  <p class="empty">{{ strings.nothingShipped }}</p>
+  <p class="empty">{{ strings.nothingHere }}</p>
   {{/if}}
   {{> pagination}}
 </section>
