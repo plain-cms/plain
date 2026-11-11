@@ -14,3 +14,9 @@ for (const link of document.querySelectorAll('.doc-contents a, .masthead nav a')
   if (path === here) link.setAttribute('aria-current', 'page');
   else if (path !== root && here.startsWith(path) && link.closest('.masthead')) link.setAttribute('aria-current', 'true');
 }
+
+// A long contents list scrolls inside the rail beside the page: when the row
+// being read is below the rail's edge, centre it. The page is never scrolled.
+const rail = document.querySelector('.doc-sidebar');
+const row = rail && rail.querySelector('[aria-current="page"]');
+if (row && row.offsetTop + row.offsetHeight > rail.clientHeight) rail.scrollTop = row.offsetTop - rail.clientHeight / 2;

@@ -211,6 +211,17 @@ main { min-width: 0; min-height: 60vh; padding-block: var(--space-4) var(--space
 /* Titles are owner text: a long unbroken word wraps instead of widening the
    page ("anywhere" also lowers the minimum width of flex and grid items). */
 .doc-sidebar, .crumb, .pager-link { overflow-wrap: anywhere; }
+/* Where the browser knows the page's language, a compound of twelve letters
+   or more breaks at a syllable, with a hyphen, before it is cut anywhere —
+   in titles and in table cells, whose columns are the narrowest text on a
+   phone. Code and link text are never given a hyphen. */
+.doc-sidebar, .crumb, .doc-id, .pager-link, h1, .toc-title,
+.prose h2, .prose h3, .prose h4, .prose th, .prose td {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
+}
+.prose code, .prose td a { -webkit-hyphens: manual; hyphens: manual; }
 
 .doc-search {
   display: flex;
@@ -246,7 +257,7 @@ main { min-width: 0; min-height: 60vh; padding-block: var(--space-4) var(--space
 .doc-tree {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);
-  column-gap: var(--space-2);
+  column-gap: var(--space-3);
   margin: 0;
   padding: var(--space-1) 0;
   list-style: none;
@@ -297,11 +308,14 @@ main { min-width: 0; min-height: 60vh; padding-block: var(--space-4) var(--space
 .crumb a:hover { color: var(--color-accent); text-decoration: underline; }
 .crumb [aria-current="page"] { color: var(--color-ink); font-weight: 600; }
 
-/* The right-hand cell: section number, entry count, date or error code. */
+/* The right-hand cell: section number, entry count, date, tag or error code.
+   It stays on one line until it would take more than its share of the block;
+   a long tag then wraps inside the cell. */
 .doc-id {
+  max-width: 60%;
   border-left: var(--hairline) solid var(--color-border);
   font-weight: 700;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 /* Page header & article ---------------------------------------------------- */
@@ -396,6 +410,8 @@ main { min-width: 0; min-height: 60vh; padding-block: var(--space-4) var(--space
   padding: var(--space-2) var(--space-3) var(--space-2) 0;
   border-bottom: var(--hairline) solid var(--color-border);
 }
+/* The last column needs no gutter: a table that only just fits must not scroll. */
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
 .prose th { color: var(--color-muted); border-bottom: var(--rule) solid var(--color-border-strong); }
 
 .prose hr { border: 0; border-top: var(--hairline) solid var(--color-border); margin: var(--space-4) 0; }
@@ -462,14 +478,19 @@ main { min-width: 0; min-height: 60vh; padding-block: var(--space-4) var(--space
 .toc-row:hover .toc-title a { text-decoration: underline; }
 .toc-desc { color: var(--color-muted); font-size: var(--text-s); margin: var(--space-1) 0 0; }
 
+/* Previous page on the left, the position in the middle, next page on the
+   right — each keeps its place when the other link is absent. */
 .pagination {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: baseline;
   gap: var(--space-3);
   padding-top: var(--space-4);
   color: var(--color-muted);
   font-size: var(--text-s);
 }
+.pagination-at { grid-column: 2; text-align: center; }
+.pagination-next { grid-column: 3; text-align: right; }
 
 .empty { color: var(--color-muted); }
 

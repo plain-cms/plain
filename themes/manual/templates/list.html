@@ -28,9 +28,9 @@
   {{/if}}
   {{#if pagination.multiple}}
   <nav class="pagination" aria-label="{{ strings.pagesNav }}">
-    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
-    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
-    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+    {{#if pagination.newer}}<a class="pagination-prev" href="{{ pagination.newer }}" rel="prev">{{ strings.newer }}</a>{{/if}}
+    <span class="pagination-at">{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a class="pagination-next" href="{{ pagination.older }}" rel="next">{{ strings.older }}</a>{{/if}}
   </nav>
   {{/if}}
 </section>
