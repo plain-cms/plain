@@ -1,7 +1,7 @@
 /* Toolbox — a theme for trades & local services (cms-spec.md §10.7 #2).
    Workwear navy + hi-vis yellow on steel white; condensed signage headings;
    job-sheet mono for prices. The one loud element is the hazard-striped
-   call-now control: a bar fixed to the bottom of every phone screen, a job
+   call-now control: a bar held to the bottom of every phone screen, a job
    card beside the text on wide ones. Everything else stays quiet and precise.
    All design decisions live in the tokens below. Restyle by editing tokens,
    never selectors (cms-spec.md §10.1). */
@@ -82,12 +82,23 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  /* A word longer than its line breaks rather than pushing the page sideways */
+  overflow-wrap: break-word;
+}
+
+/* Headings, cards and the checklist are narrow: hyphenate long compound words */
+h1, h2, h3, h4, .lede, .summary, .included li, .prose th, .prose td {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
 }
 
 ::selection { background: var(--color-mark); }
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
 a:hover { text-decoration-thickness: var(--border-strong); }
+/* A number or an address has no spaces to break at: let it wrap where it must */
+a[href^="tel:"], a[href^="mailto:"] { overflow-wrap: anywhere; }
 
 :focus-visible {
   outline: var(--focus-width) solid var(--color-accent);
@@ -129,6 +140,7 @@ main { min-height: 60vh; }
   text-decoration: none;
   border-left: var(--rule-hivis) solid var(--color-hivis);
   padding: var(--space-1) 0 var(--space-1) var(--space-2);
+  min-width: 0;
 }
 .site-title:hover { text-decoration: underline; }
 
@@ -173,15 +185,17 @@ main { min-height: 60vh; }
 }
 .call-link:hover, .cta-link:hover, .actions a:hover, .pagination a:hover { border-color: var(--color-text); text-decoration: underline; }
 
-/* Phone numbers are set like the side of the van */
+/* Phone numbers are set like the side of the van. In page text the number
+   stays the size of its sentence: only the lettering changes. */
 .call-link, .btn-call, .prose a[href^="tel:"] {
   font-family: var(--font-display);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
 .call-link { margin-left: auto; }
-.prose a[href^="tel:"] { font-size: var(--text-l); line-height: 1; }
+/* Still inline and sentence-sized, but one piece: the number moves to the
+   next line whole and only breaks when it is longer than the line */
+.prose a[href^="tel:"] { display: inline-block; max-width: 100%; }
 
 /* Headers ---------------------------------------------------------------- */
 
@@ -196,7 +210,7 @@ main { min-height: 60vh; }
   text-wrap: balance;
 }
 
-.eyebrow, .prose th, .before-after figcaption {
+.eyebrow, .price-line span, .prose th, .before-after figcaption {
   font-size: var(--text-s);
   font-weight: 600;
   text-transform: uppercase;
@@ -230,17 +244,18 @@ main { min-height: 60vh; }
   border-radius: var(--radius);
 }
 
-/* The from-price reads like the total line of an estimate */
+/* The from-price reads like the total line of an estimate: label left,
+   figure right. A long price drops below its label and wraps there. */
 .price-line {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  column-gap: var(--space-3);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
   margin: var(--space-3) 0 0;
   line-height: var(--leading-tight);
 }
-.price-line strong { grid-column: 2; grid-row: 1 / span 2; font-family: var(--font-mono); font-size: var(--text-xl); }
-.price-line small { grid-column: 1; margin-top: var(--space-1); font-size: var(--text-s); color: var(--color-muted); }
+.price-line strong { min-width: 0; font-family: var(--font-mono); font-size: var(--text-xl); }
 
 .meta {
   font-family: var(--font-mono);
@@ -309,11 +324,22 @@ main { min-height: 60vh; }
   text-align: left;
   padding: var(--space-2) var(--space-3) var(--space-2) 0;
   border-bottom: 1px solid var(--color-border);
+  vertical-align: baseline; /* a figure lines up with the first line of its label */
 }
-.prose th { border-bottom-color: var(--color-text); }
+.prose th { border-bottom-color: var(--color-text); vertical-align: bottom; }
 .prose :is(th, td):last-child { padding-right: 0; }
-.prose [align="right"] { text-align: right; }
+/* A column of words gives way before the page does, but keeps room for an
+   ordinary word; a figure keeps its words whole */
+.prose :is(th, td) { overflow-wrap: anywhere; min-width: 6em; }
+.prose [align="right"] { text-align: right; overflow-wrap: break-word; min-width: 0; }
 .prose td[align="right"] { font-family: var(--font-mono); font-weight: 700; }
+/* Three columns or more may not fit a phone. Their words stay whole, and a
+   table too wide for the screen scrolls in its own box instead of the page */
+@media (max-width: 40em) {
+  .prose table:has(th:nth-child(3)) { display: block; overflow-x: auto; }
+  .prose table:has(th:nth-child(3)) :is(th, td) { overflow-wrap: normal; min-width: 0; -webkit-hyphens: manual; hyphens: manual; }
+  .prose table:has(th:nth-child(3)) td[align="right"] { white-space: nowrap; }
+}
 
 .prose hr {
   border: 0;
@@ -377,6 +403,7 @@ main { min-height: 60vh; }
   font-weight: 700;
 }
 .service-card .price span { color: var(--color-muted); font-weight: 400; font-size: var(--text-s); }
+.service-card .price strong { min-width: 0; }
 .service-card .price b { margin-left: auto; font-family: var(--font-body); color: var(--color-muted); }
 .service-card:hover .price b { color: var(--color-text); }
 
@@ -415,20 +442,23 @@ main { min-height: 60vh; }
   overflow: hidden; /* clips the stripe to the rounded corners */
 }
 .list .call-cta { max-width: none; }
-.call-cta > * { grid-column: 1; }
-.call-cta .btn-call, .call-cta .cta-link { grid-column: 2; grid-row: 1 / span 4; }
+.call-cta > * { grid-column: 1; min-width: 0; }
+.call-cta .btn-call, .call-cta .cta-link { grid-column: 2; grid-row: 1 / span 5; }
 .call-cta h2 { margin: 0; text-wrap: balance; }
 .call-cta p { margin: 0; }
 .cta-lead { margin-bottom: var(--space-2); }
 .cta-meta { color: var(--color-muted); font-size: var(--text-s); }
+.cta-meta a { color: inherit; }
 
 .btn-call {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-3);
+  padding: var(--space-1) var(--space-3);
   font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  text-align: center;
   text-decoration: none;
   color: var(--color-on-hivis);
   background: var(--color-hivis);
@@ -436,6 +466,8 @@ main { min-height: 60vh; }
   border-radius: var(--radius);
 }
 .btn-call:hover { background: var(--color-on-hivis); color: var(--color-hivis); border-color: var(--color-hivis); }
+/* With no phone the button carries the e-mail address: longer, so a size down */
+.btn-mail { font-size: var(--text-m); }
 
 /* Wide screens: on text pages the call card stands beside the words, in the
    space the text measure leaves free, and stays in view while you read */
@@ -462,63 +494,54 @@ main { min-height: 60vh; }
     margin: var(--space-3) 0;
     /* The card is narrow: a long number wraps inside the button, never past it */
     padding: var(--space-2);
-    line-height: var(--leading-tight);
-    text-align: center;
     text-wrap: balance;
-    white-space: normal;
   }
 }
 
-/* THE SIGNATURE: the call-now bar. On phones it fixes to the bottom edge
+/* THE SIGNATURE: the call-now bar. On phones it holds to the bottom edge
    under the hazard stripe: hi-vis yellow, navy button, one tap from problem
-   to phone call. */
+   to phone call. It is the last thing on the page and sticks to the bottom of
+   the screen until the page ends, so it takes its own room, never covers the
+   footer, and may grow: long hours wrap above the button instead of being
+   cut off. */
 
 .call-bar { display: none; }
 
 @media screen and (max-width: 48em) {
-  /* The bar's height, so the page can keep clear of it (derived, not a token) */
-  html {
-    --bar-height: calc(var(--tap-target) + 2 * var(--space-2) + var(--stripe-height) + env(safe-area-inset-bottom, 0px));
-    scroll-padding-bottom: var(--bar-height);
-  }
-  body:has(.call-bar) { padding-bottom: var(--bar-height); }
-  @supports not selector(:has(a)) { body { padding-bottom: var(--bar-height); } }
+  /* Keep a focused link clear of the bar */
+  html { scroll-padding-bottom: calc(2 * var(--tap-target) + var(--space-4)); }
 
-  /* One row, always. The button is laid out first and never shrinks below
-     its number; if the prompt and hours cannot fit beside it they wrap to a
-     second row, which sits above the bar's edge and is clipped away, leaving
-     the button the full width. No long hours line can squeeze the number. */
   .call-bar {
-    position: fixed;
-    inset: auto 0 0 0;
+    position: sticky;
+    bottom: 0;
     z-index: 10;
     display: flex;
-    flex-flow: row-reverse wrap-reverse;
-    align-content: flex-start;
+    flex-wrap: wrap;
     align-items: center;
-    gap: var(--tap-target) var(--space-2);
-    height: var(--bar-height);
+    gap: var(--space-2) var(--space-3);
+    margin: 0 calc(-1 * var(--space-3));
     padding: calc(var(--space-2) + var(--stripe-height)) var(--space-3) calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
-    overflow: hidden;
     background-color: var(--color-hivis);
     color: var(--color-on-hivis);
   }
+  /* Words beside the button while both fit on one row; above it when not */
+  .call-bar-text { flex: 0 1 auto; min-width: 0; margin: 0; font-size: var(--text-s); line-height: var(--leading-tight); }
+  .call-bar-text strong { display: block; font-size: var(--text-m); }
   .call-bar .btn-call {
-    order: -1;
-    flex: 1 0 auto;
-    padding: 0 var(--space-2);
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: var(--space-1) var(--space-2);
     background: var(--color-on-hivis);
     color: var(--color-hivis);
   }
   .call-bar .btn-call:hover { border-color: var(--color-on-hivis); }
-  .call-bar-text { margin: 0; font-size: var(--text-s); line-height: var(--leading-tight); white-space: nowrap; }
-  .call-bar-text strong { display: block; font-size: var(--text-m); }
   /* The page's focus colour is too close to yellow: use the navy */
   .call-bar :focus-visible { outline-color: var(--color-on-hivis); }
 
-  /* The bar is the call control here: no second stripe, no second button */
+  /* The bar is the call control here: no second button, no second stripe */
   .masthead .call-link, .call-cta .btn-call { display: none; }
-  .call-cta { display: block; background-image: none; padding-top: var(--space-3); }
+  .call-cta { display: block; }
+  body:has(.call-bar) .call-cta { background-image: none; padding-top: var(--space-3); }
   .call-cta .cta-link { margin: var(--space-2) 0; }
 }
 
@@ -551,11 +574,12 @@ main { min-height: 60vh; }
   color: var(--color-muted);
   font-size: var(--text-s);
 }
-.colophon p { margin: 0; }
+.colophon p { margin: 0; min-width: 0; }
 .colophon a { color: var(--color-text); }
 .colophon-name strong { display: block; color: var(--color-text); }
 .colophon-contact { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 0 var(--space-3); }
-.colophon-contact a { font-weight: 700; font-variant-numeric: tabular-nums; }
+.colophon-contact > * { min-width: 0; }
+.colophon-contact a[href^="tel:"] { font-weight: 700; font-variant-numeric: tabular-nums; }
 .colophon-note { flex-basis: 100%; }
 .colophon-note > * { margin: 0 0 var(--space-1); }
 

@@ -10,6 +10,12 @@ example: true
 
 A person answers, not a menu. If we're under a sink we'll ring you back within the hour.
 
+## Write to us
+
+[hello@hartleyandson.example](mailto:hello@hartleyandson.example)
+
+For anything that can wait until tomorrow: a quote for a new bathroom, a landlord certificate, photos of the job.
+
 ## Opening hours
 
 | Day | Hours |

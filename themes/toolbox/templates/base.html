@@ -34,22 +34,17 @@
     </ul>
   </nav>
   {{#if data.business.phone}}<a class="call-link" href="tel:{{ data.business.phone }}">{{ strings.call }} {{ data.business.phone }}</a>
-  {{/if}}
+  {{else}}{{#if data.business.email}}<a class="call-link" href="mailto:{{ data.business.email }}">{{ strings.emailUs }}</a>
+  {{/if}}{{/if}}
 </header>
 <main id="main">
 {{{ body }}}
 </main>
-{{#if data.business.phone}}
-<aside class="call-bar" aria-label="{{ strings.callUs }}">
-  <p class="call-bar-text"><strong>{{ strings.callBarPrompt }}</strong>{{#if data.business.hours}} <span>{{ data.business.hours }}</span>{{/if}}</p>
-  <a class="btn-call" href="tel:{{ data.business.phone }}">{{ strings.call }} {{ data.business.phone }}</a>
-</aside>
-{{/if}}
 <footer class="colophon">
   <p class="colophon-name"><strong>{{ site.title }}</strong>{{#if site.description}} <span>{{ site.description }}</span>{{/if}}</p>
-  <p class="colophon-contact">{{#if data.business.hours}}<span>{{ data.business.hours }}</span> {{/if}}{{#if data.business.phone}}<a href="tel:{{ data.business.phone }}">{{ data.business.phone }}</a> {{/if}}{{#if data.business.area}}<span>{{ strings.serving }} {{ data.business.area }}</span>{{/if}}</p>
+  <p class="colophon-contact">{{#if data.business.hours}}<span>{{ data.business.hours }}</span> {{/if}}{{#if data.business.phone}}<a href="tel:{{ data.business.phone }}">{{ data.business.phone }}</a> {{/if}}{{#if data.business.email}}<a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a> {{/if}}{{#if data.business.area}}<span>{{ data.business.area }}</span>{{/if}}</p>
   {{#if data.footer.html}}<div class="colophon-note">{{{ data.footer.html }}}</div>{{/if}}
 </footer>
-<script type="module" src="/assets/enhance.js"></script>
+{{#if data.business.phone}}{{> call-bar}}{{else}}{{#if data.business.email}}{{> call-bar}}{{/if}}{{/if}}<script type="module" src="/assets/enhance.js"></script>
 </body>
 </html>
