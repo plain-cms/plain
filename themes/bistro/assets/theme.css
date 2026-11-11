@@ -74,7 +74,14 @@ body {
   line-height: var(--leading);
   color: var(--color-text);
   background: var(--color-bg);
+  overflow-wrap: break-word; /* a word longer than its line breaks rather than leaving the page */
 }
+
+/* Long compound words (German, Dutch) break at a syllable where the browser
+   knows the language. Links and code never gain a hyphen: an address, a
+   number or a password must read exactly as written. */
+h1, h2, h3, .prose, .dish-line, .dish-desc, .dish-page-standfirst, .summary { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+.prose a, .prose code { hyphens: manual; }
 
 /* One text column; only the menu page is allowed to be wider. */
 .masthead, .colophon, main > * { max-width: var(--measure); margin-inline: auto; }
@@ -157,7 +164,7 @@ a:hover { text-decoration-thickness: 2px; }
 }
 .colophon > * { font-size: 0.9rem; } /* not on .colophon: its width is measured in its own ch */
 .colophon p { margin: 0 0 var(--space-1); }
-.colophon a { color: inherit; white-space: nowrap; }
+.colophon a { color: inherit; }
 .colophon-name { font-weight: 700; color: var(--color-text); }
 
 /* Page headers & prose --------------------------------------------------- */
@@ -170,6 +177,7 @@ a:hover { text-decoration-thickness: 2px; }
   line-height: 1.05;
   margin: 0;
   text-wrap: balance;
+  hyphenate-limit-chars: 16 4 4; /* balancing must not hyphenate a word that fits the narrowest screen whole */
 }
 
 .meta { color: var(--color-muted); font-size: 0.9rem; margin: var(--space-2) 0 0; }
@@ -178,8 +186,13 @@ a:hover { text-decoration-thickness: 2px; }
 .prose h2 { font-size: 1.5rem; }
 .prose h3 { font-size: 1.2rem; }
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.5em; }
+.prose li > ul, .prose li > ol { margin: 0; }
 .prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
-.prose a[href^="tel:"] { font-size: 1.1em; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.prose a[href^="tel:"]:not(.btn-reserve) { font-size: 1.1em; font-weight: 700; font-variant-numeric: tabular-nums; }
+/* a phone number or footer link stays whole on one line while it fits, and
+   wraps at its own spaces only when it is longer than the line */
+.prose a[href^="tel:"], .colophon a { display: inline-block; max-width: 100%; }
 
 .prose blockquote {
   margin: var(--space-3) 0;
@@ -206,7 +219,11 @@ a:hover { text-decoration-thickness: 2px; }
 .prose pre code { background: none; padding: 0; font-size: 0.9rem; }
 
 .prose table { border-collapse: collapse; width: 100%; margin: 0 0 var(--space-3); font-variant-numeric: tabular-nums; }
-.prose th, .prose td { text-align: left; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-border); }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-border); }
+/* on a phone a table wider than the page scrolls inside itself, like a code block */
+@media (max-width: 40em) {
+  .prose table { display: block; overflow-x: auto; }
+}
 
 .cover { width: 100%; height: auto; border-radius: var(--radius); margin-bottom: var(--space-4); }
 
@@ -235,14 +252,23 @@ a:hover { text-decoration-thickness: 2px; }
 .carte .prose > :last-child { margin-bottom: 0; }
 .menu-standfirst { font-style: italic; color: var(--color-muted); margin: var(--space-2) auto 0; max-width: 44ch; }
 
-/* Courses are sorted by name in the page; `order` seats them in service
-   order (enhance.js then moves them in the document to match). */
+/* Sections are sorted by name in the page; `order` seats them in service
+   order (enhance.js then moves them in the document to match). A dish with
+   no section, or one outside these ten, keeps order 0 and comes first. */
 .carte-list { display: flex; flex-direction: column; gap: var(--space-3); list-style: none; margin: 0; padding: 0; }
-.dish { order: 5; }
-.dish[data-course="Starters"] { order: 1; }
-.dish[data-course="Mains"] { order: 2; }
-.dish[data-course="Desserts"] { order: 3; }
-.dish[data-course="Drinks"] { order: 4; }
+.dish[data-course="Breakfast"] { order: 1; }
+.dish[data-course="Bread"] { order: 2; }
+.dish[data-course="Pastries"] { order: 3; }
+.dish[data-course="Starters"] { order: 4; }
+.dish[data-course="Mains"] { order: 5; }
+.dish[data-course="Sides"] { order: 6; }
+.dish[data-course="Desserts"] { order: 7; }
+.dish[data-course="Hot drinks"] { order: 8; }
+.dish[data-course="Drinks"] { order: 9; }
+.dish[data-course="Snacks"] { order: 10; }
+/* the first dish with no section stands clear of the title, as a course heading would */
+.dish[data-course=""] { margin-top: var(--space-3); }
+.dish[data-course=""] ~ .dish[data-course=""] { margin-top: 0; }
 
 /* dish name … price: the dots follow the last word of the name, however it
    wraps; a price too long to share the line drops below, right-aligned */
@@ -290,10 +316,11 @@ a.dish-name:hover { color: var(--color-accent); text-decoration: underline; }
 
 .dish-desc { margin: var(--space-1) 0 0; color: var(--color-muted); font-style: italic; max-width: 52ch; }
 
-/* The course: a small label by default; on the carte, the first dish of
-   each course carries it as the course heading and the rest stay silent. */
+/* The section: a small label by default; on the carte, the first dish of
+   each of the ten sections carries it as the course heading and the rest
+   stay silent. */
 .dish-course { margin: 0 0 var(--space-1); font-size: 0.75rem; font-weight: 400; color: var(--color-muted); }
-.dish:is([data-course="Starters"], [data-course="Mains"], [data-course="Desserts"], [data-course="Drinks"]) .dish-course {
+.dish:is([data-course="Breakfast"], [data-course="Bread"], [data-course="Pastries"], [data-course="Starters"], [data-course="Mains"], [data-course="Sides"], [data-course="Desserts"], [data-course="Hot drinks"], [data-course="Drinks"], [data-course="Snacks"]) .dish-course {
   margin: var(--space-3) 0;
   text-align: center;
   font-size: 1.05rem;
@@ -301,7 +328,7 @@ a.dish-name:hover { color: var(--color-accent); text-decoration: underline; }
   line-height: 1.2;
   color: var(--color-accent);
 }
-.dish:is([data-course="Starters"], [data-course="Mains"], [data-course="Desserts"], [data-course="Drinks"]) .dish-course::after {
+.dish:is([data-course="Breakfast"], [data-course="Bread"], [data-course="Pastries"], [data-course="Starters"], [data-course="Mains"], [data-course="Sides"], [data-course="Desserts"], [data-course="Hot drinks"], [data-course="Drinks"], [data-course="Snacks"]) .dish-course::after {
   content: "";
   display: block;
   width: var(--space-4);
@@ -309,10 +336,16 @@ a.dish-name:hover { color: var(--color-accent); text-decoration: underline; }
   margin: var(--space-2) auto 0;
   background: var(--color-cta);
 }
+.dish[data-course="Breakfast"] ~ .dish[data-course="Breakfast"] .dish-course,
+.dish[data-course="Bread"] ~ .dish[data-course="Bread"] .dish-course,
+.dish[data-course="Pastries"] ~ .dish[data-course="Pastries"] .dish-course,
 .dish[data-course="Starters"] ~ .dish[data-course="Starters"] .dish-course,
 .dish[data-course="Mains"] ~ .dish[data-course="Mains"] .dish-course,
+.dish[data-course="Sides"] ~ .dish[data-course="Sides"] .dish-course,
 .dish[data-course="Desserts"] ~ .dish[data-course="Desserts"] .dish-course,
-.dish[data-course="Drinks"] ~ .dish[data-course="Drinks"] .dish-course { display: none; }
+.dish[data-course="Hot drinks"] ~ .dish[data-course="Hot drinks"] .dish-course,
+.dish[data-course="Drinks"] ~ .dish[data-course="Drinks"] .dish-course,
+.dish[data-course="Snacks"] ~ .dish[data-course="Snacks"] .dish-course { display: none; }
 
 .carte-note {
   margin: var(--space-4) 0 0;
@@ -326,7 +359,10 @@ a.dish-name:hover { color: var(--color-accent); text-decoration: underline; }
 
 /* Single dish page & the 404 — small cards from the same stock */
 .dish-page .carte, .not-found .carte { margin-top: var(--space-5); }
-.dish-page-header { margin: 0 0 var(--space-3); }
+/* the gap under the header belongs to the text that follows, so a dish with no text leaves none */
+.dish-page-header { margin: 0; }
+.dish-page .prose > :first-child { margin-top: var(--space-3); }
+.dish-page .prose > :is(h2, h3):first-child { margin-top: var(--space-4); }
 .dish-page .dish-line { font-size: clamp(1.4rem, 4.5vw, 1.9rem); line-height: 1.15; }
 .dish-page .dish-price { min-width: 0; }
 .dish-page-standfirst { margin: var(--space-2) 0 0; font-size: 1.15rem; font-style: italic; color: var(--color-muted); }
@@ -335,19 +371,35 @@ a.dish-name:hover { color: var(--color-accent); text-decoration: underline; }
 
 /* The house card — hours, address, reserve (class names used in page content) */
 .hours-card { margin: var(--space-4) 0; padding: clamp(1.25rem, 5vw, 2rem); }
-/* label … value on one line; a value too long for that drops whole to the next line */
+/* label … value on one line; a value too long for that drops whole to the
+   next line. The label keeps to one line until it is wider than the card,
+   then wraps, and the dots follow its last line. */
 .hours-card dl { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); margin: 0 0 var(--space-2); }
-.hours-card dt { flex: 1 0 40%; display: flex; align-items: baseline; gap: var(--space-2); font-size: 0.8rem; color: var(--color-muted); white-space: nowrap; }
+.hours-card dt {
+  flex: 1 0 auto;
+  min-width: 40%;
+  max-width: 100%;
+  display: flex;
+  align-items: baseline;
+  align-items: last baseline;
+  gap: var(--space-2);
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  overflow-wrap: anywhere;
+}
 .hours-card dt::after { content: ""; flex: 1; min-width: var(--space-3); border-bottom: var(--rule) dotted var(--color-leader); }
 .hours-card dd { margin: 0 0 0 auto; min-width: 0; text-align: right; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
 /* one list holding several label/value pairs: a row per pair, never two on a line */
-.hours-card dl:has(dt ~ dt) { display: grid; grid-template-columns: 1fr auto; gap: var(--space-2); }
+.hours-card dl:has(dt ~ dt) { display: grid; grid-template-columns: minmax(40%, 1fr) auto; gap: var(--space-2); }
 .hours-card > :last-child { margin-bottom: 0; }
 
 .btn-reserve {
   display: inline-block;
+  max-width: 100%;
   font-size: 1rem;
-  padding: 0.7em 2em;
+  line-height: 1.3;
+  padding: 0.85em 2em;
+  text-align: center;
   color: var(--color-cta-ink);
   background: var(--color-cta);
   border-radius: var(--radius);
