@@ -158,6 +158,9 @@ a:hover { text-decoration-thickness: 2px; }
 main { min-height: 60vh; }
 
 .colophon {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--space-4);
   margin-top: var(--space-5);
   padding: var(--space-3) 0 var(--space-4);
   border-top: 1px solid var(--color-border);
@@ -165,8 +168,11 @@ main { min-height: 60vh; }
   font-size: var(--text-s);
 }
 .colophon p { margin: 0 0 var(--space-3); }
-.colophon-line { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4); }
-.contact { display: flex; flex-direction: column; }
+/* Every footer line takes a full row except the addresses: each is its own
+   block, so one prints without the other, and two sit side by side where
+   there is room. */
+.colophon > * { flex: 0 0 100%; min-width: 0; }
+.colophon > .contact { display: flex; flex-direction: column; flex: 0 1 auto; }
 .contact-label {
   font-family: var(--font-mono);
   text-transform: uppercase;
@@ -186,6 +192,13 @@ main { min-height: 60vh; }
   text-transform: uppercase;
   margin: 0 0 var(--space-3);
   text-wrap: balance;
+}
+
+/* A long one-word name (a German compound, a Welsh town) breaks at a syllable
+   with a hyphen instead of mid-letter; shorter words are left whole. */
+.page-header h1, .show-where, .prose h2, .post-card h2, .prose th, .prose td {
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
 }
 
 .lede { max-width: var(--measure); font-size: var(--text-l); color: var(--color-muted); margin: 0; }
@@ -221,15 +234,26 @@ main { min-height: 60vh; }
   font-size: var(--text-s);
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
-  white-space: nowrap;
+  text-align: center;
 }
+
+/* The status is stored in English; the three labels come from strings.json in
+   the site's language and the one that matches is revealed. A value with no
+   label stays printed as written. */
+.status-label,
+[data-status="On sale"] .status-raw,
+[data-status="Sold out"] .status-raw,
+[data-status="Free entry"] .status-raw { display: none; }
+[data-status="On sale"] .status-on-sale,
+[data-status="Sold out"] .status-sold-out,
+[data-status="Free entry"] .status-free-entry { display: inline; }
 
 .btn-tickets {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-height: var(--tap-target);
-  padding: 0 var(--space-3);
+  padding: var(--space-2) var(--space-3);
   background: var(--color-accent);
   color: var(--color-accent-ink);
   border-radius: var(--radius);
@@ -237,15 +261,16 @@ main { min-height: 60vh; }
   text-transform: uppercase;
   letter-spacing: var(--tracking-caps);
   font-size: var(--text-s);
+  line-height: 1.3;
+  text-align: center;
   text-decoration: none;
-  white-space: nowrap;
 }
 .btn-tickets:hover { filter: brightness(1.12); text-decoration: none; }
 
 .actions { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); margin: 0; }
 
 .backlink a, .pagination a, .actions a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
-.actions .btn-tickets { padding: 0 var(--space-4); }
+.actions .btn-tickets { padding-inline: var(--space-4); }
 
 /* The tour list — the signature --------------------------------------------- */
 
@@ -311,11 +336,13 @@ a.show-city:hover { color: var(--color-accent); }
 .show-action { display: flex; flex-direction: column; gap: var(--space-2); }
 .show-action .status-chip {
   min-height: var(--tap-target);
+  padding-block: var(--space-2);
   border: 2px solid var(--color-muted);
   border-radius: var(--radius);
   background: none;
   color: var(--color-text);
   font-weight: var(--weight-display);
+  line-height: 1.3;
 }
 
 /* Sold out: the city takes the strike and the slot takes the stamp. Nothing
@@ -355,6 +382,7 @@ a.show-city:hover { color: var(--color-accent); }
 
 @media (min-width: 800px) {
   .page-header { margin-top: var(--space-5); }
+  .page-header h1, .show-where, .prose h2, .post-card h2 { hyphenate-limit-chars: 14 5 5; }
   .show-row { grid-template-columns: var(--date-col) minmax(0, 1fr) var(--action-col); gap: var(--space-4); }
   .date-block { flex-direction: row; align-items: center; gap: var(--space-2); }
   .date-year { display: inline; }
@@ -410,15 +438,18 @@ a.show-city:hover { color: var(--color-accent); }
 }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
+/* A table wider than the column scrolls inside its own box, never the page. */
 .prose table {
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
-  width: 100%;
   margin: 0 0 var(--space-3);
   font-variant-numeric: tabular-nums;
 }
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
+  vertical-align: top;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
   border-bottom: 1px solid var(--color-border);
 }
 .prose th { font-size: var(--text-s); text-transform: uppercase; letter-spacing: var(--tracking-caps); }
@@ -438,7 +469,9 @@ a.show-city:hover { color: var(--color-accent); }
     max-width: none;
   }
   .prose > * { grid-column: 2; min-width: 0; }
-  .prose > h2 { grid-column: 1; margin-bottom: 0; hyphens: auto; }
+  /* The heading spans the rows beside it, so a long one does not push the
+     second paragraph of its section down. */
+  .prose > h2 { grid-column: 1; grid-row: span 3; margin-bottom: 0; }
   .prose > h2 + * { margin-top: var(--space-4); }
   .prose > h2:first-child, .prose > h2:first-child + * { margin-top: 0; }
   .prose > hr { grid-column: 1 / -1; }
@@ -485,10 +518,10 @@ a.show-city:hover { color: var(--color-accent); }
   html { scroll-behavior: smooth; }
 }
 
-/* Paper is always daylight: the tokens are reset on body so a dark-scheme
-   visitor (or a customised palette) still prints black on white. */
+/* Paper is always daylight: html:root outranks both the dark scheme and a
+   customised palette, so every visitor prints black on white. */
 @media print {
-  body {
+  html:root {
     --color-bg: #fff;
     --color-panel: #fff;
     --color-code-bg: #fff;
@@ -497,15 +530,14 @@ a.show-city:hover { color: var(--color-accent); }
     --color-accent: #000;
     --color-accent-ink: #000;
     --color-border: #999;
-    max-width: none;
-    font-size: 11pt;
   }
-  .masthead nav, .skip-link, .pagination, .backlink, .colophon > :not(.colophon-line) { display: none; }
+  body { max-width: none; font-size: 11pt; }
+  .masthead nav, .skip-link, .pagination, .backlink, .colophon > :not(.contact) { display: none; }
   main { min-height: 0; }
   .page-header { margin-top: var(--space-3); }
   a { color: inherit; text-decoration: none; }
   .show-row { break-inside: avoid; padding: var(--space-3) 0; }
-  .btn-tickets, .show-action .status-chip { display: block; min-height: 0; padding: 0; border: 0; background: none; white-space: normal; overflow-wrap: anywhere; }
+  .btn-tickets, .show-action .status-chip { display: block; min-height: 0; padding: 0; border: 0; background: none; text-align: left; overflow-wrap: anywhere; }
   .played[data-status="Sold out"] .status-chip { display: block; }
   .btn-tickets::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; text-transform: none; letter-spacing: 0; }
   .prose pre { white-space: pre-wrap; }

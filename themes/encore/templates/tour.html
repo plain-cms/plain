@@ -18,7 +18,7 @@
       </div>
       <div class="show-action">
         {{#if item.ticketsUrl}}<a class="btn-tickets" href="{{ item.ticketsUrl }}" aria-label="{{ strings.tickets }}: {{ item.title }}">{{ strings.tickets }}</a>
-        {{/if}}{{#if item.status}}<span class="status-chip">{{ item.status }}</span>
+        {{/if}}{{#if item.status}}<span class="status-chip"><span class="status-raw">{{ item.status }}</span><span class="status-label status-on-sale">{{ strings.statusOnSale }}</span><span class="status-label status-sold-out">{{ strings.statusSoldOut }}</span><span class="status-label status-free-entry">{{ strings.statusFreeEntry }}</span></span>
         {{/if}}
       </div>
     </li>

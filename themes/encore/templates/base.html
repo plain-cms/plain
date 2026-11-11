@@ -39,11 +39,8 @@
 </main>
 <footer class="colophon">
   <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
-  {{#if data.band.bookingEmail}}<p class="colophon-line">
-    <span class="contact"><span class="contact-label">{{ strings.bookings }}</span> <a href="mailto:{{ data.band.bookingEmail }}">{{ data.band.bookingEmail }}</a></span>
-    {{#if data.band.pressEmail}}<span class="contact"><span class="contact-label">{{ strings.press }}</span> <a href="mailto:{{ data.band.pressEmail }}">{{ data.band.pressEmail }}</a></span>
-    {{/if}}
-  </p>
+  {{#if data.band.bookingEmail}}<p class="contact"><span class="contact-label">{{ strings.bookings }}</span> <a href="mailto:{{ data.band.bookingEmail }}">{{ data.band.bookingEmail }}</a></p>
+  {{/if}}{{#if data.band.pressEmail}}<p class="contact"><span class="contact-label">{{ strings.press }}</span> <a href="mailto:{{ data.band.pressEmail }}">{{ data.band.pressEmail }}</a></p>
   {{/if}}
   {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
