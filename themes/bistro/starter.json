@@ -1,5 +1,6 @@
 {
   "starter": "bistro",
+  "sampleTitle": "The Print Works",
   "collections": {
     "menu": {
       "path": "content/menu",

@@ -1,5 +1,6 @@
 {
   "starter": "keys",
+  "sampleTitle": "Harber & Voss",
   "collections": {
     "listings": {
       "path": "content/listings",

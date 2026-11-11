@@ -1,5 +1,6 @@
 {
   "starter": "terminal",
+  "sampleTitle": "Dana Whitlock",
   "collections": {},
   "plugins": ["github-stars"],
   "navigation": [

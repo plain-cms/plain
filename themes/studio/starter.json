@@ -1,5 +1,6 @@
 {
   "starter": "studio",
+  "sampleTitle": "Ellison & Okafor",
   "collections": {
     "projects": {
       "path": "content/projects",

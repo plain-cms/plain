@@ -1,5 +1,6 @@
 {
   "starter": "gazette",
+  "sampleTitle": "The Westhaven Gazette",
   "collections": {
     "stories": {
       "path": "content/stories",

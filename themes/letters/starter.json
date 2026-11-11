@@ -1,5 +1,6 @@
 {
   "starter": "letters",
+  "sampleTitle": "The Slow Post",
   "collections": {},
   "navigation": [
     { "label": "Home", "url": "/" },

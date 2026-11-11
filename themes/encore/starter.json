@@ -1,5 +1,6 @@
 {
   "starter": "encore",
+  "sampleTitle": "The Low Bridge",
   "collections": {
     "shows": {
       "path": "content/shows",

@@ -1,5 +1,6 @@
 {
   "starter": "practice",
+  "sampleTitle": "Alder Street Dental",
   "collections": {
     "services": {
       "path": "content/services",

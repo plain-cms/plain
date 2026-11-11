@@ -1,5 +1,6 @@
 {
   "starter":"launch",
+  "sampleTitle": "Pulse",
   "collections":{
     "pages":{"path":"content/pages","urlPattern":"/:slug/","template":"page","fields":[
       {"name":"title","type":"text","required":true},

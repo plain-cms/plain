@@ -146,7 +146,7 @@
     "tests/skills.test.js": "9a462cd72c67b27097935ded3b972c78c2b3f3eaa769a37ff49b4d3ea7799834",
     "tests/structured-data.test.js": "c44c04e21c1d4a89f1e3e96fe670a0a579ee540eedcc75230333185da303050a",
     "tests/template.test.js": "3902718402745c53b3f471b11b109cf5ee24282cb19115728bfe60e2168c8f09",
-    "tests/themes.test.js": "9cddf5b14e377a47179c89b531b45f0a7b59674f9a40eb4b6af82eae1dda20bc",
+    "tests/themes.test.js": "e5f244c02d6538ee303e0859f08f8ed246b6e6b5106832d81f2af790d6ef845e",
     "tests/update-goldens.js": "e16fda04bc1f5fe7e3da3022b417f6577a65fca6af6a51a5948ee38b55e21c34",
     "tests/update.test.js": "5ca83c5cf1e7f4168656151c7acfe076f9383244ad663be69917a24b8f8cb967",
     "tests/vuepress.test.js": "4e4e079e4e74f2f4ee3b627af5c4aac5df8bc3dd9fa28dd42a9f1ec995d12e77",

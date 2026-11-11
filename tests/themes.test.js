@@ -72,7 +72,7 @@ async function buildSample(theme, contentTheme, { stripImages = false } = {}) {
   fs.mkdirSync(path.join(scratch, 'data'), { recursive: true });
   if (nav.length) fs.writeFileSync(path.join(scratch, 'data', 'navigation.json'), JSON.stringify(nav));
   if (stripImages) removeImages(collections);
-  const site = { title: theme.meta.title, url: 'https://example.com', description: 'Sample site.', language: 'en', theme: theme.name };
+  const site = { title: contentTheme.starter.sampleTitle || theme.meta.title, url: 'https://example.com', description: 'Sample site.', language: 'en', theme: theme.name };
   fs.writeFileSync(path.join(scratch, 'site.config.json'), JSON.stringify({ site, collections }));
   return build({ root: scratch, outDir: path.join(scratch, 'dist'), quiet: true });
 }

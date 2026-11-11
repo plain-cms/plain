@@ -1,5 +1,6 @@
 {
   "starter": "folio",
+  "sampleTitle": "Sam Kessler",
   "collections": {
     "experience": {
       "path": "content/experience",

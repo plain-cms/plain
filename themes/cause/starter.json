@@ -1,5 +1,6 @@
 {
   "starter": "cause",
+  "sampleTitle": "Page & Chapter",
   "collections": {
     "programs": {
       "path": "content/programs",

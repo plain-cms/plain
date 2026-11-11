@@ -1,5 +1,6 @@
 {
   "starter": "form",
+  "sampleTitle": "Ninth Street Movement",
   "collections": {
     "instructors": {
       "path": "content/instructors",

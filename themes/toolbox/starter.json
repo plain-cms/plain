@@ -1,5 +1,6 @@
 {
   "starter": "toolbox",
+  "sampleTitle": "Hartley & Son Plumbing",
   "collections": {
     "services": {
       "path": "content/services",
