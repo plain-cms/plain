@@ -78,6 +78,40 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  /* A word too long for its line — a compound noun, a bare URL — breaks
+     rather than pushing the page sideways */
+  overflow-wrap: break-word;
+}
+
+/* Titles and labels sit in grids and flex rows, where a long word must also
+   be allowed to shrink its box */
+.page-head h1,
+.project-head h1,
+.work-intro h1,
+.work-card-title,
+.work-card-label > span,
+.work-index li span,
+.spec dt,
+.spec dd,
+.site-title {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* Where the browser can keep ordinary words whole, a very long one is
+   hyphenated in the page's language instead of cut anywhere. The limit is the
+   longest word that still fits a line by itself: 16 letters in small type and
+   on a phone, 24 in a large title on a wider screen. */
+@supports (hyphenate-limit-chars: 16 4 4) {
+  h1, h2, h3, h4,
+  .lede,
+  .spec,
+  .work-card a,
+  .work-index li {
+    hyphens: auto;
+    hyphenate-limit-chars: 16 4 4;
+  }
+  h1, .work-card-title { hyphenate-limit-chars: 24 4 4; }
 }
 
 /* Ink-on-wall selection: monochrome, like everything else */
@@ -127,7 +161,7 @@ img { border-radius: var(--radius); }
 
 .wall-label { color: var(--color-muted); font-weight: 400; margin: 0; }
 .wall-label .tags { margin-left: var(--space-2); }
-.wall-label .tag { text-decoration: none; margin-right: var(--space-2); }
+.wall-label .tag { display: inline-block; max-width: 100%; overflow-wrap: anywhere; text-decoration: none; margin-right: var(--space-2); }
 .wall-label .tag::before { content: "#"; }
 .wall-label .tag:hover { text-decoration: underline; }
 
@@ -140,6 +174,7 @@ img { border-radius: var(--radius); }
   white-space: nowrap;
   vertical-align: top;
   letter-spacing: 0;
+  text-indent: 0;
   font-variant-numeric: tabular-nums;
 }
 
@@ -271,9 +306,13 @@ main { min-height: 60vh; }
 }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
+/* A table wraps its cells as far as its words allow, then scrolls inside its
+   own box — never the page */
 .prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
   border-collapse: collapse;
-  width: 100%;
   margin: 0 0 var(--space-3);
   font-variant-numeric: tabular-nums;
 }
@@ -282,6 +321,7 @@ main { min-height: 60vh; }
   padding: var(--space-2) var(--space-3) var(--space-2) 0;
   border-bottom: 1px solid var(--color-border);
 }
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
 .prose th {
   font-size: var(--text-xs);
   font-weight: 400;
@@ -391,6 +431,10 @@ main { min-height: 60vh; }
    words, not as tall as a photograph */
 @media (max-width: 42rem) {
   .work-card-plate a { aspect-ratio: auto; }
+  h1, .work-card-title { hyphenate-limit-chars: 16 4 4; }
+  /* A table on a phone: columns share the width and long words break, so
+     three columns fit; a wider table still scrolls in its box */
+  .prose th, .prose td { min-width: 5em; overflow-wrap: anywhere; hyphens: auto; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -413,17 +457,31 @@ main { min-height: 60vh; }
 .project-head { margin-block: var(--space-5) var(--space-4); }
 .project-head h1 { margin-bottom: var(--space-4); }
 
-/* The wall label proper: client, year, disciplines — ruled like a caption card */
-.spec { max-width: 26rem; margin: 0 0 var(--space-4); border-bottom: 1px solid var(--color-border); }
-.spec div {
+/* The wall label proper: client, year, disciplines — ruled like a caption card.
+   The rows share one label column: as wide as the longest label in the page's
+   language, never more than 45% of the card. */
+.spec {
   display: grid;
-  grid-template-columns: 7rem 1fr;
+  grid-template-columns: fit-content(45%) minmax(0, 1fr);
+  column-gap: var(--space-3);
+  max-width: 26rem;
+  margin: 0 0 var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+.spec div {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  grid-template-columns: subgrid;
   column-gap: var(--space-3);
   padding-block: var(--space-2);
   border-top: 1px solid var(--color-border);
 }
-.spec dt { color: var(--color-muted); }
-.spec dd { grid-column: 2; margin: 0; }
+/* A label that wraps runs down beside its values instead of pushing the second one away */
+.spec dt { grid-row: span 8; min-width: 7rem; color: var(--color-muted); hyphenate-limit-chars: 10 4 4; }
+/* A value that runs over one line hangs its later lines in, so seven
+   services still read as seven */
+.spec dd { grid-column: 2; margin: 0; padding-left: 1em; text-indent: -1em; }
 
 .lede {
   font-size: var(--text-l);
