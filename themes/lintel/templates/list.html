@@ -1,0 +1,26 @@
+<section class="page">
+  <div class="page-side">
+    <header class="page-header">
+      {{#if tag}}<h1>{{ strings.tagHeading }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}</h1>{{else}}<h1>{{ page.title }}</h1>{{/if}}
+    </header>
+  </div>
+  <div class="page-main">
+    <div class="sheet">
+      <div class="sheet-head">
+        <p class="sheet-job">{{ site.title }}</p>
+      </div>
+      {{#if items}}<ul class="entries">
+        {{#each items as item}}<li class="entry">
+          {{#if item.dateFormatted}}<p class="entry-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>{{/if}}
+          <div class="entry-text">
+            <h2 class="entry-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+            {{#if item.description}}<p class="entry-note">{{ item.description }}</p>{{/if}}
+          </div>
+          {{#if item.cover}}<img class="entry-cover" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+        </li>
+        {{/each}}
+      </ul>{{else}}<p class="empty">{{ strings.nothingHere }}</p>{{/if}}
+    </div>
+    {{> pagination}}
+  </div>
+</section>

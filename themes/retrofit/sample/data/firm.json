@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960318",
+  "email": "bookings@hollowayenergy.example",
+  "address": "Unit 3, Tannery Yard, Marbrook MB4 2LT",
+  "hours": [
+    { "days": "Monday to Friday", "time": "8:30 to 17:30" },
+    { "days": "Saturday", "time": "Visits by appointment" },
+    { "days": "Sunday", "time": "Closed" }
+  ],
+  "registration": "Holloway Energy Surveys Ltd, registered in England no. 07514288. Accredited domestic energy assessors and retrofit coordinators, scheme no. QS-118240. VAT no. GB 318 4402 71.",
+  "consultNote": "Ring or write with the address and the number of bedrooms and you will have a fixed price on the call. Most certificate visits happen within five working days."
+}

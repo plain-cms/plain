@@ -1,0 +1,338 @@
+/* Retrofit — a domestic energy assessor's theme built around one object: the
+   energy rating chart. Seven arrow-ended bands lettered A to G, each longer
+   than the last, green through yellow to red, and a black pointer at band A
+   carrying the phone number. Everything else is certificate print: white
+   paper, black type, plain rules. Restyle by editing the tokens below. */
+
+:root {
+  /* Type — heavy grotesque for titles and the band letters, humanist text */
+  --font-heavy: "Arial Black", "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --font-text: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", "Noto Sans", sans-serif;
+  --text-base: 1.0625rem;
+  --text-small: 0.9063rem;
+  --leading: 1.55;
+
+  /* Colour — certificate white, black print, A-band green for links */
+  --color-bg: #fcfcfa;
+  --color-text: #121412;
+  --color-muted: #4b504c;
+  --color-accent: #006a3c;
+  --color-rule: #c7cbc6;
+  --color-panel: #eef0ec;
+  --color-pointer: #121412;
+  --color-pointer-ink: #ffffff;
+  --color-mark: #c3ead0;
+
+  /* The rating chart — fixed in both schemes, lettered black */
+  --band-a: #008054;
+  --band-b: #19b459;
+  --band-c: #8dce46;
+  --band-d: #ffd500;
+  --band-e: #fcaa65;
+  --band-f: #ef8023;
+  --band-g: #e9153b;
+  --band-ink: #0b0c0b;
+
+  /* Measures */
+  --page-width: 76rem;
+  --measure: 42rem;
+  --aside-width: 25rem;
+  --band-height: 2.125rem;
+  --band-gap: 0.25rem;
+  --band-shortest: 36%;
+  --tip: 0.875rem;
+  --rule-heavy: 0.375rem;
+  --rule-thin: 1px;
+  --gutter: 1rem;
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1.25rem;
+  --space-4: 2.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Charcoal: the certificate read off a screen at night. The chart keeps
+       its colours; the pointer turns pale so it still stands out. */
+    --color-bg: #1d1f1e;
+    --color-text: #eceeea;
+    --color-muted: #b2b8b2;
+    --color-accent: #5fd394;
+    --color-rule: #464b47;
+    --color-panel: #292c2a;
+    --color-pointer: #eceeea;
+    --color-pointer-ink: #141615;
+    --color-mark: #2c5a40;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 var(--gutter);
+  border-top: var(--rule-heavy) solid var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+.masthead, .frame, .colophon { max-width: var(--page-width); margin-inline: auto; }
+
+/* Headings and narrow boxes may break a long word at a syllable; running
+   text, tables, fees and figures never do. */
+h1, h2, h3, .row-title, .person-name, .person-role { hyphens: auto; hyphenate-limit-chars: 10 4 4; overflow-wrap: break-word; }
+.fee, .pointer, .hours, .prose table, .reach, .person-reach { hyphens: manual; }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-1); z-index: 2; padding: var(--space-1) var(--space-2); background: var(--color-bg); color: var(--color-text); }
+.skip-link:focus { left: var(--space-1); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Masthead: the certificate's heading line ------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-3) 0 var(--space-2);
+  border-bottom: 2px solid var(--color-text);
+}
+.site-title { font-family: var(--font-heavy); font-size: 1.375rem; font-weight: 900; line-height: 1.15; letter-spacing: -0.01em; color: var(--color-text); text-decoration: none; }
+.site-title:hover { text-decoration: underline; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: inline-block; padding: var(--space-1) 0; font-weight: 700; line-height: 1.3; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 0.25rem; text-underline-offset: 0.4rem; }
+
+/* The frame: the page on the left, the rating and how to book on the right */
+
+.frame { display: block; }
+main { min-width: 0; }
+@media (min-width: 64rem) {
+  .frame { display: grid; grid-template-columns: minmax(0, 1fr) var(--aside-width); column-gap: var(--space-4); align-items: start; }
+}
+
+.page { max-width: var(--measure); padding: var(--space-4) 0; }
+.page > * + * { margin-top: var(--space-4); }
+@media (min-width: 64rem) { .page { max-width: none; } .page > .prose, .page > .points, .page-header { max-width: var(--measure); } }
+
+.page-header h1 {
+  margin: 0;
+  font-family: var(--font-heavy);
+  font-size: clamp(1.75rem, 1.2rem + 2.2vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+.lead { margin: var(--space-2) 0 0; font-size: 1.1875rem; line-height: 1.45; }
+.crumb { margin: 0 0 var(--space-2); font-weight: 700; }
+.crumb a::before { content: ""; display: inline-block; width: 0.5em; height: 0.75em; margin-right: 0.35em; background: currentColor; clip-path: polygon(100% 0, 0 50%, 100% 100%); }
+.empty, .more, .pagination { margin: var(--space-3) 0 0; }
+.more { font-weight: 700; }
+.links { padding-left: 1.25em; }
+
+.block-heading, .points h2 { margin: 0 0 var(--space-2); font-family: var(--font-heavy); font-size: 1.3125rem; font-weight: 900; line-height: 1.2; }
+
+/* Service rows: plain, one rule apart; the fee in a small black pointer ---- */
+
+.rows, .posts { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--color-text); }
+/* the list under a page header keeps the page's own gap above its heavy rule */
+.page > * + .rows, .page > * + .posts { margin-top: var(--space-3); }
+.row, .post-row { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: var(--space-3); padding: var(--space-2) 0 0.875rem; border-bottom: var(--rule-thin) solid var(--color-rule); }
+.row-title { margin: 0; font-size: 1.1875rem; font-weight: 700; line-height: 1.3; }
+.row-title a { color: var(--color-text); text-decoration: none; }
+.row-title a:hover { color: var(--color-accent); text-decoration: underline; }
+.row-note { margin: 0.25rem 0 0; color: var(--color-muted); line-height: 1.45; text-wrap: pretty; }
+@media (min-width: 36rem) {
+  /* one fee column down the list: every tag the same width, its tip on one line */
+  .row { grid-template-columns: minmax(0, 1fr) minmax(7.5rem, max-content); }
+  .row > * { grid-column: 1; }
+  .row > .fee { grid-column: 2; grid-row: 1 / span 2; justify-self: stretch; align-self: start; max-width: 14rem; margin-top: 0.125rem; }
+}
+
+/* a pointer: a left-pointing arrow tag, its tip aimed at what it rates */
+.fee, .pointer {
+  background: var(--color-pointer);
+  color: var(--color-pointer-ink);
+  clip-path: polygon(var(--tip) 0, 100% 0, 100% 100%, var(--tip) 100%, 0 50%);
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+.fee { justify-self: start; max-width: 14rem; margin: var(--space-1) 0 0; padding: 0.25rem 0.625rem 0.25rem calc(var(--tip) + 0.375rem); font-size: var(--text-small); font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.fee.is-large { max-width: 100%; margin-top: var(--space-3); padding-block: 0.4375rem; font-size: 1.1875rem; width: fit-content; }
+
+/* THE RATING CHART — the signature, heading the booking panel on every page.
+   Seven bands from CSS counters, A shortest, G full width, each arrow-ended
+   and lettered black at its tip. The black pointer sits at band A. */
+
+.consult { padding: var(--space-4) 0; border-top: var(--rule-heavy) solid var(--color-text); }
+@media (min-width: 64rem) { .consult { border-top: 0; } }
+.consult h2 { margin: 0 0 var(--space-2); font-family: var(--font-heavy); font-size: 1.3125rem; font-weight: 900; line-height: 1.2; }
+
+/* a dotted leader runs from the tip of band A to the pointer */
+.rating {
+  display: grid;
+  grid-template-columns: minmax(min(58%, 15rem), 1fr) minmax(0, max-content);
+  column-gap: var(--space-1);
+  align-items: start;
+  padding: var(--space-2) 0;
+  border-block: var(--rule-thin) solid var(--color-rule);
+  background: repeating-linear-gradient(90deg, var(--color-text) 0 2px, transparent 2px 6px) no-repeat 0 calc(var(--space-2) + var(--band-height) / 2 - 1px) / 100% 2px;
+}
+.bands { display: grid; gap: var(--band-gap); counter-reset: band; }
+.bands span {
+  --n: 0;
+  counter-increment: band;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  width: calc(var(--band-shortest) + (100% - var(--band-shortest)) * var(--n) / 6);
+  min-width: calc(var(--tip) + 4rem);
+  height: var(--band-height);
+  padding: 0 calc(var(--tip) + 0.25rem) 0 0.375rem;
+  background: var(--band-a);
+  color: var(--band-ink);
+  clip-path: polygon(0 0, calc(100% - var(--tip)) 0, 100% 50%, calc(100% - var(--tip)) 100%, 0 100%);
+  font-family: var(--font-heavy);
+  font-size: 1.3125rem;
+  font-weight: 900;
+  line-height: 1;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+/* each band carries the certificate's score range on the left, its letter at the tip */
+.bands span::before { content: "92+"; font-family: var(--font-text); font-size: 0.75rem; font-weight: 700; letter-spacing: 0; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bands span::after { content: counter(band, upper-alpha); }
+.bands span:nth-child(2) { --n: 1; background: var(--band-b); }
+.bands span:nth-child(3) { --n: 2; background: var(--band-c); }
+.bands span:nth-child(4) { --n: 3; background: var(--band-d); }
+.bands span:nth-child(5) { --n: 4; background: var(--band-e); }
+.bands span:nth-child(6) { --n: 5; background: var(--band-f); }
+.bands span:nth-child(7) { --n: 6; background: var(--band-g); }
+.bands span:nth-child(2)::before { content: "81–91"; }
+.bands span:nth-child(3)::before { content: "69–80"; }
+.bands span:nth-child(4)::before { content: "55–68"; }
+.bands span:nth-child(5)::before { content: "39–54"; }
+.bands span:nth-child(6)::before { content: "21–38"; }
+.bands span:nth-child(7)::before { content: "1–20"; }
+
+.pointer {
+  display: flex;
+  align-items: center;
+  min-height: var(--band-height);
+  max-width: 13rem;
+  padding: 0.25rem 0.75rem 0.25rem calc(var(--tip) + 0.4375rem);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+  font-variant-numeric: tabular-nums;
+}
+.pointer.is-mail { font-size: var(--text-small); overflow-wrap: anywhere; }
+/* the outline would be clipped with the arrow: focus turns the pointer green */
+.pointer:hover, .pointer:focus-visible { background: var(--color-accent); color: var(--color-pointer-ink); text-decoration: underline; text-decoration-thickness: 2px; outline: none; }
+
+.consult-note { margin: var(--space-3) 0 0; }
+.reach { margin: var(--space-3) 0 0; }
+.label { display: block; margin: 0 0 0.125rem; font-family: var(--font-text); font-size: var(--text-small); font-weight: 700; line-height: 1.3; color: var(--color-muted); }
+.mail { overflow-wrap: anywhere; }
+.hours { margin: 0; line-height: 1.4; }
+.hours div { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); padding: 0.375rem 0; border-bottom: var(--rule-thin) solid var(--color-rule); }
+.hours dt { flex: 1 1 9rem; min-width: 0; font-weight: 700; }
+.hours dd { flex: 1 1 8rem; min-width: 0; margin: 0; }
+
+/* Service page ------------------------------------------------------------ */
+
+.points ul { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--color-text); }
+.points li { position: relative; padding: 0.5rem 0 0.5rem 1.375rem; border-bottom: var(--rule-thin) solid var(--color-rule); line-height: 1.4; }
+.points li::before { content: ""; position: absolute; left: 0; top: 0.875rem; width: 0.625rem; height: 0.625rem; background: var(--color-text); clip-path: polygon(0 0, 55% 0, 100% 50%, 55% 100%, 0 100%); }
+
+/* Prose -------------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-family: var(--font-heavy); font-size: 1.3125rem; font-weight: 900; line-height: 1.2; }
+.prose h3 { margin: var(--space-3) 0 var(--space-1); font-size: 1.125rem; line-height: 1.3; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1rem; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose blockquote, .prose table { margin: 0 0 var(--space-2); }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { max-width: 100%; height: auto; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 2px solid var(--color-text); }
+.prose blockquote { padding-left: var(--space-2); border-left: var(--rule-heavy) solid var(--band-a); }
+.prose code { font-size: 0.9em; background: var(--color-panel); padding: 0.1em 0.3em; }
+.prose pre { padding: var(--space-2); background: var(--color-panel); overflow-x: auto; line-height: 1.45; }
+.prose pre code { background: none; padding: 0; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { min-width: 7em; padding: 0.4375rem 1rem 0.4375rem 0; text-align: left; vertical-align: top; border-bottom: var(--rule-thin) solid var(--color-rule); }
+.prose th { border-bottom: 2px solid var(--color-text); vertical-align: bottom; }
+
+/* People ------------------------------------------------------------------- */
+
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: var(--space-4) var(--space-3); margin: 0; padding: var(--space-2) 0 0; list-style: none; border-top: 2px solid var(--color-text); }
+.person { display: flow-root; min-width: 0; }
+.person-photo { float: right; width: 5rem; height: 5rem; margin: 0 0 var(--space-1) var(--space-2); object-fit: cover; }
+.person-name { margin: 0; font-family: var(--font-heavy); font-size: 1.125rem; font-weight: 900; line-height: 1.25; }
+.person-role { margin: 0.25rem 0 0; font-weight: 700; line-height: 1.35; }
+.person-cred { margin: 0.25rem 0 0; font-size: var(--text-small); color: var(--color-muted); line-height: 1.45; }
+.person-bio { margin: var(--space-1) 0 0; }
+.person-bio p { margin: 0 0 var(--space-1); }
+.person-reach { margin: 0.25rem 0 0; overflow-wrap: anywhere; }
+
+/* News --------------------------------------------------------------------- */
+
+.post-date { margin: 0 0 0.125rem; font-size: var(--text-small); font-weight: 700; color: var(--color-muted); }
+.page-header .post-date { margin-bottom: var(--space-1); }
+.post-thumb { display: block; width: 100%; max-width: 14rem; height: auto; margin-bottom: var(--space-1); }
+@media (min-width: 36rem) {
+  .post-row.has-cover { grid-template-columns: minmax(0, 1fr) 9rem; }
+  .post-row.has-cover > * { grid-column: 1; }
+  .post-row.has-cover > .post-thumb { grid-column: 2; grid-row: 1 / span 3; width: 9rem; height: 6rem; margin: 0; object-fit: cover; }
+}
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); margin: var(--space-2) 0 0; padding: 0; list-style: none; font-size: var(--text-small); font-weight: 700; }
+.tags li { min-width: 0; overflow-wrap: anywhere; }
+.cover { display: block; width: 100%; height: auto; max-height: 26rem; object-fit: cover; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-1) var(--space-3); font-weight: 700; }
+.pagination span { font-weight: 400; color: var(--color-muted); }
+
+/* Footer ------------------------------------------------------------------- */
+
+.colophon { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); padding: var(--space-3) 0 var(--space-4); border-top: 2px solid var(--color-text); font-size: var(--text-small); color: var(--color-muted); }
+.colophon > * { margin: 0; max-width: 46rem; }
+.colophon p { margin: 0; }
+.colophon a { color: inherit; }
+.colophon-name { font-family: var(--font-heavy); font-weight: 900; color: var(--color-text); }
+
+/* Motion & print ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { transition: none; animation: none; scroll-behavior: auto; }
+}
+
+@media print {
+  :root { --color-bg: #ffffff; --color-text: #000000; --color-muted: #333333; --color-accent: #000000; --color-rule: #999999; --color-panel: #eeeeee; --color-pointer: #ffffff; --color-pointer-ink: #000000; }
+  /* pointers print as outlined boxes, dark on white, whatever the printer drops */
+  .fee, .pointer { clip-path: none; border: 2px solid var(--color-text); padding-left: 0.625rem; }
+  body { padding: 0; border-top-width: 2px; }
+  .masthead nav, .skip-link, .more, .pagination, .crumb { display: none; }
+  .frame { display: block; }
+  .page { max-width: none; padding-bottom: var(--space-2); }
+  a { color: inherit; }
+  .consult { break-inside: avoid; }
+  .row, .person, .post-row, .points li, .prose table { break-inside: avoid; }
+}

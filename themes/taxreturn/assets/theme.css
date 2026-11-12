@@ -1,0 +1,350 @@
+/* Tax Return — an accountant's theme built around one object: the paper tax
+   return. Tinted paper, white entry boxes, a heavy number on every box,
+   guidance in small print, and whatever is "entered" written in ballpoint
+   blue. Restyle by editing the tokens below, never the selectors. */
+
+:root {
+  /* Type — the plain grotesque of an official form; mono for entries */
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", "Nimbus Sans", sans-serif;
+  --font-number: "Arial Black", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1rem;
+  --text-note: 0.875rem;
+  --leading: 1.5;
+  --weight-heavy: 800;
+
+  /* Colour — return-form teal tint, black print, white boxes, blue ink */
+  --color-bg: #badfd6;
+  --color-text: #0b1716;
+  --color-muted: #33504c;
+  --color-accent: #0a5a58;
+  --color-box: #ffffff;
+  --color-entry: #1c3fb0;
+  --color-band: #0a5a58;
+  --color-band-ink: #ffffff;
+  --color-line: #74b0a7;
+  --color-shade: #a3d0c6;
+  --color-mark: #f4e27a;
+
+  /* Measures */
+  --page-width: 72rem;
+  --measure: 44rem;
+  --col-notes: 1fr;
+  --col-form: 2fr;
+  --box-width: 16rem;
+  --cell: 0.8125rem;
+  --number-width: 2.75rem;
+  --tick: 0.875rem;
+  --rule-heavy: 3px;
+  --rule-thin: 1px;
+  --radius: 1px;
+  --gutter: 1rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The form reversed: deep teal ground, boxes a shade lighter, pale ink */
+    --color-bg: #0a2728;
+    --color-text: #e6f1ee;
+    --color-muted: #a5c2bc;
+    --color-accent: #7fd8c9;
+    --color-box: #1a5456;
+    --color-entry: #c5d4ff;
+    --color-band: #1b6663;
+    --color-band-ink: #ffffff;
+    --color-line: #3c7a76;
+    --color-shade: #123a3b;
+    --color-mark: #2b4c8f;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 var(--gutter);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+.masthead, main, .consult, .colophon { max-width: var(--page-width); margin-inline: auto; }
+main { min-height: 40vh; }
+
+/* Running text and guidance notes are never hyphenated: a word too long for
+   its line wraps where it must. Only headings and box captions, set large in
+   narrow columns, may break a long compound word at a syllable. */
+h1, h2, h3, .box-caption { hyphens: auto; hyphenate-limit-chars: 14 4 4; }
+.entry { hyphens: manual; }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration-thickness: var(--rule-thin); text-underline-offset: 0.16em; transition: color 0.12s; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* black ring on a white pad: shows on the tint, in a box and on the band */
+:focus-visible { outline: 2px solid var(--color-text); outline-offset: 2px; box-shadow: 0 0 0 6px var(--color-box); border-radius: var(--radius); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-box); color: var(--color-text); }
+.skip-link:focus { left: var(--space-2); }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ENTRIES — whatever is written on the form: a white box, blue mono ink */
+/* One character to a cell, as the notes on a form ask: the letter spacing
+   makes every character one --cell wide, and a comb of short ticks along
+   the foot of the box falls in the gaps. The writing sits clear above the
+   comb, descenders and all. --k scales a larger entry. */
+.entry {
+  --k: 1;
+  display: block;
+  padding: 0.625rem 0.625rem 0.5rem;
+  background: linear-gradient(90deg, var(--color-line) 1px, transparent 1px) calc(0.625rem - (var(--cell) * var(--k) - 1ch) / 2) 100% / calc(var(--cell) * var(--k)) 0.4375rem repeat-x var(--color-box);
+  border-radius: var(--radius);
+  color: var(--color-entry);
+  font-family: var(--font-mono);
+  font-size: calc(1rem * var(--k));
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: calc(var(--cell) * var(--k) - 1ch);
+  overflow-wrap: anywhere;
+}
+a.entry { text-decoration: none; }
+a.entry:hover { text-decoration: underline; }
+
+/* a tick box, and the cross a ballpoint puts in it */
+.masthead nav a::before, .points li::before { content: ""; flex: none; width: var(--tick); height: var(--tick); background: var(--color-box); border-radius: var(--radius); }
+.masthead nav a[aria-current="page"]::before, .points li::before {
+  background:
+    linear-gradient(45deg, transparent 43%, var(--color-entry) 43% 57%, transparent 57%),
+    linear-gradient(-45deg, transparent 43%, var(--color-entry) 43% 57%, transparent 57%),
+    var(--color-box);
+}
+
+/* Masthead & footer ------------------------------------------------------ */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-3) 0 var(--space-2);
+  border-bottom: var(--rule-heavy) solid var(--color-text);
+}
+.site-title { margin-right: auto; font-size: 1.375rem; font-weight: var(--weight-heavy); line-height: 1.2; letter-spacing: -0.01em; color: var(--color-text); text-decoration: none; }
+.site-title:hover { text-decoration: underline; }
+
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: inline-flex; align-items: center; gap: 0.4375rem; padding: var(--space-2) 0; font-size: 0.9375rem; font-weight: 700; line-height: 1.25; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { text-decoration: underline; }
+
+/* the telephone number, entered in the reference box at the head of the form */
+.call { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-2); min-width: 0; margin: 0 0 var(--space-1); }
+.call .field-label { margin: 0; }
+.call .entry { min-width: 0; }
+/* from tablet up the menu and the number keep to the right, under one another when they wrap */
+@media (min-width: 36rem) {
+  .masthead { justify-content: flex-end; }
+}
+
+.colophon { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-4); padding: var(--space-3) 0 var(--space-4); color: var(--color-muted); }
+.colophon > * { margin: 0; font-size: var(--text-note); max-width: 44rem; }
+.colophon p { margin: 0; }
+.colophon a { color: inherit; }
+.colophon-name { font-weight: 700; color: var(--color-text); }
+.colophon-note { margin-left: auto; }
+
+/* Page frame: titles and notes on the left, boxes or text on the right ---- */
+
+.page { max-width: var(--measure); padding: var(--space-4) 0 var(--space-5); }
+.page > * + * { margin-top: var(--space-4); }
+
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.1rem + 2.3vw, 2.5rem);
+  font-weight: var(--weight-heavy);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.lead { margin: var(--space-3) 0 0; font-size: 1.0625rem; line-height: 1.45; }
+.crumb { margin: 0 0 var(--space-2); font-size: var(--text-note); font-weight: 700; }
+
+.field { margin: var(--space-3) 0 0; }
+.field-label { display: block; margin: 0 0 var(--space-1); font-size: var(--text-note); font-weight: 700; line-height: 1.3; }
+.fee-field .entry { --k: 1.1667; display: inline-block; min-width: min(100%, var(--box-width)); max-width: 100%; }
+
+@media (min-width: 62rem) {
+  .page {
+    display: grid;
+    grid-template-columns: minmax(0, var(--col-notes)) minmax(0, var(--col-form));
+    grid-template-rows: auto auto 1fr;
+    column-gap: var(--space-5);
+    align-items: start;
+    max-width: none;
+  }
+  .page > * { grid-column: 1; }
+  .page > .return, .page > .posts, .page:not(.has-return, .has-people) > .prose, .page.has-people:not(.has-return) > .people { grid-column: 2; grid-row: 1 / span 3; margin-top: 0; }
+  .page.has-return > .people { grid-column: 1 / -1; }
+  .page.is-brief { display: block; max-width: var(--measure); }
+  /* a list is a whole sheet of the form: title and instruction above, rows the full width */
+  .page.is-sheet { display: block; }
+  .page.is-sheet > * + * { margin-top: var(--space-3); }
+  .is-sheet .page-header { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); }
+  .is-sheet .lead { margin: 0; }
+}
+
+/* Prose ------------------------------------------------------------------ */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .prose h3, .prose h4, .points h2 { margin: var(--space-4) 0 var(--space-2); line-height: 1.25; }
+/* a section heading is the form's caption strip: a heavy rule over a darker tint */
+.prose h2, .points h2 { padding: 0.3125rem var(--space-2) 0.375rem; border-top: 2px solid var(--color-text); background: var(--color-shade); border-radius: 0 0 var(--radius) var(--radius); font-size: 1.0625rem; font-weight: var(--weight-heavy); }
+.prose h3 { font-size: 1rem; }
+.prose h4 { font-size: var(--text-note); }
+.prose p, .prose ul, .prose ol, .prose pre, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { max-width: 100%; height: auto; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: var(--rule-heavy) solid var(--color-text); }
+.prose hr + h2 { margin-top: 0; border-top: 0; }
+.prose blockquote { padding: 0 0 0 var(--space-3); border-left: var(--rule-heavy) solid var(--color-accent); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose code { font-family: var(--font-mono); font-size: 0.875em; background: var(--color-shade); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); background: var(--color-shade); border-radius: var(--radius); overflow-x: auto; line-height: 1.45; }
+.prose pre code { background: none; padding: 0; }
+
+/* a table is a grid of entry boxes; one wider than the page scrolls in itself */
+.prose table { display: block; max-width: 100%; overflow-x: auto; margin: 0 0 var(--space-3); border-collapse: separate; border-spacing: 2px; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: 0.375rem 0.625rem; text-align: left; vertical-align: top; }
+.prose th { padding-left: 0; font-size: var(--text-note); vertical-align: bottom; }
+.prose td { background: var(--color-box); border-radius: var(--radius); }
+
+/* THE RETURN — the signature. Each service is a box of the form: a heavy
+   number from a CSS counter, the title as its caption, the description as
+   its guidance note and, when a fee is set, a white box at the right. */
+
+.band { margin: 0; padding: var(--space-2) var(--space-3); background: var(--color-band); border-radius: var(--radius); color: var(--color-band-ink); font-size: 1.0625rem; font-weight: 700; line-height: 1.3; }
+
+.boxes { counter-reset: box; margin: 0; padding: 0; list-style: none; }
+.boxes:first-child { border-top: var(--rule-heavy) solid var(--color-text); }
+.box {
+  counter-increment: box;
+  display: grid;
+  grid-template-columns: var(--number-width) minmax(0, 1fr);
+  column-gap: var(--space-2);
+  align-items: baseline;
+  padding: 0.8125rem 0;
+  border-bottom: var(--rule-thin) solid var(--color-line);
+}
+.box::before { content: counter(box); font-family: var(--font-number); font-size: 1.625rem; font-weight: 900; line-height: 1; font-variant-numeric: tabular-nums; }
+.box-what { min-width: 0; }
+.box-caption { margin: 0; font-size: 1.0625rem; font-weight: 700; line-height: 1.3; }
+.box-caption a { color: inherit; text-decoration: none; }
+.box-caption a:hover { text-decoration: underline; }
+.box-note { margin: var(--space-1) 0 0; font-size: var(--text-note); line-height: 1.45; }
+.box-entry { grid-column: 2; max-width: var(--box-width); margin: var(--space-2) 0 0; }
+@media (min-width: 36rem) {
+  .box { grid-template-columns: var(--number-width) minmax(0, 1fr) var(--box-width); }
+  .box-what { margin-right: var(--space-2); }
+  .box-what:last-child { grid-column: 2 / -1; margin-right: 0; }
+  /* the white box and the heavy number share a top edge */
+  .box-entry { grid-column: 3; align-self: start; margin: 0.25rem 0 0; }
+}
+/* on a full-width sheet the guidance note stands beside its caption */
+.return { container-type: inline-size; }
+@container (min-width: 58rem) {
+  .box-what { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); column-gap: var(--space-4); align-items: baseline; }
+  .box-note { margin: 0; }
+  .box-what:last-child { margin-right: calc(var(--box-width) + 2 * var(--space-2)); }
+}
+.return-more, .pagination, .empty { margin: var(--space-3) 0 0; }
+.return-more { font-weight: 700; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); font-size: var(--text-note); font-weight: 700; }
+.pagination span { font-family: var(--font-mono); font-weight: 400; color: var(--color-muted); }
+
+/* What a service includes: a column of crossed tick boxes */
+.points ul { margin: 0; padding: 0; list-style: none; }
+.points li { display: flex; align-items: baseline; gap: var(--space-2); padding: 0.3125rem 0; font-size: 0.9375rem; line-height: 1.4; overflow-wrap: anywhere; }
+.points li::before { position: relative; top: 0.0625rem; }
+.points h2 { margin-top: 0; }
+
+/* People — the "personal details" of the form: the name is the entry */
+.people-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: var(--space-4); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.person { display: flow-root; min-width: 0; }
+.person-name { margin: 0; }
+.person-photo { float: right; width: 5.5rem; height: 5.5rem; margin: var(--space-2) 0 var(--space-2) var(--space-3); object-fit: cover; border-radius: var(--radius); }
+/* a portrait with nothing to stand beside sits under the name, at its left edge */
+.person-photo:last-child { display: block; float: none; margin-left: 0; margin-bottom: 0; }
+.person-photo:not(:has(~ .person-role, ~ .person-cred, ~ .person-bio)) { display: block; float: none; margin-left: 0; }
+.person-role { margin: var(--space-2) 0 0; font-weight: 700; line-height: 1.3; }
+.person-cred { margin: var(--space-1) 0 0; font-size: var(--text-note); line-height: 1.45; }
+.person-bio { margin: var(--space-2) 0; font-size: 0.9375rem; }
+.person-bio p { margin: 0 0 var(--space-2); }
+.person-reach { margin: var(--space-1) 0 0; font-family: var(--font-mono); font-size: var(--text-note); overflow-wrap: anywhere; }
+
+/* News --------------------------------------------------------------------- */
+
+.post-list { margin: 0; padding: 0; list-style: none; border-top: var(--rule-heavy) solid var(--color-text); }
+.post-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2) var(--space-3); padding: var(--space-3) 0; border-bottom: var(--rule-thin) solid var(--color-line); }
+.post-date { max-width: var(--box-width); margin: 0; }
+.page-header .post-date { margin-top: var(--space-3); }
+.post-thumb { width: 100%; max-width: 12rem; height: auto; border-radius: var(--radius); }
+@media (min-width: 36rem) {
+  .post-row { grid-template-columns: var(--box-width) minmax(0, 1fr) auto; align-items: start; }
+  .post-row > .box-what { grid-column: 2; }
+  .post-thumb { grid-column: 3; width: 7rem; height: 5rem; object-fit: cover; }
+}
+.tags li { min-width: 0; overflow-wrap: anywhere; }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; font-family: var(--font-mono); font-size: var(--text-note); }
+.cover { display: block; width: 100%; height: auto; max-height: 24rem; object-fit: cover; margin-top: var(--space-3); border-radius: var(--radius); }
+
+/* The first-meeting panel: the form's solid notice box, on every page ------- */
+
+.consult { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4); padding: var(--space-4) var(--space-3); background: var(--color-band); border-radius: var(--radius); color: var(--color-band-ink); }
+.consult > * { flex: 1 1 17rem; min-width: 0; }
+.consult > .consult-reach { flex-basis: 22rem; }
+.consult > .consult-lead { flex-basis: 20rem; }
+.consult h2 { margin: 0; font-size: 1.5rem; font-weight: var(--weight-heavy); line-height: 1.15; letter-spacing: -0.01em; }
+.consult-note { margin: var(--space-2) 0 0; max-width: 34rem; }
+.consult .field:first-child { margin-top: 0; }
+.consult .entry-phone { --k: 1.3333; }
+/* an address is long: written a little smaller, it stays on one line of a phone */
+.consult .entry[href^="mailto:"] { --k: 0.875; }
+.hours { margin: 0; font-size: 0.9375rem; line-height: 1.4; }
+.hours div { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); padding: 0.3125rem 0; border-top: var(--rule-thin) solid var(--color-line); }
+.hours dt { flex: 1 1 9rem; min-width: 0; font-weight: 700; }
+.hours dd { flex: 1 1 7rem; min-width: 0; margin: 0; }
+@media (min-width: 48rem) {
+  .consult { padding: var(--space-4); }
+}
+
+/* Motion & print ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { transition: none; scroll-behavior: auto; }
+}
+
+@media print {
+  :root { --color-bg: #fff; --color-text: #000; --color-muted: #333; --color-accent: #000; --color-box: #fff; --color-entry: #1c3fb0; --color-line: #888; --color-shade: #eee; }
+  body { padding: 0; background: none; }
+  .masthead nav, .skip-link, .return-more, .pagination, .crumb { display: none; }
+  .page { display: block; max-width: none; padding-bottom: var(--space-3); }
+  a { color: inherit; text-decoration: none; }
+  .entry, .prose td, .points li::before { border: var(--rule-thin) solid var(--color-text); }
+  .band, .consult { background: none; border: 2px solid var(--color-text); color: var(--color-text); }
+  .box, .person, .post-row, .prose h2, .prose table { break-inside: avoid; }
+}

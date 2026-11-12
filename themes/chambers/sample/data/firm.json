@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960240",
+  "email": "office@tremlettfry.example",
+  "address": "12 Bridge Street, Hatherby HB4 2QT",
+  "hours": [
+    { "days": "Monday to Friday", "time": "9:00 to 17:30" },
+    { "days": "Saturday", "time": "By appointment, 9:30 to 12:30" },
+    { "days": "Home and hospital visits", "time": "By arrangement" }
+  ],
+  "registration": "Tremlett & Fry is a partnership authorised and regulated by the Solicitors Regulation Authority, no. 608417. Partners: Jane Tremlett and Owen Fry. VAT no. GB 318 2207 46.",
+  "consultNote": "The first half-hour meeting is free, at the office or by telephone. Ring or write and a solicitor will call you back by the end of the next working day."
+}

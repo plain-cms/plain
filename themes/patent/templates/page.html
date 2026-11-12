@@ -1,0 +1,32 @@
+<article class="page">
+  <header class="page-header split">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lead">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.showServices}}{{#if collections.services}}<section class="sheet" aria-labelledby="services-heading">
+    <h2 class="sheet-title" id="services-heading">{{ strings.servicesHeading }}</h2>
+    <ol class="rows">
+      {{#each collections.services as item}}{{> service-row}}
+      {{/each}}
+    </ol>
+    <p class="sheet-more"><a href="/services/">{{ strings.allServices }}</a></p>
+  </section>{{/if}}{{/if}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.showPeople}}{{#if collections.people}}<section class="people" aria-labelledby="people-heading">
+    <h2 class="block-title" id="people-heading">{{ strings.peopleHeading }}</h2>
+    <ul class="people-list">
+      {{#each collections.people as item}}<li class="person">
+        {{#if item.photo}}<img class="person-photo" src="{{ item.photo }}" alt="{{ item.title }}" loading="lazy" decoding="async">{{/if}}
+        <h3 class="person-name">{{ item.title }}</h3>
+        {{#if item.role}}<p class="person-role">{{ item.role }}</p>{{/if}}
+        {{#if item.credentials}}<p class="person-cred">{{ item.credentials }}</p>{{/if}}
+        {{#if item.content}}<div class="person-bio">{{{ item.content }}}</div>{{/if}}
+        {{#if item.email}}<p class="person-reach"><a href="mailto:{{ item.email }}">{{ item.email }}</a></p>{{/if}}
+        {{#if item.phone}}<p class="person-reach"><a href="tel:{{ item.phone }}">{{ item.phone }}</a></p>{{/if}}
+      </li>
+      {{/each}}
+    </ul>
+  </section>{{/if}}{{/if}}
+</article>

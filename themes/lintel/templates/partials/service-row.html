@@ -1,0 +1,8 @@
+<li class="beam" data-ref="{{ strings.beamRef }}">
+          <div class="beam-draw">
+            <p class="beam-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+            <span class="fig" aria-hidden="true"><span class="fig-load"></span></span>
+            {{#if item.fee}}<p class="dim"><span class="visually-hidden">{{ strings.feeLabel }}</span> <span class="dim-text">{{ item.fee }}</span></p>{{/if}}
+          </div>
+          {{#if item.description}}<p class="beam-note">{{ item.description }}</p>{{/if}}
+        </li>

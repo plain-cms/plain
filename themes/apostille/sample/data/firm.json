@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960248",
+  "email": "office@penhallowvane.example",
+  "address": "3 Chapel Yard, Fallowmouth FM2 4QS",
+  "hours": [
+    { "days": "Monday to Friday", "time": "9:00 to 17:30" },
+    { "days": "Saturday", "time": "9:30 to 12:30, by appointment" },
+    { "days": "Home and hospital visits", "time": "By appointment" }
+  ],
+  "registration": "Ruth Penhallow and Marek Vane are notaries public, admitted by the Court of Faculties and regulated by the Faculty Office. Members of the Notaries Society. VAT no. GB 318 6642 07.",
+  "consultNote": "Most appointments take twenty minutes and can be booked for the same week. Ring or write with the country the document is for and a notary will tell you the fee before you come."
+}

@@ -1,0 +1,5 @@
+<li class="rite">
+        <p class="rite-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+        {{#if item.description}}<p class="rite-note">{{ item.description }}</p>{{/if}}
+        {{#if item.fee}}<p class="rite-fee"><span class="visually-hidden">{{ strings.feeLabel }}</span> {{ item.fee }}</p>{{/if}}
+      </li>

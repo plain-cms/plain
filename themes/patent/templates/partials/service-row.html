@@ -1,0 +1,11 @@
+<li class="row">
+        <div class="fig" aria-hidden="true">
+          <div class="parts"><span class="part"><i></i></span><span class="part"><i></i></span><span class="part"><i></i></span></div>
+          <p class="fig-cap">{{ strings.figLabel }}</p>
+        </div>
+        <div class="row-text">
+          <p class="row-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+          {{#if item.description}}<p class="row-note">{{ item.description }}</p>{{/if}}
+        </div>
+        {{#if item.fee}}<p class="fee"><span class="visually-hidden">{{ strings.feeLabel }}: </span>{{ item.fee }}</p>{{/if}}
+      </li>

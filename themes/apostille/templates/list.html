@@ -1,0 +1,19 @@
+<section class="page">
+  <header class="page-header">
+    <h1>{{#if tag}}{{ strings.taggedLabel }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  <div class="posts">
+    {{#if items}}<ul class="post-list">
+      {{#each items as item}}<li class="post-row">
+        {{#if item.dateFormatted}}<p class="post-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>{{/if}}
+        <div class="clause-body">
+          <h2 class="clause-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+          {{#if item.description}}<p class="clause-note">{{ item.description }}</p>{{/if}}
+        </div>
+        {{#if item.cover}}<img class="post-thumb" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+      </li>
+      {{/each}}
+    </ul>{{else}}<p class="empty">{{ strings.nothingHere }}</p>{{/if}}
+    {{> pagination}}
+  </div>
+</section>

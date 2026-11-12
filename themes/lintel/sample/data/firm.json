@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960284",
+  "email": "office@pennickstructural.example",
+  "address": "Unit 3, Fearnley Yard, Bridge Street, Holmbrook HB4 2QS",
+  "hours": [
+    { "days": "Monday to Friday", "time": "8:30 to 17:30" },
+    { "days": "Saturday", "time": "Site visits by appointment" },
+    { "days": "Sunday", "time": "Closed" }
+  ],
+  "registration": "Pennick Structural Ltd, registered in England no. 10482736. Ruth Pennick CEng MIStructE, Institution of Structural Engineers no. 041726. VAT no. GB 284 6193 50.",
+  "consultNote": "Ring or write with the address and a rough sketch of the wall or room, and Ruth will call you back within two working days to arrange a visit. A first site visit costs £145 and comes off the fee if you go ahead."
+}
