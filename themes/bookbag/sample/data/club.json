@@ -1,0 +1,51 @@
+{
+  "founded": "Opened 1898",
+  "meets": [
+    {
+      "day": "Monday to Friday",
+      "time": "8.45 am to 3.15 pm",
+      "what": "School day, Reception to Year 6. Gates open at 8.35 am",
+      "place": "Main gate, Mill Brow"
+    },
+    {
+      "day": "Monday to Friday",
+      "time": "8.45 to 11.45 am",
+      "what": "Nursery sessions for ages 3 and 4",
+      "place": "Nursery door, Brook Street"
+    },
+    {
+      "day": "Monday to Friday",
+      "time": "7.45 am",
+      "what": "Breakfast club, £3 a morning",
+      "place": "School hall"
+    },
+    {
+      "day": "Monday to Thursday",
+      "time": "3.15 to 5.30 pm",
+      "what": "After-school club, £8 a session",
+      "place": "School hall"
+    },
+    {
+      "day": "Wednesday",
+      "time": "3.15 to 3.45 pm",
+      "what": "Family reading time, all ages",
+      "place": "Reading garden, behind the hall"
+    },
+    {
+      "day": "Friday",
+      "time": "2.30 pm",
+      "what": "Celebration assembly, families welcome",
+      "place": "School hall"
+    },
+    {
+      "day": "Monday to Friday",
+      "time": "8.30 am to 4 pm",
+      "what": "School office open",
+      "place": "Main entrance, Mill Brow"
+    }
+  ],
+  "joinNote": "Families thinking of joining us are welcome to look round on a Tuesday morning: ring the office to book. Reception places are applied for through the county council.",
+  "email": "office@wrenfield.example",
+  "phone": "01632 960384",
+  "address": "Mill Brow, Wrenfield, Lancashire BB4 9WR"
+}

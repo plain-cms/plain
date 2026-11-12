@@ -1,0 +1,13 @@
+{
+  "founded": "Serving the parish since 1894",
+  "meets": [
+    { "day": "Second Tuesday of the month", "time": "7.30 pm", "what": "Full council meeting, with public question time first", "place": "Village Hall, Church Street" },
+    { "day": "First Monday of the month", "time": "7 pm", "what": "Planning committee", "place": "Parish Room, Village Hall" },
+    { "day": "Wednesday", "time": "10 am to 12 noon", "what": "Clerk’s office open for callers", "place": "Parish Office, The Old School" },
+    { "day": "Last Saturday of the month", "time": "10 to 11.30 am", "what": "Councillors’ surgery, drop in with any question", "place": "Sallowfield Library" }
+  ],
+  "joinNote": "Anyone may attend a council meeting, and anyone who lives or works in the parish may speak in public question time. To raise a matter, write to the clerk by the Friday before the meeting.",
+  "email": "clerk@sallowfield-pc.example",
+  "phone": "01632 960418",
+  "address": "Parish Office, The Old School, Church Street, Sallowfield HB4 6PL"
+}

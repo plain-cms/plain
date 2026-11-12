@@ -1,0 +1,45 @@
+{
+  "founded": "Founded 1908",
+  "meets": [
+    {
+      "day": "Tuesday",
+      "time": "7 pm to 8.30 pm",
+      "what": "Senior training, first team and reserves",
+      "place": "Osier Ground, floodlit pitch"
+    },
+    {
+      "day": "Wednesday",
+      "time": "6 pm to 7.15 pm",
+      "what": "Youth training, Under-11s to Under-15s",
+      "place": "Pellow Bridge Academy, 3G pitch"
+    },
+    {
+      "day": "Thursday",
+      "time": "7 pm to 8.30 pm",
+      "what": "Senior training",
+      "place": "Osier Ground, floodlit pitch"
+    },
+    {
+      "day": "Friday",
+      "time": "7 pm to 11 pm",
+      "what": "Clubhouse bar, open to all",
+      "place": "Clubhouse"
+    },
+    {
+      "day": "Saturday",
+      "time": "9.30 am to 10.30 am",
+      "what": "Mini-soccer, ages 5 to 8",
+      "place": "Osier Ground, pitch 3"
+    },
+    {
+      "day": "Saturday",
+      "time": "from 1 pm",
+      "what": "Clubhouse bar on home match days",
+      "place": "Clubhouse"
+    }
+  ],
+  "joinNote": "Senior players can come to any Tuesday or Thursday training and ask for the manager. For a place in a youth side, write to the youth secretary first.",
+  "email": "secretary@pellowbridgeafc.example",
+  "phone": "01632 960318",
+  "address": "The Osier Ground, Wharf Road, Pellow Bridge PB7 3LW"
+}

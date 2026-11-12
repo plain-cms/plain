@@ -1,0 +1,22 @@
+<section class="list">
+  <header class="page-head list-head">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if items}}<ul class="entries" role="list">
+    {{#each items as item}}<li class="entry{{#if item.cover}} has-cover{{/if}}">
+      {{#if item.dateFormatted}}<p class="entry-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{/if}}<div class="entry-what">
+        <h2 class="entry-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+        {{#if item.description}}<p class="entry-desc">{{ item.description }}</p>{{/if}}
+      </div>
+      {{#if item.cover}}<img class="entry-cover" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+    </li>
+    {{/each}}
+  </ul>{{else}}<p class="empty">{{ strings.nothingHere }}</p>{{/if}}
+  {{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>{{/if}}
+  {{#if tag}}<p class="back"><a href="/blog/">{{ strings.allNews }}</a></p>{{/if}}
+</section>

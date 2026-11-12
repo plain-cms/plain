@@ -1,0 +1,8 @@
+<li class="stop"{{#if item.status}} data-status="{{ item.status }}"{{/if}}>
+  <p class="stop-when"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time>{{#if item.time}} <span class="stop-time">{{ item.time }}</span>{{/if}}{{#if item.status}} <span class="status"><span class="s-raw">{{ item.status }}</span><span class="s-open">{{ strings.statusOpen }}</span><span class="s-members">{{ strings.statusMembers }}</span><span class="s-off">{{ strings.statusCancelled }}</span></span>{{/if}}</p>
+  <div class="stop-what">
+    <p class="stop-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    {{#if item.place}}<p class="stop-place">{{ item.place }}</p>
+    {{/if}}{{#if item.description}}<p class="stop-desc">{{ item.description }}</p>{{/if}}
+  </div>
+</li>

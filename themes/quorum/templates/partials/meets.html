@@ -1,0 +1,12 @@
+<section class="register meets">
+    <h2 class="register-head">{{ strings.meetsHeading }}</h2>
+    <ul role="list">
+      {{#each data.club.meets as meet}}<li class="meet">
+        {{#if meet.day}}<p class="meet-when"><span class="meet-day">{{ meet.day }}</span>{{#if meet.time}} <span class="meet-time">{{ meet.time }}</span>{{/if}}</p>
+        {{else}}{{#if meet.time}}<p class="meet-when"><span class="meet-time">{{ meet.time }}</span></p>
+        {{/if}}{{/if}}<p class="meet-what">{{ meet.what }}</p>
+        {{#if meet.place}}<p class="meet-place">{{ meet.place }}</p>{{/if}}
+      </li>
+      {{/each}}
+    </ul>
+  </section>

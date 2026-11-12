@@ -1,0 +1,8 @@
+<li class="fx"{{#if item.status}} data-status="{{ item.status }}"{{/if}}>
+  <p class="fx-when"><time class="fx-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>{{#if item.time}}<span class="fx-time">{{ item.time }}</span>{{/if}}{{#if item.status}}<b class="fx-off">{{ strings.statusCancelled }}</b>{{/if}}</p>
+  <div class="fx-what">
+    <p class="fx-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    {{#if item.place}}<p class="fx-place">{{ item.place }}</p>
+    {{/if}}{{#if item.status}}<p class="status"><span class="s-raw">{{ item.status }}</span><b class="s-open">{{ strings.statusOpen }}</b><b class="s-members">{{ strings.statusMembers }}</b></p>{{/if}}
+  </div>
+</li>

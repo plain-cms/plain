@@ -1,0 +1,33 @@
+{
+  "founded": "Founded 1926",
+  "meets": [
+    {
+      "day": "Monday",
+      "time": "6 to 7.15 pm",
+      "what": "Beavers, ages 6 to 8",
+      "place": "Orchard Road hut"
+    },
+    {
+      "day": "Tuesday",
+      "time": "6.30 to 8 pm",
+      "what": "Cubs, ages 8 to 10½",
+      "place": "Orchard Road hut"
+    },
+    {
+      "day": "Thursday",
+      "time": "7.15 to 9 pm",
+      "what": "Scouts, ages 10½ to 14",
+      "place": "Orchard Road hut"
+    },
+    {
+      "day": "Second Saturday of the month",
+      "time": "10 am to noon",
+      "what": "Kit store and hut work party, parents welcome",
+      "place": "Orchard Road hut"
+    }
+  ],
+  "joinNote": "Every section has a waiting list, so add your child’s name as early as you can, from age 5 for Beavers. Adult helpers do not wait: come to any meeting night and ask for the section leader.",
+  "email": "hello@3rdkettlebyscouts.example",
+  "phone": "01632 960384",
+  "address": "The Scout Hut, Orchard Road, Kettleby KB4 7RT"
+}

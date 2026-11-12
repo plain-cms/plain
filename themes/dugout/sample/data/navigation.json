@@ -1,0 +1,7 @@
+[
+  { "label": "Home", "url": "/" },
+  { "label": "What's on", "url": "/events/" },
+  { "label": "News", "url": "/blog/" },
+  { "label": "About", "url": "/about/" },
+  { "label": "Join", "url": "/join/" }
+]

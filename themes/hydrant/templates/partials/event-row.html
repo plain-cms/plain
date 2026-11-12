@@ -1,0 +1,9 @@
+<li class="entry entry-event"{{#if item.status}} data-status="{{ item.status }}"{{/if}}>
+  <p class="entry-when"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time>{{#if item.time}} <span class="entry-time">{{ item.time }}</span>{{/if}}</p>
+  <div class="entry-what">
+    <p class="entry-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    {{#if item.place}}<p class="entry-place">{{ item.place }}</p>
+    {{/if}}{{#if item.description}}<p class="entry-desc">{{ item.description }}</p>{{/if}}
+  </div>
+  {{#if item.status}}<p class="status"><span>{{ item.status }}</span><b class="s-open">{{ strings.statusOpen }}</b><b class="s-members">{{ strings.statusMembers }}</b><b class="s-off">{{ strings.statusCancelled }}</b></p>{{/if}}
+</li>

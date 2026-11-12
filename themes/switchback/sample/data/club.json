@@ -1,0 +1,13 @@
+{
+  "founded": "Founded 1923",
+  "meets": [
+    { "day": "Wednesday", "time": "6.30 pm", "what": "Training walk, about 8 km at a steady pace; head torches from October to March", "place": "Bus shelter, Fell Lane" },
+    { "day": "Thursday", "time": "7 pm to 9 pm", "what": "Climbing wall, beginners welcome", "place": "Kendlemere leisure centre" },
+    { "day": "Sunday", "time": "9 am", "what": "Club walk on the fells, 12 to 20 km, route posted in the Reading Room window", "place": "Market square, Harrowdale" },
+    { "day": "First Tuesday of the month", "time": "8 pm", "what": "Club night: talks, slides and the meets list", "place": "Back room, Packhorse Inn" }
+  ],
+  "joinNote": "Walk with us twice as a guest, then ask the membership secretary for a form. Adult membership is £32 a year and includes cheaper nights at Blea Ghyll Hut.",
+  "email": "secretary@harrowdalefac.example",
+  "phone": "01632 960318",
+  "address": "The Old Reading Room, Fell Lane, Harrowdale, Cumbria CA12 9ZQ"
+}

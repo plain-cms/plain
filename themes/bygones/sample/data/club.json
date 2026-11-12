@@ -1,0 +1,33 @@
+{
+  "founded": "Founded 1971",
+  "meets": [
+    {
+      "day": "Second Tuesday, November to February",
+      "time": "7.30 pm",
+      "what": "Winter talk, members free, visitors £3",
+      "place": "Village hall, Church Street"
+    },
+    {
+      "day": "Wednesday",
+      "time": "10 am to 1 pm",
+      "what": "Archive room open for research, by appointment",
+      "place": "The Old Forge, Mill Street"
+    },
+    {
+      "day": "Saturday and Sunday, April to October",
+      "time": "2 pm to 5 pm",
+      "what": "Old Forge Museum open, entry free",
+      "place": "The Old Forge, Mill Street"
+    },
+    {
+      "day": "First Thursday of the month",
+      "time": "7 pm",
+      "what": "Committee meeting, members welcome",
+      "place": "The Old Forge"
+    }
+  ],
+  "joinNote": "Membership is £12 a year, or £18 for a household, and brings free entry to every winter talk and two issues of Haverleigh Notes. Join at any talk or write to the membership secretary.",
+  "email": "secretary@haverleighhistory.example",
+  "phone": "01632 960318",
+  "address": "The Old Forge, Mill Street, Haverleigh, Somerset TA9 4ZX"
+}

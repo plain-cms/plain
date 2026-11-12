@@ -1,0 +1,50 @@
+{
+  "starter": "dugout",
+  "sampleTitle": "Pellow Bridge AFC",
+  "collections": {
+    "events": {
+      "path": "content/events",
+      "urlPattern": "/events/:slug/",
+      "template": "event",
+      "listUrl": "/events/",
+      "listTemplate": "events",
+      "label": "What's on",
+      "sortBy": "date",
+      "sortOrder": "asc",
+      "pageSize": 100,
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "date", "type": "date", "required": true },
+        { "name": "time", "type": "text" },
+        { "name": "place", "type": "text" },
+        { "name": "status", "type": "select", "options": ["Open to all", "Members only", "Cancelled"] },
+        { "name": "description", "type": "text" },
+        { "name": "draft", "type": "boolean", "default": false }
+      ]
+    },
+    "people": {
+      "path": "content/people",
+      "render": false,
+      "sortBy": "order",
+      "sortOrder": "asc",
+      "label": "People",
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "role", "type": "text" },
+        { "name": "email", "type": "text" },
+        { "name": "phone", "type": "text" },
+        { "name": "order", "type": "text", "default": "50" },
+        { "name": "draft", "type": "boolean", "default": false }
+      ]
+    }
+  },
+  "navigation": [
+    { "label": "Home", "url": "/" },
+    { "label": "What's on", "url": "/events/" },
+    { "label": "News", "url": "/blog/" },
+    { "label": "About", "url": "/about/" },
+    { "label": "Join", "url": "/join/" }
+  ],
+  "plugins": [],
+  "sampleContent": "sample/"
+}

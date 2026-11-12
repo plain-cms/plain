@@ -1,0 +1,13 @@
+<article class="event"{{#if page.status}} data-status="{{ page.status }}"{{/if}}>
+  <header class="event-head">
+    <p class="event-spot"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{#if page.time}} <span class="event-time">{{ page.time }}</span>{{/if}}</p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.place}}<p class="event-place">{{ page.place }}</p>
+    {{/if}}{{#if page.status}}<p class="event-status"><span class="status"><span class="s-raw">{{ page.status }}</span><span class="s-open">{{ strings.statusOpen }}</span><span class="s-members">{{ strings.statusMembers }}</span><span class="s-off">{{ strings.statusCancelled }}</span></span></p>{{/if}}
+  </header>
+  {{#if page.description}}<p class="intro event-intro">{{ page.description }}</p>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<p class="back"><a href="/events/">{{ strings.eventsLink }}</a></p>
+</article>

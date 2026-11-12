@@ -1,0 +1,4 @@
+<footer class="notice-foot">
+    <p class="signed">{{ strings.signedBy }}</p>
+    <p class="clerk-line">{{#if data.club.phone}}<a href="tel:{{ data.club.phone }}">{{ data.club.phone }}</a>{{/if}}{{#if data.club.email}} <a href="mailto:{{ data.club.email }}">{{ data.club.email }}</a>{{/if}}{{#if data.club.phone}}{{else}}{{#if data.club.email}}{{else}}<a href="/join/">{{ strings.joinLink }}</a>{{/if}}{{/if}}</p>
+  </footer>

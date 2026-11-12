@@ -1,0 +1,39 @@
+<article class="page">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="intro">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.content}}<div class="page-text prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.showMeets}}{{#if data.club.meets}}{{> meets}}{{/if}}{{/if}}
+  {{#if page.showEvents}}{{#if collections.events}}<section class="drawer-block">
+    <div class="drawer">
+      <div class="guide guide-in">
+        <h2 class="tab">{{ strings.eventsHeading }}</h2>
+        <p class="guide-body"><a href="/events/">{{ strings.eventsLink }}</a></p>
+      </div>
+      <ul class="cards" role="list">
+        {{#each collections.events as item}}{{> event-card}}{{/each}}
+      </ul>
+    </div>
+  </section>{{/if}}{{/if}}
+  {{#if page.showPeople}}{{#if collections.people}}<section class="people-block">
+    <div class="guide guide-plain">
+      <h2 class="tab">{{ strings.peopleHeading }}</h2>
+    </div>
+    <ul class="people" role="list">
+      {{#each collections.people as person}}<li class="card person">
+        <div class="card-body">
+          <p class="card-head">{{ person.title }}</p>
+          <div class="card-lines">
+            {{#if person.role}}<p class="person-role">{{ person.role }}</p>
+            {{/if}}{{#if person.phone}}<p><a href="tel:{{ person.phone }}">{{ person.phone }}</a></p>
+            {{/if}}{{#if person.email}}<p><a href="mailto:{{ person.email }}">{{ person.email }}</a></p>{{/if}}
+          </div>
+        </div>
+      </li>
+      {{/each}}
+    </ul>
+  </section>{{/if}}{{/if}}
+</article>

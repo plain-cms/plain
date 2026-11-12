@@ -1,0 +1,16 @@
+{
+  "founded": "Consecrated 1186",
+  "meets": [
+    { "day": "Sunday", "time": "8 am", "what": "Holy Communion, said, from the Prayer Book", "place": "Lady Chapel" },
+    { "day": "", "time": "10.30 am", "what": "Parish Eucharist with the choir and Sunday school", "place": "Nave" },
+    { "day": "Second and fourth Sundays", "time": "6 pm", "what": "Choral Evensong", "place": "Choir stalls" },
+    { "day": "Wednesday", "time": "10 am", "what": "Holy Communion, then coffee", "place": "Lady Chapel" },
+    { "day": "Thursday", "time": "7.30 pm", "what": "Bell-ringing practice, learners welcome", "place": "Ringing chamber, west tower" },
+    { "day": "Friday", "time": "6 to 8 pm", "what": "Choir practice, juniors in the first hour", "place": "Choir vestry" },
+    { "day": "First Saturday of the month", "time": "10 am to noon", "what": "Coffee morning and book stall", "place": "Church hall" }
+  ],
+  "joinNote": "Anyone may come to any service: there is nothing to book and nobody to ask first. To sing or ring, come to a Friday or Thursday practice, or ring the parish office.",
+  "email": "office@stbotolphskelsingham.example",
+  "phone": "01632 960318",
+  "address": "Church Lane, Kelsingham, Norfolk NR20 9ZX"
+}

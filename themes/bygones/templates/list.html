@@ -1,0 +1,33 @@
+<section class="listing">
+  <header class="page-head">
+    {{#if tag}}<p class="kicker">{{ strings.filedUnder }}</p>
+    <h1>{{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}</h1>{{else}}<h1>{{ page.title }}</h1>{{/if}}
+  </header>
+  {{#if items}}
+  <div class="drawer">
+    <ul class="cards" role="list">
+      {{#each items as item}}<li class="card post{{#if item.cover}} has-cover{{/if}}">
+        <p class="tab">{{#if item.dateFormatted}}<time datetime="{{ item.date }}">{{ item.dateFormatted }}</time>{{/if}}</p>
+        <div class="card-body">
+          <h2 class="card-head"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+          <div class="card-lines">
+            {{#if item.cover}}<img class="card-cover" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+            {{/if}}{{#if item.description}}<p class="ev-desc">{{ item.description }}</p>{{/if}}
+          </div>
+        </div>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+  {{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+  {{#if tag}}<p class="back"><a href="/blog/">{{ strings.newsLink }}</a></p>{{/if}}
+</section>
