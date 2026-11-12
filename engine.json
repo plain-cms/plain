@@ -1,5 +1,5 @@
 {
-  "version": "1.22.0",
+  "version": "1.23.0",
   "migration": 1,
   "files": {
     ".claude/settings.json": "0e9f0c421e52d76094df3135e7103785d788ac4499b76684a905001d9ea42e6b",
@@ -35,7 +35,7 @@
     "lib/util.js": "6345fc07687b3e8262d0a18fddd69b3d522a3d7f25693ebbb08de3b49f61bb9f",
     "migrations/001-adopt-engine-tests.js": "8c5e758e7b7d9b31a353366b75dc74e9eb275d77b3ee7face6b0f2bbcf0dc209",
     "migrations/README.md": "a81001cc60e3024a5858894af766c2dd0c1ea8b64c57b52ffaf8dcc3ba371a33",
-    "package.json": "28fe32cd99f9a4c9c15d59f936ad2787823f61d26a562fb3100191130cd7156f",
+    "package.json": "7995a7cff19dc44562c0c8e186e0aa83583fd15f0ac50d8e0a6863ba689552c5",
     "plugins/api-form/client.css": "263489de16ccd11134c28944bb582febbf65c62f834a096fb77988738ed0ab72",
     "plugins/api-form/client.js": "8ab6ceb9fc8be2540c08e2779266ce58f8604e1726c7535c087295085f55c94e",
     "plugins/api-form/index.js": "56930b92281cadb1f8b58ffefb52b2a904df626befaffc0bb085c1f0afa8b389",
