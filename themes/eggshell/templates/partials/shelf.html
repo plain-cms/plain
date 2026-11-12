@@ -1,0 +1,7 @@
+{{#if collections.services}}<section class="shelf" aria-label="{{ strings.shelfHeading }}">
+  <p class="shelf-head"><span>{{ strings.shelfHeading }}</span> <a href="/services/">{{ strings.allServices }} →</a></p>
+  <ul class="tins">
+    {{#each collections.services as item}}{{> tin}}
+    {{/each}}
+  </ul>
+</section>{{/if}}

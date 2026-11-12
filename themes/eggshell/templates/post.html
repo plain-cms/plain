@@ -1,0 +1,11 @@
+<article class="post">
+  <header class="page-header">
+    <p class="eyebrow"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{#each page.tagLinks as tag}} <span aria-hidden="true">·</span> <a href="{{ tag.url }}">{{ tag.name }}</a>{{/each}}</p>
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{/if}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{> call}}
+</article>

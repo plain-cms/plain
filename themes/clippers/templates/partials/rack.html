@@ -1,0 +1,9 @@
+{{#if collections.services}}<nav class="rack-strip" aria-label="{{ strings.rackLabel }}">
+  <ul class="rack">
+    {{#each collections.services as item}}{{#if item.priceFrom}}{{> peg}}
+    {{/if}}{{/each}}{{#each collections.services as item}}{{#if item.priceFrom}}{{else}}{{> peg}}
+    {{/if}}{{/each}}
+  </ul>
+  <p class="rack-more"><a href="/services/">{{ strings.allServices }} →</a></p>
+</nav>
+{{/if}}

@@ -1,0 +1,8 @@
+{{#if collections.services}}<section class="pile" aria-label="{{ strings.pileLabel }}">
+  <ul class="stack">
+    {{#each collections.services as item}}{{> box}}
+    {{/each}}
+  </ul>
+  <p class="more"><a href="/services/">{{ strings.allServices }} →</a></p>
+</section>
+{{/if}}

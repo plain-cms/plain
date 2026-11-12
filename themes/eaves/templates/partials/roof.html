@@ -1,0 +1,8 @@
+{{#if collections.services}}<section class="roof" aria-label="{{ strings.roofLabel }}">
+  <ul class="courses">
+    {{#each collections.services as item}}{{> slate}}
+    {{/each}}
+  </ul>
+  <p class="eave"><a href="/services/">{{ strings.allServices }} →</a></p>
+</section>
+{{/if}}

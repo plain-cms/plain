@@ -1,0 +1,10 @@
+<aside class="board call" aria-labelledby="call-h">
+  <h2 class="tails" id="call-h">{{ strings.callHeading }}</h2>
+  <div class="face">
+    <p class="call-main">{{#if data.business.phone}}<a href="tel:{{ data.business.phone }}">{{ data.business.phone }}</a>{{else}}{{#if data.business.email}}<a class="word" href="mailto:{{ data.business.email }}">{{ data.business.email }}</a>{{else}}<a class="word" href="/contact/">{{ strings.contactLink }}</a>{{/if}}{{/if}}</p>
+    {{#if data.business.hours}}<p class="fact"><b>{{ strings.hoursLabel }}</b> {{ data.business.hours }}</p>
+    {{/if}}{{#if data.business.area}}<p class="fact"><b>{{ strings.areaLabel }}</b> {{ data.business.area }}</p>
+    {{/if}}{{#if data.business.phone}}{{#if data.business.email}}<p class="fact"><b>{{ strings.emailLabel }}</b> <a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></p>
+    {{/if}}{{/if}}
+  </div>
+</aside>

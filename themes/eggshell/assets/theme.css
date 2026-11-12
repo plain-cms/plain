@@ -1,0 +1,427 @@
+/* Eggshell — painters and decorators (trades family). A rolled wall in one
+   emulsion, lettered white; every service is a trade paint tin on a shelf.
+   A restyle is a repaint: edit the tokens below, never selectors. */
+
+:root {
+  /* Type: bold grotesque caps, a transitional serif for spec print */
+  --font-display: "Helvetica Neue", Helvetica, "Arial Nova", Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-body: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3rem;
+  --text-xl: 1.65rem;
+  --text-xxl: clamp(2rem, 1.2rem + 3vw, 3.25rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.04;
+  --tracking-caps: 0.09em;
+
+  /* The wall: one emulsion, lettered white */
+  --color-bg: #8c1c46;
+  --color-text: #ffffff;
+  --color-muted: #f4cfdb;
+  --color-accent: #ffbdd3;
+  --color-sheen: rgba(255,255,255,0.07);
+  --color-rail: rgba(255,255,255,0.3);
+
+  /* The tin: white label printed black, bare metal, three bands */
+  --color-label: #ffffff;
+  --color-print: #141414;
+  --color-tin: #c3c8cb;
+  --color-shade: rgba(0,0,0,0.2);
+  --band-1: #006f8e;
+  --on-band-1: #ffffff;
+  --band-2: #f4b400;
+  --on-band-2: #141414;
+  --band-3: #3e4a54;
+  --on-band-3: #ffffff;
+
+  /* Measures */
+  --page-width: 72rem;
+  --measure: 38rem;
+  --tin-min: 15rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --radius: 3px;
+  --rule: 2px;
+  --focus-width: 3px;
+  --handle: 2.6rem;
+  --wire: 3px;
+  --lid: 0.55rem;
+  --slant: 0.7rem;
+  --roller: 26rem;
+}
+
+/* Lights off: the same wall after dark, bands a shade deeper */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #45102a;
+    --color-text: #f8eef1;
+    --color-muted: #e0b9c7;
+    --color-accent: #ff8fb5;
+    --color-sheen: rgba(255,255,255,0.04);
+    --color-rail: rgba(255,255,255,0.22);
+    --color-label: #ebe5da;
+    --color-print: #18130f;
+    --color-tin: #8e9498;
+    --color-shade: rgba(0,0,0,0.3);
+    --band-1: #005a74;
+    --band-2: #dd9f00;
+    --band-3: #2f3942;
+  }
+}
+
+/* Base */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  /* Roller laps: each pass a broad, soft band of sheen */
+  background-image: repeating-linear-gradient(90deg, transparent 0 calc(0.1 * var(--roller)), var(--color-sheen) calc(0.45 * var(--roller)) calc(0.55 * var(--roller)), transparent calc(0.9 * var(--roller)) var(--roller));
+  overflow-wrap: break-word;
+  --pad: clamp(var(--space-3), 3vw, var(--space-4));
+}
+
+.wrap { max-width: calc(var(--page-width) + 2 * var(--space-4)); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, var(--space-4)); }
+
+/* Hyphens only in long words, and only in headings and narrow boxes (Safari
+   reads the -webkit- pair); prose, prices and wide tables break whole words */
+h1, h2, h3, h4, .tin-brand, .tin-spec, .tin-back li { -webkit-hyphens: auto; hyphens: auto; }
+h1, h2, h3, h4, .tin-brand, .tin-spec, .tin-back li, .prose th, .prose td { hyphenate-limit-chars: 12 4 4; -webkit-hyphenate-limit-before: 4; -webkit-hyphenate-limit-after: 4; }
+/* A table cell may break shorter words; a band only a word too long for it */
+.tin-brand, .prose td { hyphenate-limit-chars: 8 3 3; }
+.tin-band { hyphenate-limit-chars: 13 4 4; -webkit-hyphenate-limit-before: 7; -webkit-hyphenate-limit-after: 7; }
+
+/* Label lettering: every heading, the menu, small caps labels */
+h1, h2, .site-title, .menu a, .eyebrow, .shelf-head, .back, .tin-brand, .flash span, .call dt, .prose th, .prose h4, .prose blockquote p:last-child:not(:first-child), .pagination { font-family: var(--font-display); font-weight: 800; text-transform: uppercase; }
+.menu a, .eyebrow, .shelf-head, .back, .tin-brand, .flash span, .call dt, .prose th, .prose h4, .prose blockquote p:last-child:not(:first-child), .pagination { font-size: var(--text-s); letter-spacing: var(--tracking-caps); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+a:hover { color: var(--color-text); text-decoration-thickness: var(--rule); }
+a[href^="tel:"], a[href^="mailto:"] { overflow-wrap: anywhere; }
+
+:focus-visible { outline: var(--focus-width) solid var(--color-accent); outline-offset: var(--rule); }
+/* On a white label the ring is printed in black */
+.call :focus-visible, .skirting :focus-visible, .tin-back :focus-visible, .prose table :focus-visible { outline-color: var(--color-print); }
+/* A flash is cut on the slant, so its ring is drawn inside the cut */
+.flash:focus-visible { outline-color: currentColor; outline-offset: calc(-2 * var(--focus-width)); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 20; padding: var(--space-2) var(--space-3); background: var(--color-label); color: var(--color-print); }
+.skip-link:focus { left: var(--space-2); color: var(--color-print); outline-color: var(--color-print); outline-offset: calc(-1 * var(--focus-width)); }
+
+main { min-height: 60vh; padding-bottom: var(--space-5); }
+
+/* The flash: prices and phone numbers, cut on the slant */
+.flash { display: inline-block; max-width: 100%; padding: var(--space-2) calc(var(--space-3) + var(--slant)); background-color: var(--color-print); color: var(--color-label); clip-path: polygon(var(--slant) 0, 100% 0, calc(100% - var(--slant)) 100%, 0 100%); font-family: var(--font-display); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1.12; text-decoration: none; overflow-wrap: anywhere; }
+.flash span { font-weight: 700; }
+a.flash:hover { color: var(--color-label); text-decoration: underline; }
+/* On the wall the flash is label white */
+.masthead .flash, .actions .flash { background-color: var(--color-label); color: var(--color-print); }
+.masthead a.flash:hover, .actions a.flash:hover { color: var(--color-print); }
+
+/* Masthead */
+
+.masthead { border-bottom: 1px solid var(--color-rail); }
+.masthead .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-4); padding-block: var(--space-2); }
+.site-title { margin-right: auto; min-width: 0; padding-block: var(--space-2); font-size: var(--text-l); line-height: var(--leading-tight); letter-spacing: -0.01em; color: var(--color-text); text-decoration: none; }
+.menu ul { display: flex; flex-wrap: wrap; gap: 0 clamp(0.7rem, 2.5vw, var(--space-3)); margin: 0; padding: 0; list-style: none; }
+.menu a { display: inline-block; padding: 0.8rem 0 0.55rem; border-bottom: var(--focus-width) solid transparent; color: var(--color-text); text-decoration: none; }
+.menu a:hover { border-bottom-color: var(--color-rail); }
+.menu a[aria-current="page"] { border-bottom-color: currentColor; }
+
+/* Page headers: lettered straight on the wall */
+
+.page-header { display: grid; gap: var(--space-3) var(--space-4); margin: var(--space-4) 0; }
+.page-header h1 { margin: 0; font-size: var(--text-xxl); line-height: var(--leading-tight); letter-spacing: -0.015em; overflow-wrap: anywhere; text-wrap: balance; }
+.lede { margin: 0; max-width: var(--measure); font-size: var(--text-l); line-height: 1.4; color: var(--color-muted); text-wrap: pretty; }
+.eyebrow, .back { margin: 0; color: var(--color-muted); }
+.back { margin-top: var(--space-4); }
+.back a, .eyebrow a { color: inherit; text-decoration: none; }
+.back a:hover, .eyebrow a:hover { color: var(--color-text); text-decoration: underline; }
+
+/* The home page (.at-index): promise and standfirst side by side, their last
+   lines on one baseline */
+@media (min-width: 60em) {
+  .at-index .page-header { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: end; align-items: last baseline; }
+  .page-header > :only-child { grid-column: 1 / -1; }
+}
+
+/* THE SIGNATURE: the tin
+   .tin is the whole object: room for the handle, the wire and its two ears
+   (::before), the can, the shelf it stands on (::after). .tin-can is the body:
+   a pressed lid, the label, a bottom rim. Three bands cycle along a row. */
+
+.tins, .views { display: grid; gap: var(--space-4); margin: 0 calc(-1 * var(--space-3)); padding: 0 var(--space-3); overflow-x: clip; list-style: none; }
+.tins { grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--tin-min)), 1fr)); }
+
+.tin { --lid-h: calc(1.5 * var(--lid)); --metal-dark: color-mix(in srgb, var(--color-tin), var(--color-print) 38%); position: relative; display: flex; flex-direction: column; min-width: 0; padding: var(--handle) 0 var(--lid-h); }
+
+/* The wire: an arch over the lid, dropping to an ear on each side */
+.tin::before { content: ""; position: absolute; top: var(--space-1); inset-inline: calc(-1 * var(--space-2)); height: calc(var(--handle) + var(--lid-h) + var(--space-3)); border: var(--wire) solid var(--color-tin); border-bottom: 0; border-radius: 50% 50% 0 0 / var(--handle) var(--handle) 0 0; background: linear-gradient(90deg, var(--color-tin) 0.75rem, transparent 0 calc(100% - 0.75rem), var(--color-tin) 0) bottom / 100% var(--space-3) no-repeat border-box; }
+/* The shelf: a plank in the wall's colour, light on its top edge. Each tin
+   draws the stretch it stands on; together they run the whole row. */
+.tin::after { content: ""; position: absolute; bottom: 0; inset-inline: calc(-1 * var(--space-3)); height: var(--lid-h); background: linear-gradient(color-mix(in srgb, var(--color-bg), var(--color-text) 35%) var(--rule), color-mix(in srgb, var(--color-bg), var(--color-print) 55%) 0); }
+@supports (overflow: clip) { .tin::after { inset-inline: -100vw; } }
+
+.tin-can {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-block: var(--lid-h) calc(var(--lid) / 2);
+  background:
+    linear-gradient(color-mix(in srgb, var(--color-tin), var(--color-label) 65%) var(--rule), var(--color-tin) 0 68%, var(--metal-dark) 0) top / 100% var(--lid-h) no-repeat,
+    linear-gradient(var(--color-tin), var(--metal-dark)) bottom / 100% calc(var(--lid) / 2) no-repeat,
+    var(--color-label);
+  color: var(--color-print);
+  border-radius: var(--radius) var(--radius) calc(2 * var(--radius)) calc(2 * var(--radius));
+}
+/* The turn of the can: shade at both edges, light left of centre */
+.tin-can::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, var(--color-shade), transparent 5%, transparent 95%, var(--color-shade)),
+    linear-gradient(90deg, var(--color-shade), transparent 22%, var(--color-sheen) 31%, transparent 44%, transparent 68%, var(--color-shade));
+}
+
+.tin-brand { margin: 0; padding: 0.45rem var(--space-3) 0.4rem; font-size: 0.66rem; line-height: 1.2; }
+
+/* The band: the job in bold caps, as broad as two lines even for "WC" */
+.tin-band { display: flex; align-items: center; min-height: 4.4rem; margin: 0 0 0.7rem; padding: 0.65rem var(--space-3) 0.7rem; background-color: var(--band-1); color: var(--on-band-1); font-size: var(--text-l); line-height: var(--leading-tight); letter-spacing: 0; }
+.tin:nth-child(3n+2) .tin-band { background-color: var(--band-2); color: var(--on-band-2); }
+.tin:nth-child(3n) .tin-band { background-color: var(--band-3); color: var(--on-band-3); }
+.tin-band a { min-width: 0; color: inherit; text-decoration: none; overflow-wrap: anywhere; }
+/* The whole tin is the link, and wears the focus ring */
+.tin-band a::after { content: ""; position: absolute; inset: 0; z-index: 2; }
+.tin-band a:focus-visible { outline: 0; }
+.tin-band a:focus-visible::after { outline: var(--focus-width) solid var(--color-accent); outline-offset: var(--focus-width); }
+.tin:hover .tin-band a { text-decoration: underline; text-decoration-thickness: var(--rule); }
+
+.tin-date, .tin-spec { margin: 0; padding: 0 var(--space-3) var(--space-2); font-size: var(--text-s); line-height: 1.4; }
+.tin-date { font-style: italic; }
+.tin-spec { padding-bottom: var(--space-3); }
+
+/* The size flash: in from the right edge, widening with its figure */
+.tin-flash { align-self: flex-end; margin: auto 0 0.8rem var(--space-3); padding-right: var(--space-3); clip-path: polygon(var(--slant) 0, 100% 0, 100% 100%, 0 100%); font-size: var(--text-l); text-align: right; }
+.tin-flash span { margin-right: var(--space-1); }
+.tin-flash strong { font-weight: 800; }
+
+/* The shelf: the tins on any page that is not their list */
+
+.shelf { margin: var(--space-4) 0; }
+.shelf-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); margin: 0 0 var(--space-1); padding-bottom: var(--space-2); border-bottom: 1px solid var(--color-rail); color: var(--color-muted); }
+.shelf-head a { color: var(--color-text); text-decoration: none; }
+.shelf-head a:hover { text-decoration: underline; }
+/* The shelf prints its small print on the home page only (tin.html decides),
+   and drops it on a phone */
+
+/* Text pages: words, advice box, shelf. On the home page and the 404 the
+   shelf comes straight after the headline. */
+.page { display: flex; flex-direction: column; }
+.page > .shelf { order: 3; margin-top: var(--space-5); }
+.at-index > .shelf, .not-found > .shelf { order: 0; margin-top: 0; }
+
+/* Wide screens: the words keep the left half, the advice box beside them */
+@media (min-width: 64em) {
+  .page, .post, .service { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-4); }
+  :is(.page, .post, .service) > * { grid-column: 1 / -1; }
+  :is(.page, .post, .service) > .prose { grid-column: 1; }
+  .prose + .call { grid-column: 2; order: 2; align-self: start; position: sticky; top: var(--space-3); margin-top: 0; }
+  .prose:not(:has(*)) + .call { grid-column: 1 / -1; }
+}
+@media (max-width: 47.99em) {
+  .shelf .tin-spec { display: none; }
+  .shelf .tins { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--space-3); }
+  /* Two abreast: lettering shrinks so a twelve-letter word fits */
+  .shelf .tin-band, .shelf .tin-flash { font-size: min(4vw, var(--text-m)); }
+  .shelf .tin-band, .shelf .tin-brand { padding-inline: 0.7rem; }
+  .shelf .tin-flash { margin-left: 0; padding-inline: calc(var(--slant) + var(--space-2)) 0.7rem; }
+}
+@media (max-width: 21em) {
+  .menu a { letter-spacing: 0.03em; }
+  .shelf .tins { grid-template-columns: minmax(0, 1fr); }
+  .shelf .tin-band, .shelf .tin-flash { font-size: var(--text-m); }
+}
+
+/* A service: the front of its tin and, turned round, the back */
+
+.views { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); margin-block: var(--space-2) var(--space-5); }
+.tin-front { max-width: 44rem; }
+.tin-front .tin-band { min-height: 7rem; margin-bottom: var(--space-3); padding: var(--space-3) var(--pad); font-size: calc(0.82 * var(--text-xxl)); letter-spacing: -0.01em; overflow-wrap: anywhere; }
+.tin-front .tin-brand, .tin-front .tin-spec { padding-inline: var(--pad); }
+.tin-front .tin-spec { font-size: var(--text-l); text-wrap: pretty; }
+.tin-front .tin-flash { margin-bottom: var(--space-3); font-size: var(--text-xl); }
+
+/* The spec panel: ruled small print under a boxed heading */
+.tin-back .tin-can { padding-inline: var(--pad); }
+.tin-back h2 { margin: var(--space-3) 0 0; padding-bottom: var(--space-2); border-bottom: var(--rule) solid var(--color-print); font-size: var(--text-s); letter-spacing: var(--tracking-caps); }
+.tin-back ul { margin: 0 0 var(--space-3); padding: 0; list-style: none; }
+.tin-back li { padding: 0.55rem 0; border-bottom: 1px solid var(--color-tin); line-height: 1.4; }
+.tin-back li:last-child { border-bottom: 0; }
+
+/* Prose: white on the wall */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); line-height: 1.1; text-wrap: balance; }
+.prose h2 { font-size: var(--text-xl); letter-spacing: -0.005em; }
+.prose h3 { font-family: var(--font-display); font-size: var(--text-l); font-weight: 700; }
+.prose h4 { color: var(--color-muted); }
+
+.prose p, .prose ul, .prose ol, .prose pre { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li::marker { color: var(--color-muted); }
+
+/* A number keeps the size of its sentence */
+.prose a[href^="tel:"] { font-family: var(--font-display); font-weight: 800; font-variant-numeric: tabular-nums; color: var(--color-text); }
+
+.prose img { display: block; max-width: 100%; height: auto; margin-bottom: var(--space-2); border: var(--space-1) solid var(--color-label); }
+/* Two pictures on one line: before and after, side by side */
+@media (min-width: 30em) {
+  .prose p:has(> img + img) { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); align-items: start; }
+}
+.cover { display: block; width: 100%; height: auto; margin: 0 0 var(--space-4); border: var(--space-1) solid var(--color-label); }
+
+/* A customer's words, cut in along one edge; the name in label caps */
+.prose blockquote { margin: var(--space-4) 0; padding: var(--space-1) 0 var(--space-1) var(--space-3); border-left: var(--lid) solid var(--color-label); font-size: var(--text-l); font-style: italic; line-height: 1.4; }
+.prose blockquote p { margin-bottom: var(--space-2); text-wrap: pretty; }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose blockquote p:last-child:not(:first-child) { font-style: normal; color: var(--color-muted); }
+
+/* Prices and hours are printed on label stock. A table that scrolls sideways
+   shows shade at the edge with more behind it. */
+.prose table {
+  width: 100%;
+  margin: var(--space-3) 0;
+  border-collapse: collapse;
+  background:
+    linear-gradient(90deg, var(--color-label) 40%, transparent) 0 / var(--space-4) 100% no-repeat local,
+    linear-gradient(270deg, var(--color-label) 40%, transparent) 100% / var(--space-4) 100% no-repeat local,
+    linear-gradient(90deg, var(--color-shade), transparent) 0 / var(--space-3) 100% no-repeat,
+    linear-gradient(270deg, var(--color-shade), transparent) 100% / var(--space-3) 100% no-repeat,
+    var(--color-label);
+  color: var(--color-print);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.35;
+}
+.prose th, .prose td { padding: 0.6rem var(--space-3); border-bottom: 1px solid var(--color-tin); text-align: left; vertical-align: baseline; }
+/* Headings keep their words whole; narrow cells (three columns, or any on a
+   phone) hyphenate; only a web address is cut */
+.prose table:has(th:nth-child(3)) :is(th, td) { -webkit-hyphens: auto; hyphens: auto; }
+.prose td { min-width: calc(5.5em + 2 * var(--space-3)); overflow-wrap: anywhere; }
+.prose th { border-bottom: var(--rule) solid var(--color-print); vertical-align: bottom; }
+.prose tr:last-child td { border-bottom: 0; }
+.prose [align="right"] { min-width: 0; text-align: right; overflow-wrap: break-word; }
+.prose td[align="right"] { font-family: var(--font-display); font-weight: 800; }
+/* Two columns: the words keep the larger share, the figure the rest */
+.prose table:not(:has(th:nth-child(3))) :is(th, td):first-child { width: 58%; }
+.prose table a { color: inherit; }
+.prose table a:hover { text-decoration-thickness: var(--rule); }
+/* Four columns anywhere, three on a phone: the table wraps as far as it can,
+   then scrolls in its own box */
+.prose table:has(th:nth-child(4)) { display: block; overflow-x: auto; }
+@media (max-width: 40em) {
+  .prose th, .prose td { -webkit-hyphens: auto; hyphens: auto; }
+  .prose table:has(th:nth-child(3)) { display: block; overflow-x: auto; }
+  .prose table:has(th:nth-child(3)) :is(th, td) { padding-inline: var(--space-2); }
+  .prose table:has(th:nth-child(3)) td:not([align="right"]) { min-width: 6em; }
+}
+
+.prose code { font-size: 0.9em; padding: 0 var(--space-1); background-color: var(--color-shade); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; background-color: var(--color-shade); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 1px solid var(--color-rail); }
+
+/* The call block: the advice-line box from the back of the tin */
+
+.call { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); max-width: 52rem; margin: var(--space-5) 0 0; padding: var(--space-3) var(--pad); background-color: var(--color-label); color: var(--color-print); border-left: var(--lid) solid var(--color-tin); border-radius: var(--radius); }
+.call > * { min-width: 0; }
+.call > div { flex: 1 1 14rem; }
+.call h2 { margin: 0; font-size: var(--text-l); line-height: 1.1; text-wrap: balance; }
+.call p { margin: var(--space-1) 0 0; }
+.call-main { font-size: var(--text-xl); }
+.call-main span { display: block; margin-bottom: 0.15em; }
+.call-mail { font-size: var(--text-l); }
+.call-facts { flex: 1 1 100%; display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: 0; font-size: var(--text-s); line-height: 1.4; }
+.call-facts div { flex: 1 1 auto; min-width: min(11rem, 100%); padding-top: var(--space-2); border-top: var(--rule) solid var(--color-print); }
+.call-facts dd { margin: 0; }
+.call a:not(.flash) { color: inherit; }
+
+/* Lists, pagination, the 404 */
+
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--color-rail); color: var(--color-muted); }
+.pagination a { padding: var(--space-2) 0; color: var(--color-text); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); margin: 0 0 var(--space-4); }
+.empty { color: var(--color-muted); }
+
+/* The skirting board: white gloss along the foot of the wall */
+
+.skirting { background-color: var(--color-label); color: var(--color-print); border-top: var(--lid) solid var(--color-tin); font-size: var(--text-s); }
+.skirting .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: var(--space-3) var(--space-4); }
+.skirting p { margin: 0; min-width: 0; }
+.skirting a { color: inherit; }
+.skirting strong { display: block; font-family: var(--font-display); font-weight: 800; text-transform: uppercase; }
+.skirting-contact { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 0 var(--space-3); }
+.skirting-contact > * { min-width: 0; }
+.skirting-note { flex-basis: 100%; }
+.skirting-note > * { margin: 0 0 var(--space-1); }
+
+/* Motion */
+
+@media (prefers-reduced-motion: no-preference) {
+  .tin-can { transition: transform 0.15s ease-out; }
+  .tins .tin:hover .tin-can { transform: translateY(calc(-1 * var(--space-1))); }
+}
+
+/* Print: black on paper, the bands as ruled boxes */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-rail: #999;
+    --color-label: #fff;
+    --color-print: #000;
+    --color-tin: #888;
+    --color-shade: rgba(0,0,0,0);
+    --band-1: #fff;
+    --on-band-1: #000;
+    --band-2: #fff;
+    --on-band-2: #000;
+    --band-3: #fff;
+    --on-band-3: #000;
+  }
+  body { background-image: none; font-size: 11pt; }
+  .wrap { max-width: none; padding: 0; }
+  main { min-height: 0; }
+  .menu, .skip-link, .pagination, .actions, .back, .shelf, .tin::before, .tin::after, .tin-can::before { display: none; }
+  .tin, .tins, .views { margin-inline: 0; padding: 0; }
+  .tin-can, .call, .prose table { border: 1px solid var(--color-print); background: none; }
+  .tin-band { border-bottom: var(--rule) solid var(--color-print); }
+  .flash { clip-path: none; padding-inline: var(--space-2); background: none; color: var(--color-print); border: 1px solid var(--color-print); }
+  .tin, .call, .prose blockquote, .prose tr { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

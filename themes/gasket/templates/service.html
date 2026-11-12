@@ -1,0 +1,21 @@
+<article class="sheet">
+  <header class="page-header">
+    <p class="back"><a href="/services/">← {{ strings.allServices }}</a></p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{#if page.priceFrom}}<p class="price"><span class="plate plate-mid"><span class="band">{{ strings.from }}</span><b>{{ page.priceFrom }}</b></span></p>
+    {{/if}}
+  </header>
+  {{> call-cta}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if page.included}}<section class="included" aria-labelledby="included-heading">
+    <h2 id="included-heading">{{ strings.includedHeading }}</h2>
+    <ul>
+      {{#each page.included as point}}<li>{{ point }}</li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+</article>

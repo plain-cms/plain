@@ -1,0 +1,6 @@
+<dl class="call-facts">
+    {{#if data.business.hours}}<div><dt>{{ strings.hoursLabel }}</dt><dd>{{ data.business.hours }}</dd></div>
+    {{/if}}{{#if data.business.area}}<div><dt>{{ strings.areaLabel }}</dt><dd>{{ data.business.area }}</dd></div>
+    {{/if}}{{#if data.business.email}}<div><dt>{{ strings.emailLabel }}</dt><dd><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></dd></div>
+    {{/if}}
+  </dl>

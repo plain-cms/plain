@@ -1,0 +1,16 @@
+<article class="page{{#if collections.services}}{{#if page.url.1}}{{#if nav.0.current}} with-stack{{/if}}{{else}} with-stack{{/if}}{{/if}}">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.url.1}}{{#if nav.0.current}}{{> call}}
+  {{> stack}}
+  {{/if}}{{else}}{{> call}}
+  {{> stack}}
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.url.1}}{{#if nav.0.current}}{{else}}{{> call}}
+  {{/if}}{{/if}}
+</article>

@@ -1,0 +1,8 @@
+{{#if collections.services}}<section class="plot" aria-label="{{ strings.lawnLabel }}">
+  <ul class="lawn" role="list">
+    {{#each collections.services as item}}{{> row}}
+    {{/each}}
+  </ul>
+  <p class="more"><a href="/services/">{{ strings.allServices }} →</a></p>
+</section>
+{{/if}}

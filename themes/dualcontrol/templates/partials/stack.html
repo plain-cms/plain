@@ -1,0 +1,8 @@
+{{#if collections.services}}<ul class="posts signs" aria-label="{{ strings.servicesLabel }}">
+  {{#each collections.services as item}}<li class="sign">
+    <p class="sign-name"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    {{#if item.priceFrom}}<p class="route"><span>{{ strings.from }}</span> {{ item.priceFrom }}</p>
+    {{/if}}
+  </li>
+  {{/each}}
+</ul>{{/if}}

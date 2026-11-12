@@ -1,0 +1,305 @@
+/* topsoil — one striped lawn on a paving-grey ground. Restyle by editing these tokens. */
+:root {
+  --font-display: Optima, Candara, 'Noto Sans', 'Segoe UI', sans-serif;
+  --font-body: Seravek, 'Gill Sans Nova', Ubuntu, Calibri, 'DejaVu Sans', source-sans-pro, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: clamp(1.125rem, 1rem + 0.6vw, 1.3125rem);
+  --text-xl: clamp(1.375rem, 1rem + 1.9vw, 2.125rem);
+  --text-xxl: clamp(1.625rem, 1rem + 3vw, 2.875rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.1;
+  --tracking-caps: 0.07em;
+  --color-bg: #d7d5cf;
+  --color-slab: #e6e4df;
+  --color-text: #1c1712;
+  --color-muted: #4f4840;
+  --color-accent: #6e4a2a;
+  --color-joint: #a9a59c;
+  --color-lawn-light: #97c85b;
+  --color-lawn-dark: #7dbd3f;
+  --color-lawn-edge: #47801f;
+  --color-grain: rgba(255,255,255,0.08);
+  --color-on-lawn: #17120d;
+  --color-soil: #3a291b;
+  --color-crumb: #6f553c;
+  --color-shade: rgba(0,0,0,0.5);
+  --stripe-width: clamp(2.75rem, 7vw, 5.5rem);
+  --soil-depth: 1.875rem;
+  --page-width: 71rem;
+  --columns: minmax(0,7fr) minmax(0,13fr) minmax(0,6fr);
+  --measure: 38rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1.25rem;
+  --space-4: 2.25rem;
+  --space-5: 4rem;
+  --rule: 0.1875rem;
+  --radius: 0;
+  --focus-width: 0.1875rem;
+  --tap-target: 2.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #232528;
+    --color-slab: #303338;
+    --color-text: #efede7;
+    --color-muted: #b9b5ab;
+    --color-accent: #d3a878;
+    --color-joint: #54575c;
+    --color-lawn-light: #2b6238;
+    --color-lawn-dark: #214f2d;
+    --color-lawn-edge: #12301b;
+    --color-grain: rgba(255,255,255,0.04);
+    --color-on-lawn: #ffffff;
+    --color-soil: #3b2a1d;
+    --color-crumb: #6b523a;
+    --color-shade: rgba(0,0,0,0.6);
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  overflow-wrap: break-word;
+}
+h1, h2, h3, h4, p, ul, ol, blockquote, table, pre, hr { margin: 0; }
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color 0.15s;
+}
+a:hover { text-decoration-color: currentColor; text-decoration-thickness: 0.16em; }
+:focus-visible { outline: var(--focus-width) solid currentColor; outline-offset: 0.15em; border-radius: var(--radius); }
+::selection { background: var(--color-text); color: var(--color-bg); }
+.wrap { width: 100%; max-width: var(--page-width); margin-inline: auto; padding-inline: var(--gutter); }
+.skip-link {
+  position: absolute; left: var(--gutter); top: 0; z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-text); color: var(--color-bg);
+  transform: translateY(-120%);
+}
+.skip-link:focus { transform: none; outline-offset: -0.4em; }
+
+/* Masthead: name, menu, number — ink on paving, one joint below. */
+.masthead { border-bottom: 1px solid var(--color-joint); }
+.masthead .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-4); padding-block: var(--space-2); }
+.site-title, .ring, h1, h2, .price b, .call-number, .prose blockquote, .prose td[align="right"] { font-family: var(--font-display); }
+.site-title {
+  flex: 1 1 14rem; min-width: 0; padding-block: var(--space-1);
+  font-size: 1.125rem; font-weight: 700; line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-caps); text-transform: uppercase; text-decoration: none; text-wrap: balance;
+}
+.menu ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); padding: 0; list-style: none; }
+.menu a, .ring { display: inline-flex; align-items: center; min-height: var(--tap-target); text-decoration-line: none; }
+.menu a, .ring span, .eyebrow, .price span, .price time, .more, .pagination, .prose th, .prose h4 {
+  font-size: var(--text-s); font-weight: 600; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+}
+.menu a:hover, .ring:hover { text-decoration-line: underline; }
+.menu a[aria-current] { text-decoration-line: underline; text-decoration-thickness: var(--rule); text-underline-offset: 0.4em; }
+.ring { flex-wrap: wrap; gap: 0 var(--space-2); font-size: var(--text-l); font-weight: 700; }
+.ring span { color: var(--color-muted); font-family: var(--font-body); }
+
+/* Page headers. On wide screens every block shares the three lawn columns. */
+main { padding-bottom: var(--space-4); }
+.page-header { padding-block: 1.75rem var(--space-3); }
+h1 {
+  font-size: var(--text-xxl); font-weight: 700; line-height: var(--leading-tight);
+  text-transform: uppercase; text-wrap: balance;
+}
+h1, h2 { hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+.lede { max-width: var(--measure); margin-top: var(--space-2); font-size: var(--text-l); line-height: 1.4; color: var(--color-muted); }
+.where { max-width: var(--measure); margin-top: var(--space-2); padding-top: var(--space-1); border-top: 1px solid var(--color-joint); font-size: var(--text-s); line-height: 1.4; }
+.eyebrow { margin-bottom: var(--space-1); color: var(--color-muted); }
+.eyebrow a { margin-left: var(--space-2); }
+.back { padding-top: var(--space-3); margin-bottom: var(--space-2); }
+.back a { margin: 0; display: inline-flex; align-items: center; min-height: var(--tap-target); }
+.cover { display: block; max-width: 100%; height: auto; margin-bottom: var(--space-4); }
+
+/* The lawn: one gradient of mower stripes down the whole list, a faint grain along the cut, text straight on the grass. */
+.lawn {
+  margin: 0 calc(-1 * var(--gutter)); padding: var(--space-2) 0 0; list-style: none;
+  color: var(--color-on-lawn);
+  background-color: var(--color-lawn-dark);
+  background-image:
+    repeating-linear-gradient(90deg, var(--color-grain) 0 1px, transparent 1px 0.3125rem),
+    linear-gradient(90deg, var(--color-lawn-light) 50%, var(--color-lawn-dark) 0);
+  background-size: auto, calc(2 * var(--stripe-width)) 100%;
+  background-repeat: repeat, round;
+  border-radius: var(--radius);
+}
+/* The spade-cut edge: the turf seen side-on, a shadow in the cut, then a strip of crumbly soil. */
+.lawn::after {
+  content: ""; display: block; height: var(--soil-depth); margin-top: var(--space-2);
+  border-top: var(--rule) solid var(--color-lawn-edge);
+  background:
+    linear-gradient(var(--color-shade), transparent 40%),
+    radial-gradient(circle, var(--color-crumb) 1.5px, transparent 2.2px) 0.3rem 0.15rem / 2.3rem 1.3rem,
+    radial-gradient(circle, var(--color-crumb) 1.1px, transparent 1.8px) 0 0.3rem / 1.1rem 0.7rem,
+    radial-gradient(circle, var(--color-crumb) 0.8px, transparent 1.4px) 0.45rem 0.55rem / 0.8rem 0.55rem,
+    var(--color-soil);
+}
+.lawn a { text-decoration-color: currentColor; }
+.row-title a { text-decoration-thickness: 0.0625rem; }
+.row { padding: 0.625rem var(--gutter); }
+.row-title {
+  font-size: var(--text-m); font-weight: 700; line-height: 1.3;
+  letter-spacing: 0.03em; text-transform: uppercase;
+}
+.row-text { margin-top: var(--space-1); font-size: 1rem; line-height: 1.45; }
+.price { margin-top: var(--space-1); line-height: 1.25; }
+.price b { font-size: var(--text-l); font-weight: 700; }
+.plot .row:nth-child(n+11) { display: none; }
+.more { text-align: right; }
+.more a, .pagination a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0 var(--space-3); margin-top: var(--space-2); }
+.pagination span { color: var(--color-muted); }
+.empty { color: var(--color-muted); }
+
+/* One service: its row, enlarged, on its own patch of lawn. */
+.patch { padding: var(--space-4) var(--gutter) 0; }
+.patch::after { margin: var(--space-4) calc(-1 * var(--gutter)) 0; }
+.patch .lede { color: inherit; }
+.patch .price { margin-top: var(--space-3); }
+.patch .price b { font-size: var(--text-xl); }
+
+/* Page text. */
+.prose { margin-top: var(--space-4); }
+.page > .prose, .post > .prose { margin-top: 0; padding-top: var(--space-4); border-top: var(--rule) solid var(--color-text); }
+.page > .plot + .prose { padding-top: var(--space-3); border-top: 0; }
+.prose > * { max-width: var(--measure); }
+.prose > * + * { margin-top: var(--space-3); }
+.prose > * + h2 { margin-top: var(--space-4); }
+.prose h2, .call h2 {
+  font-size: var(--text-m); font-weight: 700; line-height: 1.55;
+  letter-spacing: var(--tracking-caps); text-transform: uppercase;
+}
+.prose h3 { font-size: var(--text-m); font-weight: 700; }
+.prose h4 { color: var(--color-muted); }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li + li, .prose li > ul, .prose li > ol { margin-top: var(--space-1); }
+.prose li::marker { color: var(--color-accent); }
+.prose a[href^="tel:"] { font-weight: 700; white-space: nowrap; }
+.prose img { max-width: 100%; height: auto; vertical-align: bottom; }
+.prose hr { border: 0; border-top: 1px solid var(--color-joint); }
+.prose blockquote { padding-left: var(--space-3); border-left: var(--rule) solid var(--color-accent); font-size: var(--text-l); line-height: 1.4; }
+.prose blockquote p + p { margin-top: var(--space-2); }
+.prose blockquote p:last-child:not(:first-child) {
+  font-family: var(--font-body); font-size: var(--text-s); letter-spacing: var(--tracking-caps);
+  text-transform: uppercase; color: var(--color-muted);
+}
+.prose blockquote p:last-child:not(:first-child)::before { content: "\2014\00a0"; }
+.prose table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; vertical-align: baseline; border-bottom: 1px solid var(--color-joint); hyphens: manual; }
+.prose th { color: var(--color-muted); border-bottom: var(--rule) solid var(--color-text); }
+.prose th:not([align]) { text-align: left; }
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
+.prose td[align="right"] { font-weight: 700; }
+.prose code { font-family: var(--font-mono); font-size: 0.9em; padding: 0.1em 0.3em; background: var(--color-slab); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; background: var(--color-slab); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+.included { padding-top: var(--space-4); border-top: 1px solid var(--color-joint); }
+.ticks.ticks { padding: 0; list-style: none; }
+.ticks li { position: relative; padding-left: 1.75em; }
+.ticks li::before {
+  content: ""; position: absolute; left: 0.3em; top: 0.3em; width: 0.45em; height: 0.85em;
+  border: solid var(--color-accent); border-width: 0 0.15em 0.15em 0; transform: rotate(40deg);
+}
+
+/* The call block: a pale slab laid at the foot of every page. */
+.call {
+  margin: var(--space-5) calc(-1 * var(--gutter)) 0; padding: var(--space-4) var(--gutter);
+  background: var(--color-slab); border-bottom: var(--rule) solid var(--color-joint); border-radius: var(--radius);
+}
+.call-main { margin-top: var(--space-2); }
+.call-lead { color: var(--color-muted); }
+.call-number { margin-top: var(--space-1); font-size: var(--text-xl); font-weight: 700; line-height: 1.2; }
+.call-number a { text-decoration-thickness: 0.08em; }
+.call-other { font-size: var(--text-l); }
+.call-facts { margin-top: var(--space-2); font-size: var(--text-s); }
+.call-facts p + p { margin-top: var(--space-1); }
+.call-facts:empty { display: none; }
+.colophon { padding-block: var(--space-3) var(--space-4); font-size: var(--text-s); color: var(--color-muted); }
+.colophon strong { color: var(--color-text); margin-right: var(--space-2); }
+.colophon-note { margin-top: var(--space-1); }
+
+/* On a phone a two-column table wraps. Three columns or more do not fit side by side, so each row
+   becomes a record: its first cell in bold, the others under it, the headings in one line above. */
+@media (max-width: 36rem) {
+  .prose th, .prose td { padding-right: var(--space-2); hyphens: auto; }
+  .prose td[align="right"] { hyphens: manual; }
+  .prose td:first-child { overflow-wrap: anywhere; }
+  .prose table:has(th:nth-child(3)), .prose table:has(th:nth-child(3)) :is(thead, tbody, tr, th, td) { display: block; }
+  .prose table:has(th:nth-child(3)) :is(th, td) { padding: 0; border: 0; text-align: left; }
+  .prose table:has(th:nth-child(3)) tr { padding-block: var(--space-2); border-bottom: 1px solid var(--color-joint); }
+  .prose table:has(th:nth-child(3)) thead tr { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); padding-top: 0; border-bottom: var(--rule) solid var(--color-text); }
+  .prose table:has(th:nth-child(3)) th:not(:last-child)::after { content: "/"; margin-left: var(--space-2); color: var(--color-joint); }
+  .prose table:has(th:nth-child(3)) td:first-child { font-weight: 700; }
+  .prose table:has(th:nth-child(3)) td + td { margin-top: var(--space-1); }
+  .prose table:has(th:nth-child(3)) td:empty { display: none; }
+}
+@media (min-width: 56rem) {
+  .site-title { flex: 1 1 auto; }
+  .menu ul { column-gap: var(--space-3); }
+  .page-header, .row, .patch, .prose, .call { display: grid; grid-template-columns: var(--columns); column-gap: var(--space-4); }
+  .page-header > *, .patch > * { grid-column: 1 / -1; }
+  .page-header > .lede { grid-column: 2 / -1; max-width: none; }
+  .page-header > .where { grid-column: 1; grid-row: 2; align-self: start; max-width: none; margin-top: calc(var(--space-2) + 0.3em); }
+  .row { align-items: baseline; }
+  .row > * { grid-row: 1; }
+  .row-title { grid-column: 1; }
+  .row-text { grid-column: 2; }
+  .row-text, .price { margin-top: 0; }
+  .row .price { grid-column: 3; }
+  /* A strut the size of a price, so a row with no price keeps the rhythm of the rows that have one. */
+  .row::before { content: "\200b"; grid-area: 1 / 3; font-family: var(--font-display); font-size: var(--text-l); line-height: 1.25; }
+  .row .price, .patch .price { text-align: right; }
+  .patch { grid-template-columns: minmax(0,3fr) minmax(0,2fr); }
+  .patch::after { grid-column: 1 / -1; }
+  .patch > .lede { grid-column: 1; max-width: none; }
+  .patch .price { grid-column: 2; align-self: end; margin-top: var(--space-2); }
+  .prose > * { grid-column: 2; max-width: none; }
+  .prose > table, .prose > pre { grid-column: 2 / -1; }
+  .prose table:has(th:nth-child(3)) td[align="right"] { white-space: nowrap; }
+  .prose > h2 { grid-column: 1; }
+  .prose > h2 + * { margin-top: var(--space-4); }
+  .prose > h2:first-child + * { margin-top: 0; }
+  .call-main, .call-facts { margin-top: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-slab: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-joint: #888;
+    --color-lawn-light: #fff;
+    --color-lawn-dark: #fff;
+    --color-lawn-edge: #000;
+    --color-on-lawn: #000;
+    --color-soil: #000;
+    --color-crumb: #000;
+  }
+  body { font-size: 11pt; }
+  .skip-link, .menu, .more, .back, .pagination { display: none; }
+  .lawn { background-image: none; border-top: 1pt solid var(--color-text); }
+  .lawn::after { height: 2pt; border-top: 0; }
+  .row, .call, .prose blockquote, .prose tr { break-inside: avoid; }
+  .call { border: 1pt solid var(--color-text); }
+}

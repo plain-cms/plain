@@ -1,0 +1,11 @@
+<aside class="call plate" aria-labelledby="call-heading">
+  <h2 id="call-heading">{{ strings.callHeading }}</h2>
+  <p>{{ strings.callLead }}</p>
+  {{#if data.business.phone}}<a class="btn" href="tel:{{ data.business.phone }}"><span class="btn-word">{{ strings.call }}</span> <span>{{ data.business.phone }}</span></a>
+  {{else}}{{#if data.business.email}}<a class="btn" href="mailto:{{ data.business.email }}"><span>{{ strings.emailUs }}</span></a>
+  {{else}}<a class="btn" href="/contact/"><span>{{ strings.contactLink }}</span></a>
+  {{/if}}{{/if}}{{#if data.business.hours}}<p class="call-fact">{{ data.business.hours }}</p>
+  {{/if}}{{#if data.business.area}}<p class="call-fact">{{ data.business.area }}</p>
+  {{/if}}{{#if data.business.phone}}{{#if data.business.email}}<p class="call-fact"><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></p>
+  {{/if}}{{/if}}
+</aside>

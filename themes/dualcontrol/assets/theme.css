@@ -1,0 +1,489 @@
+/* Dual Control: a theme for driving instructors (trades family).
+   The object is the stack-type advance direction sign: every service is a
+   green primary-route panel with an inset white border, its name in sign
+   lettering over a white rule, its price in yellow brackets like a route
+   number, and a white arrow. Panels stand on grey posts beside a strip of
+   road. Everything else is road-marking white and tarmac grey; L-plate red
+   is kept for the call button. Restyle by editing tokens, never selectors. */
+
+:root {
+  /* Type: one humanist sans in mixed case, as on the signs */
+  --font-sign: Seravek, "Gill Sans Nova", "Trebuchet MS", Ubuntu, Calibri, "DejaVu Sans", "Noto Sans", sans-serif;
+  --font-code: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.9rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-xl: 1.75rem;
+  --text-xxl: clamp(2.1rem, 1.3rem + 2.7vw, 3.375rem);
+  --leading: 1.55;
+  --leading-tight: 1.12;
+
+  /* Colour, by day */
+  --color-bg: #f8f8f4;
+  --color-text: #2a2e31;
+  --color-muted: #5b6165;
+  --color-accent: #00693a;
+  --color-line: #d2d4cd;
+  --color-sign: #006b3b;
+  --color-sign-ink: #ffffff;
+  --color-route: #ffd60a;
+  --color-plate: #ffffff;
+  --color-plate-ink: #17191b;
+  --color-post: #9da2a5;
+  --color-road: #34383b;
+  --color-call: #cf1219;
+  --color-on-call: #ffffff;
+
+  /* Measures */
+  --page-width: 76rem;
+  --measure: 40rem;
+  --aside-width: 21rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --radius: 0.625rem;
+  --sign-edge: 3px;
+  --sign-border: 3px;
+  --rule: 2px;
+  --arrow: 2.1rem;
+  --post-width: 0.7rem;
+  --post-height: 3rem;
+  --road-height: 0.875rem;
+  --focus-width: 3px;
+  --tap: 2.75rem;
+}
+
+/* By night: tarmac ground, road-marking ink. The signs keep their colours,
+   as reflective sheeting does in headlights. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1b1d1f;
+    --color-text: #f2f2ec;
+    --color-muted: #a9aeb1;
+    --color-accent: #6ad39b;
+    --color-line: #3c4043;
+    --color-plate: #ecece6;
+    --color-post: #5f6467;
+    --color-road: #0a0b0c;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+*, ::before, ::after { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sign);
+  font-size: var(--text-m);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4 { line-height: var(--leading-tight); text-wrap: balance; }
+/* Narrow columns hyphenate long compound words; short words stay whole.
+   Prices, tables and page text are never hyphenated. */
+h1, h2, h3, h4, .site-title, .sign, .plate { -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 11 4 4; }
+.route, .call-fact, .prose table { -webkit-hyphens: manual; hyphens: manual; }
+
+::selection { background: var(--color-route); color: var(--color-plate-ink); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+a:hover { text-decoration-thickness: var(--rule); }
+/* A number or address wider than the line breaks inside itself */
+a[href^="tel:"]:not(.btn), a[href^="mailto:"]:not(.btn) { overflow-wrap: anywhere; }
+
+:focus-visible { outline: var(--focus-width) solid var(--color-text); outline-offset: 2px; }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 9; padding: var(--space-2) var(--space-3); background: var(--color-plate); color: var(--color-plate-ink); }
+.skip-link:focus { left: var(--space-2); }
+
+.masthead, main, .colophon { width: 100%; max-width: var(--page-width); margin-inline: auto; padding-inline: var(--space-3); }
+main { min-height: 60vh; padding-block: calc(var(--space-4) - var(--space-2)) var(--space-5); }
+
+/* Masthead --------------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-3);
+  padding-block: var(--space-2);
+  border-bottom: 1px solid var(--color-line);
+}
+.site-title {
+  flex: 1 1 0;
+  min-width: 0;
+  padding-block: var(--space-1);
+  font-size: var(--text-m);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  text-decoration: none;
+}
+/* A sign in miniature beside the name */
+.site-title::before {
+  content: "";
+  display: inline-block;
+  width: 1.7em;
+  height: 1.15em;
+  margin-right: var(--space-2);
+  vertical-align: -0.2em;
+  border: var(--rule) solid var(--color-sign);
+  border-radius: calc(var(--radius) / 2);
+  background: var(--color-sign);
+  box-shadow: inset 0 0 0 var(--rule) var(--color-sign-ink);
+}
+.site-title:hover { text-decoration: underline; }
+.masthead nav { order: 3; flex-basis: 100%; }
+.masthead ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-weight: 600;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current="page"] { box-shadow: inset 0 calc(-1 * var(--focus-width)) var(--color-accent); }
+
+/* The call button: L-plate red, with the plate itself drawn beside the word */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap);
+  padding: var(--space-1) var(--space-3) var(--space-1) var(--space-2);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: var(--leading-tight);
+  color: var(--color-on-call);
+  background: var(--color-call);
+  border-radius: calc(var(--radius) / 2);
+  text-decoration: none;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+.btn::before {
+  content: "";
+  flex: none;
+  width: 1.6em;
+  height: 1.6em;
+  border-radius: 2px;
+  background:
+    linear-gradient(var(--color-call), var(--color-call)) 36% 50% / 16% 62% no-repeat,
+    linear-gradient(var(--color-call), var(--color-call)) 56% 77% / 46% 16% no-repeat,
+    var(--color-on-call);
+}
+.btn:hover { text-decoration: underline; }
+.btn > * { min-width: 0; }
+.masthead .btn b { display: none; }
+
+@media (min-width: 36em) {
+  .masthead .btn b { display: inline; }
+  .site-title { font-size: var(--text-l); }
+}
+@media (min-width: 56em) {
+  .masthead, main, .colophon { padding-inline: var(--space-4); }
+  .masthead nav { order: 0; flex-basis: auto; margin-right: var(--space-3); }
+  main { padding-top: calc(var(--space-4) + var(--space-3)); }
+}
+
+/* Page header ------------------------------------------------------------ */
+
+.page-header h1 { margin: 0; font-size: var(--text-xxl); letter-spacing: -0.01em; }
+.lede { max-width: var(--measure); margin: var(--space-3) 0 0; font-size: var(--text-l); line-height: 1.4; color: var(--color-muted); text-wrap: pretty; }
+.meta { margin: var(--space-2) 0 0; font-size: var(--text-s); color: var(--color-muted); }
+.meta a { margin-left: var(--space-2); color: inherit; }
+.back { margin: 0; font-weight: 700; }
+.back a { text-decoration: none; }
+.back a:hover { text-decoration: underline; }
+.cover { width: 100%; height: auto; border-radius: var(--radius); }
+.empty { color: var(--color-muted); }
+
+/* Layout: one column, in the order the page is written. The call sign is
+   written last, except on the home page, where it stands under the headline
+   and the stack of signs follows it. */
+.page, .post, .service, .list, .not-found { display: grid; grid-template-columns: minmax(0, 1fr); }
+main > * > * + * { margin-top: var(--space-4); }
+
+/* Posts and road ----------------------------------------------------------
+   Anything that stands on posts: the stack of signs, the service's own sign.
+   Two posts behind each column, and a strip of road for them to stand on. */
+.posts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  align-content: start;
+  margin-bottom: 0;
+  padding: 0;
+  list-style: none;
+  background: linear-gradient(90deg, transparent calc(50% - var(--post-width) / 2), var(--color-post) 0 calc(50% + var(--post-width) / 2), transparent 0) 0 0 / 50% 100%;
+}
+.posts::after { grid-column: 1 / -1; margin-top: calc(var(--post-height) - var(--space-2)); }
+.posts::after, .colophon::before { content: ""; }
+.posts::after, .colophon::before, .with-stack::after {
+  height: var(--road-height);
+  background: linear-gradient(90deg, var(--color-sign-ink) 58%, transparent 0) 0 50% / 2.75rem var(--rule) repeat-x var(--color-road);
+}
+
+/* THE SIGNATURE: the direction sign ---------------------------------------
+   Green panel, green edge, inset white border, rounded corners. The name in
+   sign lettering; a white rule under it when anything follows; the price in
+   yellow brackets. The arrow points left on odd panels and right on even
+   ones, as the panels of a stack do. */
+.sign, .plate {
+  position: relative;
+  min-width: 0;
+  padding: calc(var(--sign-edge) + var(--sign-border) + 0.75rem);
+  border-radius: var(--radius);
+}
+.sign {
+  display: flex;
+  flex-direction: column;
+  padding-left: calc(var(--sign-edge) + var(--sign-border) + 1.5rem + var(--arrow));
+  color: var(--color-sign-ink);
+  background: var(--color-sign);
+  box-shadow: inset 0 0 0 var(--sign-edge) var(--color-sign), inset 0 0 0 calc(var(--sign-edge) + var(--sign-border)) var(--color-sign-ink);
+}
+.sign::before {
+  content: "";
+  position: absolute;
+  top: calc(50% - var(--arrow) * 0.35);
+  left: calc(var(--sign-edge) + var(--sign-border) + 0.75rem);
+  width: var(--arrow);
+  height: calc(var(--arrow) * 0.7);
+  background: var(--color-sign-ink);
+  clip-path: polygon(0 50%, 42% 2%, 62% 2%, 40% 35%, 100% 35%, 100% 65%, 40% 65%, 62% 98%, 42% 98%);
+}
+.signs > :nth-child(even) {
+  padding-left: calc(var(--sign-edge) + var(--sign-border) + 0.75rem);
+  padding-right: calc(var(--sign-edge) + var(--sign-border) + 1.5rem + var(--arrow));
+}
+.signs > :nth-child(even)::before { left: auto; right: calc(var(--sign-edge) + var(--sign-border) + 0.75rem); transform: scaleX(-1); }
+/* The service's own sign points straight on */
+.sign-ahead::before { transform: rotate(90deg); }
+
+.sign-name { margin: 0; font-size: var(--text-l); font-weight: 700; line-height: var(--leading-tight); letter-spacing: 0.01em; text-wrap: balance; }
+.sign-name a { color: inherit; text-decoration: none; }
+.sign-name a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
+.sign:hover .sign-name a { text-decoration: underline; }
+.sign a:focus-visible { outline: 0; }
+.sign:has(a:focus-visible) { outline: var(--focus-width) solid var(--color-text); outline-offset: 2px; }
+.sign-name ~ p { margin: var(--space-1) 0 0; line-height: 1.4; }
+.sign-name + p { margin-top: var(--space-2); padding-top: var(--space-2); border-top: var(--rule) solid var(--color-sign-ink); }
+/* Two signs side by side are one height. A name with only its price under
+   it takes the spare room, so the rules of the pair line up; on a fuller
+   sign the price stands at the foot. */
+.sign-name:last-child, .sign-name:has(+ .route) { flex: 1 0 auto; align-content: center; }
+.sign-name ~ p ~ .route { margin-top: auto; padding-top: var(--space-1); }
+.sign-date { font-size: var(--text-s); }
+.route { font-weight: 700; color: var(--color-route); }
+.route::before { content: "("; }
+.route::after { content: ")"; }
+.route span { font-weight: 400; }
+
+h1.sign-name { font-size: calc(var(--text-xxl) * 0.8); letter-spacing: 0; }
+.sign-ahead .sign-note { font-size: var(--text-l); }
+.sign-ahead .route { font-size: var(--text-xl); line-height: var(--leading-tight); }
+
+/* The white sign: black inset border, black lettering. The call block and
+   the list of what a price covers. It stays white at night. */
+.plate {
+  color: var(--color-plate-ink);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 var(--sign-edge) var(--color-plate), inset 0 0 0 calc(var(--sign-edge) + var(--sign-border)) var(--color-plate-ink);
+}
+.plate h2 { margin: 0; font-size: var(--text-l); }
+.plate p { margin: var(--space-1) 0 0; }
+.plate a:not(.btn) { color: inherit; }
+.plate :focus-visible { outline-color: var(--color-plate-ink); }
+
+/* On the call sign the button is as wide as the sign, and the word sits over
+   the number beside a larger plate */
+.call .btn { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: var(--space-3); margin: var(--space-3) 0; padding: var(--space-2) var(--space-3) var(--space-2) var(--space-2); font-size: var(--text-l); }
+.call .btn::before, .call .btn > :only-child { grid-row: 1 / span 2; }
+.call .btn::before { width: 2em; height: 2em; }
+.call .btn-word { font-size: var(--text-s); font-weight: 600; }
+
+.included ul { margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.included li { position: relative; margin-top: var(--space-1); padding-left: 1.6em; }
+.included li::before {
+  content: "";
+  position: absolute;
+  left: 0.25em;
+  top: 0.3em;
+  width: 0.5em;
+  height: 0.85em;
+  border: solid var(--color-sign);
+  border-width: 0 var(--sign-border) var(--sign-border) 0;
+  transform: rotate(40deg);
+}
+
+@media (min-width: 36em) {
+  .signs { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: var(--space-3); background-size: 25% 100%; }
+  /* A lone sign keeps the whole width, and no bare posts beside it */
+  .signs:has(> .sign:only-child) { grid-template-columns: minmax(0, 1fr); background-size: 50% 100%; }
+  .list > .call, .not-found > .call { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: var(--space-4); align-items: center; }
+  .list > .call > *, .not-found > .call > * { grid-column: 1; }
+  .list > .call > .btn, .not-found > .call > .btn { grid-column: 2; grid-row: 1 / span 6; margin: 0; }
+}
+
+/* Wide screens: text on the left, the call sign on the right. On a home
+   page with services (.with-stack) the right-hand side is the whole stack of
+   signs, and the headline and call sign share the left. */
+@media (min-width: 62em) {
+  .page, .post, .service { grid-template-columns: minmax(0, var(--measure)) minmax(0, var(--aside-width)); justify-content: space-between; column-gap: var(--space-4); align-items: start; }
+  .page > *, .post > *, .service > * { grid-column: 1; }
+  .page > .call, .post > .call, .service > .call { grid-column: 2; grid-row: 1 / span 9; margin-top: 0; }
+
+  .page.with-stack { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); grid-template-rows: auto 1fr; column-gap: var(--space-5); align-items: stretch; }
+  .with-stack > .page-header { grid-row: 1; }
+  .with-stack > .call { grid-column: 1; grid-row: 2; align-self: start; margin-block: var(--space-4); }
+  /* The signs share out the height of the left half, so the posts always
+     show the same length below the lowest one */
+  .with-stack > .signs { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; padding-bottom: var(--post-height); align-content: stretch; }
+  /* One road under both halves */
+  .with-stack > .signs::after { display: none; }
+  .with-stack::after { content: ""; grid-column: 1 / -1; grid-row: 3; }
+  .with-stack > .prose { grid-column: 1 / -1; grid-row: 4; max-width: none; columns: 2; column-gap: var(--space-5); }
+}
+
+/* Prose ------------------------------------------------------------------ */
+
+.prose { min-width: 0; max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); break-after: avoid; }
+.prose h2 { font-size: var(--text-xl); }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-m); }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre { margin: 0 0 var(--space-3); }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose a[href^="tel:"] { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Two pictures in one paragraph stand side by side when there is room */
+.prose img { display: block; max-width: 100%; height: auto; border-radius: calc(var(--radius) / 2); }
+.prose img + img { margin-top: var(--space-2); }
+@media (min-width: 36em) {
+  .prose p:has(> img + img) { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); align-items: start; }
+  .prose img + img { margin-top: 0; }
+}
+
+/* A customer's words, parked on double yellow lines */
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: var(--space-1) 0 var(--space-1) calc(1.1rem + var(--space-3));
+  font-size: var(--text-l);
+  line-height: 1.4;
+  background: linear-gradient(90deg, var(--color-road) 0 0.2rem, var(--color-route) 0 0.4rem, var(--color-road) 0 0.7rem, var(--color-route) 0 0.9rem, var(--color-road) 0 1.1rem, transparent 0);
+  break-inside: avoid;
+}
+.prose blockquote p { margin: 0 0 var(--space-2); text-wrap: pretty; }
+.prose blockquote p:last-child { margin: 0; }
+.prose blockquote p:last-child:not(:first-child) { font-size: var(--text-s); font-weight: 700; color: var(--color-muted); }
+
+/* Tables are price lists and opening hours */
+.prose table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; break-inside: avoid; }
+.prose th, .prose td {
+  min-width: 5em;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  text-align: left;
+  vertical-align: baseline;
+  border-bottom: 1px solid var(--color-line);
+  overflow-wrap: anywhere;
+}
+.prose th { font-size: var(--text-s); color: var(--color-muted); vertical-align: bottom; border-bottom: var(--rule) solid var(--color-text); }
+.prose :is(th, td):last-child { padding-right: 0; }
+.prose [align="right"] { min-width: 0; text-align: right; overflow-wrap: break-word; }
+.prose td[align="right"] { font-weight: 700; }
+.prose table + p { break-before: avoid; }
+/* Three columns or more do not fit a phone. The headings become one line,
+   and each row a short block under it with its first cell in bold. */
+@media (max-width: 40em) {
+  .prose table:has(th:nth-child(3)), .prose table:has(th:nth-child(3)) :is(thead, tbody, tr, td) { display: block; }
+  .prose table:has(th:nth-child(3)) :is(th, td) { min-width: 0; padding: 0; text-align: left; border: 0; }
+  .prose table:has(th:nth-child(3)) th { display: inline-block; padding-right: var(--space-3); }
+  .prose table:has(th:nth-child(3)) tr { padding-block: var(--space-2); border-bottom: 1px solid var(--color-line); break-inside: avoid; }
+  .prose table:has(th:nth-child(3)) thead tr { padding-top: 0; border-bottom: var(--rule) solid var(--color-text); }
+  .prose table:has(th:nth-child(3)) td:first-child { font-weight: 700; }
+}
+
+.prose code { font-family: var(--font-code); font-size: 0.9em; }
+.prose pre { padding: var(--space-3); overflow-x: auto; border: 1px solid var(--color-line); border-radius: calc(var(--radius) / 2); break-inside: avoid; }
+/* A rule in the text is a broken lane line */
+.prose hr { height: var(--rule); margin: var(--space-4) 0; border: 0; background: linear-gradient(90deg, var(--color-muted) 58%, transparent 0) 0 0 / 2.75rem 100%; }
+
+/* Lists, pagination, 404 ------------------------------------------------- */
+
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-3); font-size: var(--text-s); color: var(--color-muted); }
+.pagination a, .actions a { display: inline-flex; align-items: center; min-height: var(--tap); font-size: var(--text-m); font-weight: 700; }
+.actions { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin-bottom: 0; }
+
+/* Colophon --------------------------------------------------------------- */
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding-bottom: var(--space-4);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon::before { flex: 0 0 100%; margin-bottom: var(--space-2); }
+.colophon p { margin: 0; min-width: 0; }
+.colophon a { color: var(--color-text); }
+.colophon strong { display: block; color: var(--color-text); }
+.colophon-contact { display: flex; flex-wrap: wrap; align-content: flex-start; gap: 0 var(--space-3); }
+.colophon-contact > * { min-width: 0; }
+.colophon-contact:empty { display: none; }
+.colophon-note { flex-basis: 100%; }
+.colophon-note > * { margin: 0 0 var(--space-1); }
+
+/* Motion ----------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .signs .sign::before { transition: translate 0.15s; }
+  .signs .sign:hover::before { translate: -0.3rem 0; }
+  .signs .sign:nth-child(even):hover::before { translate: 0.3rem 0; }
+}
+
+/* Print: black on white, no posts, no road, no menu ----------------------- */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-line: #999;
+    --color-sign: #fff;
+    --color-sign-ink: #000;
+    --color-route: #000;
+    --color-plate: #fff;
+    --color-plate-ink: #000;
+    --color-call: #fff;
+    --color-on-call: #000;
+  }
+  body { font-size: 11pt; }
+  .masthead, main, .colophon { max-width: none; padding-inline: 0; }
+  main { min-height: 0; }
+  .masthead nav, .masthead .btn, .skip-link, .pagination, .actions, .back, .sign::before, .btn::before, .posts::after, .with-stack::after, .colophon::before, .site-title::before { display: none; }
+  .posts, .prose blockquote { background: none; }
+  .sign, .signs > .sign:nth-child(n), .plate { padding: var(--space-3); border: var(--rule) solid; box-shadow: none; break-inside: avoid; }
+  .prose blockquote { padding-left: var(--space-3); border-left: var(--rule) solid; }
+  .btn { padding: 0; }
+  .included li::before { border-color: var(--color-plate-ink); }
+  .prose tr { break-inside: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

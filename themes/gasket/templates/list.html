@@ -1,0 +1,18 @@
+<section class="sheet">
+  <header class="page-header">
+    {{#if tag}}<p class="meta">{{ strings.tagged }}</p>
+    {{/if}}<h1>{{#if tag}}{{ tag }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{> call-cta}}
+  {{#if items}}<ul class="jobs">
+    {{#each items as item}}{{> job}}
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

@@ -1,0 +1,17 @@
+<aside class="call" aria-label="{{ strings.reachUs }}">
+  {{#if data.business.phone}}<a class="plate plate-full" href="tel:{{ data.business.phone }}">
+    <span class="band">{{ strings.call }}</span>
+    <span class="face"><strong>{{ data.business.phone }}</strong>{{> supplier}}</span>
+  </a>
+  {{else}}{{#if data.business.email}}<a class="plate plate-full plate-mail" href="mailto:{{ data.business.email }}">
+    <span class="band">{{ strings.write }}</span>
+    <span class="face"><strong>{{ data.business.email }}</strong>{{> supplier}}</span>
+  </a>
+  {{else}}<a class="plate plate-full plate-words" href="/contact/">
+    <span class="band"></span>
+    <span class="face"><strong>{{ strings.reachUs }}</strong>{{> supplier}}</span>
+  </a>
+  {{/if}}{{/if}}{{#if data.business.hours}}<dl class="facts"><div><dt>{{ strings.hoursLabel }}</dt><dd>{{ data.business.hours }}</dd></div>{{#if data.business.phone}}{{#if data.business.email}}<div><dt>{{ strings.emailLabel }}</dt><dd><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></dd></div>{{/if}}{{/if}}</dl>
+  {{else}}{{#if data.business.phone}}{{#if data.business.email}}<dl class="facts"><div><dt>{{ strings.emailLabel }}</dt><dd><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></dd></div></dl>
+  {{/if}}{{/if}}{{/if}}
+</aside>

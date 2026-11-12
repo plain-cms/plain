@@ -1,0 +1,7 @@
+<li class="card">
+  <h2 class="frieze"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.description}}<p class="gist">{{ item.description }}</p>
+  {{/if}}{{#if item.priceFrom}}<p class="cartouche"><span><small>{{ strings.from }}</small> <b>{{ item.priceFrom }}</b></span></p>
+  {{else}}{{#if item.dateFormatted}}<p class="when"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  {{/if}}{{/if}}
+</li>

@@ -1,0 +1,7 @@
+<li class="job">
+  <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.dateFormatted}}<p class="meta"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  {{/if}}{{#if item.description}}<p>{{ item.description }}</p>
+  {{/if}}{{#if item.priceFrom}}<p class="job-price"><span class="plate"><span class="band">{{ strings.from }}</span><b>{{ item.priceFrom }}</b></span></p>
+  {{/if}}
+</li>

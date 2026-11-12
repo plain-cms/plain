@@ -1,0 +1,22 @@
+<section class="list">
+  <header class="head">
+    {{#if tag}}<p class="back">{{ strings.tagged }}</p>
+    {{/if}}<h1 class="frieze"><span>{{#if tag}}{{ tag }}{{else}}{{ page.title }}{{/if}}</span></h1>
+  </header>
+  {{#if items}}
+  <ul class="wall">
+    {{#each items as item}}{{> card}}
+    {{/each}}
+  </ul>
+  {{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+  {{> call}}
+</section>

@@ -1,0 +1,419 @@
+/* eaves — a roofer's theme built from the roofing slate. Services are slates
+   hung in half-bond courses: fixed columns, every other course shifted half
+   a slate, a hard shadow where one course laps the next, two copper nails in
+   each. Around the roof everything is quiet: overcast sky, lead-grey rules.
+   Restyle by editing the tokens below; the selectors hold no colours. */
+:root {
+  --font-display: Baskerville, 'Baskerville Old Face', 'Libre Baskerville', Georgia, 'Times New Roman', serif;
+  --font-body: 'Gill Sans', 'Gill Sans MT', Seravek, Calibri, 'Trebuchet MS', sans-serif;
+  --text-s: 0.9375rem;
+  --text-m: 1.125rem;
+  --text-gist: 1.0625rem;
+  --text-l: 1.375rem;
+  --text-xl: 1.75rem;
+  --text-xxl: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+  --leading: 1.5;
+  --tracking: 0.09em;
+  --color-bg: #e4e8eb;
+  --color-text: #22242a;
+  --color-muted: #535861;
+  --color-accent: #5a3d8a;
+  --color-slate: #594a6e;
+  --color-slate-alt: #4e4566;
+  --color-chalk: #f4f2eb;
+  --color-chalk-line: rgba(244,242,235,0.4);
+  --color-sheen: rgba(255,255,255,0.09);
+  --color-lap: rgba(20,14,28,0.6);
+  --color-felt: #2a2b33;
+  --color-lead: #959ba3;
+  --color-panel: #d2d7dc;
+  --color-copper: #c4722f;
+  --measure: 40rem;
+  --page-width: 75rem;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.5rem;
+  --space-4: 2.5rem;
+  --space-5: 4rem;
+  --slate-min: 12rem;
+  --lap: 0.5rem;
+  --joint: 0.1875rem;
+  --nail: 0.28rem;
+  --rule: 0.25rem;
+  --radius: 0.125rem;
+  --focus: 0.1875rem;
+  --tap: 2.75rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #15161b;
+    --color-text: #e6e4de;
+    --color-muted: #a3a7af;
+    --color-accent: #c3aef0;
+    --color-slate: #5b4c72;
+    --color-slate-alt: #4f4568;
+    --color-chalk: #f4f2eb;
+    --color-sheen: rgba(255,255,255,0.07);
+    --color-lap: rgba(0,0,0,0.62);
+    --color-felt: #0b0b0e;
+    --color-lead: #636973;
+    --color-panel: #24262d;
+    --color-copper: #d08442;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: var(--text-m)/var(--leading) var(--font-body);
+  overflow-wrap: break-word;
+}
+h1, h2, h3, .site-title, .ring, .hail a, .tail b, .call-main, .prose td[align="right"], .prose a[href^="tel:"] {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-variant-numeric: lining-nums;
+}
+h1, h2, h3 { margin: 0; line-height: 1.12; text-wrap: balance; }
+/* Words split only where the box is narrow: headings, slates, and the
+   standfirst, lists and table cells on a phone. Prices and figures never. */
+h1, h2, h3, h4, .slate { -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 14 5 5; }
+@media (max-width: 40em) {
+  .lede, .included, .prose li, .prose td, .prose th { -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 14 5 5; }
+}
+.tail, .prose [align="right"] { -webkit-hyphens: manual; hyphens: manual; }
+strong, b { font-weight: 600; }
+h1 { font-size: var(--text-xxl); }
+h2 { font-size: var(--text-xl); }
+h3 { font-size: var(--text-l); }
+p { margin: 0 0 var(--space-2); }
+a { color: var(--color-accent); text-decoration-thickness: 0.06em; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 0.14em; }
+:focus-visible { outline: var(--focus) solid var(--color-accent); outline-offset: 0.15rem; border-radius: var(--radius); }
+::selection { background: var(--color-slate); color: var(--color-chalk); }
+img { max-width: 100%; height: auto; }
+
+/* Small tracked capitals: menu, labels, table heads, attributions */
+.menu a, .ring span, .hail a span, .eyebrow, .back, .tail span, .tail time, .call-main span, .eave, .pagination, .prose th, .prose h4, .prose blockquote p:last-child:not(:first-child) {
+  font-family: var(--font-body);
+  font-size: var(--text-s);
+  font-weight: 400;
+  font-style: normal;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+.skip-link { position: absolute; left: var(--space-2); top: -6rem; z-index: 5; padding: var(--space-1) var(--space-2); background: var(--color-bg); color: var(--color-text); }
+.skip-link:focus { top: var(--space-1); }
+.wrap { max-width: var(--page-width); margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2.5rem); }
+
+/* Masthead: the name beside one slate, the menu, the number. A lead rule under it. */
+.masthead { border-bottom: var(--rule) solid var(--color-lead); }
+.masthead .wrap { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--space-3); padding-block: var(--space-1); }
+.site-title { display: inline-flex; align-items: center; gap: 0.6rem; min-height: var(--tap); font-size: var(--text-l); line-height: 1.1; color: var(--color-text); text-decoration: none; }
+.site-title::before {
+  content: '';
+  flex: none;
+  width: 0.95em;
+  height: 1.2em;
+  border-radius: var(--radius);
+  background:
+    radial-gradient(circle at 30% 34%, var(--color-copper) 0 0.075em, transparent 0.09em),
+    radial-gradient(circle at 70% 34%, var(--color-copper) 0 0.075em, transparent 0.09em),
+    var(--color-slate);
+  box-shadow: inset 0 0.14em 0 var(--color-lap);
+}
+.menu { order: 3; flex-basis: 100%; }
+.menu ul { display: flex; flex-wrap: wrap; column-gap: clamp(0.55rem, 3vw, 1.5rem); margin: 0; padding: 0; list-style: none; }
+.menu a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--color-text); text-decoration: none; border-block: var(--rule) solid transparent; }
+.menu a:hover { border-bottom-color: var(--color-lead); }
+.menu a[aria-current] { border-bottom-color: var(--color-accent); }
+.ring { display: inline-flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; margin-left: auto; padding-block: var(--space-1); font-size: var(--text-l); line-height: 1.2; color: var(--color-text); text-decoration: none; }
+.ring span { color: var(--color-muted); }
+.ring span:only-child { color: inherit; }
+.ring:hover { text-decoration: underline; }
+@media (min-width: 56em) {
+  .menu { order: 0; flex-basis: auto; }
+}
+
+/* Page heads. From 62em the text hangs its headings in a left column and
+   keeps one measure on the right; from 72em page heads join the same axis. */
+.page-header { padding-block: var(--space-3); }
+.lede { margin: var(--space-2) 0 0; max-width: var(--measure); color: var(--color-muted); font-size: var(--text-l); line-height: 1.35; }
+.hail { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--space-2); margin: var(--space-1) 0 0; color: var(--color-muted); font-size: var(--text-s); }
+.hail a { display: inline-flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5rem; min-height: var(--tap); padding-left: calc(var(--nail) * 2 + 0.6rem); font-size: var(--text-l); line-height: 1.2; color: var(--color-text); text-decoration-color: var(--color-lead); background: radial-gradient(circle at var(--nail) 0.62em, var(--color-copper) 0 var(--nail), transparent calc(var(--nail) + 0.05rem)) no-repeat; }
+.hail a:not([href^="tel:"]) { overflow-wrap: anywhere; }
+.hail a span { color: var(--color-muted); }
+.eyebrow, .back { margin: 0 0 var(--space-1); color: var(--color-muted); }
+.eyebrow a { margin-left: var(--space-2); }
+.back { padding-top: var(--space-3); }
+.back a, .eave a, .pagination a { display: inline-block; padding-block: 0.6rem; }
+.empty { color: var(--color-muted); }
+.cover { display: block; width: 100%; margin-bottom: var(--space-3); border-bottom: var(--lap) solid var(--color-lead); }
+@media (min-width: 36em) {
+  .hail a[href^="tel:"] { font-size: var(--text-xl); }
+}
+@media (min-width: 62em) {
+  .included, .call, .prose, .page-header, .slab { grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)); column-gap: var(--space-4); }
+  .included, .call, .prose { display: grid; }
+  .slab, .call { grid-template-columns: minmax(0, 1fr) minmax(0, calc(var(--measure) - var(--space-3))); }
+}
+@media (min-width: 72em) {
+  .page-header, .slab { display: grid; }
+  .page-header { grid-template-rows: 1fr auto; align-items: end; padding-block: var(--space-3) var(--space-2); }
+  .page-header > *, .slab > * { grid-column: 1; }
+  .page-header > :first-child { grid-row: 1 / span 2; }
+  .page-header .lede, .page-header .hail, .slab .lede, .slab .tail { grid-column: 2; }
+  .page-header .hail { grid-row: 2; }
+  .lede { margin-top: 0; }
+  .post .page-header > * { grid-column: 1 / -1; }
+  .post .lede { margin-top: var(--space-2); }
+}
+
+/* The roof. Each .slate is one slate: two copper nails, the title in chalk,
+   the price at the tail, and along its head the shadow of the course that
+   laps it. Plain slates (::before, ::after) close every course: a half at
+   each end of a shifted one, whole ones after the last service, so the roof
+   never shows a gap. A lead roll caps it; the gutter overhangs at the eaves. */
+.roof { margin-bottom: var(--space-3); }
+.courses, .slab {
+  --shade: linear-gradient(var(--color-lap) 0 var(--lap), transparent 0), linear-gradient(var(--color-lap), transparent calc(var(--lap) * 1.75));
+  --pin: var(--color-copper) 0 var(--nail), var(--color-lap) calc(var(--nail) + 0.03rem) calc(var(--nail) + 0.1rem), transparent calc(var(--nail) + 0.14rem);
+  --pin-y: calc(var(--lap) + 1.1rem);
+  --face: linear-gradient(165deg, var(--color-sheen), transparent 60%);
+}
+.courses {
+  --gutter: calc(var(--lap) * 2);
+  --eave: min(1.25rem, 4vw - 0.25rem);
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  column-gap: var(--joint);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: repeating-linear-gradient(var(--color-felt) 0 2.5rem, var(--color-lead) 2.5rem 2.75rem) top / 100% calc(100% - var(--gutter)) no-repeat;
+}
+.courses::before, .courses::after { content: ''; grid-column: 1 / -1; }
+.courses::before { height: calc(var(--lap) * 2); margin-inline: calc(var(--joint) * -1); background: linear-gradient(var(--color-panel), var(--color-lead) 70%); border-radius: var(--lap) var(--lap) 0 0; }
+.courses::after { height: var(--gutter); margin-inline: calc(var(--eave) * -1); background: linear-gradient(var(--color-felt) 0 0.125rem, var(--color-lead) 0.125rem); border-radius: 0 0 var(--gutter) var(--gutter); }
+.slate {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  grid-column: span 2;
+  min-height: var(--slate-min);
+  padding: calc(var(--lap) + 2.1rem) 0.875rem var(--space-2);
+  color: var(--color-chalk);
+  background-color: var(--color-slate);
+  background-image:
+    radial-gradient(circle at 22% var(--pin-y), var(--pin)),
+    radial-gradient(circle at 78% var(--pin-y), var(--pin)),
+    var(--shade),
+    var(--face);
+  box-shadow: inset 0 -0.125rem 0 var(--color-chalk-line), var(--joint) 0 0 var(--color-felt), calc(var(--joint) * -1) 0 0 var(--color-felt);
+}
+.slate:nth-child(3n+2), .slate:nth-child(7n+4) { background-color: var(--color-slate-alt); }
+.slate:focus-within { outline: var(--focus) solid var(--color-chalk); outline-offset: calc(var(--lap) * -1 - var(--focus)); }
+.slate h2 { font-size: var(--text-l); font-style: italic; }
+.slate a { color: inherit; text-decoration: none; outline: 0; }
+.slate a::after { content: ''; position: absolute; inset: 0; }
+.slate:hover a { text-decoration: underline; }
+.gist { margin: 0.3rem 0 0.75rem; font-size: var(--text-gist); line-height: 1.38; text-wrap: pretty; }
+.tail { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.5em; margin: auto 0 0; padding-top: var(--space-1); border-top: 0.125rem solid var(--color-chalk-line); }
+.tail b { font-size: var(--text-l); line-height: 1.2; }
+/* Plain slates. --n is how many slate widths one covers: a half by default,
+   more where it has to finish the last course. Joints and nails are drawn
+   in a slate at a time, so a half slate shows the one nail a cut slate has. */
+.slate::before, .slate::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: calc(var(--n, 0.5) * (100% + var(--joint)) - var(--joint));
+  --tile: 0 0 / calc((100% + var(--joint)) / var(--n, 0.5)) 100%;
+  background:
+    linear-gradient(90deg, transparent calc(100% - var(--joint)), var(--color-felt) 0) var(--tile),
+    radial-gradient(circle at 22% var(--pin-y), var(--pin)) var(--tile),
+    radial-gradient(circle at 78% var(--pin-y), var(--pin)) var(--tile),
+    var(--shade),
+    var(--face) var(--tile),
+    var(--color-slate-alt);
+  box-shadow: inherit;
+}
+.slate::before { right: calc(100% + var(--joint)); }
+.slate::after { left: calc(100% + var(--joint)); }
+/* Phones: one lapped column, each slate set an eighth off the one above */
+@media (max-width: 35.99em) {
+  .slate { grid-column: 1 / span 7; min-height: 0; }
+  .slate:nth-child(even) { grid-column: 2 / span 7; }
+  .slate::before, .slate::after { --n: 0.142857; width: calc((100% - var(--joint) * 6) / 7); }
+  .slate:nth-child(odd)::after, .slate:nth-child(even)::before { content: ''; }
+  .roof .gist { display: none; }
+  .roof .slate h2 { margin-bottom: var(--space-2); }
+}
+/* Two slates, then one */
+@media (min-width: 36em) and (max-width: 55.99em) {
+  .courses { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .slate:nth-child(3n) { grid-column: 2 / span 2; }
+  .slate:nth-child(3n)::before, .slate:nth-child(3n)::after, .slate:last-child:nth-child(3n+1)::after { content: ''; }
+  .slate:last-child:nth-child(3n+1)::after { --n: 1; }
+}
+/* Three, then two */
+@media (min-width: 56em) and (max-width: 71.99em) {
+  .courses { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .slate:nth-child(5n+4) { grid-column: 2 / span 2; }
+  .slate:nth-child(5n+4)::before, .slate:nth-child(5n)::after, .slate:last-child:not(:nth-child(5n+3))::after { content: ''; }
+  .slate:last-child:nth-child(5n+1)::after { --n: 2; }
+  .slate:last-child:nth-child(5n+2)::after { --n: 1; }
+  .slate:last-child:nth-child(5n+4)::after { --n: 1.5; }
+  .roof .slate:nth-child(n+11) { display: none; }
+}
+/* Four, then three */
+@media (min-width: 72em) {
+  .slate:nth-child(7n+5) { grid-column: 2 / span 2; }
+  .slate:nth-child(7n+5)::before, .slate:nth-child(7n)::after, .slate:last-child:not(:nth-child(7n+4))::after { content: ''; }
+  .slate:last-child:nth-child(7n+1)::after { --n: 3; }
+  .slate:last-child:nth-child(7n+2)::after { --n: 2; }
+  .slate:last-child:nth-child(7n+3)::after { --n: 1; }
+  .slate:last-child:nth-child(7n+5)::after { --n: 2.5; }
+  .slate:last-child:nth-child(7n+6)::after { --n: 1.5; }
+}
+/* The roof is printed on the home page and the 404 only (page.html decides
+   by the length of the address), as a summary of at most eleven slates, a
+   number that closes its last course. */
+.roof .slate:nth-child(n+12) { display: none; }
+.eave { margin: 0; text-align: right; }
+
+/* One service: the slate at full size */
+.slab {
+  padding: calc(var(--lap) + 3.2rem) var(--space-3) var(--space-3);
+  color: var(--color-chalk);
+  background-color: var(--color-slate);
+  background-image:
+    radial-gradient(circle at 2.2rem calc(var(--lap) + 1.5rem), var(--pin)),
+    radial-gradient(circle at calc(100% - 2.2rem) calc(var(--lap) + 1.5rem), var(--pin)),
+    var(--shade),
+    var(--face);
+  box-shadow: 0 var(--lap) 0 var(--color-lead);
+  margin-bottom: var(--space-4);
+}
+.slab h1 { font-style: italic; }
+.slab .lede { color: inherit; }
+.slab .tail { margin-top: var(--space-3); }
+.slab .tail b { font-size: var(--text-xl); }
+
+/* Page text */
+.prose { margin-bottom: var(--space-4); }
+.prose > * { min-width: 0; margin-block: 0 var(--space-2); }
+.prose h2 { margin-top: var(--space-3); padding-top: var(--space-2); border-top: 0.0625rem solid var(--color-lead); }
+.prose h2:first-child { margin-top: 0; }
+.prose h3 { margin-top: var(--space-3); }
+.prose h4 { margin-top: var(--space-2); color: var(--color-muted); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin-top: var(--space-1); }
+.prose ul > li::marker, .included li::marker { color: var(--color-copper); }
+.prose a[href^="tel:"] { white-space: nowrap; }
+.prose a[href^="mailto:"] { overflow-wrap: anywhere; }
+.prose blockquote { margin-inline: 0; padding: 0 0 0 var(--space-3); border-left: var(--rule) solid var(--color-accent); font: italic var(--text-l)/1.35 var(--font-display); }
+.prose blockquote p { margin-bottom: var(--space-1); }
+.prose blockquote p:last-child:not(:first-child) { color: var(--color-muted); }
+.prose img { display: block; margin-bottom: var(--space-2); }
+.prose hr { height: var(--rule); border: 0; background: var(--color-lead); margin-block: var(--space-3); }
+.prose code { font-size: 0.85em; background: var(--color-panel); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { padding: var(--space-2); background: var(--color-panel); overflow-x: auto; line-height: 1.4; }
+.prose pre code { padding: 0; background: none; }
+/* Prices and hours: label left, figure right. Words in a cell give way before
+   the page does; a heading word is never cut, so its column keeps that width. */
+.prose table { width: 100%; border-collapse: collapse; }
+.prose th, .prose td { padding: 0.6rem var(--space-2) 0.6rem 0; text-align: left; vertical-align: baseline; border-bottom: 0.0625rem solid var(--color-lead); min-width: 4.5em; }
+.prose td { overflow-wrap: anywhere; }
+.prose th { color: var(--color-muted); border-bottom-width: var(--rule); vertical-align: bottom; }
+.prose :is(th, td):last-child { padding-right: 0; }
+.prose [align="right"] { text-align: right; overflow-wrap: break-word; min-width: 0; }
+.prose td[align="right"] { font-size: var(--text-l); line-height: 1.2; }
+/* Three columns or more on a phone. A table of words is read a row at a
+   time: its headings on one line, then each row as a block with its first
+   cell for a heading. A table with figures stays a table, set smaller, and
+   its figure columns keep the width a price needs. Neither scrolls sideways. */
+@media (max-width: 40em) {
+  .prose th { overflow-wrap: anywhere; }
+  .prose table:has(th:nth-child(3)) :is(th, td) { padding-right: var(--space-1); font-size: var(--text-s); }
+  .prose table:has(th:nth-child(3)) td[align="right"] { width: 5.5em; font-size: var(--text-m); }
+  .prose table:has(th:nth-child(3)):not(:has([align="right"])), .prose table:has(th:nth-child(3)):not(:has([align="right"])) :is(thead, tbody, tr, td) { display: block; }
+  .prose table:has(th:nth-child(3)):not(:has([align="right"])) thead tr { display: flex; flex-wrap: wrap; column-gap: var(--space-2); border-bottom: var(--rule) solid var(--color-lead); }
+  .prose table:has(th:nth-child(3)):not(:has([align="right"])) :is(th, td) { min-width: 0; padding: 0; border: 0; }
+  .prose table:has(th:nth-child(3)):not(:has([align="right"])) th { padding-block: 0.3rem; }
+  .prose table:has(th:nth-child(3)):not(:has([align="right"])) tbody tr { padding-block: 0.6rem; border-bottom: 0.0625rem solid var(--color-lead); }
+  .prose table:has(th:nth-child(3)):not(:has([align="right"])) td:first-child { font-size: var(--text-m); font-weight: 600; }
+  .prose table:has(th:nth-child(3)):not(:has([align="right"])) td + td { margin-top: 0.2rem; }
+}
+@media (min-width: 62em) {
+  .prose > * { grid-column: 2; }
+  .prose > h2 { grid-column: 1; margin-top: var(--space-2); padding-top: calc(var(--space-2) - 0.25rem); }
+  .prose > h2 + * { margin-top: var(--space-2); padding-top: var(--space-2); border-top: 0.0625rem solid var(--color-lead); }
+  .prose > h2:first-child, .prose > h2:first-child + * { margin-top: 0; }
+}
+
+/* What the price covers: every line nailed */
+.included { margin-bottom: var(--space-4); padding-top: var(--space-3); border-top: var(--rule) solid var(--color-lead); }
+.included ul { margin: var(--space-2) 0 0; padding-left: 1.3em; }
+.included li { margin-bottom: var(--space-1); padding-left: 0.2em; }
+@media (min-width: 62em) { .included ul { margin-top: 0; } }
+
+/* The call block: a sheet of lead fixed with two copper nails */
+.call {
+  margin-block: var(--space-4) var(--space-5);
+  padding: var(--space-3);
+  background:
+    radial-gradient(circle at 0.9rem 0.9rem, var(--color-copper) 0 var(--nail), transparent calc(var(--nail) + 0.05rem)),
+    radial-gradient(circle at calc(100% - 0.9rem) 0.9rem, var(--color-copper) 0 var(--nail), transparent calc(var(--nail) + 0.05rem)),
+    var(--color-panel);
+  border-top: var(--rule) solid var(--color-lead);
+  border-bottom: 0.0625rem solid var(--color-lead);
+}
+.call-ask p { margin: var(--space-1) 0 var(--space-2); color: var(--color-muted); }
+.call-main { margin: 0 0 var(--space-1); font-size: clamp(1.4rem, 1rem + 2.4vw, 2.25rem); line-height: 1.15; }
+.call-main a { display: inline-flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.6rem; min-height: var(--tap); color: var(--color-text); text-decoration-color: var(--color-lead); }
+.call-main span { color: var(--color-muted); }
+.call-main a:not([href^="tel:"]) { font-size: var(--text-l); overflow-wrap: anywhere; }
+.call-meta { margin: 0; color: var(--color-muted); font-size: var(--text-s); }
+.call-meta a { display: inline-block; padding-block: var(--space-1); overflow-wrap: anywhere; }
+@media (min-width: 62em) { .call { padding-block: var(--space-4); } }
+
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2); margin-top: var(--space-3); color: var(--color-muted); }
+
+.colophon { border-top: var(--rule) solid var(--color-lead); padding-block: var(--space-3) var(--space-4); color: var(--color-muted); font-size: var(--text-s); }
+.colophon p { margin-bottom: var(--space-1); }
+.colophon strong { color: var(--color-text); font-family: var(--font-display); font-size: var(--text-m); }
+.colophon-contact { display: inline-block; max-width: 100%; margin-right: var(--space-2); padding-block: 0.3rem; }
+.colophon a { overflow-wrap: anywhere; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .skip-link { transition: top 0.15s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none; animation: none; scroll-behavior: auto; }
+}
+
+/* Print: ink on white paper, whatever scheme the screen was in */
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #111;
+    --color-muted: #444;
+    --color-accent: #111;
+    --color-slate: #555;
+    --color-lead: #888;
+    --color-panel: #fff;
+    --color-copper: #555;
+  }
+  body { font-size: 11pt; }
+  .skip-link, .menu, .roof, .eave, .back, .pagination, .site-title::before { display: none; }
+  .courses { display: block; background: none; }
+  .courses::before, .courses::after, .slate::before, .slate::after { display: none; }
+  .courses .slate, .slab, .call { min-height: 0; padding: var(--space-1) 0; color: inherit; background: none; box-shadow: none; border-bottom: 0.0625rem solid var(--color-lead); break-inside: avoid; }
+  .tail { border-top: 0; }
+  .slab .lede { color: var(--color-muted); }
+}

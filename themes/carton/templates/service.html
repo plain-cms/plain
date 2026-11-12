@@ -1,0 +1,33 @@
+<article class="service">
+  <p class="eyebrow"><a href="/services/">← {{ strings.allServices }}</a></p>
+  <header class="box box-big">
+    <span class="tape" aria-hidden="true" data-tape="{{ strings.fragile }}"></span>
+    <div class="box-sides">
+      <div class="box-face">
+        <div class="panel">
+          <div class="panel-room">
+            <p class="panel-label">{{ strings.room }}</p>
+            <h1>{{ page.title }}</h1>
+            {{#if page.description}}<p class="box-note">{{ page.description }}</p>
+            {{/if}}
+          </div>
+          {{#if page.included}}<section class="panel-contents" aria-labelledby="contents-heading">
+            <h2 class="panel-label" id="contents-heading">{{ strings.contents }} <small>{{ strings.contentsNote }}</small></h2>
+            <ul>
+              {{#each page.included as line}}<li>{{ line }}</li>
+              {{/each}}
+            </ul>
+          </section>
+          {{/if}}
+        </div>
+      </div>
+      <p class="box-end{{#if page.priceFrom}}{{else}} box-end-bare{{/if}}"><span class="up" aria-hidden="true"></span>{{#if page.priceFrom}}<span><small>{{ strings.from }}</small> <strong>{{ page.priceFrom }}</strong></span>{{/if}}</p>
+    </div>
+  </header>
+  <div class="columns">
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}{{> call}}
+  </div>
+</article>
