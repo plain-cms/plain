@@ -1,0 +1,8 @@
+<div class="db-line">
+    <div class="db-cell db-cap"><p class="db-label">{{ strings.colCapacity }}</p><h3 class="db-title">{{#if entry.content}}<a href="{{ entry.url }}">{{ entry.title }}</a>{{else}}{{ entry.title }}{{/if}}</h3></div>
+    {{#if entry.organization}}<div class="db-cell db-ship"><p class="db-label">{{ strings.colShip }}</p><p class="db-org">{{ entry.organization }}</p></div>
+    {{/if}}<div class="db-cell db-dates"><p class="db-label">{{ strings.colDates }}</p><p class="db-period">{{#if entry.period}}{{ entry.period }}{{else}}<time datetime="{{ entry.date }}">{{ entry.dateFormatted }}</time>{{/if}}</p></div>
+    {{#if entry.location}}<div class="db-cell db-port"><p class="db-label">{{ strings.colPlace }}</p><p class="stamp"><span>{{ entry.location }}</span></p></div>
+    {{/if}}</div>
+  {{#if entry.summary}}<p class="db-voyage"><span class="db-voyage-label">{{#if entry.location}}{{ strings.voyage }}{{else}}{{ strings.remarks }}{{/if}}</span> {{ entry.summary }}</p>
+  {{/if}}

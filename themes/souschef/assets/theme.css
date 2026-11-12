@@ -1,0 +1,341 @@
+/* Sous Chef — a chef's CV hung on the pass. Each role is an order docket:
+   a narrow kitchen-printer ticket in black and red, torn off at a saw-tooth
+   foot and slid up under the lip of a steel ticket rail, one rail per row
+   (one across on a phone, as many as fit on the home page's pass, three on
+   the CV and on A4). Black enamel by default: where other themes have a
+   (prefers-color-scheme: dark) block, this one has light, the white day
+   wall, and even then the pass on the home page stays black enamel.
+   Dockets stay bond-white in both. Restyle with the tokens. */
+
+:root {
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+  --font-cond: "Avenir Next Condensed", "Helvetica Neue", "Arial Narrow", "Roboto Condensed", "Liberation Sans Narrow", sans-serif;
+  --text-xs: 0.75rem;
+  --text-s: 0.875rem;
+  --text-m: 1.125rem;
+  --text-l: 1.375rem;
+  --text-xl: clamp(1.75rem, 1.3rem + 1.8vw, 2.5rem);
+  --text-xxl: clamp(2.125rem, 1.4rem + 3vw, 3.5rem);
+  --text-docket: 0.8125rem;
+  --text-station: 1.875rem;
+  --leading: 1.5;
+
+  --color-bg: #131313;
+  --color-text: #eeede8;
+  --color-muted: #a8a8a3;
+  --color-accent: #f2453b;
+  --color-rule: #4a4a47;
+  --color-enamel: #0b0b0b;
+  --color-enamel-text: #f1f0eb;
+  --color-enamel-muted: #a9a9a4;
+  --color-signal: #e8261c;
+  --color-paper: #f5f4ef;
+  --color-print: #191919;
+  --color-print-soft: #55554f;
+  --color-print-red: #c1161c;
+  --color-keyline: #8e8e8a;
+  --color-steel-hi: #e2e5e8;
+  --color-steel: #a2a8ae;
+  --color-steel-lo: #565b61;
+  --color-shadow: rgba(0,0,0,0.5);
+  --color-code-bg: #222221;
+
+  --page-width: 78rem;
+  --measure: 38rem;
+  --gutter: clamp(1rem, 3vw, 2.5rem);
+  --docket-width: 15.5rem;
+  --rail-height: 1.125rem;
+  --tooth: 0.5rem;
+  --radius: 2px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: #e8e8e4;
+    --color-text: #151515;
+    --color-muted: #4e4e4a;
+    --color-accent: #b5131a;
+    --color-rule: #b4b4ae;
+    --color-paper: #fdfdfa;
+    --color-keyline: #85857f;
+    --color-steel-hi: #f6f7f8;
+    --color-steel: #a9aeb4;
+    --color-steel-lo: #61666c;
+    --color-shadow: rgba(0,0,0,0.22);
+    --color-code-bg: #d8d8d3;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--color-bg); color: var(--color-text);
+  font: 500 var(--text-m)/var(--leading) var(--font-cond); font-stretch: condensed;
+  overflow-wrap: break-word;
+}
+a { color: var(--color-accent); text-underline-offset: 0.18em; text-decoration-thickness: 1px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-signal); outline-offset: 3px; }
+h1, h2, h3, h4 { text-wrap: balance; }
+.skip-link { position: absolute; left: var(--gutter); top: -4rem; z-index: 9; padding: 0.5rem 0.75rem; background: var(--color-paper); color: var(--color-print); font: var(--text-s) var(--font-mono); }
+.skip-link:focus { top: 0.5rem; }
+
+/* The frame: every band shares one content edge. */
+.masthead-bar, .profile, main, .colophon { width: min(100% - 2 * var(--gutter), var(--page-width) - 2 * var(--gutter)); margin-inline: auto; }
+.masthead { background: var(--color-enamel); color: var(--color-enamel-text); border-bottom: 3px solid var(--color-steel); }
+.masthead a { color: var(--color-enamel-text); }
+.masthead-bar, .pass-label, .ticket-link, .tags a, .print-button {
+  font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.masthead-bar {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.25rem 2rem;
+  padding-block: 0.75rem; font-size: var(--text-s);
+}
+.site-title { font-weight: 700; text-decoration: none; }
+.site-mark { display: block; line-height: 0; padding: 0.1rem 0; }
+.site-mark svg { display: block; }
+.mark-paper { fill: var(--color-paper); }
+.mark-ink { fill: var(--color-print); }
+.mark-red { fill: var(--color-signal); }
+.mark-steel { fill: var(--color-steel); }
+.mark-lip { fill: var(--color-steel-lo); }
+.masthead-bar { align-items: center; }
+.menu { margin-left: auto; }
+.menu ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 1.5rem; }
+.menu a { display: inline-block; padding: 0.3rem 0; text-decoration: none; border-bottom: 3px solid transparent; }
+.menu a:hover { border-bottom-color: var(--color-enamel-muted); }
+.menu a[aria-current="page"] { border-bottom-color: var(--color-signal); }
+
+.profile { display: grid; gap: 0.75rem 2.5rem; padding-block: 1rem 1.25rem; border-top: 1px dashed var(--color-enamel-muted); }
+.profile p { margin: 0; }
+.profile-name { font-weight: 700; text-transform: uppercase; font-size: var(--text-xl); line-height: 1; hyphens: auto; }
+.profile-role { margin-top: 0.35rem !important; font: var(--text-s) var(--font-mono); color: var(--color-enamel-muted); }
+.profile-reach { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; }
+.contact { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 1.25rem; font: var(--text-s) var(--font-mono); }
+.contact li { min-width: 0; max-width: 100%; }
+.contact a { overflow-wrap: anywhere; text-decoration-color: var(--color-signal); text-decoration-thickness: 2px; }
+.ticket-link {
+  display: inline-block; padding: 0.45rem 0.7rem; font-size: var(--text-xs); font-weight: 700; text-decoration: none;
+  border: 2px solid var(--color-signal); border-radius: var(--radius);
+}
+.ticket-link::after { content: " →"; }
+.ticket-link:hover { background: var(--color-signal); color: var(--color-enamel-text); }
+@media (min-width: 60rem) {
+  /* Contacts stack like the lines of a ticket header, so the headline
+     beside the name keeps one long line. */
+  .profile { grid-template-columns: minmax(0, 1fr) minmax(0, auto); align-items: end; }
+  .profile-reach { flex-wrap: nowrap; align-items: flex-end; justify-content: flex-end; }
+  .profile .contact { flex-direction: column; align-items: flex-end; text-align: right; max-width: 24rem; }
+  .profile-cv { flex: none; }
+}
+/* On /experience/ the CV's letterhead stands in for the profile band. */
+body:has(.cv) .profile { display: none; }
+
+main { display: block; padding-block: 2rem 4rem; }
+.page-head { margin-bottom: 1.75rem; }
+.page-head h1, .cv-name { margin: 0; font-weight: 700; font-size: var(--text-xxl); line-height: 1.02; max-width: 32ch; hyphens: auto; }
+.pass-label, .note-date { margin: 0; font-size: var(--text-xs); font-weight: 700; letter-spacing: 0.1em; color: var(--color-muted); }
+.note-date { font-family: var(--font-mono); }
+.empty { font: var(--text-s) var(--font-mono); color: var(--color-muted); }
+
+/* The rail and the docket — the signature. Every slot draws the rail
+   across the whole list, so each grid row gets one rail, clipped at the
+   list's edges, which are the edges of the content column. The rail is a
+   ticket grabber: a flat steel face, a bright edge where the metal turns
+   under, and a dark lower lip with the docket's top slid up behind it. */
+.dockets { list-style: none; margin: 0; padding: 0; }
+.slot { position: relative; padding-top: 0.25rem; min-width: 0; }
+.rails .slot::before {
+  content: ""; position: absolute; z-index: 1; top: 0; left: -100vw; right: -100vw; height: var(--rail-height);
+  background:
+    linear-gradient(transparent 70%, var(--color-shadow)),
+    linear-gradient(var(--color-steel-hi) 0 1px, var(--color-steel) 1px 56%, var(--color-steel-hi) 56% 63%, var(--color-steel-lo) 63%);
+  box-shadow: 0 2px 2px -1px var(--color-shadow);
+}
+.docket {
+  position: relative; display: flex; flex-direction: column;
+  margin-bottom: var(--tooth); padding: calc(var(--rail-height) + 0.85rem) 1rem 0.9rem;
+  background: var(--color-paper); color: var(--color-print);
+  border: 1px solid var(--color-keyline); border-bottom: 0;
+  box-shadow: 0 0.75rem 1.25rem -0.75rem var(--color-shadow);
+  font: 400 var(--text-docket)/1.45 var(--font-mono); font-stretch: normal;
+  hyphens: auto; -webkit-hyphenate-limit-before: 4; hyphenate-limit-chars: 10 4 4;
+}
+/* The lip's shadow on the paper it holds. */
+.docket::before {
+  content: ""; position: absolute; left: 0; right: 0; top: calc(var(--rail-height) - 0.25rem); height: 0.55rem;
+  background: linear-gradient(var(--color-shadow), transparent);
+}
+/* The torn foot: paper teeth over printer-grey teeth set 1.5px lower. */
+.docket::after {
+  content: ""; position: absolute; left: -1px; right: -1px; top: 100%; height: calc(var(--tooth) + 1.5px);
+  background:
+    conic-gradient(from -45deg at 50% 100%, var(--color-paper) 90deg, transparent 0) 0 0 / calc(var(--tooth) * 2) var(--tooth) round no-repeat,
+    conic-gradient(from -45deg at 50% 100%, var(--color-keyline) 90deg, transparent 0) 0 1.5px / calc(var(--tooth) * 2) var(--tooth) round no-repeat;
+}
+.docket p { margin: 0; }
+.docket a { color: inherit; }
+.docket-head {
+  order: -1; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 0.75rem;
+  margin-bottom: 0.7rem; padding-bottom: 0.45rem; border-bottom: 1px dashed var(--color-print); font-size: var(--text-xs);
+}
+.docket-org { flex: 1 1 7rem; min-width: 0; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+.docket .docket-when { margin-left: auto; text-align: right; color: var(--color-print-soft); }
+.docket-station {
+  margin: 0 0 0.65rem; font: 700 var(--text-station)/0.98 var(--font-cond); font-stretch: condensed;
+  letter-spacing: 0.01em; text-transform: uppercase; hyphenate-limit-chars: auto;
+}
+.docket-station a { text-decoration-color: var(--color-print-red); text-decoration-thickness: 3px; text-underline-offset: 0.12em; }
+.docket-station a:hover { color: var(--color-print-red); }
+.docket .docket-loc { margin-bottom: 0.65rem; line-height: 1.7; }
+.docket-loc span {
+  padding: 0.1em 0.45em; background: var(--color-print); color: var(--color-paper);
+  font-size: var(--text-xs); font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+}
+.docket-mods { list-style: none; margin: 0.7rem 0 0; padding: 0.5rem 0 0; border-top: 1px dashed var(--color-print); color: var(--color-print-red); }
+.docket-mods li { position: relative; padding-left: 1.4em; margin-bottom: 0.3rem; }
+.docket-mods li::before { content: "+"; position: absolute; left: 0; font-weight: 700; }
+
+.rails {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.25rem 1.25rem; align-items: start;
+  padding-bottom: 0.5rem; overflow-x: clip;
+}
+@media (min-width: 40rem) { .cv .rails { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 64rem) { .cv .rails { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+
+/* The pass: on the home page the headline and the rails sit on black
+   enamel in both schemes, bled to both edges of the window and closed by a
+   steel edge; as many dockets hang on a rail as fit. */
+.service {
+  margin: -2rem 0 2.5rem; padding-block: 2rem 2.25rem;
+  background: var(--color-enamel); color: var(--color-enamel-text);
+  border-image: linear-gradient(var(--color-enamel) calc(100% - 3px), var(--color-steel) 0) fill 0 / 0 / 0 100vmax 3px;
+}
+.service .page-head { margin-bottom: 1.5rem; }
+.service .pass-label { margin-bottom: 0.85rem; color: var(--color-enamel-muted); }
+.pass .rails { grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--docket-width)), 1fr)); }
+
+/* Page text. */
+.prose { max-width: var(--measure); }
+.prose > p:first-child { font-size: var(--text-l); line-height: 1.3; }
+.prose h2, .prose h3, .prose h4 { font-weight: 700; line-height: 1.1; margin: 2rem 0 0.6rem; hyphens: auto; }
+.prose h2 { font-size: var(--text-xl); }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-m); text-transform: uppercase; letter-spacing: 0.04em; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin-bottom: 0.35rem; }
+.prose ul > li::marker { content: "+  "; color: var(--color-accent); font-family: var(--font-mono); font-weight: 700; }
+.prose a[href^="mailto:"], .prose a[href^="tel:"] { overflow-wrap: anywhere; font-family: var(--font-mono); font-size: 0.9em; font-weight: 700; }
+.prose blockquote { margin: 1.5rem 0; padding-left: 1rem; border-left: 4px solid var(--color-accent); }
+.prose hr { border: 0; border-top: 1px dashed var(--color-rule); margin: 2rem 0; }
+.prose img, .cover { display: block; max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover { margin: 0 0 2rem; }
+.prose code, .prose pre { font-family: var(--font-mono); font-size: 0.85em; }
+.prose code { background: var(--color-code-bg); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { overflow-x: auto; padding: 1rem; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre code { background: none; padding: 0; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: var(--text-s); }
+.prose th, .prose td { min-width: 4.5rem; overflow-wrap: break-word; hyphens: manual; padding: 0.45rem 0.75rem 0.45rem 0; border-bottom: 1px solid var(--color-rule); text-align: left; vertical-align: top; }
+.prose th { font: 700 var(--text-xs) var(--font-mono); text-transform: uppercase; }
+
+/* Home text, CV letterhead, skills. */
+.home-text { display: grid; gap: 1rem 4rem; }
+@media (min-width: 60rem) {
+  .home-text { grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); align-items: start; }
+  .home-text .skills { margin-top: 0.4rem; padding: 0 0 0 1.5rem; border: 0; border-left: 1px dashed var(--color-rule); }
+  .home-text .skills ul { display: block; }
+  .home-text .skills li { margin: 0 0 0.2rem; }
+}
+.cv-head { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px dashed var(--color-rule); }
+.cv-name { text-transform: uppercase; }
+.cv-role { margin: 0.5rem 0 0.75rem; font: var(--text-s) var(--font-mono); color: var(--color-muted); }
+.cv-head .contact a { color: var(--color-text); }
+.skills { margin-top: 2rem; padding-top: 1.25rem; border-top: 1px dashed var(--color-rule); }
+.skills ul { list-style: none; margin: 0.6rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 0; hyphens: auto; }
+/* Every skill leads with a red slash rule, so a wrapped line never ends on
+   a separator. */
+.skills li { min-width: 0; margin-right: 1.25em; }
+.skills li::before {
+  content: ""; display: inline-block; width: 2px; height: 0.85em; margin-right: 0.55em;
+  background: var(--color-accent); transform: skewX(-20deg); vertical-align: -0.05em;
+}
+.cv-print { margin-top: 2rem; font: var(--text-xs) var(--font-mono); color: var(--color-muted); }
+.cv-print p { margin: 0 0 0.75rem; }
+.print-button { font-size: inherit; font-weight: 700; padding: 0.5rem 0.8rem; cursor: pointer; color: var(--color-text); background: none; border: 2px solid var(--color-accent); border-radius: var(--radius); }
+.print-button[hidden] { display: none; }
+
+/* Role page: the docket at a larger print, the story beside it. */
+.role > .pass-label { margin-bottom: 0.85rem; }
+.role-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem 3rem; align-items: start; }
+.role-rail { --text-station: clamp(2rem, 1.5rem + 2vw, 2.75rem); --text-docket: 0.875rem; }
+@media (min-width: 56rem) { .role-layout { grid-template-columns: minmax(0, 24rem) minmax(0, 1fr); } }
+.backlink { margin-top: 2.5rem; font: var(--text-s) var(--font-mono); }
+
+/* Notes: an optional blog. */
+.note-list { list-style: none; margin: 0; padding: 0; max-width: 46rem; }
+.note-list li { padding: 1.1rem 0; border-top: 1px dashed var(--color-rule); }
+.note-list h2 { margin: 0.2rem 0 0.3rem; font-size: var(--text-l); line-height: 1.15; hyphens: auto; }
+.note-list h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.note-list p { margin: 0; }
+.post .note-date { margin-bottom: 0.5rem; }
+.tags { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.tags a { display: inline-block; padding: 0.15rem 0.5rem; font-size: var(--text-xs); color: var(--color-text); text-decoration: none; border: 1px solid var(--color-keyline); border-radius: var(--radius); }
+.tags a:hover { border-color: var(--color-accent); }
+.pagination { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin-top: 2rem; font: var(--text-s) var(--font-mono); }
+.lost-links { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2rem; }
+
+.colophon { padding-block: 1.25rem 2.5rem; border-top: 3px solid var(--color-steel); font: var(--text-xs) var(--font-mono); color: var(--color-muted); }
+.colophon p { margin: 0 0 0.35rem; }
+.colophon a { color: var(--color-muted); overflow-wrap: anywhere; }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Print: the CV on A4 in dark ink on white, three dockets to a row, the
+   rail a printed bar, no menu or footer, no docket split across sheets. */
+@media print {
+  @page { size: A4; margin: 11mm 12mm; }
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-rule: #999999;
+    --color-enamel: #ffffff;
+    --color-enamel-text: #000000;
+    --color-enamel-muted: #333333;
+    --color-signal: #000000;
+    --color-paper: #ffffff;
+    --color-print: #000000;
+    --color-print-soft: #333333;
+    --color-print-red: #000000;
+    --color-keyline: #777777;
+    --color-steel: #666666;
+    --color-shadow: rgba(0,0,0,0);
+    --color-code-bg: #ffffff;
+  }
+  html { font-size: 8.4pt; }
+  body { line-height: 1.35; }
+  .skip-link, .masthead-bar, .colophon, .pagination, .backlink, .cv-print, .ticket-link, .pass > .pass-label, .tags { display: none; }
+  .service { margin: 0; padding: 0; border-image: none; }
+  .masthead { border: 0; }
+  .profile { padding: 0 0 3mm; border: 0; }
+  main { padding: 0; width: auto; }
+  a { color: inherit; text-decoration: none; }
+  .page-head { margin-bottom: 4mm; }
+  .cv-head { margin-bottom: 4mm; padding-bottom: 3mm; }
+  .cv-name { font-size: 20pt; }
+  .rails, .cv .rails, .pass .rails { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4.5mm 4mm; margin: 0; padding: 0; }
+  .slot { break-inside: avoid; }
+  .rails .slot::before { background: none; border-top: 1.4mm solid var(--color-steel); box-shadow: none; }
+  .docket { box-shadow: none; }
+  .docket::before { content: none; }
+  .docket::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .docket-loc span { background: none; color: var(--color-print); border: 1px solid var(--color-print); }
+  .docket-station { font-size: 15pt; }
+  .skills { margin-top: 4mm; padding-top: 2mm; break-inside: avoid; }
+  .prose pre { white-space: pre-wrap; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

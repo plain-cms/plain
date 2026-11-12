@@ -1,0 +1,3 @@
+{{#if data.profile.email}}<li><a href="mailto:{{ data.profile.email }}">{{ data.profile.email }}</a></li>
+{{/if}}{{#each data.profile.links as link}}<li><a href="{{ link.url }}">{{ link.label }}</a></li>
+{{/each}}

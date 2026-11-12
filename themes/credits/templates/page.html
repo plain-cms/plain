@@ -1,0 +1,10 @@
+<article class="page">
+{{#if page.url.4}}{{> page-head}}{{else}}{{#if page.slug.2}}{{> bill-home}}{{else}}{{> page-head}}{{/if}}{{/if}}
+  {{#if page.content}}<div class="wrap">
+    <div class="prose">
+{{{ page.content }}}
+    </div>
+  </div>
+  {{/if}}
+</article>
+{{#if page.url.4}}{{> profile-card}}{{else}}{{#if page.slug.2}}{{else}}{{> profile-card}}{{/if}}{{/if}}

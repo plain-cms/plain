@@ -1,0 +1,575 @@
+/* Mandate — a CV for an interim finance director or turnaround chief
+   executive, set like the tombstone announcements of the financial pages:
+   each assignment a ruled box, every line centred, two boxes across, on
+   salmon newsprint in black ink. Everything else stays quiet. All design
+   decisions live in the tokens below (cms-spec.md §10.1). */
+
+:root {
+  --font-serif: Baskerville, "Baskerville Old Face", "Hoefler Text", Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-xxl: clamp(1.875rem, 1.25rem + 2.4vw, 2.75rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.2;
+  --tracking-wide: 0.16em;
+  --tracking-caps: 0.08em;
+
+  --color-bg: #f2cfc1;
+  --color-text: #1b1512;
+  --color-muted: #5c4339;
+  --color-accent: #1b1512;
+  --color-rule: #1b1512;
+  --color-code-bg: #eac3b3;
+  --color-mark: #e2ad98;
+
+  --rule-box: 2pt;
+  --rule-thin: 1px;
+  --measure: 36em;
+  --page-width: 75rem;
+  --lead-width: 24rem;
+  --cv-width: 52rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+}
+
+/* Night: charcoal stock, salmon ink. The same paper, read under a lamp. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #242120;
+    --color-text: #f2cfc1;
+    --color-muted: #c49a87;
+    --color-accent: #f2cfc1;
+    --color-rule: #e9bca8;
+    --color-code-bg: #2f2b29;
+    --color-mark: #5a4038;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { color-scheme: light dark; background: var(--color-bg); }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+/* Every band shares one column with a 16px gutter on a phone. */
+.masthead, main, .profile, .colophon {
+  width: min(100% - 2rem, var(--page-width));
+  margin-inline: auto;
+}
+main { flex: 1 0 auto; }
+
+h1, h2, h3, h4 { font-weight: 400; hyphens: auto; }
+
+::selection { background: var(--color-mark); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg);
+  border: var(--rule-box) solid var(--color-rule);
+}
+.skip-link:focus { left: var(--space-2); }
+
+/* Small grotesque lines: everything that is not the announcement itself. */
+.masthead nav, .stone-summary, .stone-points, .stone-when, .lh-contact,
+.lh-label, .skills, .lh-cv, .record-head h2, .colophon, .meta, .tags,
+.pagination, .cv-print, .backlink, .actions, .empty {
+  font-family: var(--font-sans);
+}
+
+/* Masthead & footer ------------------------------------------------------ */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-4) 0 var(--space-2);
+  border-bottom: var(--rule-box) solid var(--color-rule);
+}
+
+.site-title {
+  min-width: 0;
+  font-size: clamp(1.0625rem, 0.95rem + 0.5vw, var(--text-l));
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text);
+  text-decoration: none;
+  hyphens: auto;
+}
+
+.masthead nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.masthead nav a {
+  display: inline-block;
+  padding: var(--space-2) 0 calc(var(--space-2) - 2px);
+  border-bottom: 2px solid transparent;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.masthead nav a:hover { border-bottom-color: var(--color-muted); }
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-rule); }
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-3) 0 var(--space-5);
+  border-top: var(--rule-thin) solid var(--color-rule);
+  color: var(--color-muted);
+  font-size: var(--text-xs);
+}
+.colophon p { margin: 0; min-width: 0; }
+.colophon a { color: inherit; }
+.colophon-note { flex-basis: 100%; }
+.colophon-note p { margin: 0; }
+
+/* The tombstone ---------------------------------------------------------- */
+
+/* One announcement: a 2pt box, every line centred. The organization is set
+   in wide serif capitals over a short rule, the role beneath it, the scope in
+   small grotesque, and period and location in small capitals at the foot. A
+   role with no organization takes the capitals itself. */
+.stones {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 40rem) {
+  .stones { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.stone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-5) var(--space-3) var(--space-4);
+  border: var(--rule-box) solid var(--color-rule);
+  text-align: center;
+}
+@media (min-width: 30rem) { .stone { padding-inline: var(--space-4); } }
+
+.stone-name {
+  max-width: 100%;
+  margin: 0;
+  font-size: var(--text-m);
+  line-height: var(--leading-tight);
+}
+
+.stone-org {
+  display: block;
+  font-size: clamp(1.0625rem, 0.9rem + 0.5vw, var(--text-l));
+  line-height: 1.3;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+.stone-org::after {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  margin: var(--space-3) auto;
+  border-top: var(--rule-thin) solid var(--color-rule);
+}
+
+.stone-title { display: block; font-style: italic; font-size: var(--text-l); }
+.stone-title:only-child {
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+}
+.stone-title a { color: inherit; }
+
+.stone-summary,
+.stone-points {
+  max-width: 30em;
+  margin: 0;
+  font-size: var(--text-s);
+  line-height: 1.45;
+  hyphens: manual;
+}
+
+.stone-points { padding: 0; list-style: none; color: var(--color-muted); }
+.stone-points::before {
+  content: "";
+  display: block;
+  width: 2.5rem;
+  margin: 0 auto var(--space-3);
+  border-top: var(--rule-thin) solid var(--color-rule);
+}
+.stone-points li + li { margin-top: var(--space-2); }
+
+.stone-when {
+  margin: auto 0 0;
+  padding-top: var(--space-2);
+  font-size: var(--text-s);
+  font-variant-caps: small-caps;
+  letter-spacing: var(--tracking-caps);
+  font-variant-numeric: lining-nums;
+}
+.stone-loc::before { content: "·"; margin: 0 0.6em 0 0.4em; }
+
+/* The home page ------------------------------------------------------------ */
+
+.home { padding: var(--space-5) 0 var(--space-6); }
+
+.home-lead h1,
+.page-head h1 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-xxl);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+.record { margin-top: var(--space-5); }
+
+.record-head { margin: 0 0 var(--space-4); text-align: center; }
+.record-head h2 {
+  margin: 0;
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.record-note {
+  margin: var(--space-1) 0 0;
+  font-style: italic;
+  font-size: var(--text-s);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+@media (min-width: 64rem) {
+  .home {
+    display: grid;
+    grid-template-columns: minmax(0, var(--lead-width)) minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .record { margin-top: 0; }
+}
+
+/* Letterheads: the profile under every page, the head of the CV ----------- */
+
+.lh { text-align: center; }
+
+.profile {
+  padding: var(--space-5) 0;
+  border-top: var(--rule-box) solid var(--color-rule);
+}
+
+.lh-name {
+  margin: 0;
+  font-size: var(--text-l);
+  line-height: 1.25;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  hyphens: auto;
+}
+.cv-head .lh-name { font-size: clamp(1.5rem, 1rem + 2.2vw, 2.375rem); }
+
+.lh-role { max-width: 40em; margin: var(--space-2) auto 0; font-style: italic; hyphens: auto; }
+
+.lh-contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--space-4);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-s);
+}
+.lh-contact li { min-width: 0; max-width: 100%; }
+.lh-contact a { display: inline-block; max-width: 100%; padding: var(--space-1) 0; }
+
+/* Addresses break anywhere rather than widen their line, and never take a
+   hyphen that would read as part of the address. */
+.lh-contact a, .colophon a, .prose a { overflow-wrap: anywhere; hyphens: manual; }
+
+.lh-label {
+  margin: var(--space-4) 0 var(--space-2);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.skills {
+  max-width: 48em;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-s);
+  hyphens: manual;
+}
+.skills li { display: inline; }
+.skills li:not(:last-child)::after { content: "·"; margin: 0 0.5em; }
+
+.lh-cv { margin: var(--space-4) 0 0; font-size: var(--text-s); }
+
+/* The CV --------------------------------------------------------------------- */
+
+.cv {
+  max-width: var(--cv-width);
+  margin: 0 auto;
+  padding: var(--space-5) 0 var(--space-6);
+}
+
+.cv-head {
+  margin: 0 0 var(--space-5);
+  padding: 0 0 var(--space-4);
+  border-bottom: var(--rule-box) solid var(--color-rule);
+}
+
+.cv .record-note { margin: 0 0 var(--space-3); }
+
+.cv-skills { margin: var(--space-5) 0 0; padding-top: var(--space-2); border-top: var(--rule-thin) solid var(--color-rule); }
+
+body:has(.cv) .profile { display: none; }
+
+.cv-print {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin: var(--space-5) 0 0;
+  color: var(--color-muted);
+  font-size: var(--text-s);
+  text-align: center;
+}
+.cv-print p { margin: 0; }
+
+.print-button {
+  min-height: 2.75rem;
+  padding: var(--space-1) var(--space-4);
+  font: inherit;
+  font-weight: 700;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--rule-box) solid var(--color-rule);
+  cursor: pointer;
+}
+.print-button:hover { color: var(--color-bg); background: var(--color-text); }
+
+.empty { color: var(--color-muted); text-align: center; }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-3);
+  border-top: var(--rule-thin) solid var(--color-rule);
+  font-size: var(--text-s);
+}
+
+/* A role's page: its own announcement, then the story -------------------- */
+
+.role, .page, .post, .list, .not-found {
+  max-width: var(--cv-width);
+  margin: 0 auto;
+  padding: var(--space-5) 0 var(--space-6);
+}
+
+.stone-lg { max-width: 40rem; margin: 0 auto var(--space-5); }
+.stone-lg .stone-org { font-size: clamp(1.125rem, 0.8rem + 1.6vw, var(--text-xl)); }
+.stone-lg .stone-title { font-size: var(--text-xl); }
+.stone-lg .stone-title:only-child { font-size: var(--text-xxl); line-height: var(--leading-tight); }
+.stone-lg .stone-summary { font-size: var(--text-m); }
+
+.role-points, .prose { max-width: var(--measure); margin-inline: auto; }
+
+.role-points { margin-top: 0; margin-bottom: var(--space-4); padding-left: 1.2em; list-style: "–  "; }
+.role-points li + li { margin-top: var(--space-2); }
+
+.backlink, .actions { margin: var(--space-5) 0 0; font-size: var(--text-s); text-align: center; }
+.actions { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-5); }
+
+/* Pages, posts, the note list --------------------------------------------- */
+
+.page-head { margin: 0 auto var(--space-4); max-width: var(--measure); text-align: center; }
+.page-head h1::after {
+  content: "";
+  display: block;
+  width: 3rem;
+  margin: var(--space-4) auto 0;
+  border-top: var(--rule-box) solid var(--color-rule);
+}
+
+.meta { margin: 0; font-size: var(--text-s); color: var(--color-muted); font-variant-caps: small-caps; letter-spacing: var(--tracking-caps); }
+
+.tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; list-style: none; font-size: var(--text-s); }
+.tags a { display: inline-block; padding: var(--space-1) 0; }
+
+.cover { display: block; width: 100%; max-width: 48rem; height: auto; margin: 0 auto var(--space-5); border: var(--rule-box) solid var(--color-rule); }
+
+.post-list { max-width: var(--measure); margin: 0 auto; padding: 0; list-style: none; }
+.post-item { padding: var(--space-4) 0; }
+.post-item + .post-item { border-top: var(--rule-thin) solid var(--color-rule); }
+.post-item h2 { margin: 0 0 var(--space-1); font-size: var(--text-l); line-height: var(--leading-tight); }
+.post-desc { margin: var(--space-2) 0 0; }
+
+/* Prose -------------------------------------------------------------------- */
+
+.prose { hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.home-lead .prose > p:first-child,
+.page .prose > p:first-child { font-size: var(--text-l); line-height: 1.45; }
+
+.prose h2, .prose h3, .prose h4 { margin: var(--space-5) 0 var(--space-2); line-height: var(--leading-tight); hyphens: auto; }
+.prose h2 { font-size: var(--text-xl); }
+.prose h3 { font-size: var(--text-l); font-style: italic; }
+.prose h4 { font-family: var(--font-sans); font-size: var(--text-xs); font-weight: 700; letter-spacing: var(--tracking-wide); text-transform: uppercase; }
+
+.prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose ul { list-style: "–  "; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li::marker { color: var(--color-muted); }
+
+.prose img { display: block; max-width: 100%; height: auto; }
+
+.prose blockquote { padding-left: var(--space-3); border-left: var(--rule-box) solid var(--color-rule); font-style: italic; }
+
+.prose code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-code-bg); padding: 0.05em 0.3em; }
+.prose pre { overflow-x: auto; padding: var(--space-3); background: var(--color-code-bg); line-height: 1.5; }
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); }
+
+/* A table keeps readable cells and scrolls inside its own box. */
+.prose table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: var(--font-sans);
+  font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
+  hyphens: manual;
+  /* An inked edge shows on the side that has more table to scroll to. */
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) left / 1.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) right / 1.5rem 100% no-repeat local,
+    linear-gradient(to right, var(--color-rule), transparent) left / 5px 100% no-repeat scroll,
+    linear-gradient(to left, var(--color-rule), transparent) right / 5px 100% no-repeat scroll;
+}
+.prose th, .prose td { min-width: 8rem; padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: var(--rule-thin) solid var(--color-rule); }
+.prose th { border-bottom-width: var(--rule-box); }
+
+.prose hr { margin: var(--space-5) auto; width: 3rem; border: 0; border-top: var(--rule-box) solid var(--color-rule); }
+
+/* Motion ------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Print: the CV on one sheet of A4, black on white, the announcements still
+   two across. Navigation, the profile, the footer and the button go. ----- */
+
+@media print {
+  @page { size: A4; margin: 11mm 12mm; }
+
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #222;
+    --color-accent: #000;
+    --color-rule: #000;
+    --color-code-bg: #fff;
+    --color-mark: #fff;
+    --rule-box: 1.25pt;
+  }
+
+  html { font-size: 8.6pt; }
+  body { display: block; min-height: 0; line-height: 1.4; }
+  .masthead, main, .profile, .colophon { width: auto; }
+
+  .masthead, .colophon, .skip-link, .pagination, .backlink, .actions,
+  .cv-print, .tags { display: none; }
+
+  a { color: inherit; text-decoration: none; }
+
+  .home, .cv, .role, .page, .post, .list { display: block; max-width: none; padding: 0; }
+  .record { margin-top: 6mm; }
+  .profile { padding: 4mm 0 0; break-inside: avoid; }
+
+  .cv-head { margin: 0 0 3mm; padding: 0 0 2.5mm; }
+  .cv-head .lh-name { font-size: 17pt; }
+  .lh-contact { margin-top: 1.5mm; }
+  .lh-contact a { padding: 0; }
+  .cv .record-note { margin-bottom: 2mm; }
+
+  .stones { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3mm; }
+  .stone { gap: 1.6mm; padding: 3.5mm 4mm 2.5mm; break-inside: avoid; }
+  .stone-org { font-size: 10.5pt; }
+  .stone-org::after { margin: 1.5mm auto; }
+  .stone-title { font-size: 10.5pt; }
+  .stone-points::before { margin-bottom: 1.5mm; }
+  .stone-points li + li { margin-top: 0.8mm; }
+  .stone-when { padding-top: 0; }
+
+  .cv-skills { margin-top: 3mm; padding-top: 0; break-inside: avoid; }
+  .cv-skills .lh-label { margin: 1.5mm 0 1mm; }
+
+  .stone-lg { max-width: none; }
+  .prose, .role-points { max-width: 150mm; }
+  .prose pre { white-space: pre-wrap; }
+  .prose table { overflow: visible; background: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

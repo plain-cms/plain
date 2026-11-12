@@ -1,0 +1,18 @@
+{
+  "name": "Joanna Marsh",
+  "role": "Primary teacher: Year 6, maths lead and early career mentor",
+  "email": "joanna@joannamarsh.example",
+  "links": [
+    { "label": "07700 900318", "url": "tel:+447700900318" },
+    { "label": "joannamarsh.example", "url": "https://joannamarsh.example" }
+  ],
+  "skills": [
+    "Maths mastery teaching",
+    "Year 6 assessment and moderation",
+    "Mentoring early career teachers",
+    "Forest School Level 3",
+    "Phonics (trained in Key Stage 1)",
+    "Paediatric first aid",
+    "British Sign Language Level 1"
+  ]
+}

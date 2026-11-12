@@ -1,0 +1,16 @@
+<article class="role">
+  <header class="stone stone-lg">
+    <h1 class="stone-name">{{#if page.organization}}<span class="stone-org">{{ page.organization }}</span> {{/if}}<span class="stone-title">{{ page.title }}</span></h1>
+    {{#if page.summary}}<p class="stone-summary">{{ page.summary }}</p>
+    {{/if}}<p class="stone-when"><span class="stone-period">{{#if page.period}}{{ page.period }}{{else}}<time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{/if}}</span>{{#if page.location}} <span class="stone-loc">{{ page.location }}</span>{{/if}}</p>
+  </header>
+  {{#if page.highlights}}<ul class="role-points">
+    {{#each page.highlights as point}}<li>{{ point }}</li>
+    {{/each}}
+  </ul>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+  <p class="backlink"><a href="/experience/">{{ strings.backToCv }}</a></p>
+</article>

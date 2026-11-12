@@ -1,0 +1,22 @@
+<article class="sheet role">
+  <header class="sheet-head role-head">
+    <p class="eyebrow"><a href="/experience/">{{ strings.experience }}</a></p>
+    <h1 class="sheet-title">{{ page.title }}</h1>
+    <p class="entry-when">{{#if page.period}}{{ page.period }}{{else}}<time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{/if}}</p>
+    {{#if page.organization}}<p class="entry-at"><span>{{ page.organization }}</span>{{#if page.location}} <span class="entry-place">{{ page.location }}</span>{{/if}}</p>
+    {{else}}{{#if page.location}}<p class="entry-at"><span class="entry-place">{{ page.location }}</span></p>
+    {{/if}}{{/if}}
+  </header>
+  <div class="sheet-body">
+    <div class="prose">
+      {{#if page.summary}}<p class="lede">{{ page.summary }}</p>
+      {{/if}}{{#if page.highlights}}<ul class="points">
+        {{#each page.highlights as point}}<li>{{ point }}</li>
+        {{/each}}
+      </ul>
+      {{/if}}{{{ page.content }}}
+    </div>
+    <p class="more back"><a href="/experience/">{{ strings.backToCv }}</a></p>
+    <div class="filler"></div>
+  </div>
+</article>

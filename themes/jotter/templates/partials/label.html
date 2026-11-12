@@ -1,0 +1,10 @@
+<section class="label" aria-label="{{ strings.profile }}">
+  <dl class="label-lines">
+    <div class="label-line label-line-name"><dt>{{ strings.labelName }}</dt><dd>{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</dd></div>
+    {{#if data.profile.role}}<div class="label-line"><dt>{{ strings.labelSubject }}</dt><dd>{{ data.profile.role }}</dd></div>
+    {{/if}}{{#if data.profile.email}}<div class="label-line label-line-contact"><dt>{{ strings.labelContact }}</dt><dd><ul class="contact" role="list">{{> profile-contact}}</ul></dd></div>
+    {{else}}{{#if data.profile.links}}<div class="label-line label-line-contact"><dt>{{ strings.labelContact }}</dt><dd><ul class="contact" role="list">{{> profile-contact}}</ul></dd></div>
+    {{/if}}{{/if}}
+  </dl>
+  <a class="label-cv" href="/experience/">{{ strings.readTheCv }}</a>
+</section>

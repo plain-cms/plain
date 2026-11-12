@@ -1,0 +1,7 @@
+<li class="stratum">
+        {{> depth}}
+        <div class="stratum-desc">
+          <h3 class="stratum-title">{{#if entry.content}}<a href="{{ entry.url }}">{{ entry.title }}</a>{{else}}{{ entry.title }}{{/if}}</h3>
+          {{> stratum-meta}}
+        </div>
+      </li>

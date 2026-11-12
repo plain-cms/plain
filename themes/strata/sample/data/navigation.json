@@ -1,0 +1,14 @@
+[
+  {
+    "label": "Home",
+    "url": "/"
+  },
+  {
+    "label": "CV",
+    "url": "/experience/"
+  },
+  {
+    "label": "Contact",
+    "url": "/contact/"
+  }
+]

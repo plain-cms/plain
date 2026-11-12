@@ -1,0 +1,19 @@
+{
+  "name": "Mara Ellingham",
+  "role": "Actor — classical and new work on stage, crime and medical drama on screen",
+  "email": "mara@maraellingham.example",
+  "links": [
+    { "label": "07700 900318", "url": "tel:+447700900318" },
+    { "label": "Agent: pellowassociates.example", "url": "https://pellowassociates.example" },
+    { "label": "castbook.example/maraellingham", "url": "https://castbook.example/maraellingham" }
+  ],
+  "skills": [
+    "Accents: Lancashire, Yorkshire, Glasgow, RP, General American",
+    "Stage combat, advanced certificate",
+    "Singing: mezzo, folk and musical theatre",
+    "Conversational Welsh",
+    "Horse riding",
+    "Full driving licence",
+    "Self-tape set-up at home"
+  ]
+}

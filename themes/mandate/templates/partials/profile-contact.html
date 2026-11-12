@@ -1,0 +1,5 @@
+{{#if data.profile.email}}<ul class="lh-contact" role="list" aria-label="{{ strings.contactLabel }}">
+    {{> contact-items}}</ul>
+  {{else}}{{#if data.profile.links}}<ul class="lh-contact" role="list" aria-label="{{ strings.contactLabel }}">
+    {{> contact-items}}</ul>
+  {{/if}}{{/if}}

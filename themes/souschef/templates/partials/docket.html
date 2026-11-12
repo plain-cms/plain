@@ -1,0 +1,16 @@
+<li class="slot">
+  <article class="docket">
+    <h2 class="docket-station">{{#if entry.content}}<a href="{{ entry.url }}">{{ entry.title }}</a>{{else}}{{ entry.title }}{{/if}}</h2>
+    <div class="docket-head">
+      {{#if entry.organization}}<p class="docket-org">{{ entry.organization }}</p>
+      {{/if}}<p class="docket-when">{{#if entry.period}}{{ entry.period }}{{else}}<time datetime="{{ entry.date }}">{{ entry.dateFormatted }}</time>{{/if}}</p>
+    </div>
+    {{#if entry.location}}<p class="docket-loc"><span>{{ entry.location }}</span></p>
+    {{/if}}{{#if entry.summary}}<p class="docket-summary">{{ entry.summary }}</p>
+    {{/if}}{{#if entry.highlights}}<ul class="docket-mods">
+      {{#each entry.highlights as point}}<li>{{ point }}</li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </article>
+</li>

@@ -1,0 +1,29 @@
+{{#if page.url.4}}{{> page-plain}}{{else}}{{#if page.slug.2}}<article class="page home">
+  <div class="service">
+    <header class="page-head">
+      <h1>{{ page.title }}</h1>
+    </header>
+    {{#if collections.experience}}<section class="pass" aria-labelledby="pass-label">
+      <p class="pass-label" id="pass-label">{{ strings.onThePass }}</p>
+      <ol class="dockets rails" role="list">
+        {{#each collections.experience as entry}}{{> docket}}
+        {{/each}}
+      </ol>
+    </section>
+    {{/if}}
+  </div>
+  <div class="home-text">
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}{{#if data.profile.skills}}<section class="skills" aria-labelledby="skills-label">
+      <h2 class="pass-label" id="skills-label">{{ strings.skills }}</h2>
+      <ul>
+        {{#each data.profile.skills as skill}}<li>{{ skill }}</li>
+        {{/each}}
+      </ul>
+    </section>
+    {{/if}}
+  </div>
+</article>
+{{else}}{{> page-plain}}{{/if}}{{/if}}

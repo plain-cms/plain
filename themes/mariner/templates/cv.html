@@ -1,0 +1,56 @@
+<article class="cv">
+  <header class="cv-head">
+    {{#if data.profile}}<div class="cv-who">
+      <p class="leaf-head">{{ strings.coverLabel }}</p>
+      <h1 class="cv-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</h1>
+      {{#if data.profile.role}}<p class="cv-role">{{ data.profile.role }}</p>
+      {{/if}}
+    </div>
+    {{#if data.profile.email}}<ul class="contact-list cv-contact">
+      {{> profile-contact}}
+    </ul>
+    {{else}}{{#if data.profile.links}}<ul class="contact-list cv-contact">
+      {{> profile-contact}}
+    </ul>
+    {{/if}}{{/if}}
+    {{else}}<div class="cv-who">
+      <p class="leaf-head">{{ strings.coverLabel }}</p>
+      <h1 class="cv-name">{{ page.title }}</h1>
+    </div>
+    {{/if}}
+  </header>
+  <section class="cv-record" aria-labelledby="cv-record-head">
+    <h2 class="leaf-head" id="cv-record-head">{{ strings.recordHeading }}</h2>
+    {{#if items}}<div class="db">
+      {{> db-heads}}
+      <ol class="db-list" role="list">
+        {{#each items as entry}}<li class="db-entry">
+  {{> db-line}}{{#if entry.highlights}}<ul class="db-highlights">
+    {{#each entry.highlights as point}}<li>{{ point }}</li>
+    {{/each}}
+  </ul>
+  {{/if}}</li>
+        {{/each}}
+      </ol>
+    </div>
+    {{else}}<p class="empty">{{ strings.noEntries }}</p>
+    {{/if}}
+  </section>
+  {{#if data.profile.skills}}<section class="cv-skills" aria-labelledby="cv-skills-head">
+    <h2 class="leaf-head" id="cv-skills-head">{{ strings.skills }}</h2>
+    <ul class="skill-list">
+      {{#each data.profile.skills as skill}}<li>{{ skill }}</li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</article>
+<div class="cv-print">
+  <p>{{ strings.printNote }} <span class="print-hint">{{ strings.printHint }}</span></p>
+  <button type="button" class="print-button" hidden>{{ strings.printButton }}</button>
+</div>

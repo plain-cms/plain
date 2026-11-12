@@ -1,0 +1,12 @@
+  <header class="bill">
+    <div class="wrap bill-inner">
+      <h1 class="bill-tagline">{{ page.title }}</h1>
+      <p class="bill-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</p>
+      {{#if data.profile.role}}<p class="bill-role">{{ data.profile.role }}</p>
+      {{/if}}{{#if collections.experience}}<ul class="billing" role="list" aria-label="{{ strings.credits }}">
+        {{#each collections.experience as entry}}{{> credit}}{{/each}}
+      </ul>
+      {{/if}}{{> contacts}}
+      <p class="to-cv"><a href="/experience/">{{ strings.readTheCv }}</a></p>
+    </div>
+  </header>

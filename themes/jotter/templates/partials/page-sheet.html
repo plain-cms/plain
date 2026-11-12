@@ -1,0 +1,11 @@
+<article class="sheet">
+  <header class="sheet-head">
+    <h1 class="sheet-title">{{ page.title }}</h1>
+  </header>
+  <div class="sheet-body">
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}<div class="filler"></div>
+  </div>
+</article>

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
+{{#if page.description}}<meta name="description" content="{{ page.description }}">
+{{else}}{{#if page.summary}}<meta name="description" content="{{ page.summary }}">
+{{/if}}{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+{{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
+{{#if page.description}}<meta property="og:description" content="{{ page.description }}">
+{{else}}{{#if page.summary}}<meta property="og:description" content="{{ page.summary }}">
+{{/if}}{{/if}}{{#if page.date}}<meta property="og:type" content="article">
+{{else}}<meta property="og:type" content="website">
+{{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
+<meta name="twitter:card" content="summary_large_image">
+{{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
+<meta name="twitter:card" content="summary_large_image">
+{{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
+{{/each}}<meta name="color-scheme" content="dark light">
+{{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
+{{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+{{/if}}{{#if site.appleTouchIcon}}<link rel="apple-touch-icon" href="{{ site.appleTouchIcon }}">
+{{/if}}<link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
+<header class="masthead">
+  <div class="masthead-bar">
+    {{#if data.profile}}<a class="site-mark" href="/" aria-label="{{ site.title }}"><svg viewBox="0 0 30 24" width="30" height="24" aria-hidden="true" focusable="false"><path class="mark-paper" d="M7 3h16v17l-2 2-2-2-2 2-2-2-2 2-2-2-2 2-2-2z"/><rect class="mark-ink" x="10" y="9" width="10" height="3"/><rect class="mark-red" x="10" y="14" width="8" height="2"/><rect class="mark-steel" x="0" y="0" width="30" height="6"/><rect class="mark-lip" x="0" y="4" width="30" height="2"/></svg></a>
+    {{else}}<a class="site-title" href="/">{{ site.title }}</a>
+    {{/if}}<nav class="menu" aria-label="{{ strings.mainNav }}">
+      <ul>
+        {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
+        {{/each}}
+      </ul>
+    </nav>
+  </div>
+  {{#if data.profile}}<section class="profile" aria-label="{{ strings.profile }}">
+    <div class="profile-who">
+      <p class="profile-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</p>
+      {{#if data.profile.role}}<p class="profile-role">{{ data.profile.role }}</p>
+      {{/if}}
+    </div>
+    <div class="profile-reach">
+      {{#if data.profile.email}}<ul class="contact">
+        {{> contact}}
+      </ul>
+      {{else}}{{#if data.profile.links}}<ul class="contact">
+        {{> contact}}
+      </ul>
+      {{/if}}{{/if}}<p class="profile-cv"><a class="ticket-link" href="/experience/">{{ strings.readTheCv }}</a></p>
+    </div>
+  </section>
+  {{/if}}
+</header>
+<main id="main">
+{{{ body }}}
+</main>
+<footer class="colophon">
+  <p>{{ site.title }}{{#if site.description}} · {{ site.description }}{{/if}}</p>
+  {{#if data.profile.email}}<p><a href="mailto:{{ data.profile.email }}">{{ data.profile.email }}</a></p>
+  {{/if}}{{#if data.footer.html}}<div class="colophon-note">{{{ data.footer.html }}}</div>{{/if}}
+</footer>
+<script type="module" src="/assets/enhance.js"></script>
+</body>
+</html>
