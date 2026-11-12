@@ -1,0 +1,14 @@
+{
+  "phone": "01632-960418",
+  "emergencyPhone": "07700-900417",
+  "emergencyNote": "In labour, or worried? Day or night",
+  "hours": [
+    { "days": "Mon, Tue, Thu", "time": "9 am – 5 pm" },
+    { "days": "Wed", "time": "9 am – 7.30 pm" },
+    { "days": "Fri", "time": "9 am – 1 pm" },
+    { "days": "Sat–Sun", "time": "Closed" }
+  ],
+  "address": "The Weavers' Room, 7 Mill Fold, Marsden HD7 6AB",
+  "bookingUrl": "",
+  "email": "anna@holroydmidwifery.example"
+}

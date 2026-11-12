@@ -1,0 +1,24 @@
+<section class="list" data-list="{{ page.url }}">
+  <header class="page-header">
+    {{#if tag}}<p class="eyebrow">{{ strings.tagged }}</p>
+    <h1>{{ tag }}</h1>
+    {{else}}<h1>{{ page.title }}</h1>
+    {{/if}}
+  </header>
+  {{#if items}}<ul class="entries">
+    {{#each items as item}}<li class="entry">
+      {{#if item.date}}<p class="entry-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{/if}}<h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.description}}<p class="entry-desc">{{ item.description }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

@@ -1,0 +1,31 @@
+<article class="page home">
+  <div class="home-top">
+    <header class="page-header">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </header>
+    <section class="board-frame" aria-labelledby="board-label">
+      <h2 class="board-label" id="board-label">{{ strings.careBoard }}</h2>
+      <ul class="board board-home">
+        {{> core-cells}}{{#each collections.services as item}}<li class="cell cell-care"><a class="cell-link" href="{{ item.url }}">{{ item.title }}</a></li>
+        {{/each}}{{#if collections.services.11}}<li class="cell cell-more"><a class="cell-link" href="/care/">{{ strings.allCare }}</a></li>
+        {{/if}}
+      </ul>
+    </section>
+    {{#if data.practice}}<div class="home-key">
+      {{#if data.practice.hours}}<p class="fact-label">{{ strings.openingHours }}</p>
+      <dl class="hours key-hours">
+        {{#each data.practice.hours as slot}}<div><dt>{{ slot.days }}</dt><dd>{{ slot.time }}</dd></div>
+        {{/each}}
+      </dl>
+      {{/if}}{{#if data.practice.address}}<p class="fact-label">{{ strings.findUs }}</p>
+      <address class="key-address">{{ data.practice.address }}</address>
+      {{/if}}
+    </div>
+    {{/if}}
+  </div>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

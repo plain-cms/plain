@@ -1,0 +1,16 @@
+<section class="page not-found">
+  <header class="page-header">
+    <p class="eyebrow">{{ strings.notFoundTitle }}</p>
+    <h1>{{ strings.notFoundHeading }}</h1>
+  </header>
+  <div class="prose">
+    <p>{{ strings.notFoundBody }}</p>
+    <ul>
+      <li><a href="/">{{ strings.goHome }}</a></li>
+      <li><a href="/care/">{{ strings.seeCare }}</a></li>
+      <li><a href="/contact/">{{ strings.contactUs }}</a></li>
+    </ul>
+    {{#if data.practice.phone}}<p>{{ strings.notFoundCall }} <a href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></p>
+    {{/if}}
+  </div>
+</section>

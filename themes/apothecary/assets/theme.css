@@ -1,0 +1,571 @@
+/* Apothecary — a community pharmacy theme (clinic family).
+   The page is amber medicine-bottle glass: cream type on brown. One object
+   carries the design: the dispensing label, a white panel typed in black
+   mono caps (CALL, OPEN, the hours, the Book line) with the pharmacy's name
+   and address printed under a rule, stuck on a bottle drawn in CSS (glass
+   shading, neck, ribbed child-proof cap) and lapped at its lower corner by
+   the yellow cautionary sticker holding the after-hours number. It stands
+   beside the headline on the home page and beside the text on every care
+   page. Everything else is quiet grotesque type on the glass.
+   Restyle by editing the tokens below, never the selectors. */
+
+:root {
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-xl: clamp(1.375rem, 2.4vw, 1.75rem);
+  --text-xxl: clamp(2rem, 4.4vw, 3.5rem);
+  --text-label: 0.9375rem;
+  --leading-body: 1.6;
+  --leading-tight: 1.12;
+
+  --color-bg: #5a2a0c;
+  --color-text: #fbefd9;
+  --color-muted: #e6c399;
+  --color-accent: #ffd21f;
+  --color-glass: #74360c;
+  --color-glass-edge: #3c1904;
+  --color-glass-shine: #a9622a;
+  --color-glass-deep: #401c06;
+  --color-rule: rgba(251,239,217,0.3);
+  --color-label: #fdfcf7;
+  --color-print: #141210;
+  --color-print-muted: #4d4741;
+  --color-cap: #f1eee5;
+  --color-cap-rib: #bdb6a6;
+  --color-shade: rgba(70,35,5,0.2);
+  --color-focus: #ffffff;
+
+  --page-width: 76rem;
+  --measure: 64ch;
+  --label-width: 26.5rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --space-s: 0.5rem;
+  --space-m: 1rem;
+  --space-l: 2.5rem;
+  --radius: 3px;
+  --line: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1e0f05;
+    --color-text: #f4e6cd;
+    --color-muted: #d3b088;
+    --color-accent: #f0c419;
+    --color-glass: #552709;
+    --color-glass-edge: #331604;
+    --color-glass-shine: #8a4c1b;
+    --color-glass-deep: #130902;
+    --color-rule: rgba(244,230,205,0.26);
+    --color-label: #ebe6da;
+    --color-print: #12100e;
+    --color-print-muted: #48423c;
+    --color-cap: #d9d4c8;
+    --color-cap-rib: #9c9588;
+    --color-shade: rgba(40,20,0,0.28);
+    --color-focus: #ffffff;
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  -webkit-text-size-adjust: 100%;
+}
+
+.wrap {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+h1, h2, h3, h4 {
+  line-height: var(--leading-tight);
+  margin: 0;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+a { color: var(--color-text); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: var(--line); }
+
+a[href^="tel:"] { font-variant-numeric: tabular-nums lining-nums; }
+a[href^="tel:"], a[href^="mailto:"] { overflow-wrap: anywhere; }
+
+:focus-visible {
+  outline: var(--line) solid var(--color-focus);
+  outline-offset: 2px;
+}
+.label :focus-visible,
+.sticker :focus-visible { outline-color: var(--color-print); }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-s);
+  z-index: 5;
+  padding: var(--space-s) var(--space-m);
+  background: var(--color-label);
+  color: var(--color-print);
+}
+.skip-link:focus { left: var(--space-s); }
+
+/* Masthead */
+
+.masthead { padding: var(--space-m) 0; border-bottom: 1px solid var(--color-rule); }
+
+.masthead-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s) var(--space-l);
+}
+
+.site-title {
+  font-weight: 700;
+  font-size: var(--text-l);
+  letter-spacing: -0.01em;
+  text-decoration: none;
+  line-height: 1.2;
+}
+
+.menu { flex: 1 1 auto; }
+.menu ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.menu a {
+  display: inline-block;
+  padding: var(--space-s) 0.125rem;
+  text-decoration: none;
+  border-bottom: var(--line) solid transparent;
+}
+.menu a:hover { border-bottom-color: var(--color-muted); }
+.menu a[aria-current="page"] { border-bottom-color: var(--color-text); font-weight: 700; }
+
+.book {
+  display: inline-block;
+  padding: 0.5rem 0.875rem;
+  border: 2px solid var(--color-text);
+  border-radius: var(--radius);
+  font-weight: 700;
+  text-decoration: none;
+  line-height: 1.3;
+}
+.book:hover { background: var(--color-text); color: var(--color-bg); }
+
+/* Page heads and text */
+
+main.wrap { padding-top: var(--space-l); padding-bottom: calc(var(--space-l) * 1.6); }
+
+.page-header { max-width: 46rem; margin-bottom: var(--space-l); }
+.page-header h1 {
+  font-size: var(--text-xxl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.lede {
+  margin: var(--space-m) 0 0;
+  font-size: var(--text-l);
+  line-height: 1.45;
+  color: var(--color-muted);
+  max-width: 40rem;
+}
+
+.eyebrow, .back, .entry-date, .tags-label, .base-label {
+  margin: 0 0 var(--space-s);
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  letter-spacing: 0.06em;
+  color: var(--color-muted);
+}
+.eyebrow, .tags-label, .base-label { text-transform: uppercase; }
+.back a { color: var(--color-muted); }
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose h2 {
+  font-size: var(--text-xl);
+  margin: 2.25em 0 0.5em;
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--color-rule);
+}
+.prose h3 { font-size: var(--text-l); margin: 1.75em 0 0.4em; }
+.prose h4 { font-size: var(--text-m); margin: 1.5em 0 0.3em; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 1.1em; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li { margin-bottom: 0.35em; }
+.prose li::marker { color: var(--color-muted); }
+.prose strong { font-weight: 700; }
+.prose img { display: block; max-width: 100%; height: auto; }
+.prose hr { border: 0; border-top: 1px solid var(--color-rule); margin: var(--space-l) 0; }
+.prose blockquote {
+  margin-left: 0;
+  padding-left: var(--space-m);
+  border-left: var(--line) solid var(--color-muted);
+  color: var(--color-muted);
+}
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  background: var(--color-glass-deep);
+  padding: 0.1em 0.3em;
+  border-radius: var(--radius);
+}
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-m);
+  background: var(--color-glass-deep);
+  border-radius: var(--radius);
+  line-height: 1.45;
+}
+.prose pre code { background: none; padding: 0; }
+
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+  /* A table wider than the column scrolls; a pale edge shows there is more */
+  background:
+    linear-gradient(90deg, var(--color-bg) 1.25rem, transparent) 0 0 / 2.5rem 100% no-repeat local,
+    linear-gradient(270deg, var(--color-bg) 1.25rem, transparent) 100% 0 / 2.5rem 100% no-repeat local,
+    linear-gradient(90deg, var(--color-rule), transparent) 0 0 / 1.25rem 100% no-repeat scroll,
+    linear-gradient(270deg, var(--color-rule), transparent) 100% 0 / 1.25rem 100% no-repeat scroll;
+}
+.prose th, .prose td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5rem 1.25rem 0.5rem 0;
+  border-bottom: 1px solid var(--color-rule);
+  min-width: 7.5rem;
+}
+.prose th {
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Home and care pages: text on the left, the bottle standing on the right */
+
+@media (min-width: 60em) {
+  .with-label {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) var(--label-width);
+    column-gap: clamp(2.5rem, 5vw, 5rem);
+    align-items: start;
+  }
+  .with-label > * { grid-column: 1; }
+  .with-label > .bottle { grid-column: 2; grid-row: 1 / span 3; margin-top: 4.25rem; }
+}
+
+/* The bottle */
+
+.bottle {
+  position: relative;
+  max-width: var(--label-width);
+  margin: 6rem 0 var(--space-l);
+  padding: 2.75rem 1.125rem 2.25rem;
+  border-radius: 3.25rem 3.25rem 1.5rem 1.5rem;
+  background-color: var(--color-glass);
+  background-image: linear-gradient(90deg, var(--color-glass-edge) 0%, var(--color-glass) 14%, var(--color-glass-shine) 21%, var(--color-glass) 29%, var(--color-glass) 78%, var(--color-glass-edge) 100%);
+}
+.bottle::before,
+.bottle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.bottle::after {
+  bottom: calc(100% - 0.5rem);
+  width: 42%;
+  height: 1.9rem;
+  background: linear-gradient(90deg, var(--color-glass-edge), var(--color-glass) 30%, var(--color-glass-shine) 40%, var(--color-glass) 55%, var(--color-glass-edge));
+}
+.bottle::before {
+  bottom: calc(100% + 1.25rem);
+  width: 52%;
+  height: 3rem;
+  border-radius: var(--radius) var(--radius) 2px 2px;
+  background: repeating-linear-gradient(90deg, var(--color-cap) 0 7px, var(--color-cap-rib) 7px 9px);
+}
+
+.label {
+  position: relative;
+  z-index: 1;
+  container-type: inline-size;
+  padding: 1.125rem 1.125rem 1rem;
+  background: var(--color-label);
+  color: var(--color-print);
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: 1.45;
+  border-radius: 2px;
+  box-shadow: inset 0.9rem 0 0.9rem -0.9rem var(--color-shade), inset -0.9rem 0 0.9rem -0.9rem var(--color-shade);
+}
+.label.has-sticker { padding-bottom: 2.75rem; }
+.label a { color: var(--color-print); }
+
+.label-head {
+  margin: 0 0 0.875rem;
+  padding-bottom: 0.625rem;
+  border-bottom: 2px solid var(--color-print);
+  font-family: var(--font-mono);
+  font-size: 1.1875rem;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.label-row {
+  display: grid;
+  grid-template-columns: 9ch minmax(0, 1fr);
+  column-gap: 1ch;
+  margin: 0 0 0.5rem;
+}
+.label-row dt { font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; -webkit-hyphens: auto; hyphens: auto; }
+.label-row dd { margin: 0; min-width: 0; }
+.label-row .tel { font-weight: 700; font-size: 1.125rem; line-height: 1.3; }
+@container (max-width: 16rem) {
+  .label-row { grid-template-columns: minmax(0, 1fr); }
+}
+
+.hours {
+  display: grid;
+  grid-template-columns: fit-content(45%) minmax(0, 1fr);
+  gap: 0.2em 1.5ch;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+.hours li { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+.hours .days { min-width: 0; }
+
+.label-book { margin: 0.875rem 0 0; }
+.label-book a {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  background: var(--color-print);
+  color: var(--color-label);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.label-book a::after { content: " \2192"; }
+.label-book a:hover { text-decoration: underline; }
+.label-book a:focus-visible { outline-offset: 3px; }
+
+.label-pharmacy {
+  margin: 0.875rem 0 0;
+  padding-top: 0.5rem;
+  border-top: 1px dashed var(--color-print-muted);
+  font-size: var(--text-s);
+  color: var(--color-print-muted);
+  line-height: 1.4;
+}
+.label-pharmacy strong {
+  display: block;
+  color: var(--color-print);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* The cautionary sticker */
+
+.sticker {
+  position: relative;
+  z-index: 2;
+  width: fit-content;
+  max-width: 88%;
+  margin: -2rem -0.375rem 0 auto;
+  padding: 0.625rem 0.875rem 0.7rem;
+  background: var(--color-accent);
+  color: var(--color-print);
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: 1.25;
+  border-radius: 2px;
+  box-shadow: inset 0 0 0 0.25rem var(--color-accent), inset 0 0 0 0.375rem var(--color-print), 0 0.25rem 0.5rem var(--color-shade);
+  transform: rotate(-2.5deg);
+}
+.sticker-note { display: block; font-size: var(--text-s); }
+.sticker-tel {
+  display: block;
+  color: var(--color-print);
+  font-size: 1.75rem;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-decoration: none;
+}
+.sticker-tel:hover { text-decoration: underline; }
+
+/* The care index, the blog index and tag pages: one plain list */
+
+.entries { margin: 0; padding: 0; list-style: none; max-width: 50rem; border-top: 1px solid var(--color-rule); }
+.entry { padding: 1.125rem 0 1.25rem; border-bottom: 1px solid var(--color-rule); }
+.entry h2 { font-size: var(--text-xl); letter-spacing: -0.01em; }
+.entry h2 a { text-decoration: none; }
+.entry h2 a:hover { text-decoration: underline; }
+.entry-desc { margin: 0.375rem 0 0; color: var(--color-muted); max-width: var(--measure); }
+.empty { color: var(--color-muted); }
+
+[data-list^="/care/"] .entries { columns: 2 22rem; column-gap: var(--space-l); max-width: none; border-top: 0; }
+[data-list^="/care/"] .entry { break-inside: avoid; border-top: 1px solid var(--color-rule); border-bottom: 0; }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s) var(--space-l);
+  margin-top: var(--space-l);
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+}
+.pagination span { color: var(--color-muted); }
+
+/* Care pages */
+
+.steps { max-width: var(--measure); margin-top: var(--space-l); }
+.steps h2 {
+  font-size: var(--text-xl);
+  padding-top: var(--space-m);
+  border-top: 1px solid var(--color-rule);
+  margin-bottom: var(--space-m);
+}
+.steps ol { margin: 0; padding: 0; list-style: none; counter-reset: step; }
+.steps li {
+  position: relative;
+  counter-increment: step;
+  padding: 0 0 0 2.75rem;
+  margin-bottom: 0.875rem;
+  min-height: 1.875rem;
+}
+.steps li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 1.875rem;
+  height: 1.875rem;
+  border: 2px solid var(--color-text);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  font-weight: 700;
+  line-height: 1.625rem;
+  text-align: center;
+}
+
+/* Posts */
+
+.cover { display: block; max-width: 100%; height: auto; margin: 0 0 var(--space-l); }
+.tags { margin-top: var(--space-l); max-width: var(--measure); }
+.tags-label { display: inline; margin-right: var(--space-s); }
+.tags a {
+  display: inline-block;
+  margin: 0 0.375rem 0.375rem 0;
+  padding: 0.125rem 0.5rem;
+  border: 1px solid var(--color-muted);
+  border-radius: var(--radius);
+  font-size: var(--text-s);
+  text-decoration: none;
+}
+.tags a:hover { border-color: var(--color-text); }
+
+/* The foot of every page: hours, phone, address, the after-hours sticker */
+
+.base {
+  background: var(--color-glass-deep);
+  padding: var(--space-l) 0;
+  font-size: var(--text-s);
+}
+.base-cols {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr));
+  gap: var(--space-l);
+  margin-bottom: var(--space-l);
+}
+.base-cols:not(:has(.base-col)) { display: none; }
+.base-col p, .base address { margin: 0 0 0.75rem; font-style: normal; }
+.base-col .base-label { margin-bottom: 0.25rem; }
+.base .hours { font-family: var(--font-mono); }
+.base .tel { font-weight: 700; font-size: var(--text-l); }
+.base .sticker { margin: 0; max-width: 100%; transform: rotate(-1.5deg); }
+.base-name { margin: 0; padding-top: var(--space-m); border-top: 1px solid var(--color-rule); color: var(--color-muted); }
+.base-name strong { color: var(--color-text); }
+.base-note { margin-top: var(--space-s); color: var(--color-muted); }
+.base-note a { color: var(--color-muted); }
+
+@media (max-width: 30em) {
+  .masthead-in { gap: 0.25rem var(--space-m); }
+  .menu { flex-basis: 100%; order: 3; }
+  .book { padding: 0.375rem 0.625rem; font-size: var(--text-s); }
+  .bottle { margin-top: 5.5rem; padding-left: 0.75rem; padding-right: 0.75rem; }
+  .label { padding-left: 0.875rem; padding-right: 0.875rem; }
+  .sticker-tel { font-size: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-glass: #ffffff;
+    --color-glass-deep: #ffffff;
+    --color-rule: #999999;
+    --color-label: #ffffff;
+    --color-print: #000000;
+    --color-print-muted: #333333;
+    --color-accent: #ffffff;
+  }
+  .menu, .book, .skip-link, .label-book { display: none; }
+  .masthead { border-bottom-width: 2px; }
+  main.wrap { padding-top: var(--space-m); padding-bottom: var(--space-m); }
+  .with-label { display: block; }
+  .bottle {
+    margin: var(--space-m) 0;
+    padding: 0;
+    max-width: 30rem;
+    background-image: none;
+    break-inside: avoid;
+  }
+  .bottle::before, .bottle::after { display: none; }
+  .label, .label.has-sticker { padding-bottom: 1rem; border: 2px solid var(--color-print); box-shadow: none; }
+  .sticker { transform: none; margin: var(--space-s) 0 0; box-shadow: none; border: 2px solid var(--color-print); }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: var(--text-s); }
+  .prose pre, .prose code { border: 1px solid var(--color-rule); }
+  .base { padding: var(--space-m) 0; border-top: 2px solid var(--color-print); }
+}

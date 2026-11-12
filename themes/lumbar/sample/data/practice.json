@@ -1,0 +1,14 @@
+{
+  "phone": "01632-960412",
+  "emergencyPhone": "07700-900318",
+  "emergencyNote": "Back gone? Same-day line",
+  "hours": [
+    { "days": "Mon, Wed, Fri", "time": "8 am – 6 pm" },
+    { "days": "Tue & Thu", "time": "11 am – 8 pm" },
+    { "days": "Saturday", "time": "9 am – 1 pm" },
+    { "days": "Sunday", "time": "Closed" }
+  ],
+  "address": "Unit 3, Brindle Yard, Tanner Street, Elmsford",
+  "bookingUrl": "",
+  "email": "hello@brindleyard-osteo.example"
+}

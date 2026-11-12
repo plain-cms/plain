@@ -1,0 +1,19 @@
+<article class="page">
+  <header class="card-head">
+    <h1 class="marker">{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.url.4}}{{else}}{{#if page.slug.4}}{{#if collections.services}}
+  <section class="box box-intake" aria-labelledby="intake-caption">
+    <h2 class="caption" id="intake-caption">{{ strings.inFor }}</h2>
+    <ul class="ticks ticks-links">
+      {{#each collections.services as item}}<li><a href="{{ item.url }}">{{ item.title }}</a></li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}{{/if}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>

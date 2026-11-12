@@ -1,0 +1,14 @@
+{
+  "phone": "01632-960418",
+  "emergencyPhone": "999",
+  "emergencyNote": "Sudden slurred speech or a drooping face?",
+  "hours": [
+    { "days": "Mon–Thu", "time": "8.30am – 6pm" },
+    { "days": "Fri", "time": "8.30am – 3pm" },
+    { "days": "Sat", "time": "9am – 12.30pm, children only" },
+    { "days": "Sun", "time": "Closed" }
+  ],
+  "address": "The Old Reading Room, 7 Cotton Lane, Penwick PN3 4HL",
+  "bookingUrl": "",
+  "email": "hello@penwickspeech.example"
+}

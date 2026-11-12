@@ -1,0 +1,15 @@
+<section class="page not-found">
+  <header class="card-head">
+    <p class="caption">{{ strings.notFoundTitle }}</p>
+    <h1 class="marker">{{ strings.notFoundHeading }}</h1>
+  </header>
+  <div class="prose">
+    <p>{{ strings.notFoundBody }}</p>
+    {{#if data.practice.phone}}<p>{{ strings.notFoundCall }} <a href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></p>
+    {{/if}}<ul>
+      <li><a href="/">{{ strings.goHome }}</a></li>
+      <li><a href="/care/">{{ strings.seeCare }}</a></li>
+      <li><a href="/contact/">{{ strings.contactUs }}</a></li>
+    </ul>
+  </div>
+</section>

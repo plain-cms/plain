@@ -1,0 +1,15 @@
+{
+  "phone": "01632-960418",
+  "emergencyPhone": "111",
+  "emergencyNote": "Sudden change in your sight while we are closed?",
+  "hours": [
+    { "days": "Monday–Wednesday", "time": "9 am – 5:30 pm" },
+    { "days": "Thursday", "time": "9 am – 7 pm" },
+    { "days": "Friday", "time": "9 am – 5:30 pm" },
+    { "days": "Saturday", "time": "9 am – 4 pm" },
+    { "days": "Sunday", "time": "Closed" }
+  ],
+  "address": "41 Sheep Street, Wellingham",
+  "bookingUrl": "",
+  "email": "eyes@ferrandandhale.example"
+}

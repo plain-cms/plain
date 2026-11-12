@@ -1,0 +1,7 @@
+<li class="entry">
+  <h2 class="entry-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  <span class="vb" aria-hidden="true"></span>
+  {{#if item.dateFormatted}}<p class="entry-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  {{/if}}{{#if item.description}}<p class="entry-desc">{{ item.description }}</p>
+  {{/if}}
+</li>
