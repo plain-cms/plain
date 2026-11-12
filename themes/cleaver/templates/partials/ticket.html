@@ -1,0 +1,6 @@
+<li class="ticket" data-status="{{ item.status }}">
+  <p class="ticket-top"><span class="ticket-cat">{{ item.category }}</span>{{#if item.status}}<span class="status"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ item.status }}</span></span>{{/if}}</p>
+  <h2 class="ticket-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.price}}<p class="ticket-price"><span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}</p>{{/if}}
+  {{#if item.description}}<p class="ticket-desc">{{ item.description }}</p>{{/if}}
+</li>

@@ -1,0 +1,7 @@
+<li class="piece" data-status="{{ item.status }}">
+  <div class="bar"><p class="punches">{{> marks}}</p></div>
+  <div class="piece-text">
+    <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+    {{#if item.description}}<p class="piece-desc">{{ item.description }}</p>{{/if}}
+  </div>
+</li>

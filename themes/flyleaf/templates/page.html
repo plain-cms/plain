@@ -1,0 +1,9 @@
+<article class="spread page">
+  <header class="verso">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.content}}<div class="recto prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

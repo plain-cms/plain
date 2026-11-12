@@ -1,0 +1,11 @@
+{
+  "phone": "01632 960284",
+  "email": "ruth@lowmillpottery.example",
+  "address": "Low Mill Pottery, The Old Dye House, Mill Lane, Alderbeck, North Yorkshire YO63 4QR",
+  "hours": [
+    { "days": "Thursday and Friday", "time": "10:00 to 16:00" },
+    { "days": "Saturday", "time": "10:00 to 17:00" },
+    { "days": "Sunday to Wednesday", "time": "Closed for making" }
+  ],
+  "orderNote": "Ring or e-mail to have a piece put by, then collect it from the studio or have it posted anywhere in the UK from £6 a parcel. Each firing is small: if something has sold out, ask and your name goes on one from the next kiln."
+}

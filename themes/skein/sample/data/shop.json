@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960174",
+  "email": "shop@tansyandwoad.example",
+  "address": "Tansy & Woad, 9 Finkle Street, Kirkby Ainsley, North Yorkshire YO62 4DN",
+  "hours": [
+    { "days": "Tuesday to Friday", "time": "10:00 to 17:00" },
+    { "days": "Saturday", "time": "9:30 to 16:30" },
+    { "days": "Sunday and Monday", "time": "Closed" },
+    { "days": "First Thursday of the month", "time": "Knit night until 20:00" }
+  ],
+  "orderNote": "Ring or e-mail and we will put yarn aside for a week, or post it to you for £3.60 however much you order. If you are matching hanks you already have, tell us the shade and the dye lot printed on the band."
+}

@@ -1,0 +1,384 @@
+/* Loupe — the hallmark under the loupe: each product is headed by a bevelled
+   silver bar struck with punches. Restyle by editing the tokens below, never
+   selectors (cms-spec.md §10.1). Velvet black is the default: in place of a
+   (prefers-color-scheme: dark) block there is a light one. */
+
+:root {
+  /* Type — heavy punch figures, small spaced geometric caps */
+  --font-text: "Avenir Next", Avenir, "Century Gothic", "URW Gothic", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  --font-caps: Futura, "Century Gothic", "URW Gothic", "Avenir Next", Avenir, "Segoe UI", Arial, sans-serif;
+  --font-figure: "Avenir Next", Avenir, "Century Gothic", "URW Gothic", "Arial Black", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.6;
+  --tracking-caps: 0.16em;
+  --price-size: clamp(1.5rem, 1.15rem + 1.5vw, 1.75rem);
+
+  /* Colour — black velvet, satin white, sterling grey */
+  --color-bg: #0c0c0f;
+  --color-text: #ededf0;
+  --color-muted: #a3a4ab;
+  --color-accent: #ffffff;
+  --color-line: #36373e;
+  --color-pad: #17171c;
+  --color-velvet: #050506;
+  --color-velvet-text: #ededf0;
+  --color-velvet-muted: #a3a4ab;
+  --color-velvet-line: #2c2d33;
+  --color-bar: #c2c5cb;
+  --color-bar-bevel: #f7f8fa;
+  --color-bar-side: #a4a8af;
+  --color-bar-foot: #6f737b;
+  --color-bar-sheen: rgba(255,255,255,0.5);
+  --color-bar-shade: rgba(20,22,28,0.22);
+  --color-tarnish: #909399;
+  --color-engrave: #23252a;
+  --color-punch: #1c1d22;
+  --color-punch-shade: rgba(0,0,0,0.9);
+  --color-figure: #f5f6f8;
+  --shadow-bar: 0 1px 0 rgba(0,0,0,0.6);
+
+  /* Measure */
+  --page: 72rem;
+  --measure: 38rem;
+  --radius: 2px;
+  --bevel: 3px;
+  --cut: 0.5rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Tissue white: the counter, with the velvet tray set down on it */
+    --color-bg: #f4f4f2;
+    --color-text: #1a1b1f;
+    --color-muted: #5b5d64;
+    --color-accent: #000000;
+    --color-line: #cfd0d2;
+    --color-pad: #e9e9e6;
+    --color-velvet: #0c0c0f;
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+html { color-scheme: dark light; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+.wrap { max-width: var(--page); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, var(--space-4)); }
+main { min-height: 60vh; padding-block: var(--space-4) var(--space-5); }
+
+h1, h2, h3, .lede, .prose, .piece-desc, .summary, .cartouche { hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+/* wide prose and tables are not hyphenated */
+@media (min-width: 40rem) { .prose, .summary { hyphens: manual; } }
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+::selection { background: var(--color-bar); color: var(--color-engrave); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-pad); }
+.skip-link:focus { left: var(--space-2); }
+
+/* The label voice: small spaced geometric caps */
+.site-title, .masthead nav a, .cartouche, .status, .label, .meta, .more, .back, .pagination, .tags, .shop-card h2, .colophon-name, .prose h2, .prose th {
+  font-family: var(--font-caps);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+/* The velvet tray the silver lies on, black in both schemes */
+.velvet {
+  --color-text: var(--color-velvet-text);
+  --color-muted: var(--color-velvet-muted);
+  --color-accent: var(--color-velvet-text);
+  --color-line: var(--color-velvet-line);
+  padding: clamp(0.75rem, 3vw, 1.5rem);
+  color: var(--color-text);
+  background: var(--color-velvet);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius);
+}
+.velvet > :last-child { margin-bottom: 0; }
+
+/* Masthead: the name, with a hallmark struck beside it */
+
+.masthead { border-bottom: 1px solid var(--color-line); }
+.masthead-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 var(--space-4); padding-block: 0.75rem; }
+.site-title { display: flex; align-items: center; gap: 0.75rem; min-width: 0; padding-block: var(--space-1); font-size: 0.875rem; letter-spacing: 0.2em; color: var(--color-text); text-decoration: none; }
+.bar, .hallmark {
+  border: var(--bevel) solid;
+  border-color: var(--color-bar-bevel) var(--color-bar-side) var(--color-bar-foot);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-bar);
+}
+.hallmark { flex: none; display: flex; gap: 0.2em; width: fit-content; padding: 0.25em; font-size: 0.6875rem; background: var(--color-bar) linear-gradient(var(--color-bar-sheen), transparent 40%, transparent 60%, var(--color-bar-shade)); border-width: 1px; }
+.hallmark span { position: relative; width: 1em; height: 1em; background: var(--color-punch) linear-gradient(var(--color-punch-shade), transparent 55%); clip-path: polygon(25% 0, 75% 0, 100% 25%, 100% 75%, 75% 100%, 25% 100%, 0 75%, 0 25%); }
+.hallmark span:first-child { width: 1.8em; clip-path: polygon(22% 0, 78% 0, 100% 50%, 78% 100%, 22% 100%, 0 50%); }
+.hallmark span:nth-child(2) { clip-path: polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 50%); }
+/* under the home headline, magnified: brilliant, crown, rose */
+.hallmark-lg { margin: var(--space-3) 0 0; padding: 0.3em; font-size: 1.5rem; border-width: var(--bevel); }
+.hallmark-lg span::before { content: ""; position: absolute; inset: 26% 34%; background: var(--color-figure); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.hallmark-lg span:nth-child(2)::before { inset: 18% 24% 46%; clip-path: polygon(0 100%, 0 12%, 27% 58%, 50% 0, 73% 58%, 100% 12%, 100% 100%); }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: var(--space-2) 0 var(--space-1); border-bottom: 1px solid transparent; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { border-color: var(--color-muted); }
+.masthead nav a[aria-current="page"] { border-color: var(--color-accent); }
+
+.colophon { border-top: 1px solid var(--color-line); color: var(--color-muted); font-size: 0.875rem; }
+.colophon-in { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: var(--space-3) var(--space-4); }
+.colophon p { margin: 0; }
+.colophon a { color: inherit; }
+
+/* Headings */
+
+h1 { margin: 0; font-size: clamp(1.875rem, 1.1rem + 2.2vw, 2.625rem); font-weight: 700; line-height: 1.08; letter-spacing: -0.02em; text-wrap: balance; }
+.page-header { max-width: 48rem; margin-bottom: var(--space-4); }
+.lede { margin: var(--space-3) 0 0; max-width: var(--measure); font-size: 1.125rem; line-height: 1.5; }
+.meta { margin: 0 0 var(--space-2); color: var(--color-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.more, .back { margin: var(--space-3) 0 0; }
+.back { margin-top: var(--space-4); }
+.back a { margin-right: var(--space-3); }
+.more a, .back a, .tags a { display: inline-block; padding-block: var(--space-1); }
+.empty { margin: 0; color: var(--color-muted); }
+
+/* Two columns: heading and words left; the tray of bars, or the page text, right */
+
+.home-head, .tray { margin-bottom: var(--space-4); }
+@media (min-width: 60rem) {
+  .home, .page:has(> .prose), .post:has(> .prose), .list:has(> .post-list) { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); grid-template-rows: auto 1fr; column-gap: var(--space-5); align-items: start; }
+  .tray { grid-column: 2; grid-row: 1 / span 2; }
+  .home-text { grid-column: 1; }
+  .page > .page-header, .post > .page-header, .list > .page-header { grid-row: 1 / span 2; }
+  .page > .prose, .post > .prose, .post > .cover, .list > .post-list, .list > .pagination { grid-column: 2; }
+  /* no featured product: one column of words */
+  .home:not(:has(.pieces li)) { display: block; }
+}
+
+/* THE BAR OF PUNCHES — the signature: bevelled silver, the marks sunk dark, the figures bright */
+
+.pieces { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 26rem), 1fr)); gap: calc(var(--space-4) * 1.25) var(--space-4); margin: 0; list-style: none; }
+.pieces:empty { display: none; }
+.piece { position: relative; min-width: 0; container-type: inline-size; }
+
+.bar {
+  position: relative;
+  padding: 0.4375rem 0.625rem;
+  /* satin; a glint crosses on hover */
+  background: linear-gradient(100deg, transparent 42%, var(--color-bar-sheen) 50%, transparent 58%) 0 0 / 250% 100% no-repeat, linear-gradient(var(--color-bar-sheen), transparent 1rem, transparent calc(100% - 1rem), var(--color-bar-shade)) var(--color-bar);
+  transition: background-position 0.8s ease;
+}
+.piece:hover .bar { background-position: 100% 0, 0 0; }
+.bar-big { width: fit-content; max-width: 100%; margin-bottom: var(--space-4); padding: 0.75rem 0.875rem; }
+
+/* the price and its unit wrap as one */
+.punches, .priced { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) 0.625rem; min-width: 0; margin: 0; color: var(--color-engrave); }
+/* a punch: shadow under its upper and left walls, a bright lip lower right */
+.punch {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  max-width: 100%;
+  background: linear-gradient(var(--color-bar-bevel), var(--color-bar-bevel)) 100% 0 / 2px 100% no-repeat, linear-gradient(transparent 50%, var(--color-bar-bevel) 50%) var(--color-punch);
+  color: var(--color-figure);
+  clip-path: var(--shape);
+}
+.punch::before { content: ""; position: absolute; inset: 0 1px 1px 0; z-index: -1; background: linear-gradient(var(--color-punch-shade), transparent 0.5rem), linear-gradient(90deg, var(--color-punch-shade), transparent 0.5rem), var(--color-punch); clip-path: var(--shape); }
+
+.cartouche {
+  --shape: polygon(calc(var(--cut) * 1.5) 0, calc(100% - var(--cut) * 1.5) 0, 100% 50%, calc(100% - var(--cut) * 1.5) 100%, calc(var(--cut) * 1.5) 100%, 0 50%);
+  padding: 0.55em calc(var(--cut) * 1.5 + 0.5em) 0.45em;
+  font-size: 0.6875rem;
+}
+.cut {
+  --shape: polygon(var(--cut) 0, calc(100% - var(--cut)) 0, 100% var(--cut), 100% calc(100% - var(--cut)), calc(100% - var(--cut)) 100%, var(--cut) 100%, 0 calc(100% - var(--cut)), 0 var(--cut));
+  padding: 0.3em 0.55em 0.24em;
+  font-family: var(--font-figure);
+  font-size: var(--price-size);
+  font-weight: 700;
+  font-variant-numeric: lining-nums;
+  line-height: 1.1;
+}
+.unit { min-width: 0; font-size: 0.8125rem; font-weight: 600; line-height: 1.3; }
+
+/* the office mark closes a bar that has room: a rose in a round punch */
+.bar::after, .hallmark-lg span:last-child::before {
+  position: absolute;
+  inset: 50% 1.375rem auto auto;
+  width: 0.5em;
+  height: 0.5em;
+  margin: -0.25em;
+  font-size: 0.875rem;
+  color: var(--color-figure);
+  background: radial-gradient(currentColor 30%, transparent 36%);
+  border-radius: 50%;
+  clip-path: none;
+  box-shadow: 0 -0.44em, 0.42em -0.14em, 0.26em 0.36em, -0.26em 0.36em, -0.42em -0.14em, 0 0 0 0.62em var(--color-punch), 1px 1px 0 0.62em var(--color-bar-bevel);
+}
+.hallmark-lg span:last-child { background: none; clip-path: none; }
+.hallmark-lg span:last-child::before { inset: 50% 50% auto auto; font-size: 0.56em; }
+@media (min-width: 30rem) {
+  .bar { padding-right: 3rem; }
+  .bar::after { content: ""; }
+}
+
+/* Status: nothing for In stock, a shield for the other three, plain engraving for anything else */
+.status { min-width: 0; font-size: 0.625rem; line-height: 1.15; }
+.st, [data-status="In stock"] .status { display: none; }
+.st-raw { display: inline; }
+.st.punch {
+  --shape: polygon(0 0, 100% 0, 100% 50%, 50% 100%, 0 50%);
+  max-width: 11em;
+  padding: 0.6em 0.9em 1.9em;
+  text-align: center;
+  text-wrap: balance;
+}
+:is([data-status="To order"], [data-status="Seasonal"], [data-status="Sold out"]) .st-raw { display: none; }
+[data-status="To order"] .st-order, [data-status="Seasonal"] .st-season, [data-status="Sold out"] .st-out, .product[data-status="In stock"] .st-in { display: block; }
+.product[data-status="In stock"] .status { display: block; }
+.product[data-status="In stock"] .st-raw { display: none; }
+
+/* Sold out: the bar tarnished, the price struck through */
+[data-status="Sold out"] .bar { background: var(--color-tarnish); border-color: var(--color-bar-side) var(--color-bar-foot) var(--color-bar-foot); }
+[data-status="Sold out"] .cut { color: var(--color-bar); text-decoration: line-through; text-decoration-thickness: 0.09em; }
+.piece[data-status="Sold out"] h2 a { color: var(--color-muted); }
+
+.piece-text { margin-top: 0.75rem; }
+.piece h2, .post-card h2 { margin: 0; font-size: 1.1875rem; font-weight: 500; line-height: 1.25; }
+.piece h2 a, .post-card h2 a { color: var(--color-text); text-decoration-color: var(--color-muted); }
+/* the whole piece is the link */
+.piece h2 a::after { content: ""; position: absolute; inset: 0; }
+.piece-desc { margin: var(--space-1) 0 0; font-size: 0.9375rem; line-height: 1.5; color: var(--color-muted); }
+@container (min-width: 32rem) {
+  .piece-text:has(p) { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); gap: var(--space-4); }
+  .piece-desc { margin: 0.1em 0 0; }
+}
+
+/* The product page: its hallmark, magnified, on its own velvet */
+
+.plinth { margin-bottom: var(--space-4); }
+.bar-big .cartouche { font-size: 0.8125rem; }
+.bar-big .status { font-size: 0.75rem; }
+.bar-big .cut { font-size: clamp(var(--price-size), 8vw, var(--price-size) * 1.5); }
+/* enhance.js marks a price of more than 14 characters; it is set a size smaller */
+.cut[data-long] { font-size: calc(var(--price-size) * 0.75); }
+.bar-big .cut[data-long] { font-size: var(--price-size); }
+.bar-big .unit { font-size: 0.9375rem; }
+.product-more:empty { display: none; }
+.product-more > * + * { margin-top: var(--space-4); }
+.details { max-width: var(--measure); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-bar); }
+.details li { padding: var(--space-2) 0; border-bottom: 1px solid var(--color-line); line-height: 1.4; }
+.cover { display: block; max-width: 100%; height: auto; margin-bottom: var(--space-4); border: 1px solid var(--color-line); }
+.product-more .cover { margin-bottom: 0; }
+@media (min-width: 60rem) {
+  .product-more:has(> .prose):has(> .details, > .cover) { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); column-gap: var(--space-5); align-items: start; }
+  .product-more > .prose { grid-column: 2; grid-row: 1 / span 2; margin-top: 0; }
+}
+
+/* Page text */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-size: 0.875rem; font-weight: 600; }
+.prose h2::after { content: ""; display: block; width: var(--space-4); margin-top: var(--space-2); border-top: 1px solid var(--color-bar); }
+.prose h3, .prose h4 { margin: 1.5rem 0 var(--space-1); font-size: 1em; font-weight: 500; line-height: 1.3; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.25rem; }
+.prose ul { list-style: square; }
+.prose li::marker { color: var(--color-muted); }
+.prose img { max-width: 100%; height: auto; }
+.prose a, .shop-card a { hyphens: manual; }
+.prose blockquote { padding-left: var(--space-3); border-left: var(--bevel) solid var(--color-bar); color: var(--color-muted); }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 1px solid var(--color-line); }
+.prose code { padding: 0.1em 0.3em; font-family: var(--font-mono); font-size: 0.875em; background: var(--color-pad); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.45; background: var(--color-pad); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+.prose table { display: block; width: fit-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums lining-nums; hyphens: manual; }
+.prose td { min-width: 7em; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-line); }
+.prose th { font-size: 0.6875rem; color: var(--color-muted); border-color: var(--color-bar); }
+
+/* News list and page numbers */
+
+.post-list { max-width: var(--measure); margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-bar); }
+.post-card { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-line); }
+.summary { margin: var(--space-1) 0 0; color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); color: var(--color-muted); }
+
+/* The shop card: how to order, on a pad with a silver edge */
+
+.shop-card { display: grid; gap: var(--space-4); margin-top: var(--space-5); padding: var(--space-4) clamp(var(--space-3), 4vw, var(--space-4)); background: var(--color-pad); border-top: var(--bevel) solid var(--color-bar); border-radius: var(--radius); }
+.shop-card > div { min-width: 0; }
+.shop-card h2 { margin: 0 0 var(--space-2); color: var(--color-muted); }
+.shop-note { max-width: 34rem; margin: 0 0 var(--space-3); }
+.shop-links { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-3) var(--space-4); margin: 0; }
+.shop-link { display: block; min-width: 0; max-width: 100%; text-decoration: none; }
+.label { display: block; color: var(--color-muted); }
+.shop-link-value { display: block; overflow-wrap: anywhere; text-decoration: underline; text-decoration-thickness: 1px; }
+.shop-link:hover .shop-link-value { text-decoration-thickness: 2px; }
+.shop-phone .shop-link-value { font-family: var(--font-figure); font-size: clamp(1rem, 0.45rem + 2.8vw, 1.75rem); font-weight: 700; font-variant-numeric: lining-nums; line-height: 1.2; }
+.shop-hours dl { margin: 0; font-variant-numeric: tabular-nums lining-nums; }
+.shop-hours dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 1px solid var(--color-line); }
+.shop-hours dd { margin: 0 0 0 auto; text-align: right; text-wrap: balance; color: var(--color-muted); }
+.shop-address address { font-style: normal; text-wrap: balance; }
+@media (min-width: 56rem) {
+  .shop-card { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bar { transition: none; }
+}
+
+/* Print: ink on white, the punches outlined */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-line: #999;
+    --color-pad: #fff;
+    --color-velvet: #fff;
+    --color-velvet-text: #000;
+    --color-velvet-muted: #333;
+    --color-velvet-line: #fff;
+    --color-bar: #fff;
+    --color-bar-bevel: #000;
+    --color-bar-side: #000;
+    --color-bar-foot: #000;
+    --color-tarnish: #fff;
+    --color-engrave: #000;
+    --color-punch: #fff;
+    --color-figure: #000;
+    --shadow-bar: none;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .hallmark, .bar::after, .more, .back, .pagination { display: none; }
+  main { min-height: 0; }
+  .velvet { padding: 0; }
+  .bar { border-width: 1px; background: none; }
+  .punch { background: none; clip-path: none; border: 1px solid var(--color-text); }
+  .punch::before { display: none; }
+  .st.punch { padding-bottom: 0.6em; }
+  [data-status="Sold out"] .cut { color: var(--color-muted); }
+  .shop-card { border: 1px solid var(--color-text); }
+  .piece, .shop-card, .details li, .post-card { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}

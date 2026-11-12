@@ -1,0 +1,11 @@
+<li class="hank" data-status="{{ item.status }}">
+  <div class="band">
+    <div class="band-name">
+      <p class="band-cat"><span class="cat">{{ item.category }}</span>{{#if item.status}}<span class="status">{{> status}}<span class="st st-raw">{{ item.status }}</span></span>{{/if}}</p>
+      <h2 class="band-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.description}}<p class="band-desc">{{ item.description }}</p>{{/if}}
+    </div>
+    {{#if item.details}}<ul class="band-spec" aria-label="{{ strings.details }}">{{#each item.details as fact}}<li>{{ fact }}</li>{{/each}}</ul>{{/if}}
+    {{#if item.price}}<p class="band-lap"><span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}</p>{{/if}}
+  </div>
+</li>

@@ -1,0 +1,395 @@
+/* Kiln — the potter's glaze test board. Restyle by editing the tokens, never
+   selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — a rounded sans, and mono for the scratched codes */
+  --font-round: ui-rounded, "Arial Rounded MT Bold", "Hiragino Maru Gothic ProN", "Varela Round", Nunito, "Segoe UI", system-ui, sans-serif;
+  --font-body: ui-rounded, "Hiragino Maru Gothic ProN", "Varela Round", Nunito, "Segoe UI", system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.6;
+  --tracking-code: 0.08em;
+  --price-size: 2.25rem;
+
+  /* Colour — light: grey stoneware, raw clay, celadon as a fill, iron-oxide ink */
+  --color-bg: #c8c5bc;
+  --color-speckle: #8a6b56;
+  --color-text: #3a1f12;
+  --color-muted: #4b3a2f;
+  --color-accent: #7a3215;
+  --color-line: #9d978a;
+  --color-clay: #e9e2d4;
+  --color-clay-edge: #a79f8f;
+  --color-incise: #6b5d4e;
+  --color-incise-light: #fbf7ee;
+  --color-glaze: #9fcdbd;
+  --color-glaze-pool: #6ea694;
+  --color-glaze-ink: #5a2410;
+  --color-glaze-raw: #cfc3ba;
+  --color-nail: #3d3029;
+  --shadow-tile: 2px 5px 0 rgba(58,31,18,0.2);
+  --shadow-hole: inset 0 3px 3px rgba(58,31,18,0.7);
+
+  /* Measure */
+  --tile: 13rem;
+  --hole: 1.15rem;
+  --radius: 6px;
+  --page: 76rem;
+  --measure: 40rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1.25rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The reduced kiln — soot-dark ground, toasted clay, celadon now the text */
+    --color-bg: #1e1a17;
+    --color-speckle: #5b3f2c;
+    --color-text: #c9e4d8;
+    --color-muted: #94b3a6;
+    --color-accent: #e19c6e;
+    --color-line: #4a433c;
+    --color-clay: #38312b;
+    --color-clay-edge: #100d0b;
+    --color-incise: #ab9f90;
+    --color-incise-light: #1b1714;
+    --color-glaze: #86b9a8;
+    --color-glaze-pool: #4f8271;
+    --color-glaze-ink: #2c140a;
+    --color-glaze-raw: #999187;
+    --color-nail: #0c0a09;
+    --shadow-tile: 2px 5px 0 rgba(0,0,0,0.55);
+    --shadow-hole: inset 0 3px 3px rgba(0,0,0,0.85);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+/* The ground: fired stoneware, its iron speckle six sparse dot fields that
+   never line up. The glaze carries specks too, the raw clay none. */
+body {
+  --specks:
+    radial-gradient(circle at 22% 31%, var(--color-speckle) 0.9px, transparent 1.6px),
+    radial-gradient(circle at 71% 64%, var(--color-speckle) 1.3px, transparent 2px),
+    radial-gradient(circle at 43% 88%, var(--color-speckle) 0.6px, transparent 1.2px),
+    radial-gradient(circle at 87% 12%, var(--color-speckle) 1px, transparent 1.7px),
+    radial-gradient(circle at 9% 57%, var(--color-speckle) 0.5px, transparent 1.1px),
+    radial-gradient(circle at 58% 9%, var(--color-speckle) 0.7px, transparent 1.3px);
+  --specks-size: 233px 197px, 281px 263px, 149px 227px, 271px 313px, 167px 139px, 307px 179px;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  background-image: var(--specks);
+  background-size: var(--specks-size);
+  overflow-wrap: break-word;
+}
+
+.masthead, main, .colophon { max-width: var(--page); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, var(--space-4)); }
+main { min-height: 50vh; padding-bottom: var(--space-5); }
+
+h1, h2, h3, .site-title, .price, .shop-value, .colophon-name, strong, b, th { font-family: var(--font-round); font-weight: 700; }
+h1, h2, h3, .home-head .lede, .tile-desc, .cat { hyphens: auto; }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+.glaze :focus-visible { outline-color: var(--color-glaze-ink); }
+::selection { background: var(--color-glaze); color: var(--color-glaze-ink); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-clay); }
+.skip-link:focus { left: var(--space-2); }
+
+/* The code voice: small spaced mono capitals, as scratched with a pin */
+.code { font-family: var(--font-mono); font-size: 0.75rem; font-weight: 400; line-height: 1.4; letter-spacing: var(--tracking-code); text-transform: uppercase; }
+.tile-code, .details, .shop-card > div > .code { color: var(--color-incise); text-shadow: 0 1px 0 var(--color-incise-light); }
+
+/* Masthead: the name, a small tile beside it, the menu */
+
+.masthead { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-4); padding-block: var(--space-3) 1rem; }
+.masthead::after { content: ""; flex: 0 0 100%; height: 1px; margin-top: 0.75rem; background: var(--color-line); }
+.site-title { display: flex; align-items: center; gap: 0.65rem; min-width: 0; margin-right: auto; font-size: 1.4rem; line-height: 1.15; color: var(--color-text); text-decoration: none; }
+.site-title::before {
+  content: "";
+  flex: none;
+  width: 1rem;
+  height: 1.5rem;
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at 50% 20%, var(--color-nail) 1.4px, transparent 2px),
+    linear-gradient(174deg, var(--color-glaze) 41%, var(--color-clay) 43%);
+  box-shadow: 0 1px 0 var(--color-clay-edge);
+}
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: var(--space-1) 0; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current] { text-decoration: underline; text-decoration-thickness: 3px; text-decoration-color: var(--color-accent); text-underline-offset: 0.3em; }
+.masthead-call { font-family: var(--font-mono); font-size: 0.9rem; color: var(--color-text); white-space: nowrap; }
+@media (max-width: 47.99em) {
+  .masthead-call { display: none; }
+}
+
+/* Page headings, set straight on the stoneware */
+
+.page-header, .home-head { padding: var(--space-4) 0 var(--space-3); }
+h1 { margin: 0; font-size: clamp(1.8rem, 1.2rem + 2.6vw, 2.75rem); line-height: 1.08; letter-spacing: -0.01em; text-wrap: balance; }
+.lede { max-width: var(--measure); margin: var(--space-3) 0 0; font-size: 1.125rem; line-height: 1.5; }
+.meta { margin: 0 0 var(--space-2); color: var(--color-muted); }
+.more { margin: var(--space-3) 0 0; }
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.empty { color: var(--color-muted); }
+/* text set straight on the ground stands on a clean patch, so no speck reads as a full stop */
+.masthead > *, .page-header > *, .home-head > *, .empty, .back, .pagination, .colophon > * { background: var(--color-bg); }
+.page-header > *, .home-head > * { width: fit-content; }
+
+/* Home: the headline stands beside the board of tiles; the words lie below */
+
+.home h1 { font-size: clamp(1.8rem, 0.9rem + 2.4vw, 2.75rem); }
+.featured { padding-bottom: var(--space-4); }
+.featured:not(:has(li)), .tiles:empty { display: none; }
+/* under the headline: the sign on the door */
+.home-hours { display: none; }
+.home-hours .hours > div { border-color: var(--color-line); }
+.home > .prose { columns: 3 17rem; column-gap: var(--space-4); }
+.home > .prose :is(h2, h3) { break-after: avoid; }
+.home > .prose :is(p, li) { break-inside: avoid; }
+@media (min-width: 60em) {
+  .home { display: grid; grid-template-columns: minmax(0, 21.5rem) minmax(0, 1fr); gap: 0 var(--space-5); align-items: start; }
+  .featured { padding-top: var(--space-4); }
+  .home-head > .home-hours { display: block; width: auto; max-width: 21.5rem; margin-top: var(--space-4); }
+  .home > .prose { grid-column: 1 / -1; }
+  .home:not(:has(.tiles li)) { display: block; }
+}
+@media (min-width: 60em) and (min-height: 45em) {
+  .home-head { position: sticky; top: 0; }
+}
+
+/* The test tile — the signature: raw clay, the top dipped to an uneven line
+   with a darker bead and a run, a nail hole. */
+
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--tile), 100%), 1fr)); gap: var(--space-4) var(--space-3); margin: 0; padding: 0; list-style: none; }
+@media (max-width: 30em) {
+  .tiles { grid-template-columns: repeat(auto-fill, minmax(9.25rem, 1fr)); gap: var(--space-3) 0.75rem; }
+  li.tile { --pad: 0.8rem; }
+}
+/* clay cut by hand: no two corners alike, a hard short shadow */
+.tile, .slab, .shop-card { background: var(--color-clay); border-radius: var(--radius); box-shadow: 0 3px 0 var(--color-clay-edge), var(--shadow-tile); }
+.tile, .shop-card { border-radius: 2px var(--radius) 3px 8px / var(--radius) 3px 8px 2px; }
+.tile:nth-child(even) { border-radius: var(--radius) 2px 8px 3px / 3px var(--radius) 2px 7px; }
+.tile { --pad: 1.1rem; position: relative; display: flex; flex-direction: column; min-width: 0; container-type: inline-size; overflow: hidden; }
+.dip {
+  /* how far the glaze line stops short of the bottom, at six points left to right */
+  --g: 15px; --h: 13px; --i: 11px; --j: 10px; --k: 6px; --l: 4px;
+  order: -1;
+  position: relative;
+  filter: drop-shadow(0 2.5px 0 var(--color-glaze-pool));
+}
+/* seven dips: no column of a shelf repeats */
+li:nth-child(7n+2) > .dip { --g: 4px; --h: 5px; --i: 8px; --j: 8px; --k: 12px; --l: 14px; --at: 40px; --run-x: 17%; --run: 31px; }
+li:nth-child(7n+3) > .dip { --g: 9px; --h: 5px; --i: 3px; --j: 6px; --k: 11px; --l: 13px; --at: 120px; --run: 0; }
+li:nth-child(7n+4) > .dip { --g: 5px; --h: 10px; --i: 15px; --j: 13px; --k: 8px; --l: 4px; --at: 70px; --run-x: 55%; --run: 42px; }
+li:nth-child(7n+5) > .dip { --g: 13px; --h: 8px; --i: 10px; --j: 5px; --k: 7px; --l: 3px; --at: 15px; --run-x: 88%; --run: 29px; }
+li:nth-child(7n+6) > .dip { --g: 3px; --h: 6px; --i: 5px; --j: 9px; --k: 8px; --l: 12px; --at: 95px; --run: 0; }
+li:nth-child(7n) > .dip { --g: 11px; --h: 12px; --i: 9px; --j: 11px; --k: 8px; --l: 10px; --at: 55px; --run-x: 33%; --run: 36px; }
+.glaze {
+  position: relative;
+  min-height: calc(var(--hole) + 4rem);
+  padding: calc(var(--hole) + 1rem) var(--pad) 1.6rem;
+  background: var(--color-glaze);
+  /* a clean band of glaze covers the specks where the price is written */
+  background-image: linear-gradient(transparent calc(var(--hole) + 0.6rem), var(--color-glaze) calc(var(--hole) + 0.85rem) calc(100% - 1.45rem), transparent 0), var(--specks);
+  background-size: auto, 131px 113px, 157px 149px, 89px 127px, 151px 173px, 97px 79px, 173px 101px;
+  background-position: var(--at, 0) 0;
+  /* celadon gathers, deeper, towards the line */
+  box-shadow: inset 0 -3.5rem 2.5rem -2.5rem var(--color-glaze-pool);
+  color: var(--color-glaze-ink);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--l)), 80% calc(100% - var(--k)), 60% calc(100% - var(--j)), 40% calc(100% - var(--i)), 20% calc(100% - var(--h)), 0 calc(100% - var(--g)));
+}
+/* the nail hole, and the nail in its shade */
+.glaze::before {
+  content: "";
+  position: absolute;
+  top: 0.45rem;
+  left: 50%;
+  width: var(--hole);
+  aspect-ratio: 1;
+  margin-left: calc(var(--hole) / -2);
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, var(--color-nail) 30%, transparent 35%) var(--color-bg);
+  background-color: color-mix(in srgb, var(--color-nail) 45%, var(--color-bg));
+  box-shadow: var(--shadow-hole), 0 0 0 1.5px var(--rim, var(--color-glaze-pool));
+}
+/* the run: a tear of glaze hanging from the line */
+.dip::after {
+  content: "";
+  position: absolute;
+  top: calc(100% - 24px);
+  left: var(--run-x, 76%);
+  width: 11px;
+  height: var(--run, 40px);
+  background: color-mix(in srgb, var(--color-glaze-pool) 55%, var(--color-glaze));
+  border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+}
+
+.tile-title { margin: 0; padding: 1.4rem var(--pad) 0; font-size: 1.2rem; line-height: 1.2; }
+.tile-title a { color: inherit; text-decoration-color: var(--color-accent); }
+.tile-title a::after { content: ""; position: absolute; inset: 0; }
+.tile-price { margin: 0; line-height: 1.05; }
+.price { display: block; font-size: 1.75rem; font-size: clamp(1.5rem, 13cqi, var(--price-size)); letter-spacing: -0.01em; }
+.unit { display: block; margin-top: 0.2rem; font-size: 0.85rem; line-height: 1.3; }
+.tile-desc { margin: var(--space-2) 0 0; padding-inline: var(--pad); font-size: 0.9rem; line-height: 1.45; }
+.tile-code { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-1) var(--space-2); margin: auto 0 0; padding: var(--space-3) var(--pad) var(--pad); }
+.cat, .status { min-width: 0; }
+
+/* Status, in words. Sold out is a tile whose glaze is still unfired: chalky,
+   no bead, the price struck through, the word in a filled plate. */
+.st { display: none; padding: 0 0.4em; border: 1px solid; border-radius: 2px; }
+.st-raw, .st-in { padding: 0; border: 0; }
+.st-raw { display: inline; }
+.st-season { border-style: dashed; }
+.st-out { background: var(--color-incise); border-color: var(--color-incise); color: var(--color-clay); text-shadow: none; }
+[data-status="To order"] .st-order, [data-status="Seasonal"] .st-season, [data-status="Sold out"] .st-out, .tile-big[data-status="In stock"] .st-in { display: inline-block; }
+:is([data-status="In stock"], [data-status="To order"], [data-status="Seasonal"], [data-status="Sold out"]) .st-raw { display: none; }
+[data-status="Sold out"] .glaze { --rim: var(--color-clay-edge); background: var(--color-glaze-raw); box-shadow: none; }
+[data-status="Sold out"] .dip { filter: drop-shadow(0 1.5px 0 var(--color-clay-edge)); }
+[data-status="Sold out"] .dip::after { display: none; }
+[data-status="Sold out"] .price { text-decoration: line-through; text-decoration-thickness: 0.08em; }
+[data-status="Sold out"] :is(.tile-title, .tile-desc) { color: var(--color-muted); }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* a hung tile swings a little on its nail */
+  li.tile { transform-origin: 50% 1rem; transition: rotate 0.3s ease-out; }
+  li.tile:hover { rotate: -1.5deg; }
+}
+
+/* One product: the same tile, large, its details scratched in the raw end */
+
+.product { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4); padding-top: var(--space-4); }
+.tile-big { --pad: 1.4rem; --price-size: 3.25rem; --hole: 1.35rem; max-width: 27rem; }
+.tile-big .tile-title { font-size: clamp(1.6rem, 1.2rem + 1.6vw, 2.1rem); line-height: 1.1; }
+.tile-big .tile-desc { margin-top: var(--space-3); font-size: 1.0625rem; }
+.details { margin: var(--space-3) var(--pad) 0; padding: 0; list-style: none; font-family: var(--font-mono); font-size: 0.8rem; line-height: 1.45; border-top: 1px solid var(--color-clay-edge); }
+.details li, .post-card, .hours > div { padding: 0.4rem 0; border-bottom: 1px solid var(--color-clay-edge); }
+.product-more { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); min-width: 0; }
+.product-more:empty { display: none; }
+.cover { display: block; width: 100%; height: auto; border-radius: var(--radius); }
+.post > .cover { margin-bottom: var(--space-3); }
+.back { margin: 0; }
+.not-found { padding-top: var(--space-4); }
+.not-found .tile-code { justify-content: flex-start; gap: var(--space-2) var(--space-3); text-shadow: none; }
+@media (min-width: 56em) {
+  .product { grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); align-items: start; }
+  .back { grid-column: 1 / -1; }
+}
+
+/* Page text lies on a slab of raw clay */
+
+.slab { padding: clamp(var(--space-3), 4vw, var(--space-4)); box-shadow: 0 3px 0 var(--color-clay-edge); }
+:is(.page, .post, .list) > :is(.slab, .cover) { max-width: calc(var(--measure) + 2 * var(--space-4)); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .post-card h2 { margin: var(--space-4) 0 var(--space-2); font-size: 1.3rem; line-height: 1.2; }
+.prose h3 { margin: var(--space-3) 0 var(--space-1); font-size: 1.1rem; line-height: 1.25; }
+.prose :is(p, ul, ol, table, pre, blockquote) { margin: 0 0 var(--space-3); }
+.prose :is(ul, ol) { padding-left: 1.25rem; }
+.prose li::marker { color: var(--color-accent); }
+.prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
+.prose blockquote { padding-left: var(--space-3); border-left: 3px solid var(--color-accent); color: var(--color-muted); }
+.prose hr { height: 1px; margin: var(--space-4) 0; border: 0; background: var(--color-clay-edge); }
+.prose code { padding: 0.1em 0.3em; font-family: var(--font-mono); font-size: 0.88em; background: var(--color-bg); border-radius: 3px; }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.45; background: var(--color-bg); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+/* a table is as wide as its words and scrolls inside its own box */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.95rem; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; min-width: 6em; overflow-wrap: normal; border-bottom: 1px solid var(--color-clay-edge); }
+.prose th { white-space: nowrap; border-bottom-color: var(--color-text); }
+
+/* News list and page numbers */
+.post-list { margin: 0; list-style: none; }
+.post-card { padding: var(--space-3) 0; }
+.post-card:first-child { padding-top: 0; }
+.post-card:last-child { padding-bottom: 0; border-bottom: 0; }
+.post-card h2 { margin: 0; }
+.summary { margin: var(--space-1) 0 0; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; color: var(--color-muted); }
+
+/* The shop card: one long tile on its side, how to order written on the dipped end */
+
+.shop-card { display: grid; grid-template-columns: minmax(0, 1fr); margin-top: var(--space-5); overflow: hidden; }
+.shop-card > div { min-width: 0; }
+/* no hours, no address: the dipped end and the raw stub it was held by */
+.shop-card:not(:has(.shop-hours, .shop-address)) { padding-bottom: 2.25rem; }
+.shop-card .dip { display: grid; grid-template-columns: minmax(0, 1fr); }
+.shop-card .dip::after { display: none; }
+.shop-card .glaze { background-image: none; padding: calc(var(--hole) + 1.6rem) var(--space-3) calc(var(--space-3) + 15px); }
+.shop-hours, .shop-address { padding: var(--space-3); }
+.shop-hours + .shop-address { padding-top: 0; }
+.shop-card h2, .home-hours h2 { margin: 0 0 var(--space-2); }
+.shop-note { max-width: 34rem; margin: 0 0 var(--space-3); }
+.shop-links { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-3) var(--space-4); margin: 0; }
+.shop-links a { display: block; min-width: 0; color: inherit; text-decoration: none; }
+.shop-links .code { display: block; }
+.shop-value { font-size: 1.05rem; line-height: 1.25; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+.shop-phone .shop-value { font-size: clamp(1rem, 5.2vw, 1.75rem); line-height: 1.1; }
+a:hover .shop-value { text-decoration-thickness: 2px; }
+.hours { margin: 0; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.45; }
+.hours > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); }
+.hours dd { margin: 0 0 0 auto; text-align: right; }
+.shop-address address { font-style: normal; text-wrap: balance; }
+@media (min-width: 56em) {
+  .shop-card { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); }
+  .shop-card:not(:has(.shop-hours, .shop-address)) { grid-template-columns: minmax(0, 1fr) 5rem; max-width: 46rem; padding-bottom: 0; }
+  .shop-card .dip { filter: drop-shadow(2.5px 0 0 var(--color-glaze-pool)); }
+  .shop-card .glaze {
+    padding: var(--space-4) calc(var(--space-4) + 15px) var(--space-4) calc(var(--hole) + 2 * var(--space-3));
+    box-shadow: inset -3.5rem 0 2.5rem -2.5rem var(--color-glaze-pool);
+    clip-path: polygon(0 0, calc(100% - var(--g)) 0, calc(100% - var(--h)) 20%, calc(100% - var(--i)) 40%, calc(100% - var(--j)) 60%, calc(100% - var(--k)) 80%, calc(100% - var(--l)) 100%, 0 100%);
+  }
+  .shop-card .glaze::before { top: 50%; left: var(--space-3); margin: calc(var(--hole) / -2) 0 0; }
+  .shop-hours, .shop-hours + .shop-address { padding: var(--space-4) var(--space-3); }
+}
+
+.colophon { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); padding-bottom: var(--space-4); color: var(--color-muted); font-size: 0.9rem; }
+.colophon::before { content: ""; flex: 0 0 100%; height: 1px; margin-bottom: var(--space-3); background: var(--color-line); }
+.colophon p { margin: 0; }
+
+/* Print: black on white, the dip line kept as a drawn line */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-speckle: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-line: #999;
+    --color-clay: #fff;
+    --color-clay-edge: #999;
+    --color-incise: #333;
+    --color-incise-light: #fff;
+    --color-glaze: #fff;
+    --color-glaze-pool: #777;
+    --color-glaze-ink: #000;
+    --color-glaze-raw: #fff;
+    --color-nail: #000;
+    --shadow-tile: 0 0 0 1px #777;
+    --shadow-hole: inset 0 0 0 1px #000;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .masthead-call, .site-title::before, .skip-link, .more, .back, .pagination { display: none; }
+  main { min-height: 0; }
+  .tile, .shop-card { box-shadow: var(--shadow-tile); }
+  .slab { padding: 0; }
+  .slab, .glaze { box-shadow: none; }
+  .tile, .shop-card, .details li, .post-card { break-inside: avoid; }
+  .st-out { background: none; color: inherit; }
+  a { color: inherit; text-decoration: none; }
+}

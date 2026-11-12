@@ -1,0 +1,412 @@
+/* Rivet — an ironmonger's wall of small drawers: every product is a drawer
+   front with a typed manila card in a brass holder, an enamel plate above it
+   and a cup pull below. Restyle by editing the tokens, never selectors.
+   Dark-stained oak is the default; where another theme has a
+   (prefers-color-scheme: dark) block, this one has light: scrubbed pine. */
+
+:root {
+  /* Type — typewriter labels, heavy slab headings */
+  --font-slab: Superclarendon, "Bookman Old Style", Rockwell, "Rockwell Nova", "Roboto Slab", "Zilla Slab", "DejaVu Serif", Georgia, serif;
+  --font-type: "American Typewriter", "Courier Prime", "Courier New", Courier, "Nimbus Mono PS", "Liberation Mono", monospace;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.6;
+  --tracking-caps: 0.07em;
+
+  /* Colour — dark-stained oak, manila, white enamel, brass */
+  --color-bg: #2b1c11;
+  --color-grain: rgba(0,0,0,0.17);
+  --color-text: #f1e7d3;
+  --color-muted: #c4b294;
+  --color-accent: #d19a5c;
+  --color-carcass: #140c06;
+  --color-drawer: #50321b;
+  --color-drawer-lip: #74502f;
+  --color-brass: #b99443;
+  --color-brass-light: #efd88f;
+  --color-brass-dark: #6b501d;
+  --color-marker: #b99443;
+  --color-card: #ead7a6;
+  --color-card-ink: #1b1611;
+  --color-card-faint: #54483a;
+  --color-soldout: #b9ad90;
+  --color-enamel: #fbfaf3;
+  --color-enamel-ink: #141210;
+  --color-code-bg: #1d130b;
+  --shadow-card: inset 0 2px 3px rgba(0,0,0,0.32);
+  --shadow-cast: 0 3px 5px rgba(0,0,0,0.5);
+
+  /* Measure */
+  --drawer: 16rem;
+  --joint: 5px;
+  --frame: 5px;
+  --pull: 4.5rem;
+  --board: 6rem;
+  --page: 76rem;
+  --measure: 40rem;
+  --radius: 2px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Scrubbed pine — the same cabinet in a pale kitchen wood */
+    --color-bg: #e8d8b6;
+    --color-grain: rgba(120,80,30,0.16);
+    --color-text: #261a10;
+    --color-muted: #5b4630;
+    --color-accent: #8a5320;
+    --color-carcass: #5c3f20;
+    --color-drawer: #d1ab6e;
+    --color-drawer-lip: #ecd09a;
+    --color-brass: #a9822f;
+    --color-brass-light: #e9d080;
+    --color-brass-dark: #5f4717;
+    --color-marker: #8c6a22;
+    --color-card: #f8efd3;
+    --color-soldout: #cdc3a9;
+    --color-enamel: #ffffff;
+    --color-code-bg: #dbc9a3;
+    --shadow-card: inset 0 2px 3px rgba(70,45,10,0.3);
+    --shadow-cast: 0 3px 5px rgba(70,45,10,0.45);
+  }
+}
+
+/* Base */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: dark light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+/* The ground: matchboard, one groove to a board */
+body {
+  margin: 0;
+  font-family: var(--font-type);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg) repeating-linear-gradient(90deg, var(--color-grain) 0 2px, transparent 2px var(--board)) 50% 0;
+  overflow-wrap: break-word;
+}
+
+.fascia-in, main, .colophon-in {
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: clamp(var(--space-3), 4vw, var(--space-4));
+}
+main { min-height: 50vh; padding-bottom: var(--space-5); }
+
+/* only long words are hyphenated, and in headings only very long ones;
+   wide prose only on a phone, tables and prices never */
+h1, h2, h3, .plate, .home-head .lede, .home-text { hyphens: auto; hyphenate-limit-chars: 9 4 4; }
+h1, h2, h3 { hyphenate-limit-chars: 13 4 4; }
+@media (max-width: 30rem) {
+  .lede, .prose, .summary { hyphens: auto; hyphenate-limit-chars: 9 4 4; }
+}
+.prose a, .counter a, code, .prose table, .price { hyphens: manual; }
+
+a { color: inherit; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-color: currentColor; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: var(--color-card); color: var(--color-card-ink); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-card); color: var(--color-card-ink); font-weight: 700; }
+.skip-link:focus { left: var(--space-2); }
+
+/* The typed label voice */
+.fascia nav a, .meta, .tags, .more, .back, .pagination, .stamp, .counter h2, .counter-word, .prose th {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+/* Fascia: the name over the door, a brass rule under it */
+
+.fascia { border-bottom: 3px double var(--color-brass); }
+.fascia-in { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 var(--space-4); padding-block: 0.8rem 0.45rem; }
+.site-title, .colophon-name, h1, .prose h2, .prose h3, .post-card h2, .plate { font-family: var(--font-slab); font-weight: 800; }
+.site-title { min-width: 0; font-size: clamp(1.3rem, 3.4vw, 1.8rem); line-height: 1.15; text-decoration: none; }
+.fascia nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.fascia nav a { display: block; padding: var(--space-2) 0 var(--space-1); border-bottom: 3px solid transparent; text-decoration: none; }
+.fascia nav a:hover { border-color: var(--color-brass-dark); }
+.fascia nav a[aria-current="page"] { border-color: var(--color-marker); }
+
+.colophon { border-top: 3px double var(--color-brass); color: var(--color-muted); font-size: 0.9rem; }
+.colophon-in { padding-block: var(--space-3) var(--space-4); }
+.colophon p { margin: 0; }
+.colophon-name { color: var(--color-text); }
+
+/* Headings */
+
+.page-header { margin: var(--space-4) 0 var(--space-3); }
+h1 { margin: 0; max-width: 24ch; font-size: clamp(1.5rem, 5vw, 2.75rem); line-height: 1.1; text-wrap: balance; }
+.lede { margin: var(--space-2) 0 0; max-width: var(--measure); font-size: 1.125rem; line-height: 1.5; }
+.meta { margin: 0 0 var(--space-1); color: var(--color-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.tags a { display: block; padding-block: var(--space-1); }
+.more, .back { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-3) 0 0; }
+
+/* Home: the headline at the counter, the wall beside it */
+
+.home { display: grid; gap: var(--space-3) var(--space-4); margin-top: var(--space-4); }
+.home > * { min-width: 0; }
+@media (min-width: 60rem) {
+  .home:has(.drawer) { grid-template-columns: minmax(0, 23rem) minmax(0, 1fr); align-items: start; }
+  .home:has(.drawer) h1 { font-size: 2.2rem; }
+  .home-text { grid-column: 1 / -1; }
+  /* four rows of drawers or more: the headline goes above the wall, not beside a long empty column */
+  .home:has(.drawer:nth-child(10)) { grid-template-columns: minmax(0, 1fr); }
+}
+.home .home-text { max-width: none; margin-top: var(--space-3); padding-top: var(--space-3); border-top: 3px double var(--color-brass); columns: 3 18rem; column-gap: var(--space-4); }
+.home-text > * { break-inside: avoid; }
+.home-text > :is(h2, h3) { break-after: avoid; }
+
+/* THE DRAWER WALL — the signature
+   A cabinet of drawer fronts with a joint between them. Rows stretch to fill
+   the cabinet, so a short last row is a row of wider drawers, never a hole. */
+
+.wall {
+  padding: var(--joint);
+  background: var(--color-carcass);
+  border: 0.4rem solid var(--color-drawer);
+  border-radius: calc(var(--radius) * 2);
+  box-shadow: inset 0 0 0 1px var(--color-carcass), 0 0 0 1px var(--color-carcass), var(--shadow-cast);
+}
+.wall:not(:has(li)) { display: none; }
+.drawers { display: flex; flex-wrap: wrap; gap: var(--joint); margin: 0; padding: 0; list-style: none; }
+
+.drawer {
+  position: relative;
+  flex: 1 1 min(100%, clamp(calc(var(--drawer) * 0.8), 30%, var(--drawer)));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  padding: 0.45rem var(--space-3) 0.9rem;
+  /* the grain runs along the drawer front */
+  background: var(--color-drawer) repeating-linear-gradient(179.4deg, transparent 0 4px, var(--color-grain) 4px 5px, transparent 5px 13px, var(--color-grain) 13px 15px, transparent 15px 21px);
+  border-radius: var(--radius);
+  box-shadow: inset 0 2px 0 var(--color-drawer-lip), inset 0 -2px 0 var(--color-grain);
+}
+
+/* the white enamel plate at the top edge: the category, a screw at each end */
+.plate {
+  max-width: 100%;
+  margin: 0;
+  padding: 0.25rem 1.3rem 0.2rem;
+  font-size: 0.66rem;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-caps);
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-enamel-ink);
+  background: var(--color-enamel);
+  background-image: radial-gradient(circle at 0.6rem 50%, var(--color-brass-dark) 0 1.5px, transparent 2.2px), radial-gradient(circle at calc(100% - 0.6rem) 50%, var(--color-brass-dark) 0 1.5px, transparent 2.2px);
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 2px var(--color-enamel), inset 0 0 0 3px var(--color-enamel-ink), var(--shadow-cast);
+}
+
+/* the brass card-holder and the manila card typed in black */
+.card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  max-width: 32rem;
+  padding: var(--space-2) 0.7rem 0.4rem;
+  color: var(--color-card-ink);
+  background: var(--color-card);
+  border: var(--frame) solid var(--color-brass);
+  border-color: var(--color-brass-light) var(--color-brass) var(--color-brass-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card), 0 0 0 1px var(--color-brass-dark), var(--shadow-cast);
+}
+[data-status="Sold out"] .card { background: var(--color-soldout); }
+.card a, .counter a { text-decoration-color: currentColor; }
+.card :focus-visible, .counter :focus-visible { outline-color: var(--color-card-ink); }
+
+.card-title { margin: 0; font-family: inherit; font-size: 1rem; font-weight: 700; line-height: 1.25; hyphens: auto; }
+.card-title a { text-decoration: none; }
+.card-title a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
+.card-title a:hover { text-decoration: underline; }
+.card-title a:focus-visible { outline: none; }
+.card-title a:focus-visible::after { outline: 3px solid var(--color-text); outline-offset: -4px; }
+
+/* typed across the card: the unit, a row of full stops, the price */
+.card-price { order: 2; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); margin: auto 0 0; padding-top: var(--space-2); }
+.card-price::before { content: ""; order: 1; flex: 1 1 1rem; min-width: 1rem; border-bottom: 2px dotted var(--color-card-faint); }
+.unit { min-width: 0; font-size: 0.85rem; line-height: 1.3; color: var(--color-card-faint); }
+.price { order: 2; min-width: 0; margin-left: auto; font-size: 1.4rem; font-weight: 700; line-height: 1.15; }
+[data-status="Sold out"] .price { text-decoration: line-through; }
+[data-status="Sold out"] .unit { color: inherit; }
+
+/* Status: rubber-stamped on the card. Four labels are printed, one is shown. */
+.stamp { order: 1; margin: var(--space-2) 0 0; font-size: 0.7rem; }
+.drawers [data-status="In stock"] .stamp { display: none; }
+.st { display: none; padding: 0.15em 0.5em; border: 2px solid; border-radius: var(--radius); transform: rotate(-2deg); }
+.st-raw { display: inline; padding: 0; border: 0; transform: none; }
+.st-season { border-style: dashed; }
+.st-out { background: var(--color-card-ink); border-color: var(--color-card-ink); color: var(--color-soldout); }
+[data-status="In stock"] .st-in, [data-status="To order"] .st-order, [data-status="Seasonal"] .st-season, [data-status="Sold out"] .st-out { display: inline-block; }
+:is([data-status="In stock"], [data-status="To order"], [data-status="Seasonal"], [data-status="Sold out"]) .st-raw { display: none; }
+
+/* the brass cup pull: a dome, two screws, the hollow under its lip */
+.drawer::after {
+  content: "";
+  flex: none;
+  width: var(--pull);
+  height: calc(var(--pull) * 0.4);
+  background:
+    radial-gradient(circle at 16% 70%, var(--color-brass-dark) 0 1.5px, transparent 2.2px),
+    radial-gradient(circle at 84% 70%, var(--color-brass-dark) 0 1.5px, transparent 2.2px),
+    radial-gradient(ellipse at 38% 12%, var(--color-brass-light), var(--color-brass) 48%, var(--color-brass-dark));
+  border-radius: 50% 50% 9% 9% / 100% 100% 14% 14%;
+  box-shadow: inset 0 -2px 0 var(--color-brass-light), 0 2px 0 var(--color-carcass), var(--shadow-cast);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .drawers .drawer { transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; }
+  .drawers .drawer:hover { z-index: 1; transform: scale(1.025); box-shadow: inset 0 2px 0 var(--color-drawer-lip), 0 0 0 2px var(--color-carcass), var(--shadow-cast); }
+}
+
+/* One product: its drawer front, large */
+
+.product { display: grid; gap: var(--space-3) var(--space-4); margin-top: var(--space-4); }
+.product > * { min-width: 0; }
+.drawer-big { --pull: 6.5rem; flex: none; max-width: 34rem; gap: var(--space-3); padding: var(--space-3) clamp(var(--space-3), 4vw, var(--space-4)) 1.4rem; border: var(--joint) solid var(--color-carcass); }
+.drawer-big .plate { font-size: 0.75rem; }
+.drawer-big .card { padding: var(--space-3) var(--space-3) 0.7rem; }
+.drawer-big .card-title { max-width: none; font-size: clamp(1.15rem, 5.5vw, 2rem); line-height: 1.15; }
+.drawer-big .card-price { padding-top: var(--space-4); }
+.drawer-big .price { font-size: clamp(1.6rem, 6vw, 2.4rem); }
+.drawer-big .unit { font-size: 1rem; }
+.drawer-big .stamp { margin-top: var(--space-3); font-size: 0.85rem; }
+
+.product-more:empty { display: none; }
+.product-more > :first-child, .prose > :first-child { margin-top: 0; }
+.product-more > :last-child, .prose > :last-child { margin-bottom: 0; }
+.product-more .lede { margin-bottom: var(--space-3); }
+.details { max-width: var(--measure); margin: 0 0 var(--space-3); padding: 0; list-style: none; border-top: 3px double var(--color-brass); }
+.details li { padding: var(--space-2) 0; border-bottom: 1px solid var(--color-brass-dark); }
+.cover { display: block; max-width: min(100%, var(--measure)); height: auto; margin: 0 0 var(--space-3); border: 1px solid var(--color-carcass); }
+.product .back { margin-top: var(--space-2); }
+
+@media (min-width: 56rem) {
+  .product:has(.product-more > *) { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+  .product .back { grid-column: 1 / -1; }
+}
+
+.not-found { margin-top: var(--space-5); }
+.not-found .drawer { max-width: 26rem; }
+
+/* Page text, set straight on the boards */
+
+.prose { max-width: var(--measure); }
+.prose h2, .prose h3, .post-card h2 { margin: var(--space-4) 0 var(--space-2); line-height: 1.2; }
+.prose h2, .post-card h2 { font-size: 1.3rem; }
+.prose h3 { font-size: 1.05rem; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-muted); }
+.prose img { display: block; max-width: 100%; height: auto; }
+.prose a[href^="tel:"] { font-weight: 700; white-space: nowrap; }
+.prose blockquote { padding-left: var(--space-3); border-left: 3px solid var(--color-brass); color: var(--color-muted); }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 3px double var(--color-brass); }
+.prose code { padding: 0.1em 0.3em; font-family: var(--font-mono); font-size: 0.88em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.45; background: var(--color-code-bg); }
+.prose pre code { padding: 0; background: none; }
+.prose table { width: 100%; border-collapse: collapse; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-brass-dark); }
+.prose th { border-bottom: 2px solid var(--color-brass); }
+@media (max-width: 40em) {
+  .prose table { display: block; overflow-x: auto; }
+  .prose th, .prose td { min-width: 8rem; }
+}
+
+/* News list and page numbers */
+
+.post-list { max-width: var(--measure); margin: 0; padding: 0; list-style: none; border-top: 3px double var(--color-brass); }
+.post-card { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-brass-dark); }
+.post-card h2 { margin: 0; }
+.post-card h2 a { text-decoration: none; }
+.post-card h2 a:hover { text-decoration: underline; }
+.summary { margin: var(--space-1) 0 0; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-3) 0 0; color: var(--color-muted); }
+.pagination a { color: var(--color-text); }
+.list .pagination { max-width: var(--measure); }
+.empty { margin: 0; color: var(--color-muted); }
+
+/* The shop card: the order card on the counter, a large card in the same brass frame */
+
+.counter {
+  display: grid;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+  padding: clamp(var(--space-3), 4vw, var(--space-4));
+  color: var(--color-card-ink);
+  background: var(--color-card);
+  border: calc(var(--frame) + 2px) solid var(--color-brass);
+  border-color: var(--color-brass-light) var(--color-brass) var(--color-brass-dark);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card), 0 0 0 1px var(--color-brass-dark), var(--shadow-cast);
+}
+.counter > div { min-width: 0; }
+.counter h2 { margin: 0 0 var(--space-2); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.3em; }
+.counter-note { max-width: 34rem; margin: 0 0 var(--space-3); }
+.counter-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: 0; }
+.counter-link { display: flex; flex-direction: column; min-width: 0; max-width: 100%; text-decoration: none; }
+.counter-word { color: var(--color-card-faint); }
+.counter-value { font-size: 1.05rem; font-weight: 700; line-height: 1.35; text-decoration: underline; text-decoration-thickness: 2px; overflow-wrap: anywhere; }
+.counter-phone .counter-value { font-size: 1.6rem; line-height: 1.2; }
+.counter-hours dl { margin: 0; }
+.counter-hours dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 2px dotted var(--color-card-faint); }
+.counter-hours dt { font-weight: 700; }
+.counter-hours dd { margin: 0 0 0 auto; text-align: right; }
+.counter-address address { font-style: normal; text-wrap: balance; }
+
+@media (min-width: 56rem) {
+  .counter { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); }
+}
+
+/* Print: black ink on white, the drawers outlined */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-grain: transparent;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-carcass: #fff;
+    --color-drawer: #fff;
+    --color-drawer-lip: #fff;
+    --color-brass: #666;
+    --color-brass-light: #666;
+    --color-brass-dark: #666;
+    --color-card: #fff;
+    --color-card-ink: #000;
+    --color-card-faint: #333;
+    --color-soldout: #fff;
+    --color-enamel: #fff;
+    --color-enamel-ink: #000;
+    --color-code-bg: #eee;
+    --shadow-card: 0 0 0 0 transparent;
+    --shadow-cast: 0 0 0 0 transparent;
+    --frame: 1px;
+  }
+  body { font-size: 11pt; }
+  .fascia nav, .skip-link, .more, .back, .pagination, .drawer::after { display: none; }
+  main { min-height: 0; }
+  .wall, .drawer-big { padding: 0; border: 0; }
+  .drawer, .counter, .post-card { break-inside: avoid; }
+  .st-out { color: var(--color-card-ink); background: none; text-decoration: line-through; }
+  a { text-decoration: none; }
+}

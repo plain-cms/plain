@@ -1,0 +1,11 @@
+{
+  "phone": "01632 960317",
+  "email": "shop@holroydbutchers.example",
+  "address": "Holroyd & Sons, 27 Kirkgate, Hebbleton, West Yorkshire HX9 4QT",
+  "hours": [
+    { "days": "Tuesday to Friday", "time": "7:30 to 17:00" },
+    { "days": "Saturday", "time": "7:00 to 15:00" },
+    { "days": "Sunday and Monday", "time": "Closed" }
+  ],
+  "orderNote": "Ring or e-mail before four o'clock and your order is cut, wrapped and waiting at the counter the next morning. We deliver in Hebbleton and the valley villages on Fridays for £3. We do not post."
+}

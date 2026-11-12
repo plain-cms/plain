@@ -1,0 +1,380 @@
+/* Punnet — a greengrocer's stall: white crates on display-grass matting, and
+   pegged into the head of each a day-glo starburst with the price in black
+   marker. Restyle by editing the tokens below, never selectors (cms-spec §10.1). */
+
+:root {
+  /* Type — poster condensed numerals over a humanist sans */
+  --font-poster: Impact, Haettenschweiler, "Franklin Gothic Demi Cond", "Arial Narrow", "Liberation Sans Narrow", "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+  --font-body: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", "Trebuchet MS", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.5;
+  --tracking: 0.05em;
+  --price-size: 2.5rem;
+  --tilt: -5deg;
+
+  /* Colour — light: grass matting, white slats, marker ink, saturn-yellow stars */
+  --color-bg: #1e7433;
+  --color-blade: #186229;
+  --color-text: #ffffff;
+  --color-muted: #d9efd2;
+  --color-accent: #f8f32b;
+  --color-card: #ffffff;
+  --color-card-ink: #141613;
+  --color-card-muted: #474f47;
+  --color-groove: #c4ccc1;
+  --color-star: #f8f32b;
+  --color-star-ink: #141613;
+  --color-off: #d3d8ce;
+  --color-star-off: #ffffff;
+  --color-code-bg: #ecefe8;
+  --color-shadow: rgba(6,36,14,0.5);
+
+  /* Measure */
+  --page: 72rem;
+  --measure: 40rem;
+  --radius: 2px;
+  --slat: 3px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The stall after dusk — green-black ground, dim boards, the stars still lit */
+    --color-bg: #0e1f15;
+    --color-blade: #09160e;
+    --color-text: #e9f2e6;
+    --color-muted: #a9bfab;
+    --color-accent: #f4ee2a;
+    --color-card: #1f3527;
+    --color-card-ink: #edf3ea;
+    --color-card-muted: #b5c6b6;
+    --color-groove: #3d5847;
+    --color-star: #f4ee2a;
+    --color-off: #16261b;
+    --color-star-off: #56735f;
+    --color-code-bg: #162a1e;
+    --color-shadow: rgba(0,0,0,0.6);
+  }
+}
+
+/* Base */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+/* The matting: staggered tufts, always darker than the ground */
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  background-image:
+    radial-gradient(ellipse 1px 3px at 2px 4px, var(--color-blade) 99%, transparent),
+    radial-gradient(ellipse 1px 3px at 7px 11px, var(--color-blade) 99%, transparent);
+  background-size: 10px 14px;
+  overflow-wrap: break-word;
+}
+
+.masthead, main, .colophon {
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: clamp(var(--space-3), 4vw, var(--space-4));
+}
+main { min-height: 50vh; padding-bottom: var(--space-5); }
+
+/* Hyphens only in headings and narrow boxes; wide text, tables and prices as written */
+h1, h2, h3, .home .prose, .crate-desc, .unit, .cat { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+@media (max-width: 30rem) { .prose, .lede, .summary, .shop-note { hyphens: auto; hyphenate-limit-chars: 12 4 4; } }
+a[href^="tel:"], a[href^="mailto:"], code, .prose table { hyphens: manual; }
+
+a { color: inherit; text-decoration-thickness: 1.5px; text-underline-offset: 0.16em; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.slat :focus-visible, .plank :focus-visible { outline-color: var(--color-card-ink); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 3; padding: var(--space-2) var(--space-3); background: var(--color-card); color: var(--color-card-ink); font-weight: 700; }
+.skip-link:focus { left: var(--space-2); }
+
+/* The label voice: small bold caps */
+.label, .meta, .status, .tags, .pagination, .more, .back, .shop-card h2 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+/* The poster voice: prices, the shop's name, the phone, the stencil on a crate */
+.price, .site-title, .figure, .cat, .colophon-name, .shop-order h2 {
+  font-family: var(--font-poster);
+  font-weight: 700;
+  font-synthesis: none;
+  font-variant-numeric: lining-nums;
+}
+
+/* Boards: white slats with a gap between them, a nail at each end */
+
+.plank, .slat, .crate::before, .board::before {
+  min-width: 0;
+  background-color: var(--slat-bg, var(--color-card));
+  color: var(--color-card-ink);
+  border-radius: var(--radius);
+}
+.plank, .crate-foot, .crate::before, .board::before {
+  background-image:
+    radial-gradient(circle at 0.55rem 50%, var(--color-groove) 1.5px, transparent 2px),
+    radial-gradient(circle at calc(100% - 0.55rem) 50%, var(--color-groove) 1.5px, transparent 2px);
+}
+.crate, .board {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--slat);
+  min-width: 0;
+  filter: drop-shadow(0 2px 0 var(--color-shadow));
+}
+.crate::before, .board::before { content: ""; flex: none; height: 0.7rem; }
+.slat { padding: var(--space-3); }
+.slat > :first-child { margin-top: 0; }
+.slat > :last-child, .prose > :last-child { margin-bottom: 0; }
+
+/* Masthead: the name board */
+
+.masthead { padding-top: var(--space-3); }
+.plank { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-4); padding: 0.5rem 1.4rem; box-shadow: 0 2px 0 var(--color-shadow); }
+.site-title { flex: 1 1 auto; min-width: 0; padding-block: var(--space-1); font-size: clamp(1.45rem, 4vw, 1.9rem); line-height: 1.05; letter-spacing: 0.02em; text-transform: uppercase; text-decoration: none; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: 0.4rem 0 0.2rem; border-bottom: 3px solid transparent; font-weight: 700; text-decoration: none; }
+.masthead nav a:hover { border-color: var(--color-groove); }
+.masthead nav a[aria-current="page"] { border-color: currentColor; }
+.masthead-call { display: none; align-items: baseline; gap: var(--space-2); text-decoration: none; }
+.masthead-call .label { color: var(--color-card-muted); }
+.masthead-call .figure { font-size: 1.4rem; line-height: 1.2; white-space: nowrap; }
+@media (min-width: 52rem) {
+  .masthead-call { display: flex; }
+}
+
+.colophon { margin-top: var(--space-4); padding-block: var(--space-3) var(--space-4); color: var(--color-muted); font-size: 0.9rem; }
+.colophon p { margin: 0; }
+.colophon-name { font-size: 1.1rem; letter-spacing: 0.02em; text-transform: uppercase; color: var(--color-text); }
+
+/* Headings chalked straight on the matting */
+
+.page-header { margin: var(--space-4) 0 var(--space-3); }
+h1 { margin: 0; max-width: 24ch; font-size: clamp(1.7rem, 4.4vw, 2.5rem); line-height: 1.1; letter-spacing: -0.01em; text-wrap: balance; }
+.home h1 { max-width: none; }
+.lede { margin: var(--space-2) 0 0; max-width: 46rem; font-size: 1.125rem; line-height: 1.45; }
+.meta { margin: 0 0 var(--space-1); color: var(--color-muted); }
+.slat .meta { color: var(--color-card-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.tags a { display: block; padding-block: var(--space-1); }
+.more, .back, .pagination { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-3) 0 0; font-size: 0.85rem; }
+.more { justify-content: flex-end; }
+.pagination { justify-content: space-between; color: var(--color-muted); }
+.pagination a { color: var(--color-text); }
+.more a:hover, .back a:hover, .pagination a:hover, .tags a:hover { color: var(--color-accent); }
+.empty { margin: 0; color: var(--color-muted); }
+
+/* THE CRATE AND ITS SHOWCARD — the signature
+   Each product is a crate of white slats; the price is a starburst pegged into
+   its head, half on the crate and half above it. */
+
+.crates {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: calc(var(--price-size) * 1.3 + var(--space-3)) var(--space-3);
+  margin: 0;
+  padding: calc(var(--price-size) * 1.3) 0 0;
+  list-style: none;
+}
+.crates:empty { display: none; }
+.featured:not(:has(li)) .more { justify-content: flex-start; margin-top: 0; }
+
+.crate { container-type: inline-size; }
+.crate[data-status="Sold out"] { --slat-bg: var(--color-off); }
+.crate-body, .product-head { display: flex; flex-direction: column; min-width: 0; }
+.crate-body { flex: 1; padding-top: var(--space-2); }
+
+.showcard {
+  order: -1;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  max-width: calc(100% + 1.25rem);
+  margin: 0 0 var(--space-2) -1.25rem;
+  font-size: clamp(2rem, 13cqi, var(--price-size));
+  line-height: 1;
+}
+.star { display: block; rotate: var(--tilt); }
+.crate:nth-child(4n + 2) .star { rotate: calc(var(--tilt) * -0.7); }
+.crate:nth-child(4n + 3) .star { rotate: calc(var(--tilt) * 0.4); }
+.crate:nth-child(4n) .star { rotate: calc(var(--tilt) * -1.1); }
+/* The star is cut around the text box, its points a fixed reach in em beyond it:
+   it grows with the price and can never cut it. */
+.price {
+  display: block;
+  max-width: 7.5em;
+  margin-top: -1.7em;
+  padding: 0.95em;
+  color: var(--color-star-ink);
+  background: var(--color-star);
+  text-align: center;
+  text-wrap: balance;
+  clip-path: polygon(100% 50%, calc(100% - .66em) calc(59.95% - .13em), calc(100% - .21em) calc(70.71% - .09em), calc(100% - .7em) calc(83.41% - .47em), calc(100% - .28em) calc(100% - .28em), calc(83.41% - .47em) calc(100% - .7em), calc(70.71% - .09em) calc(100% - .21em), calc(59.95% - .13em) calc(100% - .66em), 50% 100%, calc(40.05% + .13em) calc(100% - .66em), calc(29.29% + .09em) calc(100% - .21em), calc(16.59% + .47em) calc(100% - .7em), .28em calc(100% - .28em), .7em calc(83.41% - .47em), .21em calc(70.71% - .09em), .66em calc(59.95% - .13em), 0% 50%, .66em calc(40.05% + .13em), .21em calc(29.29% + .09em), .7em calc(16.59% + .47em), .28em .28em, calc(16.59% + .47em) .7em, calc(29.29% + .09em) .21em, calc(40.05% + .13em) .66em, 50% 0%, calc(59.95% - .13em) .66em, calc(70.71% - .09em) .21em, calc(83.41% - .47em) .7em, calc(100% - .28em) .28em, calc(100% - .7em) calc(16.59% + .47em), calc(100% - .21em) calc(29.29% + .09em), calc(100% - .66em) calc(40.05% + .13em));
+}
+/* enhance.js only tunes the size: a long price is written smaller */
+.price[data-len="mid"] { font-size: 0.72em; }
+.price[data-len="long"] { max-width: 9em; font-size: 0.5em; }
+[data-status="Sold out"] .price { background: var(--color-star-off); color: var(--color-card-ink); text-decoration: line-through; text-decoration-thickness: 0.08em; }
+/* the unit takes the star's width and sits under it, inside the crate's edge */
+.unit { width: 0; min-width: 100%; margin-top: 0.1rem; padding-left: 1.25rem; font-size: 0.95rem; font-weight: 700; line-height: 1.25; text-align: center; }
+
+.crate-title { margin: 0; font-size: 1.25rem; line-height: 1.2; }
+.crate-title a { text-decoration: none; }
+.crate-title a::after { content: ""; position: absolute; inset: 0; }
+.crate-title a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.crate-title a:focus-visible { outline: none; }
+.crate-title a:focus-visible::after { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.crate-desc { margin: var(--space-1) 0 0; font-size: 0.95rem; line-height: 1.4; color: var(--color-card-muted); }
+
+.crate-foot { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 var(--space-3); margin: 0; padding: 0.4rem 1.15rem 0.3rem; }
+.cat { min-width: 0; font-size: 0.95rem; line-height: 1.3; letter-spacing: var(--tracking); text-transform: uppercase; overflow-wrap: anywhere; }
+.status { min-width: 0; margin-left: auto; }
+
+/* Status: four labels are printed, the matching one is shown, each with its mark */
+.st { display: none; }
+.st-raw { display: inline; }
+.st::before { content: ""; display: inline-block; width: 0.65em; height: 0.65em; margin-right: 0.4em; border: 2px solid; border-radius: 50%; }
+.st-in::before { background: currentColor; }
+.st-season::before { background: linear-gradient(90deg, currentColor 50%, transparent 0); }
+.st-out { padding: 0.15em 0.5em; background: var(--color-card-ink); color: var(--color-card); border-radius: var(--radius); }
+.st-out::before, .st-raw::before { content: none; }
+[data-status="To order"] .st-order, [data-status="Seasonal"] .st-season, [data-status="Sold out"] .st-out, .crate-big[data-status="In stock"] .st-in { display: inline-block; }
+:is([data-status="In stock"], [data-status="To order"], [data-status="Seasonal"], [data-status="Sold out"]) .st-raw { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .star { transition: rotate 0.15s ease-out, scale 0.15s ease-out; }
+  .crates .crate:hover .star { rotate: 0deg; scale: 1.05; }
+}
+
+/* One product: the crate, large */
+
+.product, .not-found { margin-top: var(--space-4); }
+.product:has(.showcard), .not-found { margin-top: calc(min(11vw, var(--price-size) * 1.4) * 1.35 + var(--space-3)); }
+.not-found { max-width: 32rem; }
+.crate-big .slat { padding-inline: clamp(var(--space-3), 5cqi, var(--space-4)); }
+.crate-big .showcard { font-size: clamp(2.2rem, 12cqi, calc(var(--price-size) * 1.4)); }
+.crate-big .price[data-len="long"] { font-size: 0.62em; }
+.crate-big .unit { font-size: 1.05rem; }
+.crate-big .crate-title { max-width: none; font-size: clamp(1.6rem, 5cqi, 2.4rem); line-height: 1.1; }
+.crate-big .crate-desc { margin-top: var(--space-2); font-size: 1.125rem; line-height: 1.45; }
+.crate-big .crate-foot { padding-block: 0.5rem 0.4rem; }
+.product-body { padding-block: var(--space-2) var(--space-4); }
+.product-more { margin-top: var(--space-4); }
+.product-more:empty { display: none; }
+.cover { display: block; max-width: 100%; height: auto; margin-bottom: var(--space-3); }
+.details { margin: 0 0 var(--space-3); padding: 0; list-style: none; border-top: 2px solid; font-variant-numeric: tabular-nums; }
+.details li { padding: var(--space-2) 0; border-bottom: 1px solid var(--color-groove); }
+@media (min-width: 56rem) {
+  .product-body:has(.product-more > *) { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--space-5); align-items: start; }
+  .product-more { margin-top: var(--space-2); }
+}
+
+/* Page text, on a board */
+
+.board:has(.prose) { max-width: calc(var(--measure) + 2 * var(--space-4)); }
+.prose { padding: clamp(var(--space-3), 4vw, var(--space-4)); }
+.product .prose { padding: 0; }
+.home .prose { columns: 3 16rem; column-gap: var(--space-4); column-rule: var(--slat) solid var(--color-groove); }
+.home .board { max-width: none; margin-top: var(--space-4); }
+.home .prose > * { break-inside: avoid; }
+.home .prose > :is(h2, h3) { break-after: avoid; }
+
+.prose h2, .prose h3, .post-card h2 { margin: var(--space-4) 0 var(--space-2); line-height: 1.2; }
+.prose h2, .post-card h2 { font-size: 1.3rem; }
+.prose h3 { font-size: 1.0625rem; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { display: block; max-width: 100%; height: auto; }
+.prose a:hover, .shop-card a:hover .value, .shop-visit:hover { background: var(--color-star); color: var(--color-star-ink); }
+.prose a[href^="tel:"] { font-weight: 700; white-space: nowrap; }
+.prose blockquote { padding-left: var(--space-3); border-left: 4px solid; color: var(--color-card-muted); }
+.prose hr { height: var(--slat); margin: var(--space-4) 0; border: 0; background: var(--color-groove); }
+.prose code { padding: 0.1em 0.3em; font-family: var(--font-mono); font-size: 0.9em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.45; background: var(--color-code-bg); }
+.prose pre code { padding: 0; background: none; }
+.prose table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-groove); }
+.prose th { border-bottom: 2px solid; }
+@media (max-width: 40em) {
+  .prose table { display: block; overflow-x: auto; }
+}
+
+/* News: one slat to a post */
+.post-list { max-width: calc(var(--measure) + 2 * var(--space-4)); margin: 0; padding: 0; list-style: none; }
+.post-card h2 { margin: 0; }
+.post-card h2 a { text-decoration: none; }
+.post-card h2 a:hover { text-decoration: underline; }
+.summary { margin: var(--space-1) 0 0; color: var(--color-card-muted); }
+
+/* The shop card: how to order, on three slats */
+
+.shop-card { flex-flow: row wrap; margin-top: var(--space-5); }
+.shop-card::before { flex: 0 0 100%; }
+.shop-card .slat { padding: var(--space-3) clamp(var(--space-3), 3vw, 1.75rem) 1.25rem; }
+.shop-order, .shop-hours { flex: 4 1 20rem; }
+.shop-address { flex: 2 1 12rem; }
+.shop-card h2 { margin: 0 0 var(--space-2); color: var(--color-card-muted); }
+.shop-card .shop-order h2 { font-size: 1.5rem; line-height: 1.1; letter-spacing: 0.02em; color: inherit; }
+.shop-note { margin: 0 0 var(--space-3); max-width: 34rem; }
+.shop-links { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-2) var(--space-4); margin: 0; }
+.shop-links a { display: flex; flex-direction: column; min-width: 0; max-width: 100%; text-decoration: none; }
+.shop-links .label { color: var(--color-card-muted); }
+.shop-links .figure { font-size: clamp(1.6rem, 7vw, 2.1rem); line-height: 1.1; text-decoration: underline; text-decoration-color: var(--color-star); text-decoration-thickness: 0.14em; text-underline-offset: 0.12em; }
+.shop-links .value, .shop-visit { font-size: clamp(0.85rem, 4.4vw, 1em); font-weight: 700; line-height: 1.5; overflow-wrap: anywhere; }
+.shop-links .value, a.shop-visit { text-decoration: underline; text-decoration-thickness: 1.5px; }
+.shop-hours dl { margin: 0; font-variant-numeric: tabular-nums; }
+.shop-hours dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 1px solid var(--color-groove); }
+.shop-hours dt { font-weight: 700; }
+.shop-hours dd { margin: 0 0 0 auto; text-align: right; }
+.shop-address address { font-style: normal; text-wrap: balance; }
+
+/* Print: ink on white, the stars outlined */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-blade: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-card: #fff;
+    --color-card-ink: #000;
+    --color-card-muted: #333;
+    --color-groove: #999;
+    --color-star: #fff;
+    --color-star-ink: #000;
+    --color-off: #fff;
+    --color-star-off: #fff;
+    --color-code-bg: #fff;
+    --color-shadow: rgba(0,0,0,0);
+  }
+  body { font-size: 11pt; background-image: none; }
+  .masthead nav, .skip-link, .more, .back, .pagination, .crate::before, .board::before { display: none; }
+  main { min-height: 0; }
+  .crates { gap: var(--space-2); padding: 0; }
+  .crate, .board { filter: none; }
+  .plank, .slat { border: 1px solid var(--color-groove); background-image: none; box-shadow: none; }
+  .showcard { margin-left: 0; }
+  .unit { padding-left: 0; text-align: left; }
+  .crate:nth-child(n) .star { rotate: none; }
+  .price { margin: 0; padding: 0.1em 0.25em; border: 2px solid; clip-path: none; }
+  .crate, .slat, .details li { break-inside: avoid; }
+  a { text-decoration: none; }
+}

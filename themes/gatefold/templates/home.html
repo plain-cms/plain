@@ -1,0 +1,15 @@
+<article class="home">
+  <div class="rack">
+    <header class="gatefold">
+      <div class="gatefold-front"><h1>{{ page.title }}</h1></div>
+      <div class="gatefold-inside">
+        {{#if page.description}}<p class="lede">{{ page.description }}</p>{{/if}}
+        <p class="more"><a href="/products/">{{ strings.allProducts }}</a></p>
+      </div>
+    </header>
+    <ul class="sleeves" role="list" aria-label="{{ strings.featuredLabel }}">{{#each collections.products as item}}{{#if item.featured}}{{> sleeve}}{{/if}}{{/each}}</ul>
+  </div>
+  {{#if page.content}}<div class="liner prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

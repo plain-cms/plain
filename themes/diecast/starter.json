@@ -1,0 +1,36 @@
+{
+  "starter": "diecast",
+  "sampleTitle": "Tappenden's Toys & Models",
+  "collections": {
+    "products": {
+      "path": "content/products",
+      "urlPattern": "/products/:slug/",
+      "template": "product",
+      "listUrl": "/products/",
+      "listTemplate": "products",
+      "label": "Shop",
+      "sortBy": "category",
+      "sortOrder": "asc",
+      "pageSize": 100,
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "category", "type": "text", "required": true },
+        { "name": "price", "type": "text" },
+        { "name": "unit", "type": "text" },
+        { "name": "status", "type": "select", "options": ["In stock", "To order", "Seasonal", "Sold out"] },
+        { "name": "description", "type": "text" },
+        { "name": "details", "type": "list" },
+        { "name": "cover", "type": "image" },
+        { "name": "featured", "type": "boolean", "default": false },
+        { "name": "draft", "type": "boolean", "default": false }
+      ]
+    }
+  },
+  "navigation": [
+    { "label": "Home", "url": "/" },
+    { "label": "Shop", "url": "/products/" },
+    { "label": "About", "url": "/about/" },
+    { "label": "Visit", "url": "/visit/" }
+  ],
+  "sampleContent": "sample/"
+}

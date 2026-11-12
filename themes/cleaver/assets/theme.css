@@ -1,0 +1,459 @@
+/* Cleaver — a butcher's counter. Restyle by editing the tokens below, never
+   selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — slab numerals over plain grotesque caps */
+  --font-slab: Rockwell, "Rockwell Nova", "Roboto Slab", "Zilla Slab", "DejaVu Serif", "Sitka Display", Georgia, serif;
+  --font-grot: "Helvetica Neue", Helvetica, "Nimbus Sans", "Liberation Sans", Arimo, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.55;
+  --tracking-caps: 0.06em;
+  --price-size: 4.5rem;
+
+  /* Colour — light: white glazed tiles, black ink, ox-blood, a navy apron */
+  --color-bg: #f4f6f3;
+  --color-grout: #dce1de;
+  --color-text: #15171a;
+  --color-muted: #555c61;
+  --color-accent: #8c1c1f;
+  --color-paper: #ffffff;
+  --color-line: #c3cac7;
+  --color-tray: #d3dade;
+  --color-tray-rim: #87929a;
+  --color-tray-lip: #f3f5f6;
+  --color-ticket: #ffffff;
+  --color-ticket-ink: #15171a;
+  --color-ticket-muted: #3c4247;
+  --color-price: #8c1c1f;
+  --color-soldout: #b4baba;
+  --color-soldout-ink: #2f3437;
+  --color-spike: #48525a;
+  --color-apron: #1b2a4a;
+  --color-apron-ink: #ffffff;
+  --color-apron-stripe: #ffffff;
+  --color-code-bg: #e8ebe9;
+  --shadow-ticket: 0 1px 2px rgba(21,23,26,0.42);
+
+  /* Measure */
+  --tile: 5rem;
+  --grout: 2px;
+  --stripe: 1.875rem;
+  --spike: 2.125rem;
+  --page: 72rem;
+  --measure: 40rem;
+  --radius: 3px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The cold room — slate tiles, a dark steel tray, the tickets still white */
+    --color-bg: #242b30;
+    --color-grout: #1a2024;
+    --color-text: #e8ecec;
+    --color-muted: #a9b2b7;
+    --color-accent: #f0897d;
+    --color-paper: #2c343a;
+    --color-line: #48535b;
+    --color-tray: #13171a;
+    --color-tray-rim: #5a666e;
+    --color-tray-lip: #7e8a92;
+    --color-ticket: #eceeeb;
+    --color-soldout: #8b9296;
+    --color-soldout-ink: #1c2023;
+    --color-spike: #a9b2b7;
+    --color-apron: #1c2d52;
+    --color-apron-stripe: #dfe3e6;
+    --color-code-bg: #1b2125;
+    --shadow-ticket: 0 2px 4px rgba(0,0,0,0.6);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+/* The wall: glazed tiles, drawn as grout lines */
+body {
+  margin: 0;
+  font-family: var(--font-grot);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  background-image:
+    linear-gradient(var(--color-grout) var(--grout), transparent var(--grout)),
+    linear-gradient(90deg, var(--color-grout) var(--grout), transparent var(--grout));
+  background-size: var(--tile) var(--tile);
+  background-position: 50% 0;
+  overflow-wrap: break-word;
+}
+
+.masthead-in, main, .colophon-in {
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: clamp(var(--space-3), 4vw, var(--space-4));
+}
+main { min-height: 50vh; padding-bottom: var(--space-5); }
+
+h1, h2, h3, .home .prose, .lede, .ticket-cat, .ticket-desc { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+.prose a, .prose table, .shop-card a, .masthead-call, code { hyphens: manual; }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: var(--color-apron); color: var(--color-apron-ink); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-paper); font-weight: 700; }
+.skip-link:focus { left: var(--space-2); }
+
+/* The label voice: small bold grotesque caps */
+.masthead nav a, .call-word, .ticket-top, .tray-more, .back, .pagination, .shop-card h2, .shop-link-word, .meta, .tags {
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+/* Masthead: the name over the door, then the apron stripe */
+
+.masthead { background: var(--color-bg); }
+.masthead::after, .shop-card::before {
+  content: "";
+  display: block;
+  height: var(--stripe);
+  /* butcher's stripe: a broad navy bar, then a pinstripe */
+  background: repeating-linear-gradient(90deg,
+    var(--color-apron) 0 calc(var(--stripe) * 0.6), var(--color-apron-stripe) 0 calc(var(--stripe) * 0.7),
+    var(--color-apron) 0 calc(var(--stripe) * 0.8), var(--color-apron-stripe) 0 calc(var(--stripe) * 0.9));
+}
+.masthead-in { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-4); padding-block: 0.75rem; }
+
+.site-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: var(--font-slab);
+  font-size: clamp(1.3rem, 3.6vw, 1.85rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text);
+}
+.masthead nav { flex: 1 0 100%; order: 3; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: var(--space-2) 0 var(--space-1); border-bottom: 3px solid transparent; font-size: 0.8rem; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { border-color: var(--color-line); }
+.masthead nav a[aria-current="page"] { border-color: var(--color-accent); }
+
+.masthead-call { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); min-width: 0; text-decoration: none; }
+.call-word { color: var(--color-muted); }
+.call-number { font-family: var(--font-slab); font-size: 1.2rem; font-weight: 700; line-height: 1.2; }
+
+@media (min-width: 48rem) {
+  .masthead nav { flex: 0 1 auto; order: 0; }
+}
+
+.colophon { border-top: var(--grout) solid var(--color-line); color: var(--color-muted); font-size: 0.9rem; background: var(--color-bg); }
+.colophon-in { padding-block: var(--space-3) var(--space-4); }
+.colophon p { margin: 0; }
+.colophon a { color: inherit; }
+.colophon-name { font-family: var(--font-slab); font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; color: var(--color-text); }
+
+/* Headings painted on the tiles */
+
+.page-header, .home-head { margin: var(--space-4) 0 var(--space-3); }
+.page-header h1, .home-head h1 {
+  margin: 0;
+  max-width: 24ch;
+  font-size: clamp(1.75rem, 5.2vw, 3rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  hyphenate-limit-chars: 16 4 4;
+}
+.home-head { margin-top: 0.75rem; }
+.lede { margin: var(--space-2) 0 0; max-width: var(--measure); font-size: 1.125rem; line-height: 1.45; }
+.meta { margin: 0 0 var(--space-1); color: var(--color-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.tags a { display: block; padding-block: var(--space-1); overflow-wrap: anywhere; }
+
+@media (min-width: 56rem) {
+  /* the paragraph starts level with the headline's capitals */
+  .home-head { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-4); align-items: start; }
+  .home-head .lede { margin: 0.1em 0 0; }
+}
+
+/* The tray and its tickets: the signature */
+
+.tray {
+  padding: 0.75rem;
+  background: var(--color-tray);
+  border: 2px solid var(--color-tray-rim);
+  border-radius: calc(var(--radius) * 3);
+  /* the rolled rim: a bright lip, then a crease */
+  box-shadow: inset 0 0 0 2px var(--color-tray-lip), inset 0 0 0 0.375rem var(--color-tray), inset 0 0 0 calc(0.375rem + 1px) var(--color-tray-rim);
+}
+.tickets {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  gap: calc(var(--spike) + var(--space-1)) var(--space-2);
+  margin: 0;
+  padding: 0 0 var(--spike);
+  list-style: none;
+}
+.tickets:empty { display: none; }
+/* no featured product: the tray goes, the link to the shop stays */
+.tray:not(:has(li)) { padding: 0; background: none; border: 0; box-shadow: none; }
+
+.tray-more { margin: var(--space-1) var(--space-2) var(--space-1); text-align: right; font-size: 0.8rem; }
+.tray:not(:has(li)) .tray-more { margin: 0; text-align: left; }
+.tray-more a, .back a, .pagination a, .tags a { color: var(--color-text); }
+
+.ticket {
+  --card: var(--color-ticket);
+  --ink: var(--color-ticket-ink);
+  --sub: var(--color-ticket-muted);
+  --fig: var(--color-price);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  container-type: inline-size;
+  padding: var(--space-2) var(--space-3) 0.75rem;
+  background: var(--card);
+  color: var(--ink);
+  border-radius: var(--radius);
+  filter: drop-shadow(var(--shadow-ticket));
+}
+/* the tab the card narrows to, and the steel spike under it */
+.ticket::after {
+  content: "";
+  position: absolute;
+  top: calc(100% - 1px);
+  left: calc(50% - 1.125rem);
+  width: 2.25rem;
+  height: var(--spike);
+  background: linear-gradient(var(--card) 15%, var(--color-spike) 0);
+  clip-path: polygon(0 0, 100% 0, 74% 15%, 62% 15%, 50% 100%, 38% 15%, 26% 15%);
+}
+.ticket[data-status="Sold out"] {
+  --card: var(--color-soldout);
+  --ink: var(--color-soldout-ink);
+  --sub: var(--color-soldout-ink);
+  --fig: var(--color-soldout-ink);
+}
+
+.ticket-top { order: 0; min-height: 1.35rem; display: flex; flex-wrap: wrap; align-items: start; justify-content: space-between; gap: var(--space-1) var(--space-2); margin: 0; color: var(--sub); }
+.ticket-cat, .status { min-width: 0; overflow-wrap: anywhere; }
+.ticket-cat { padding-top: calc(0.1em + 1.5px); }
+
+.ticket-price { order: 1; display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-2); margin: calc(var(--space-3) + var(--space-1)) 0 0; }
+.price {
+  min-width: 0;
+  font-family: var(--font-slab);
+  font-size: clamp(2.25rem, 17.5cqi, var(--price-size));
+  font-weight: 700;
+  font-variant-numeric: lining-nums;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--fig);
+  overflow-wrap: anywhere;
+}
+/* enhance.js tunes the size: a short price larger, a long one smaller */
+.price[data-len="short"] { font-size: clamp(2.5rem, 22cqi, var(--price-size)); }
+.price[data-len="mid"] { font-size: clamp(1.9rem, 15cqi, calc(var(--price-size) * 0.75)); }
+.price[data-len="long"] { font-size: clamp(1.4rem, 8.5cqi, calc(var(--price-size) * 0.45)); line-height: 1.05; letter-spacing: 0; }
+[data-status="Sold out"] .price { text-decoration: line-through; text-decoration-thickness: 0.07em; }
+.unit { min-width: 0; padding-bottom: var(--space-2); font-size: 0.875rem; font-weight: 700; line-height: 1.3; color: var(--sub); overflow-wrap: anywhere; }
+
+.ticket-title {
+  order: 2;
+  margin: 0;
+  padding-top: var(--space-2);
+  border-top: 2px solid var(--ink);
+  font-size: clamp(0.95rem, 6.2cqi, 1.125rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
+.ticket:not(:has(.ticket-price)) .ticket-title { margin-top: var(--space-2); font-size: 1.3rem; }
+.ticket-title a { color: inherit; text-decoration: none; }
+.ticket-title a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
+.ticket-title a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+/* the ring is drawn inside the card, which is light in both schemes */
+.ticket-title a:focus-visible { outline: none; }
+.ticket-title a:focus-visible::after { outline: 3px solid var(--ink); outline-offset: -5px; }
+.ticket-desc { order: 3; margin: var(--space-1) 0 0; font-size: 0.875rem; line-height: 1.4; color: var(--sub); }
+
+/* Status: four labels are printed, the matching one is shown */
+.st { display: none; padding: 0.1em 0.45em; border: 1.5px solid; border-radius: 2px; color: var(--ink); }
+.st-raw { display: inline; padding: 0; border: 0; }
+.st-season { border-style: dashed; }
+.st-out { background: var(--ink); border-color: var(--ink); color: var(--card); }
+[data-status="To order"] .st-order, [data-status="Seasonal"] .st-season, [data-status="Sold out"] .st-out, .ticket-big[data-status="In stock"] .st-in { display: inline-block; }
+:is([data-status="In stock"], [data-status="To order"], [data-status="Seasonal"], [data-status="Sold out"]) .st-raw { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .tickets .ticket { transition: transform 0.15s ease-out; }
+  .tickets .ticket:hover { transform: translateY(-3px); }
+}
+
+/* One product: the ticket, large */
+
+.product { display: grid; grid-template-areas: "ticket" "more" "back"; column-gap: var(--space-4); margin-top: var(--space-4); }
+.product-ticket { grid-area: ticket; min-width: 0; max-width: 34rem; }
+.product-more { grid-area: more; margin-top: calc(var(--spike) + var(--space-3)); }
+.product .back { grid-area: back; }
+.ticket-big { padding: var(--space-3) clamp(var(--space-3), 5cqi, var(--space-4)) var(--space-4); }
+.ticket-big .ticket-price { margin-top: calc(var(--space-3) + var(--space-2)); }
+.ticket-big .price { font-size: clamp(2.6rem, 17.5cqi, calc(var(--price-size) * 1.6)); }
+.ticket-big .price[data-len="short"] { font-size: clamp(3rem, 24cqi, calc(var(--price-size) * 1.6)); }
+.ticket-big .price[data-len="mid"] { font-size: clamp(2.4rem, 15cqi, var(--price-size)); }
+.ticket-big .price[data-len="long"] { font-size: clamp(1.6rem, 9cqi, calc(var(--price-size) * 0.6)); }
+.ticket-big .unit { font-size: 1rem; }
+.ticket-big .ticket-title { margin-top: var(--space-3); padding-top: var(--space-3); border-top-width: 3px; font-size: clamp(1.5rem, 4.5vw, 2.25rem); line-height: 1.05; letter-spacing: 0.01em; }
+.ticket-big .ticket-desc { margin-top: var(--space-2); font-size: 1.0625rem; line-height: 1.45; }
+
+.back { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: calc(var(--spike) + var(--space-3)) 0 0; font-size: 0.8rem; }
+
+.product-more, .sheet {
+  min-width: 0;
+  padding: clamp(var(--space-3), 4vw, var(--space-4));
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+}
+.product-more:empty { display: none; }
+.product-cover { display: block; width: 100%; height: auto; margin-bottom: var(--space-3); }
+.details { margin: 0 0 var(--space-3); padding: 0; list-style: none; border-top: 2px solid var(--color-text); font-variant-numeric: tabular-nums; }
+.details li { padding: var(--space-2) 0; border-bottom: 1px solid var(--color-line); }
+.product-more > :last-child, .sheet > :last-child, .prose > :last-child { margin-bottom: 0; }
+
+@media (min-width: 56rem) {
+  .product:has(.product-more > *) { grid-template: "ticket more" auto "back more" 1fr / minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+  .product-more { margin-top: 0; }
+}
+
+.not-found { margin-top: var(--space-5); max-width: 30rem; }
+
+/* Sheets of white paper on the wall: page text */
+
+.sheet { max-width: calc(var(--measure) + 2 * var(--space-4)); }
+.home .sheet { margin-top: var(--space-4); max-width: none; columns: 3 17rem; column-gap: var(--space-4); column-rule: 1px solid var(--color-line); }
+.home .sheet > * { break-inside: avoid; }
+.home .sheet > :is(h2, h3) { break-after: avoid; }
+.sheet > :first-child, .prose > :first-child { margin-top: 0; }
+
+.prose h2, .prose h3, .post-card h2 { margin: var(--space-4) 0 var(--space-2); font-weight: 800; line-height: 1.15; letter-spacing: 0.03em; text-transform: uppercase; }
+.prose h2, .post-card h2 { font-size: 1.2rem; }
+.prose h3 { font-size: 1rem; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose ul > li::marker { color: var(--color-accent); }
+.prose img, .cover { display: block; max-width: 100%; height: auto; margin-bottom: var(--space-3); }
+.prose a[href^="tel:"] { font-weight: 700; white-space: nowrap; }
+.prose blockquote { padding-left: var(--space-3); border-left: 3px solid var(--color-accent); color: var(--color-muted); }
+.prose hr { height: var(--grout); margin: var(--space-4) 0; border: 0; background: var(--color-line); }
+.prose code { padding: 0.1em 0.3em; font-family: var(--font-mono); font-size: 0.9em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.45; background: var(--color-code-bg); }
+.prose pre code { padding: 0; background: none; }
+.prose table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-line); }
+.prose th { font-size: 0.8rem; letter-spacing: var(--tracking-caps); text-transform: uppercase; border-bottom: 2px solid var(--color-text); }
+@media (max-width: 40em) {
+  .prose table { display: block; overflow-x: auto; }
+  .prose :is(th, td) { min-width: 9rem; }
+}
+
+/* News list and page numbers */
+.post-list { margin: 0; list-style: none; }
+.post-card { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-line); }
+.post-card:first-child { padding-top: 0; }
+.post-card:last-child { padding-bottom: 0; border-bottom: 0; }
+.post-card h2 { margin: 0; }
+.post-card h2 a { color: var(--color-text); text-decoration: none; }
+.post-card h2 a:hover { text-decoration: underline; }
+.summary { margin: var(--space-1) 0 0; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-3) 0 0; color: var(--color-muted); font-size: 0.8rem; }
+.empty { margin: 0; color: var(--color-muted); }
+
+/* The shop card: the apron, with how to order pinned to it */
+
+.shop-card {
+  display: grid;
+  gap: 0 var(--space-4);
+  margin-top: var(--space-5);
+  padding: 0 clamp(var(--space-3), 4vw, var(--space-4)) var(--space-3);
+  background: var(--color-apron);
+  color: var(--color-apron-ink);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.shop-card::before { grid-column: 1 / -1; margin-inline: calc(-1 * var(--space-4)); }
+.shop-card > div { min-width: 0; padding: var(--space-4) 0 var(--space-3); }
+.shop-card > div + div { padding-top: var(--space-2); }
+.shop-card h2 { margin: 0 0 var(--space-2); }
+.shop-card :focus-visible { outline-color: var(--color-apron-ink); }
+.shop-note { margin: 0 0 var(--space-3); max-width: 34rem; }
+.shop-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; }
+.shop-link { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-1); min-width: 0; max-width: 100%; padding: var(--space-2) var(--space-3); background: var(--color-ticket); color: var(--color-ticket-ink); border-radius: var(--radius); text-decoration: none; }
+.shop-link-word { color: var(--color-ticket-muted); }
+.shop-link-value { font-size: 1.0625rem; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.shop-phone .shop-link-value { font-family: var(--font-slab); font-size: 1.6rem; line-height: 1.1; color: var(--color-price); }
+.shop-link:hover .shop-link-value { text-decoration: underline; text-decoration-thickness: 2px; }
+.shop-hours dl { margin: 0; font-variant-numeric: tabular-nums; }
+.shop-hours dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 1px dotted var(--color-apron-ink); }
+.shop-hours dt { font-weight: 700; }
+.shop-hours dd { margin: 0 0 0 auto; text-align: right; }
+.shop-address address { font-style: normal; text-wrap: balance; }
+
+@media (min-width: 56rem) {
+  .shop-card { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); }
+  .shop-card > div + div { padding-top: var(--space-4); }
+}
+
+/* Print: ink on white, the tickets outlined */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-grout: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-paper: #fff;
+    --color-line: #999;
+    --color-tray: #fff;
+    --color-ticket: #fff;
+    --color-ticket-ink: #000;
+    --color-ticket-muted: #333;
+    --color-price: #000;
+    --color-soldout: #fff;
+    --color-soldout-ink: #555;
+    --color-apron: #fff;
+    --color-apron-ink: #000;
+    --color-apron-stripe: #fff;
+  }
+  body { font-size: 11pt; background-image: none; }
+  .masthead nav, .skip-link, .tray-more, .back, .pagination, .masthead::after, .shop-card::before, .ticket::after { display: none; }
+  main { min-height: 0; }
+  .tray { padding: 0; border: 0; box-shadow: none; }
+  .tickets { gap: var(--space-2); padding: 0; }
+  .ticket, .shop-card, .shop-link { border: 1px solid var(--color-text); filter: none; }
+  .ticket, .shop-card, .details li, .post-card { break-inside: avoid; }
+  .product-more, .sheet { padding: 0; border: 0; }
+  a { color: inherit; text-decoration: none; }
+}

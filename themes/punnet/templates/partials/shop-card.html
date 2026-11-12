@@ -1,0 +1,18 @@
+<section class="shop-card board" aria-labelledby="shop-card-title">
+  <div class="slat shop-order">
+    <h2 id="shop-card-title">{{ strings.orderHeading }}</h2>
+    {{#if data.shop.orderNote}}<p class="shop-note">{{ data.shop.orderNote }}</p>{{/if}}
+    <p class="shop-links">{{#if data.shop.phone}}<a class="shop-phone" href="tel:{{ data.shop.phone }}"><span class="label">{{ strings.call }}</span> <span class="figure">{{ data.shop.phone }}</span></a>{{/if}}{{#if data.shop.email}}<a class="shop-email" href="mailto:{{ data.shop.email }}"><span class="label">{{ strings.email }}</span> <span class="value">{{ data.shop.email }}</span></a>{{/if}}{{#if data.shop.phone}}{{else}}{{#if data.shop.email}}{{else}}<a class="shop-visit" href="/visit/">{{ strings.visitLink }}</a>{{/if}}{{/if}}</p>
+  </div>
+  {{#if data.shop.hours}}<div class="slat shop-hours">
+    <h2>{{ strings.hours }}</h2>
+    <dl>
+      {{#each data.shop.hours as row}}<div><dt>{{ row.days }}</dt><dd>{{ row.time }}</dd></div>
+      {{/each}}
+    </dl>
+  </div>{{/if}}
+  {{#if data.shop.address}}<div class="slat shop-address">
+    <h2>{{ strings.address }}</h2>
+    <address>{{ data.shop.address }}</address>
+  </div>{{/if}}
+</section>

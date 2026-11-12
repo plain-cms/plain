@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960482",
+  "email": "shop@tolleyandmarsh.example",
+  "address": "Tolley & Marsh, 14 Sheep Street, Castle Barton, Shropshire SY27 4HN",
+  "hours": [
+    { "days": "Monday, Tuesday, Thursday, Friday", "time": "8:00 to 17:30" },
+    { "days": "Wednesday", "time": "8:00 to 13:00" },
+    { "days": "Saturday", "time": "8:00 to 16:00" },
+    { "days": "Sunday", "time": "Closed" }
+  ],
+  "orderNote": "Ring or e-mail and we will put it by with your name on it, to collect and pay for at the counter. Heavy goods go out on the van on Tuesdays and Fridays, within eight miles, for £4. We do not post."
+}

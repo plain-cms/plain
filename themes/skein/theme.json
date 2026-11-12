@@ -1,0 +1,60 @@
+{
+  "name": "skein",
+  "title": "Skein",
+  "description": "A yarn shop's shelf on a bright white page: every product is a hank of woad-blue wool with diagonal ply lines, wrapped in a white ball band printed in black condensed capitals — name and category, a ruled grid of details, and a heavy price on the lap.",
+  "family": "shop",
+  "bestFor": [
+    "yarn shop",
+    "wool shop",
+    "haberdashery",
+    "hand-dyed yarn",
+    "knitting and crochet",
+    "fabric shop",
+    "needlecraft",
+    "craft supplies"
+  ],
+  "mood": [
+    "crisp",
+    "handmade",
+    "graphic",
+    "orderly"
+  ],
+  "layouts": [
+    "page",
+    "home"
+  ],
+  "tokens": {
+    "--font-label": "the bold condensed face of the label: headings, product names, prices, the spec grid, the menu, the phone and e-mail links and the small capital labels",
+    "--font-text": "the humanist sans of everything else: descriptions and page text",
+    "--font-mono": "inline code and code blocks in page text",
+    "--text-base": "size of ordinary body text",
+    "--leading": "line spacing of body text",
+    "--tracking": "letter spacing of the small capital labels: menu, categories, status, dates, tags, table headings and the headings on the shop card",
+    "--price-size": "size of the price on a band; the product page sets it a third larger, and both shrink on the narrowest screens so that a figure stays in one piece",
+    "--color-bg": "page background, and the text of a selection",
+    "--color-tweed": "the fine weave drawn over the page background; the same as the background in the light scheme, so it shows only in the dark one",
+    "--color-text": "body text, headings, the shop's name, the heavy rules and the thin rule over each section of page text",
+    "--color-muted": "secondary text: the line beside a page heading, dates, summaries, quotations, small labels on the shop card, the footer, and the dashed outline of a sold-out hank",
+    "--color-accent": "the thread: the underline of links and of the current menu item, list markers, focus rings and the background of a text selection",
+    "--color-line": "thin rules between rows of a table, news items and blocks of the shop card, the line above the footer, and the border of photographs",
+    "--color-dye": "the wool: the fill of every hank (the second and third hank are paler tints of it) and the rule beside a quotation",
+    "--color-ply": "the diagonal ply lines shading each hank",
+    "--color-band": "the paper of the ball band (white in both schemes) and the text of the inverted Sold out box; the paler hanks are the dye mixed with it",
+    "--color-band-ink": "everything printed on a band: names, prices, details, the status box, its keyline and the rules between panels",
+    "--color-band-muted": "category, description and unit on a band, and the name and price of a sold-out product",
+    "--color-shadow": "the shadow under a band and under its glued lap",
+    "--color-code-bg": "background of code in page text",
+    "--hank-end": "how much wool shows either side of the band on wide screens, as a share of the row's width (two thirds of that on narrower screens), and the indent of the text under a product",
+    "--hank-round": "the longest taper of a hank's end; where less wool shows, the taper shortens with it",
+    "--ply": "distance from one ply line to the next, and from one nick in a hank's outline to the next",
+    "--rule": "thickness of the heavy rules under the masthead and over the shop card, and of the quotation rule",
+    "--page": "maximum width of the page",
+    "--measure": "maximum width of a column of text",
+    "--radius": "corner rounding of bands, photographs and inline code",
+    "--space-1": "hairline gap: between a label and its value, under a category line",
+    "--space-2": "small gap: between a category and its status, between tags, under a heading",
+    "--space-3": "page gutter on small screens, the gap between hanks and the padding of a band",
+    "--space-4": "gap between blocks, and the page gutter on wide screens",
+    "--space-5": "large gap above the shop card and the home page text, and the space at the foot of the page"
+  }
+}

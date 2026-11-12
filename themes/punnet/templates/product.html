@@ -1,0 +1,16 @@
+<article class="product">
+  <div class="crate crate-big" data-status="{{ page.status }}">
+    <div class="slat product-body">
+      <div class="product-head">
+        <h1 class="crate-title">{{ page.title }}</h1>
+        {{#if page.price}}<p class="showcard"><span class="star"><span class="price">{{ page.price }}</span></span>{{#if page.unit}}<span class="unit">{{ page.unit }}</span>{{/if}}</p>{{/if}}
+        {{#if page.description}}<p class="crate-desc">{{ page.description }}</p>{{/if}}
+      </div>
+      <div class="product-more">{{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="{{ page.title }}" decoding="async">{{/if}}{{#if page.details}}<ul class="details" aria-label="{{ strings.details }}">{{#each page.details as fact}}<li>{{ fact }}</li>{{/each}}</ul>{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+      </div>{{/if}}</div>
+    </div>
+    <p class="slat crate-foot"><span class="cat">{{ page.category }}</span>{{#if page.status}}<span class="status"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ page.status }}</span></span>{{/if}}</p>
+  </div>
+  <p class="back"><a href="/products/">{{ strings.backToShop }}</a></p>
+</article>

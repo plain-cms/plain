@@ -1,0 +1,13 @@
+<article class="spread home">
+  <header class="verso">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>{{/if}}
+  </header>
+  <div class="recto">
+    <ul class="pile" role="list" aria-label="{{ strings.featuredLabel }}">{{#each collections.products as item}}{{#if item.featured}}{{> book}}{{/if}}{{/each}}</ul>
+    <p class="more"><a href="/products/">{{ strings.allProducts }}</a></p>
+  </div>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

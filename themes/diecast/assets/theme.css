@@ -1,0 +1,394 @@
+/* Diecast — a kit's sprue on its instruction sheet.
+   Restyle by editing the tokens below, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — rounded numerals over a plain grotesque */
+  --font-round: "Arial Rounded MT Bold", ui-rounded, Nunito, Quicksand, "Varela Round", "Hiragino Maru Gothic ProN", "Helvetica Neue", Arial, sans-serif;
+  --font-grot: "Helvetica Neue", Helvetica, "Nimbus Sans", "Liberation Sans", Arimo, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.5;
+  --tracking: 0.07em;
+  --price-size: 2.125rem;
+
+  /* Colour — light: instruction-sheet white, black line, one kit plastic */
+  --color-bg: #fdfdfa;
+  --color-text: #141414;
+  --color-muted: #55585c;
+  --color-accent: #c41c74;
+  --color-line: #141414;
+  --color-hair: #c8c9c6;
+  --color-plastic: #ff7ab6;
+  --color-plastic-ink: #141414;
+  --color-box: #141414;
+  --color-box-ink: #ffffff;
+  --color-code-bg: #eeeeea;
+
+  /* The sprue */
+  --runner: 0.5rem;
+  --gate: 0.4375rem;
+  --gap: 1.375rem;
+  --tab: 1.875rem;
+  --cell-min: 14rem;
+  --radius: 0.25rem;
+  --radius-big: 2.25rem;
+
+  /* Measure */
+  --rule: 2px;
+  --page: 74rem;
+  --measure: 40rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The black bench: the sprue keeps its plastic, the print turns white */
+    --color-bg: #111112;
+    --color-text: #f2f2ee;
+    --color-muted: #a9abae;
+    --color-accent: #ff7ab6;
+    --color-line: #f2f2ee;
+    --color-hair: #3d3f43;
+    --color-box: #f2f2ee;
+    --color-box-ink: #111112;
+    --color-code-bg: #1f2023;
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+body { margin: 0; font-family: var(--font-grot); font-size: var(--text-base); line-height: var(--leading); color: var(--color-text); background: var(--color-bg); overflow-wrap: break-word; }
+.masthead-in, main, .colophon-in { max-width: var(--page); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, var(--space-4)); }
+main { min-height: 50vh; padding-bottom: var(--space-5); }
+
+/* hyphenate headings and narrow columns only; never tables, links or code */
+h1, h2, h3, .part-cat, .part-desc, .home > .prose { hyphens: auto; hyphenate-limit-chars: 11 4 4; }
+@media (max-width: 30rem) { .prose, .lede, .summary { hyphens: auto; hyphenate-limit-chars: 11 4 4; } }
+.prose a, .prose table, code { hyphens: manual; }
+
+a { color: inherit; text-decoration-thickness: 1.5px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 3px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+::selection { background: var(--color-plastic); color: var(--color-plastic-ink); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-bg); font-weight: 700; }
+.skip-link:focus { left: var(--space-2); }
+
+/* The label voice: small bold caps */
+.masthead nav a, .call-word, .part-cat, .st, .more, .back, .pagination, .shop-card h2, .key-label, .shop-link-word, .meta, .tags { font-size: 0.75rem; font-weight: 700; line-height: 1.3; letter-spacing: var(--tracking); text-transform: uppercase; }
+/* The numeral voice: rounded */
+.site-title, .call-number, .price, .cell::before, .steps h2::before, .lost, .shop-phone .shop-link-value, .colophon-name, .prose ol > li::marker { font-family: var(--font-round); font-weight: 700; font-synthesis: none; font-variant-numeric: lining-nums; }
+
+/* Masthead */
+
+.masthead { border-bottom: var(--rule) solid var(--color-line); }
+.masthead-in { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-4); padding-block: 0.7rem; }
+.site-title { min-width: 0; margin-right: auto; padding: 0.3rem 1rem 0.3rem 0.7rem; background: var(--color-plastic); color: var(--color-plastic-ink); border-radius: var(--radius) var(--radius-big) var(--radius-big) var(--radius); font-size: clamp(1.05rem, 4.2vw, 1.3rem); line-height: 1.15; text-decoration: none; }
+.masthead nav { flex: 1 0 100%; order: 3; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-1); margin: 0 calc(-1 * var(--space-2)); padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: 0.35rem var(--space-2); font-size: 0.8rem; text-decoration: none; }
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current="page"] { background: var(--color-box); color: var(--color-box-ink); }
+.call { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); min-width: 0; text-decoration: none; }
+.call-word { color: var(--color-muted); }
+.call-number { font-size: 1.15rem; line-height: 1.2; text-decoration: underline; text-decoration-thickness: 1.5px; }
+@media (min-width: 48rem) {
+  .masthead nav { flex: 0 1 auto; order: 0; }
+}
+
+.colophon { border-top: var(--rule) solid var(--color-line); color: var(--color-muted); font-size: 0.9rem; }
+.colophon-in { padding-block: var(--space-3) var(--space-4); }
+.colophon p { margin: 0; }
+.colophon-name { color: var(--color-text); }
+
+/* Headings */
+
+.page-header, .home-head { margin: var(--space-4) 0 var(--space-3); }
+.page-header h1, .home-head h1 { margin: 0; max-width: 22ch; font-size: clamp(1.8rem, 5vw, 2.9rem); font-weight: 800; line-height: 1.04; letter-spacing: -0.02em; text-wrap: balance; }
+.lede { margin: var(--space-2) 0 0; max-width: var(--measure); font-size: 1.125rem; line-height: 1.45; }
+.meta { margin: 0 0 var(--space-1); color: var(--color-muted); }
+.more, .back { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-3) 0 0; font-size: 0.8rem; }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.tags a { display: block; padding-block: var(--space-1); }
+
+/* Home: the title block beside the sprue */
+@media (min-width: 64rem) {
+  .home { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 11fr); gap: 0 var(--space-4); align-items: start; }
+  .home > .prose, .home:not(:has(.cell)) .home-head { grid-column: 1 / -1; }
+  .home-head h1 { font-size: clamp(2rem, 3.6vw, 2.9rem); }
+  .home > .sprue { margin-top: var(--space-4); }
+  /* the sheet's key, level with the foot of the sprue */
+  .home:has(.cell) .home-head { display: flex; flex-direction: column; align-self: stretch; margin-bottom: 0; }
+  .home:has(.cell) .key { display: block; }
+  .home:has(.cell) .more { margin-bottom: var(--space-4); }
+  .home:not(:has(.key)) .home-head { align-self: center; }
+  .home-head .lede { font-size: 1.25rem; }
+}
+.key { display: none; flex: none; margin-top: auto; padding: 0 var(--space-3) var(--space-3); border: var(--rule) solid var(--color-line); font-size: 0.9375rem; }
+
+/* THE SPRUE: each cell is plastic with a runner-wide shadow, so neighbours
+   share a bar; a short last row grows to close the frame. The cell's ::after
+   is the hole, its backgrounds the gates. */
+
+.sprue { counter-reset: part; display: flex; flex-wrap: wrap; gap: var(--runner); margin: var(--space-3) 0 0; padding: var(--runner); list-style: none; border-radius: calc(var(--runner) + var(--radius)); overflow: hidden; }
+.sprue:empty { display: none; }
+.cell {
+  --reach: calc(var(--gap) + 0.75rem);
+  --reach-top: calc(var(--tab) + 0.75rem);
+  --p: linear-gradient(var(--color-plastic), var(--color-plastic));
+  --g1: calc(var(--gap) + 2.6rem);
+  --g2: calc(100% - var(--gap) - 2.6rem);
+  --g3: 30%;
+  --g4: 64%;
+  counter-increment: part;
+  position: relative;
+  flex: 1 1 var(--cell-min);
+  display: flex;
+  min-width: 0;
+  padding: var(--tab) var(--gap) var(--gap);
+  background: var(--color-plastic);
+  box-shadow: 0 0 0 var(--runner) var(--color-plastic);
+}
+/* the number tab moulded on the runner */
+.cell::before {
+  content: counter(part);
+  position: absolute;
+  top: calc(-1 * var(--runner));
+  left: var(--gap);
+  z-index: 1;
+  box-sizing: border-box;
+  display: grid;
+  place-items: end center;
+  min-width: 2.25rem;
+  height: calc(var(--runner) + var(--tab) - 0.375rem);
+  padding: 0 0.4rem 0.1rem;
+  background: var(--color-plastic);
+  color: var(--color-plastic-ink);
+  border-radius: 0 0 var(--radius) var(--radius);
+  font-size: 1.125rem;
+  line-height: 1.2;
+}
+/* the gates; the bottom one keeps left of the cut-outs */
+.cell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    var(--p) var(--g1) 0 / var(--gate) var(--reach-top),
+    var(--p) var(--g2) 0 / var(--gate) var(--reach-top),
+    var(--p) var(--g3) 100% / var(--gate) var(--reach),
+    var(--p) var(--gx, 0) var(--g4) / var(--reach) var(--gate);
+  background-repeat: no-repeat;
+  background-color: var(--color-bg);
+  border-radius: calc(var(--radius) * 1.5);
+}
+.cell:nth-child(3n)::before { left: auto; right: var(--gap); }
+.cell:nth-child(3n+2) { --g1: 7rem; --g3: 42%; --g4: 40%; --gx: 100%; }
+.cell:nth-child(4n+3) { --g2: 56%; --g3: 36%; }
+
+/* the part; --clear keeps the first line off its locating hole */
+.part {
+  --hole: var(--color-bg);
+  --clear: 1.3rem;
+  --pad: 0.7rem;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 0.55rem var(--pad) calc(var(--pad) + var(--cut, 0rem));
+  background: radial-gradient(circle at calc(100% - 0.85rem) 0.85rem, var(--hole) 0.22rem, transparent 0.26rem) var(--color-plastic);
+  color: var(--color-plastic-ink);
+  border: var(--rule) solid transparent;
+  border-radius: var(--radius);
+}
+/* a status label, or a photograph, takes the place of the hole */
+.cell[data-status]:not([data-status=""], [data-status="In stock"]) > .part, .cell-main[data-status="In stock"] > .part, .part:has(.part-cover) { --hole: transparent; --clear: 0rem; }
+/* what is cut out of a part's bottom edge: a notch, a step or a bite */
+.part::before { content: ""; position: absolute; right: var(--cut-r, 1.5rem); bottom: calc(-1 * var(--rule)); box-sizing: border-box; width: var(--cut-w, 0); height: calc(var(--cut, 0rem) + var(--rule)); background: var(--color-bg); border: 0 dashed var(--color-text); border-radius: var(--cut-rad, var(--radius) var(--radius) 0 0); }
+/* no two parts on a sprue are the same shape */
+.cell:nth-child(5n+1) .part { --cut: 0.9rem; --cut-w: 3.25rem; }
+.cell:nth-child(5n+2) .part { border-radius: var(--radius) var(--radius) var(--radius-big) var(--radius-big); }
+.cell:nth-child(5n+3) .part { --cut: 0.9rem; --cut-w: 4.5rem; --cut-r: calc(-1 * var(--rule)); --cut-e: 0; --cut-rad: var(--radius) 0 0; border-top-left-radius: var(--radius-big); }
+.cell:nth-child(5n+4) .part { border-radius: var(--radius-big) var(--radius) var(--radius-big) var(--radius); }
+.cell:nth-child(5n) .part { --cut: 1.2rem; --cut-w: 2.4rem; --cut-rad: 1.2rem 1.2rem 0 0; border-radius: calc(var(--radius-big) / 2) var(--radius) calc(var(--radius-big) / 2) calc(var(--radius-big) / 2); }
+
+/* Sold out: the part is snipped off. Stubs, tab and a dashed outline stay. */
+.cell[data-status="Sold out"] { --reach: 0.45rem; --reach-top: 0.45rem; }
+.cell[data-status="Sold out"] .part { background: var(--color-bg); color: var(--color-text); border: var(--rule) dashed var(--color-text); }
+.cell[data-status="Sold out"] .part::before { border-width: var(--rule) var(--cut-e, var(--rule)) 0 var(--rule); }
+
+.part-cover { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; margin-bottom: var(--space-2); border-radius: var(--radius); }
+/* category and status share a line, or the status goes above it */
+.part-head { display: flex; flex-wrap: wrap-reverse; align-items: baseline; gap: 0.3rem 0.6rem; margin: 0 var(--clear) 0.3rem 0; }
+.part-cat { min-width: 0; }
+.part-title { margin: 0; font-size: 1.1rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; }
+.part-title, .part-title a, .part-title a::after { border-radius: inherit; }
+.part-title a::after { content: ""; position: absolute; inset: 0; }
+.part-title a:focus-visible { outline: none; }
+.part-title a:focus-visible::after { outline: 3px solid var(--color-text); outline-offset: 5px; }
+.part-desc { margin: 0.35rem 0 0; font-size: 0.875rem; line-height: 1.35; }
+.part-foot { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.15rem var(--space-2); margin: auto 0 0; padding-top: 0.6rem; }
+.part-foot:empty { display: none; }
+.price { min-width: 0; font-size: var(--price-size); line-height: 1.05; letter-spacing: -0.01em; }
+.unit { min-width: 0; font-size: 0.8rem; line-height: 1.25; }
+.status { min-width: 0; margin-left: auto; }
+[data-status="Sold out"] .part-cover { filter: grayscale(1); }
+[data-status="Sold out"] .price { text-decoration: line-through; text-decoration-thickness: 0.08em; }
+
+/* Status: the matching label of four is shown */
+.st { display: none; padding: 0.15em 0.45em; border: 1.5px solid; border-radius: 2px; }
+.st-raw { display: inline-block; padding: 0; border: 0; }
+.st-season { border-style: double; border-width: 3px; }
+.st-out { background: var(--color-box); border-color: var(--color-box); color: var(--color-box-ink); }
+[data-status="To order"] .st-order, [data-status="Seasonal"] .st-season, [data-status="Sold out"] .st-out, .cell-main[data-status="In stock"] .st-in { display: inline-block; }
+:is([data-status="In stock"], [data-status="To order"], [data-status="Seasonal"], [data-status="Sold out"]) .st-raw { display: none; }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* a part twists on its gates under the pointer */
+  li.cell .part { transition: transform 0.15s ease-out; }
+  li.cell:hover .part { transform: rotate(-0.8deg); }
+}
+
+/* One product: the part large, its facts the next part along */
+
+.product, .not-found { margin-top: var(--space-4); }
+.sprue-product:not(:has(.cell-facts)), .not-found .sprue { max-width: 46rem; }
+.not-found .sprue { display: block; }
+.cell-main { flex: 7 1 22rem; }
+.cell-facts { flex: 5 1 16rem; }
+.cell-main .part, .not-found .part { --pad: clamp(0.8rem, 3vw, 1.5rem); padding-top: var(--pad); }
+.cell-main .part-title { font-size: clamp(1.7rem, 4.6vw, 2.75rem); line-height: 1.04; letter-spacing: -0.02em; }
+.cell-main .part-desc { margin-top: 0.6rem; max-width: var(--measure); font-size: 1.125rem; line-height: 1.45; }
+.cell-main .part-foot { padding-top: 1.25rem; }
+.cell-main .price { font-size: clamp(var(--price-size), 10vw, calc(var(--price-size) * 1.5)); }
+.cell-main .unit { font-size: 1rem; }
+.lost { margin: 0 0 var(--space-2); font-size: 4rem; line-height: 1; }
+.not-found .part-title { font-size: 1.6rem; }
+.not-found .part-desc { font-size: 1rem; }
+
+.details { margin: 0; padding: 0; list-style: none; font-variant-numeric: tabular-nums; }
+.details li { padding: 0.45rem 0; border-bottom: 1px solid; }
+.details li:first-child { padding-top: 0; padding-right: var(--clear); }
+.details li:last-child { padding-bottom: 0; border-bottom: 0; }
+.product-cover { display: block; max-width: min(100%, var(--measure)); height: auto; margin-top: var(--space-4); border: var(--rule) solid var(--color-line); }
+.product .prose { margin-top: var(--space-4); }
+.back { margin-top: var(--space-4); }
+
+/* Page text: the instructions */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .prose h3, .post-card h2 { margin: var(--space-4) 0 var(--space-2); font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; }
+.prose h2, .post-card h2 { font-size: 1.35rem; }
+.prose h3 { font-size: 1.05rem; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose ul > li::marker { color: var(--color-accent); }
+.prose img, .cover { display: block; max-width: 100%; height: auto; margin-bottom: var(--space-3); }
+.prose a[href^="tel:"] { font-weight: 700; white-space: nowrap; }
+.prose blockquote { padding-left: var(--space-3); border-left: var(--runner) solid var(--color-plastic); }
+.prose hr { height: var(--rule); margin: var(--space-4) 0; border: 0; background: var(--color-line); }
+.prose code { padding: 0.1em 0.3em; font-family: var(--font-mono); font-size: 0.9em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.45; background: var(--color-code-bg); }
+.prose pre code { padding: 0; background: none; }
+.prose table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-hair); }
+.prose th { font-size: 0.8rem; letter-spacing: var(--tracking); text-transform: uppercase; border-bottom: var(--rule) solid var(--color-line); }
+@media (max-width: 40em) {
+  .prose table { display: block; overflow-x: auto; overflow-wrap: normal; }
+  .prose th, .prose td { min-width: 7.5rem; }
+}
+
+/* Sections are numbered like the steps of an assembly */
+.steps { counter-reset: step; }
+.steps h2 { counter-increment: step; display: flex; align-items: start; gap: 0.6rem; }
+.steps h2::before { content: counter(step); flex: none; display: grid; place-items: center; width: 1.6rem; height: 1.6rem; background: var(--color-box); color: var(--color-box-ink); border-radius: 2px; font-size: 1rem; line-height: 1; }
+.home > .prose { max-width: none; margin-top: var(--space-5); padding-top: var(--space-4); border-top: var(--rule) solid var(--color-line); columns: 3 17rem; column-gap: var(--space-4); }
+.home > .prose > * { break-inside: avoid; }
+.home > .prose > :is(h2, h3) { break-after: avoid; }
+
+/* News list and page numbers */
+.post-list { max-width: var(--measure); margin: 0; padding: 0; list-style: none; border-top: var(--rule) solid var(--color-line); }
+.post-card { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-hair); }
+.post-card h2 { margin: 0; }
+.summary { margin: var(--space-1) 0 0; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; color: var(--color-muted); font-size: 0.8rem; }
+.pagination a { color: var(--color-text); }
+.empty { margin: 0; color: var(--color-muted); }
+
+/* The shop card: a ruled box, labels in black tabs */
+
+.shop-card { display: flex; flex-direction: column; margin-top: var(--space-5); border: var(--rule) solid var(--color-line); }
+.shop-card > div { min-width: 0; padding: 0 var(--space-3) var(--space-3); }
+.shop-card > div + div { border-top: var(--rule) solid var(--color-line); }
+.shop-card h2, .key-label { width: fit-content; margin: 0 0 var(--space-3) calc(-1 * var(--space-3)); padding: 0.3rem 0.6rem; background: var(--color-box); color: var(--color-box-ink); }
+.shop-note { margin: 0 0 var(--space-3); max-width: 36rem; }
+.shop-links { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: 0; }
+.shop-link {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.1rem;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.5rem 1.1rem 0.55rem 0.8rem;
+  background: var(--color-plastic);
+  color: var(--color-plastic-ink);
+  border-radius: var(--radius) var(--radius-big) var(--radius) var(--radius);
+  text-decoration: none;
+}
+.shop-link-value { font-size: 1.05rem; font-weight: 700; line-height: 1.25; text-decoration: underline; text-decoration-thickness: 1.5px; }
+.shop-phone .shop-link-value { font-size: 1.5rem; line-height: 1.1; }
+.shop-link:hover .shop-link-value { text-decoration-thickness: 3px; }
+.shop-hours dl { margin: 0; font-variant-numeric: tabular-nums; }
+.shop-hours dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 1px solid var(--color-hair); }
+.shop-hours dt { font-weight: 700; }
+.shop-hours dd { margin: 0 0 0 auto; text-align: right; text-wrap: balance; }
+address { font-style: normal; text-wrap: balance; }
+.key dl { padding-bottom: var(--space-3); }
+.key dl > div { padding-block: var(--space-2); }
+@media (min-width: 56rem) {
+  .shop-card { flex-direction: row; }
+  .shop-card > div + div { border-top: 0; border-left: var(--rule) solid var(--color-line); }
+  .shop-order { flex: 5 1 0; }
+  .shop-card > .shop-hours { flex: 4 1 0; }
+  .shop-address { flex: 3 1 0; }
+}
+
+/* Print: the parts outlined, the runner dropped */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-line: #000;
+    --color-hair: #999;
+    --color-plastic: #fff;
+    --color-plastic-ink: #000;
+    --color-box: #fff;
+    --color-box-ink: #000;
+    --color-code-bg: #fff;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .more, .back, .pagination, .cell::before, .cell::after, .part::before { display: none; }
+  main { min-height: 0; }
+  .sprue { gap: var(--space-2); padding: 0; overflow: visible; }
+  .cell { padding: 0; background: none; box-shadow: none; }
+  .part, .shop-link, .site-title { border: 1px solid var(--color-text); }
+  .steps h2::before, .shop-card h2, .st-out { border: 1px solid; }
+  .part, .shop-card, .post-card, .details li { break-inside: avoid; }
+  a { text-decoration: none; }
+}
