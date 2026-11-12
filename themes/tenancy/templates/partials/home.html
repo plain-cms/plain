@@ -1,0 +1,12 @@
+<article class="page home">
+  <header class="home-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  <p class="cabinet-label"><a href="/listings/">{{ strings.allListings }} <span aria-hidden="true">→</span></a></p>
+  {{#if page.body}}<div class="prose home-prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{> inquiry}}
+</article>

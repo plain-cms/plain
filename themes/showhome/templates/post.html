@@ -1,0 +1,16 @@
+<article class="post">
+  <header class="board">
+    <p class="meta"><time class="fig" datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{#if page.tagLinks}}<ul class="tags">{{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>{{/each}}</ul>
+    {{/if}}
+  </header>
+  {{#if page.cover}}<figure class="cover"><img src="{{ page.cover }}" alt="{{ page.title }}" decoding="async"></figure>
+  {{/if}}{{#if page.body}}<div class="cols cols-solo">
+    <div class="panel prose">
+{{{ page.content }}}
+    </div>
+  </div>
+  {{/if}}
+</article>

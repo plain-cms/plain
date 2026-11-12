@@ -1,0 +1,14 @@
+<li class="cottage" data-status="{{ item.status }}">
+  <h2 class="lintel"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  <div class="reveal">
+    <div class="sash">
+      <div class="pane pane-price">{{ item.price }}</div>
+      <div class="pane pane-status">{{#if item.status}}{{> status-labels}}{{/if}}</div>
+      <div class="pane pane-rooms">{{#if item.beds}}<span>{{ item.beds }} {{ strings.beds }}</span>{{/if}}{{#if item.baths}}<span>{{ item.baths }} {{ strings.baths }}</span>{{/if}}</div>
+      <div class="pane pane-area">{{ item.area }}</div>
+    </div>
+  </div>
+  {{#if item.address}}<p class="cottage-address">{{ item.address }}</p>
+  {{/if}}{{#if item.description}}<p class="cottage-note">{{ item.description }}</p>
+  {{/if}}
+</li>

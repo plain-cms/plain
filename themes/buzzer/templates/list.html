@@ -1,0 +1,24 @@
+<div class="house">
+  <section class="list">
+    <header class="page-head">
+      <h1>{{ page.title }}</h1>
+      {{#if tag}}<p class="lede">{{ strings.filedUnder }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}</p>
+      {{/if}}
+    </header>
+    {{#if items}}
+    <ol class="directory directory--posts">
+    {{#each items as item}}<li class="row">
+      {{#if item.dateFormatted}}<p class="row-address"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{/if}}<h2 class="row-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.description}}<p class="row-desc">{{ item.description }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+    </ol>
+    {{else}}
+    <p class="empty">{{ strings.nothingHere }}</p>
+    {{/if}}
+    {{> pagination}}
+  </section>
+  {{> door}}
+</div>

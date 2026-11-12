@@ -1,0 +1,267 @@
+:root {
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", "URW Palladio L", P052, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --color-bg: #f9faf6;
+  --color-paper: #ffffff;
+  --color-text: #1b1c19;
+  --color-muted: #575952;
+  --color-accent: #b0222b;
+  --color-line: #1b1c19;
+  --color-rule: #c6c8be;
+  --color-wash-rose: #f0d2ce;
+  --color-wash-straw: #ebdea9;
+  --color-wash-sky: #cddfea;
+  --color-wash-sage: #d2e0c6;
+  --color-hatch-pending: #b0222b;
+  --color-hatch-closed: #1b1c19;
+  --color-focus: #b0222b;
+  --color-code: #eceee6;
+  --color-mark: #ebdea9;
+  --text-s: 0.875rem;
+  --text-m: 1.125rem;
+  --text-l: 1.3rem;
+  --text-xl: clamp(1.75rem, 1.15rem + 2.1vw, 2.6rem);
+  --text-figure: clamp(1.6rem, 1.35rem + 0.7vw, 2.05rem);
+  --leading: 1.55;
+  --tracking-caps: 0.14em;
+  --measure: 36rem;
+  --page-width: 78rem;
+  --lot-min: 20.5rem;
+  --edge: 0.22rem;
+  --line: 1px;
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1.25rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1d2427;
+    --color-paper: #253034;
+    --color-text: #e6e8e2;
+    --color-muted: #aab2ac;
+    --color-accent: #ef8a7e;
+    --color-line: #d3d8d0;
+    --color-rule: #4a5659;
+    --color-wash-rose: #6a3a41;
+    --color-wash-straw: #645628;
+    --color-wash-sky: #2d4e63;
+    --color-wash-sage: #3b5639;
+    --color-hatch-pending: #ef8a7e;
+    --color-hatch-closed: #e6e8e2;
+    --color-focus: #f5b0a6;
+    --color-code: #253034;
+    --color-mark: #645628;
+  }
+}
+
+/* An auction sale plan. A listing is a lot: .parcel is the field (red edging,
+   wash inside), shaped by nth-child, under the plain .lot-box. The home page
+   opens on the plan itself, an SVG of fields with the title on the middle lot. */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { text-size-adjust: 100%; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-serif); font-size: var(--text-m); line-height: var(--leading); overflow-wrap: break-word; }
+a { color: var(--color-accent); text-decoration-thickness: var(--line); text-underline-offset: 0.16em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; box-shadow: 0 0 0 5px var(--color-paper); }
+::selection { background: var(--color-mark); color: var(--color-text); }
+img { max-width: 100%; height: auto; display: block; }
+h1, h2, h3, h4 { font-weight: 400; line-height: 1.18; hyphens: auto; text-wrap: balance; }
+
+.skip-link { position: absolute; left: var(--space-2); top: -4rem; z-index: 5; background: var(--color-paper); color: var(--color-text); padding: var(--space-1) var(--space-2); border: var(--line) solid var(--color-line); }
+.skip-link:focus { top: var(--space-2); }
+
+.site-title, .menu a, .sheet-label, .lot-place, .status, .inquiry h2, .imprint-name, .pagination, .meta, .tags, .lot-listed { font-style: normal; letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+
+/* ---- masthead: the title block of the plan ---- */
+.masthead { border-bottom: 5px double var(--color-line); background: var(--color-bg); }
+.masthead-in { max-width: var(--page-width); margin: 0 auto; padding: var(--space-3) 16px var(--space-2); display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4); }
+.site-title { color: var(--color-text); text-decoration: none; font-size: 1.2rem; line-height: 1.25; display: inline-flex; align-items: baseline; gap: var(--space-2); min-width: 0; }
+.north { flex: none; width: 0.65rem; height: 1.25rem; align-self: center; clip-path: polygon(50% 0, 100% 100%, 50% 76%, 0 100%); background: linear-gradient(90deg, var(--color-line) 50%, var(--color-accent) 50%); }
+.menu ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); }
+.menu a { color: var(--color-text); text-decoration: none; font-size: 0.8rem; padding: 0.35rem 0; display: inline-block; border-bottom: 2px solid transparent; }
+.menu a:hover { border-bottom-color: var(--color-rule); }
+.menu a[aria-current="page"] { color: var(--color-accent); border-bottom-color: var(--color-accent); }
+.masthead-phone { margin-left: auto; color: var(--color-text); font-size: 1.05rem; text-decoration-color: var(--color-accent); overflow-wrap: anywhere; }
+
+main { max-width: var(--page-width); margin: 0 auto; padding: 0 16px var(--space-5); }
+
+/* ---- page heads ---- */
+.page-head { padding: var(--space-4) 0 var(--space-3); }
+.page-head h1 { font-style: italic; font-size: var(--text-xl); margin: 0; max-width: 24em; }
+.lede { color: var(--color-muted); font-size: var(--text-l); line-height: 1.4; margin: var(--space-2) 0 0; max-width: var(--measure); }
+
+/* ---- the sheet: neat line with a cartouche ---- */
+.sheet { position: relative; border: var(--line) solid var(--color-line); outline: var(--line) solid var(--color-line); outline-offset: 4px; margin: var(--space-3) 5px var(--space-5); background: var(--color-paper); }
+.sheet-label { position: absolute; top: -0.85em; left: var(--space-3); margin: 0; padding: 0 var(--space-2); background: var(--color-bg); font-size: 0.8rem; line-height: 1.6; z-index: 2; max-width: calc(100% - 2 * var(--space-3)); }
+.sheet-label a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.plan { list-style: none; margin: 0; padding: var(--space-2); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--lot-min)), 1fr)); }
+
+/* ---- the home page: the sale plan, title lettered on the middle lot ---- */
+.survey { display: flex; align-items: center; justify-content: center; min-height: 26rem; margin-top: var(--space-4); padding: clamp(4rem, 1rem + 6vw, 5.5rem) clamp(1.25rem, 25% - 3rem, 20rem); }
+.survey-map { position: absolute; inset: 0; width: 100%; height: 100%; }
+.field { fill: var(--color-paper); stroke: var(--color-line); stroke-width: 1; vector-effect: non-scaling-stroke; stroke-linejoin: round; }
+.plot { stroke: var(--color-accent); stroke-width: 3.5; }
+.rose { fill: var(--color-wash-rose); }
+.straw { fill: var(--color-wash-straw); }
+.sky { fill: var(--color-wash-sky); }
+.sage { fill: var(--color-wash-sage); }
+.hatch { fill: url(#hatch); }
+.hatch-line { stroke: var(--color-hatch-pending); stroke-width: 2; }
+.beck { fill: none; stroke: var(--color-wash-sky); stroke-width: 6; vector-effect: non-scaling-stroke; }
+.survey div { position: relative; z-index: 1; width: 100%; max-width: 35rem; background: var(--color-paper); border: var(--line) solid var(--color-line); padding: var(--space-3) var(--space-4) var(--space-4); text-align: center; }
+.survey div h1 { font-style: italic; font-size: var(--text-xl); margin: 0 auto; max-width: 18em; hyphens: manual; }
+.survey div h1::after { content: ""; display: block; width: 4rem; margin: var(--space-3) auto 0; border-top: 2px solid var(--color-accent); }
+.survey div .lede { margin: var(--space-3) auto 0; }
+
+/* ---- a lot ---- */
+.lot { --wash: var(--color-wash-rose); position: relative; display: flex; align-items: center; justify-content: center; min-height: 16rem; padding: 3.4rem 21% 3rem; }
+.parcel { position: absolute; inset: var(--space-1); background: var(--color-accent); clip-path: polygon(2% 9%, 76% 0, 100% 21%, 95% 100%, 0 91%); }
+.parcel::after { content: ""; position: absolute; clip-path: inherit; inset: var(--edge); background-color: var(--wash); }
+.lot:nth-child(4n+2) { --wash: var(--color-wash-straw); }
+.lot:nth-child(4n+2) .parcel { clip-path: polygon(0 15%, 44% 0, 100% 7%, 100% 87%, 13% 100%); }
+.lot:nth-child(4n+3) { --wash: var(--color-wash-sky); }
+.lot:nth-child(4n+3) .parcel { clip-path: polygon(13% 0, 100% 5%, 87% 100%, 0 92%); }
+.lot:nth-child(4n) { --wash: var(--color-wash-sage); }
+.lot:nth-child(4n) .parcel { clip-path: polygon(0 4%, 63% 0, 100% 27%, 97% 100%, 4% 95%); }
+
+/* pending and taken lots: a hatched band across the head of the field */
+[data-status="Under offer"] .parcel::after, [data-status="Let agreed"] .parcel::after { background-image: repeating-linear-gradient(-45deg, var(--color-hatch-pending) 0 2px, transparent 2px 9px); background-size: 100% 3.2rem; background-repeat: no-repeat; }
+[data-status="Sold"] .parcel::after, [data-status="Booked"] .parcel::after { background-image: repeating-linear-gradient(-45deg, var(--color-hatch-closed) 0 1.5px, transparent 1.5px 8px), repeating-linear-gradient(45deg, var(--color-hatch-closed) 0 1.5px, transparent 1.5px 8px); background-size: 100% 3.2rem; background-repeat: no-repeat; }
+
+.lot-box { position: relative; z-index: 1; width: 100%; background: var(--color-paper); border: var(--line) solid var(--color-line); padding: var(--space-2) var(--space-2) var(--space-3); text-align: center; }
+.lot-place { font-size: 0.68rem; line-height: 1.45; color: var(--color-muted); margin: 0 0 var(--space-1); overflow-wrap: anywhere; }
+.lot-name { font-style: italic; font-size: 1.28rem; line-height: 1.22; margin: 0 0 var(--space-2); }
+.lot-name a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.lot-name a::after { content: ""; position: absolute; inset: 0; }
+.lot-figure, .lot-price { text-wrap: balance; }
+.lot-figure { font-size: var(--text-figure); line-height: 1.08; margin: 0; font-variant-numeric: lining-nums; letter-spacing: 0.01em; }
+/* an area breaks the same way on every lot: hectares, then acres beneath */
+.lot-figure--area { max-width: 10.5ch; margin-left: auto; margin-right: auto; hyphens: auto; }
+.lot-price { font-size: 1.12rem; line-height: 1.3; margin: var(--space-1) 0 0; }
+.lot-address { font-style: italic; color: var(--color-muted); margin: var(--space-2) 0 0; line-height: 1.35; }
+.facts { list-style: none; display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; font-size: var(--text-s); color: var(--color-muted); }
+.status { display: inline-block; margin: var(--space-2) 0 0; padding: 0.1rem 0.5rem; border: var(--line) solid currentColor; font-size: 0.72rem; line-height: 1.5; color: var(--color-text); }
+.status [data-for], .status-raw { display: none; }
+[data-status="Under offer"] .status, [data-status="Let agreed"] .status { color: var(--color-accent); border-style: dashed; }
+[data-status="Sold"] .status, [data-status="Booked"] .status { color: var(--color-muted); }
+.status:not([data-status="For sale"]):not([data-status="Under offer"]):not([data-status="Sold"]):not([data-status="To let"]):not([data-status="Let agreed"]):not([data-status="Available"]):not([data-status="Booked"]) .status-raw,
+[data-status="For sale"] [data-for="For sale"], [data-status="Under offer"] [data-for="Under offer"], [data-status="Sold"] [data-for="Sold"], [data-status="To let"] [data-for="To let"], [data-status="Let agreed"] [data-for="Let agreed"], [data-status="Available"] [data-for="Available"], [data-status="Booked"] [data-for="Booked"] { display: inline; }
+
+/* ---- a listing's own page: one lot, drawn large ---- */
+.lot--page { min-height: 24rem; padding: 4rem 12% 3.4rem; margin: var(--space-4) 0; }
+.lot--page .lot-box { max-width: 36rem; padding: var(--space-3) var(--space-4) var(--space-4); }
+.lot--page .lot-name { font-size: var(--text-xl); margin-bottom: var(--space-3); }
+.lot--page .lot-figure { font-size: clamp(2rem, 1.4rem + 2vw, 3.1rem); }
+.lot--page .lot-price { font-size: var(--text-l); }
+.lot--page .parcel { clip-path: polygon(0 10%, 64% 0, 100% 7%, 98% 100%, 3% 95%); }
+[data-slug^="b"], [data-slug^="f"], [data-slug^="j"], [data-slug^="n"], [data-slug^="r"], [data-slug^="v"], [data-slug^="z"] { --wash: var(--color-wash-straw); }
+[data-slug^="c"], [data-slug^="g"], [data-slug^="k"], [data-slug^="o"], [data-slug^="s"], [data-slug^="w"] { --wash: var(--color-wash-sky); }
+[data-slug^="d"], [data-slug^="h"], [data-slug^="l"], [data-slug^="p"], [data-slug^="t"], [data-slug^="x"] { --wash: var(--color-wash-sage); }
+.lot-listed { font-size: 0.72rem; color: var(--color-muted); margin: var(--space-3) 0 0; }
+
+.gallery { list-style: none; margin: 0 0 var(--space-4); padding: 0; display: grid; gap: var(--space-2); grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); }
+.gallery img, .cover img { width: 100%; border: var(--line) solid var(--color-line); }
+.cover { margin: 0 0 var(--space-4); max-width: 52rem; }
+.back { margin: var(--space-4) 0 0; font-style: italic; }
+
+/* ---- reading column + inquiry ---- */
+.cols { display: grid; gap: var(--space-4) var(--space-5); align-items: start; }
+.prose { max-width: var(--measure); min-width: 0; }
+.prose > :first-child { margin-top: 0; }
+.prose h2 { font-style: italic; font-size: 1.5rem; margin: var(--space-4) 0 var(--space-2); }
+.prose h3 { font-size: 1.15rem; letter-spacing: 0.08em; text-transform: uppercase; margin: var(--space-4) 0 var(--space-1); }
+.prose h4 { font-style: italic; font-size: 1.1rem; margin: var(--space-3) 0 var(--space-1); }
+.prose li { margin: 0.2rem 0; }
+.prose li > ul, .prose li > ol { margin: 0.2rem 0; }
+.prose blockquote { margin: var(--space-3) 0; padding: 0 0 0 var(--space-3); border-left: var(--edge) solid var(--color-accent); font-style: italic; }
+.prose hr { border: 0; border-top: var(--line) solid var(--color-line); margin: var(--space-4) 0; }
+.prose table { display: block; overflow-x: auto; border-collapse: collapse; margin: var(--space-3) 0; font-size: 1rem; }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: var(--space-1) var(--space-3) var(--space-1) 0; border-bottom: var(--line) solid var(--color-rule); }
+.prose th { font-weight: 400; font-style: italic; border-bottom-color: var(--color-line); }
+.prose code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-code); padding: 0.05em 0.25em; }
+.prose pre { font-family: var(--font-mono); background: var(--color-code); padding: var(--space-2) var(--space-3); overflow-x: auto; font-size: 0.85rem; line-height: 1.5; border-left: var(--edge) solid var(--color-rule); }
+.prose pre code { background: none; padding: 0; font-size: inherit; }
+.prose a[href^="tel:"], .prose a[href^="mailto:"], .mail { overflow-wrap: anywhere; }
+
+.inquiry { background: var(--color-paper); border: var(--line) solid var(--color-line); outline: var(--line) solid var(--color-line); outline-offset: 3px; margin: 4px; padding: var(--space-3); max-width: 26rem; }
+.inquiry h2 { font-size: 0.8rem; line-height: 1.5; margin: 0 0 var(--space-2); padding-bottom: var(--space-2); border-bottom: var(--line) solid var(--color-rule); }
+.inquiry p { margin: var(--space-2) 0 0; }
+.inquiry-phone a { color: var(--color-text); text-decoration: none; font-size: clamp(1.1rem, 0.85rem + 1.4vw, 1.35rem); line-height: 1.3; }
+.inquiry-verb { font-style: italic; }
+.tel { display: inline-block; max-width: 100%; }
+.inquiry-phone .tel { text-decoration: underline var(--color-accent) var(--line); text-underline-offset: 0.16em; }
+.inquiry-phone a:hover .tel { text-decoration-thickness: 2px; }
+.inquiry-hours, .inquiry-note { color: var(--color-muted); font-size: var(--text-s); line-height: 1.45; }
+.inquiry-note { font-style: italic; }
+
+/* ---- lists, pagination, posts ---- */
+.empty { font-style: italic; color: var(--color-muted); margin: var(--space-4) 0; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4); font-size: 0.8rem; margin: 0 0 var(--space-5); }
+.pagination span { color: var(--color-muted); }
+.post-list { list-style: none; margin: 0 0 var(--space-4); padding: 0; max-width: 44rem; border-top: var(--line) solid var(--color-line); }
+.post-list li { padding: var(--space-3) 0; border-bottom: var(--line) solid var(--color-rule); }
+.post-list h2 { font-style: italic; font-size: 1.4rem; margin: 0 0 var(--space-1); }
+.post-list h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.post-list p { margin: 0; }
+.meta { font-size: 0.75rem; color: var(--color-muted); margin: 0 0 var(--space-2); }
+.tags { list-style: none; margin: var(--space-3) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); font-size: 0.75rem; }
+
+/* ---- imprint: the agent's name at the foot of the sheet ---- */
+.imprint { border-top: 5px double var(--color-line); }
+.imprint-in { max-width: var(--page-width); margin: 0 auto; padding: var(--space-4) 16px var(--space-5); font-size: var(--text-s); line-height: 1.5; }
+.imprint p { margin: 0 0 var(--space-1); }
+.imprint-name { font-size: 0.85rem; }
+.imprint-hours { color: var(--color-muted); }
+.imprint a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.imprint-note { color: var(--color-muted); margin-top: var(--space-2); }
+.scale { display: block; width: min(12rem, 100%); height: 0.45rem; margin-bottom: var(--space-3); border: var(--line) solid var(--color-line); background: repeating-linear-gradient(90deg, var(--color-line) 0 25%, transparent 25% 50%); }
+
+@media (min-width: 40rem) {
+  .masthead-in, main, .imprint-in { padding-left: var(--space-4); padding-right: var(--space-4); }
+  .plan { padding: var(--space-3); }
+}
+@media (min-width: 60rem) {
+  .cols { grid-template-columns: minmax(0, var(--measure)) minmax(15rem, 22rem); }
+  .cols--single { grid-template-columns: minmax(0, 26rem); }
+  .imprint-in { display: grid; grid-template-columns: repeat(4, auto); gap: 0 var(--space-4); align-items: start; justify-content: start; }
+  .scale { grid-column: 1 / -1; }
+  .imprint-in > p, .imprint-note { margin: 0; }
+  .imprint-note { grid-column: 2 / -1; }
+}
+@media (max-width: 30rem) {
+  .plan { padding: var(--space-1) 0; }
+  .lot { padding-left: 12%; padding-right: 12%; min-height: 14rem; }
+  .survey { min-height: 0; }
+  .survey div { padding: var(--space-3) var(--space-2); }
+  .survey div .lede { font-size: 1.1rem; }
+  .lot--page { padding: 3.8rem 11% 3.2rem; }
+  .lot--page .lot-box { padding: var(--space-2) var(--space-3) var(--space-3); }
+  .masthead-phone { margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-paper: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-line: #000000;
+    --color-rule: #999999;
+    --color-focus: #000000;
+  }
+  body { font-size: 11pt; }
+  .skip-link, .menu, .back, .pagination, .lot-name a::after { display: none; }
+  .masthead-phone { margin-left: 0; }
+  .parcel, .survey-map { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .lot, .inquiry { break-inside: avoid; }
+  a { text-decoration: none; color: var(--color-text); }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; overflow-wrap: anywhere; }
+  .cols { display: block; }
+  .inquiry { margin-top: 1rem; }
+}

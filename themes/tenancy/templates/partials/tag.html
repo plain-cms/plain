@@ -1,0 +1,7 @@
+<li class="hang" data-status="{{ item.status }}"><span class="hook" aria-hidden="true"></span><div class="fob"><div class="insert">
+  {{#if item.status}}<p class="status"><span class="status-raw">{{ item.status }}</span>{{> status-words}}</p>
+  {{/if}}<h2 class="tag-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.address}}<p class="tag-address">{{ item.address }}</p>
+  {{/if}}{{#if item.price}}<p class="tag-price">{{ item.price }}</p>
+  {{/if}}<ul class="facts">{{#if item.beds}}<li><b>{{ item.beds }}</b> {{ strings.beds }}</li>{{/if}}{{#if item.baths}}<li><b>{{ item.baths }}</b> {{ strings.baths }}</li>{{/if}}{{#if item.area}}<li><b>{{ item.area }}</b></li>{{/if}}</ul>
+</div></div></li>

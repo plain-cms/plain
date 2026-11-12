@@ -1,0 +1,30 @@
+<article class="plot" data-status="{{ page.status }}">
+  <header class="plot-head">
+    <div class="plot-name">
+      <h1>{{ page.title }}</h1>
+      {{#if page.address}}<p class="plot-addr">{{ page.address }}</p>
+      {{/if}}{{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </div>
+    {{#if page.price}}{{> plate}}{{else}}{{#if page.status}}{{> plate}}{{/if}}{{/if}}
+    <dl class="facts">
+      <div><dt>{{ strings.colBeds }}</dt><dd>{{#if page.beds}}<b>{{ page.beds }}</b> <span class="unit">{{ strings.beds }}</span>{{else}}{{> gap}}{{/if}}</dd></div>
+      <div><dt>{{ strings.colBaths }}</dt><dd>{{#if page.baths}}<b>{{ page.baths }}</b> <span class="unit">{{ strings.baths }}</span>{{else}}{{> gap}}{{/if}}</dd></div>
+      <div><dt>{{ strings.colArea }}</dt><dd>{{#if page.area}}{{ page.area }}{{else}}{{> gap}}{{/if}}</dd></div>
+      {{#if page.dateFormatted}}<div><dt>{{ strings.listedOn }}</dt><dd><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></dd></div>
+      {{/if}}
+    </dl>
+  </header>
+  {{#if page.photos}}<ul class="gallery" aria-label="{{ strings.photos }}">
+    {{#each page.photos as photo}}<li><img src="{{ photo }}" alt="{{ page.title }}" loading="lazy" decoding="async"></li>
+    {{/each}}
+  </ul>
+  {{else}}{{#if page.cover}}<figure class="cover"><img src="{{ page.cover }}" alt="{{ page.title }}" decoding="async"></figure>
+  {{/if}}{{/if}}<div class="cols">
+    {{#if page.body}}<div class="panel prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}{{> inquiry}}
+  </div>
+  <p class="back"><a href="/listings/"><span aria-hidden="true">←</span> {{ strings.allListings }}</a></p>
+</article>

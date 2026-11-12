@@ -1,0 +1,371 @@
+/* Hideaway — holiday cottages let by the week.
+   The page is a whinstone wall after dark. Every cottage is a window in it:
+   a stone lintel carrying its name, a deep reveal, a white sash of four panes
+   holding price, status, rooms and area. Free cottages glow lamp-amber, pending
+   ones burn low, taken ones go dark. By day (light scheme) the wall is grey harl
+   and the glass is sky-pale with the lamp still warm behind it: night is the default, so where other themes have
+   a (prefers-color-scheme: dark) block this one has light. Tokens only. */
+:root {
+  --font-text: "Iowan Old Style", "Palatino Linotype", Palatino, "URW Palladio L", P052, "Book Antiqua", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3rem;
+  --text-xl: clamp(1.4rem, 1.2rem + 0.9vw, 1.8rem);
+  --text-xxl: clamp(1.9rem, 1.4rem + 2.2vw, 2.75rem);
+  --leading: 1.6;
+  --leading-tight: 1.2;
+  --tracking-caps: 0.06em;
+  --measure: 38rem;
+  --page-width: 78rem;
+  --gutter: clamp(1rem, 0.4rem + 2.6vw, 2.25rem);
+  --gap: 2.5rem;
+  --bar: 5px;
+  --margin: 0.55rem;
+  --depth: 0.7rem;
+  --pane-height: 6.75rem;
+  --color-bg: #12171e;
+  --color-text: #ebe5d6;
+  --color-muted: #9aa0a8;
+  --color-accent: #f0a843;
+  --color-accent-ink: #120d06;
+  --color-stone: #2b333d;
+  --color-reveal: #080a0e;
+  --color-bar: #f2efe6;
+  --color-glow: rgba(240,168,67,0.3);
+  --color-lit: #e99a35;
+  --color-lit-core: #ffd27a;
+  --color-low: #b0742f;
+  --color-low-core: #c98a3e;
+  --color-dark: #1a2129;
+  --color-dark-ink: #b8bec6;
+  --color-pane-ink: #120d06;
+  --color-sheen: rgba(255,255,255,0.06);
+  --color-fleck: rgba(255,255,255,0.04);
+  --color-rule: #3a434e;
+  --color-code-bg: #0b0e13;
+  --color-mark: rgba(240,168,67,0.35);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: #c6c7c2;
+    --color-text: #1a1e23;
+    --color-muted: #43484e;
+    --color-accent: #7b4a12;
+    --color-accent-ink: #f7f3ea;
+    --color-stone: #dedacf;
+    --color-reveal: #55595e;
+    --color-bar: #fbfaf5;
+    --color-glow: rgba(214,138,40,0.3);
+    --color-lit: #cddbe2;
+    --color-lit-core: #f7dfa8;
+    --color-low: #a2acb1;
+    --color-low-core: #c4b89a;
+    --color-dark: #2a3139;
+    --color-dark-ink: #d5d9dc;
+    --color-pane-ink: #14181c;
+    --color-sheen: rgba(255,255,255,0.08);
+    --color-fleck: rgba(0,0,0,0.055);
+    --color-rule: #8a8d8b;
+    --color-code-bg: #b6b8b3;
+    --color-mark: rgba(123,74,18,0.25);
+  }
+}
+
+/* ---------- ground ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background-color: var(--color-bg);
+  background-image: radial-gradient(var(--color-fleck) 0.7px, transparent 1.3px), radial-gradient(var(--color-fleck) 0.6px, transparent 1.1px);
+  background-size: 5px 7px, 9px 4px;
+  background-position: 0 0, 2px 3px;
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--text-m);
+  line-height: var(--leading);
+  font-variant-numeric: oldstyle-nums;
+  overflow-wrap: break-word;
+}
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; }
+::selection { background: var(--color-mark); }
+h1, h2, h3, h4 { font-weight: 400; line-height: var(--leading-tight); hyphens: auto; overflow-wrap: break-word; margin: 0; }
+img { max-width: 100%; height: auto; display: block; }
+.mail, .tel { overflow-wrap: anywhere; }
+.lamp .tel { white-space: nowrap; }
+
+.skip-link { position: absolute; left: var(--gutter); top: -4rem; padding: 0.5rem 0.9rem; background: var(--color-accent); color: var(--color-accent-ink); z-index: 2; }
+.skip-link:focus { top: 0.5rem; }
+
+/* ---------- masthead and footer: a string course of stone ---------- */
+.masthead, .colophon, main { max-width: var(--page-width); margin-inline: auto; padding-inline: var(--gutter); }
+.masthead {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.4rem 1.75rem;
+  padding-block: 1.1rem 1.25rem; position: relative;
+}
+.masthead::after, .colophon::before {
+  content: ""; position: absolute; left: var(--gutter); right: var(--gutter); height: 0.35rem;
+  background: var(--color-stone); box-shadow: 0 0.15rem 0 var(--color-reveal);
+}
+.masthead::after { bottom: 0; }
+.colophon::before { top: 0; }
+.site-title {
+  font-size: var(--text-l); text-decoration: none;
+  font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps);
+  margin-right: auto; max-width: 100%;
+}
+.menu ul { display: flex; flex-wrap: wrap; gap: 0.2rem 1.25rem; list-style: none; margin: 0; padding: 0; }
+.menu a { display: inline-block; padding-block: 0.3rem; text-decoration-color: var(--color-muted); }
+.menu a[aria-current="page"] { text-decoration: underline 3px var(--color-accent); text-underline-offset: 0.3em; }
+.masthead-phone { white-space: nowrap; font-variant-numeric: lining-nums; }
+
+main { padding-block: 2rem 3.5rem; }
+
+.colophon {
+  position: relative;
+  padding-block: 1.85rem 2.5rem;
+  display: flex; flex-wrap: wrap; gap: 0.3rem 2rem;
+  font-size: var(--text-s); color: var(--color-muted);
+}
+.colophon p { margin: 0; }
+.colophon-name { color: var(--color-text); font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); font-size: var(--text-m); flex-basis: 100%; }
+.colophon-note { flex-basis: 100%; }
+.colophon-note p { margin: 0.25rem 0 0; }
+
+/* ---------- page heads ---------- */
+.page-head { margin-bottom: 2rem; max-width: 48rem; }
+.page-cols > .page-head { margin-bottom: 0; }
+.page-head h1 { font-size: var(--text-xxl); letter-spacing: -0.005em; }
+.lede { font-size: var(--text-l); line-height: 1.4; color: var(--color-muted); margin: 0.75rem 0 0; font-style: italic; max-width: var(--measure); }
+.empty { font-style: italic; color: var(--color-muted); }
+
+/* ---------- the lane: one window per cottage ---------- */
+.lane {
+  list-style: none; margin: 0 0 3rem; padding: 0;
+  display: grid; gap: var(--gap) calc(var(--gap) * 0.75);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
+  align-items: start;
+}
+.cottage { --_horn: 0.6rem; position: relative; padding-inline: var(--_horn); max-width: 24rem; }
+.lintel {
+  background: var(--color-stone);
+  padding: 0.55rem 0.9rem 0.6rem; margin-inline: calc(-1 * var(--_horn));
+  text-align: center; font-size: var(--text-l); line-height: var(--leading-tight);
+  font-variant-caps: small-caps; letter-spacing: 0.03em;
+  box-shadow: 0 0.2rem 0 var(--color-reveal);
+}
+.lintel a { text-decoration: none; }
+.lintel a::after { content: ""; position: absolute; inset: 0; z-index: 2; }
+.cottage:hover .lintel a { text-decoration: underline; text-decoration-color: var(--color-accent); }
+
+.reveal {
+  border-inline: var(--margin) solid var(--color-stone);
+  border-bottom: 0.8rem solid var(--color-stone);
+  background: var(--color-reveal);
+  padding: var(--depth) var(--depth) 0;
+  box-shadow: inset 0 0 1.6rem var(--color-glow);
+  position: relative;
+}
+.reveal::after {
+  content: ""; position: absolute; left: calc(-1 * var(--margin) - var(--_horn)); right: calc(-1 * var(--margin) - var(--_horn));
+  bottom: -0.8rem; height: 0.8rem; background: var(--color-stone);
+  box-shadow: 0 0.3rem 0 var(--color-reveal);
+}
+.sash {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  border: var(--bar) solid var(--color-bar);
+  background-color: var(--color-lit);
+  background-image: radial-gradient(ellipse 75% 65% at 50% 58%, var(--color-lit-core), var(--color-lit));
+  color: var(--color-pane-ink);
+}
+.pane {
+  min-height: var(--pane-height);
+  padding: 0.5rem;
+  border: calc(var(--bar) * 0.5) solid var(--color-bar);
+  margin: 0;
+  line-height: var(--leading-tight);
+  font-variant-numeric: lining-nums;
+  hyphens: manual;
+}
+/* the meeting rail: a thicker bar between the upper and lower sash */
+.sash > :nth-child(-n+2) { border-bottom-width: var(--bar); }
+.sash > :nth-child(n+3) { border-top-width: var(--bar); }
+/* price and status share one size and one first baseline across the upper panes */
+.pane-price, .status { font-size: 1rem; }
+.pane-price { text-wrap: balance; }
+.pane-rooms span { display: block; }
+.status { font-variant-caps: all-small-caps; letter-spacing: 0.05em; }
+.pane-status { hyphens: auto; }
+
+/* pending: the lamp burns low */
+[data-status="Under offer"] .sash, [data-status="Let agreed"] .sash {
+  background-color: var(--color-low);
+  background-image: radial-gradient(ellipse 60% 50% at 50% 60%, var(--color-low-core), var(--color-low));
+}
+[data-status="Under offer"] .reveal, [data-status="Let agreed"] .reveal { box-shadow: inset 0 0 0.8rem var(--color-glow); }
+/* closed: the window goes dark, one reflection across the glass */
+[data-status="Sold"] .sash, [data-status="Booked"] .sash {
+  background-color: var(--color-dark);
+  background-image: linear-gradient(120deg, transparent 0 22%, var(--color-sheen) 22% 48%, transparent 48% 100%);
+  color: var(--color-dark-ink);
+}
+[data-status="Sold"] .reveal, [data-status="Booked"] .reveal { box-shadow: none; }
+
+/* status words: every value printed, the matching one shown */
+.status [data-for],
+:is([data-status="For sale"], [data-status="Under offer"], [data-status="Sold"], [data-status="To let"],
+  [data-status="Let agreed"], [data-status="Available"], [data-status="Booked"]) .status-raw { display: none; }
+[data-status="For sale"] [data-for="For sale"],
+[data-status="Under offer"] [data-for="Under offer"],
+[data-status="Sold"] [data-for="Sold"],
+[data-status="To let"] [data-for="To let"],
+[data-status="Let agreed"] [data-for="Let agreed"],
+[data-status="Available"] [data-for="Available"],
+[data-status="Booked"] [data-for="Booked"] { display: inline; }
+
+.cottage-address { margin: 1.35rem 0 0; font-style: italic; color: var(--color-muted); font-size: var(--text-s); }
+.cottage-note { margin: 0.35rem 0 0; font-size: var(--text-s); line-height: 1.5; }
+.reveal + .cottage-note { margin-top: 1.35rem; }
+
+/* ---------- one cottage ---------- */
+.stay { display: grid; gap: 2rem 3.5rem; align-items: start; }
+.stay-window { overflow: visible; max-width: 27rem; width: 100%; }
+.stay-window .lintel { font-size: var(--text-xl); padding-block: 0.8rem; }
+.stay .pane { min-height: 8.5rem; padding: 0.75rem 0.6rem; }
+.stay .pane-price, .stay .status { font-size: clamp(1rem, 0.8rem + 0.6vw, 1.125rem); }
+@media (min-width: 52rem) { .stay { grid-template-columns: minmax(0, 26rem) minmax(0, 1fr); } }
+.stay-text { min-width: 0; }
+.stay-text .lede { margin-top: 0; color: var(--color-text); }
+.stay-address { margin: 1rem 0 0; font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); font-size: var(--text-l); line-height: 1.3; }
+.stay-listed { margin: 0.4rem 0 0; color: var(--color-muted); font-size: var(--text-s); }
+.photos { list-style: none; padding: 0; margin: 1.75rem 0 0; display: grid; gap: var(--bar); grid-template-columns: repeat(auto-fill, minmax(min(100%, 11rem), 1fr)); background: var(--color-bar); border: var(--bar) solid var(--color-bar); }
+.photos img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 4 / 3; }
+.photo-single { margin: 1.75rem 0 0; border: var(--bar) solid var(--color-bar); max-width: var(--measure); }
+.back { margin: 2rem 0 0; font-size: var(--text-s); }
+.back a::before { content: "\2190\00a0"; }
+
+/* ---------- reading text ---------- */
+.page-cols { display: grid; gap: 2rem 3.5rem; align-items: start; grid-template-areas: "head" "house" "body"; }
+.page-cols > * { grid-area: body; }
+.page-cols > .page-head { grid-area: head; }
+.page-cols > .house { grid-area: house; }
+@media (min-width: 56rem) {
+  .page-cols { grid-template-columns: minmax(0, var(--measure)) minmax(17rem, 28rem); justify-content: space-between; grid-template-areas: "head house" "body house"; grid-template-rows: auto 1fr; }
+}
+.prose { max-width: var(--measure); min-width: 0; }
+.stay .prose { margin-top: 1.75rem; }
+.prose > :first-child { margin-top: 0; }
+.prose h2 { font-size: var(--text-xl); margin: 2.2rem 0 0.6rem; }
+.prose h3 { font-size: var(--text-l); margin: 1.8rem 0 0.4rem; font-variant-caps: small-caps; letter-spacing: 0.03em; }
+.prose h4 { font-size: var(--text-m); margin: 1.5rem 0 0.3rem; font-style: italic; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 1rem; }
+.prose ul, .prose ol { padding-left: 1.3rem; }
+.prose li + li { margin-top: 0.25rem; }
+.prose a { overflow-wrap: anywhere; }
+.prose strong { font-weight: 700; }
+.prose blockquote { margin-left: 0; padding: 0.2rem 0 0.2rem 1.1rem; border-left: 0.35rem solid var(--color-stone); font-style: italic; color: var(--color-muted); }
+.prose hr { border: 0; height: 0.35rem; background: var(--color-stone); margin: 2rem 0; }
+.prose code { font-family: var(--font-mono); font-size: 0.88em; background: var(--color-code-bg); padding: 0.05rem 0.25rem; }
+.prose pre { background: var(--color-code-bg); padding: 0.8rem 1rem; overflow-x: auto; }
+.prose pre code { padding: 0; background: none; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: lining-nums tabular-nums; hyphens: manual; }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: 0.45rem 1.25rem 0.45rem 0; border-bottom: 1px solid var(--color-rule); min-width: 7rem; }
+.prose th { font-weight: 400; font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); border-bottom: 2px solid var(--color-stone); }
+.prose img { margin: 1rem 0; }
+.way-back { padding-left: 1.3rem; }
+
+/* ---------- the inquiry box: lamp on, door open ---------- */
+.inquiry {
+  border: 0.35rem solid var(--color-stone);
+  padding: 1.2rem 1.25rem 1.3rem;
+  min-width: 0;
+}
+.stay .inquiry, .listings .inquiry { margin-top: 2.5rem; max-width: var(--measure); }
+.inquiry h2 { font-size: var(--text-l); font-variant-caps: small-caps; letter-spacing: 0.03em; }
+.inquiry p { margin: 0.6rem 0 0; }
+.inquiry-hours, .inquiry-note { font-size: var(--text-s); color: var(--color-muted); }
+.inquiry-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 0.75rem; }
+.inquiry-actions:empty { display: none; }
+.lamp {
+  display: inline-block; padding: 0.65rem 1rem; min-height: 2.75rem; max-width: 100%;
+  background: var(--color-accent); color: var(--color-accent-ink);
+  text-decoration: none; font-variant-numeric: lining-nums;
+  box-shadow: 0 0 1.2rem var(--color-glow);
+}
+.lamp:hover { text-decoration: underline; text-decoration-color: currentColor; }
+.inquiry-mail { max-width: 100%; }
+
+/* the owner's own window, lamp lit: the inquiry box on every page */
+.house { --_horn: 0.6rem; border: 0; padding: 0 var(--_horn); width: 100%; max-width: 28rem; }
+.house .lintel { margin-bottom: 0; font-size: var(--text-l); }
+.house .pane { margin: 0; min-height: 9.5rem; font-size: var(--text-s); line-height: 1.35; }
+.house .pane a { display: block; text-decoration-color: currentColor; }
+.house .pane a:hover { text-decoration-thickness: 2px; }
+.pane-label { display: block; font-variant-caps: all-small-caps; letter-spacing: 0.05em; font-size: var(--text-m); line-height: var(--leading-tight); margin-bottom: 0.2rem; }
+.house .tel { font-size: var(--text-m); }
+.house .reveal::after { left: calc(-1 * var(--margin) - var(--_horn)); right: calc(-1 * var(--margin) - var(--_horn)); }
+
+/* ---------- journal ---------- */
+.notes { list-style: none; margin: 0; padding: 0; max-width: var(--measure); }
+.note { padding-block: 1.2rem; border-bottom: 1px solid var(--color-rule); }
+.note h2 { font-size: var(--text-xl); }
+.note p { margin: 0.4rem 0 0; }
+.note-date { margin: 0 0 0.3rem; color: var(--color-muted); font-size: var(--text-s); font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); }
+.tags { list-style: none; margin: 1rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; font-size: var(--text-s); }
+.post-cover { margin: 0 0 2rem; }
+
+.pager { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; align-items: baseline; margin: 0 0 2rem; color: var(--color-muted); }
+.pager a { color: var(--color-text); }
+
+@media (max-width: 30rem) {
+  .cottage, .house { --_horn: 0.35rem; }
+  .reveal { border-inline-width: 0.4rem; padding: 0.45rem 0.45rem 0; }
+  .pane, .stay .pane { padding: 0.45rem 0.5rem; }
+  .reveal::after { left: calc(-0.4rem - var(--_horn)); right: calc(-0.4rem - var(--_horn)); }
+  .menu ul { gap: 0.1rem 1rem; }
+  .masthead-phone { flex-basis: 100%; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a { transition: text-decoration-color 0.15s ease; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-accent-ink: #000000;
+    --color-stone: #ffffff;
+    --color-reveal: #ffffff;
+    --color-bar: #000000;
+    --color-glow: rgba(0,0,0,0);
+    --color-lit: #ffffff;
+    --color-lit-core: #ffffff;
+    --color-low: #ffffff;
+    --color-low-core: #ffffff;
+    --color-dark: #ffffff;
+    --color-dark-ink: #000000;
+    --color-pane-ink: #000000;
+    --color-sheen: rgba(0,0,0,0);
+    --color-fleck: rgba(0,0,0,0);
+    --color-rule: #999999;
+    --color-code-bg: #ffffff;
+  }
+  .menu, .skip-link, .back { display: none; }
+  .masthead, .colophon { border-color: var(--color-text); }
+  .lintel { border-bottom: 1px solid var(--color-text); }
+  .lamp { background: none; border: 1px solid var(--color-text); box-shadow: none; }
+  .cottage, .inquiry { break-inside: avoid; }
+  .reveal { border-color: var(--color-text); border-width: 0 1px 1px; }
+  .reveal::after { display: none; }
+  main { padding-block: 1rem; }
+}

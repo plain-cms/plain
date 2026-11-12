@@ -1,0 +1,33 @@
+<div class="house">
+  <article class="listing">
+    <header class="page-head listing-head">
+      {{#if page.status}}<p class="status" data-status="{{ page.status }}"><span class="status-raw">{{ page.status }}</span>{{> status-labels}}</p>
+      {{/if}}<h1>{{ page.title }}</h1>
+      {{#if page.address}}<p class="listing-address">{{ page.address }}</p>
+      {{/if}}{{#if page.price}}<p class="listing-price">{{ page.price }}</p>
+      {{/if}}{{#if page.beds}}<ul class="facts">{{> facts-page}}</ul>
+      {{else}}{{#if page.baths}}<ul class="facts">{{> facts-page}}</ul>
+      {{else}}{{#if page.area}}<ul class="facts">{{> facts-page}}</ul>
+      {{/if}}{{/if}}{{/if}}{{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}{{#if page.dateFormatted}}<p class="listed">{{ strings.listedOn }} <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+      {{/if}}
+    </header>
+    {{#if page.photos}}<ul class="gallery" aria-label="{{ strings.photos }}">
+      {{#each page.photos as photo}}<li><img src="{{ photo }}" alt="{{ page.title }}" loading="lazy" decoding="async"></li>
+      {{/each}}
+    </ul>
+    {{else}}{{#if page.cover}}<figure class="cover"><img src="{{ page.cover }}" alt="{{ page.title }}" decoding="async"></figure>
+    {{/if}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}<p class="back"><a href="/listings/">← {{ strings.allListings }}</a></p>
+  </article>
+  <aside class="door" aria-labelledby="door-heading">
+    <div class="plate">
+      <h2 class="plate-head" id="door-heading">{{ strings.doorHeading }}</h2>
+      {{> pushes}}
+      <p class="plate-note">{{ strings.doorNote }}</p>
+    </div>
+    {{> nameplate}}
+  </aside>
+</div>

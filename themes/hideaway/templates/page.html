@@ -1,0 +1,14 @@
+<article class="page">
+  <div class="page-cols">
+    <header class="page-head">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </header>
+    {{> house}}
+    {{#if page.body}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </div>
+</article>

@@ -1,0 +1,247 @@
+:root {
+  --font-engraved: Copperplate, "Copperplate Gothic", "Copperplate Gothic Light", "Bank Gothic", "Helvetica Neue", Arial, sans-serif;
+  --font-body: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "Segoe UI", "DejaVu Sans", sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --text-s: 0.9rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: clamp(1.35rem, 1.1rem + 1vw, 1.8rem);
+  --text-xxl: clamp(1.75rem, 1.1rem + 2.6vw, 3.1rem);
+  --text-price: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+  --tracking-caps: 0.14em;
+  --leading: 1.6;
+  --color-bg: #d2b36b;
+  --color-text: #17120a;
+  --color-muted: #4a3b1c;
+  --color-accent: #634c00;
+  --color-brush: rgba(255,248,225,0.16);
+  --color-groove: #7d6431;
+  --color-sheen: rgba(255,246,214,0.55);
+  --color-shade: rgba(64,44,6,0.32);
+  --color-plate: #dcc17f;
+  --color-plate-edge: #6e5523;
+  --color-hole: #1b150b;
+  --color-ebonite: #141210;
+  --color-ebonite-hi: #4a4540;
+  --color-lamp: #ffd23c;
+  --color-glow: rgba(255,206,48,0.55);
+  --color-slot: rgba(74,52,10,0.17);
+  --color-code-bg: rgba(60,42,8,0.12);
+  --color-mark: #ffe27a;
+  --measure: 40rem;
+  --page-width: 74rem;
+  --door-width: 22.5rem;
+  --grille-size: 9.5rem;
+  --push-size: 2.75rem;
+  --radius: 0.4rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1e1910;
+    --color-text: #ecdcae;
+    --color-muted: #b4a173;
+    --color-accent: #ffcc33;
+    --color-brush: rgba(0,0,0,0.18);
+    --color-groove: #5d4c2a;
+    --color-sheen: rgba(0,0,0,0.6);
+    --color-shade: rgba(0,0,0,0.55);
+    --color-plate: #30281a;
+    --color-plate-edge: #0c0a06;
+    --color-hole: #050403;
+    --color-ebonite: #0b0a09;
+    --color-ebonite-hi: #3a3631;
+    --color-lamp: #ffd447;
+    --color-glow: rgba(255,200,40,0.7);
+    --color-slot: rgba(0,0,0,0.38);
+    --color-code-bg: rgba(255,220,140,0.08);
+    --color-mark: #6b5310;
+  }
+}
+
+/* Satin brass, brushed; text is black-filled engraving with a light catch. */
+*, *::before, *::after { box-sizing: border-box; }
+html { text-size-adjust: 100%; }
+body { margin: 0; background-color: var(--color-bg); background-image: repeating-linear-gradient(180deg, var(--color-brush) 0 1px, transparent 1px 3px); color: var(--color-text); font-family: var(--font-body); font-size: var(--text-m); line-height: var(--leading); overflow-wrap: break-word; }
+::selection { background: var(--color-mark); color: var(--color-text); }
+a { color: inherit; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 3px; }
+:focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; box-shadow: 0 0 0 3px var(--color-lamp); border-radius: 2px; }
+img { max-width: 100%; height: auto; }
+
+h1, h2, h3, h4, .site-title, .plate-head, .row-title { font-family: var(--font-engraved); font-weight: 400; text-shadow: 0 1px 0 var(--color-sheen); hyphens: auto; hyphenate-limit-chars: 10 4 4; overflow-wrap: break-word; }
+
+.skip-link { position: absolute; left: 1rem; top: -4rem; padding: 0.6rem 1rem; background: var(--color-plate); border: 1px solid var(--color-plate-edge); z-index: 2; }
+.skip-link:focus { top: 1rem; }
+
+/* Masthead: the house name engraved over a double groove. */
+.fascia { border-bottom: 1px solid var(--color-groove); box-shadow: 0 1px 0 var(--color-sheen); }
+.fascia-inner { max-width: var(--page-width); margin: 0 auto; padding: 1.1rem 1rem 0.9rem; display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 2.25rem; }
+.site-title { font-size: var(--text-l); letter-spacing: 0.06em; line-height: 1.2; text-decoration: none; }
+.menu ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0 1.4rem; }
+.menu a { display: inline-block; padding: 0.55rem 0 0.4rem; font-family: var(--font-engraved); font-size: 0.82rem; letter-spacing: var(--tracking-caps); text-transform: uppercase; text-decoration: none; border-bottom: 3px solid transparent; }
+.menu a:hover { border-bottom-color: var(--color-groove); }
+.menu a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+.fascia-phone { display: inline-flex; align-items: center; gap: 0.65rem; font-weight: 600; text-decoration: none; padding: 0.4rem 0; }
+.pip { flex: none; width: 0.85rem; height: 0.85rem; border-radius: 50%; background: var(--color-ebonite); box-shadow: 0 0 0 2px var(--color-lamp), 0 0 6px 2px var(--color-glow); }
+
+/* Every page ends at the door: the plate beside (or under) the content. */
+main { max-width: var(--page-width); margin: 0 auto; padding: 2.25rem 1rem 4rem; }
+.house { display: grid; grid-template-columns: minmax(0, 1fr); gap: 3rem; }
+@media (min-width: 48rem) { .fascia-phone { margin-left: auto; } }
+@media (min-width: 60rem) {
+  .house { grid-template-columns: minmax(0, 1fr) var(--door-width); gap: 4.5rem; align-items: start; }
+}
+@media (min-width: 60rem) and (min-height: 48rem) {
+  .door { position: sticky; top: 1.5rem; }
+}
+
+.page-head { margin-bottom: 2rem; }
+.page-head h1 { font-size: var(--text-xxl); line-height: 1.06; letter-spacing: 0.015em; margin: 0 0 0.9rem; max-width: 22em; }
+.lede { font-size: var(--text-l); line-height: 1.45; margin: 0; max-width: var(--measure); }
+.house--home { --grille-size: 11rem; }
+.house--home .page-head h1 { font-size: clamp(2rem, 1.1rem + 3.4vw, 3.6rem); line-height: 1; letter-spacing: 0.01em; }
+
+/* On the home page the hand-written list of rooms reads like the directory:
+   plain engraved rows, numbered, rule under each. */
+.house--home .prose > ul { list-style: none; padding: 0; counter-reset: teaser; border-top: 1px solid var(--color-groove); box-shadow: inset 0 1px 0 var(--color-sheen); }
+.house--home .prose > ul > li { counter-increment: teaser; position: relative; margin: 0; padding: 0.6rem 0 0.65rem 2.75rem; border-bottom: 1px solid var(--color-groove); box-shadow: 0 1px 0 var(--color-sheen); }
+.house--home .prose > ul > li::before { content: counter(teaser, decimal-leading-zero); position: absolute; left: 0; top: 0.78rem; font-family: var(--font-engraved); font-size: 0.85rem; letter-spacing: 0.06em; color: var(--color-muted); }
+.house--home .prose > ul > li > a:first-child { font-family: var(--font-engraved); letter-spacing: 0.03em; }
+
+/* Running text */
+.prose { max-width: var(--measure); hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose h2 { font-size: var(--text-xl); line-height: 1.2; margin: 2.2rem 0 0.6rem; }
+.prose h3 { font-size: var(--text-l); line-height: 1.25; margin: 1.8rem 0 0.5rem; }
+.prose h4 { font-size: var(--text-s); letter-spacing: var(--tracking-caps); text-transform: uppercase; margin: 1.6rem 0 0.4rem; }
+.prose p, .prose ul, .prose ol { margin: 0 0 1rem; }
+.prose li { margin-bottom: 0.3rem; }
+.prose li > ul, .prose li > ol { margin: 0.3rem 0 0; }
+.prose a[href^="tel:"], .prose a[href^="mailto:"] { overflow-wrap: anywhere; }
+.prose blockquote { margin: 1.5rem 0; padding: 0.2rem 0 0.2rem 1.2rem; border-left: 3px solid var(--color-groove); box-shadow: inset 1px 0 0 var(--color-sheen); }
+.prose hr { border: 0; border-top: 1px solid var(--color-groove); box-shadow: 0 1px 0 var(--color-sheen); margin: 2rem 0; }
+.prose code { font-family: var(--font-mono); font-size: 0.88em; background: var(--color-code-bg); padding: 0.1em 0.3em; border-radius: 3px; }
+.prose pre { font-family: var(--font-mono); font-size: 0.88rem; background: var(--color-code-bg); padding: 1rem; overflow-x: auto; border-radius: var(--radius); line-height: 1.5; }
+.prose pre code { background: none; padding: 0; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 1.5rem 0; font-size: var(--text-s); }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: 0.55rem 1rem 0.55rem 0; border-bottom: 1px solid var(--color-groove); min-width: 7rem; }
+.prose th { font-family: var(--font-engraved); font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.78rem; border-bottom-width: 2px; }
+.prose img { border-radius: var(--radius); }
+
+/* The entry-phone plate: screws, drilled grille, lit pushes, hours. */
+.plate, .nameplate { position: relative; background: radial-gradient(circle at 14px var(--screw-y, 14px), var(--color-sheen) 0 1.5px, var(--color-plate-edge) 2.5px 5px, transparent 5.5px) 0 0 / calc(100% - 28px) calc(100% - 28px), repeating-linear-gradient(180deg, var(--color-brush) 0 1px, transparent 1px 3px) var(--color-plate); border: 1px solid var(--color-plate-edge); border-radius: var(--radius); box-shadow: inset 0 1px 0 var(--color-sheen), inset 0 -2px 0 var(--color-shade), 0 3px 0 var(--color-shade), 0 10px 24px var(--color-shade); }
+.plate { padding: calc(var(--grille-size) + 3.25rem) 1.25rem 1.6rem; }
+.plate::before, .plate::after { content: ""; position: absolute; left: 50%; border-radius: 50%; transform: translateX(-50%); }
+.plate::before { top: 1.75rem; width: var(--grille-size); height: var(--grille-size); background-color: var(--color-hole); mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='-50 -50 100 100' fill='none' stroke='white' stroke-width='5.4' stroke-linecap='round' stroke-dasharray='0 1'%3E%3Ccircle r='2.7' fill='white' stroke='none'/%3E%3Ccircle r='10' pathLength='6'/%3E%3Ccircle r='19' pathLength='12'/%3E%3Ccircle r='28' pathLength='18'/%3E%3Ccircle r='37' pathLength='24'/%3E%3Ccircle r='46' pathLength='30'/%3E%3C/svg%3E") center / contain no-repeat; }
+.plate::after { top: 1.05rem; width: calc(var(--grille-size) + 1.4rem); height: calc(var(--grille-size) + 1.4rem); border: 1px solid var(--color-groove); box-shadow: 0 1px 0 var(--color-sheen), inset 0 1px 0 var(--color-sheen); }
+.plate-head { margin: 0 0 1.3rem; text-align: center; font-size: 1.02rem; line-height: 1.3; letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.pushes { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
+.push { display: grid; grid-template-columns: var(--push-size) minmax(0, 1fr); column-gap: 1rem; align-items: center; min-height: calc(var(--push-size) + 0.9rem); padding: 0.45rem 0.5rem 0.45rem 0.45rem; text-decoration: none; border-radius: var(--radius); }
+.push::before { content: ""; grid-row: 1 / span 2; width: var(--push-size); height: var(--push-size); border-radius: 50%; background: radial-gradient(circle at 36% 30%, var(--color-ebonite-hi), var(--color-ebonite) 64%); box-shadow: 0 0 0 3px var(--color-lamp), 0 0 0 5px var(--color-plate-edge), 0 0 14px 4px var(--color-glow), inset 0 -2px 3px var(--color-shade); transition: box-shadow 0.15s, transform 0.1s; }
+.push:hover::before { box-shadow: 0 0 0 3px var(--color-lamp), 0 0 0 5px var(--color-plate-edge), 0 0 22px 8px var(--color-glow), inset 0 -2px 3px var(--color-shade); }
+.push:active::before { transform: scale(0.94); }
+.push-label { font-family: var(--font-engraved); font-size: 0.8rem; letter-spacing: var(--tracking-caps); text-transform: uppercase; line-height: 1.2; text-shadow: 0 1px 0 var(--color-sheen); }
+.push-value { grid-column: 2; font-weight: 600; font-size: 0.95rem; line-height: 1.3; padding: 0.22rem 0.55rem 0.2rem; margin: 0.15rem 0 0 -0.55rem; background: var(--color-slot); border-radius: 2px; box-shadow: inset 0 2px 3px var(--color-shade), inset 0 -1px 0 var(--color-sheen), 0 1px 0 var(--color-sheen); overflow-wrap: anywhere; hyphens: manual; justify-self: start; }
+.push:hover .push-value { text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
+.plate-hours, .plate-note { text-wrap: balance; }
+.plate-hours { margin: 1.4rem 0 0; padding-top: 1rem; border-top: 1px solid var(--color-groove); box-shadow: inset 0 1px 0 var(--color-sheen); text-align: center; line-height: 1.45; }
+.plate-hours-label { display: block; font-family: var(--font-engraved); font-size: 0.72rem; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-muted); margin-bottom: 0.2rem; }
+.plate-hours-value { font-family: var(--font-engraved); font-size: 0.95rem; letter-spacing: 0.03em; text-shadow: 0 1px 0 var(--color-sheen); }
+/* Under it, the house's name on a two-screw plate. */
+.nameplate { --screw-y: 50%; background-size: calc(100% - 28px) 100%, auto; margin: 1.1rem 0 0; padding: 0.75rem 2.4rem; text-align: center; text-wrap: balance; font-family: var(--font-engraved); font-size: 0.95rem; line-height: 1.3; letter-spacing: 0.08em; text-shadow: 0 1px 0 var(--color-sheen); }
+.plate-note { margin: 1rem 0 0; font-size: var(--text-s); color: var(--color-muted); text-align: center; line-height: 1.45; }
+
+/* The directory: one engraved row per place, numbered like the flats on a
+   board of bells. Status is a word, never a colour. */
+.directory { list-style: none; margin: 0; padding: 0; counter-reset: row; border-top: 1px solid var(--color-groove); box-shadow: inset 0 1px 0 var(--color-sheen); }
+.row { counter-increment: row; position: relative; padding: 1.15rem 0 1.25rem 2.75rem; border-bottom: 1px solid var(--color-groove); box-shadow: 0 1px 0 var(--color-sheen); }
+.row::before { content: counter(row, decimal-leading-zero); position: absolute; left: 0; top: 1.3rem; font-family: var(--font-engraved); font-size: 0.85rem; letter-spacing: 0.06em; color: var(--color-muted); }
+.directory--posts .row::before { content: none; }
+.directory--posts .row { padding-left: 0; }
+.row-title { margin: 0; font-size: var(--text-l); line-height: 1.25; }
+.row-title a { text-decoration: none; }
+.row-title a::after { content: ""; position: absolute; inset: 0; }
+.row:hover .row-title a { text-decoration: underline; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
+.row-address { margin: 0.3rem 0 0; font-size: var(--text-s); color: var(--color-muted); }
+.row-desc { margin: 0.45rem 0 0; font-size: var(--text-s); line-height: 1.5; max-width: 36rem; }
+.row-side { display: flex; flex-direction: column; align-items: flex-start; }
+.row-price { margin: 0.6rem 0 0; font-weight: 700; font-size: 1.2rem; line-height: 1.25; hyphens: manual; }
+@media (min-width: 40rem) {
+  .row--place { display: grid; grid-template-columns: minmax(0, 1fr) minmax(7rem, 12rem); column-gap: 2rem; align-items: start; }
+  .row-side { align-items: flex-end; text-align: right; }
+  .row-side > .row-price { margin-top: 0; }
+}
+
+.facts { list-style: none; margin: 0.5rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.2rem 1.4rem; font-size: var(--text-s); }
+
+/* Three states, each the word on its own engraved tab: open is outlined,
+   pending is a dashed outline, closed is filled solid. */
+.status { margin: 0.6rem 0 0; font-family: var(--font-engraved); font-size: 0.8rem; letter-spacing: var(--tracking-caps); text-transform: uppercase; line-height: 1.3; color: var(--color-text); padding: 0.28rem 0.6rem; border: 1px solid var(--color-text); box-shadow: inset 0 0 0 2px var(--color-sheen); }
+.status [data-for],
+.status[data-status="For sale"] .status-raw, .status[data-status="Under offer"] .status-raw, .status[data-status="Sold"] .status-raw,
+.status[data-status="To let"] .status-raw, .status[data-status="Let agreed"] .status-raw,
+.status[data-status="Available"] .status-raw, .status[data-status="Booked"] .status-raw { display: none; }
+.status[data-status="For sale"] [data-for="For sale"],
+.status[data-status="Under offer"] [data-for="Under offer"],
+.status[data-status="Sold"] [data-for="Sold"],
+.status[data-status="To let"] [data-for="To let"],
+.status[data-status="Let agreed"] [data-for="Let agreed"],
+.status[data-status="Available"] [data-for="Available"],
+.status[data-status="Booked"] [data-for="Booked"] { display: inline; }
+.status[data-status="Under offer"], .status[data-status="Let agreed"] { border-style: dashed; box-shadow: none; }
+.status[data-status="Sold"], .status[data-status="Booked"] { background: var(--color-text); color: var(--color-bg); box-shadow: inset 0 0 0 2px var(--color-text), inset 0 0 0 3px var(--color-bg); }
+
+/* One place */
+.listing-head .status { margin: 0 0 1rem; display: inline-block; }
+.listing-address { margin: 0 0 0.6rem; font-size: var(--text-l); color: var(--color-muted); }
+.listing-price { margin: 0.4rem 0 0.4rem; font-weight: 700; font-size: var(--text-price); line-height: 1.15; hyphens: manual; }
+.listing-head .facts { font-size: var(--text-m); margin: 0 0 1.2rem; }
+.listing-head .lede { margin-bottom: 0.9rem; }
+.listed { margin: 0 0 0.5rem; font-family: var(--font-engraved); font-size: 0.8rem; letter-spacing: 0.08em; color: var(--color-muted); }
+.gallery { list-style: none; margin: 0 0 2rem; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 0.75rem; }
+.gallery img, .cover img { display: block; width: 100%; border: 1px solid var(--color-plate-edge); border-radius: var(--radius); }
+.gallery img { aspect-ratio: 4 / 3; object-fit: cover; }
+.cover { margin: 0 0 2rem; }
+.back { margin: 2.5rem 0 0; font-family: var(--font-engraved); font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase; }
+
+.tags { margin: 1rem 0 0; font-size: var(--text-s); }
+.tags-label { color: var(--color-muted); margin-right: 0.3rem; }
+.tag { margin-right: 0.6rem; }
+.empty { font-size: var(--text-l); margin: 1rem 0; }
+.way-out { padding-left: 1.2rem; font-size: var(--text-l); }
+.way-out li { margin-bottom: 0.5rem; }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.5rem; margin: 2rem 0 0; font-family: var(--font-engraved); font-size: 0.85rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.pagination-link { padding: 0.55rem 0.9rem; border: 1px solid var(--color-groove); box-shadow: inset 0 1px 0 var(--color-sheen); text-decoration: none; }
+.pagination-count { color: var(--color-muted); }
+
+/* Footer */
+.colophon { border-top: 1px solid var(--color-groove); box-shadow: inset 0 1px 0 var(--color-sheen); font-size: var(--text-s); color: var(--color-muted); }
+.colophon-inner { max-width: var(--page-width); margin: 0 auto; padding: 1.5rem 1rem 2.5rem; display: flex; flex-wrap: wrap; gap: 0.4rem 2rem; }
+.colophon p { margin: 0; }
+.colophon-name { font-family: var(--font-engraved); letter-spacing: 0.08em; color: var(--color-text); }
+.colophon-contact a { overflow-wrap: anywhere; }
+.colophon-note { flex-basis: 100%; }
+.colophon-note p { margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .push:active::before { transform: none; }
+}
+
+@media print {
+  :root { --color-bg: #ffffff; --color-text: #000000; --color-muted: #333333; --color-accent: #000000; --color-groove: #777777; --color-plate: #ffffff; --color-plate-edge: #777777; --color-sheen: rgba(0,0,0,0); --color-shade: rgba(0,0,0,0); --color-brush: rgba(0,0,0,0); --color-glow: rgba(0,0,0,0); }
+  body { background: none; font-size: 11pt; }
+  .menu, .skip-link, .pip, .plate::before, .plate::after, .push::before { display: none; }
+  .fascia-phone { margin-left: 0; }
+  main { padding: 1rem 0; }
+  .house { display: block; }
+  .door { position: static; margin-top: 2rem; break-inside: avoid; }
+  .plate { padding: 1rem; box-shadow: none; background-image: none; }
+  .push { display: block; padding: 0; }
+  .push-value { background: none; box-shadow: none; margin-left: 0.4rem; }
+  .nameplate { background: none; box-shadow: none; }
+  .status[data-status="Sold"], .status[data-status="Booked"] { background: none; color: var(--color-text); border: 3px double var(--color-text); box-shadow: none; }
+  .row-title a::after { content: none; }
+}

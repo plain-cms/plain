@@ -1,0 +1,31 @@
+<article class="page">
+  <header class="{{#if page.url.4}}page-head{{else}}sheet survey{{/if}}">
+    <div class="head-box">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </div>
+    {{#if page.url.4}}{{else}}<svg class="survey-map" viewBox="0 0 1200 560" preserveAspectRatio="none" aria-hidden="true">
+      <defs><pattern id="hatch" width="11" height="11" patternUnits="userSpaceOnUse" patternTransform="rotate(-45)"><line class="hatch-line" x2="0" y2="11"/></pattern></defs>
+      <polygon class="field" points="380,0 760,0 640,60 290,90"/>
+      <polygon class="field" points="930,300 1200,400 1200,560 820,560 890,470"/>
+      <polygon class="field" points="890,470 820,560 420,560 520,500"/>
+      <polygon class="field" points="0,240 250,280 270,460 0,420"/>
+      <polyline class="beck" points="0,330 60,350 120,335 180,362 262,372"/>
+      <polygon class="field plot sage" points="0,0 380,0 290,90 250,280 0,240"/>
+      <polygon class="field plot straw" points="760,0 1200,0 1200,180 910,100 640,60"/>
+      <polygon class="field plot sky" points="910,100 1200,180 1200,400 930,300"/>
+      <polygon class="field plot hatch" points="910,100 1200,180 1200,400 930,300"/>
+      <polygon class="field plot sky" points="520,500 420,560 0,560 0,420 270,460"/>
+      <polygon class="field plot rose" points="290,90 640,60 910,100 930,300 890,470 520,500 270,460 250,280"/>
+    </svg>
+    <p class="sheet-label"><a href="/listings/">{{ strings.allListings }}</a></p>
+    {{/if}}
+  </header>
+  <div class="cols">
+    {{#if page.body}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}{{> inquiry}}
+  </div>
+</article>

@@ -1,0 +1,15 @@
+<li class="pane">
+<div class="glass">{{#if item.cover}}<img class="view" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+<div class="hang"><span class="cord"></span>
+<div class="board">
+{{#if item.price}}<p class="price">{{ item.price }}</p>
+{{/if}}<h2 class="board-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+<ul class="facts">{{#if item.beds}}<li><b>{{ item.beds }}</b> {{ strings.beds }}</li>{{/if}}{{#if item.baths}}<li><b>{{ item.baths }}</b> {{ strings.baths }}</li>{{/if}}{{#if item.area}}<li><b>{{ item.area }}</b></li>{{/if}}</ul>
+</div>
+{{#if item.status}}{{> plate}}
+{{/if}}
+</div>
+</div>
+<span class="sill"></span>
+<div class="notes">{{#if item.address}}<p class="addr">{{ item.address }}</p>{{/if}}{{#if item.description}}<p class="desc">{{ item.description }}</p>{{/if}}</div>
+</li>

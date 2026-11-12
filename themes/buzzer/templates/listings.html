@@ -1,0 +1,18 @@
+<div class="house">
+  <section class="listings">
+    <header class="page-head">
+      <h1>{{ page.title }}</h1>
+      <p class="lede">{{ strings.listingsLede }}</p>
+    </header>
+    {{#if items}}
+    <ol class="directory">
+    {{#each items as item}}{{> row}}
+    {{/each}}
+    </ol>
+    {{else}}
+    <p class="empty">{{ strings.noListings }}</p>
+    {{/if}}
+    {{> pagination}}
+  </section>
+  {{> door}}
+</div>

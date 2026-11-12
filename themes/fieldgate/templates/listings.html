@@ -1,0 +1,21 @@
+<section class="listings">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    <p class="lede">{{ strings.listingsLede }}</p>
+  </header>
+  {{#if items}}<div class="sheet">
+    <ol class="plan">
+      {{#each items as item}}{{> lot}}
+      {{/each}}
+    </ol>
+  </div>
+  {{else}}<p class="empty">{{ strings.noListings }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}<div class="cols cols--single">
+    {{> inquiry}}
+  </div>
+</section>

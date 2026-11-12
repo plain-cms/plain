@@ -1,0 +1,14 @@
+<div class="house{{#if page.url.1}}{{else}} house--home{{/if}}">
+  <article class="page">
+    <header class="page-head">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </header>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </article>
+  {{> door}}
+</div>
