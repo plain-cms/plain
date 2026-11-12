@@ -1,0 +1,10 @@
+<aside class="pass" aria-label="{{ strings.glance }}">
+  {{> lanyard}}
+  <div class="badge badge-sm">
+    {{#if data.event.dateLabel}}<p class="badge-date">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}{{ data.event.dateLabel }}{{/if}}</p>
+    {{/if}}{{#if data.event.time}}<p class="fact fact-time">{{ data.event.time }}</p>
+    {{/if}}{{#if data.event.venue}}<p class="fact fact-venue">{{ data.event.venue }}</p>
+    {{/if}}{{#if data.event.address}}<p class="fact fact-address">{{ data.event.address }}</p>
+  {{/if}}</div>
+  {{> ribbon}}
+</aside>

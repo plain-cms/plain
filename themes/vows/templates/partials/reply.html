@@ -1,0 +1,1 @@
+{{#if data.event.replyBy}}{{> reply-card}}{{else}}{{#if data.event.replyEmail}}{{> reply-card}}{{else}}{{#if data.event.ticketsUrl}}{{> reply-card}}{{/if}}{{/if}}{{/if}}

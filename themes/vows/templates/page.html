@@ -1,0 +1,14 @@
+<div class="sheet-wrap">
+  <article class="sheet card">
+    <header class="sheet-head">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>{{/if}}
+    </header>
+    {{#if page.showProgramme}}{{#if data.event.programme}}{{> programme}}{{/if}}{{/if}}
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>{{/if}}
+    {{#if page.showPeople}}{{#if data.event.people}}{{> people}}{{/if}}{{/if}}
+  </article>
+  {{> reply-full}}
+</div>

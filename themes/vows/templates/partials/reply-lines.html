@@ -1,0 +1,10 @@
+{{#if data.event.replyBy}}<p class="rc-by">{{ strings.replyFavour }} <span class="rc-date">{{ data.event.replyBy }}</span></p>
+{{else}}{{#if data.event.replyEmail}}<p class="rc-by">{{ strings.kindlyReply }}</p>
+{{/if}}{{/if}}{{#if data.event.replyEmail}}<p class="rc-name" aria-hidden="true">{{ strings.replyName }}</p>
+<ul class="rc-options" role="list">
+  <li><a href="mailto:{{ data.event.replyEmail }}?subject={{ strings.acceptSubject }}">{{ strings.accepts }}</a></li>
+  <li><a href="mailto:{{ data.event.replyEmail }}?subject={{ strings.declineSubject }}">{{ strings.declines }}</a></li>
+</ul>
+<p class="rc-write">{{ strings.orWrite }} <a href="mailto:{{ data.event.replyEmail }}">{{ data.event.replyEmail }}</a></p>
+{{/if}}{{#if data.event.ticketsUrl}}<p class="rc-tickets"><a href="{{ data.event.ticketsUrl }}">{{ strings.tickets }}</a></p>
+{{/if}}

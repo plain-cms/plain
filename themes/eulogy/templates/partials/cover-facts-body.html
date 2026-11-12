@@ -1,0 +1,7 @@
+<div class="cover-facts">
+      {{#if data.event.dateLabel}}<p class="cover-date">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}{{ data.event.dateLabel }}{{/if}}</p>
+      {{/if}}{{#if data.event.time}}<p class="cover-time">{{ data.event.time }}</p>
+      {{/if}}{{#if data.event.venue}}<p class="cover-venue">{{ data.event.venue }}</p>
+      {{/if}}{{#if data.event.address}}<p class="cover-address">{{ data.event.address }}</p>
+      {{/if}}{{#if data.event.entry}}<p class="cover-entry">{{ data.event.entry }}</p>
+    {{/if}}</div>

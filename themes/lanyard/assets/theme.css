@@ -1,0 +1,399 @@
+/* Lanyard — a conference theme built around one object: the delegate badge,
+   a white card hung from a woven burgundy strap, with a satin ribbon
+   foil-stamped along its foot. All colour, type and measure live in the
+   tokens below. Restyle by editing tokens, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — a bold neo-grotesque, with small spaced capitals for labels */
+  --font-display: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", "Nimbus Sans", sans-serif;
+  --text-base: 1.0625rem;
+  --leading: 1.55;
+  --tracking-caps: 0.14em;
+
+  /* Colour — light: exhibition carpet, a white card, laser-print ink, burgundy satin */
+  --color-bg: #e2e3e0;
+  --color-fleck: #d2d3cf;
+  --color-text: #141416;
+  --color-muted: #4a4b50;
+  --color-accent: #7c1430;
+  --color-rule: #b4b5b1;
+  --color-card: #ffffff;
+  --color-card-edge: #c9cac6;
+  --color-print: #111113;
+  --color-print-soft: #4d4e53;
+  --color-satin: #741229;
+  --color-satin-sheen: #8e2340;
+  --color-satin-deep: #57091c;
+  --color-foil: #ecd9a2;
+  --color-metal: #c3c6cb;
+  --color-metal-dark: #7d8189;
+  --color-code-bg: #f3f3f1;
+  --color-shadow: rgba(20,20,22,0.22);
+
+  /* Measure */
+  --measure: 42rem;
+  --measure-wide: 76rem;
+  --badge: 25rem;
+  --strap: 2.1rem;
+  --drop: 8rem;
+  --time-col: 6.5rem;
+  --radius-card: 0.7rem;
+  --radius: 2px;
+  --rule: 2px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Lights down: the hall dimmed for the keynote, badges catching the stage light */
+    --color-bg: #1c1d21;
+    --color-fleck: #26272c;
+    --color-text: #eaeae6;
+    --color-muted: #aeafb5;
+    --color-accent: #f28ba1;
+    --color-rule: #45464d;
+    --color-card: #dcdad3;
+    --color-card-edge: #9e9c95;
+    --color-print: #121214;
+    --color-print-soft: #44454a;
+    --color-satin: #8a1834;
+    --color-satin-sheen: #a8304f;
+    --color-satin-deep: #631025;
+    --color-foil: #efdca6;
+    --color-metal: #9a9da3;
+    --color-metal-dark: #5d6067;
+    --color-code-bg: #2a2b30;
+    --color-shadow: rgba(0,0,0,0.55);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+/* The carpet: a fine fleck on the grey, never stronger than the flat ground. */
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  background-image: radial-gradient(var(--color-fleck) 0.8px, transparent 1.4px), radial-gradient(var(--color-fleck) 0.8px, transparent 1.4px);
+  background-size: 7px 7px, 11px 11px;
+  background-position: 0 0, 4px 5px;
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+h1, h2, h3, h4 { margin: 0; line-height: 1.12; hyphens: auto; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; box-shadow: 0 0 0 3px var(--color-bg); }
+::selection { background: var(--color-foil); color: var(--color-print); }
+
+.wrap { max-width: var(--measure-wide); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, 2.5rem); }
+main { padding-block: var(--space-4) var(--space-5); min-height: 60vh; }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 5; padding: var(--space-2) var(--space-3); background: var(--color-bg); }
+.skip-link:focus { left: var(--space-2); }
+
+/* Small spaced capitals: the badge printer's labels */
+.rail nav a, .badge-date, .kicker, .part-day, .slot-place, .btn, .tags a, .prose th, .foot-name {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  font-weight: 700;
+}
+
+/* The rail: masthead whose heavy lower rule every strap hangs from ------- */
+
+.rail { border-bottom: var(--rule) solid var(--color-text); }
+.rail-in { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: 0.9rem; }
+.site-title { min-width: 0; font-family: var(--font-display); font-size: 1.05rem; font-weight: 800; line-height: 1.25; letter-spacing: -0.01em; color: var(--color-text); text-decoration: none; }
+.site-title:hover { color: var(--color-accent); }
+.rail nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) 1.5rem; }
+.rail nav a { display: inline-block; padding-block: 0.2rem; font-size: 0.74rem; color: var(--color-text); text-decoration: none; border-bottom: 3px solid transparent; }
+.rail nav a:hover { border-bottom-color: var(--color-text); }
+.rail nav a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+
+.foot { border-top: var(--rule) solid var(--color-text); color: var(--color-muted); font-size: 0.92rem; }
+.foot-in { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--space-3) var(--space-4); padding-block: var(--space-4); }
+.foot-in > div:empty { display: none; }
+.foot p { margin: 0; }
+.foot-name { font-size: 0.8rem; color: var(--color-text); }
+.foot-venue { font-weight: 700; color: var(--color-text); }
+.foot-note > :last-child { margin-bottom: 0; }
+
+/* The lanyard: two woven straps falling from the rail in a V, gathered in a
+   metal crimp. The event's name is woven along each strap. It reaches up
+   through main's top padding so it starts on the rail itself. */
+
+.rig { position: relative; min-width: 0; width: 100%; max-width: var(--badge); margin: calc(-1 * var(--space-4)) auto 0; }
+.lanyard { position: relative; height: var(--drop); overflow: hidden; }
+.strap {
+  position: absolute; left: 50%; bottom: 0.55rem;
+  width: var(--strap); height: calc(var(--drop) * 1.3); margin-left: calc(var(--strap) / -2);
+  overflow: hidden; transform-origin: 50% 100%;
+  background: repeating-linear-gradient(0deg, var(--color-satin) 0 3px, var(--color-satin-deep) 3px 4px);
+  box-shadow: inset 2px 0 0 var(--color-satin-sheen), inset -2px 0 0 var(--color-satin-sheen);
+}
+.strap-l { transform: rotate(-19deg); }
+.strap-r { transform: rotate(19deg); }
+.strap > span {
+  position: absolute; left: 50%; bottom: 1.1rem;
+  writing-mode: vertical-rl; transform: translateX(-50%) rotate(180deg);
+  white-space: nowrap; font-family: var(--font-display); font-size: 0.6rem; font-weight: 800; line-height: 1;
+  letter-spacing: 0.22em; text-transform: uppercase; color: var(--color-foil);
+}
+.lanyard::after {
+  content: ""; position: absolute; left: 50%; bottom: 0;
+  width: calc(var(--strap) * 1.55); height: 1.15rem; transform: translateX(-50%);
+  border-radius: 0.25rem 0.25rem 0.15rem 0.15rem;
+  background: linear-gradient(90deg, var(--color-metal-dark), var(--color-metal) 30% 70%, var(--color-metal-dark));
+}
+
+/* The badge: a white card with a punched slot, the clip's hook through it */
+
+.badge {
+  position: relative; z-index: 1; container-type: inline-size;
+  padding: 2.4rem clamp(1.1rem, 6%, 1.75rem) 1.6rem;
+  color: var(--color-print); background: var(--color-card);
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 0 0 0.45rem var(--color-card), inset 0 0 0 calc(0.45rem + 1px) var(--color-fleck), 0 0 0 1px var(--color-card-edge), 0 18px 28px -18px var(--color-shadow);
+}
+.badge::before, .badge::after { content: ""; position: absolute; left: 50%; }
+.badge::before { top: 0.85rem; width: 3.4rem; height: 0.6rem; margin-left: -1.7rem; border-radius: 0.3rem; background: var(--color-bg); box-shadow: inset 0 1px 2px var(--color-shadow); }
+.badge::after { top: -0.1rem; width: 1rem; height: 1.45rem; margin-left: -0.5rem; border: 0.22rem solid var(--color-metal-dark); border-top: 0; border-radius: 0 0 0.6rem 0.6rem; }
+.badge p { margin: 0; }
+.badge .badge-date { padding-bottom: 0.55rem; margin-bottom: 1rem; border-bottom: 4px solid var(--color-print); font-size: 0.76rem; line-height: 1.4; }
+.badge-name {
+  font-family: var(--font-display); font-weight: 800; letter-spacing: -0.025em; line-height: 0.98;
+  font-size: clamp(1.9rem, 1.2rem + 3vw, 2.6rem); font-size: clamp(1.7rem, 11.5cqi, 2.85rem);
+  overflow-wrap: break-word; text-wrap: balance;
+}
+.badge .badge-line { margin-top: 0.85rem; font-size: 1.08rem; line-height: 1.35; text-wrap: pretty; }
+.badge-line + .fact, .badge-date + .fact { margin-top: 1.15rem; padding-top: 0.9rem; border-top: 1px solid var(--color-card-edge); }
+.badge-date + .fact { margin-top: 0; padding-top: 0; border-top: 0; }
+.fact { font-size: 0.95rem; line-height: 1.4; }
+.fact + .fact { margin-top: 0.35rem; }
+.fact-venue { font-weight: 700; }
+.fact-address { color: var(--color-print-soft); hyphens: manual; }
+.fact-venue + .fact-address { margin-top: 0; }
+.fact-entry { font-weight: 700; }
+.fact-address + .fact-entry, .fact-venue + .fact-entry, .fact-time + .fact-entry { margin-top: 0.8rem; }
+
+/* The foot ribbon: burgundy satin, the one word in gold foil, a swallowtail
+   cut. The satin is drawn behind the link so a focus ring is never clipped. */
+
+.ribbon, .person-role {
+  display: block; margin: -0.4rem auto 0; text-align: center; text-transform: uppercase; color: var(--color-foil);
+  background: var(--color-satin) linear-gradient(90deg, var(--color-satin-deep), var(--color-satin) 14%, var(--color-satin-sheen) 46%, var(--color-satin) 76%, var(--color-satin-deep));
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - var(--notch, 1rem)), 0 100%);
+  hyphens: auto;
+}
+.ribbon {
+  width: 72%; padding: 1.7rem 0.75rem 2.5rem; text-decoration: none;
+  font-family: var(--font-display); font-size: 1rem; font-weight: 800; line-height: 1.2; letter-spacing: 0.3em;
+}
+/* clip-path would cut an outline off, so focus rings the word inside. */
+.ribbon:focus-visible { outline: 0; box-shadow: none; }
+.ribbon:focus-visible span { outline: 2px solid var(--color-foil); outline-offset: 0.4rem; }
+.ribbon:hover span { text-decoration: underline; text-underline-offset: 0.3em; }
+
+/* Home: the badge hangs on the left, the day's business beside it ------- */
+
+.home-top { display: grid; gap: var(--space-4) clamp(2rem, 5vw, 4.5rem); }
+.home-top > * { min-width: 0; }
+.home-main { max-width: var(--measure); }
+@media (min-width: 56rem) {
+  .home-top { grid-template-columns: minmax(0, var(--badge)) minmax(0, 1fr); align-items: start; }
+  .home-main { padding-top: var(--space-2); }
+}
+/* The badge stays in view while the programme scrolls (tall windows only). */
+@media (min-width: 56rem) and (min-height: 44rem) {
+  .home-top > .rig { position: sticky; top: calc(var(--drop) * -0.6); }
+}
+
+/* Under the ribbon, in plain print: the ribbon stays the one foil call to action. */
+.rig .reply { display: block; margin: var(--space-3) 0 0; padding: 0; border: 0; text-align: center; }
+.rig .reply > p + p { margin-top: 0.45rem; }
+.rig .reply-mail { justify-content: center; }
+.rig .btn { padding: 0; font-size: 0.74rem; color: var(--color-accent); background: none; border-radius: 0; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.3em; }
+.rig .btn:hover { text-decoration-thickness: 2px; transform: none; }
+.rig .btn::after { content: " \2192"; content: " \2192" / ""; }
+
+.reply { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.25rem; margin-bottom: var(--space-4); padding-bottom: var(--space-4); border-bottom: 1px solid var(--color-rule); }
+.reply p { margin: 0; }
+.reply-mail { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; min-width: 0; }
+.reply-address { min-width: 0; font-size: 0.9rem; overflow-wrap: anywhere; }
+.reply-end { display: block; margin: var(--space-5) 0 0; padding: var(--space-3) 0 0; border-top: var(--rule) solid var(--color-text); border-bottom: 0; }
+.reply-end > p + p { margin-top: 0.75rem; }
+.reply-entry { font-weight: 700; }
+
+.btn {
+  display: inline-block; padding: 0.7rem 1.1rem; font-size: 0.76rem; line-height: 1.25; text-decoration: none;
+  color: var(--color-foil); background: var(--color-satin) linear-gradient(90deg, var(--color-satin), var(--color-satin-sheen) 50%, var(--color-satin));
+  border-radius: var(--radius); transition: transform 0.12s;
+}
+.btn:hover { text-decoration: underline; transform: translateY(-1px); }
+
+/* The programme: the agenda in the delegate pack, plain laser print ------ */
+
+.section-h { margin-bottom: var(--space-3); font-family: var(--font-display); font-size: 1.55rem; font-weight: 800; letter-spacing: -0.015em; overflow-wrap: break-word; }
+.programme { min-width: 0; }
+.home-main .programme, .prose + .programme, .programme + .prose { margin-top: var(--space-5); }
+.part + .part { margin-top: var(--space-4); }
+.part-day { padding-bottom: 0.45rem; font-size: 0.78rem; line-height: 1.35; border-bottom: var(--rule) solid var(--color-text); }
+.agenda { list-style: none; margin: 0; padding: 0; }
+.part > .agenda:first-child { border-top: var(--rule) solid var(--color-text); }
+.slot { display: grid; grid-template-columns: var(--time-col) minmax(0, 1fr); column-gap: var(--space-3); padding-block: 0.75rem; border-bottom: 1px solid var(--color-rule); }
+.slot p { margin: 0; }
+.slot-time { grid-column: 1; hyphens: auto; font-weight: 700; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.slot-what { grid-column: 2; min-width: 0; }
+.slot-title { font-weight: 700; line-height: 1.3; hyphens: auto; }
+.slot-place { margin-top: 0.2rem; font-size: 0.7rem; line-height: 1.45; color: var(--color-muted); hyphens: auto; }
+.slot-note { margin-top: 0.2rem; font-size: 0.92rem; line-height: 1.4; color: var(--color-muted); }
+@media (max-width: 30rem) {
+  :root { --time-col: 4.6rem; }
+  .slot { column-gap: 0.75rem; }
+  .slot-time { font-size: 0.9rem; }
+}
+
+/* People: small badges, each role on its own ribbon ---------------------- */
+
+.people { min-width: 0; margin-top: var(--space-5); }
+.people-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: var(--space-4) 1.25rem; align-items: start; }
+@media (min-width: 22rem) and (max-width: 32rem) { .people-list { grid-template-columns: 1fr 1fr; gap: var(--space-4) 0.75rem; } .person-card { padding-inline: 0.75rem; } }
+.person { min-width: 0; }
+.person p { margin: 0; }
+.person-card {
+  position: relative; z-index: 1; padding: 1.75rem 1rem 1.1rem;
+  color: var(--color-print); background: var(--color-card); border-radius: calc(var(--radius-card) * 0.7);
+  box-shadow: 0 0 0 1px var(--color-card-edge), 0 12px 18px -14px var(--color-shadow);
+}
+.person-card::before { content: ""; position: absolute; top: 0.65rem; left: 50%; width: 2.2rem; height: 0.42rem; margin-left: -1.1rem; border-radius: 0.21rem; background: var(--color-bg); box-shadow: inset 0 1px 2px var(--color-shadow); }
+.person-name { font-family: var(--font-display); font-size: 1.12rem; font-weight: 800; line-height: 1.15; letter-spacing: -0.01em; hyphens: auto; }
+.person-note { margin-top: 0.45rem; font-size: 0.88rem; line-height: 1.4; color: var(--color-print-soft); }
+.person .person-role { --notch: 0.6rem; width: 84%; margin-top: -0.3rem; padding: 0.85rem 0.6rem 1.35rem; font-size: 0.68rem; font-weight: 700; line-height: 1.35; letter-spacing: 0.16em; }
+
+/* Pages, posts and lists: the text, with a small badge on the rail ------- */
+
+.sheet { display: grid; gap: var(--space-4) clamp(2rem, 5vw, 4.5rem); }
+.sheet > * { min-width: 0; }
+.page-header, .sheet-main { max-width: var(--measure); }
+.page-header h1 { font-family: var(--font-display); font-size: clamp(2rem, 1.3rem + 2.6vw, 3.1rem); font-weight: 800; line-height: 1.02; letter-spacing: -0.025em; text-wrap: balance; }
+.lede { margin: var(--space-3) 0 0; font-size: 1.2rem; line-height: 1.4; color: var(--color-muted); }
+.kicker { margin: 0 0 var(--space-2); font-size: 0.74rem; color: var(--color-muted); }
+.cover { display: block; width: 100%; height: auto; margin-top: var(--space-4); border-radius: var(--radius-card); }
+.pass { display: none; }
+@media (min-width: 60rem) {
+  .sheet { grid-template-columns: minmax(0, var(--measure)) minmax(0, 16rem); justify-content: space-between; }
+  .page-header { grid-column: 1; grid-row: 1; }
+  .sheet-main { grid-column: 1; grid-row: 2; }
+  .pass { display: block; grid-column: 2; grid-row: 1 / span 2; align-self: start; margin-top: calc(-1 * var(--space-4)); }
+  .pass .lanyard { height: 5rem; }
+  .pass .strap { width: 1.5rem; margin-left: -0.75rem; }
+  .pass .strap > span { display: none; }
+  .pass .lanyard::after { width: 2.3rem; }
+}
+.badge-sm { padding: 2.2rem 1.15rem 1.2rem; }
+.badge-sm .fact { font-size: 0.9rem; }
+.pass .ribbon { font-size: 0.82rem; letter-spacing: 0.24em; padding: 1.1rem 0.5rem 1.8rem; }
+
+.post-list { list-style: none; margin: 0; padding: 0; border-top: var(--rule) solid var(--color-text); }
+.post-row { padding-block: 1.1rem; border-bottom: 1px solid var(--color-rule); }
+.post-row > * { margin: 0; }
+.post-row h2 { font-family: var(--font-display); font-size: 1.3rem; font-weight: 800; line-height: 1.2; letter-spacing: -0.01em; }
+.post-row h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
+.post-row h2 a:hover { color: var(--color-accent); }
+.post-summary { margin-top: var(--space-1); color: var(--color-muted); }
+.empty { color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-4) 0 0; padding: 0; }
+.tags a { display: inline-block; padding: 0.3rem 0.6rem; font-size: 0.7rem; text-decoration: none; border: 1px solid var(--color-accent); border-radius: var(--radius); }
+.tags a:hover { text-decoration: underline; }
+.back { margin: var(--space-4) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--color-rule); }
+
+.lost { display: grid; justify-items: start; gap: var(--space-4); }
+.rig-lost { margin-inline: 0; }
+.lost .badge-date { font-size: 1rem; letter-spacing: 0.3em; }
+.lost-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+
+/* Body text -------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-family: var(--font-display); font-size: 1.35rem; font-weight: 800; letter-spacing: -0.01em; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: 1.1rem; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1rem; color: var(--color-muted); }
+.prose ul, .prose ol { margin: 0 0 var(--space-3); padding-left: 1.3rem; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li::marker { color: var(--color-accent); font-weight: 700; }
+.prose a { overflow-wrap: anywhere; }
+.prose a[href^="tel:"], .prose a[href^="mailto:"] { font-weight: 700; white-space: normal; }
+.prose blockquote { margin: var(--space-4) 0; padding: var(--space-1) 0 var(--space-1) var(--space-3); border-left: 4px solid var(--color-accent); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose hr { height: 0; margin: var(--space-4) 0; border: 0; border-top: var(--rule) solid var(--color-text); }
+.prose table { display: block; width: max-content; max-width: 100%; overflow-x: auto; margin: 0 0 var(--space-3); border-collapse: collapse; font-size: 0.95rem; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { font-size: 0.7rem; border-bottom: var(--rule) solid var(--color-text); }
+.prose td { min-width: 7rem; max-width: 22rem; }
+.prose code { font-size: 0.9em; padding: 0.1em 0.3em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { margin: 0 0 var(--space-3); padding: var(--space-3); overflow-x: auto; background: var(--color-code-bg); border-radius: var(--radius); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+.prose img { display: block; max-width: 100%; height: auto; }
+
+#search-app input { width: 100%; padding: 0.6rem 0.8rem; font: inherit; color: var(--color-text); background: var(--color-bg); border: var(--rule) solid var(--color-text); border-radius: var(--radius); }
+
+@media (max-width: 30rem) {
+  :root { --drop: 5.5rem; --strap: 1.7rem; }
+  .ribbon { width: 80%; letter-spacing: 0.24em; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  /* Ink on paper: every satin ground becomes white, every foil word black. */
+  html:root {
+    --color-bg: #ffffff;
+    --color-fleck: #ffffff;
+    --color-text: #000000;
+    --color-muted: #444444;
+    --color-accent: #000000;
+    --color-rule: #999999;
+    --color-card: #ffffff;
+    --color-card-edge: #777777;
+    --color-print: #000000;
+    --color-print-soft: #444444;
+    --color-satin: #ffffff;
+    --color-satin-sheen: #ffffff;
+    --color-satin-deep: #ffffff;
+    --color-foil: #000000;
+    --color-code-bg: #ffffff;
+    --color-shadow: rgba(0,0,0,0);
+  }
+  body { font-size: 11pt; background-image: none; }
+  .skip-link, .rail nav, .lanyard, .pass, .badge::before, .badge::after, .person-card::before { display: none; }
+  main { padding-block: var(--space-3); min-height: 0; }
+  .rig { margin-top: 0; max-width: none; }
+  .badge, .person-card { box-shadow: none; border: 1px solid var(--color-print); break-inside: avoid; }
+  .badge { padding-top: 1.2rem; }
+  .ribbon, .person .person-role { width: auto; margin: 0; padding: 0.4rem 0; clip-path: none; background: none; text-align: left; letter-spacing: var(--tracking-caps); }
+  .btn { padding: 0; background: none; }
+  /* On paper the ribbon goes nowhere; the reply block prints the address. */
+  .ribbon { display: none; }
+  .rig .btn::after { content: none; }
+  .slot, .person, .post-row { break-inside: avoid; }
+  .part-day, .section-h, .prose h2, .prose h3 { break-after: avoid; }
+  a { color: inherit; }
+  .reply-tickets .btn::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; overflow-wrap: anywhere; text-transform: none; letter-spacing: 0; }
+}

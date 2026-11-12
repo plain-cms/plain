@@ -1,0 +1,25 @@
+<div class="home">
+  <div class="home-top">
+  <div class="rig">
+    {{> lanyard}}
+    <header class="badge">
+      {{#if data.event.dateLabel}}<p class="badge-date">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}{{ data.event.dateLabel }}{{/if}}</p>
+      {{/if}}<h1 class="badge-name">{{ site.title }}</h1>
+      <p class="badge-line">{{ page.title }}</p>
+      {{#if data.event.time}}<p class="fact fact-time">{{ data.event.time }}</p>
+      {{/if}}{{#if data.event.venue}}<p class="fact fact-venue">{{ data.event.venue }}</p>
+      {{/if}}{{#if data.event.address}}<p class="fact fact-address">{{ data.event.address }}</p>
+      {{/if}}{{#if data.event.entry}}<p class="fact fact-entry">{{ data.event.entry }}</p>
+      {{/if}}</header>
+    {{> ribbon}}
+    {{> reply}}
+  </div>
+  <div class="home-main">
+    <div class="prose">
+{{{ page.content }}}
+    </div>
+    {{#if page.showProgramme}}{{#if data.event.programme}}{{> programme}}{{/if}}{{/if}}
+  </div>
+  </div>
+  {{#if page.showPeople}}{{#if data.event.people}}{{> people}}{{/if}}{{/if}}
+</div>

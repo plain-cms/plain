@@ -1,0 +1,47 @@
+{
+  "dateLabel": "Saturday 4 September 2027",
+  "date": "2027-09-04",
+  "time": "Half past two in the afternoon",
+  "venue": "Elmswold Court",
+  "address": "Church Lane, Upper Elmswold, Gloucestershire GL54 3PJ",
+  "entry": "Summer garden dress; the lawns are soft underfoot",
+  "replyBy": "1 July 2027",
+  "replyEmail": "reply@harrietandowen.example",
+  "ticketsUrl": "",
+  "peopleLabel": "The wedding party",
+  "programme": [
+    {
+      "day": "Friday 3 September",
+      "items": [
+        { "time": "7 pm", "title": "Welcome drinks", "place": "The Wheatsheaf, Upper Elmswold", "note": "For everyone who arrives the night before. The first round is ours." }
+      ]
+    },
+    {
+      "day": "Saturday 4 September",
+      "items": [
+        { "time": "2.30 pm", "title": "The ceremony", "place": "The walled garden", "note": "In the orangery if it rains. Please be seated by quarter past two." },
+        { "time": "3.15 pm", "title": "Champagne and lawn games", "place": "The south lawn", "note": "" },
+        { "time": "4.30 pm", "title": "Photographs", "place": "Under the cedar", "note": "Family first, then everyone together on the steps." },
+        { "time": "5.30 pm", "title": "Wedding breakfast", "place": "The orangery", "note": "" },
+        { "time": "7.30 pm", "title": "Speeches and the cake", "place": "The orangery", "note": "" },
+        { "time": "8.30 pm", "title": "First dance, then the band", "place": "The old stables", "note": "The Fennel Street Five play until midnight." },
+        { "time": "11.45 pm", "title": "Carriages", "place": "The front drive", "note": "The minibus leaves at midnight for the Wheatsheaf and Cheltenham Spa station." }
+      ]
+    },
+    {
+      "day": "Sunday 5 September",
+      "items": [
+        { "time": "11 am", "title": "Bacon rolls and coffee", "place": "The Wheatsheaf garden", "note": "For anyone still standing." }
+      ]
+    }
+  ],
+  "people": [
+    { "name": "Clemmie Pryce", "role": "Maid of honour", "note": "Harriet’s sister. Ask her about rooms, lifts and anything else." },
+    { "name": "Daniel Lacey", "role": "Best man", "note": "Owen’s brother, and keeper of the rings." },
+    { "name": "Margaret and Hugh Pryce", "role": "Parents of the bride", "note": "" },
+    { "name": "Sunita Lacey", "role": "Mother of the groom", "note": "" },
+    { "name": "Tom Adeyemi", "role": "Reader", "note": "Owen’s oldest friend, from the first week of university." },
+    { "name": "Freddie Lacey and Sam Whitlock", "role": "Ushers", "note": "In the green ties, with umbrellas if they are needed." },
+    { "name": "The Fennel Street Five", "role": "Band", "note": "Swing and soul from Bristol, with a ceilidh set after ten." }
+  ]
+}

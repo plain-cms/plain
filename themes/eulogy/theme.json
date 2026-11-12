@@ -1,0 +1,60 @@
+{
+  "name": "eulogy",
+  "title": "Eulogy",
+  "description": "A memorial theme built like the order of service handed out at the door: the home page is the booklet’s half-mourning violet cover with the name reversed out in large roman capitals and two staples on its spine, and inside, black ink on white with violet rubrics and italic notes — black cloth and lilac after dark.",
+  "family": "event",
+  "bestFor": [
+    "memorial service",
+    "funeral",
+    "celebration of life",
+    "thanksgiving service",
+    "remembrance gathering",
+    "scattering of ashes",
+    "anniversary of a death",
+    "wake"
+  ],
+  "mood": [
+    "quiet",
+    "dignified",
+    "warm",
+    "traditional"
+  ],
+  "layouts": [
+    "page",
+    "home"
+  ],
+  "tokens": {
+    "--font-serif": "the one Times-like serif for everything: the name on the cover, capital headings, rubrics, italic notes and body text",
+    "--font-mono": "code in page text, the only place the serif steps aside",
+    "--text-base": "size of ordinary body text",
+    "--leading": "line spacing of body text",
+    "--tracking-caps": "letter spacing of the small violet rubrics: part headings, headings in page text, Reply by, dates, tags and table headings",
+    "--tracking-name": "letter spacing of the name in capitals on the cover and on the small booklet",
+    "--color-bg": "page background (white stock by day, black cloth at night)",
+    "--color-text": "body text, headings, programme titles, names and menu links",
+    "--color-muted": "secondary text: the intro under a heading, places in the programme, the reply address, notes about people, post summaries and the footer",
+    "--color-accent": "the violet (lilac at night) of rubrics, links, roles, programme times, list markers, a rule in page text, selected text, the current menu entry and focus rings",
+    "--color-rule": "thin dividing lines: under the masthead, around the reply block, between posts and table rows, above the footer, the dot before the reply address, and the soft shadow at the cut edge of a table that scrolls",
+    "--color-code-bg": "background of inline code and code blocks in page text",
+    "--color-cover": "the violet card of the booklet: the cover on the home page, the closed booklet beside inner pages on a wide screen, and the small mark beside the site name",
+    "--color-cover-ink": "lettering reversed out of the cover: the name, the invitation line, the date and the venue",
+    "--color-cover-soft": "the quieter lettering on the cover — time, address, what to wear, the venue on the small booklet — and the short rule above the date",
+    "--color-fold": "the shadow of the fold down each booklet's spine, under the staples and down the edge of the small mark beside the site name",
+    "--color-staple": "the steel of the two staples on the cover’s spine",
+    "--color-staple-shine": "the light catching the middle of each staple",
+    "--shadow-cover": "the shadow the cover casts on the page",
+    "--measure": "width of the text column on pages, posts and inside the booklet on the home page",
+    "--measure-wide": "widest the masthead, home page and footer grow",
+    "--cover-width": "width of the cover on the home page; on a phone it is the width of the screen",
+    "--cover-ratio": "shape of both booklets, width divided by height; a cover with more words on it grows taller",
+    "--staple": "length of each staple on the cover; the small booklet's are a little over half as long",
+    "--time-col": "widest the margin for programme times grows; a longer time wraps inside it",
+    "--hang": "the hanging indent of programme and people notes, and the indent of lists",
+    "--radius": "corner rounding of code blocks, the search box and focus rings",
+    "--space-1": "smallest gap: between list items",
+    "--space-2": "small gap: under rubrics and between reply lines",
+    "--space-3": "page gutter on small screens and the gap between paragraphs",
+    "--space-4": "gap between blocks",
+    "--space-5": "large gap between sections and above the footer"
+  }
+}

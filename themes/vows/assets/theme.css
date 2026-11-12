@@ -1,0 +1,397 @@
+/* Vows — a wedding theme built around one object: the engraved invitation
+   suite. A cotton card with a blind-embossed border lies on a sage envelope
+   whose leaf-print liner shows at the head; the smaller reply card is tucked
+   under its corner and closes every page. All colour, type and measure live
+   in the tokens below: restyle by editing tokens, never selectors. */
+
+:root {
+  /* Type: wide engraved capitals over an old-style roman and its italic */
+  --font-caps: Copperplate, "Copperplate Gothic Light", "Bodoni 72 Smallcaps", Didot, "Book Antiqua", Georgia, serif;
+  --font-text: "Iowan Old Style", "Palatino Linotype", Palatino, "URW Palladio L", "Book Antiqua", Georgia, serif;
+  --font-italic: "Hoefler Text", Baskerville, "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.6;
+  --tracking-caps: 0.14em;
+  --tracking-name: 0.06em;
+
+  /* Colour, by day: sage envelope, green liner, cotton card, engraver's ink */
+  --color-bg: #c3cdb4;
+  --color-text: #1b241d;
+  --color-muted: #3f4b3c;
+  --color-accent: #2a5233;
+  --color-card: #f6f4ec;
+  --color-ink: #151815;
+  --color-ink-soft: #4a4f47;
+  --color-liner: #33503b;
+  --color-leaf: #41634a;
+  --color-liner-ink: #f2f0e4;
+  --color-emboss-light: #ffffff;
+  --color-emboss-shade: rgba(64,74,58,0.2);
+  --color-rule: #a3a79a;
+  --color-shadow: rgba(36,52,38,0.3);
+  --color-code-bg: #ecebe3;
+
+  /* Measures */
+  --measure: 44rem;
+  --measure-wide: 76rem;
+  --invite: 32rem;
+  --reply: 20rem;
+  --time-col: 5.5rem;
+  --radius: 2px;
+  --emboss-inset: 0.7rem;
+  --flap: 1.75rem;
+  --tilt: 2deg;
+  --tuck: 4.5rem;
+  --overhang: 2.5rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* By candlelight: a deep-green envelope and liner, the card printed pale on green stock */
+    --color-bg: #1d2a22;
+    --color-text: #e6eadf;
+    --color-muted: #aab6a4;
+    --color-accent: #a8d2a2;
+    --color-card: #26352b;
+    --color-ink: #efeee5;
+    --color-ink-soft: #bac2b2;
+    --color-liner: #101b14;
+    --color-leaf: #1d3024;
+    --color-liner-ink: #e1e8d8;
+    --color-emboss-light: rgba(255,255,255,0.12);
+    --color-emboss-shade: rgba(0,0,0,0.45);
+    --color-rule: #66745f;
+    --color-shadow: rgba(0,0,0,0.55);
+    --color-code-bg: #1e2b23;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+.wrap { max-width: var(--measure-wide); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, 2.5rem); }
+main { padding-block: var(--space-4) var(--space-5); min-height: 50vh; }
+h1, h2, h3, h4 { margin: 0; font-weight: 400; line-height: 1.2; }
+p { margin: 0 0 var(--space-3); }
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius); }
+::selection { background: var(--color-liner); color: var(--color-liner-ink); }
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 3; padding: var(--space-2) var(--space-3); background: var(--color-card); color: var(--color-ink); }
+.skip-link:focus { left: var(--space-2); }
+
+/* The engraver's two voices */
+.site-title, .liner nav a, .inv-names, .inv-date, .inv-venue, .rc-date, .rc-tickets a, .sec-h, .order-title,
+.person-name, .sheet-head h1, .prose h2, .prose h4, .prose th, .post-row h2, .tags a, .back-name {
+  font-family: var(--font-caps);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  font-weight: 400;
+}
+.inv-line, .inv-time, .inv-address, .inv-entry, .rc-entry, .rc-by, .rc-name, .rc-options a, .part-day, .order-time,
+.order-place, .person-role, .lede, .home-sign, .prose h3, .prose blockquote, .post-date, .pagination, .empty, .back-link,
+.back-date, .back-address {
+  font-family: var(--font-italic);
+  font-style: italic;
+  font-variant-numeric: oldstyle-nums;
+}
+/* Display lines may hyphenate; running text, prices and addresses do not. */
+.inv-names, .sheet-head h1, .order-title, .person-name, .part-day, .order-place, .person-role, .prose h2, .prose h3, .post-row h2, .rc-options a { hyphens: auto; }
+
+/* The liner: leaf-print paper at the head of the envelope -------------- */
+
+.liner {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: var(--flap);
+  background: var(--color-liner);
+  color: var(--color-liner-ink);
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--flap)), 50% 100%, 0 calc(100% - var(--flap)));
+}
+/* Sprigs of two leaves each, scattered on the bias. */
+.liner::before {
+  content: "";
+  position: absolute;
+  inset: -30rem -10rem;
+  background-image:
+    radial-gradient(4px 11px at 30% 30%, var(--color-leaf) 90%, transparent 100%),
+    radial-gradient(11px 4px at 42% 44%, var(--color-leaf) 90%, transparent 100%),
+    radial-gradient(4px 11px at 78% 74%, var(--color-leaf) 90%, transparent 100%),
+    radial-gradient(11px 4px at 66% 88%, var(--color-leaf) 90%, transparent 100%);
+  background-size: 46px 46px;
+  transform: rotate(-32deg);
+  pointer-events: none;
+}
+.liner-in { position: relative; display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-1) var(--space-4); padding-block: 1.05rem 0.4rem; }
+.site-title { min-width: 0; font-size: 0.95rem; line-height: 1.35; color: var(--color-liner-ink); text-decoration: none; }
+.liner nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) 1.5rem; }
+.liner nav a { display: inline-block; padding-block: 0.2rem; font-size: 0.76rem; color: var(--color-liner-ink); text-decoration: none; border-bottom: 2px solid transparent; }
+.liner nav a:hover { border-bottom-color: var(--color-liner-ink); }
+.liner nav a[aria-current="page"] { border-bottom-color: var(--color-liner-ink); }
+.liner :focus-visible { outline-color: var(--color-liner-ink); }
+
+/* Cotton card with a blind-embossed border ------------------------------ */
+
+.card {
+  position: relative;
+  z-index: 1;
+  background: var(--color-card);
+  color: var(--color-ink);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px var(--color-shadow), 0 14px 30px -16px var(--color-shadow);
+}
+/* The panel inside the border is pressed up from behind with no ink. Lit
+   from the top left, its raised edge catches the light along the top and
+   left and falls into a soft shade along the bottom and right. */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: var(--emboss-inset);
+  border-radius: var(--radius);
+  pointer-events: none;
+  box-shadow:
+    inset 2px 2px 1px -1px var(--color-emboss-light),
+    inset -2px -2px 2px -1px var(--color-emboss-shade),
+    -1px -1px 1px var(--color-emboss-light),
+    1px 1px 2px var(--color-emboss-shade);
+}
+.card a { color: var(--color-ink); text-decoration-color: var(--color-accent); }
+.card a:hover { color: var(--color-accent); }
+
+/* Home: the suite -------------------------------------------------------- */
+
+.home { display: grid; gap: var(--space-5) 3.5rem; }
+.home > * { min-width: 0; }
+.home-note { max-width: var(--measure); }
+/* The welcome opens in the invitation's italic and is signed with the names. */
+.home-note .prose > p:first-child { font-family: var(--font-italic); font-style: italic; font-size: 1.28rem; line-height: 1.45; }
+.home-sign { margin: 1.1rem 0 0; font-size: 1.25rem; line-height: 1.35; }
+.home-sign::before { content: ""; display: inline-block; width: 1.75rem; margin-right: 0.6rem; vertical-align: 0.32em; border-top: 1px solid currentColor; }
+
+/* The suite: the invitation lies on top, the reply card is slipped under its
+   bottom right corner and shows past its edge by the overhang. */
+.suite { width: min(100%, calc(var(--invite) + var(--overhang))); }
+.invitation {
+  width: min(calc(100% - var(--overhang) / 2), var(--invite));
+  box-shadow: 0 1px 2px var(--color-shadow), 0 18px 32px -14px var(--color-shadow);
+  padding: clamp(2rem, 5vw, 2.6rem) clamp(1.5rem, 5vw, 2.6rem) clamp(1.75rem, 4vw, 2.1rem);
+  text-align: center;
+  container-type: inline-size;
+}
+.invitation :where(p) { margin: 0; }
+.inv-names { font-size: clamp(1.45rem, 8.2cqi, 2.6rem); line-height: 1.18; letter-spacing: var(--tracking-name); text-wrap: balance; }
+.inv-line { margin: 0.9rem auto 0; max-width: 24rem; font-size: clamp(1.1rem, 0.95rem + 0.5vw, 1.28rem); line-height: 1.4; text-wrap: balance; }
+.inv-line + p::before { content: ""; display: block; width: 2.5rem; margin: 1.15rem auto; border-top: 1px solid currentColor; }
+.inv-date { font-size: 0.92rem; line-height: 1.5; }
+.inv-time { margin-top: 0.15rem; font-size: 1.05rem; }
+.inv-venue { margin-top: 0.85rem; font-size: 0.92rem; line-height: 1.5; }
+.inv-address { margin-top: 0.15rem; font-size: 0.95rem; line-height: 1.45; color: var(--color-ink-soft); }
+/* What to wear, at the foot of the card on the centre line */
+.inv-entry { margin: 1.4rem auto 0; max-width: 22rem; font-size: 0.98rem; line-height: 1.4; text-wrap: balance; }
+.inv-entry::before { content: ""; display: block; width: 0.35rem; height: 0.35rem; margin: 0 auto 1.1rem; border: 1px solid currentColor; transform: rotate(45deg); }
+.inv-line + .inv-entry::before { width: 2.5rem; height: 0; margin-block: 0 1.15rem; border: 0; border-top: 1px solid currentColor; transform: none; }
+
+/* The reply card: smaller stock, slipped under the corner of the card above */
+
+.reply-card {
+  z-index: 0;
+  width: min(88%, var(--reply));
+  margin: calc(-1 * var(--tuck)) 0 0 auto;
+  padding: calc(var(--tuck) + 1.1rem) 1.5rem 1.35rem;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  transform: rotate(var(--tilt));
+  transform-origin: 0 0;
+}
+.reply-card::before { inset: calc(var(--emboss-inset) - 0.25rem); }
+.reply-card :where(p) { margin: 0; }
+.rc-entry { text-align: center; }
+/* A rule parts what to wear from the reply lines, only when lines follow. */
+.rc-entry:not(:last-child) { margin-bottom: 0.9rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--color-rule); }
+.rc-by { margin-bottom: 1rem; text-align: center; font-size: 1rem; text-wrap: balance; }
+.rc-date { display: block; margin-top: 0.3rem; font-size: 0.8rem; font-style: normal; }
+.rc-by:last-child { margin-bottom: 0; }
+.rc-name { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.55rem; font-size: 1.1rem; }
+.rc-name::after { content: ""; flex: 1 1 auto; border-bottom: 1px solid var(--color-rule); }
+.rc-options { list-style: none; margin: 0; padding: 0; }
+.rc-options li + li { margin-top: 0.4rem; }
+/* Each answer is written on its own ruled line; pointing at one ticks the blank. */
+.rc-options a { position: relative; display: block; padding-left: 3.2rem; font-size: 1.06rem; line-height: 1.35; text-decoration-line: underline; text-decoration-color: var(--color-accent); }
+.rc-options a::before { content: ""; position: absolute; left: 0; top: 0; width: 2.6rem; height: 1.15em; border-bottom: 1px solid var(--color-rule); }
+.rc-options a::after { content: ""; position: absolute; left: 1rem; top: 0.05em; width: 0.42em; height: 0.85em; border: solid var(--color-accent); border-width: 0 2px 2px 0; transform: rotate(40deg); opacity: 0; transition: opacity 0.15s; }
+.rc-options a:hover::after, .rc-options a:focus-visible::after { opacity: 1; }
+.rc-write { margin-top: 0.9rem; font-size: 0.82rem; line-height: 1.45; color: var(--color-ink-soft); }
+.rc-write a { overflow-wrap: anywhere; }
+.rc-tickets { margin-top: 1rem; text-align: center; }
+* + .rc-tickets { padding-top: 0.9rem; border-top: 1px solid var(--color-rule); }
+.rc-entry + .rc-tickets { margin-top: 0; padding-top: 0; border-top: 0; }
+.reply-card .rc-tickets a { display: inline-block; max-width: 100%; padding: 0.5rem 1rem; font-size: 0.78rem; line-height: 1.3; text-decoration: none; border: 3px double var(--color-ink); }
+.reply-card .rc-tickets a:hover { border-color: var(--color-accent); }
+
+/* On a wide screen the welcome sits beside the suite, and the parts of the
+   programme stand side by side below it. */
+@media (min-width: 52rem) {
+  .home > .programme { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); align-items: start; gap: var(--space-4) 3rem; }
+  .home > .programme > .sec-h { grid-column: 1 / -1; margin-bottom: 0; }
+  .home > .programme > .part { margin: 0; }
+}
+/* Wider still, the suite lies on the left with the welcome and the order of
+   the day read down the right beside it; the people follow full width. */
+@media (min-width: 78rem) {
+  .home { grid-template-columns: minmax(0, calc(var(--invite) + var(--overhang))) minmax(0, 1fr); align-items: start; }
+  .home > .suite { grid-row: 1 / span 2; }
+  .home > .home-note, .home > .programme { grid-column: 2; }
+  .home > .people { grid-column: 1 / -1; }
+  .home-note { padding-top: 0.6rem; }
+}
+
+/* The order of the day --------------------------------------------------- */
+
+.part { container-type: inline-size; }
+.sec-h { margin-bottom: 1.25rem; font-size: 1rem; line-height: 1.35; }
+.sec-h::after { content: ""; display: block; width: 2rem; margin-top: 0.6rem; border-top: 1px solid currentColor; }
+.part + .part { margin-top: 1.75rem; }
+.part-day { margin-bottom: 0.5rem; font-size: 1.15rem; line-height: 1.3; }
+.order { list-style: none; margin: 0; padding: 0; }
+.order-item { display: grid; grid-template-columns: var(--time-col) minmax(0, 1fr); gap: 0 var(--space-3); padding-block: 0.45rem; }
+.order-item :where(p) { margin: 0; }
+.order-time { grid-column: 1; font-size: 1rem; line-height: 1.45; text-align: right; }
+.order-what { grid-column: 2; min-width: 0; }
+.order-title { font-size: 0.84rem; line-height: 1.55; letter-spacing: 0.09em; padding-top: 0.08rem; }
+.order-place { font-size: 0.97rem; line-height: 1.4; }
+.order-note { margin-top: 0.1rem; font-size: 0.92rem; line-height: 1.45; color: var(--color-muted); }
+@container (max-width: 21rem) {
+  .order-item { grid-template-columns: minmax(0, 1fr); }
+  .order-time, .order-what { grid-column: 1; text-align: left; }
+}
+
+/* People ---------------------------------------------------------------- */
+
+.people-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: 1.4rem 2rem; }
+.person :where(p) { margin: 0; }
+.person-name { font-size: 0.86rem; line-height: 1.5; letter-spacing: 0.1em; }
+.person-role { font-size: 1rem; line-height: 1.4; }
+.person-note { margin-top: 0.2rem; font-size: 0.92rem; line-height: 1.45; color: var(--color-muted); }
+
+/* Pages, posts, lists: one sheet of the suite ---------------------------- */
+
+.sheet-wrap { max-width: var(--measure); margin-inline: auto; }
+.sheet { padding: clamp(2rem, 6vw, 3.5rem) clamp(1.4rem, 6vw, 3.75rem); }
+.sheet-wrap > .reply-card { margin-top: calc(-1 * var(--tuck)); }
+@media (min-width: 52rem) { .sheet-wrap > .reply-card { margin-right: calc(-1 * var(--overhang)); } }
+.sheet-head { margin-bottom: var(--space-4); text-align: center; }
+.sheet-head h1 { font-size: clamp(1.5rem, 1.05rem + 2vw, 2.35rem); line-height: 1.22; letter-spacing: var(--tracking-name); text-wrap: balance; }
+.sheet-head::after { content: ""; display: block; width: 2.5rem; margin: 1.6rem auto 0; border-top: 1px solid currentColor; }
+.lede { max-width: 32rem; margin: 1rem auto 0; font-size: 1.2rem; line-height: 1.45; color: var(--color-ink-soft); text-wrap: balance; }
+.sheet > .programme + * , .sheet > * + .people { margin-top: 2.75rem; }
+.cover { display: block; width: 100%; height: auto; margin: 0 0 var(--space-4); }
+
+.post-date { margin: 0 0 0.35rem; font-size: 1rem; color: var(--color-ink-soft); }
+.post-list { list-style: none; margin: 0; padding: 0; }
+.post-row { padding-block: 1.1rem; border-top: 1px solid var(--color-rule); }
+.post-row:first-child { border-top: 0; padding-top: 0; }
+.post-row > :where(*) { margin: 0; }
+.post-row h2 { font-size: 0.98rem; line-height: 1.5; letter-spacing: 0.08em; }
+.post-summary { margin-top: 0.3rem; color: var(--color-ink-soft); }
+.empty { text-align: center; color: var(--color-ink-soft); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); }
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2) 1.25rem; margin: var(--space-4) 0 0; padding: 0; }
+.tags a { font-size: 0.74rem; }
+.back-link { margin: var(--space-4) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--color-rule); }
+.not-found-links { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-4); margin: 0; }
+
+/* Body text -------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 0.6rem; font-size: 0.92rem; line-height: 1.45; }
+.prose h3 { margin: 1.6rem 0 0.4rem; font-size: 1.2rem; }
+.prose h4 { margin: 1.25rem 0 0.3rem; font-size: 0.78rem; color: var(--color-muted); }
+.prose ul, .prose ol { margin: 0 0 var(--space-3); padding-left: 1.3rem; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li::marker { color: var(--color-muted); }
+/* Secondary text is lighter ink on a card, and the muted green on the envelope. */
+.card :is(.order-note, .person-note, .prose h4), .card .prose li::marker { color: var(--color-ink-soft); }
+.prose a { overflow-wrap: anywhere; }
+.prose blockquote { margin: 1.5rem 0; padding-left: 1.25rem; font-size: 1.1rem; border-left: 2px solid var(--color-accent); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose hr { width: 3rem; margin: var(--space-4) auto; border: 0; border-top: 1px solid currentColor; }
+.prose table { display: block; width: max-content; max-width: 100%; overflow-x: auto; margin: 0 0 var(--space-3); border-collapse: collapse; font-size: 0.95rem; line-height: 1.45; }
+.prose th, .prose td { padding: 0.5rem 1rem 0.5rem 0; text-align: left; vertical-align: top; }
+.prose th { font-size: 0.7rem; letter-spacing: 0.1em; border-bottom: 1px solid currentColor; }
+.prose td { min-width: 7rem; border-bottom: 1px solid var(--color-rule); }
+.prose code { font-family: var(--font-mono); font-size: 0.86em; padding: 0.1em 0.3em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { margin: 0 0 var(--space-3); padding: var(--space-3); overflow-x: auto; background: var(--color-code-bg); border-radius: var(--radius); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+.prose img { display: block; max-width: 100%; height: auto; }
+
+/* The back of the envelope ------------------------------------------------ */
+
+.back { padding-bottom: var(--space-5); text-align: center; font-size: 0.95rem; color: var(--color-muted); }
+.back-in::before { content: ""; display: block; width: 3rem; margin: 0 auto 1.5rem; border-top: 1px solid currentColor; }
+.back-in > :where(p) { margin: 0 0 0.15rem; }
+.back-name { margin-bottom: 0.4rem; font-size: 0.82rem; line-height: 1.5; color: var(--color-text); }
+.back-updates { margin-top: 0.9rem; }
+.back-note { margin-top: var(--space-3); }
+.back-note > :last-child { margin-bottom: 0; }
+
+#search-app input { width: 100%; padding: 0.6rem 0.8rem; font: inherit; color: var(--color-ink); background: var(--color-card); border: 1px solid var(--color-rule); border-radius: var(--radius); }
+
+@media (max-width: 30rem) {
+  .reply-card { transform: rotate(1deg); padding-inline: 1.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  /* Black ink on white paper, whatever the screen scheme or a site's own palette. */
+  html:root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-card: #ffffff;
+    --color-ink: #000000;
+    --color-ink-soft: #333333;
+    --color-liner: #ffffff;
+    --color-leaf: #ffffff;
+    --color-liner-ink: #000000;
+    --color-emboss-light: #ffffff;
+    --color-emboss-shade: #ffffff;
+    --color-rule: #888888;
+    --color-shadow: rgba(0,0,0,0);
+    --color-code-bg: #ffffff;
+  }
+  body { font-size: 11pt; }
+  .skip-link, .liner nav, .liner::before, .card::before { display: none; }
+  .liner { clip-path: none; padding-bottom: 0; border-bottom: 1px solid var(--color-rule); }
+  main { padding-block: var(--space-3); min-height: 0; }
+  .home { display: block; }
+  .home > * + * { margin-top: var(--space-4); }
+  .card { box-shadow: none; border: 1px solid var(--color-rule); }
+  .reply-card { transform: none; width: auto; max-width: var(--reply); margin: var(--space-3) 0 0 auto; padding-top: 1.25rem; break-inside: avoid; }
+  .sheet-wrap > .reply-card { margin-right: 0; }
+  .order-item, .person, .post-row { break-inside: avoid; }
+  .sec-h, .part-day, .prose h2, .prose h3 { break-after: avoid; }
+  .rc-tickets a::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; overflow-wrap: anywhere; text-transform: none; letter-spacing: 0; }
+}

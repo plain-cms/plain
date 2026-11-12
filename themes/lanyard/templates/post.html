@@ -1,0 +1,15 @@
+<article class="sheet">
+  <header class="page-header">
+    {{#if page.dateFormatted}}<p class="kicker"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>{{/if}}
+    <h1>{{ page.title }}</h1>
+    {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="">{{/if}}
+  </header>
+  {{> pass}}
+  <div class="sheet-main">
+    <div class="prose">
+{{{ page.content }}}
+    </div>
+    {{#if page.tagLinks}}<ul class="tags" role="list">{{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>{{/each}}</ul>{{/if}}
+    <p class="back"><a href="/blog/">{{ strings.allUpdates }}</a></p>
+  </div>
+</article>

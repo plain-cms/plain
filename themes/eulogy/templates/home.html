@@ -1,0 +1,19 @@
+<div class="home">
+  <div class="cover-hold">
+  <header class="booklet cover">
+    <div class="cover-head">
+      <h1 class="cover-name">{{ site.title }}</h1>
+      <p class="cover-line">{{ page.title }}</p>
+    </div>
+    {{> cover-facts}}
+  </header>
+  </div>
+  <div class="inside">
+    {{> reply}}
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>{{/if}}
+    {{#if page.showProgramme}}{{#if data.event.programme}}{{> programme}}{{/if}}{{/if}}
+    {{#if page.showPeople}}{{#if data.event.people}}{{> people}}{{/if}}{{/if}}
+  </div>
+</div>

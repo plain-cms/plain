@@ -1,0 +1,61 @@
+{
+  "name": "wristband",
+  "title": "Wristband",
+  "description": "A weekend music festival theme whose masthead is a woven satin wristband — the name and dates in condensed capitals over a diamond repeat between stitched selvedges, closed by a brass bead clasp that is the ticket link — on last-light indigo, or marquee white by day.",
+  "family": "event",
+  "bestFor": [
+    "music festival",
+    "folk festival",
+    "weekend festival",
+    "camping festival",
+    "festival in a field",
+    "beer and music festival",
+    "food and music festival",
+    "village music weekend"
+  ],
+  "mood": [
+    "festive",
+    "warm",
+    "after-dark",
+    "woven",
+    "bold"
+  ],
+  "layouts": [
+    "page",
+    "home"
+  ],
+  "tokens": {
+    "--font-caps": "the woven capitals: band lettering, clasp, menu, headings, times, line-up names, labels and tabs",
+    "--font-body": "running text, notes and the footer — a humanist sans",
+    "--text-base": "size of ordinary body text",
+    "--leading": "line spacing of body text",
+    "--tracking-caps": "letter spacing of the condensed capitals",
+    "--color-bg": "page background: last-light indigo, or marquee white in the light scheme",
+    "--color-text": "body text, headings and menu links (festoon white, or indigo ink)",
+    "--color-muted": "secondary text: notes, ledes, summaries, addresses, the footer and the updates link",
+    "--color-accent": "links, programme times, labels, line-up roles, the current menu entry, the diamonds beside headings and focus rings",
+    "--color-rule": "dividing lines and the diamond repeat above the footer",
+    "--color-surface": "background of code and the search box",
+    "--color-band": "the wristband's satin and every short length of it: tabs, stage and tag labels, the 404 scrap, selected text",
+    "--color-band-ink": "lettering and diamonds woven into the band and its lengths; the focus ring on the band",
+    "--color-selvedge": "the bound edges along the top and bottom of the band and the tabs",
+    "--color-stitch": "stitched selvedges of the band and the tabs",
+    "--color-sheen": "the satin highlight along the band's top edge",
+    "--color-weft": "the fine weft lines across the band",
+    "--color-clasp": "the brass bead clasp closing the band",
+    "--color-clasp-ink": "the word on the clasp and its focus ring",
+    "--color-clasp-ridge": "grip ridges at both ends of the clasp",
+    "--measure": "width of the text column",
+    "--measure-wide": "widest the band's lettering, menu, home page and footer grow",
+    "--band-pad": "space above and below the band's lettering; the clasp stands this much plus a little beyond each edge",
+    "--diamond": "height of the diamond repeat in the band, beside headings, under page titles and above the footer",
+    "--stitch": "length of one stitch in the selvedges and in a rule in page text",
+    "--radius": "corner rounding of code blocks and the search box; the band is cut square",
+    "--rule": "weight of the heavier dividing lines and the menu underline",
+    "--space-1": "smallest gap: inside lists in page text",
+    "--space-2": "small gap: under labels, dates and day headings",
+    "--space-3": "page gutter on small screens and the gap between paragraphs",
+    "--space-4": "gap between blocks",
+    "--space-5": "large gap between sections and above the reply block"
+  }
+}

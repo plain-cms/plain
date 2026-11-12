@@ -1,0 +1,11 @@
+<section class="people">
+  <h2 class="section-h">{{#if data.event.peopleLabel}}{{ data.event.peopleLabel }}{{else}}{{ strings.takingPart }}{{/if}}</h2>
+  <ul class="people-list" role="list">
+    {{#each data.event.people as person}}<li class="person">
+      <p class="person-name">{{ person.name }}</p>
+      {{#if person.role}}<p class="person-role">{{ person.role }}</p>
+      {{/if}}{{#if person.note}}<p class="person-note">{{ person.note }}</p>
+    {{/if}}</li>
+    {{/each}}
+  </ul>
+</section>

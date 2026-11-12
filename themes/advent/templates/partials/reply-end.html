@@ -1,0 +1,1 @@
+{{#if data.event.entry}}{{> reply-end-body}}{{else}}{{#if data.event.replyBy}}{{> reply-end-body}}{{else}}{{#if data.event.replyEmail}}{{> reply-end-body}}{{else}}{{#if data.event.ticketsUrl}}{{> reply-end-body}}{{/if}}{{/if}}{{/if}}{{/if}}

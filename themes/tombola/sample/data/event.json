@@ -1,0 +1,49 @@
+{
+  "dateLabel": "Saturday 19 June 2027",
+  "date": "2027-06-19",
+  "time": "12 noon to 5 pm",
+  "venue": "The Green, Hallowby",
+  "address": "Church Lane, Hallowby, near Kirkby Wold YO62 9QT",
+  "entry": "Adults £1 on the gate, children free. Bring coins for the stalls.",
+  "replyBy": "",
+  "replyEmail": "",
+  "ticketsUrl": "",
+  "peopleLabel": "Who to ask",
+  "programme": [
+    {
+      "day": "In the ring",
+      "items": [
+        { "time": "12.00", "title": "Hallowby Silver Band opens the fair", "place": "Bandstand", "note": "" },
+        { "time": "12.30", "title": "Maypole dancing", "place": "The ring", "note": "Years 3 and 4 of Hallowby Primary School." },
+        { "time": "1.00", "title": "Fancy dress parade", "place": "The ring", "note": "Under-elevens. This year’s theme is the seaside." },
+        { "time": "1.30", "title": "Egg-and-spoon and sack races", "place": "Top of the green", "note": "" },
+        { "time": "2.00", "title": "Dog show", "place": "The ring", "note": "Six classes, £1 a class. Enter at the ring from 1.30." },
+        { "time": "3.00", "title": "Tug of war", "place": "The ring", "note": "The Plough against the cricket club." },
+        { "time": "3.30", "title": "Welly wanging", "place": "Long side, by the beck", "note": "" },
+        { "time": "4.00", "title": "Raffle drawn", "place": "Bandstand", "note": "First prize is a hamper from Hallowby Stores." },
+        { "time": "4.30", "title": "Cake auction", "place": "Tea tent", "note": "Whatever the tea tent has left goes to the highest bidder." },
+        { "time": "5.00", "title": "Fair closes", "place": "", "note": "" }
+      ]
+    },
+    {
+      "day": "All afternoon",
+      "items": [
+        { "time": "", "title": "Teas and home-made cakes", "place": "Church hall", "note": "A pot of tea, a scone and a slice of cake for £3.50." },
+        { "time": "", "title": "Tombola", "place": "By the lychgate", "note": "Every ticket ending in 0 or 5 wins." },
+        { "time": "", "title": "Plants and produce", "place": "Along the churchyard wall", "note": "" },
+        { "time": "", "title": "Second-hand books", "place": "Church porch", "note": "Paperbacks 50p, hardbacks £1." },
+        { "time": "", "title": "Coconut shy, hoopla and splat-the-rat", "place": "Bottom of the green", "note": "" },
+        { "time": "", "title": "Tower tours", "place": "St Wilfrid’s tower", "note": "Every half hour, £2. There are 68 steps and no handrail; not for under-eights." },
+        { "time": "", "title": "Barbecue and bar", "place": "Outside the Plough", "note": "" }
+      ]
+    }
+  ],
+  "people": [
+    { "name": "Margaret Thwaite", "role": "Fair secretary", "note": "Stall bookings, cake promises and anything that is not on this page." },
+    { "name": "Revd Joanna Pell", "role": "Vicar of St Wilfrid’s", "note": "Opens the fair with the band and draws the raffle." },
+    { "name": "Dennis Ackroyd", "role": "Dog show steward", "note": "Takes entries at the ring from 1.30." },
+    { "name": "Hallowby Silver Band", "role": "Music from noon", "note": "Conducted by Brian Sowerby. Requests cost a pound in the bucket." },
+    { "name": "Priya Nair", "role": "Teas", "note": "Bakers: cakes to the church hall by eleven on the day, please." },
+    { "name": "Tom Garside", "role": "Car park and first aid", "note": "" }
+  ]
+}

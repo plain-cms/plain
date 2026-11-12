@@ -1,0 +1,4 @@
+{{#if data.event.replyBy}}<p class="reply-by">{{ strings.replyBy }} {{ data.event.replyBy }}</p>
+{{/if}}{{#if data.event.replyEmail}}<p class="reply-mail"><a class="btn" href="mailto:{{ data.event.replyEmail }}?subject={{ strings.replySubject }}">{{ strings.replyByEmail }}</a> <span class="reply-address">{{ data.event.replyEmail }}</span></p>
+{{/if}}{{#if data.event.ticketsUrl}}<p class="reply-tickets"><a class="btn" href="{{ data.event.ticketsUrl }}">{{ strings.tickets }}</a></p>
+{{/if}}

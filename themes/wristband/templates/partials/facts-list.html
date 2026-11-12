@@ -1,0 +1,8 @@
+<dl class="facts">
+  {{#if data.event.dateLabel}}<div class="fact"><dt>{{ strings.when }}</dt><dd><span class="fact-main">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}{{ data.event.dateLabel }}{{/if}}</span>{{#if data.event.time}} <span class="fact-sub">{{ data.event.time }}</span>{{/if}}</dd></div>
+  {{else}}{{#if data.event.time}}<div class="fact"><dt>{{ strings.when }}</dt><dd><span class="fact-main">{{ data.event.time }}</span></dd></div>
+  {{/if}}{{/if}}{{#if data.event.venue}}<div class="fact"><dt>{{ strings.where }}</dt><dd><span class="fact-main">{{ data.event.venue }}</span>{{#if data.event.address}} <span class="fact-sub">{{ data.event.address }}</span>{{/if}}</dd></div>
+  {{else}}{{#if data.event.address}}<div class="fact"><dt>{{ strings.where }}</dt><dd><span class="fact-main">{{ data.event.address }}</span></dd></div>
+  {{/if}}{{/if}}{{#if data.event.entry}}<div class="fact"><dt>{{ strings.entryLabel }}</dt><dd><span class="fact-main fact-entry">{{ data.event.entry }}</span></dd></div>
+  {{/if}}
+</dl>

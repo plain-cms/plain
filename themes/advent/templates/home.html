@@ -1,0 +1,17 @@
+<div class="home">
+  <div class="calendar card">
+    <header class="invite">
+      {{#if data.event.dateLabel}}<p class="invite-date">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}{{ data.event.dateLabel }}{{/if}}</p>
+      {{/if}}<h1 class="invite-name">{{ site.title }}</h1>
+      <div class="invite-foot">
+        <p class="invite-line">{{ page.title }}</p>
+        {{> facts}}
+      </div>
+    </header>
+    {{#if page.showProgramme}}{{#if data.event.programme}}{{> programme}}{{/if}}{{/if}}
+  </div>
+  {{#if page.content}}<div class="prose home-body">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.showPeople}}{{#if data.event.people}}{{> people}}{{/if}}{{/if}}
+</div>

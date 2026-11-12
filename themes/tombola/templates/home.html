@@ -1,0 +1,19 @@
+<div class="home{{#if page.showProgramme}}{{#if data.event.programme}} home-split{{/if}}{{/if}}">
+  <div class="home-main">
+    <header class="invite">
+      {{#if data.event.dateLabel}}<p class="invite-date">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}<span>{{ data.event.dateLabel }}</span>{{/if}}</p>
+      {{/if}}<h1 class="invite-name">{{ site.title }}</h1>
+      <p class="invite-line">{{ page.title }}</p>
+      {{#if data.event.time}}<p class="fact fact-time">{{ data.event.time }}</p>
+      {{/if}}{{#if data.event.venue}}<p class="fact fact-venue">{{ data.event.venue }}</p>
+      {{/if}}{{#if data.event.address}}<p class="fact fact-address">{{ data.event.address }}</p>
+      {{/if}}{{#if data.event.entry}}<p class="fact fact-entry">{{ data.event.entry }}</p>
+      {{/if}}{{> reply}}
+    </header>
+    <div class="prose">
+{{{ page.content }}}
+    </div>
+  </div>
+  {{#if page.showProgramme}}{{#if data.event.programme}}{{> programme}}{{/if}}{{/if}}
+  {{#if page.showPeople}}{{#if data.event.people}}{{> people}}{{/if}}{{/if}}
+</div>

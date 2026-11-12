@@ -1,0 +1,22 @@
+<div class="home">
+  <div class="suite">
+    <header class="invitation card">
+      <h1 class="inv-names">{{ site.title }}</h1>
+      <p class="inv-line">{{ page.title }}</p>
+      {{#if data.event.dateLabel}}<p class="inv-date">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}{{ data.event.dateLabel }}{{/if}}</p>
+      {{/if}}{{#if data.event.time}}<p class="inv-time">{{ data.event.time }}</p>
+      {{/if}}{{#if data.event.venue}}<p class="inv-venue">{{ data.event.venue }}</p>
+      {{/if}}{{#if data.event.address}}<p class="inv-address">{{ data.event.address }}</p>
+      {{/if}}{{#if data.event.entry}}<p class="inv-entry">{{ data.event.entry }}</p>
+      {{/if}}</header>
+    {{> reply}}
+  </div>
+  {{#if page.content}}<div class="home-note">
+    <div class="prose">
+{{{ page.content }}}
+    </div>
+    <p class="home-sign">{{ site.title }}</p>
+  </div>{{/if}}
+  {{#if page.showProgramme}}{{#if data.event.programme}}{{> programme}}{{/if}}{{/if}}
+  {{#if page.showPeople}}{{#if data.event.people}}{{> people}}{{/if}}{{/if}}
+</div>
