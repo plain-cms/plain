@@ -1,0 +1,60 @@
+{
+  "trialNote": "Your first lesson is a free half-hour trial — ring the office or send an email to book one, and we will match you with a teacher.",
+  "days": [
+    {
+      "day": "Monday",
+      "classes": [
+        { "time": "15:30–19:00", "name": "Piano lessons", "who": "Clara", "level": "By arrangement" },
+        { "time": "16:45", "name": "Junior Strings", "who": "Tomasz", "level": "Ages 7–11" },
+        { "time": "19:30", "name": "Chamber Choir", "who": "Helen", "level": "Adults, reading music" }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "classes": [
+        { "time": "09:30", "name": "Music Bugs", "who": "Ruth", "level": "Ages 2–4" },
+        { "time": "15:30–19:30", "name": "Violin & viola lessons", "who": "Tomasz", "level": "By arrangement" },
+        { "time": "16:30", "name": "Theory Club", "who": "Clara", "level": "Grades 1–5" },
+        { "time": "18:30", "name": "Adult Beginners’ Piano", "who": "Daniel", "level": "Adults" }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "classes": [
+        { "time": "15:30–17:00", "name": "Singing lessons", "who": "Ffion", "level": "By arrangement" },
+        { "time": "15:30–18:30", "name": "Cello lessons", "who": "Isabel", "level": "By arrangement" },
+        { "time": "17:15", "name": "Youth Voices", "who": "Ffion", "level": "Ages 11–16" },
+        { "time": "19:00", "name": "Strings Ensemble", "who": "Isabel", "level": "Grade 4 and up" }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "classes": [
+        { "time": "10:00", "name": "Music Bugs", "who": "Ruth", "level": "Ages 2–4" },
+        { "time": "15:30–19:00", "name": "Piano lessons", "who": "Clara", "level": "By arrangement" },
+        { "time": "16:00–20:00", "name": "Piano lessons", "who": "Daniel", "level": "By arrangement" },
+        { "time": "18:30", "name": "Sing for Pleasure", "who": "Helen", "level": "Adults, no audition" }
+      ]
+    },
+    {
+      "day": "Friday",
+      "classes": [
+        { "time": "15:30–18:30", "name": "Singing lessons", "who": "Helen", "level": "By arrangement" },
+        { "time": "16:30", "name": "First Strings", "who": "Tomasz", "level": "Ages 5–7" }
+      ]
+    },
+    {
+      "day": "Saturday",
+      "classes": [
+        { "time": "09:30", "name": "Music Bugs", "who": "Ruth", "level": "Ages 2–4" },
+        { "time": "10:00–13:00", "name": "Piano lessons", "who": "Daniel", "level": "By arrangement" },
+        { "time": "10:30", "name": "Little Voices", "who": "Ffion", "level": "Ages 5–8" },
+        { "time": "11:30", "name": "Saturday Orchestra", "who": "Tomasz and Isabel", "level": "Grade 2 and up" }
+      ]
+    },
+    {
+      "day": "Sunday",
+      "classes": []
+    }
+  ]
+}

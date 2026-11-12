@@ -1,0 +1,189 @@
+{
+  "trialNote": "Every new pupil’s first class is free — ring or e-mail the office to book a place, and come in anything comfortable.",
+  "days": [
+    {
+      "day": "Monday",
+      "classes": [
+        {
+          "time": "4.00–4.30pm",
+          "name": "Baby Ballet",
+          "who": "Harriet",
+          "level": "Ages 3–4"
+        },
+        {
+          "time": "4.45–5.30pm",
+          "name": "Primary Ballet",
+          "who": "Harriet",
+          "level": "Ages 6–7"
+        },
+        {
+          "time": "5.30–6.30pm",
+          "name": "Grade 3 Ballet",
+          "who": "Sofia",
+          "level": "Ages 9–11"
+        },
+        {
+          "time": "6.45–8.00pm",
+          "name": "Intermediate Ballet",
+          "who": "Yuki and Tom (piano)",
+          "level": "Ages 13 and over"
+        }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "classes": [
+        {
+          "time": "4.30–5.15pm",
+          "name": "Pre-Primary Ballet",
+          "who": "Harriet",
+          "level": "Ages 5–6"
+        },
+        {
+          "time": "5.15–6.15pm",
+          "name": "Junior Contemporary",
+          "who": "Daniel",
+          "level": "Ages 8–11"
+        },
+        {
+          "time": "6.30–7.30pm",
+          "name": "Grade 5 Ballet",
+          "who": "Sofia",
+          "level": "Ages 11–13"
+        },
+        {
+          "time": "7.45–8.45pm",
+          "name": "Adult Beginners’ Ballet",
+          "who": "Peggy",
+          "level": "Adults, no experience"
+        }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "classes": [
+        {
+          "time": "4.15–5.00pm",
+          "name": "Grade 1 Ballet",
+          "who": "Sofia",
+          "level": "Ages 7–8"
+        },
+        {
+          "time": "5.15–6.15pm",
+          "name": "Tap",
+          "who": "Isabel",
+          "level": "Ages 8 and over"
+        },
+        {
+          "time": "6.30–7.45pm",
+          "name": "Pointe Preparation",
+          "who": "Yuki",
+          "level": "By invitation"
+        },
+        {
+          "time": "8.00–9.00pm",
+          "name": "Adult Barre & Stretch",
+          "who": "Clementine",
+          "level": "All adults"
+        }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "classes": [
+        {
+          "time": "4.30–5.30pm",
+          "name": "Grade 2 Ballet",
+          "who": "Sofia",
+          "level": "Ages 8–9"
+        },
+        {
+          "time": "5.30–6.30pm",
+          "name": "Boys’ Ballet",
+          "who": "Daniel",
+          "level": "Ages 7–12"
+        },
+        {
+          "time": "6.45–8.00pm",
+          "name": "Intermediate Ballet",
+          "who": "Yuki and Tom (piano)",
+          "level": "Ages 13 and over"
+        },
+        {
+          "time": "8.00–9.00pm",
+          "name": "Adult Improvers’ Ballet",
+          "who": "Clementine",
+          "level": "After a year of class"
+        }
+      ]
+    },
+    {
+      "day": "Friday",
+      "classes": [
+        {
+          "time": "4.00–4.30pm",
+          "name": "Baby Ballet",
+          "who": "Harriet",
+          "level": "Ages 3–4"
+        },
+        {
+          "time": "4.45–5.45pm",
+          "name": "Jazz",
+          "who": "Isabel",
+          "level": "Ages 9–13"
+        },
+        {
+          "time": "6.00–7.15pm",
+          "name": "Senior Contemporary",
+          "who": "Daniel",
+          "level": "Ages 13 and over"
+        }
+      ]
+    },
+    {
+      "day": "Saturday",
+      "classes": [
+        {
+          "time": "9.00–9.30am",
+          "name": "Baby Ballet",
+          "who": "Harriet",
+          "level": "Ages 3–4"
+        },
+        {
+          "time": "9.45–10.30am",
+          "name": "Pre-Primary Ballet",
+          "who": "Harriet",
+          "level": "Ages 5–6"
+        },
+        {
+          "time": "10.30–11.15am",
+          "name": "Primary Ballet",
+          "who": "Sofia",
+          "level": "Ages 6–7"
+        },
+        {
+          "time": "11.30am–12.30pm",
+          "name": "Grade 4 Ballet",
+          "who": "Sofia",
+          "level": "Ages 10–12"
+        },
+        {
+          "time": "12.45–2.00pm",
+          "name": "Repertoire Workshop",
+          "who": "Clementine and Tom (piano)",
+          "level": "Grade 4 and above"
+        },
+        {
+          "time": "2.15–3.15pm",
+          "name": "Adult Beginners’ Ballet",
+          "who": "Peggy",
+          "level": "Adults, no experience"
+        }
+      ]
+    },
+    {
+      "day": "Sunday",
+      "classes": []
+    }
+  ]
+}

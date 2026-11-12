@@ -1,0 +1,62 @@
+{
+  "trialNote": "New to climbing? Book Intro to Bouldering — £20 with shoe hire, and at the end we sign you off to climb on your own.",
+  "days": [
+    {
+      "day": "Monday",
+      "classes": [
+        { "time": "10:00", "name": "Over-50s Bouldering", "who": "Margit", "level": "All levels" },
+        { "time": "16:30", "name": "Kids' Club", "who": "Hollie", "level": "Ages 6–8" },
+        { "time": "18:00", "name": "Intro to Bouldering", "who": "Ana", "level": "Beginner" },
+        { "time": "19:30", "name": "Strength & Fingerboard", "who": "Dev", "level": "V4+" }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "classes": [
+        { "time": "12:30", "name": "Lunchtime Mobility", "who": "Margit", "level": "All levels" },
+        { "time": "16:30", "name": "Kids' Club", "who": "Rhys", "level": "Ages 9–12" },
+        { "time": "18:30", "name": "Learn to Belay (top-rope wall)", "who": "Kwame", "level": "Beginner" },
+        { "time": "19:30", "name": "Women's Bouldering Social", "who": "Tess", "level": "All levels" }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "classes": [
+        { "time": "10:00", "name": "Home-School Climbing", "who": "Rhys", "level": "Ages 7–14" },
+        { "time": "17:00", "name": "Youth Squad", "who": "Sam", "level": "Ages 12–16" },
+        { "time": "18:00", "name": "Intro to Bouldering", "who": "Ana", "level": "Beginner" },
+        { "time": "19:30", "name": "Footwork Clinic", "who": "Ana", "level": "V1–V3" }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "classes": [
+        { "time": "10:00", "name": "Over-50s Bouldering", "who": "Margit", "level": "All levels" },
+        { "time": "16:30", "name": "Kids' Club", "who": "Hollie", "level": "Ages 6–8" },
+        { "time": "18:30", "name": "Adaptive Climbing", "who": "Tess", "level": "All levels" },
+        { "time": "19:30", "name": "Strength & Fingerboard", "who": "Dev", "level": "V4+" }
+      ]
+    },
+    {
+      "day": "Friday",
+      "classes": [
+        { "time": "16:30", "name": "Kids' Club", "who": "Rhys", "level": "Ages 9–12" },
+        { "time": "18:00", "name": "Learn to Belay (top-rope wall)", "who": "Kwame", "level": "Beginner" },
+        { "time": "19:00", "name": "Friday Night Social", "who": "", "level": "" }
+      ]
+    },
+    {
+      "day": "Saturday",
+      "classes": [
+        { "time": "09:00", "name": "Little Climbers", "who": "Hollie", "level": "Ages 4–5" },
+        { "time": "10:30", "name": "Youth Squad", "who": "Sam", "level": "Ages 12–16" },
+        { "time": "12:00", "name": "Intro to Bouldering", "who": "Ana", "level": "Beginner" },
+        { "time": "14:00", "name": "Reading Problems", "who": "Sam", "level": "V1–V3" }
+      ]
+    },
+    {
+      "day": "Sunday",
+      "classes": []
+    }
+  ]
+}

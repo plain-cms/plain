@@ -1,0 +1,20 @@
+<article class="leaf instructor">
+  <header class="cover">
+    <div class="cover-frame">
+      <h1>{{ page.title }}</h1>
+      {{#if page.discipline}}<p class="cover-for">{{ page.discipline }}</p>
+      {{/if}}<p class="cover-imprint">{{ site.title }}</p>
+    </div>
+  </header>
+  <div class="leaf-body">
+    {{#if page.description}}<p class="dedication">{{ page.description }}</p>
+    {{/if}}{{#if page.photo}}<img class="plate portrait" src="{{ page.photo }}" alt="{{ page.title }}" decoding="async">
+    {{/if}}{{#if page.content}}<div class="sheet prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}<aside class="see-timetable">
+      <p>{{ strings.catchClassesBody }}</p>
+      <a class="btn-trial" href="/schedule/">{{ strings.seeSchedule }}</a>
+    </aside>
+  </div>
+</article>

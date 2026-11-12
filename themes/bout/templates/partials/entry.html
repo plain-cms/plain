@@ -1,0 +1,8 @@
+<li class="entry">
+  {{#if item.photo}}<img class="entry-photo" src="{{ item.photo }}" alt="" loading="lazy" decoding="async">
+  {{/if}}<h2 class="entry-name"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.discipline}}<p class="discipline">{{ item.discipline }}</p>
+  {{/if}}{{#if item.dateFormatted}}<p class="entry-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  {{/if}}{{#if item.description}}<p class="entry-summary">{{ item.description }}</p>
+  {{/if}}
+</li>

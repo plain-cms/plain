@@ -1,0 +1,523 @@
+/* Tearoff — evening classes in a hired hall, as the photocopied flyer on the
+   noticeboard: lilac copier paper, black toner and nothing else, white
+   paste-up panels with hard edges. The signature is the fringe of tear-off
+   strips: the weekly timetable, one strip per day between dashed scissor
+   cuts, the day set sideways at its head; a day with no classes is a stub
+   someone has already torn off. Restyle by editing tokens, never selectors. */
+
+:root {
+  --font-display: "Helvetica Neue", "Arial Narrow", "Nimbus Sans Narrow", "Roboto Condensed", Helvetica, Arial, sans-serif;
+  --font-body: "American Typewriter", "Courier Prime", Courier, "Courier New", "Nimbus Mono PS", monospace;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --stretch-display: condensed;
+  --weight-display: 900;
+  --weight-bold: 700;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.875rem;
+  --text-xxl: clamp(2.5rem, 7vw, 4.25rem);
+  --text-hero: clamp(2.75rem, 6.4vw, 5.25rem);
+  --text-day: clamp(1.5rem, 2.4vw, 1.875rem);
+  --text-time: 1.125rem;
+  --leading-body: 1.55;
+  --leading-tight: 0.95;
+
+  --color-bg: #d6c6ee;
+  --color-text: #16121a;
+  --color-muted: #463c55;
+  --color-accent: #16121a;
+  --color-panel: #ffffff;
+  --color-edge: #6b5f7c;
+  --color-cut: #16121a;
+  --color-block: #16121a;
+  --color-on-block: #d6c6ee;
+
+  --measure: 64ch;
+  --page-width: 78rem;
+  --strip-min: 8.75rem;
+  --head-length: 9.5rem;
+  --gutter: clamp(1rem, 3vw, 2rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --cut-width: 2px;
+  --cut-dash: 7px;
+  --rule: 3px;
+  --tap-target: 2.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The negative copy: white toner on black stock, panels a step darker. */
+    --color-bg: #17131d;
+    --color-text: #f1ecf7;
+    --color-muted: #b4a9c4;
+    --color-accent: #f1ecf7;
+    --color-panel: #050407;
+    --color-edge: #8a7d9c;
+    --color-cut: #f1ecf7;
+    --color-block: #f1ecf7;
+    --color-on-block: #17131d;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+
+body {
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  max-width: var(--page-width);
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+::selection { color: var(--color-on-block); background: var(--color-block); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: var(--rule); }
+a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
+
+:focus-visible { outline: var(--rule) solid var(--color-accent); outline-offset: var(--rule); }
+
+.skip-link {
+  position: absolute; left: -100vw; top: var(--space-2); z-index: 9;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-on-block); background: var(--color-block);
+}
+.skip-link:focus { left: var(--space-2); }
+
+main { min-height: 50vh; }
+
+h1, h2, h3, .site-title, .kicker {
+  font-family: var(--font-display);
+  font-stretch: var(--stretch-display);
+  font-weight: var(--weight-display);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
+}
+
+/* Masthead: the flyer's top line ----------------------------------------- */
+
+.masthead {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-3) 0 var(--space-2);
+  border-bottom: var(--rule) solid var(--color-text);
+}
+.site-title {
+  flex: 1 1 100%; min-width: 0;
+  font-size: var(--text-xl);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.site-title:hover { text-decoration: underline; }
+.masthead nav { flex: 1 1 14rem; }
+.masthead ul {
+  display: flex; flex-wrap: wrap; gap: 0 var(--space-3);
+  margin: 0; padding: 0; list-style: none;
+}
+.masthead nav a {
+  display: inline-flex; align-items: center; min-height: var(--tap-target);
+  color: var(--color-text); text-decoration: none;
+}
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current="page"] { box-shadow: inset 0 calc(-1 * var(--rule)) var(--color-accent); font-weight: var(--weight-bold); }
+
+@media (min-width: 56em) {
+  .masthead { flex-wrap: nowrap; column-gap: var(--space-4); }
+  .site-title { flex: 0 1 auto; }
+  .masthead nav { flex: 1 1 auto; }
+  .masthead ul { justify-content: flex-end; }
+}
+
+/* A toner block: the paper shows through the letters */
+.btn-trial {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: var(--tap-target);
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-display); font-stretch: var(--stretch-display);
+  font-weight: var(--weight-display); font-size: var(--text-l);
+  line-height: 1.1; text-align: center; text-decoration: none;
+  color: var(--color-on-block); background: var(--color-block);
+  border: var(--rule) solid var(--color-block);
+}
+.btn-trial:hover { color: var(--color-text); background: transparent; }
+
+/* Headers ----------------------------------------------------------------- */
+
+.page-header { margin: var(--space-4) 0 var(--space-4); max-width: 60rem; }
+.page-header h1 { font-size: var(--text-xxl); margin: 0 0 var(--space-3); text-wrap: pretty; }
+.page-home .page-header { max-width: 72rem; }
+.page-home .page-header h1 { font-size: var(--text-hero); letter-spacing: -0.02em; }
+/* The intro line is typed copy pasted up on white, its cut edge copied as a line */
+.lede {
+  width: fit-content; max-width: calc(46ch + 2 * var(--space-3));
+  margin: 0; padding: var(--space-2) var(--space-3);
+  font-size: var(--text-l); text-wrap: pretty;
+  background: var(--color-panel); border: 1px solid var(--color-edge);
+}
+.kicker { font-size: var(--text-l); margin: 0 0 var(--space-2); }
+.discipline { font-weight: var(--weight-bold); margin: 0; hyphens: auto; }
+.meta { margin: 0 0 var(--space-2); color: var(--color-muted); }
+.tags { display: inline; margin-left: var(--space-2); }
+.tag { color: var(--color-text); }
+.tag::before { content: "#"; }
+
+/* THE SIGNATURE: the fringe ------------------------------------------------
+   Every day is one strip, cut from the same paper as the page. Phones: the
+   strips lie stacked, the day sideways down the left end. Wider: they hang
+   side by side, the day sideways at the head, the classes down the strip,
+   and the strips of a row share one length, like the fringe of a real flyer.
+   The cuts are drawn with gradients from each strip's top, so two strips'
+   cuts lie exactly on top of one another whatever their lengths. */
+
+.timetable { margin: var(--space-4) 0; }
+
+.timetable-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: var(--space-3); margin-bottom: var(--space-3);
+}
+.timetable-head h2 { font-size: var(--text-l); margin: 0; text-transform: uppercase; }
+.take-one {
+  margin: 0; padding: 0 var(--space-2);
+  font-size: var(--text-s); font-weight: var(--weight-bold);
+  color: var(--color-on-block); background: var(--color-block);
+}
+
+.fringe {
+  position: relative;
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: minmax(0, 1fr);
+}
+/* The scissors on the tear line, under Take one, inside the last strip's head */
+.fringe::before, .fringe::after {
+  content: ""; position: absolute; z-index: 2;
+  top: -0.75rem; right: var(--space-3); height: 1.5rem;
+}
+.fringe::before { width: 2.5rem; margin-right: -0.5rem; background: var(--color-bg); }
+.fringe::after {
+  width: 1.5rem; transform: scaleX(-1);
+  background: var(--color-cut);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='6' cy='6' r='3'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Cpath d='M21 3 8.1 15.9M14.5 14.5 21 21M8.1 8.1 12 12'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round'%3E%3Ccircle cx='6' cy='6' r='3'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Cpath d='M21 3 8.1 15.9M14.5 14.5 21 21M8.1 8.1 12 12'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* Each cut starts in a little scissor snip, a V where the blades stopped */
+.strip {
+  position: relative;
+  display: flex; gap: var(--space-3);
+  padding: var(--space-3);
+  background-image: radial-gradient(circle, var(--color-cut) 0 1px, transparent 1.6px);
+  background-size: 6px 6px; background-repeat: repeat-y; background-position: 0 0;
+}
+.strip::before, .strip::after {
+  content: ""; position: absolute; left: 0; right: 0; height: 0.75rem;
+  background:
+    linear-gradient(to bottom left, transparent calc(50% - 1px), var(--color-cut) 0 calc(50% + 1px), transparent 0) 0 0 / 0.625rem 50% no-repeat,
+    linear-gradient(to bottom right, transparent calc(50% - 1px), var(--color-cut) 0 calc(50% + 1px), transparent 0) 0 100% / 0.625rem 50% no-repeat,
+    repeating-linear-gradient(to right, var(--color-cut) 0 var(--cut-dash), transparent 0 calc(var(--cut-dash) * 1.8)) 0.625rem 50% / 100% var(--cut-width) no-repeat;
+}
+.strip::before { top: -0.375rem; }
+.strip::after { bottom: -0.375rem; }
+
+.strip-day {
+  flex: none; margin: 0;
+  max-height: 9rem;
+  writing-mode: vertical-rl; transform: rotate(180deg);
+  text-align: end;
+  font-size: var(--text-day); line-height: 1;
+  hyphenate-limit-chars: 8 3 3;
+}
+.strip-body { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; }
+
+.sessions { list-style: none; margin: 0; padding: 0; }
+.session { display: flex; flex-direction: column; padding: 0 0 var(--space-3); }
+.session:last-child { padding-bottom: 0; }
+.session-time {
+  font-weight: var(--weight-bold); font-size: var(--text-time);
+  font-variant-numeric: tabular-nums; line-height: 1.25;
+  hyphens: auto;
+}
+.session-name {
+  font-family: var(--font-display); font-stretch: var(--stretch-display);
+  font-weight: var(--weight-display); font-size: var(--text-l);
+  line-height: 1.05; margin: var(--space-1) 0 0;
+  hyphens: auto; hyphenate-limit-chars: 8 3 3;
+}
+.session-who, .session-level { font-size: var(--text-s); line-height: 1.35; hyphens: auto; }
+.session-who { margin-top: var(--space-1); }
+.session-level { color: var(--color-muted); }
+
+.strip-tail { display: none; }
+
+/* The stub: the paper ends in a torn edge, and past it the strip is gone —
+   the noticeboard shows through the gap, hatched in toner, and the cuts on
+   either side stop where the paper stops. */
+.strip-none { position: relative; margin: 0; color: var(--color-muted); font-weight: var(--weight-bold); }
+.strip-stub .strip-body { flex-direction: row; align-items: center; }
+.strip-stub .strip-body::after {
+  content: ""; position: relative; z-index: 1;
+  flex: 1 1 auto; align-self: stretch; min-width: 3rem;
+  margin: calc(-1 * var(--space-3) - var(--cut-width)) calc(-1 * var(--space-3)) calc(-1 * var(--space-3) - var(--cut-width)) var(--space-3);
+  background: repeating-linear-gradient(-45deg, var(--color-cut) 0 1px, transparent 0 9px) var(--color-bg);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='40'%3E%3Cpath d='M4 0l-3 3 4 3-3 3 4 3-3 3 4 4-5 3 3 3-4 3 5 4-3 3 1 5H8V0z'/%3E%3C/svg%3E") 0 0 / 8px 40px repeat-y, linear-gradient(var(--color-cut) 0 0) 8px 0 / 100% 100% no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='40'%3E%3Cpath d='M4 0l-3 3 4 3-3 3 4 3-3 3 4 4-5 3 3 3-4 3 5 4-3 3 1 5H8V0z'/%3E%3C/svg%3E") 0 0 / 8px 40px repeat-y, linear-gradient(var(--color-cut) 0 0) 8px 0 / 100% 100% no-repeat;
+}
+.strip-stub .strip-none::after {
+  content: ""; position: absolute; z-index: 2;
+  top: calc(-1 * var(--space-3) - var(--cut-width)); bottom: calc(-1 * var(--space-3) - var(--cut-width));
+  left: calc(100% + var(--space-3)); width: 8px;
+  background: var(--color-cut);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='40'%3E%3Cpath d='M4 0l-3 3 4 3-3 3 4 3-3 3 4 4-5 3 3 3-4 3 5 4-3 3 1 5' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 0 0 / 8px 40px repeat-y;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='40'%3E%3Cpath d='M4 0l-3 3 4 3-3 3 4 3-3 3 4 4-5 3 3 3-4 3 5 4-3 3 1 5' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 0 0 / 8px 40px repeat-y;
+}
+
+.today-flag:not([hidden]) {
+  align-self: flex-start; margin: 0 0 var(--space-2); padding: 0 var(--space-2);
+  font-size: var(--text-s); font-weight: var(--weight-bold);
+  color: var(--color-on-block); background: var(--color-block);
+}
+.strip-stub .today-flag:not([hidden]) { align-self: center; margin: 0 var(--space-2) 0 0; }
+.strip.is-today .strip-day { align-self: flex-start; color: var(--color-on-block); background: var(--color-block); padding: var(--space-2) var(--space-1); }
+
+@media (min-width: 40em) {
+  .fringe { grid-template-columns: repeat(auto-fit, minmax(var(--strip-min), 1fr)); row-gap: var(--space-4); }
+  .fringe:not(:has(> :nth-child(4))) { grid-template-columns: repeat(auto-fill, minmax(var(--strip-min), 14rem)); }
+  .strip {
+    flex-direction: column; gap: var(--space-3);
+    background-repeat: repeat-x;
+  }
+  .strip::before, .strip::after {
+    top: 0; bottom: 0; left: auto; right: auto; width: 0.75rem; height: auto;
+    background:
+      linear-gradient(to bottom left, transparent calc(50% - 1px), var(--color-cut) 0 calc(50% + 1px), transparent 0) 0 0 / 50% 0.625rem no-repeat,
+      linear-gradient(to bottom right, transparent calc(50% - 1px), var(--color-cut) 0 calc(50% + 1px), transparent 0) 100% 0 / 50% 0.625rem no-repeat,
+      repeating-linear-gradient(to bottom, var(--color-cut) 0 var(--cut-dash), transparent 0 calc(var(--cut-dash) * 1.8)) 50% 0.625rem / var(--cut-width) 100% no-repeat;
+  }
+  .strip::before { left: -0.375rem; }
+  .strip::after { right: -0.375rem; }
+  .strip-day { height: var(--head-length); max-height: none; }
+  .strip.is-today .strip-day { padding: var(--space-2); }
+  /* The name at the foot of every strip, as on a real tear-off: it wraps onto
+     as many sideways lines as it needs, never cut off */
+  .strip-tail {
+    display: block; margin-top: auto; padding-bottom: var(--space-4); /* the top, once turned */
+    max-height: 13rem; max-width: 100%;
+    writing-mode: vertical-rl; transform: rotate(180deg);
+    font-size: var(--text-s); line-height: 1.25; color: var(--color-muted);
+    hyphens: auto;
+  }
+  .strip-stub .strip-body { flex-direction: column; align-items: stretch; }
+  .strip-stub .strip-body::after {
+    min-width: 0; min-height: var(--space-4);
+    margin: var(--space-3) calc(-1 * var(--space-3) - var(--cut-width)) calc(-1 * var(--space-3));
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='8'%3E%3Cpath d='M0 4l3-3 3 4 3-3 3 4 3-3 4 4 3-5 3 3 3-4 4 5 3-3 5 1V8H0z'/%3E%3C/svg%3E") 0.25rem 0 / 40px 8px repeat-x, linear-gradient(var(--color-cut) 0 0) 0 8px / 100% 100% no-repeat;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='8'%3E%3Cpath d='M0 4l3-3 3 4 3-3 3 4 3-3 4 4 3-5 3 3 3-4 4 5 3-3 5 1V8H0z'/%3E%3C/svg%3E") 0.25rem 0 / 40px 8px repeat-x, linear-gradient(var(--color-cut) 0 0) 0 8px / 100% 100% no-repeat;
+  }
+  .strip-stub .strip-none::after {
+    top: calc(100% + var(--space-3)); bottom: auto; height: 8px; width: auto;
+    left: calc(-1 * var(--space-3) - var(--cut-width)); right: calc(-1 * var(--space-3) - var(--cut-width));
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='8'%3E%3Cpath d='M0 4l3-3 3 4 3-3 3 4 3-3 4 4 3-5 3 3 3-4 4 5 3-3 5 1' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 0.25rem 0 / 40px 8px repeat-x;
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='8'%3E%3Cpath d='M0 4l3-3 3 4 3-3 3 4 3-3 4 4 3-5 3 3 3-4 4 5 3-3 5 1' fill='none' stroke='black' stroke-width='2'/%3E%3C/svg%3E") 0.25rem 0 / 40px 8px repeat-x;
+  }
+  .strip-stub .today-flag:not([hidden]) { align-self: flex-start; margin: 0 0 var(--space-2); }
+}
+
+.trial-note {
+  display: inline-block; max-width: var(--measure);
+  margin: var(--space-4) 0 0; padding: var(--space-2) var(--space-3);
+  font-weight: var(--weight-bold);
+  background: var(--color-panel); border: 1px solid var(--color-edge);
+  text-wrap: pretty;
+}
+
+/* Paste-up panels: white paper glued on the master, the cut edge copied as a line */
+.paste-up { background: var(--color-panel); border: 1px solid var(--color-edge); }
+
+/* Prose --------------------------------------------------------------------- */
+
+.prose {
+  max-width: calc(var(--measure) + 2 * var(--space-4));
+  padding: clamp(var(--space-3), 3vw, 1.75rem);
+  margin: var(--space-4) 0;
+}
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); text-wrap: pretty; }
+.prose h2 { font-size: var(--text-xl); }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-family: var(--font-body); font-size: var(--text-m); font-weight: var(--weight-bold); letter-spacing: 0; }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose img { max-width: 100%; height: auto; filter: grayscale(1) contrast(1.25); }
+.prose blockquote {
+  margin: var(--space-3) 0; padding: 0 0 0 var(--space-3);
+  border-left: var(--rule) solid var(--color-text);
+  font-weight: var(--weight-bold);
+}
+.prose code { font-family: var(--font-mono); font-size: 0.88em; }
+.prose pre {
+  margin: 0 0 var(--space-3); padding: var(--space-3);
+  overflow-x: auto; border: 1px dashed var(--color-edge);
+}
+.prose pre code { font-size: var(--text-s); }
+.prose hr { border: 0; border-top: var(--cut-width) dashed var(--color-cut); margin: var(--space-4) 0; }
+
+.prose table {
+  display: block; overflow-x: auto; max-width: 100%;
+  border-collapse: collapse; margin: 0 0 var(--space-3);
+  font-variant-numeric: tabular-nums; hyphens: manual;
+}
+.prose th, .prose td {
+  text-align: left; vertical-align: top;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: 1px solid var(--color-edge);
+}
+@media (max-width: 40em) { .prose th, .prose td { width: 8em; } }
+.prose th {
+  font-family: var(--font-display); font-stretch: var(--stretch-display);
+  font-weight: var(--weight-display); font-size: var(--text-m);
+  border-bottom: var(--rule) solid var(--color-text);
+}
+
+.cover { display: block; width: 100%; height: auto; margin: 0 0 var(--space-4); filter: grayscale(1) contrast(1.25); }
+
+/* Instructors: paste-up cards ------------------------------------------------- */
+
+.card-list {
+  list-style: none; margin: 0 0 var(--space-4); padding: 0;
+  display: grid; gap: var(--space-3);
+  grid-template-columns: repeat(auto-fill, minmax(min(18rem, 100%), 1fr));
+}
+.card {
+  display: grid; grid-template-columns: minmax(0, 1fr); align-content: start;
+  row-gap: var(--space-2); padding: var(--space-3);
+}
+.card.has-photo { grid-template-columns: minmax(0, 1fr) 5.5rem; column-gap: var(--space-3); }
+.card > * { grid-column: 1; margin: 0; }
+.card h2 { font-size: var(--text-xl); }
+.card h2 a { color: var(--color-text); text-decoration: none; }
+.card h2 a:hover { text-decoration: underline; }
+.card .summary { font-size: var(--text-s); }
+.card.has-photo .summary { hyphens: auto; }
+.card-photo {
+  grid-column: 2; grid-row: 1 / span 4; width: 100%; aspect-ratio: 0.8;
+  object-fit: cover; filter: grayscale(1) contrast(1.25);
+}
+
+.instructor-photo {
+  display: block; width: 100%; max-width: 18rem; aspect-ratio: 0.8;
+  object-fit: cover; margin: 0 0 var(--space-4);
+  filter: grayscale(1) contrast(1.25); border: 1px solid var(--color-edge);
+}
+
+/* The pointer to the timetable: a single strip of its own */
+.pointer {
+  position: relative; max-width: 22rem;
+  margin: var(--space-4) 0; padding: var(--space-3);
+  background: radial-gradient(circle, var(--color-cut) 0 1px, transparent 1.6px) 0 0 / 6px 6px repeat-x;
+}
+.pointer::before, .pointer::after {
+  content: ""; position: absolute; top: 0; bottom: 0; width: var(--cut-width);
+  background: repeating-linear-gradient(to bottom, var(--color-cut) 0 var(--cut-dash), transparent var(--cut-dash) calc(var(--cut-dash) * 1.8));
+}
+.pointer::before { left: 0; }
+.pointer::after { right: 0; }
+.pointer h2 { font-size: var(--text-xl); margin: 0 0 var(--space-2); }
+.pointer p { margin: 0 0 var(--space-3); }
+.pointer p:last-child { margin: 0; }
+
+@media (min-width: 60em) {
+  .instructor {
+    display: grid; column-gap: var(--space-4); align-items: start;
+    grid-template-columns: minmax(0, calc(var(--measure) + 2 * var(--space-4))) minmax(0, 1fr);
+  }
+  .instructor > * { grid-column: 1; }
+  .instructor > .page-header { grid-column: 1 / -1; }
+  .instructor > .prose { margin-top: 0; }
+  .instructor-photo, .pointer { grid-column: 2; margin-top: 0; }
+  .instructor-photo + .prose { grid-row: 2 / span 2; }
+}
+
+/* Pagination, empty, 404 ---------------------------------------------------------- */
+
+.pagination {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center;
+  gap: var(--space-3); padding: var(--space-3) 0;
+}
+.pagination a {
+  display: inline-flex; align-items: center; min-height: var(--tap-target);
+  padding: 0 var(--space-3); border: var(--cut-width) solid var(--color-text);
+  color: var(--color-text); text-decoration: none; font-weight: var(--weight-bold);
+}
+.pagination a:hover { color: var(--color-on-block); background: var(--color-block); }
+.empty { font-weight: var(--weight-bold); }
+
+/* Colophon: under the last scissor cut ------------------------------------------- */
+
+.colophon {
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-4); padding: var(--space-3) 0 var(--space-4);
+  border-top: var(--cut-width) dashed var(--color-cut);
+  font-size: var(--text-s);
+}
+.colophon > * { min-width: 0; margin: 0; }
+.colophon-name {
+  font-family: var(--font-display); font-stretch: var(--stretch-display);
+  font-weight: var(--weight-display); font-size: var(--text-l); text-transform: uppercase;
+}
+.colophon-trial { max-width: var(--measure); }
+.colophon-note { flex-basis: 100%; color: var(--color-muted); }
+.colophon-note > * { margin: 0 0 var(--space-1); }
+.colophon-note a { color: inherit; }
+
+/* Motion --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .btn-trial, .pagination a { transition: background-color 0.15s, color 0.15s; }
+}
+
+/* Print: a real flyer to pin up — toner on white, the strips ready to cut ---------- */
+
+@media print {
+  html:root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #222;
+    --color-accent: #000;
+    --color-panel: #fff;
+    --color-edge: #000;
+    --color-cut: #000;
+    --color-block: #fff;
+    --color-on-block: #000;
+  }
+  body { max-width: none; padding: 0; font-size: 10pt; }
+  main { min-height: 0; }
+  .masthead nav, .btn-trial, .skip-link, .pagination, .today-flag, .pointer, .take-one { display: none; }
+  .masthead { padding-top: 0; }
+  .page-header { margin: var(--space-3) 0; }
+  .page-home .page-header h1, .page-header h1 { font-size: 26pt; }
+  .fringe { grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr)); }
+  .strip { break-inside: avoid; flex-direction: column; }
+  .strip.is-today .strip-day { padding: 0; }
+  .paste-up { border: 0; padding: 0; }
+  a { color: inherit; text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }
+  .prose pre { white-space: pre-wrap; }
+  .colophon { font-size: 9pt; }
+}

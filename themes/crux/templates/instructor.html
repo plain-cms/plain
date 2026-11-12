@@ -1,0 +1,15 @@
+<article class="instructor{{#if page.photo}} has-photo{{/if}}">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.discipline}}<p class="discipline">{{ page.discipline }}</p>
+    {{/if}}
+  </header>
+  {{#if page.photo}}<img class="instructor-photo" src="{{ page.photo }}" alt="{{ page.title }}" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+  <aside class="on-wall">
+    <div class="tag"><a class="tag-face" href="/schedule/"><span class="tag-name">{{ strings.seeSchedule }}</span><span class="tag-who">{{ strings.scheduleNote }}</span></a></div>
+  </aside>
+</article>

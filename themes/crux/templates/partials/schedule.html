@@ -1,0 +1,23 @@
+{{#if data.schedule.days}}<section class="wall" aria-labelledby="week-heading">
+  <h2 class="wall-head" id="week-heading">{{ strings.thisWeek }}</h2>
+  <ol class="week">
+    {{#each data.schedule.days as day}}<li class="day" data-day="{{ day.day }}">
+      <h3 class="day-name">{{ day.day }} <span class="today-flag" hidden>{{ strings.today }}</span></h3>
+      {{#if day.classes}}<ul class="tags">
+        {{#each day.classes as session}}<li class="tag"><div class="tag-face">
+          <span class="tag-head"><span class="tag-time">{{ session.time }}</span>{{#if session.level}}
+          <span class="tag-grade"><span class="tag-grade-label">{{ strings.levelLabel }}</span> <span class="tag-level">{{ session.level }}</span></span>{{/if}}</span>
+          <span class="tag-name">{{ session.name }}</span>{{#if session.who}}
+          <span class="tag-who">{{ strings.withInstructor }} {{ session.who }}</span>{{/if}}
+        </div></li>
+        {{/each}}
+      </ul>
+      {{else}}<p class="day-empty">{{ strings.noClasses }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ol>
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}<p class="print-only">{{ site.title }} · {{ site.url }}</p>
+</section>
+{{/if}}

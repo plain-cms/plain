@@ -1,0 +1,25 @@
+<article class="instructor">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.discipline}}<p class="role">{{ page.discipline }}</p>
+    {{/if}}{{#if page.photo}}{{else}}{{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{/if}}
+  </header>
+  <div class="spread">
+  {{#if page.photo}}<div class="portrait">
+    <img class="portrait-photo" src="{{ page.photo }}" alt="{{ page.title }}" decoding="async">
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </div>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<aside class="cast-line catch">
+    <h2 class="cast-left catch-role">{{ strings.catchClasses }}</h2>
+    <div class="cast-right">
+      <p>{{ strings.catchClassesBody }}</p>
+      <p><a class="catch-link" href="/schedule/">{{ strings.seeSchedule }}</a></p>
+    </div>
+  </aside>
+  </div>
+</article>

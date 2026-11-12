@@ -1,0 +1,22 @@
+<section class="dict-page">
+  <header class="runhead">
+    <span class="guide" aria-hidden="true">{{ items.0.title }}</span>
+    <h1>{{ page.title }}</h1>
+    <span class="guide guide-end" aria-hidden="true">{{> guide-last}}</span>
+  </header>
+  {{#if items}}
+  <ul class="dict">
+    {{#each items as item}}{{> entry}}
+    {{/each}}
+  </ul>
+  {{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}
+  <nav class="folio" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span class="folio-number">{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

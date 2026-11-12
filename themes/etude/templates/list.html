@@ -1,0 +1,26 @@
+<section class="leaf list">
+  <header class="cover">
+    <div class="cover-frame">
+      {{#if tag}}<h1>{{ tag }}</h1>
+      <p class="cover-for">{{ strings.tagged }}</p>
+      {{else}}<h1>{{ page.title }}</h1>
+      {{/if}}{{#if pagination.multiple}}<p class="cover-date">{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</p>
+      {{/if}}<p class="cover-imprint">{{ site.title }}</p>
+    </div>
+  </header>
+  <div class="leaf-body">
+    {{#if items}}<div class="sheet">
+      <ul class="entries">
+        {{#each items as item}}{{> entry}}
+        {{/each}}
+      </ul>
+    </div>
+    {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+    {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+      {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+      <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+      {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+    </nav>
+    {{/if}}
+  </div>
+</section>

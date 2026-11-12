@@ -1,0 +1,24 @@
+{{#if data.schedule.days}}
+<section class="timetable" aria-labelledby="week-head">
+  <header class="runhead">
+    <span class="guide" aria-hidden="true">{{ data.schedule.days.0.day }}</span>
+    <h2 id="week-head">{{ strings.timetableName }}</h2>
+    <span class="guide guide-end" aria-hidden="true">{{#if data.schedule.days.7}}{{ data.schedule.days.7.day }}{{else}}{{#if data.schedule.days.6}}{{ data.schedule.days.6.day }}{{else}}{{#if data.schedule.days.5}}{{ data.schedule.days.5.day }}{{else}}{{#if data.schedule.days.4}}{{ data.schedule.days.4.day }}{{else}}{{#if data.schedule.days.3}}{{ data.schedule.days.3.day }}{{else}}{{#if data.schedule.days.2}}{{ data.schedule.days.2.day }}{{else}}{{#if data.schedule.days.1}}{{ data.schedule.days.1.day }}{{else}}{{ data.schedule.days.0.day }}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}{{/if}}</span>
+  </header>
+  <div class="week">
+    {{#each data.schedule.days as day}}
+    <section class="day{{#if day.classes}}{{else}} is-closed{{/if}}" data-day="{{ day.day }}">
+      <h3 class="day-hw">{{ day.day }} <span class="today-flag" hidden>{{ strings.today }}</span></h3>
+      {{#if day.classes}}<ul class="senses">
+        {{#each day.classes as session}}<li class="sense"><span class="s-time">{{ session.time }}</span> <span class="s-name">{{ session.name }}</span>{{#if session.who}}<span class="s-who">, {{ strings.withInstructor }} {{ session.who }}</span>{{/if}}{{#if session.level}}<span class="s-level">{{ session.level }}</span>{{/if}}</li>
+        {{/each}}
+      </ul>
+      {{else}}<p class="no-classes">{{ strings.noClasses }}</p>
+      {{/if}}
+    </section>
+    {{/each}}
+  </div>
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}
+</section>
+{{/if}}

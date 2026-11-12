@@ -1,0 +1,23 @@
+{{#if data.schedule.days}}<section class="timetable" aria-labelledby="pool-heading">
+  <h2 class="pool-heading" id="pool-heading">{{ strings.timetableHeading }}</h2>
+  <ol class="pool">
+    {{#each data.schedule.days as day}}<li class="lane" data-day="{{ day.day }}">
+      <span class="block" aria-hidden="true"></span>
+      <h3 class="day-name">{{ day.day }} <span class="today-flag" hidden>{{ strings.today }}</span></h3>
+      {{#if day.classes}}<ul class="classes">
+        {{#each day.classes as session}}<li class="session">
+          <span class="session-time">{{ session.time }}</span>
+          <span class="session-name">{{ session.name }}</span>
+          {{#if session.who}}<span class="session-meta"><span class="session-who">{{ strings.withInstructor }} {{ session.who }}</span>{{#if session.level}}<span class="session-level">{{ session.level }}</span>{{/if}}</span>{{else}}{{#if session.level}}<span class="session-meta"><span class="session-level">{{ session.level }}</span></span>{{/if}}{{/if}}
+        </li>
+        {{/each}}
+      </ul>
+      {{else}}<p class="no-classes">{{ strings.noClasses }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ol>
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}
+</section>
+{{/if}}

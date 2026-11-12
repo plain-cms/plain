@@ -1,0 +1,68 @@
+{
+  "trialNote": "Not sure which stage? Every new swimmer starts with a free 15-minute assessment swim on a Saturday morning — call the desk on 01632 960418 to book one.",
+  "days": [
+    {
+      "day": "Monday",
+      "classes": [
+        { "time": "16:00", "name": "Splashers", "who": "Priti", "level": "With a grown-up" },
+        { "time": "16:30", "name": "Stage 1", "who": "Priti", "level": "Non-swimmers" },
+        { "time": "17:00", "name": "Stage 3", "who": "Bev", "level": "Swims 5 m" },
+        { "time": "17:30", "name": "Stage 5", "who": "Callum", "level": "Swims 25 m" },
+        { "time": "19:30", "name": "Adult beginners", "who": "Sam", "level": "From age 16" }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "classes": [
+        { "time": "16:00", "name": "Stage 2", "who": "Jo", "level": "Floats unaided" },
+        { "time": "16:30", "name": "Stage 4", "who": "Jo", "level": "Swims 10 m" },
+        { "time": "17:15", "name": "Junior squad", "who": "Rhiannon", "level": "Ages 9–14" },
+        { "time": "19:30", "name": "Adult improvers", "who": "Tomasz", "level": "Adults, 25 m" }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "classes": [
+        { "time": "09:30", "name": "Splashers", "who": "Priti", "level": "With a grown-up" },
+        { "time": "16:00", "name": "Stage 1", "who": "Bev", "level": "Non-swimmers" },
+        { "time": "16:30", "name": "Stage 3", "who": "Bev", "level": "Swims 5 m" },
+        { "time": "17:00", "name": "Stage 6", "who": "Callum", "level": "Swims 50 m" },
+        { "time": "20:00", "name": "Stroke clinic", "who": "Tomasz", "level": "Adults" }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "classes": [
+        { "time": "15:30–19:00", "name": "Private lessons", "who": "Jo", "level": "By arrangement" },
+        { "time": "16:00", "name": "Stage 2", "who": "Priti", "level": "Floats unaided" },
+        { "time": "16:30", "name": "Stage 4", "who": "Callum", "level": "Swims 10 m" },
+        { "time": "17:15", "name": "Junior squad", "who": "Rhiannon", "level": "Ages 9–14" },
+        { "time": "19:30", "name": "Adult beginners", "who": "Sam", "level": "From age 16" }
+      ]
+    },
+    {
+      "day": "Friday",
+      "classes": [
+        { "time": "16:00", "name": "Stage 1", "who": "Priti", "level": "Non-swimmers" },
+        { "time": "16:30", "name": "Stage 5", "who": "Callum", "level": "Swims 25 m" },
+        { "time": "17:15", "name": "Lifesaving club", "who": "Rhiannon", "level": "Stage 6 passed" },
+        { "time": "19:30", "name": "Adult improvers", "who": "Tomasz", "level": "Adults, 25 m" }
+      ]
+    },
+    {
+      "day": "Saturday",
+      "classes": [
+        { "time": "08:30", "name": "Splashers", "who": "Priti", "level": "With a grown-up" },
+        { "time": "09:00", "name": "Stage 1", "who": "Bev", "level": "Non-swimmers" },
+        { "time": "09:30", "name": "Stage 2", "who": "Jo", "level": "Floats unaided" },
+        { "time": "10:00", "name": "Stage 3", "who": "Bev", "level": "Swims 5 m" },
+        { "time": "10:30", "name": "Stage 4", "who": "Callum", "level": "Swims 10 m" },
+        { "time": "11:00", "name": "Adult beginners", "who": "Sam", "level": "From age 16" }
+      ]
+    },
+    {
+      "day": "Sunday",
+      "classes": []
+    }
+  ]
+}

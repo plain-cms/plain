@@ -1,0 +1,20 @@
+<article class="entry-page">
+  <div class="runhead">
+    <span class="guide guide-letter" aria-hidden="true">{{ page.title.0 }}</span>
+    <p class="runhead-title"><a href="/instructors/">{{ strings.teachersHead }}</a></p>
+    <span class="guide guide-end guide-letter" aria-hidden="true">{{ page.title.0 }}</span>
+  </div>
+  <header class="entry-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.discipline}}<p class="pos">{{ page.discipline }}</p>
+    {{/if}}{{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.photo}}<img class="portrait" src="{{ page.photo }}" alt="{{ page.title }}" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<p class="xref"><span class="xref-label">{{ strings.seeAlso }}</span> <a href="/schedule/">{{ strings.timetableName }}</a></p>
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}
+</article>

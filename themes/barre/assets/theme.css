@@ -1,0 +1,458 @@
+/* Barre — the end-of-year recital programme.
+   A folded card: one fold crease runs down the middle of the page and is the
+   only rule in the theme. Everything is set either side of it, the way a cast
+   list is: the role ranged right to the crease, the dancer set left from it.
+   In the timetable the role is the time and the dancer is the class; in the
+   instructor list it is the discipline and the person; in page text it is the
+   section heading and its paragraphs. The masthead and page title
+   are the programme's cover, set on the plain ground; below them the
+   programme lies open as a lighter card (.spread), the crease running from
+   its top edge to its bottom edge. Centred lines inside it (the programme
+   label, the acts, the first-class note) sit on the crease on a patch of
+   card colour. On phones the crease moves left, to the edge of a narrow time column, and is
+   drawn only beside the lists that need it. Edit tokens, not selectors. */
+:root {
+  --font-display: Avenir, "Avenir Next", Futura, "Century Gothic", "Gill Sans", "Trebuchet MS", sans-serif;
+  --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --weight-display: 300;
+  --weight-caps: 400;
+  --tracking-caps: 0.2em;
+  --tracking-title: 0.32em;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-cast: 0.9375rem;
+  --text-xl: 1.375rem;
+  --text-xxl: clamp(1.55rem, 1.1rem + 1.8vw, 2.25rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.3;
+  --color-bg: #f6e3df;
+  --color-text: #1d1619;
+  --color-muted: #6a4b55;
+  --color-accent: #9a1c49;
+  --color-panel: #f3dcd8;
+  --color-card: #fcf2ef;
+  --shadow-card: 0 1px 2px rgba(122,58,72,0.10), 0 16px 40px rgba(122,58,72,0.10);
+  --color-crease: #b98790;
+  --color-crease-light: #fdf4f2;
+  --color-shade: rgba(122,58,72,0.09);
+  --page-width: 68rem;
+  --measure: 34rem;
+  --gutter: 1rem;
+  --side-gap: 1.5rem;
+  --card-pad: 3rem;
+  --time-col: 31%;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --radius: 2px;
+  --focus-width: 2px;
+  --tap-target: 2.75rem;
+  --photo-ratio: 0.8;
+  --portrait-max: 15rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #141012;
+    --color-text: #f4e6e9;
+    --color-muted: #bfa6ad;
+    --color-accent: #f293b2;
+    --color-panel: #2c2226;
+    --color-card: #1e171a;
+    --shadow-card: 0 1px 2px rgba(0,0,0,0.6), 0 16px 40px rgba(0,0,0,0.5);
+    --color-crease: #e597b0;
+    --color-crease-light: #070506;
+    --color-shade: rgba(229,151,176,0.07);
+  }
+}
+
+/* ---------- ground ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  overflow-wrap: break-word;
+}
+::selection { background: var(--color-panel); color: var(--color-text); }
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; transition: text-decoration-color 0.2s; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: var(--focus-width) solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius); }
+img { max-width: 100%; height: auto; }
+
+.skip-link { position: absolute; left: var(--gutter); top: -4rem; z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-bg); color: var(--color-accent); }
+.skip-link:focus { top: var(--space-2); }
+
+/* The open programme: a lighter card lying on the ground. */
+.spread {
+  position: relative;
+  isolation: isolate;
+  max-width: calc(var(--page-width) + 2 * var(--card-pad));
+  margin: 0 auto;
+  padding: var(--space-4) var(--card-pad) var(--space-5);
+  background: var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+.spread:not(:has(> *)) { display: none; }
+
+/* The crease. Wide screens: one line down the card from edge to edge, a
+   shadow falling into it from the left, a highlight on its right lip. */
+@media (min-width: 52rem) {
+  .spread::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 1.25rem);
+    width: 2.5rem;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent 0, var(--color-shade) calc(50% - 1px), var(--color-crease) calc(50% - 1px), var(--color-crease) 50%, var(--color-crease-light) 50%, var(--color-crease-light) calc(50% + 1px), transparent calc(50% + 1px));
+  }
+}
+
+/* Centred lines. Inside the card they sit on the crease on a patch of card. */
+.site-title, .menu ul, .page-header, .programme-heading span, .act-title, .act-closed,
+.trial-note, .colophon > *, .pagination, .empty, .exits {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+.programme-heading span, .act-title, .act-closed, .trial-note, .pagination, .empty { background: var(--color-card); }
+
+/* ---------- masthead ---------- */
+.masthead { padding: var(--space-4) var(--gutter) 0; text-align: center; }
+.site-title {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--weight-caps);
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  padding-block: var(--space-1) var(--space-2);
+  hyphens: auto;
+}
+.menu ul {
+  list-style: none;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-block: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  column-gap: var(--space-4);
+}
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  font-family: var(--font-display);
+  font-weight: var(--weight-caps);
+  font-size: var(--text-s);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.menu a:hover { color: var(--color-accent); }
+.menu a[aria-current="page"] { color: var(--color-accent); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.5em; }
+.menu-trial a { font-family: var(--font-body); font-style: italic; font-size: var(--text-m); letter-spacing: 0; text-transform: none; color: var(--color-accent); text-decoration: underline; }
+
+/* ---------- page heads ---------- */
+main { flex: 1; padding: 0 var(--gutter) var(--space-4); }
+.page-header { max-width: min(100%, 54rem); margin-block: var(--space-4); padding-block: var(--space-1); text-align: center; }
+.page-header > * { margin-inline: auto; }
+.page-header h1 {
+  max-width: min(100%, 52rem);
+  margin-block: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-xxl);
+  line-height: var(--leading-tight);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  hyphens: auto;
+  hyphenate-limit-chars: 8 3 3;
+  overflow-wrap: break-word;
+}
+.lede { max-width: min(100%, var(--measure)); margin: var(--space-3) auto 0; font-style: italic; font-size: var(--text-l); line-height: 1.45; }
+.page-header .role { margin-block: 0 var(--space-2); font-style: italic; color: var(--color-muted); }
+.page-header h1 + .role { margin: var(--space-2) auto 0; }
+.page-header .tags { margin-block: var(--space-1) 0; font-style: italic; }
+.tags a + a::before { content: " · " / ""; color: var(--color-muted); }
+
+/* ---------- the cast line: role | crease | dancer ---------- */
+.cast { list-style: none; margin: 0; padding: 0; }
+.cast-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: calc(2 * var(--side-gap));
+  align-items: baseline;
+  max-width: var(--page-width);
+  margin-inline: auto;
+}
+.cast-left { text-align: right; }
+.cast-right { display: block; min-width: 0; }
+
+/* ---------- the timetable ---------- */
+.programme { max-width: var(--page-width); margin: 0 auto; counter-reset: act; }
+.programme + .prose { margin-top: var(--space-5); }
+.programme-heading {
+  margin: 0;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: var(--weight-caps);
+  font-size: var(--text-s);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.programme-heading span { display: block; padding-block: 0 var(--space-2); }
+/* The programme's title sits at the top of the card and covers the crease
+   down to a small rose diamond, where the fold begins. */
+.spread > .programme:first-child { margin-top: calc(-1 * var(--space-4)); }
+.spread > .programme:first-child .programme-heading span { padding-top: var(--space-4); }
+.programme-heading::after {
+  content: "";
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin: 0 auto;
+  background: var(--color-accent);
+  transform: rotate(45deg);
+}
+.act { counter-increment: act; margin-top: var(--space-4); }
+.programme-heading + .act { margin-top: var(--space-3); }
+.act-title {
+  margin-bottom: var(--space-2);
+  padding-block: var(--space-1);
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+}
+.act-no {
+  display: block;
+  margin-bottom: var(--space-1);
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: normal;
+  font-size: var(--text-l);
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--color-accent);
+}
+.act-no::after { content: "\00a0" counter(act, upper-roman); font-variant-numeric: lining-nums; }
+.today-flag { font-family: var(--font-body); font-style: italic; font-size: var(--text-m); letter-spacing: 0; text-transform: none; color: var(--color-accent); }
+.act-name { padding-left: var(--tracking-caps); }
+.act.is-today .act-name { color: var(--color-accent); }
+.act-closed { margin-block: 0; text-align: center; font-style: italic; color: var(--color-muted); }
+.session { padding-block: var(--space-2); }
+.session-time {
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  font-variant-numeric: oldstyle-nums proportional-nums;
+  hyphens: manual;
+}
+.session-name {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--weight-caps);
+  font-size: var(--text-cast);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+  hyphenate-limit-chars: 8 3 3;
+  margin-bottom: 0.2rem;
+}
+.session-who, .session-level { font-style: italic; color: var(--color-muted); line-height: 1.4; }
+.session-who + .session-level::before { content: " · " / ""; }
+.trial-note {
+  max-width: min(100%, var(--measure));
+  margin-block: var(--space-4) 0;
+  padding-block: var(--space-2);
+  text-align: center;
+  font-style: italic;
+  font-size: var(--text-l);
+  line-height: 1.45;
+  color: var(--color-accent);
+}
+
+/* ---------- instructor and post lists ---------- */
+.entries { max-width: var(--page-width); margin: 0 auto; }
+.entry { padding-block: var(--space-3); }
+.entry .cast-left { display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: flex-start; gap: var(--space-2) var(--space-3); }
+.entry .cast-left:not(:has(.entry-role)) { align-self: start; }
+.entry-role { margin: 0; font-style: italic; color: var(--color-muted); hyphens: auto; }
+.entry-photo { display: block; flex: none; }
+.entry-photo img { display: block; width: 5.5rem; aspect-ratio: var(--photo-ratio); object-fit: cover; border-radius: var(--radius); }
+.entry-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-caps);
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+}
+.entry-name a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.entry-name a:hover { color: var(--color-accent); }
+.entry-note { margin: var(--space-2) 0 0; max-width: var(--measure); color: var(--color-muted); }
+.empty { margin-block: var(--space-4); font-style: italic; color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-2) var(--space-4); margin-block: var(--space-4) 0; font-style: italic; }
+.pagination a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+.pagination span { display: inline-flex; align-items: center; color: var(--color-muted); }
+
+/* ---------- a person's page ---------- */
+.portrait { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: calc(2 * var(--side-gap)); align-items: center; max-width: var(--page-width); margin: 0 auto var(--space-4); }
+.portrait-photo { justify-self: end; width: 100%; max-width: var(--portrait-max); aspect-ratio: var(--photo-ratio); object-fit: cover; border-radius: var(--radius); }
+.portrait-photo.cover { aspect-ratio: auto; max-width: 100%; }
+.portrait .lede { margin: 0; max-width: var(--measure); }
+.catch { margin-top: var(--space-5); }
+.catch-role { margin: 0; font-family: var(--font-display); font-weight: var(--weight-caps); font-size: var(--text-s); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-muted); hyphens: auto; }
+.catch .cast-right > p { margin: 0 0 var(--space-2); max-width: var(--measure); }
+.catch-link { font-style: italic; }
+
+/* ---------- 404 ---------- */
+.exits { list-style: none; padding-block: 0; margin-block: var(--space-4) 0; text-align: center; font-style: italic; font-size: var(--text-l); }
+.exits li { min-height: var(--tap-target); }
+
+/* ---------- page text ---------- */
+.prose { max-width: var(--page-width); margin: 0 auto; }
+.prose > * { min-width: 0; }
+.prose h2 {
+  margin: var(--space-4) 0 var(--space-3);
+  font-family: var(--font-display);
+  font-weight: var(--weight-caps);
+  font-size: var(--text-cast);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+}
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: var(--text-l); font-style: italic; font-weight: normal; line-height: var(--leading-tight); hyphens: auto; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-family: var(--font-display); font-weight: var(--weight-caps); font-size: var(--text-s); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-muted); hyphens: auto; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin-top: 0; margin-bottom: var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.25rem; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose ::marker { color: var(--color-accent); }
+.prose strong { font-weight: 600; }
+.prose a[href^="mailto:"], .prose a[href^="tel:"] { overflow-wrap: anywhere; }
+.prose blockquote { margin-inline: 0; padding-left: var(--space-4); font-style: italic; font-size: var(--text-l); line-height: 1.45; color: var(--color-muted); }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose hr { border: 0; margin: var(--space-4) 0; text-align: center; color: var(--color-muted); }
+.prose hr::after { content: "\2042" / ""; }
+.prose code { font-family: var(--font-mono); font-size: 0.875em; padding: 0.1em 0.3em; background: var(--color-panel); border-radius: var(--radius); overflow-wrap: anywhere; }
+.prose pre { overflow-x: auto; padding: var(--space-3); background: var(--color-panel); border-radius: var(--radius); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; overflow-wrap: normal; }
+/* A table wraps its cells at spaces only; when its longest words do not fit
+   the column it scrolls inside its own box, never off the page. */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: lining-nums tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3); text-align: left; vertical-align: top; overflow-wrap: normal; hyphens: manual; }
+.prose th { font-family: var(--font-display); font-weight: var(--weight-caps); font-size: var(--text-s); letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-muted); }
+.prose tbody tr:nth-child(odd) td { background: var(--color-panel); }
+.prose img { display: block; border-radius: var(--radius); }
+
+/* ---------- colophon ---------- */
+.colophon { padding: var(--space-4) var(--gutter) var(--space-5); text-align: center; color: var(--color-muted); font-size: var(--text-s); }
+.colophon > * { max-width: min(100%, var(--measure)); margin-block: 0 var(--space-2); }
+.colophon-name { font-family: var(--font-display); font-weight: var(--weight-caps); letter-spacing: var(--tracking-title); text-transform: uppercase; color: var(--color-text); }
+.colophon-trial { font-style: italic; font-size: var(--text-m); color: var(--color-accent); }
+.colophon-note { font-style: italic; }
+.colophon-note p { margin: 0; }
+
+/* ---------- wide: the spread ---------- */
+@media (min-width: 52rem) {
+  .prose { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); column-gap: calc(2 * var(--side-gap)); align-items: baseline; }
+  .prose > * { grid-column: 2; max-width: var(--measure); }
+  .prose > h2 { grid-column: 1; justify-self: end; max-width: 22rem; text-align: right; }
+  .prose > h2 + * { margin-top: var(--space-4); }
+  .prose > table, .prose > pre { max-width: 100%; }
+}
+
+/* ---------- phones: the crease moves to the edge of the time column ---------- */
+@media (max-width: 51.99rem) {
+  .cast { position: relative; }
+  .cast::before {
+    content: "";
+    position: absolute;
+    top: var(--space-2);
+    bottom: var(--space-2);
+    left: calc(var(--time-col) + var(--space-3) - 1px);
+    width: 2px;
+    background: linear-gradient(to right, var(--color-crease) 50%, var(--color-crease-light) 50%);
+  }
+  .cast-line, .catch { grid-template-columns: minmax(0, var(--time-col)) minmax(0, 1fr); column-gap: calc(2 * var(--space-3)); }
+  .session-time { font-size: var(--text-m); }
+  .entry-name { font-size: var(--text-m); }
+  .entry-photo img { width: 4rem; }
+  .entry-role { font-size: var(--text-s); }
+  .catch { position: relative; }
+  .catch::before { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--time-col) + var(--space-3) - 1px); width: 2px; background: linear-gradient(to right, var(--color-crease) 50%, var(--color-crease-light) 50%); }
+  .spread { margin-inline: calc(-0.5 * var(--gutter)); padding: var(--space-3) var(--space-3) var(--space-4); }
+  .spread > .programme:first-child { margin-top: calc(-1 * var(--space-3)); }
+  .spread > .programme:first-child .programme-heading span { padding-top: var(--space-3); }
+  .prose th, .prose td { min-width: 4.25em; padding-inline: var(--space-2); }
+  .prose th { letter-spacing: 0.05em; }
+  .portrait { grid-template-columns: minmax(0, 1fr); row-gap: var(--space-3); }
+  .portrait-photo { justify-self: center; }
+  .portrait .lede { text-align: center; margin-inline: auto; }
+  .menu ul { column-gap: var(--space-3); }
+  .site-title { font-size: var(--text-m); letter-spacing: var(--tracking-caps); hyphens: manual; }
+  .page-header h1 { letter-spacing: 0.08em; }
+  .session-name, .entry-name { letter-spacing: 0.14em; }
+  .entry-note, .entry-role { hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+/* ---------- print: the programme on white card ---------- */
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-panel: #eeeeee;
+    --color-card: #ffffff;
+    --shadow-card: none;
+    --color-crease: #777777;
+    --color-crease-light: #ffffff;
+    --color-shade: rgba(0,0,0,0);
+  }
+  body { font-size: 10.5pt; }
+  .menu, .skip-link, .today-flag, .catch, .exits { display: none; }
+  .spread { padding-inline: 0; }
+  .masthead { padding-top: 0; }
+  main { padding-bottom: var(--space-3); }
+  .act, .entry, .session { break-inside: avoid; }
+  .act-title { break-after: avoid; }
+  a { color: var(--color-text); text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

@@ -1,0 +1,437 @@
+/* Etude — a music school theme built on the Urtext study-edition cover.
+   Blue-grey cover stock, deep navy ink, ivory music-paper sheets for reading,
+   and no second colour. The one loud element is the cover: every page opens
+   with its title in spaced capitals, centred in a double-rule frame, the
+   subject beneath it as the "for violin" line, and the school's name as the
+   imprint at the frame's foot. On wide screens the cover stands upright to the
+   left of the page, like an edition lying beside its open contents page; the
+   timetable is set as that contents page — time, piece, leader dots, level.
+   All design decisions live in the tokens below; restyle by editing tokens,
+   never selectors (cms-spec.md §10.1). */
+
+:root {
+  --font-caps: Baskerville, "Baskerville Old Face", "Big Caslon", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  --font-text: "Iowan Old Style", Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-s: 0.9375rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-title: clamp(1.375rem, 0.9rem + 2.4vw, 2rem);
+  --leading-text: 1.6;
+  --leading-caps: 1.3;
+  --tracking-title: 0.16em;
+  --tracking-caps: 0.2em;
+
+  --color-bg: #b3c0cb;
+  --color-text: #142240;
+  --color-muted: #2e4058;
+  --color-accent: #283a8a;
+  --color-on-accent: #f6f2e6;
+  --color-frame: #142240;
+  --color-paper: #f6f2e6;
+  --color-staff: #cfc8b4;
+  --color-tint: #d9dff0;
+
+  --measure: 38rem;
+  --page-width: 78rem;
+  --cover-width: 24rem;
+  --cover-min: 34rem;
+  --time-col: 6.25em;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --frame-outer: 3px;
+  --frame-inner: 1px;
+  --frame-gap: 6px;
+  --hairline: 1px;
+  --tap-target: 2.75rem;
+  --photo-ratio: 0.8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The cloth-bound night edition: indigo-black board, silver blocking,
+       sheets a shade above the board so reading text keeps its own ground. */
+    --color-bg: #172031;
+    --color-text: #e2e6ec;
+    --color-muted: #a6b2c2;
+    --color-accent: #aab7f2;
+    --color-on-accent: #172031;
+    --color-frame: #c3cedb;
+    --color-paper: #212b3d;
+    --color-staff: #3a4659;
+    --color-tint: #33406a;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-m);
+  line-height: var(--leading-text);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+::selection { background: var(--color-tint); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration-thickness: var(--hairline); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 9; padding: var(--space-2) var(--space-3); background: var(--color-paper); }
+.skip-link:focus { left: var(--space-2); }
+
+.site-title, .masthead nav a, .btn-trial, .cover-imprint, .sheet-head, .day-name, .entry-title, .prose h2, .colophon-name {
+  font-family: var(--font-caps);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+/* Masthead: the shelf the edition sits on — quiet, one line when it fits --- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-4);
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--space-2) var(--space-3) 0;
+}
+.site-title { flex: 1 1 auto; min-width: 0; padding: var(--space-2) 0; font-size: var(--text-s); color: var(--color-text); text-decoration: none; }
+.site-title:hover { text-decoration: underline; }
+.masthead nav { order: 1; flex: 1 0 100%; }
+.masthead ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: inline-flex; align-items: center; min-height: var(--tap-target); font-size: var(--text-xs); color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { color: var(--color-accent); }
+.masthead nav a[aria-current="page"] { box-shadow: inset 0 -2px var(--color-frame); }
+
+.btn-trial {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  padding: 0 var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--color-text);
+  text-decoration: none;
+  border: var(--hairline) solid var(--color-frame);
+  box-shadow: inset 0 0 0 2px var(--color-bg), inset 0 0 0 3px var(--color-frame);
+}
+.btn-trial:hover { color: var(--color-on-accent); background: var(--color-accent); box-shadow: none; }
+
+@media (max-width: 30em) {
+  .masthead ul { column-gap: var(--space-2); }
+  .masthead nav a { letter-spacing: 0.12em; }
+}
+@media (min-width: 52em) {
+  .masthead nav { order: 0; flex: 0 1 auto; }
+}
+
+main { display: block; max-width: var(--page-width); margin: 0 auto; padding: 0 var(--space-3); min-height: 50vh; }
+
+/* THE SIGNATURE: the edition cover -----------------------------------------
+   Double-rule frame (heavy outside, hairline inside), the title in spaced
+   transitional capitals, a short rule, the "for violin" line in italic, and
+   the imprint — the school's name under a small diamond — pinned to the foot. */
+
+.leaf { margin: var(--space-4) 0 0; }
+
+.cover-frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: var(--space-5) var(--space-4) var(--space-4);
+  border: var(--frame-outer) solid var(--color-frame);
+}
+.cover-frame::before {
+  content: "";
+  position: absolute;
+  inset: var(--frame-gap);
+  border: var(--frame-inner) solid var(--color-frame);
+  pointer-events: none;
+}
+
+.cover h1 {
+  margin: 0;
+  max-width: 100%;
+  font-family: var(--font-caps);
+  font-size: var(--text-title);
+  font-weight: 400;
+  line-height: var(--leading-caps);
+  letter-spacing: var(--tracking-title);
+  padding-left: var(--tracking-title);
+  text-transform: uppercase;
+  text-wrap: balance;
+  hyphens: auto;
+}
+
+.cover-for {
+  margin: var(--space-4) 0 0;
+  max-width: 30em;
+  font-size: var(--text-l);
+  font-style: italic;
+  line-height: 1.4;
+  text-wrap: balance;
+  hyphens: auto;
+}
+.cover-for::before, .cover-date::before {
+  content: "";
+  display: block;
+  width: 3rem;
+  margin: 0 auto var(--space-4);
+  border-top: var(--hairline) solid var(--color-frame);
+}
+.cover-for + .cover-date::before { display: none; }
+
+.cover-date { margin: var(--space-3) 0 0; font-size: var(--text-s); font-style: italic; color: var(--color-muted); }
+
+.cover-imprint {
+  margin: auto 0 0;
+  padding-top: var(--space-5);
+  font-size: var(--text-xs);
+  line-height: var(--leading-caps);
+  padding-left: var(--tracking-caps);
+}
+.cover-imprint::before {
+  content: "";
+  display: block;
+  width: 0.45rem;
+  height: 0.45rem;
+  margin: 0 auto var(--space-3);
+  border: var(--hairline) solid var(--color-frame);
+  transform: rotate(45deg);
+}
+
+.leaf-body > * + * { margin-top: var(--space-4); }
+.leaf-body { margin-top: var(--space-4); }
+.leaf-body > :first-child { margin-top: 0; }
+
+@media (min-width: 64em) {
+  .leaf {
+    display: grid;
+    grid-template-columns: var(--cover-width) minmax(0, 1fr);
+    column-gap: var(--space-5);
+    align-items: start;
+  }
+  .cover-frame { min-height: var(--cover-min); }
+  .leaf-body { margin-top: 0; }
+}
+
+@media (max-width: 30em) {
+  .cover-frame { padding: var(--space-4) var(--space-3) var(--space-3); }
+  .cover-imprint { padding-top: var(--space-4); }
+}
+
+/* Ivory music-paper sheets: a stave ruled across the top, never under text */
+
+.sheet {
+  background: var(--color-paper);
+  padding: var(--space-4);
+  border: var(--hairline) solid var(--color-staff);
+}
+.sheet::before {
+  content: "";
+  display: block;
+  height: calc(4 * 0.3rem + var(--hairline));
+  margin: 0 0 var(--space-4);
+  background: repeating-linear-gradient(to bottom, var(--color-staff) 0 var(--hairline), transparent var(--hairline) 0.3rem);
+}
+@media (max-width: 30em) { .sheet { padding: var(--space-3); } .sheet::before { margin-bottom: var(--space-3); } }
+
+.sheet-head { margin: 0 0 var(--space-4); font-size: var(--text-s); text-align: center; hyphens: auto; }
+
+.dedication { margin-left: auto; margin-right: auto; max-width: var(--measure); font-size: var(--text-l); font-style: italic; text-align: center; text-wrap: balance; }
+
+/* The timetable, set as an edition's contents page -------------------------- */
+
+
+
+.day { break-inside: avoid; margin: 0 0 var(--space-4); }
+
+.day-name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-s);
+  line-height: var(--leading-caps);
+  text-align: center;
+  hyphens: auto;
+}
+.day-name::before, .day-name::after { content: ""; flex: 1 1 1rem; border-top: var(--hairline) solid var(--color-frame); }
+.day-label { flex: 0 1 auto; min-width: 0; }
+
+.today-flag { display: block; font-family: var(--font-text); font-size: var(--text-xs); font-style: italic; text-transform: none; letter-spacing: 0; color: var(--color-accent); }
+.today-flag[hidden] { display: none; }
+.day.is-today .day-name::before, .day.is-today .day-name::after { border-top-width: 3px; }
+
+/* One time column per day: each row is a subgrid of the day's list, so a long
+   time widens the column for the whole day, never for one row. */
+.sessions {
+  display: grid;
+  grid-template-columns: minmax(min-content, min(var(--time-col), 32%)) minmax(0, 1fr);
+  column-gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.session {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: inherit;
+  grid-template-columns: subgrid;
+  align-items: start;
+  column-gap: var(--space-3);
+  padding: var(--space-2) 0;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.session + .session { border-top: var(--hairline) solid var(--color-staff); }
+
+.session-time { font-weight: 600; line-height: 1.35; hyphens: manual; }
+
+.session-line { display: flex; flex-wrap: wrap; align-items: last baseline; line-height: 1.35; }
+.session-name { flex: 0 1 auto; min-width: 0; margin-right: 0.3em; hyphens: auto; }
+.session-who { flex: 0 1 auto; min-width: 0; font-style: italic; color: var(--color-muted); }
+/* Phones: the class name takes its own line; teacher and level share the next */
+@media (max-width: 40em) {
+  .session-name { flex-basis: 100%; margin-right: 0; }
+  .sessions { grid-template-columns: minmax(min-content, calc(var(--time-col) * 0.58)) minmax(0, 1fr); }
+}
+.leader { flex: 1 0 1.25rem; align-self: last baseline; height: 0.25em; margin: 0 var(--space-2); border-bottom: 2px dotted var(--color-muted); }
+.session-level { flex: 0 1 auto; min-width: 0; margin-left: auto; font-style: italic; color: var(--color-muted); text-align: right; hyphens: manual; }
+
+.day-off { margin: 0; font-style: italic; color: var(--color-muted); text-align: center; }
+
+.trial-note { margin: 0; padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-frame); font-style: italic; text-align: center; text-wrap: balance; hyphens: manual; }
+.trial-note a, .colophon a { overflow-wrap: anywhere; }
+
+.print-only { display: none; }
+
+/* Hyphenate only words of eight letters or more, so short words move whole;
+   a longer unbroken string still breaks (overflow-wrap on body). */
+.cover h1, .cover-for, .day-name, .session-name, .sheet-head, .entry-title, .entry-for, .prose h2, .prose h3 { hyphenate-limit-chars: 8 4 3; }
+
+/* Reading text --------------------------------------------------------------- */
+
+.prose { hyphens: manual; }
+.prose > * { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-3); font-size: var(--text-s); line-height: var(--leading-caps); hyphens: auto; }
+.prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); font-size: var(--text-l); font-style: italic; font-weight: 400; line-height: var(--leading-caps); hyphens: auto; }
+.prose h4 { font-size: var(--text-m); }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose li + li { margin-top: var(--space-1); }
+.prose a { overflow-wrap: anywhere; }
+.prose img { max-width: 100%; height: auto; }
+.prose blockquote { padding-left: var(--space-3); border-left: 2px solid var(--color-frame); font-style: italic; }
+.prose hr { border: 0; border-top: var(--hairline) solid var(--color-frame); width: 3rem; margin: var(--space-4) 0; }
+.prose code { font-family: var(--font-mono); font-size: 0.875em; overflow-wrap: anywhere; }
+.prose pre { overflow-x: auto; padding: var(--space-3); border: var(--hairline) solid var(--color-staff); }
+.prose pre code { overflow-wrap: normal; }
+
+.prose table { display: block; overflow-x: auto; border-collapse: collapse; font-variant-numeric: lining-nums tabular-nums; }
+.prose th, .prose td { min-width: 6.5em; padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: var(--hairline) solid var(--color-staff); }
+.prose th { font-weight: 600; border-bottom-color: var(--color-frame); }
+
+.plate { display: block; max-width: min(100%, 18rem); height: auto; margin-left: auto; margin-right: auto; padding: var(--space-2); background: var(--color-paper); border: var(--hairline) solid var(--color-frame); }
+.plate.portrait { aspect-ratio: var(--photo-ratio); object-fit: cover; }
+.plate.wide { max-width: 100%; }
+
+.tags { margin-bottom: 0; text-align: center; font-size: var(--text-s); }
+.tags a { display: inline-block; margin: 0 var(--space-2); font-style: italic; }
+
+/* Pointer from an instructor's page to the timetable */
+.see-timetable { text-align: center; }
+.see-timetable p { margin: 0 0 var(--space-3); }
+
+/* The catalogue: instructors and posts as entries on one sheet ---------------- */
+
+.entries { margin: 0; padding: 0; list-style: none; }
+.entry { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; row-gap: var(--space-1); padding: var(--space-3) 0; }
+.entry + .entry { border-top: var(--hairline) solid var(--color-staff); }
+.entry:first-child { padding-top: 0; }
+.entry:last-child { padding-bottom: 0; }
+.entry.has-photo { grid-template-columns: minmax(0, 1fr) 5rem; column-gap: var(--space-3); }
+.entry > * { grid-column: 1; margin: 0; }
+.entry-photo { grid-column: 2; grid-row: 1 / span 4; width: 100%; aspect-ratio: var(--photo-ratio); object-fit: cover; border: var(--hairline) solid var(--color-frame); }
+.entry-title { font-size: var(--text-m); line-height: var(--leading-caps); hyphens: auto; }
+.entry-title a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.entry-title a:hover { color: var(--color-accent); }
+.entry-for { font-style: italic; hyphens: auto; }
+.entry-date { font-size: var(--text-s); font-style: italic; color: var(--color-muted); }
+.entry-desc { color: var(--color-muted); }
+
+@media (min-width: 48em) {
+  .entries { columns: 2 17rem; column-gap: var(--space-5); }
+  .entry { break-inside: avoid; }
+  .entry + .entry { border-top: 0; }
+  .entry { padding: 0 0 var(--space-4); }
+}
+
+.empty { margin-bottom: 0; font-style: italic; text-align: center; }
+
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-3); font-size: var(--text-s); }
+.pagination a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+
+/* Colophon: the back cover ----------------------------------------------------- */
+
+.colophon {
+  max-width: var(--page-width);
+  margin: var(--space-5) auto 0;
+  padding: var(--space-4) var(--space-3);
+  text-align: center;
+  font-size: var(--text-s);
+}
+.colophon > * { max-width: var(--measure); margin: 0 auto var(--space-2); }
+.colophon-name { width: fit-content; max-width: 100%; padding-top: var(--space-3); border-top: var(--hairline) solid var(--color-frame); font-size: var(--text-xs); }
+.colophon-note { color: var(--color-muted); }
+.colophon-note > * { margin: 0 0 var(--space-1); }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Print: ink on white, the frame kept, the shelf and back cover dropped. */
+
+@media print {
+  html:root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-on-accent: #000;
+    --color-frame: #000;
+    --color-paper: #fff;
+    --color-staff: #999;
+    --color-tint: #fff;
+  }
+  body { font-size: 10pt; }
+  .masthead nav, .btn-trial, .skip-link, .pagination, .colophon, .see-timetable, .today-flag { display: none; }
+  .leaf { display: block; margin-top: var(--space-2); }
+  .cover-frame { min-height: 0; padding: var(--space-4) var(--space-3) var(--space-3); }
+  .cover-imprint { padding-top: var(--space-3); }
+  .sheet { padding: 0; border: 0; }
+  .sheet::before { display: none; }
+  .week { columns: 2; column-gap: var(--space-4); }
+  .day.is-today .day-name::before, .day.is-today .day-name::after { border-top-width: var(--hairline); }
+  .print-only { display: block; margin: var(--space-3) 0 0; text-align: center; font-size: var(--text-xs); }
+  a { color: inherit; text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }
+  .prose pre { white-space: pre-wrap; }
+}

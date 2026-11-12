@@ -1,0 +1,718 @@
+/* Crux — a bouldering and climbing gym theme. The page is the wall:
+   anthracite paint drilled with a staggered grid of T-nuts. Every class on
+   the timetable is a route tag screwed to the foot of a climb: a white
+   laminated card, hard corners, no shadow, the left fifth of it a band of
+   hold-colour tape (one colour per day, violet first, never under text),
+   time and class in black marker capitals, the teacher in mono and the
+   level in a ruled grade box at the far end. Everything else is chalk-white
+   text on the wall. Dark is the default: where another theme has a
+   (prefers-color-scheme: dark) block this one has light — birch ply.
+   Restyle by editing the tokens, never the selectors. */
+
+:root {
+  /* Type — condensed capitals for the marker, mono for the printed parts */
+  --font-marker: "Avenir Next Condensed", "DIN Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Arial Narrow", "Liberation Sans Narrow", "Nimbus Sans Narrow", sans-serif-condensed, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, "Cascadia Mono", Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --text-s: 0.8125rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3rem;
+  --text-xl: 1.7rem;
+  --text-time: 1.75rem;
+  --text-hero: clamp(2.1rem, 1.2rem + 3vw, 3.4rem);
+  --leading: 1.6;
+  --tracking-caps: 0.035em;
+
+  /* Colour — anthracite wall paint, chalk ink, violet */
+  --color-bg: #2a2c2f;
+  --color-tnut: #161719;
+  --color-panel: #36393d;
+  --color-text: #eeede8;
+  --color-muted: #aeb1b5;
+  --color-accent: #b9a3ff;
+  --color-on-accent: #1c1530;
+  --color-rule: #6a6e74;
+  /* The tags are the same white laminate and black marker in both schemes */
+  --color-tag: #f6f5f0;
+  --color-tag-edge: #f6f5f0;
+  --color-marker: #141414;
+  --color-tag-print: #55585c;
+  --tape-1: #7c4ddb;
+  --tape-2: #f0c419;
+  --tape-3: #27a35a;
+  --tape-4: #f17c1f;
+  --tape-5: #2e7dd7;
+  --tape-6: #d9383a;
+
+  /* Layout */
+  --page-width: 80rem;
+  --measure: 40rem;
+  --gutter: clamp(1rem, 3vw, 2.25rem);
+  --day-col: 8.5rem;
+  --tag-min: 15rem;
+  --tnut-pitch: 3rem;
+  --tnut-size: 0.19rem;
+  --border: 1px;
+  --border-strong: 2px;
+  --tap: 2.75rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Birch ply: pale wood, dark ink, the T-nuts a soft brown that every
+       text colour still clears at 4.5:1 */
+    --color-bg: #ead9b8;
+    --color-tnut: #cbb792;
+    --color-panel: #f3e9d4;
+    --color-text: #1e1a15;
+    --color-muted: #4f4335;
+    --color-accent: #4d23a6;
+    --color-on-accent: #ffffff;
+    --color-rule: #8f7a5c;
+    --color-tag-edge: #a8916c;
+  }
+}
+
+/* Base -------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html {
+  color-scheme: dark light;
+  background: var(--color-bg);
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  /* The wall: two offset grids of T-nut holes */
+  background-image:
+    radial-gradient(circle, var(--color-tnut) var(--tnut-size), transparent calc(var(--tnut-size) + 0.5px)),
+    radial-gradient(circle, var(--color-tnut) var(--tnut-size), transparent calc(var(--tnut-size) + 0.5px));
+  background-size: var(--tnut-pitch) var(--tnut-pitch);
+  background-position: 0 0, calc(var(--tnut-pitch) * 0.5) calc(var(--tnut-pitch) * 0.5);
+  overflow-wrap: break-word;
+}
+
+.masthead, main, .colophon {
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+::selection { background: var(--color-accent); color: var(--color-on-accent); }
+
+a { color: var(--color-accent); text-decoration-thickness: var(--border); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: var(--border-strong); }
+
+:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 1px var(--color-bg);
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: 0.5rem;
+  z-index: 10;
+  padding: 0.5rem 1rem;
+  background: var(--color-tag);
+  color: var(--color-marker);
+}
+.skip-link:focus { left: 0.5rem; }
+
+main { min-height: 50vh; }
+
+.print-only { display: none; }
+
+.site-title, .page-head h1, .prose h2, .prose h3, .day-name,
+.tag-time, .tag-name, .tag-level, .person h2, .colophon-name, .btn-trial,
+.masthead nav a, .pagination a, .way-out a {
+  font-family: var(--font-marker);
+  font-stretch: condensed;
+}
+
+/* Masthead ----------------------------------------------------------------
+   Phone: name and the trial link share row one, the menu goes under them.
+   Wide: one row. */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  padding-block: 0.75rem 0.5rem;
+  border-bottom: var(--border) solid var(--color-rule);
+}
+
+.site-title {
+  flex: 1 1 10rem;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  font-size: var(--text-l);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+}
+/* A short piece of violet tape beside the name */
+.site-title::before {
+  content: "";
+  flex: none;
+  width: 0.5em;
+  height: 1.15em;
+  background: var(--tape-1);
+}
+.site-title:hover { color: var(--color-accent); }
+
+.masthead nav { order: 1; flex: 0 0 100%; }
+.masthead nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.1rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--text-m);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.masthead nav a:hover { color: var(--color-text); }
+.masthead nav a[aria-current="page"] {
+  color: var(--color-text);
+  box-shadow: inset 0 -3px var(--color-accent);
+}
+
+@media (min-width: 56em) {
+  .masthead { padding-block: 0.5rem; }
+  .site-title { flex: 0 1 auto; }
+  .masthead nav { order: 0; flex: 1 1 auto; }
+  .masthead nav ul { justify-content: flex-end; }
+}
+
+.btn-trial {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 0.9rem;
+  font-size: var(--text-m);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  border: var(--border-strong) solid var(--color-text);
+}
+.btn-trial:hover { color: var(--color-on-accent); background: var(--color-accent); border-color: var(--color-accent); }
+
+/* Page heading -------------------------------------------------------------- */
+
+.page-head { margin: 1.5rem 0 1.25rem; }
+.page-head h1 {
+  margin: 0;
+  max-width: 24ch;
+  font-size: var(--text-hero);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  hyphens: auto;
+  text-wrap: balance;
+}
+.lede {
+  margin: 0.6rem 0 0;
+  max-width: var(--measure);
+  font-size: var(--text-m);
+  line-height: 1.4;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+@media (min-width: 60em) {
+  .page-head { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); column-gap: 3rem; align-items: end; }
+  .page-head > :not(h1) { grid-column: 2; }
+  .page-head h1 { grid-row: 1 / span 3; }
+  .not-found .page-head { display: block; }
+  .page-head .lede { margin: 0; }
+}
+
+.discipline, .meta {
+  margin: 0.4rem 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+  hyphens: auto;
+}
+.page-head .discipline, .page-head .meta { font-size: var(--text-m); }
+
+.topics { margin-left: 0.5rem; }
+.topic { margin-right: 0.5rem; white-space: nowrap; }
+.topic::before { content: "#"; }
+
+.tagged { display: block; font-family: var(--font-mono); font-size: var(--text-s); font-weight: 400; letter-spacing: 0.1em; color: var(--color-muted); }
+
+/* THE SIGNATURE: the timetable as a row of route tags --------------------------
+   One row per day, its name painted on the wall at the left (above, on a
+   phone); the day's classes are tags taped in that day's colour. The level
+   box sits at the right-hand end and drops under the class on a narrow tag. */
+
+.wall { margin: 0 0 2.5rem; }
+
+.wall-head {
+  margin: 0;
+  padding: 0.4rem 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  border-bottom: var(--border) solid var(--color-rule);
+}
+
+.week { list-style: none; margin: 0; padding: 0; }
+
+.day {
+  --tape: var(--tape-1);
+  padding: 0.85rem 0;
+  border-bottom: var(--border) solid var(--color-rule);
+}
+.day:nth-child(6n + 2) { --tape: var(--tape-2); }
+.day:nth-child(6n + 3) { --tape: var(--tape-3); }
+.day:nth-child(6n + 4) { --tape: var(--tape-4); }
+.day:nth-child(6n + 5) { --tape: var(--tape-5); }
+.day:nth-child(6n) { --tape: var(--tape-6); }
+
+@media (min-width: 40em) {
+  .day { display: grid; grid-template-columns: var(--day-col) minmax(0, 1fr); column-gap: 1rem; }
+}
+
+.day-name {
+  margin: 0 0 0.6rem;
+  font-size: var(--text-l);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+}
+@media (min-width: 40em) { .day-name { margin: 0.3rem 0 0; } }
+
+.today-flag {
+  display: block;
+  width: fit-content;
+  margin-top: 0.4rem;
+  padding: 0.05rem 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  border: var(--border) solid var(--color-accent);
+}
+.today-flag[hidden] { display: none; }
+
+.tags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--tag-min), 100%), 1fr));
+  gap: 0.75rem;
+}
+
+.tag { min-width: 0; }
+
+.tag-face {
+  display: grid;
+  grid-template-columns: 20% minmax(0, 1fr);
+  grid-template-rows: auto auto 1fr;
+  column-gap: 0.6rem;
+  height: 100%;
+  padding-right: 0.6rem;
+  background: var(--color-tag);
+  color: var(--color-marker);
+  border: var(--border) solid var(--color-tag-edge);
+  text-decoration: none;
+}
+.tag-face::before {
+  content: "";
+  grid-row: 1 / -1;
+  background: var(--tape, var(--tape-1));
+}
+.tag-face > * { grid-column: 2; min-width: 0; }
+
+/* Time on the left, the grade box at the far right; a time too long to share
+   the line pushes the box down, still at the right */
+.tag-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 0.3rem 0.4rem;
+  padding-top: 0.45rem;
+}
+.tag-time {
+  flex: 1 1 auto;
+  padding-top: 0.15rem;
+  font-size: var(--text-time);
+  font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  hyphens: manual;
+}
+.tag-name {
+  margin-top: 0.3rem;
+  font-size: var(--text-m);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+}
+.tag-face > .tag-name:first-child { padding-top: 0.6rem; }
+.tag-name:last-child { padding-bottom: 0.7rem; }
+.tag-who {
+  align-self: end;
+  padding: 0.4rem 0 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  line-height: 1.3;
+  color: var(--color-tag-print);
+}
+
+.tag-grade {
+  display: flex;
+  flex-direction: column;
+  max-width: 9rem;
+  margin-left: auto;
+  text-align: center;
+}
+.tag-grade-label {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-tag-print);
+}
+.tag-level {
+  margin-top: 0.1rem;
+  min-width: 3.25rem;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.1;
+  border: var(--border-strong) solid var(--color-marker);
+  hyphens: auto;
+}
+
+.day-empty {
+  margin: 0;
+  max-width: var(--tag-min);
+  padding: 0.75rem 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+  border: var(--border-strong) dashed var(--color-rule);
+}
+
+.trial-note {
+  display: flex;
+  gap: 0.75rem;
+  max-width: var(--measure);
+  margin: 1rem 0 0;
+  font-weight: 600;
+  text-wrap: pretty;
+}
+/* A strip of violet tape beside the note, never under it */
+.trial-note::before {
+  content: "";
+  flex: none;
+  width: 0.6rem;
+  background: var(--tape-1);
+}
+
+/* Prose ---------------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose h2, .prose h3 {
+  margin: 2.25rem 0 0.5rem;
+  line-height: 1.05;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+  text-wrap: balance;
+}
+.prose h2 { font-size: var(--text-xl); font-weight: 800; }
+.prose h3 { font-size: var(--text-l); font-weight: 700; }
+.prose h4 {
+  margin: 1.75rem 0 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.prose p, .prose ul, .prose ol { margin: 0 0 1rem; }
+.prose li { margin-bottom: 0.3rem; }
+.prose li > ul, .prose li > ol { margin: 0.3rem 0 0; }
+.prose strong { font-weight: 700; }
+.prose a[href^="mailto:"], .prose a[href^="tel:"] { overflow-wrap: anywhere; }
+.prose img { max-width: 100%; height: auto; }
+
+.prose blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 0 0.25rem 1.1rem;
+  border-left: 0.5rem solid var(--tape-1);
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  padding: 0.05em 0.3em;
+  background: var(--color-panel);
+}
+.prose pre {
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  background: var(--color-panel);
+  border-left: var(--border-strong) solid var(--color-rule);
+}
+.prose pre code { padding: 0; font-size: var(--text-s); background: none; }
+
+/* Price lists: figures line up; a wide table scrolls inside its own box, and
+   while there is more to the right its cut edge is a dashed chalk line */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0 0 1rem;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  hyphens: manual;
+}
+@supports (animation-timeline: scroll()) {
+  .prose table {
+    border-right: var(--border-strong) dashed transparent;
+    animation: table-cut linear both;
+    animation-timeline: scroll(self inline);
+  }
+}
+@keyframes table-cut {
+  from, 95% { border-right-color: var(--color-text); }
+  to { border-right-color: transparent; }
+}
+.prose th, .prose td {
+  min-width: 6.5rem;
+  padding: 0.5rem 1.25rem 0.5rem 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--border) solid var(--color-rule);
+}
+.prose th {
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  border-bottom: var(--border-strong) solid var(--color-text);
+}
+
+.prose hr { margin: 2rem 0; border: 0; border-top: var(--border-strong) dashed var(--color-rule); }
+
+.cover { display: block; width: 100%; max-width: var(--measure); height: auto; margin: 0 0 1.5rem; }
+
+/* Instructors: a ruled roster, a short piece of tape over each name ------------ */
+
+.roster {
+  list-style: none;
+  margin: 0 0 2rem;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr));
+  gap: 2rem 3rem;
+}
+.person {
+  --tape: var(--tape-1);
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-content: start;
+  padding-top: 1.1rem;
+  border-top: var(--border) solid var(--color-rule);
+}
+.person:nth-child(6n + 2) { --tape: var(--tape-2); }
+.person:nth-child(6n + 3) { --tape: var(--tape-3); }
+.person:nth-child(6n + 4) { --tape: var(--tape-4); }
+.person:nth-child(6n + 5) { --tape: var(--tape-5); }
+.person:nth-child(6n) { --tape: var(--tape-6); }
+.person::before {
+  content: "";
+  position: absolute;
+  top: -0.25rem;
+  left: 0;
+  width: 3rem;
+  height: 0.5rem;
+  background: var(--tape);
+}
+.person h2 {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+}
+.person h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); text-decoration-thickness: var(--border-strong); }
+.person h2 a:hover { color: var(--color-accent); }
+.summary { margin: 0.5rem 0 0; }
+
+.has-photo { grid-template-columns: 5.5rem minmax(0, 1fr); column-gap: 1rem; }
+.has-photo > * { grid-column: 2; }
+.person-photo { grid-column: 1; grid-row: 1 / span 4; align-self: start; }
+.person-photo img, .instructor-photo {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border: var(--border) solid var(--color-tag-edge);
+}
+
+.instructor-photo { max-width: 16rem; margin: 0 0 1.5rem; }
+
+.on-wall { max-width: 22rem; margin: 2.5rem 0 0; }
+.on-wall .tag-face:hover .tag-name { text-decoration: underline; text-decoration-thickness: var(--border-strong); }
+
+@media (min-width: 60em) {
+  .instructor {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) minmax(0, 20rem);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 4rem;
+    align-items: start;
+  }
+  .instructor > .page-head { grid-column: 1 / -1; display: block; }
+  .instructor > .prose { grid-column: 1; grid-row: 2 / span 2; }
+  .instructor-photo { grid-column: 2; grid-row: 2; max-width: none; }
+  .on-wall { grid-column: 2; grid-row: 3; margin: 0; }
+  .instructor:not(.has-photo) .on-wall { grid-row: 2; }
+}
+
+/* Pagination, empty list, 404 ------------------------------------------------ */
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.pagination a, .way-out a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 0.9rem;
+  font-size: var(--text-m);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  border: var(--border-strong) solid var(--color-text);
+}
+.pagination a:hover, .way-out a:hover { border-color: var(--color-accent); color: var(--color-accent); }
+
+.empty { font-family: var(--font-mono); color: var(--color-muted); }
+
+.way-out { display: flex; flex-wrap: wrap; gap: 0.75rem; list-style: none; margin: 0; padding: 0; }
+
+/* Colophon -------------------------------------------------------------------- */
+
+.colophon {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 3rem;
+  padding-block: 1.25rem 2.5rem;
+  border-top: var(--border) solid var(--color-rule);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon p { margin: 0; max-width: var(--measure); }
+.colophon-name {
+  font-size: var(--text-l);
+  font-weight: 800;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+.colophon-note > * { margin: 0 0 0.25rem; }
+
+/* Motion -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .btn-trial, .pagination a, .way-out a { transition: background-color 0.12s, color 0.12s, border-color 0.12s; }
+}
+
+/* Print — the timetable goes on the noticeboard ------------------------------------
+   Plain paper whatever the screen scheme: colour tokens are reset here (html in
+   the selector, so a site's token overrides do not win). The tags keep their
+   tape, which never carries text. */
+
+@media print {
+  html:root {
+    --color-bg: #ffffff;
+    --color-tnut: #ffffff;
+    --color-panel: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-on-accent: #ffffff;
+    --color-rule: #000000;
+    --color-tag: #ffffff;
+    --color-tag-edge: #000000;
+    --color-marker: #000000;
+    --color-tag-print: #333333;
+  }
+  body { background: none; font-size: 10pt; }
+  .masthead, main, .colophon { max-width: none; padding-inline: 0; }
+  .masthead nav, .btn-trial, .skip-link, .pagination, .colophon, .on-wall, .today-flag, .wall-head { display: none; }
+  .masthead { border-bottom-width: var(--border-strong); }
+  main { min-height: 0; }
+  a { color: inherit; text-decoration: none; }
+  .page-head { margin: 0.75rem 0; display: block; }
+  .page-head h1 { font-size: var(--text-xl); }
+  .lede { font-size: var(--text-s); }
+  .day { break-inside: avoid; padding: 0.4rem 0; grid-template-columns: 6rem minmax(0, 1fr); display: grid; column-gap: 0.5rem; }
+  .day-name { font-size: var(--text-m); margin: 0; }
+  .tags { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.35rem; }
+  .tag-face::before { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+  .tag-time { font-size: var(--text-l); }
+  .tag-name, .tag-level { font-size: var(--text-s); }
+  .print-only { display: block; margin: 0.5rem 0 0; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }
+  .prose pre { white-space: pre-wrap; }
+}
