@@ -1,0 +1,9 @@
+<article class="page">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>
+{{> tb-sheet}}

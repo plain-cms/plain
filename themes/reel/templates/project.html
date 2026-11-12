@@ -1,0 +1,34 @@
+<article class="project">
+  <header class="screen">
+    <div class="frame frame-lg">
+      <div class="picture">
+        {{#if page.cover}}<img src="{{ page.cover }}" alt="" decoding="async">
+        {{/if}}<h1 class="card-title">{{ page.title }}</h1>
+        <p class="slate">{{#if page.client}}<span class="tc tc-client"><span class="vh">{{ strings.client }} </span>{{ page.client }}</span> {{/if}}<span class="tc tc-year"><span class="vh">{{ strings.year }} </span><time class="year" datetime="{{ page.date }}">{{ page.date }}</time></span></p>
+      </div>
+      {{#if page.description}}<p class="subtitle">{{ page.description }}</p>
+      {{/if}}
+    </div>
+  </header>
+  {{#if page.services}}<div class="project-body">
+    <section class="credits" aria-labelledby="credits-title">
+      <h2 id="credits-title">{{ strings.services }}</h2>
+      <ul class="roles">
+        {{#each page.services as service}}<li>{{ service }}</li>
+        {{/each}}
+      </ul>
+      <p class="credit-name">{{ site.title }}</p>
+    </section>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </div>
+  {{else}}{{#if page.content}}<div class="project-body">
+    <div class="prose">
+{{{ page.content }}}
+    </div>
+  </div>
+  {{/if}}{{/if}}
+  {{> more-work}}
+</article>

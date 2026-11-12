@@ -1,0 +1,8 @@
+{{#if collections.projects}}<nav class="more wrap" aria-labelledby="more-title">
+    <h2 class="caps" id="more-title">{{ strings.moreWork }}</h2>
+    <ul class="chips">
+      {{#each collections.projects as item}}<li><a href="{{ item.url }}"><span class="chip" aria-hidden="true"></span><span class="chip-title">{{ item.title }}</span><time class="year" datetime="{{ item.date }}">{{ item.date }}</time></a></li>
+      {{/each}}
+    </ul>
+    <p class="caps"><a href="/work/">{{ strings.allWork }}</a></p>
+  </nav>{{/if}}

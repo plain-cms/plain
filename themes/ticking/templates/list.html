@@ -1,0 +1,16 @@
+<section class="list">
+  {{> band}}
+  <header class="page-head wrap">
+    <h1>{{#if tag}}{{ strings.tagged }} <q>{{ tag }}</q>{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}<ul class="entries wrap">
+    {{#each items as item}}<li>
+      <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      <p class="typed"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{#if item.description}}<p class="entry-note">{{ item.description }}</p>{{/if}}
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty wrap">{{ strings.nothingHere }}</p>
+  {{/if}}{{> pagination}}
+</section>

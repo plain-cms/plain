@@ -1,0 +1,21 @@
+<div class="desk">
+  <header class="side">
+    <h1 class="side-title">{{#if tag}}{{ strings.tagged }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  <div class="tray">
+  {{#if items}}<ul class="sheets">
+    {{#each items as item}}<li class="sheet">
+      <dl class="slug">
+        <div><dt>{{ strings.date }}</dt><dd><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></dd></div>
+      </dl>
+      <h2 class="headline"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.description}}<p class="copy">{{ item.description }}</p>
+      {{/if}}<p class="ends"><span>{{ strings.ends }}</span></p>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{> pagination}}
+  </div>
+</div>

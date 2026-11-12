@@ -1,0 +1,22 @@
+<article class="project">
+  <header class="project-head">
+    <p class="kicker"><time class="year" datetime="{{ page.date }}">{{ page.date }}</time></p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.cover}}<figure class="project-cover"><img src="{{ page.cover }}" alt="" decoding="async"></figure>
+  {{/if}}<div class="project-body">
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}{{> register}}
+  </div>
+</article>
+<dl class="tb">
+  <div><dt>{{ strings.labelProject }}</dt><dd class="tb-title">{{ page.title }}</dd></div>
+  {{#if page.client}}<div class="tb-client"><dt>{{ strings.labelClient }}</dt><dd>{{ page.client }}</dd></div>
+  {{/if}}<div class="tb-date"><dt>{{ strings.labelDate }}</dt><dd><time class="year" datetime="{{ page.date }}">{{ page.date }}</time></dd></div>
+  {{#if page.services}}<div><dt>{{ strings.labelScope }}</dt><dd><ul class="tb-scope">{{#each page.services as service}}<li>{{ service }}</li>{{/each}}</ul></dd></div>
+  {{/if}}
+</dl>

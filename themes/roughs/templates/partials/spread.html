@@ -1,0 +1,15 @@
+<li class="spread">
+      <a class="spread-link" href="{{ item.url }}">
+        {{#if item.cover}}<div class="book book-cover">
+          <img src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+          <div class="leaf leaf-l"></div><div class="leaf leaf-r"></div>
+        </div>
+        <h2 class="spread-title spread-under">{{ item.title }}</h2>
+        {{else}}<div class="book">
+          <div class="leaf leaf-l"><h2 class="spread-title">{{ item.title }}</h2></div>
+          {{#if item.description}}<div class="leaf leaf-r"><p class="spread-text">{{ item.description }}</p></div>{{else}}<div class="leaf leaf-r"></div>{{/if}}
+        </div>
+        {{/if}}
+      </a>
+      <p class="spread-meta"><time class="year" datetime="{{ item.date }}">{{ item.date }}</time>{{#if item.client}} <span class="spread-client">{{ item.client }}</span>{{/if}}</p>
+    </li>

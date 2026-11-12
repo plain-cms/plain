@@ -1,0 +1,17 @@
+<section class="tablet">
+  <header class="tablet-head">
+    <h1 class="inscription">{{#if tag}}{{ strings.taggedWith }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}<ul class="stones">
+    {{#each items as item}}<li class="stone-entry">
+      <h2 class="inscription inscription-s"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      <p class="entry-meta"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{#if item.description}}<p class="entry-text">{{ item.description }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+</section>
+{{> pagination}}
