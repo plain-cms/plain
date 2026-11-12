@@ -1,0 +1,525 @@
+/* Kerbside — a street-food theme built around one object: the cut-vinyl
+   menu panel beside the serving hatch, lettered to be read from the back of
+   the queue. White vinyl on truck paint, small print on white strips, a
+   checker-plate step for a footer. Restyle by editing tokens, never selectors. */
+
+:root {
+  /* Type — sign-shop rounded caps over a humanist sans */
+  --font-vinyl: "Arial Rounded MT Bold", ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", "Varela Round", Nunito, Quicksand, system-ui, sans-serif;
+  --font-body: Seravek, "Gill Sans Nova", "Gill Sans", Ubuntu, Calibri, "Trebuchet MS", "DejaVu Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --weight-vinyl: 800;
+  --size-vinyl: clamp(2.25rem, 7.8vw, 6.5rem);
+  --size-title: clamp(1.9rem, 5vw, 3.75rem);
+  --size-text: 1.0625rem;
+  --leading: 1.6;
+  --leading-vinyl: 1.34;
+  --tracking-caps: 0.08em;
+
+  /* Colour — by day: ultramarine truck paint, white vinyl, steel step */
+  --color-bg: #1d2fa8;
+  --color-text: #ffffff;
+  --color-muted: #c8cff5;
+  --color-accent: #aebaff;
+  --color-seam: #131f7a;
+  --color-rivet: #5c70ea;
+  --color-strip: #ffffff;
+  --color-strip-ink: #0b0d14;
+  --color-strip-link: #1d2fa8;
+  --color-plate: #aab0b8;
+  --color-plate-hi: #c9ced4;
+  --color-plate-lo: #8a9099;
+  --color-plate-ink: #0f1116;
+  --color-focus: #ffffff;
+  --color-focus-edge: #0b0d14;
+
+  /* Measure */
+  --measure: 40rem;
+  --measure-wide: 78rem;
+  --gutter: clamp(1rem, 3.2vw, 2.5rem);
+  --seam: 3px;
+  --keyline: 3px;
+  --radius-strip: 3px;
+  --radius-cut: 0.75rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The hatch at night — navy paint, the lettering gone pale blue */
+    --color-bg: #0b1033;
+    --color-text: #c9d4ff;
+    --color-muted: #99a5d8;
+    --color-accent: #8fa0ff;
+    --color-seam: #05071c;
+    --color-rivet: #2f3d94;
+    --color-strip: #b4c1f3;
+    --color-strip-ink: #080b22;
+    --color-strip-link: #1a2890;
+    --color-plate: #2a2e39;
+    --color-plate-hi: #3b404e;
+    --color-plate-lo: #191c24;
+    --color-plate-ink: #d6dbea;
+    --color-focus: #c9d4ff;
+    --color-focus-edge: #05071c;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--size-text);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+main { flex: 1; }
+
+::selection { background: var(--color-strip); color: var(--color-strip-ink); }
+
+/* Every block runs from kerb to kerb; what is in it keeps to one left-ranged column. */
+.masthead, .page-header, .band, .prose, .more, .empty, .pagination, .plate, .front .hours-card {
+  padding-inline: max(var(--gutter), calc((100% - var(--measure-wide)) / 2));
+}
+
+a { color: var(--color-accent); text-decoration-thickness: 0.08em; text-underline-offset: 0.16em; }
+a:hover { color: var(--color-text); }
+
+/* two rings, one pale and one dark, so focus shows on paint, strip and plate alike */
+:focus-visible {
+  outline: var(--keyline) solid var(--color-focus);
+  outline-offset: var(--keyline);
+  box-shadow: 0 0 0 var(--keyline) var(--color-focus-edge);
+  border-radius: var(--radius-strip);
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-strip);
+  color: var(--color-strip-link);
+}
+.skip-link:focus { left: var(--space-2); }
+
+/* The lettering voice: rounded heavy caps, cut from one roll */
+.vinyl, .site-title, .masthead nav a, .page-header h1, .prose h2, .prose h3, .prose th, .band-section,
+.hours-card dt, .btn-reserve, .more, .pagination, .meta, .plate-name {
+  font-family: var(--font-vinyl);
+  font-weight: var(--weight-vinyl);
+  text-transform: uppercase;
+}
+/* loose enough that an accent on a capital (Â, Ö, Ă) never meets the line above, nor a comma below one (Ș, Ț) the line beneath */
+.vinyl, .site-title, .page-header h1, .prose h2, .prose h3, .hours-card dt, .btn-reserve, .more, .pagination { line-height: var(--leading-vinyl); }
+/* only the big lettering hyphenates, and only a word too long to move down whole */
+.vinyl, .page-header h1, .prose h2, .prose h3 { hyphens: auto; -webkit-hyphenate-limit-before: 4; -webkit-hyphenate-limit-after: 4; hyphenate-limit-chars: 10 4 4; }
+
+/* Masthead ---------------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-2);
+  border-bottom: var(--seam) solid var(--color-seam);
+}
+.site-title { font-size: clamp(1.5rem, 1.1rem + 1.6vw, 2.125rem); letter-spacing: 0.01em; color: var(--color-text); text-decoration: none; }
+.site-title:hover { text-decoration: underline; }
+.masthead ul { display: flex; flex-wrap: wrap; gap: var(--space-1); margin: 0 calc(-1 * var(--space-2)); padding: 0; list-style: none; }
+.masthead nav a {
+  display: block;
+  padding: 0.35em 0.75em;
+  font-size: 0.9375rem;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-text);
+  text-decoration: none;
+  border-radius: var(--radius-strip);
+}
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current="page"] { background: var(--color-strip); color: var(--color-strip-ink); }
+
+/* Page headers ------------------------------------------------------------ */
+
+.page-header { padding-block: var(--space-4) var(--space-3); }
+.page-header h1 { max-width: 22ch; margin: 0; font-size: var(--size-title); text-wrap: balance; }
+.meta { margin: 0 0 var(--space-2); font-size: 0.875rem; letter-spacing: var(--tracking-caps); color: var(--color-muted); }
+
+/* the home page's welcome line: one white stripe along the side of the truck */
+.stripe { padding-block: 0.55rem; background: var(--color-strip); color: var(--color-strip-ink); }
+.stripe h1 {
+  max-width: none;
+  font-family: var(--font-body);
+  font-size: clamp(1.0625rem, 0.9rem + 0.7vw, 1.375rem);
+  font-weight: 700;
+  line-height: 1.25;
+  text-transform: none;
+}
+
+/* THE PANEL — the signature ------------------------------------------------
+   One dish to a band, kerb to kerb. Every name at one queue-reading size,
+   stacked like cut letters; the price the same size on a line of its own,
+   ranged right; the small print on white strips in the space beside it. */
+
+.hatch { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+
+.band {
+  position: relative;
+  padding-block: var(--space-2) var(--space-3);
+  border-top: var(--seam) solid var(--color-seam);
+}
+/* straight under the masthead its seam is seam enough */
+.dish > .band, .not-found > .band { border-top: 0; }
+/* a line of rivets under each panel seam: a domed head and the ring of shadow round it */
+.band::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 0.75rem;
+  background: radial-gradient(circle, var(--color-rivet) 2.5px, var(--color-seam) 3px, var(--color-seam) 4px, transparent 4.5px) 0 0 / 3rem 100% repeat-x;
+}
+
+.vinyl {
+  margin: 0;
+  font-size: var(--size-vinyl);
+  letter-spacing: 0.01em;
+  text-wrap: balance;
+}
+/* a box of its own, so the focus ring is one rectangle round a name of two or three lines */
+.vinyl a { display: inline-block; max-width: 100%; vertical-align: top; color: inherit; text-decoration: none; }
+.vinyl a:hover { text-decoration: underline; text-decoration-thickness: 0.07em; text-underline-offset: 0.09em; }
+.vinyl-mid { font-size: var(--size-title); }
+
+/* description and price share the last line when there is room; on a phone
+   the price keeps its own line under the name and the strips drop below it */
+.band-foot {
+  display: flex;
+  flex-wrap: wrap-reverse;
+  align-items: flex-start; /* with wrap-reverse: the foot of the line */
+  gap: var(--space-2) var(--space-4);
+}
+/* a price is shown as written: never set in capitals, never hyphenated */
+.price { flex: 0 1 auto; max-width: 100%; margin-left: auto; text-align: right; text-transform: none; hyphens: manual; }
+@media (max-width: 48em) {
+  .band-foot { flex-flow: column-reverse; align-items: stretch; }
+  .band-foot .strips { flex: none; padding: 0; }
+}
+
+.strips {
+  flex: 1 1 17rem;
+  max-width: 40rem;
+  margin: 0;
+  /* the last strip stands on the price's baseline */
+  padding-bottom: calc(var(--size-vinyl) * 0.3 - 0.4rem);
+  font-weight: 600;
+  line-height: 1.9;
+  text-wrap: balance; /* strips of like length, never one word on a strip of its own */
+}
+.strips span {
+  padding: 0.24em 0.6em;
+  background: var(--color-strip);
+  color: var(--color-strip-ink);
+  border-radius: var(--radius-strip);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+.vinyl + .strips, .meta + .strips { margin-top: var(--space-2); }
+
+.band-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-2);
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: var(--tracking-caps);
+}
+.band-section::after { content: ""; flex: 1; border-top: 2px solid; opacity: 0.7; }
+
+/* The build sorts dishes by section name from a to z; the panel seats them in
+   service order. A dish with no section, or one outside the ten, stays first. */
+.band[data-section="Breakfast"] { order: 1; }
+.band[data-section="Bread"] { order: 2; }
+.band[data-section="Pastries"] { order: 3; }
+.band[data-section="Starters"] { order: 4; }
+.band[data-section="Mains"] { order: 5; }
+.band[data-section="Sides"] { order: 6; }
+.band[data-section="Desserts"] { order: 7; }
+.band[data-section="Hot drinks"] { order: 8; }
+.band[data-section="Drinks"] { order: 9; }
+.band[data-section="Snacks"] { order: 10; }
+/* a section is named once, on its first dish */
+.band[data-section="Breakfast"] ~ .band[data-section="Breakfast"] .band-section,
+.band[data-section="Bread"] ~ .band[data-section="Bread"] .band-section,
+.band[data-section="Pastries"] ~ .band[data-section="Pastries"] .band-section,
+.band[data-section="Starters"] ~ .band[data-section="Starters"] .band-section,
+.band[data-section="Mains"] ~ .band[data-section="Mains"] .band-section,
+.band[data-section="Sides"] ~ .band[data-section="Sides"] .band-section,
+.band[data-section="Desserts"] ~ .band[data-section="Desserts"] .band-section,
+.band[data-section="Hot drinks"] ~ .band[data-section="Hot drinks"] .band-section,
+.band[data-section="Drinks"] ~ .band[data-section="Drinks"] .band-section,
+.band[data-section="Snacks"] ~ .band[data-section="Snacks"] .band-section { display: none; }
+
+/* The home page letters the whole menu, in the same order. Up to eight dishes
+   it is the panel as above; from nine it is the price list under the panel:
+   every dish still there, name and price on one line where they fit, one size
+   down, the small print left to the menu page. */
+.hatch-front > :is(.band:nth-last-child(n+9), .band:nth-last-child(n+9) ~ .band) {
+  --size-vinyl: var(--size-title);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end; /* the price stands on the name's last line */
+  gap: 0 var(--space-4);
+}
+.hatch-front > :is(.band:nth-last-child(n+9), .band:nth-last-child(n+9) ~ .band) .band-section { flex: 0 0 100%; }
+/* on a phone the price keeps a line of its own, as on the panel */
+.hatch-front > :is(.band:nth-last-child(n+9), .band:nth-last-child(n+9) ~ .band) h2 { flex: 1 1 100%; min-width: 0; }
+/* wider, a name stops short of the right edge, so a short price always fits on its last line; a long one drops to its own */
+@media (min-width: 48em) {
+  .hatch-front > :is(.band:nth-last-child(n+9), .band:nth-last-child(n+9) ~ .band) h2 { flex: 0 1 auto; max-width: calc(100% - 5 * var(--size-vinyl) - var(--space-4)); }
+}
+.hatch-front > :is(.band:nth-last-child(n+9), .band:nth-last-child(n+9) ~ .band) .band-foot { display: contents; }
+.hatch-front > :is(.band:nth-last-child(n+9), .band:nth-last-child(n+9) ~ .band) .strips { display: none; }
+
+.more, .pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding-block: var(--space-3);
+  border-top: var(--seam) solid var(--color-seam);
+  font-size: 1.125rem;
+  letter-spacing: 0.03em;
+}
+.pagination { justify-content: space-between; color: var(--color-muted); }
+.empty { margin: 0; padding-block: var(--space-4); }
+
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.tags a {
+  display: block;
+  padding: 0.1em 0.6em;
+  background: var(--color-strip);
+  color: var(--color-strip-link);
+  border-radius: var(--radius-strip);
+  font-weight: 600;
+}
+
+.cover {
+  display: block;
+  width: calc(100% - 2 * var(--gutter));
+  max-width: var(--measure);
+  height: auto;
+  margin-inline: max(var(--gutter), calc((100% - var(--measure-wide)) / 2));
+  border: var(--keyline) solid var(--color-strip);
+  border-radius: var(--radius-cut);
+}
+
+/* Prose — white lettering straight on the paint; anything boxed is a strip -- */
+
+.prose { padding-block: var(--space-3) var(--space-5); }
+.band + .prose { border-top: var(--seam) solid var(--color-seam); padding-top: var(--space-4); }
+.prose > * { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+
+.prose h2, .prose h3 { margin: var(--space-4) 0 var(--space-2); letter-spacing: 0.01em; }
+.prose h2 { font-size: 1.75rem; }
+.prose h3 { font-size: 1.25rem; }
+.prose h4 { margin: var(--space-4) 0 var(--space-1); font-size: 1rem; text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-accent); }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: var(--seam) solid var(--color-seam); }
+.prose img { max-width: 100%; height: auto; border: var(--keyline) solid var(--color-strip); border-radius: var(--radius-cut); }
+/* a phone number moves down whole before it is ever cut; an e-mail address
+   stays inline and breaks inside itself, so the full stop after it stays put */
+.prose a[href^="tel:"] { display: inline-block; max-width: 100%; }
+.prose a[href^="mailto:"] { overflow-wrap: anywhere; }
+.prose a[href^="tel:"], .hours-card a[href^="tel:"] { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+.prose blockquote, .prose pre, .prose :not(pre) > code {
+  background: var(--color-strip);
+  color: var(--color-strip-ink);
+  border-radius: var(--radius-strip);
+}
+.prose blockquote { margin: var(--space-3) 0; padding: var(--space-3) var(--space-3) 1px; font-weight: 600; }
+.prose blockquote a, .hours-card dd a { color: var(--color-strip-link); }
+.prose code { font-family: var(--font-mono); font-size: 0.875em; }
+.prose :not(pre) > code { padding: 0.1em 0.35em; }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.5; }
+
+/* a wide table scrolls inside its own box */
+.prose table { display: block; width: fit-content; max-width: 100%; overflow-x: auto; margin: 0 0 var(--space-3); border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rivet); }
+.prose th { font-size: 0.875rem; letter-spacing: var(--tracking-caps); color: var(--color-muted); }
+/* on a phone the cells keep a readable width and the table scrolls instead */
+@media (max-width: 34em) { .prose th, .prose td { min-width: 7.5rem; } }
+
+/* The pitch list: each label lettered on the paint, each value on its own strip */
+.hours-card { max-width: 46rem; margin: var(--space-4) 0; border-bottom: var(--seam) solid var(--color-seam); }
+.hours-card dl {
+  display: grid;
+  grid-template-columns: minmax(0, 12rem) minmax(0, 1fr);
+  gap: var(--space-1) var(--space-3);
+  align-items: baseline;
+  margin: 0;
+  padding: var(--space-2) 0;
+  border-top: var(--seam) solid var(--color-seam);
+}
+.hours-card dt { font-size: 1.1875rem; letter-spacing: 0.02em; }
+.hours-card dd {
+  justify-self: start;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0.2em 0.6em;
+  background: var(--color-strip);
+  color: var(--color-strip-ink);
+  border-radius: var(--radius-strip);
+  font-weight: 600;
+}
+.hours-card dd a { display: inline-block; max-width: 100%; }
+@media (max-width: 34em) {
+  .hours-card dl { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* THE FRONT — the home page, top to bottom: the welcome stripe, the pitch list
+   lifted out of the page text to stand where the queue looks first, the panel,
+   then the rest of the text. (enhance.js moves the list in the document too.) */
+.front { display: flex; flex-direction: column; padding-bottom: var(--space-5); }
+.front > .panel { order: 2; }
+/* the seam under the panel, and the gap before the text */
+.front::after { content: ""; order: 2; height: var(--space-4); border-top: var(--seam) solid var(--color-seam); }
+.front .prose { display: contents; }
+.front .prose > * {
+  order: 3;
+  max-width: min(var(--measure), calc(100% - 2 * var(--gutter)));
+  margin-inline: max(var(--gutter), calc((100% - var(--measure-wide)) / 2));
+}
+/* flex items keep both their margins: take back what would have collapsed */
+.front .prose > :is(h2, h3, h4, hr, .reserve) { margin-top: var(--space-3); }
+.front .prose > :is(blockquote, pre) { margin-top: 0; }
+
+/* the pitch list on the home page: its pairs side by side, label over strip */
+.front .hours-card {
+  order: 1;
+  display: grid;
+  /* as many columns as fit, each as wide as its longest strip, so a strip breaks only on a narrow screen */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), max-content));
+  gap: var(--space-2) var(--space-4);
+  align-items: start;
+  max-width: none;
+  margin-block: 0;
+  margin-inline: 0;
+  padding-block: var(--space-2) var(--space-3);
+  border: 0;
+}
+.front .hours-card dl { display: block; min-width: 0; padding: 0; border: 0; }
+.front .hours-card dt { margin-bottom: var(--space-1); }
+.front .hours-card dd + dt { margin-top: var(--space-2); }
+.front .hours-card dd { font-size: 1rem; text-wrap: balance; }
+.front .hours-card .reserve { align-self: center; min-width: 0; padding: 0; border: 0; }
+
+/* The one button: a contour-cut sticker — white lozenge, a gap of paint, a white keyline */
+.reserve { margin: var(--space-4) 0; }
+.hours-card .reserve { margin: 0; padding: var(--space-3) 0; border-top: var(--seam) solid var(--color-seam); }
+.btn-reserve {
+  display: inline-block;
+  max-width: calc(100% - 4 * var(--keyline));
+  margin: calc(2 * var(--keyline));
+  padding: 0.6em 1.1em;
+  background: var(--color-strip);
+  color: var(--color-strip-link);
+  border-radius: var(--radius-cut);
+  box-shadow: 0 0 0 var(--keyline) var(--color-bg), 0 0 0 calc(2 * var(--keyline)) var(--color-strip);
+  font-size: 1.1875rem;
+  letter-spacing: 0.03em;
+  text-align: center;
+  text-decoration: none;
+}
+.btn-reserve:hover { background: var(--color-bg); color: var(--color-text); }
+/* focus: the sticker turns to paint and a third ring stands outside the keyline, clear of it */
+.btn-reserve:focus-visible {
+  outline-offset: calc(3 * var(--keyline));
+  background: var(--color-bg);
+  color: var(--color-text);
+  border-radius: var(--radius-cut);
+  box-shadow: 0 0 0 var(--keyline) var(--color-bg), 0 0 0 calc(2 * var(--keyline)) var(--color-strip);
+}
+
+/* Footer — the checker-plate step under the hatch -------------------------- */
+
+.plate {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-4);
+  background: var(--color-plate);
+  color: var(--color-plate-ink);
+  border-top: var(--seam) solid var(--color-plate-lo);
+  font-size: 0.9375rem;
+}
+/* raised lozenges, drawn square and turned 45 degrees */
+.plate::before {
+  content: "";
+  position: absolute;
+  inset: -75vmax;
+  transform: rotate(45deg);
+  background:
+    radial-gradient(ellipse 7px 2px at 8px 8px, var(--color-plate-hi) 92%, transparent) 0 0 / 32px 32px,
+    radial-gradient(ellipse 2px 7px at 24px 24px, var(--color-plate-hi) 92%, transparent) 0 0 / 32px 32px,
+    radial-gradient(ellipse 7px 2px at 9px 10px, var(--color-plate-lo) 92%, transparent) 0 0 / 32px 32px,
+    radial-gradient(ellipse 2px 7px at 25px 26px, var(--color-plate-lo) 92%, transparent) 0 0 / 32px 32px;
+}
+/* the words sit on a patch of plain plate, clear of the lozenges */
+.plate > * { position: relative; width: fit-content; max-width: min(100%, var(--measure)); margin: 0 0 var(--space-1) -0.6em; padding: 0.15em 0.6em; background: var(--color-plate); border-radius: var(--radius-strip); }
+.plate a { color: inherit; }
+.plate-name { letter-spacing: 0.03em; }
+
+/* Motion & print ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .btn-reserve, .masthead nav a { transition: background-color 0.12s, color 0.12s; }
+}
+
+@media print {
+  /* black on white whichever scheme the screen was in: no paint, no plate */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-seam: #000;
+    --color-rivet: #999;
+    --color-strip: #fff;
+    --color-strip-ink: #000;
+    --color-strip-link: #000;
+    --color-plate: #fff;
+    --color-plate-ink: #000;
+    --color-plate-lo: #000;
+    --seam: 1pt;
+    --size-vinyl: 22pt;
+    --size-title: 20pt;
+  }
+  body { display: block; font-size: 11pt; }
+  .masthead nav, .skip-link, .reserve, .btn-reserve, .more, .pagination, .band::before, .plate::before { display: none; }
+  .strips span, .hours-card dd { padding-inline: 0; }
+  .strips { line-height: 1.4; }
+  .band, .hours-card dl { break-inside: avoid; }
+  a { text-decoration: none; }
+}

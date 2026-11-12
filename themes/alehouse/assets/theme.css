@@ -1,0 +1,467 @@
+/* Alehouse — a village-pub theme built around one object: the fascia, the
+   long black board over the windows with the house name in fat gilt Egyptian
+   capitals and a hard red drop shade. The menu's section names are lettered
+   the same way, smaller; nothing else is gilded or shaded. Under the board
+   the page is the pub front: black woodwork, a row of window panes for the
+   hours, a painted door for the booking link.
+   Polished mahogany is the default: where another theme has a
+   (prefers-color-scheme: dark) block, this one has light — the whitewashed front.
+   Restyle by editing the tokens below, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — fat Egyptian capitals for lettering, a transitional serif for reading */
+  --font-slab: "Rockwell Extra Bold", Rockwell, "Rockwell Nova", "Roboto Slab", "Zilla Slab", "DejaVu Serif", Georgia, serif;
+  --font-body: Charter, "Bitstream Charter", "Charis SIL", Georgia, Cambria, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.125rem;
+  --leading: 1.55;
+  --text-fascia: clamp(1.5rem, 7.6vw, 4.25rem);
+  --tracking-caps: 0.1em;
+  --shade: 0.07em;
+
+  /* Colour — inside, after dark: polished mahogany and ivory, an ivory door */
+  --color-bg: #3b170f;
+  --color-text: #f6eedb;
+  --color-muted: #d6c3a8;
+  --color-accent: #edc096;
+  --color-panel: #4d2318;
+  --color-rule: #6e4232;
+  --color-code-bg: #260f09;
+  --color-door: #f6eedb;
+  --color-door-hover: #ffffff;
+  --color-door-ink: #2b110a;
+
+  /* Colour — the fascia: gold and red stay on the lettering in both schemes */
+  --color-board: #0d0907;
+  --color-moulding: #24150f;
+  --color-lining: #f0e7d0;
+  --color-gilt: #e6b645;
+  --color-shade: #d02c20;
+
+  /* Layout */
+  --page-width: 68rem;
+  --measure: 40rem;
+  --col-label: 13rem;
+  --bar: 3px;
+  --radius: 2px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* The front by day — whitewash, black woodwork, lamplit panes, a red door */
+    --color-bg: #f4f2ec;
+    --color-text: #181513;
+    --color-muted: #5b544c;
+    --color-accent: #a3231a;
+    --color-panel: #f0ead9;
+    --color-rule: #cdc8bd;
+    --color-code-bg: #e8e5dc;
+    --color-door: #a3231a;
+    --color-door-hover: #84190f;
+    --color-door-ink: #fff7e8;
+    --color-board: #131110;
+    --color-moulding: #3a342f;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+html { color-scheme: dark light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word; /* last resort: a word longer than its line breaks rather than leave the page */
+}
+
+/* Long compounds break at a syllable where the browser knows the language;
+   an address, a number or a password is never given a hyphen. */
+h1, h2, h3, h4, p, li, dt, dd, td { hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+.prose a, .plinth a, code, pre, th, td, .item-price, .dish-price { hyphens: manual; }
+.prose .btn-reserve { hyphens: auto; } /* a label is words, not an address */
+/* a wide column of running text never needs a hyphen */
+@media (min-width: 40em) { .prose :is(p, li) { hyphens: manual; } }
+/* only long words: one that fits the narrowest column whole is never hyphenated */
+h1, .site-title { text-wrap: balance; hyphenate-limit-chars: 14 4 4; }
+
+::selection { background: var(--color-text); color: var(--color-bg); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: var(--bar) solid var(--color-text); outline-offset: 2px; }
+.fascia :focus-visible, .plinth :focus-visible { outline-color: var(--color-lining); }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-lining);
+  color: var(--color-board);
+}
+.skip-link:focus { left: var(--space-2); }
+
+/* The sign-writer's small capitals: plain paint, never gilded */
+.fascia nav a, .prose h2, .prose th, .hours-card dt, .btn-reserve, .meta, .kicker,
+.plinth-name, .pagination, .back {
+  font-family: var(--font-slab);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+/* THE LETTERING — the signature. Gold leaf with a hard red drop shade, cut
+   from the letter by a line of board black. Only ever on a black board: the
+   house name on the fascia, and the section names of the menu. */
+.site-title, .dish-section, .item:is([data-section="Breakfast"], [data-section="Bread"], [data-section="Pastries"], [data-section="Starters"], [data-section="Mains"], [data-section="Sides"], [data-section="Desserts"], [data-section="Hot drinks"], [data-section="Drinks"], [data-section="Snacks"]) .section-name {
+  font-family: var(--font-slab);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--color-gilt);
+  background: var(--color-board);
+  text-shadow:
+    max(calc(var(--shade) * 0.3), 0.5px) max(calc(var(--shade) * 0.3), 0.5px) 0 var(--color-board),
+    max(var(--shade), 2px) max(var(--shade), 2px) 0 var(--color-shade);
+}
+
+/* The fascia -------------------------------------------------------------- */
+
+.fascia {
+  position: relative;
+  padding: var(--space-3) var(--space-2);
+  background: var(--color-board);
+  border-top: var(--space-2) solid var(--color-moulding);
+  border-bottom: var(--space-1) solid var(--color-moulding);
+  color: var(--color-lining);
+  text-align: center;
+}
+/* the sign-writer's lining: one cream line round the board */
+.fascia-board {
+  border: 2px solid var(--color-lining);
+  /* the lettering stands clear of the lining at each end on a wide board */
+  padding: clamp(0.75rem, 2.2vw, 1.6rem) clamp(var(--space-2), 5vw - 1.5rem, 2.5rem) var(--space-1);
+}
+.site-title {
+  display: block;
+  hyphens: auto;
+  padding-bottom: 0.1em;
+  font-size: var(--text-fascia);
+  line-height: 1;
+  text-decoration: none;
+}
+.fascia nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--space-4);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.fascia nav a {
+  display: block;
+  padding: 0.7rem 0.1rem;
+  font-size: 0.8125rem;
+  color: var(--color-lining);
+  text-decoration: none;
+}
+.fascia nav a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.fascia nav a[aria-current="page"] { box-shadow: inset 0 -0.5rem 0 var(--color-board), inset 0 calc(-0.5rem - 2px) 0 var(--color-lining); }
+
+/* the consoles that carry the board at each end: a lined pilaster panel the
+   height of the fascia, and under it a moulded drop — a shoulder, a hollow
+   each side, a rounded tongue — lined like the panel above. The drop's
+   outline is a mask, so the paint stays a token. */
+@media (min-width: 60em) {
+  .fascia {
+    padding-inline: 5rem;
+    --console:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 37'%3E%3Cpath d='M0 0h48v6c-4.97 0-9 4.03-9 9v7a15 15 0 0 1-30 0v-7c0-4.97-4.03-9-9-9z'/%3E%3C/svg%3E") 0 100% / 100% 2.3125rem no-repeat,
+      linear-gradient(var(--color-board), var(--color-board)) 0 0 / 100% calc(100% - 2.3125rem + 1px) no-repeat;
+  }
+  .fascia::before, .fascia::after, .fascia-board::before, .fascia-board::after { content: ""; position: absolute; }
+  .fascia::before, .fascia::after {
+    top: 0;
+    bottom: -2.3125rem;
+    width: 3rem;
+    background:
+      linear-gradient(var(--color-board), var(--color-board)) calc(0.5rem + 2px) calc(1rem + 2px) / calc(100% - 1rem - 4px) calc(100% - 4.3125rem - 4px) no-repeat,
+      linear-gradient(var(--color-lining), var(--color-lining)) 0.5rem 1rem / calc(100% - 1rem) calc(100% - 4.3125rem) no-repeat,
+      var(--color-board);
+    -webkit-mask: var(--console);
+    mask: var(--console);
+  }
+  .fascia-board::before, .fascia-board::after {
+    z-index: 1;
+    bottom: -2rem;
+    width: 1.25rem;
+    height: 1.1875rem;
+    border: 2px solid var(--color-lining);
+    border-radius: 0 0 0.625rem 0.625rem;
+  }
+  .fascia::before { left: var(--space-3); }
+  .fascia::after { right: var(--space-3); }
+  .fascia-board::before { left: calc(var(--space-3) + 0.875rem); }
+  .fascia-board::after { right: calc(var(--space-3) + 0.875rem); }
+}
+
+/* Page -------------------------------------------------------------------- */
+
+main, .plinth-in {
+  max-width: calc(var(--page-width) + 2 * var(--space-4));
+  margin-inline: auto;
+  padding-inline: clamp(var(--space-3), 4vw, var(--space-4));
+}
+main { flex: 1 0 auto; width: 100%; padding-block: var(--space-4) var(--space-5); }
+
+.page-header { margin: var(--space-3) 0 var(--space-4); }
+.page-header h1 {
+  max-width: 32ch;
+  margin: 0;
+  font-size: clamp(2rem, 5.2vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+}
+.meta, .kicker { margin: 0 0 var(--space-2); font-size: 0.75rem; color: var(--color-muted); }
+
+/* Prose ------------------------------------------------------------------- */
+
+.prose > * { margin: 0 0 var(--space-3); }
+.prose > :last-child { margin-bottom: 0; }
+.prose > :is(p, ul, ol, h2, h3, h4, blockquote) { max-width: var(--measure); }
+.sided > p:first-child { max-width: 34em; font-size: 1.15em; line-height: 1.45; }
+
+.prose h2 {
+  margin-top: var(--space-4);
+  font-size: 1rem;
+  line-height: calc(var(--text-base) * var(--leading));
+}
+.prose h2::before { content: ""; display: block; width: 2.5rem; margin-bottom: var(--space-2); border-top: var(--bar) solid var(--color-text); }
+.prose h3 { margin-top: var(--space-4); font-size: 1.3em; line-height: 1.2; }
+.prose h4 { margin-top: var(--space-4); font-size: 1em; font-style: italic; }
+.prose h2 + h3, .prose h3 + h4 { margin-top: 0; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img, .cover { display: block; max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover { width: 100%; margin-bottom: var(--space-4); }
+.prose hr { border: 0; border-top: 1px solid var(--color-rule); margin: var(--space-4) 0; }
+
+.prose blockquote { padding-left: var(--space-3); border-left: var(--bar) solid var(--color-text); color: var(--color-muted); font-style: italic; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.prose code { font-family: var(--font-mono); font-size: 0.82em; background: var(--color-code-bg); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); background: var(--color-code-bg); border-radius: var(--radius); overflow-x: auto; line-height: 1.5; }
+.prose pre code { padding: 0; background: none; font-size: 0.85rem; }
+
+/* a table wider than its column scrolls inside its own box */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-rule); text-align: left; vertical-align: top; }
+.prose th { font-size: 0.75rem; border-bottom: var(--bar) solid var(--color-text); overflow-wrap: normal; }
+
+/* Side heads: on a wide page each h2 stands in the left column beside the
+   text it heads, and the windows run the full width of the front. */
+@media (min-width: 56em) {
+  .sided { display: grid; grid-template-columns: var(--col-label) minmax(0, var(--measure)) minmax(0, 1fr); column-gap: var(--space-4); align-items: start; }
+  /* text with no side heading beside it — before the first one, or after
+     the windows — keeps the page's left edge; text under a heading stands
+     in the column beside it */
+  .sided > * { grid-column: 1 / 3; min-width: 0; }
+  .sided > h2 { grid-column: 1; }
+  .sided > .hours-card { grid-column: 1 / -1; }
+  .sided > h2 ~ :not(h2, .hours-card) { grid-column: 2; }
+  .sided > .hours-card ~ :not(h2, .hours-card) { grid-column: 1 / 3; }
+  .sided > .hours-card ~ h2 ~ :not(h2, .hours-card) { grid-column: 2; }
+  .sided > h2 + * { margin-top: calc(var(--space-4) + var(--space-2) + var(--bar)); }
+  .sided > p:first-child { font-size: 1.25em; line-height: 1.4; }
+}
+
+/* The windows — hours, address, phone (class names used in page content).
+   One black frame; each label and value is a pane; the booking link is the door. */
+.hours-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bar);
+  margin: var(--space-4) 0;
+  padding: calc(var(--bar) * 2);
+  background: var(--color-board);
+}
+.hours-card dl, .hours-card .reserve { flex: 1 1 12rem; max-width: 100%; margin: 0; }
+.hours-card dl { display: flex; flex-direction: column; justify-content: center; padding: var(--space-3); background: var(--color-panel); }
+.hours-card dt { font-size: 0.75rem; line-height: 1.35; color: var(--color-muted); }
+.hours-card dd { margin: var(--space-1) 0 0; font-size: 1.1em; line-height: 1.3; }
+.hours-card dd + dt { margin-top: var(--space-3); }
+.prose h2 + .hours-card { margin-top: 0; }
+
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.75em 1.4em;
+  border: 0.3rem solid var(--color-door);
+  background: var(--color-door);
+  box-shadow: inset 0 0 0 1px var(--color-door-ink);
+  color: var(--color-door-ink);
+  font-size: 0.875rem;
+  line-height: 1.35;
+  text-align: center;
+  text-decoration: none;
+}
+.btn-reserve:hover { background: var(--color-door-hover); border-color: var(--color-door-hover); }
+.btn-reserve:focus-visible { outline-color: var(--color-door-ink); outline-offset: calc(var(--bar) * -3); }
+.prose > .reserve, .prose > p:has(> .btn-reserve:only-child) { margin-block: var(--space-4); }
+.hours-card .reserve { display: flex; }
+/* one shrinkable column, so a label that is a single long word breaks inside the door */
+.hours-card .reserve .btn-reserve { flex: 1; max-width: 100%; display: grid; grid-template-columns: minmax(0, 1fr); align-content: center; min-height: 4.5rem; padding: var(--space-3); }
+
+/* The menu ---------------------------------------------------------------- */
+
+/* The build sorts by section name; `order` seats the sections in service
+   order (enhance.js then moves them in the document to match). An item with
+   no section, or one outside these ten, keeps order 0 and comes first. */
+.tariff { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.item[data-section="Breakfast"] { order: 1; }
+.item[data-section="Bread"] { order: 2; }
+.item[data-section="Pastries"] { order: 3; }
+.item[data-section="Starters"] { order: 4; }
+.item[data-section="Mains"] { order: 5; }
+.item[data-section="Sides"] { order: 6; }
+.item[data-section="Desserts"] { order: 7; }
+.item[data-section="Hot drinks"] { order: 8; }
+.item[data-section="Drinks"] { order: 9; }
+.item[data-section="Snacks"] { order: 10; }
+
+/* one line of the tariff: name and price, the description beneath; a price
+   too long to share the line drops under the name, at the right */
+.item { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--space-3); padding: 0.7rem 0; border-bottom: 1px solid var(--color-rule); }
+.item-name { flex: 1 1 9rem; min-width: 0; margin: 0; font-size: 1.25em; line-height: 1.25; }
+.item-name a { color: var(--color-text); text-decoration: none; }
+.item-name a:hover { text-decoration: underline; }
+.item-desc { order: 1; flex: 0 0 100%; min-width: 0; margin: var(--space-1) 0 0; color: var(--color-muted); font-style: italic; }
+.item-price, .dish-price { font-family: var(--font-slab); font-weight: 700; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; }
+.item-price { max-width: 100%; margin: 0 0 0 auto; font-size: 1rem; text-align: right; text-wrap: balance; }
+
+/* The section: a small label by default; the first item of each of the ten
+   sections carries it as a lettered board and the rest stay silent. */
+.section-name { flex: 0 0 100%; min-width: 0; margin: 0 0 var(--space-1); font-family: var(--font-slab); font-size: 0.75rem; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-muted); }
+.item:is([data-section="Breakfast"], [data-section="Bread"], [data-section="Pastries"], [data-section="Starters"], [data-section="Mains"], [data-section="Sides"], [data-section="Desserts"], [data-section="Hot drinks"], [data-section="Drinks"], [data-section="Snacks"]) .section-name {
+  margin: var(--space-4) 0 var(--space-2);
+  padding: 0.5em var(--space-3) 0.55em;
+  outline: 1px solid var(--color-lining);
+  outline-offset: -0.3rem;
+  font-size: clamp(1.35rem, 4.4vw, 1.75rem);
+  line-height: 1.1;
+  text-align: center;
+}
+.item[data-section="Breakfast"] ~ .item[data-section="Breakfast"] .section-name,
+.item[data-section="Bread"] ~ .item[data-section="Bread"] .section-name,
+.item[data-section="Pastries"] ~ .item[data-section="Pastries"] .section-name,
+.item[data-section="Starters"] ~ .item[data-section="Starters"] .section-name,
+.item[data-section="Mains"] ~ .item[data-section="Mains"] .section-name,
+.item[data-section="Sides"] ~ .item[data-section="Sides"] .section-name,
+.item[data-section="Desserts"] ~ .item[data-section="Desserts"] .section-name,
+.item[data-section="Hot drinks"] ~ .item[data-section="Hot drinks"] .section-name,
+.item[data-section="Drinks"] ~ .item[data-section="Drinks"] .section-name,
+.item[data-section="Snacks"] ~ .item[data-section="Snacks"] .section-name { display: none; }
+
+/* wide: one long line — name, what it is, the price at the far end */
+@media (min-width: 56em) {
+  .item { display: grid; grid-template-columns: 19rem minmax(0, 1fr) fit-content(15rem); grid-template-areas: "sec sec sec" "name desc price"; column-gap: var(--space-4); }
+  .section-name { grid-area: sec; }
+  .item-name { grid-area: name; }
+  .item-desc { grid-area: desc; margin: 0; }
+  .item-price { grid-area: price; }
+}
+
+/* One item on its own page */
+.dish-section { display: inline-block; margin: 0 0 var(--space-3); padding: 0.45em 0.9em 0.5em; outline: 1px solid var(--color-lining); outline-offset: -0.25rem; font-size: 1.25rem; line-height: 1.1; }
+.dish-price { margin: var(--space-3) 0 0; font-size: 1.4rem; }
+.lede { max-width: 34em; margin: var(--space-3) 0 0; font-size: 1.15em; line-height: 1.45; font-style: italic; color: var(--color-muted); }
+.back { margin: var(--space-4) 0 0; font-size: 0.75rem; }
+
+/* Post list, tags, pagination --------------------------------------------- */
+
+.post-list { margin: 0; padding: 0; list-style: none; border-top: var(--bar) solid var(--color-text); }
+.post-list li { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-rule); }
+.post-list h2 { margin: 0; font-size: 1.4em; line-height: 1.2; }
+.post-list h2 a { color: var(--color-text); text-decoration: none; }
+.post-list h2 a:hover { text-decoration: underline; }
+.post-list .summary { margin: var(--space-1) 0 0; color: var(--color-muted); }
+@media (min-width: 56em) {
+  .post-list li { display: grid; grid-template-columns: var(--col-label) minmax(0, var(--measure)); column-gap: var(--space-4); align-items: baseline; }
+  .post-list li > * { grid-column: 2; }
+  .post-list .meta { grid-column: 1; grid-row: 1 / span 2; }
+}
+
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-4) 0 0; padding: var(--space-3) 0 0; border-top: 1px solid var(--color-rule); list-style: none; font-style: italic; }
+.tags li { min-width: 0; }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; font-size: 0.75rem; color: var(--color-muted); }
+.pagination a { padding: var(--space-2) 0; }
+.empty { color: var(--color-muted); font-style: italic; }
+.ways { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+
+/* The plinth — the black board at the foot of the front ------------------- */
+
+.plinth { padding-block: var(--space-4); background: var(--color-board); border-top: var(--space-1) solid var(--color-moulding); color: var(--color-lining); }
+.plinth p { margin: 0; }
+.plinth a { color: inherit; }
+.plinth-name { display: block; margin-bottom: var(--space-1); font-size: 0.8125rem; }
+.plinth-note { margin-top: var(--space-2); font-size: 0.9em; }
+.plinth-note > * { margin: 0; }
+
+/* Motion & print ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+@media print {
+  /* black ink on white, whichever scheme the screen was in: every board,
+     pane and door prints as plain type */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-panel: #fff;
+    --color-rule: #999;
+    --color-code-bg: #fff;
+    --color-door: #fff;
+    --color-door-ink: #000;
+    --color-board: #fff;
+    --color-moulding: #000;
+    --color-lining: #000;
+    --color-gilt: #000;
+    --color-shade: #fff;
+  }
+  body { font-size: 11pt; }
+  main, .plinth-in { max-width: none; padding-inline: 0; }
+  body { display: block; min-height: 0; }
+  .fascia { padding: var(--space-2) 0; border-width: 0 0 1px; }
+  .fascia-board { border: 0; padding: 0; }
+  .site-title, .dish-section, .section-name { text-shadow: none; }
+  .site-title { font-size: 22pt; }
+  .fascia nav, .fascia::before, .fascia::after, .fascia-board::before, .fascia-board::after, .skip-link, .prose .reserve, .hours-card .reserve, .btn-reserve, .back, .pagination { display: none; }
+  .hours-card { padding: 0; gap: 0; border: 1px solid var(--color-text); }
+  .hours-card dl { border: 1px solid var(--color-rule); }
+  .plinth { border-width: 1px 0 0; padding-block: var(--space-3); }
+  a { color: inherit; text-decoration: none; }
+  .item, .hours-card { break-inside: avoid; }
+  .section-name, .prose h2 { break-after: avoid; }
+}

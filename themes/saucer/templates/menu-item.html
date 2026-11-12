@@ -1,0 +1,14 @@
+<article class="dish-page">
+  <div class="plate">
+    <div class="well">
+      {{#if page.section}}<p class="dish-section">{{ page.section }}</p>{{/if}}
+      <h1 class="well-title">{{ page.title }}</h1>
+      {{#if page.price}}<p class="dish-price">{{ page.price }}</p>{{/if}}
+      {{#if page.description}}<p class="dish-desc">{{ page.description }}</p>{{/if}}
+      {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+      </div>{{/if}}
+    </div>
+  </div>
+  <p class="back"><a href="/menu/">{{ strings.backToMenu }}</a></p>
+</article>

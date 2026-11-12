@@ -1,0 +1,442 @@
+/* Chippy — a fish-and-chip shop theme built around one object: the
+   peg-letter menu board above the fryer. Black grooved felt, white push-in
+   capitals, section names and prices in chip yellow down the right. The
+   board is the same in both schemes; only the page round it changes.
+   Restyle by editing the tokens below, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — grotesque capitals for the board and every heading, a humanist sans for reading */
+  --font-display: "Helvetica Neue", Helvetica, "Arial Nova", Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-body: "Gill Sans", "Gill Sans Nova", "Gill Sans MT", Seravek, Calibri, "Trebuchet MS", "DejaVu Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.55;
+  --text-peg: clamp(0.9375rem, 0.82rem + 0.7vw, 1.125rem);
+  --tracking-peg: 0.14em;
+  --tracking-label: 0.09em;
+
+  /* Colour — the page: chip paper and black ink */
+  --color-bg: #fbfaf5;
+  --color-text: #17160f;
+  --color-muted: #5d5a4f;
+  --color-accent: #17160f;
+  --color-border: #d6d3c6;
+  --color-code-bg: #efede3;
+
+  /* Colour — the board: the same in both schemes */
+  --color-felt: #0e0e0d;
+  --color-groove: #31312d;
+  --color-peg: #f6f4ec;
+  --color-peg-dim: #bab7aa;
+  --color-chip: #ffcf14;
+  --color-chip-ink: #17160f;
+  --color-frame: #a4a8a8;
+  --shadow-board: 0 1px 0 rgba(0,0,0,0.35), 0 14px 30px rgba(0,0,0,0.18);
+
+  /* Layout */
+  --measure: 62ch;
+  --page-width: 74rem;
+  --board-width: 46rem;
+  --groove: 0.375rem;
+  --price-col: 5em;
+  --frame: 0.5rem;
+  --radius: 2px;
+  --rule: 3px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* After closing: the shop with the lights down, the board still lit */
+    --color-bg: #1a1916;
+    --color-text: #f3f1e8;
+    --color-muted: #aba797;
+    --color-accent: #ffcf14;
+    --color-border: #3b3933;
+    --color-code-bg: #26251f;
+    --color-frame: #777b7b;
+    --shadow-board: 0 1px 0 rgba(0,0,0,0.6), 0 14px 30px rgba(0,0,0,0.5);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 clamp(1rem, 4vw, 1.5rem);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+/* Long compound words break at a syllable where the browser knows the
+   language: in headings and board names always, in running text only on a
+   phone, where the column is narrow. Links, code, tables and prices never
+   gain a hyphen: an address or a number must read exactly as written. */
+h1, h2, h3, .peg-name { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+@media (max-width: 30em) {
+  .prose, .peg-desc, .summary { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+}
+.prose a, .prose code, .prose table { hyphens: manual; }
+
+.masthead, .footer, main { max-width: var(--page-width); margin-inline: auto; }
+main { min-height: 60vh; padding: var(--space-4) 0 var(--space-5); }
+.page, .post, .list { max-width: var(--measure); margin-inline: auto; }
+.menu-page, .item-page, .not-found { max-width: var(--board-width); margin-inline: auto; }
+
+::selection { background: var(--color-chip); color: var(--color-chip-ink); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+a:hover { background: var(--color-chip); color: var(--color-chip-ink); }
+
+:focus-visible { outline: var(--rule) solid var(--color-accent); outline-offset: 2px; }
+.board :focus-visible, .skip-link:focus-visible { outline-color: var(--color-chip); }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-felt);
+  color: var(--color-chip);
+}
+.skip-link:focus { left: var(--space-2); }
+
+/* The shop-front voice: grotesque capitals, letter-spaced */
+.site-title, .masthead nav a, .page-header h1, .prose h2, .prose h3, .post-list h2, .meta,
+.prose th, .hours-card dt, .btn-reserve, .footer-name, .back, .pagination {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+}
+
+/* Masthead & footer ------------------------------------------------------ */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
+  padding: var(--space-3) 0 calc(var(--space-2) + var(--space-1));
+  border-bottom: var(--rule) solid var(--color-text);
+}
+.site-title {
+  max-width: 100%;
+  font-size: clamp(1.05rem, 0.9rem + 0.8vw, 1.3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-peg);
+  color: var(--color-text);
+  text-decoration: none;
+}
+/* the menu links: a strip cut from the board, the page you are on in yellow */
+.masthead nav ul { display: flex; flex-wrap: wrap; margin: 0; padding: 0 var(--space-1); list-style: none; border-radius: var(--radius); }
+.masthead nav a {
+  display: block;
+  padding: var(--groove) calc(var(--space-2) + var(--space-1));
+  font-size: 0.8125rem;
+  line-height: calc(var(--groove) * 4);
+  letter-spacing: var(--tracking-peg);
+  color: var(--color-peg);
+  text-decoration: none;
+}
+.masthead nav a:hover { background: none; color: var(--color-chip); text-decoration: underline; }
+.masthead nav a[aria-current="page"] { color: var(--color-chip); }
+.masthead nav a:focus-visible { outline-color: var(--color-chip); outline-offset: calc(-1 * var(--rule)); }
+
+.footer {
+  margin-top: var(--space-4);
+  padding: var(--space-3) 0 var(--space-4);
+  border-top: var(--rule) solid var(--color-text);
+  color: var(--color-muted);
+  font-size: 0.9375rem;
+}
+.footer p { margin: 0 0 var(--space-1); }
+.footer-name { font-size: 0.8125rem; color: var(--color-text); }
+
+/* Page headers & prose --------------------------------------------------- */
+
+.page-header { margin: var(--space-3) 0 var(--space-4); }
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.2rem + 2.6vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+  hyphenate-limit-chars: 16 4 4;
+}
+.meta { margin: 0 0 var(--space-2); font-size: 0.8125rem; color: var(--color-muted); }
+
+.prose h2, .prose h3, .prose h4 { line-height: 1.2; margin: var(--space-4) 0 var(--space-2); }
+.prose h2 { font-size: 1.1875rem; }
+.prose h3 { font-size: 1rem; }
+.prose h4 { font-size: 1rem; }
+.prose > :first-child { margin-top: 0; }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img, .cover { max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover { width: 100%; margin-bottom: var(--space-4); }
+.prose hr { border: 0; border-top: var(--rule) solid var(--color-text); margin: var(--space-4) 0; }
+/* a phone number in bold; one longer than the line breaks inside itself */
+.prose a[href^="tel:"]:not(.btn-reserve) { font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+.prose blockquote { padding: 0 0 0 var(--space-3); border-left: var(--rule) solid var(--color-text); color: var(--color-muted); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.prose code { font-family: var(--font-mono); font-size: 0.875em; background: var(--color-code-bg); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { background: var(--color-code-bg); padding: var(--space-3); border-radius: var(--radius); overflow-x: auto; line-height: 1.5; }
+.prose pre code { background: none; padding: 0; }
+
+.prose table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { text-align: left; vertical-align: top; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-border); }
+.prose th { font-size: 0.8125rem; border-bottom-color: var(--color-text); }
+/* on a phone a table wider than the page scrolls inside itself, like a code
+   block, its cells kept wide enough to read */
+@media (max-width: 40em) {
+  .prose table { display: block; overflow-x: auto; }
+  .prose th, .prose td { min-width: 7.5em; }
+}
+
+/* THE BOARD — the signature ---------------------------------------------
+   Felt with a groove every --groove; every line of lettering is a whole
+   number of grooves tall, so the letters always sit in the same place on
+   the ribs. White letters for what is sold, chip yellow for the section
+   names and the prices. */
+
+.board, .masthead nav ul {
+  background-color: var(--color-felt);
+  background-image: repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--groove) - 1px), var(--color-groove) calc(var(--groove) - 1px), var(--color-groove) var(--groove));
+}
+.board {
+  padding: calc(var(--groove) * 4) clamp(0.75rem, 4vw, 2rem) calc(var(--groove) * 5);
+  border: var(--frame) solid var(--color-frame);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-board);
+  color: var(--color-peg);
+  font-family: var(--font-display);
+  font-size: var(--text-peg);
+  font-weight: 700;
+  line-height: calc(var(--groove) * 5);
+  letter-spacing: var(--tracking-peg);
+  text-transform: uppercase;
+}
+.board a { color: inherit; text-decoration: none; }
+.board a:hover { background: none; color: var(--color-chip); text-decoration: underline; }
+
+.board-title {
+  margin: 0 0 var(--groove);
+  padding-left: 0.3em; /* the tracking after the last letter, balanced */
+  font-size: clamp(1.4rem, 1.1rem + 1.5vw, 1.875rem);
+  font-weight: 700;
+  line-height: calc(var(--groove) * 8);
+  letter-spacing: 0.3em;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* Rows are sorted by section name in the page; `order` seats the sections
+   in service order (enhance.js then moves them in the document to match).
+   A row with no section, or one outside these ten, keeps order 0: first. */
+.pegs { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.peg[data-section="Breakfast"] { order: 1; }
+.peg[data-section="Bread"] { order: 2; }
+.peg[data-section="Pastries"] { order: 3; }
+.peg[data-section="Starters"] { order: 4; }
+.peg[data-section="Mains"] { order: 5; }
+.peg[data-section="Sides"] { order: 6; }
+.peg[data-section="Desserts"] { order: 7; }
+.peg[data-section="Hot drinks"] { order: 8; }
+.peg[data-section="Drinks"] { order: 9; }
+.peg[data-section="Snacks"] { order: 10; }
+
+/* the section name: yellow letters on the first row of its section, after a blank half row */
+.peg-section { margin: 0; padding-top: calc(var(--groove) * 3); font: inherit; letter-spacing: inherit; color: var(--color-chip); overflow-wrap: anywhere; }
+.peg[data-section="Breakfast"] ~ .peg[data-section="Breakfast"] .peg-section,
+.peg[data-section="Bread"] ~ .peg[data-section="Bread"] .peg-section,
+.peg[data-section="Pastries"] ~ .peg[data-section="Pastries"] .peg-section,
+.peg[data-section="Starters"] ~ .peg[data-section="Starters"] .peg-section,
+.peg[data-section="Mains"] ~ .peg[data-section="Mains"] .peg-section,
+.peg[data-section="Sides"] ~ .peg[data-section="Sides"] .peg-section,
+.peg[data-section="Desserts"] ~ .peg[data-section="Desserts"] .peg-section,
+.peg[data-section="Hot drinks"] ~ .peg[data-section="Hot drinks"] .peg-section,
+.peg[data-section="Drinks"] ~ .peg[data-section="Drinks"] .peg-section,
+.peg[data-section="Snacks"] ~ .peg[data-section="Snacks"] .peg-section { display: none; }
+
+/* name … price. The name keeps clear of the price column. A price that
+   fits the column starts at its left edge, so the prices run down the
+   right, ragged; a longer one reaches back towards a short name, or drops
+   to the row below a long one, pushed to the right. */
+.peg-line { display: flex; flex-wrap: wrap; column-gap: var(--space-2); margin: 0; }
+.peg-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: calc(100% - var(--price-col) - var(--space-2) - 1px);
+  margin: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  overflow-wrap: anywhere;
+}
+.peg-price {
+  flex: 0 1 auto;
+  min-width: var(--price-col);
+  max-width: 100%;
+  margin: 0 0 0 auto;
+  color: var(--color-chip);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* the small print under a name: the one thing on the board not in capitals */
+.peg-desc {
+  max-width: 54ch;
+  margin: 0;
+  padding-bottom: calc(var(--groove) * 2);
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: calc(var(--groove) * 4);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--color-peg-dim);
+}
+
+.board-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-4); margin: calc(var(--groove) * 3) 0 0; font-size: 0.8125rem; color: var(--color-chip); }
+.board-foot a:only-child { margin-left: auto; }
+
+/* one item, and the 404: a small board with the name a size up */
+.peg-big { font-size: clamp(1.25rem, 1rem + 1.6vw, 1.875rem); line-height: calc(var(--groove) * 6); }
+.item-page .peg-section { padding-top: 0; }
+.peg-big .peg-name { flex-basis: 55%; max-width: none; }
+.peg-big .peg-price { min-width: 0; }
+.peg-big + .peg-desc { margin-top: var(--groove); padding-bottom: 0; font-size: 1.0625rem; }
+.item-page .prose { margin-top: var(--space-4); }
+.back, .pagination { font-size: 0.8125rem; }
+.back { margin: var(--space-4) 0 0; }
+
+/* The home page: text on the left, the board hung on the right. A menu
+   longer than the board fades out over its last row (the fade sits at a
+   fixed depth, so a short menu never reaches it), and the foot links to the
+   full menu. page.html shows the board only on a page whose address has no
+   fifth character: "/", or "/fr/" for a translated home page. */
+.front { max-width: none; }
+.front > .page-header, .front > .prose { max-width: var(--measure); }
+.front-board { max-width: var(--board-width); margin: 0 0 var(--space-4); }
+.front-board .pegs {
+  max-height: calc(var(--groove) * 60);
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, var(--color-felt) calc(var(--groove) * 52), transparent calc(var(--groove) * 59));
+  mask-image: linear-gradient(to bottom, var(--color-felt) calc(var(--groove) * 52), transparent calc(var(--groove) * 59));
+}
+@media (min-width: 60em) {
+  .front:has(.front-board) {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 5fr);
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-5);
+    align-items: start;
+  }
+  .front > .page-header { grid-column: 1; grid-row: 1; margin-top: var(--space-2); }
+  .front > .prose { grid-column: 1; grid-row: 2; }
+  .front-board { grid-column: 2; grid-row: 1 / span 2; margin: 0; }
+  .front-board .pegs {
+    max-height: calc(var(--groove) * 105);
+    -webkit-mask-image: linear-gradient(to bottom, var(--color-felt) calc(var(--groove) * 97), transparent calc(var(--groove) * 104));
+    mask-image: linear-gradient(to bottom, var(--color-felt) calc(var(--groove) * 97), transparent calc(var(--groove) * 104));
+  }
+}
+
+/* The house slip — hours, address, the order button (class names used in
+   page content): a ruled paper slip, label left, value right. */
+.hours-card { margin: var(--space-4) 0; border-top: var(--rule) solid var(--color-text); }
+.hours-card dl {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: 0 var(--space-3);
+  margin: 0;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.hours-card dt { padding-top: 0.25em; font-size: 0.8125rem; line-height: 1.35; color: var(--color-muted); overflow-wrap: anywhere; hyphens: auto; }
+.hours-card dd { margin: 0; font-weight: 600; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+@media (max-width: 26em) {
+  .hours-card dl { grid-template-columns: minmax(0, 1fr); }
+}
+
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.8em 1.5em;
+  border: 2px solid var(--color-chip-ink);
+  border-radius: var(--radius);
+  background: var(--color-chip);
+  color: var(--color-chip-ink);
+  font-size: 0.9375rem;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-peg);
+  text-align: center;
+  text-decoration: none;
+}
+/* under the finger the button turns into a tile of the board */
+.btn-reserve:hover { background: var(--color-felt); color: var(--color-chip); }
+.prose .reserve { margin: var(--space-4) 0; }
+.hours-card .reserve { margin: var(--space-3) 0 0; }
+.hours-card .btn-reserve { display: block; }
+
+/* Post list & pagination ------------------------------------------------- */
+
+.post-list { margin: 0; padding: 0; list-style: none; }
+.post-list li { padding: var(--space-3) 0 calc(var(--space-3) + var(--space-2)); border-top: 1px solid var(--color-border); }
+.post-list li:first-child { border-top: var(--rule) solid var(--color-text); }
+.post-list h2 { margin: 0; font-size: 1.1875rem; line-height: 1.25; }
+.post-list h2 a { text-decoration: none; }
+.post-list .summary { margin: var(--space-2) 0 0; }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; color: var(--color-muted); }
+.empty { color: var(--color-muted); }
+
+/* Motion & print --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .btn-reserve { transition: background-color 0.12s, color 0.12s; }
+}
+
+@media print {
+  /* ink on white, whichever scheme the screen was in: the board prints as a ruled list */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-border: #999;
+    --color-code-bg: #fff;
+    --color-felt: #fff;
+    --color-groove: #fff;
+    --color-peg: #000;
+    --color-peg-dim: #333;
+    --color-chip: #000;
+    --color-frame: #000;
+    --shadow-board: none;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .prose .reserve, .prose .btn-reserve, .back, .board-foot, .pagination { display: none; }
+  .board { border-width: 1pt; }
+  .front-board .pegs { max-height: none; -webkit-mask-image: none; mask-image: none; }
+  a { text-decoration: none; }
+  .peg, .hours-card { break-inside: avoid; }
+}

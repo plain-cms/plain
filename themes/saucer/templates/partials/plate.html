@@ -1,0 +1,13 @@
+<aside class="plate" aria-labelledby="plate-title">
+    <div class="well">
+      <h2 class="well-title" id="plate-title">{{ strings.menu }}</h2>
+      <ol class="dishes" role="list">
+        {{#each collections.menu as item}}<li class="dish" data-section="{{ item.section }}">
+          {{#if item.section}}<h3 class="dish-section">{{ item.section }}</h3>{{/if}}
+          <p class="dish-line"><a class="dish-name" href="{{ item.url }}">{{ item.title }}</a>{{#if item.price}} <span class="dish-price">{{ item.price }}</span>{{/if}}</p>
+        </li>
+        {{/each}}
+      </ol>
+      <p class="well-foot"><a href="/menu/">{{ strings.fullMenu }}</a></p>
+    </div>
+  </aside>

@@ -1,0 +1,388 @@
+/* Crumb — a bakery theme built around one object: the printed greaseproof
+   sheet the loaf is wrapped in, and the white label that seals it.
+   Every colour, font and measure is a token below; restyle by editing
+   tokens, never selectors. */
+
+:root {
+  /* Type — typewriter capitals over a humanist sans */
+  --font-type: "American Typewriter", "Courier Prime", "Courier New", Courier, monospace;
+  --font-body: "Gill Sans", "Gill Sans MT", Seravek, Calibri, "Trebuchet MS", sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, monospace;
+  --text-base: 1.125rem;
+  --leading: 1.55;
+  --tracking: 0.07em;
+  --word-space: 0.1em;
+
+  /* Colour — greaseproof white, one rye-crust ink */
+  --color-bg: #f8f6f0;
+  --color-text: #5c3216;
+  --color-muted: #84604a;
+  --color-accent: #5c3216;
+  --color-print: #8b6d57;
+  --color-rule: #5c3216;
+  --color-hairline: #d9ccbf;
+  --color-label: #ffffff;
+  --color-label-ink: #5c3216;
+  --color-label-muted: #84604a;
+  --color-btn: #5c3216;
+  --color-btn-ink: #ffffff;
+  --color-code-bg: #eee8dd;
+  --color-mark: #ead8c4;
+  --color-shadow: rgba(92,50,22,0.45);
+
+  /* The sheet and its label */
+  --band-home: min(44vh, 24rem);
+  --slant: -8deg;
+  --print-size: max(1rem, min(1.75vw, 2.25rem), 0.9vw);
+  --print-pitch: 2.5;
+  --keyline: 1.5px;
+  --rule: 2px;
+  --radius: 0.4rem;
+
+  /* Layout */
+  --measure: 44rem;
+  --shelf: 8.5rem;
+  --space-1: 0.3rem;
+  --space-2: 0.6rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The same sheet printed the other way: white on crust brown, white labels */
+    --color-bg: #47270f;
+    --color-text: #f6efe6;
+    --color-muted: #dcc6b2;
+    --color-accent: #ffffff;
+    --color-print: #c2b3a6;
+    --color-rule: #f6efe6;
+    --color-hairline: #7b5a43;
+    --color-label: #fffdf9;
+    --color-btn: #fffdf9;
+    --color-btn-ink: #5c3216;
+    --color-code-bg: #37200d;
+    --color-mark: #80512c;
+    --color-shadow: rgba(0,0,0,0.5);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  word-spacing: var(--word-space); /* Gill Sans kerns the space after a full stop almost shut */
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+main { min-height: 50vh; padding: 0 var(--space-3); }
+main > *, .foot > * { max-width: var(--measure); margin-inline: auto; }
+
+::selection { color: var(--color-text); background: var(--color-mark); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: var(--rule); }
+/* a phone number or e-mail address stays in the line, breaking only where it
+   must, so the full stop after it never strays onto a line of its own */
+a[href^="tel:"], a[href^="mailto:"] { overflow-wrap: anywhere; }
+
+:focus-visible { outline: var(--rule) solid var(--color-accent); outline-offset: 2px; border-radius: 2px; }
+.label :focus-visible, .hours-card :focus-visible { outline-color: var(--color-label-ink); }
+
+/* The typewriter voice */
+.site-title, .band nav, h1, h2, h3, th, .typed, .tags, .price, .hours-card dt, .btn-reserve, .foot-name, .pagination, .back {
+  font-family: var(--font-type);
+  word-spacing: normal;
+}
+.site-title, .band nav, h1, h2, h3, th, .typed, .tags, .hours-card dt, .btn-reserve, .foot-name {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking);
+}
+/* long compounds break at a syllable in headings and narrow boxes (and in
+   text on a phone, below); wide text, tables and prices never do */
+h1, h2, h3, h4, .site-title, .hours-card, .shelf { hyphens: auto; hyphenate-limit-chars: 11 4 4; }
+.prose a, .hours-card a, code, .prose table, .price { hyphens: manual; }
+
+/* The white label: a sticker with an ink keyline set in from its edge, and
+   the hard edge of cut paper below it — never a glow */
+.label, .hours-card, .skip-link {
+  color: var(--color-label-ink);
+  background: var(--color-label);
+  border: var(--keyline) solid var(--color-label-ink);
+  border-radius: var(--radius);
+  box-shadow: 0 0 0 var(--space-1) var(--color-label), 0 1px 0 var(--space-1) var(--color-shadow);
+}
+.label a, .hours-card a { color: inherit; }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-3); z-index: 2; padding: var(--space-2) var(--space-3); }
+.skip-link:focus { left: var(--space-3); }
+
+/* THE SHEET — the signature ------------------------------------------------
+   The site title, step-and-repeated in one ink as slanted running rows, full
+   bleed and clipped to this band, in a tint of the ink so the label leads.
+   The run is a fixed set of forty empty elements; each prints the title
+   twenty-four times from its data attribute, and the text breaks wherever the
+   row ends, so a title of any length fills the sheet. 960 titles is enough
+   for a one-letter name at any width: the box below is only as large as the
+   slant needs, and --print-size grows with the screen past 4000px, so the
+   number of titles a sheet can hold never rises above about 550. */
+
+.band {
+  position: relative;
+  overflow: hidden;
+  overflow: clip; /* clipped, and never a scroll box */
+  display: grid;
+  grid-template-columns: minmax(0, var(--measure));
+  justify-content: center;
+  align-content: center;
+  padding: var(--space-4) var(--space-3);
+  border-bottom: var(--rule) solid var(--color-rule);
+}
+body[data-slug="index"] .band { min-height: var(--band-home); }
+
+.print {
+  position: absolute;
+  inset: -8vw calc(-8vw - 2rem); /* what a turn of --slant uncovers, and a little over */
+  transform: rotate(var(--slant));
+  font: 400 var(--print-size) / var(--print-pitch) var(--font-type);
+  letter-spacing: var(--tracking);
+  word-spacing: normal;
+  text-transform: uppercase;
+  color: var(--color-print);
+  word-break: break-all;
+  line-break: anywhere;
+  user-select: none;
+  pointer-events: none;
+}
+.print i { font-style: normal; }
+.print i::before, .print i::after {
+  content: attr(data-t) "\2003\2003" attr(data-t) "\2003\2003" attr(data-t) "\2003\2003" attr(data-t) "\2003\2003"
+    attr(data-t) "\2003\2003" attr(data-t) "\2003\2003" attr(data-t) "\2003\2003" attr(data-t) "\2003\2003"
+    attr(data-t) "\2003\2003" attr(data-t) "\2003\2003" attr(data-t) "\2003\2003" attr(data-t) "\2003\2003";
+}
+
+.seal {
+  position: relative;
+  justify-self: start;
+  max-width: calc(100% - 2 * var(--space-1));
+  margin: var(--space-1);
+  padding: var(--space-3) var(--space-4) var(--space-2);
+}
+.site-title {
+  display: block;
+  font-size: clamp(1.15rem, 0.7rem + 2.6vw, 2.3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  text-decoration: none;
+}
+.band nav { margin-top: var(--space-2); border-top: 1px dotted var(--color-label-ink); font-size: 0.85rem; }
+.band nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin: 0; padding: 0; list-style: none; }
+.band nav a { display: block; padding: var(--space-2) 0; text-decoration: none; }
+.band nav a:hover, .band nav a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: var(--rule); text-underline-offset: 0.35em; }
+
+/* Headings & prose ------------------------------------------------------- */
+
+.page-head { margin-top: var(--space-5); margin-bottom: var(--space-4); }
+h1 { margin: 0; font-size: clamp(1.35rem, 1rem + 2vw, 2.15rem); font-weight: 600; line-height: 1.2; text-wrap: balance; }
+
+.typed { margin: 0 0 var(--space-2); font-size: 0.8rem; color: var(--color-muted); }
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-5) 0 var(--space-3); padding-top: var(--space-2); border-top: var(--rule) solid var(--color-rule); font-size: 1.1rem; line-height: 1.3; }
+h2, h3, strong { font-weight: 600; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: 0.92rem; line-height: 1.35; }
+.prose h4 { margin: var(--space-4) 0 var(--space-1); font-size: 1em; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose table, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-muted); }
+.prose img, .cover { display: block; max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover { width: 100%; margin-bottom: var(--space-4); }
+.prose blockquote { padding-left: var(--space-3); border-left: var(--rule) solid var(--color-rule); font-style: italic; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: var(--rule) dotted var(--color-rule); }
+.prose code { font-family: var(--font-mono); font-size: 0.86em; background: var(--color-code-bg); padding: 0.1em 0.3em; border-radius: 2px; }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.5; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+/* a table wider than the column scrolls inside its own box */
+.prose table { display: block; width: fit-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.95em; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-hairline); }
+.prose th { font-size: 0.78em; border-bottom: var(--rule) solid var(--color-rule); }
+
+/* The house label: hours, address, phone — each pair typed on a dotted line */
+.hours-card { margin: var(--space-4) var(--space-1); padding: var(--space-2) var(--space-4) var(--space-3); }
+.hours-card dl { display: grid; grid-template-columns: minmax(6.5rem, 34%) minmax(0, 1fr); margin: 0; }
+.hours-card dt, .hours-card dd { min-width: 0; margin: 0; padding: var(--space-2) 0; border-bottom: 1px dotted var(--color-label-ink); }
+.hours-card dt { padding: calc(var(--space-2) + 0.42em) var(--space-3) var(--space-2) 0; font-size: 0.74rem; line-height: 1.4; color: var(--color-label-muted); }
+.hours-card dd { font-variant-numeric: tabular-nums; }
+.reserve, .prose p:has(> .btn-reserve:only-child) { margin: var(--space-4) 0; }
+.prose .hours-card p.reserve { margin: var(--space-3) 0 var(--space-1); }
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.75em 1.3em;
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-btn-ink);
+  background: var(--color-btn);
+  border: var(--rule) solid var(--color-btn);
+  border-radius: var(--radius);
+}
+.btn-reserve:hover { color: var(--color-btn); background: none; }
+.hours-card .btn-reserve { color: var(--color-label); background: var(--color-label-ink); border-color: var(--color-label-ink); }
+.hours-card .btn-reserve:hover { color: var(--color-label-ink); background: none; }
+
+/* The menu ---------------------------------------------------------------
+   Items arrive sorted by section name; `order` seats the sections in service
+   order (enhance.js then moves them in the document to match). Every item
+   carries its section on a small label in the left column and opens with an
+   ink rule; later items of the same section drop both for a hairline. */
+
+.shelves { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.loaf[data-section="Breakfast"] { order: 1; }
+.loaf[data-section="Bread"] { order: 2; }
+.loaf[data-section="Pastries"] { order: 3; }
+.loaf[data-section="Starters"] { order: 4; }
+.loaf[data-section="Mains"] { order: 5; }
+.loaf[data-section="Sides"] { order: 6; }
+.loaf[data-section="Desserts"] { order: 7; }
+.loaf[data-section="Hot drinks"] { order: 8; }
+.loaf[data-section="Drinks"] { order: 9; }
+.loaf[data-section="Snacks"] { order: 10; }
+
+.loaf {
+  display: grid;
+  grid-template-columns: var(--shelf) minmax(0, 1fr);
+  column-gap: var(--space-3);
+  margin-top: var(--space-4);
+  border-top: var(--rule) solid var(--color-rule);
+  background: 100% 0 / calc(100% - var(--shelf) - var(--space-3)) 1px no-repeat;
+}
+.loaf[data-section=""],
+.loaf[data-section="Breakfast"] ~ .loaf[data-section="Breakfast"],
+.loaf[data-section="Bread"] ~ .loaf[data-section="Bread"],
+.loaf[data-section="Pastries"] ~ .loaf[data-section="Pastries"],
+.loaf[data-section="Starters"] ~ .loaf[data-section="Starters"],
+.loaf[data-section="Mains"] ~ .loaf[data-section="Mains"],
+.loaf[data-section="Sides"] ~ .loaf[data-section="Sides"],
+.loaf[data-section="Desserts"] ~ .loaf[data-section="Desserts"],
+.loaf[data-section="Hot drinks"] ~ .loaf[data-section="Hot drinks"],
+.loaf[data-section="Drinks"] ~ .loaf[data-section="Drinks"],
+.loaf[data-section="Snacks"] ~ .loaf[data-section="Snacks"] {
+  margin-top: 0;
+  border-top: 0;
+  background-image: linear-gradient(var(--color-hairline), var(--color-hairline));
+}
+.loaf[data-section="Breakfast"] ~ .loaf[data-section="Breakfast"] .shelf,
+.loaf[data-section="Bread"] ~ .loaf[data-section="Bread"] .shelf,
+.loaf[data-section="Pastries"] ~ .loaf[data-section="Pastries"] .shelf,
+.loaf[data-section="Starters"] ~ .loaf[data-section="Starters"] .shelf,
+.loaf[data-section="Mains"] ~ .loaf[data-section="Mains"] .shelf,
+.loaf[data-section="Sides"] ~ .loaf[data-section="Sides"] .shelf,
+.loaf[data-section="Desserts"] ~ .loaf[data-section="Desserts"] .shelf,
+.loaf[data-section="Hot drinks"] ~ .loaf[data-section="Hot drinks"] .shelf,
+.loaf[data-section="Drinks"] ~ .loaf[data-section="Drinks"] .shelf,
+.loaf[data-section="Snacks"] ~ .loaf[data-section="Snacks"] .shelf { display: none; }
+
+/* a menu with no sections at all has no left column to keep: one ink rule
+   under the heading, then the items at the full width of the page */
+.shelves:not(:has(.shelf)) { border-top: var(--rule) solid var(--color-rule); }
+.shelves:not(:has(.shelf)) .loaf { display: block; background-size: 100% 1px; }
+.shelves:not(:has(.shelf)) .loaf:first-child { background-image: none; }
+
+.shelf { grid-column: 1; margin: 0; padding: var(--space-3) var(--space-1) var(--space-2); font-size: 0.78rem; line-height: 1.3; }
+.shelf .label { display: inline-block; max-width: 100%; padding: 0.3em 0.65em; }
+.loaf-body { grid-column: 2; padding: var(--space-3) 0; }
+.loaf-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-3); margin: 0; }
+.loaf-name { flex: 1 1 50%; min-width: 0; font-size: 1.12em; font-weight: 600; color: var(--color-text); text-decoration: none; }
+.loaf-name:hover { text-decoration: underline; }
+.price { max-width: 100%; margin: 0 0 0 auto; font-size: 1.05em; text-align: right; font-variant-numeric: tabular-nums; }
+.loaf-desc { max-width: 34rem; margin: var(--space-1) 0 0; font-size: 0.96em; color: var(--color-muted); }
+
+/* One item, and the 404: a filled-in label */
+.item, .lost { padding-top: var(--space-5); }
+.item-label { margin: 0 var(--space-1) var(--space-4); padding: var(--space-3) var(--space-4) var(--space-4); }
+.item-shelf { padding-bottom: var(--space-2); border-bottom: 1px dotted var(--color-label-ink); color: var(--color-label-muted); }
+.item-price { margin-top: var(--space-2); font-size: 1.2em; text-align: left; }
+.item-desc { margin: var(--space-3) 0 0; }
+.lost-links { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: var(--space-3) 0 0; }
+.back { margin: var(--space-4) 0 0; font-size: 0.85rem; }
+
+@media (max-width: 38em) {
+  .prose, .loaf-body, .item-desc, .summary { hyphens: auto; hyphenate-limit-chars: 11 4 4; }
+  .loaf { display: block; background-size: 100% 1px; }
+  .shelf { padding: var(--space-3) var(--space-1) 0; }
+  .loaf-body { padding: var(--space-2) 0 var(--space-3); }
+  .hours-card { padding-inline: var(--space-3); }
+  .hours-card dl { grid-template-columns: minmax(0, 1fr); }
+  .hours-card dt { padding-right: 0; padding-bottom: 0; border-bottom: 0; }
+  .hours-card dd { padding-top: 0; }
+  .seal, .item-label { padding-inline: var(--space-3); }
+}
+
+/* Posts ------------------------------------------------------------------ */
+
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; list-style: none; font-size: 0.8rem; }
+.post-list { margin: 0; padding: 0; list-style: none; }
+.post-list li { padding: var(--space-3) 0; border-top: 1px solid var(--color-hairline); }
+.post-list li:first-child { border-top: var(--rule) solid var(--color-rule); }
+.post-list h2 { margin: 0; font-size: 1.1rem; line-height: 1.3; }
+.post-list a { text-decoration: none; }
+.post-list a:hover { text-decoration: underline; }
+.summary { margin: var(--space-1) 0 0; color: var(--color-muted); }
+.empty { color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); font-size: 0.85rem; color: var(--color-muted); }
+
+/* Footer ----------------------------------------------------------------- */
+
+.foot { margin-top: var(--space-5); padding: 0 var(--space-3) var(--space-4); font-size: 0.92rem; color: var(--color-muted); }
+.foot p { margin-top: 0; margin-bottom: var(--space-1); }
+.foot > :first-child { padding-top: var(--space-3); border-top: var(--rule) solid var(--color-rule); }
+.foot a { color: inherit; }
+.foot-name { font-size: 0.85em; font-weight: 700; color: var(--color-text); }
+
+/* Motion & print --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .btn-reserve { transition: color 0.15s, background-color 0.15s; }
+}
+
+@media print {
+  /* ink on white, whichever scheme the screen was in */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-rule: #000;
+    --color-hairline: #999;
+    --color-label: #fff;
+    --color-label-ink: #000;
+    --color-label-muted: #333;
+    --color-code-bg: #fff;
+    --color-shadow: transparent;
+  }
+  body { font-size: 11pt; }
+  .print, .band nav, .skip-link, .back, .pagination { display: none; }
+  .band, body[data-slug="index"] .band { display: block; min-height: 0; padding-block: 0 var(--space-2); }
+  .seal { margin: 0; padding: 0; border: 0; }
+  main { min-height: 0; }
+  main > *, .foot > * { max-width: none; }
+  a { text-decoration: none; }
+  .btn-reserve, .hours-card .btn-reserve { color: inherit; background: none; border-color: currentColor; }
+  .loaf-body, .hours-card dl, .post-list li { break-inside: avoid; }
+  .shelf, h2, h3 { break-after: avoid; }
+}

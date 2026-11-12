@@ -1,0 +1,16 @@
+<article class="dish">
+  <header class="band">
+    {{#if page.section}}<p class="band-section">{{ page.section }}</p>{{/if}}
+    <h1 class="vinyl">{{ page.title }}</h1>
+    {{#if page.description}}<div class="band-foot">
+      <p class="strips"><span>{{ page.description }}</span></p>
+      {{#if page.price}}<p class="vinyl price">{{ page.price }}</p>{{/if}}
+    </div>{{else}}{{#if page.price}}<div class="band-foot">
+      <p class="vinyl price">{{ page.price }}</p>
+    </div>{{/if}}{{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  <p class="more"><a href="/menu/">{{ strings.backToMenu }}</a></p>
+</article>

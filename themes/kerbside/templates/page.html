@@ -1,0 +1,15 @@
+{{#if page.url.5}}{{> plain-page}}{{else}}{{#if page.slug.4}}<article class="page front">
+  <header class="page-header stripe">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if collections.menu}}<section class="panel" aria-label="{{ strings.menu }}">
+    <ol class="hatch hatch-front" role="list">
+      {{#each collections.menu as item}}{{> band}}
+      {{/each}}
+    </ol>
+    <p class="more"><a href="/menu/">{{ strings.fullMenu }}</a></p>
+  </section>{{/if}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>{{else}}{{> plain-page}}{{/if}}{{/if}}

@@ -1,0 +1,14 @@
+<article class="item cols">
+  <div class="side">
+    <header class="ticket" data-section="{{ page.section }}">
+      {{#if page.section}}<p class="ticket-section">{{ page.section }}</p>{{/if}}
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="ticket-desc">{{ page.description }}</p>{{/if}}
+      {{#if page.price}}<p class="ticket-price">{{ page.price }}</p>{{/if}}
+    </header>
+    <p class="back"><a href="/menu/">{{ strings.backToMenu }}</a></p>
+  </div>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

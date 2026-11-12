@@ -1,0 +1,344 @@
+/* Fry-up — a café theme built around one object: the pink duplicate torn
+   from the waitress's order pad. The page is the sheet; what the pad's
+   printer printed is in grotesque capitals, what the waitress wrote is in a
+   humanist italic, and every word is carbon violet. Restyle by editing the
+   tokens below, never the selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — the hand that wrote the order, the press that printed the pad */
+  --font-hand: "Gill Sans", "Gill Sans MT", Seravek, Candara, Calibri, "Trebuchet MS", "Lucida Sans", "DejaVu Sans", sans-serif;
+  --font-print: "Helvetica Neue", Helvetica, "Arial Nova", Arial, "Liberation Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.125rem;
+  --text-title: clamp(2rem, 1.25rem + 2.4vw, 2.75rem);
+  --text-hand: 1.2rem;
+  --text-print: 0.72rem;
+  --leading: 1.5;
+  --tracking-print: 0.09em;
+
+  /* Colour — light: carbonless pink, carbon violet, blue-grey pad rules */
+  --color-bg: #f6c9d4;
+  --color-text: #43298c;
+  --color-muted: #5a3f99;
+  --color-accent: #5a2aae;
+  --color-rule: #7b8fb5;
+  --color-feint: #9eabc8;
+  --color-no: #b01224;
+  --color-tint: #efb6c5;
+  --color-mark: #e3b1e0;
+  --color-smudge: rgba(67,41,140,0.4);
+
+  /* Layout */
+  --sheet: 68rem;
+  --measure: 40rem;
+  --col-side: 41%;
+  --col-price: clamp(5.75rem, 24vw, 8.5rem);
+  --row: 1.75rem;
+  --rule: 1px;
+  --rule-heavy: 2px;
+  --radius: 2px;
+  --gutter: clamp(0.75rem, 4vw, 2rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The carbon sheet from between the leaves: violet-black, pale where the pen pressed */
+    --color-bg: #1b142e;
+    --color-text: #eadff6;
+    --color-muted: #b9a9d6;
+    --color-accent: #d3b8ff;
+    --color-rule: #6c6699;
+    --color-feint: #453c6b;
+    --color-no: #ff7b7b;
+    --color-tint: #2a2045;
+    --color-mark: #5a3f99;
+    --color-smudge: rgba(234,223,246,0.3);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  font-family: var(--font-hand);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word; /* a word longer than its line breaks rather than leaving the page */
+}
+/* the perforation the sheet was torn along */
+body::before { content: ""; display: block; height: var(--space-2); border-bottom: var(--rule-heavy) dotted var(--color-rule); }
+
+.sheet { max-width: var(--sheet); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* Long compound words break at a syllable in headings and narrow boxes only,
+   where the browser knows the language. Running text, tables and prices keep
+   whole words; links and code never gain a hyphen: an address, a number or a
+   password must read exactly as written. */
+h1, h2, h3, h4, .hours-card dt, .hours-card dd, .row-name, .row-section, .row-note { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+.prose a, .hours-card a, code { hyphens: manual; }
+/* a phone number or e-mail address too long for its line breaks inside itself */
+.prose a[href^="tel:"]:not(.btn-reserve), .prose a[href^="mailto:"]:not(.btn-reserve) { overflow-wrap: anywhere; }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration: underline; text-decoration-thickness: var(--rule); text-underline-offset: 0.16em; }
+a:hover { text-decoration-thickness: var(--rule-heavy); }
+:focus-visible { outline: var(--rule-heavy) solid var(--color-accent); outline-offset: 2px; border-radius: var(--radius); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-bg); }
+.skip-link:focus { left: var(--space-2); }
+
+/* What the printer printed: grotesque capitals, small and tracked */
+.site-title, .masthead nav a, .pad-no, .heads, .row-section, .label, .hours-card dt, .btn-reserve,
+.prose h3, .prose h4, .prose th, .tags a, .pagination, .back, .foot-name {
+  font-family: var(--font-print);
+  font-size: var(--text-print);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-print);
+  text-transform: uppercase;
+}
+
+/* What the waitress wrote: a humanist italic, a little soft where the carbon took */
+h1, .row-line, .row-note, .hours-card dd, .written, .lead, .prose h2, .posts h2, .side-note, .foot-line {
+  font-style: italic;
+  font-weight: 400;
+  text-shadow: 0 0 0.035em var(--color-smudge);
+}
+
+/* The head of the pad ------------------------------------------------------ */
+
+.masthead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) 0 var(--space-1);
+  border-bottom: var(--rule-heavy) solid var(--color-rule);
+}
+.masthead-id { min-width: 0; }
+.site-title { font-size: clamp(1.1rem, 0.8rem + 1.6vw, 1.85rem); line-height: 1.1; letter-spacing: 0.04em; color: var(--color-text); text-decoration: none; }
+.site-title { hyphens: auto; }
+.site-title:hover { text-decoration: underline; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-1) 0 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: var(--space-2) 0; font-weight: 400; color: var(--color-text); }
+.masthead nav a[aria-current="page"] { font-weight: 700; text-decoration-thickness: var(--rule-heavy); }
+
+/* the one thing on the sheet that is red: the serial box, never filled in */
+.pad-no { flex: none; display: flex; align-items: center; gap: var(--space-2); margin: 0; font-size: 1rem; letter-spacing: 0.02em; text-transform: none; color: var(--color-no); }
+.pad-no::after { content: ""; width: clamp(2.75rem, 12vw, 7.5rem); height: clamp(2rem, 6vw, 2.5rem); border: var(--rule-heavy) solid var(--color-no); }
+
+.foot { padding: var(--space-3) 0 var(--space-5); border-top: var(--rule-heavy) solid var(--color-rule); color: var(--color-muted); }
+.foot p { margin: 0 0 var(--space-1); }
+.foot-name { margin-right: var(--space-2); color: var(--color-text); }
+.foot-note { font-size: 0.9rem; }
+.foot a { color: inherit; }
+
+/* The sheet's two columns: a margin for the heading, a ruled column for the entry */
+
+.split { display: grid; grid-template-columns: minmax(0, var(--col-side)) minmax(0, 1fr); min-height: 60vh; }
+.side { padding: var(--space-4) var(--space-4) var(--space-4) 0; }
+.entry { padding: var(--space-4) 0 var(--space-5) var(--space-4); border-left: var(--rule) solid var(--color-rule); }
+.menu-page > .entry { padding: 0 0 var(--space-5); }
+/* The home page is the one page whose address has no fifth character ("/",
+   or "/fr/" for a translation): page.html then writes the order pad up from
+   the menu in the right-hand column, and its blank rows run on to the foot
+   of the sheet. */
+.front > .entry { display: flex; flex-direction: column; padding: 0; }
+.front .order { flex: 1; display: flex; flex-direction: column; border-bottom: 0; }
+.front .rows { flex: 1; padding-bottom: var(--row); }
+@media (min-width: 52em) and (min-height: 40em) {
+  header.side { position: sticky; top: 0; align-self: start; }
+}
+
+h1 { margin: 0; font-size: var(--text-title); line-height: 1.1; text-wrap: balance; }
+.label { margin: 0 0 var(--space-2); color: var(--color-muted); }
+.side-note, .lead { margin: var(--space-3) 0 0; max-width: var(--measure); color: var(--color-muted); }
+.lead { margin: 0 0 var(--space-3); font-size: var(--text-hand); color: var(--color-text); }
+.back { margin: var(--space-4) 0 0; font-weight: 400; }
+.empty { margin: 0; font-style: italic; }
+.menu-page .empty { padding: var(--space-3); }
+
+/* a printed box with a written value: the price on a dish's own page */
+.cell { display: inline-block; max-width: 100%; margin: var(--space-3) 0 0; padding: var(--space-2) var(--space-3); border: var(--rule) solid var(--color-rule); border-left: calc(var(--rule) * 3) double var(--color-rule); }
+.cell .label { display: block; margin: 0; }
+.written { font-size: 1.5rem; line-height: 1.2; }
+
+/* Page text ----------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.side .prose { margin-top: var(--space-3); }
+.prose p, .prose ul, .prose ol, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-size: 1.6rem; line-height: 1.15; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: 0.85rem; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); color: var(--color-muted); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img, .cover { display: block; max-width: 100%; height: auto; border: var(--rule) solid var(--color-rule); }
+.cover { width: 100%; margin: 0 0 var(--space-4); }
+.prose a[href^="tel:"]:not(.btn-reserve) { font-variant-numeric: tabular-nums; font-weight: 600; }
+.prose blockquote { margin: var(--space-3) 0; padding: 0 0 0 var(--space-3); border-left: calc(var(--rule) * 3) double var(--color-rule); font-style: italic; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: var(--rule-heavy) dotted var(--color-rule); }
+.prose code { font-family: var(--font-mono); font-size: 0.85em; background: var(--color-tint); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.5; background: var(--color-tint); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+/* a table wider than its column scrolls inside its own box, like a code block */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { min-width: 6em; padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: var(--rule) solid var(--color-feint); }
+.prose th { border-bottom: var(--rule-heavy) solid var(--color-rule); }
+
+/* The house card: the boxes at the head of the pad — a printed label, a
+   written answer. One box per <dl>; boxes share their rules, and a short
+   last row widens its boxes rather than leave an empty one. */
+.hours-card { display: flex; flex-wrap: wrap; margin: var(--space-4) 0; border: var(--rule) solid var(--color-rule); }
+.hours-card dl { flex: 1 1 min(100%, 10.5rem); }
+.hours-card dl, .hours-card .reserve { min-width: 0;margin: 0 calc(var(--rule) * -1) calc(var(--rule) * -1) 0; padding: var(--space-2) var(--space-3) var(--space-3); border: solid var(--color-rule); border-width: 0 var(--rule) var(--rule) 0; }
+.hours-card dt { color: var(--color-muted); }
+.hours-card dt ~ dt { margin-top: var(--space-3); }
+.hours-card dd { margin: var(--space-1) 0 0; font-size: var(--text-hand); line-height: 1.25; font-variant-numeric: tabular-nums; }
+.hours-card .reserve { flex: 1 1 100%; padding-top: var(--space-3); }
+
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.8em 1.2em;
+  font-size: 0.8rem;
+  color: var(--color-text);
+  border: var(--rule-heavy) solid var(--color-text);
+  border-radius: var(--radius);
+  box-shadow: var(--space-1) var(--space-1) 0 var(--color-rule);
+}
+.btn-reserve:hover { background: var(--color-tint); }
+.prose > .reserve, .prose > p:has(> .btn-reserve:only-child) { margin: var(--space-4) 0; }
+
+/* THE ORDER — the signature ------------------------------------------------
+   Ruled rows a line of writing high, printed column heads, and a double rule
+   before the price column, running the whole height of the order. */
+
+.order { position: relative; border-right: var(--rule) solid var(--color-rule); border-bottom: var(--rule-heavy) solid var(--color-rule); }
+.order::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: var(--col-price);
+  width: calc(var(--rule) * 4);
+  border: solid var(--color-rule);
+  border-width: 0 var(--rule);
+  pointer-events: none;
+}
+.heads { display: grid; grid-template-columns: minmax(0, 1fr) var(--col-price); margin: 0; border-bottom: var(--rule-heavy) solid var(--color-rule); color: var(--color-muted); }
+.heads > * { padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3); }
+.heads > :last-child { text-align: right; }
+.heads a { color: var(--color-text); }
+
+/* Sections arrive sorted by name; `order` seats them in service order
+   (enhance.js then moves them in the document to match). An item with no
+   section, or one outside these ten, keeps order 0 and comes first. */
+.rows {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  line-height: var(--row);
+  background-image: linear-gradient(to bottom, transparent calc(100% - 0.125rem - var(--rule)), var(--color-feint) calc(100% - 0.125rem - var(--rule)), var(--color-feint) calc(100% - 0.125rem), transparent calc(100% - 0.125rem));
+  background-size: 100% var(--row);
+}
+.row[data-section="Breakfast"] { order: 1; }
+.row[data-section="Bread"] { order: 2; }
+.row[data-section="Pastries"] { order: 3; }
+.row[data-section="Starters"] { order: 4; }
+.row[data-section="Mains"] { order: 5; }
+.row[data-section="Sides"] { order: 6; }
+.row[data-section="Desserts"] { order: 7; }
+.row[data-section="Hot drinks"] { order: 8; }
+.row[data-section="Drinks"] { order: 9; }
+.row[data-section="Snacks"] { order: 10; }
+.row[data-section="Breakfast"] ~ .row[data-section="Breakfast"] .row-section,
+.row[data-section="Bread"] ~ .row[data-section="Bread"] .row-section,
+.row[data-section="Pastries"] ~ .row[data-section="Pastries"] .row-section,
+.row[data-section="Starters"] ~ .row[data-section="Starters"] .row-section,
+.row[data-section="Mains"] ~ .row[data-section="Mains"] .row-section,
+.row[data-section="Sides"] ~ .row[data-section="Sides"] .row-section,
+.row[data-section="Desserts"] ~ .row[data-section="Desserts"] .row-section,
+.row[data-section="Hot drinks"] ~ .row[data-section="Hot drinks"] .row-section,
+.row[data-section="Drinks"] ~ .row[data-section="Drinks"] .row-section,
+.row[data-section="Snacks"] ~ .row[data-section="Snacks"] .row-section { display: none; }
+
+/* every line of the order is one ruled row high, so the writing sits on the rules */
+.row-section { margin: 0 var(--col-price) 0 0; padding: calc(var(--row) + 0.25rem) var(--space-3) 0; line-height: calc(var(--row) - 0.25rem); color: var(--color-muted); }
+/* once enhance.js has seated the rows, a section that opens the order needs no blank row above it */
+.rows[data-seated] > .row:first-child .row-section { padding-top: 0.25rem; }
+.row-line { display: grid; grid-template-columns: minmax(0, 1fr) var(--col-price); margin: 0; font-size: var(--text-hand); }
+.row-name { padding: 0 var(--space-3); color: var(--color-text); text-decoration-color: var(--color-muted); text-underline-offset: 0.1em; }
+.row-price { padding: 0 var(--space-2) 0 var(--space-3); text-align: right; font-variant-numeric: tabular-nums; }
+.row-note { margin: 0 calc(var(--col-price) + var(--space-3)) 0 0; padding-left: calc(var(--space-3) + 1.2em); font-size: 1rem; color: var(--color-muted); }
+.row-foot { order: 11; margin-right: var(--col-price); padding: var(--row) var(--space-3) 0; font-size: 1rem; font-style: italic; }
+
+/* Posts and pagination ---------------------------------------------------- */
+
+.posts { margin: 0; padding: 0; list-style: none; }
+.posts li { padding: 0 0 var(--space-3); margin: 0 0 var(--space-3); border-bottom: var(--rule) solid var(--color-feint); }
+.posts h2 { margin: 0; font-size: 1.6rem; line-height: 1.15; }
+.posts h2 a { color: var(--color-text); }
+.summary { margin: var(--space-2) 0 0; max-width: var(--measure); }
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.tags a { font-weight: 400; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; font-weight: 400; color: var(--color-muted); }
+.menu-page .pagination { padding: 0 var(--space-3); }
+
+/* One column on a phone: the margin rule goes, the order keeps its rules */
+@media (max-width: 51.99em) {
+  .split { display: block; min-height: 0; }
+  .side { padding: var(--space-4) 0 var(--space-3); }
+  .entry { padding: 0 0 var(--space-4); border-left: 0; }
+  .front > .entry { padding-bottom: var(--space-4); }
+  .order { margin-top: var(--space-3); border-top: var(--rule-heavy) solid var(--color-rule); border-left: var(--rule) solid var(--color-rule); }
+  .front .order { border-bottom: var(--rule-heavy) solid var(--color-rule); }
+  .heads > *, .row-section, .row-name, .row-note, .row-foot { padding-left: var(--space-2); }
+  .row-name { padding-right: var(--space-2); }
+  .row-price { padding: 0 0.35rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a, .btn-reserve { transition: background-color 0.15s, text-decoration-thickness 0.15s; }
+}
+
+@media print {
+  /* dark ink on white paper, whichever scheme the screen was in */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-rule: #666;
+    --color-feint: #bbb;
+    --color-no: #000;
+    --color-tint: #fff;
+    --color-smudge: rgba(0,0,0,0);
+  }
+  body { font-size: 11pt; }
+  body::before, .skip-link, .masthead nav, .pad-no, .row-foot, .back, .pagination { display: none; }
+  .sheet { max-width: none; padding: 0; }
+  .split { display: block; min-height: 0; }
+  .side { position: static; padding: var(--space-3) 0; }
+  .entry { padding: 0 0 var(--space-3); border-left: 0; }
+  .rows { background: none; }
+  .row { border-bottom: var(--rule) solid var(--color-feint); break-inside: avoid; }
+  .btn-reserve { box-shadow: none; }
+  .prose pre, .prose code { border: var(--rule) solid var(--color-feint); }
+}

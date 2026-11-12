@@ -1,0 +1,26 @@
+<section class="menu">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if items}}
+  <ol class="shelves" role="list">
+    {{#each items as item}}<li class="loaf" data-section="{{ item.section }}">
+      {{#if item.section}}<h2 class="shelf"><span class="label">{{ item.section }}</span></h2>{{/if}}
+      <div class="loaf-body">
+        <p class="loaf-line"><a class="loaf-name" href="{{ item.url }}">{{ item.title }}</a>{{#if item.price}} <span class="price">{{ item.price }}</span>{{/if}}</p>
+        {{#if item.description}}<p class="loaf-desc">{{ item.description }}</p>{{/if}}
+      </div>
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}
+  <p class="empty">{{ strings.menuEmpty }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.menuPrevious }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.menuMore }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

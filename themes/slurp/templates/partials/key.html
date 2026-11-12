@@ -1,0 +1,7 @@
+<li class="key" data-section="{{ item.section }}">
+  <div class="key-face">
+    <p class="key-name"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    {{#if item.description}}<p class="key-desc">{{ item.description }}</p>{{/if}}
+  </div>
+  {{#if item.section}}<p class="key-foot"><span class="key-section">{{ item.section }}</span>{{#if item.price}} <span class="key-price">{{ item.price }}</span>{{/if}}</p>{{else}}{{#if item.price}}<p class="key-foot"><span class="key-price">{{ item.price }}</span></p>{{/if}}{{/if}}
+</li>

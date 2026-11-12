@@ -1,0 +1,24 @@
+<section class="menu-page">
+  <div class="board">
+    <h1 class="board-title">{{ page.title }}</h1>
+    {{#if items}}
+    <ol class="pegs" role="list">
+      {{#each items as item}}<li class="peg" data-section="{{ item.section }}">
+        {{#if item.section}}<h2 class="peg-section">{{ item.section }}</h2>{{/if}}
+        <p class="peg-line"><span class="peg-name"><a href="{{ item.url }}">{{ item.title }}</a></span>{{#if item.price}} <span class="peg-price">{{ item.price }}</span>{{/if}}</p>
+        {{#if item.description}}<p class="peg-desc">{{ item.description }}</p>{{/if}}
+      </li>
+      {{/each}}
+    </ol>
+    {{else}}
+    <p class="peg-desc">{{ strings.menuEmpty }}</p>
+    {{/if}}
+  </div>
+  {{#if pagination.multiple}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.menuPrevious }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.menuMore }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>
