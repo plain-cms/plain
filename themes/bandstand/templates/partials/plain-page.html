@@ -1,0 +1,14 @@
+<article class="sheet">
+  <header class="card card-plain">
+    <div class="card-head">
+      <h1 class="card-title">{{ page.title }}</h1>
+      {{#if page.description}}<p class="card-date">{{ page.description }}</p>
+      {{/if}}
+    </div>
+    <div class="card-foot"><span class="staff" aria-hidden="true"></span></div>
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>

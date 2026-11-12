@@ -1,0 +1,15 @@
+<article class="show">
+  <div class="bellows">
+    <header class="pleat" data-status="{{ page.status }}">
+      <div class="face cloth">
+        <time class="pleat-date" datetime="{{ page.date }}">{{ page.dateFormatted }}</time>
+        <h1 class="pleat-head">{{ page.title }}</h1>
+      </div>
+      <div class="face paper"><div class="paper-text">{{#if page.venue}}<p class="pleat-venue">{{ page.venue }}{{#if page.city}}, {{ page.city }}{{/if}}</p>{{else}}{{#if page.city}}<p class="pleat-venue">{{ page.city }}</p>{{/if}}{{/if}}{{#if page.support}}<p class="pleat-support"><span class="with">{{ strings.withSupport }}</span> {{ page.support }}</p>{{/if}}</div><div class="paper-act">{{#if page.status}}<span class="status" data-status="{{ page.status }}"><span class="status-raw">{{ page.status }}</span><span class="status-label is-on-sale">{{ strings.statusOnSale }}</span><span class="status-label is-sold-out">{{ strings.statusSoldOut }}</span><span class="status-label is-free">{{ strings.statusFreeEntry }}</span></span>{{/if}}{{#if page.ticketsUrl}}<a class="key" href="{{ page.ticketsUrl }}">{{ strings.tickets }}</a>{{/if}}</div></div>
+    </header>
+  </div>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<p class="backlink"><a href="/shows/">{{ strings.allShows }}</a></p>
+</article>

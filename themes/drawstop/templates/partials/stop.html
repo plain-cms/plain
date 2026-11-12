@@ -1,0 +1,14 @@
+<li class="stop" data-status="{{ item.status }}">
+      <div class="stop-knob">
+        {{#if item.ticketsUrl}}<a class="knob knob-link" href="{{ item.ticketsUrl }}">{{> labels}}<span class="knob-pitch">{{ strings.tickets }}</span><span class="sr-only">: {{ item.title }}</span></a>
+        {{/if}}<span class="knob knob-still">{{> labels}}</span>
+      </div>
+      <div class="stop-text">
+        <time class="stop-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+        <a class="stop-name{{#if item.city}}{{else}} stop-occasion{{/if}}" href="{{ item.url }}">{{#if item.city}}{{ item.city }}{{else}}{{ item.title }}{{/if}}</a>
+        {{#if item.city}}<span class="stop-title">{{ item.title }}</span>
+        {{/if}}{{#if item.venue}}<span class="stop-venue">{{ item.venue }}</span>
+        {{/if}}{{#if item.support}}<span class="stop-with">{{ strings.withSupport }} {{ item.support }}</span>
+        {{/if}}
+      </div>
+    </li>

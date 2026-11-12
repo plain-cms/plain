@@ -1,0 +1,31 @@
+{{#if page.url.1}}<article class="page">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
+{{else}}<div class="home{{#if collections.shows}} home-dated{{/if}}">
+  <header class="page-head home-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if collections.shows}}<section class="home-dates jambed" aria-labelledby="dates-heading">
+    <h2 class="plate" id="dates-heading">{{ strings.datesHeading }}</h2>
+    <ul class="jamb" role="list">
+    {{#each collections.shows as item}}{{> stop}}
+    {{/each}}
+    </ul>
+    <p class="more jamb-side"><a href="/shows/">{{ strings.allDates }}</a></p>
+  </section>
+  {{/if}}{{#if page.content}}<div class="prose home-prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</div>
+{{/if}}

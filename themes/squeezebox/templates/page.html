@@ -1,0 +1,28 @@
+{{#if page.url.4}}<article class="page">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>{{else}}<article class="home{{#if collections.shows}} home--bellows{{/if}}">
+  <header class="page-head home-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if collections.shows}}<section class="home-bellows" aria-labelledby="home-dates">
+    <div class="frame"><h2 class="frame-title" id="home-dates">{{ strings.datesHeading }}</h2><a href="/shows/">{{ strings.seeAllDates }}</a></div>
+    <ul class="bellows" role="list" data-sortable>
+      {{#each collections.shows as item}}{{> pleat}}
+      {{/each}}<li class="bellows-divider" hidden>{{ strings.playedShows }}</li>
+    </ul>
+  </section>
+  {{/if}}{{#if page.content}}<div class="prose home-body">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>{{/if}}

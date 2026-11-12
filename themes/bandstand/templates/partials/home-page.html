@@ -1,0 +1,23 @@
+<article class="home">
+  <div class="stand">
+    <header class="card card-big card-home">
+      {{> lyre}}
+      <div class="card-head">
+        <h1 class="card-title">{{ page.title }}</h1>
+        {{#if page.description}}<p class="card-date">{{ page.description }}</p>
+        {{/if}}
+      </div>
+      {{#if data.band.tagline}}<div class="card-top">
+        <p class="card-part">{{ data.band.tagline }}</p>
+      </div>
+      {{/if}}<div class="card-foot">
+        <span class="staff" aria-hidden="true"></span>
+        <a class="mark" href="/shows/">{{ strings.seeShows }}</a>
+      </div>
+    </header>
+  </div>
+  {{#if page.content}}<div class="prose home-body">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>

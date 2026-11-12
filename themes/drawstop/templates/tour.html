@@ -1,0 +1,19 @@
+<section class="tour jambed">
+  <header class="page-head jamb-side">
+    <h1>{{ page.title }}</h1>
+    {{#if data.band.tagline}}<p class="lede">{{ data.band.tagline }}</p>
+    {{/if}}
+  </header>
+  {{#if items}}<ul class="jamb" role="list">
+    {{#each items as item}}{{> stop}}
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty jamb-side">{{ strings.noShows }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}<nav class="pagination jamb-side" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.laterShows }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.earlierShows }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

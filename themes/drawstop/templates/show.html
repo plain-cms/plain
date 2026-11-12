@@ -1,0 +1,20 @@
+<article class="show jambed" data-status="{{ page.status }}">
+  <header class="show-head">
+    <div class="stop-knob show-knob">
+      {{#if page.ticketsUrl}}<a class="knob knob-link" href="{{ page.ticketsUrl }}">{{#if page.status}}<span class="st st-raw">{{ page.status }}</span><span class="st st-on">{{ strings.statusOnSale }}</span><span class="st st-sold">{{ strings.statusSoldOut }}</span><span class="st st-free">{{ strings.statusFreeEntry }}</span>{{/if}}<span class="knob-pitch">{{ strings.tickets }}</span><span class="sr-only">: {{ page.title }}</span></a>
+      {{/if}}<span class="knob knob-still">{{#if page.status}}<span class="st st-raw">{{ page.status }}</span><span class="st st-on">{{ strings.statusOnSale }}</span><span class="st st-sold">{{ strings.statusSoldOut }}</span><span class="st st-free">{{ strings.statusFreeEntry }}</span>{{/if}}</span>
+    </div>
+    <div class="stop-text show-text">
+      <time class="stop-date" datetime="{{ page.date }}">{{ page.dateFormatted }}</time>
+      <h1 class="show-title">{{ page.title }}</h1>
+      {{#if page.venue}}<p class="stop-venue">{{ page.venue }}{{#if page.city}}, {{ page.city }}{{/if}}</p>
+      {{else}}{{#if page.city}}<p class="stop-venue">{{ page.city }}</p>
+      {{/if}}{{/if}}{{#if page.support}}<p class="stop-with">{{ strings.withSupport }} {{ page.support }}</p>
+      {{/if}}
+    </div>
+  </header>
+  {{#if page.content}}<div class="prose jamb-side">
+{{{ page.content }}}
+  </div>
+  {{/if}}<p class="backlink jamb-side"><a href="/shows/">{{ strings.allDates }}</a></p>
+</article>

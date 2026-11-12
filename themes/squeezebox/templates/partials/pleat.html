@@ -1,0 +1,7 @@
+<li class="pleat" data-status="{{ item.status }}">
+      <div class="face cloth">
+        <time class="pleat-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+        <a class="pleat-head" href="{{ item.url }}">{{#if item.city}}{{ item.city }}{{else}}{{ item.title }}{{/if}}</a>
+      </div>
+      <div class="face paper"><div class="paper-text">{{#if item.city}}<p class="pleat-title">{{ item.title }}</p>{{/if}}{{#if item.venue}}<p class="pleat-venue">{{ item.venue }}</p>{{/if}}{{#if item.support}}<p class="pleat-support"><span class="with">{{ strings.withSupport }}</span> {{ item.support }}</p>{{/if}}</div><div class="paper-act">{{#if item.status}}<span class="status" data-status="{{ item.status }}"><span class="status-raw">{{ item.status }}</span><span class="status-label is-on-sale">{{ strings.statusOnSale }}</span><span class="status-label is-sold-out">{{ strings.statusSoldOut }}</span><span class="status-label is-free">{{ strings.statusFreeEntry }}</span></span>{{/if}}{{#if item.ticketsUrl}}<a class="key" href="{{ item.ticketsUrl }}" aria-label="{{ strings.tickets }}: {{ item.title }}">{{ strings.tickets }}</a>{{/if}}</div></div>
+    </li>

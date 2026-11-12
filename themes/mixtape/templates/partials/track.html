@@ -1,0 +1,8 @@
+<li class="track" data-status="{{ item.status }}" data-side-a="{{ strings.sideA }}" data-side-b="{{ strings.sideB }}" data-a="{{ strings.sideALetter }}" data-b="{{ strings.sideBLetter }}">
+      <time class="track-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+      <div class="track-main">
+        <a class="track-head" href="{{ item.url }}">{{#if item.city}}{{ item.city }}{{else}}{{ item.title }}{{/if}}</a>
+        <span class="track-where">{{#if item.venue}}<span class="track-venue">{{ item.venue }}</span>{{/if}}{{#if item.support}}<span class="track-with">{{ strings.withSupport }} {{ item.support }}</span>{{/if}}</span>
+        {{> ticks}}{{#if item.status}}<span class="status-raw">{{ item.status }}</span>{{/if}}{{#if item.ticketsUrl}}<a class="tickets" href="{{ item.ticketsUrl }}"><span class="t-buy">{{ strings.tickets }}</span><span class="t-free">{{ strings.reserve }}</span><span class="sr-only">: {{ item.title }}</span></a>{{/if}}<s class="tickets-gone" aria-hidden="true">{{ strings.tickets }}</s>
+      </div>
+    </li>

@@ -1,0 +1,20 @@
+<article class="sheet post">
+  <header class="card card-plain">
+    <div class="card-head">
+      <h1 class="card-title">{{ page.title }}</h1>
+      {{#if page.description}}<p class="card-date">{{ page.description }}</p>
+      {{/if}}
+    </div>
+    <div class="card-top">
+      <p class="card-part"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+      {{#if page.tagLinks}}<p class="card-composer tags">{{#each page.tagLinks as tag}}<a href="{{ tag.url }}">{{ tag.name }}</a> {{/each}}</p>
+      {{/if}}
+    </div>
+    <div class="card-foot"><span class="staff" aria-hidden="true"></span></div>
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
