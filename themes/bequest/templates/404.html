@@ -1,0 +1,12 @@
+<section class="page not-found">
+  <header class="page-header">
+    <p class="eyebrow">404</p>
+    <h1>{{ strings.notFoundTitle }}</h1>
+    <p class="lede">{{ strings.notFoundBody }}</p>
+  </header>
+  <ul class="page-links">
+    <li><a href="/">{{ strings.goHome }}</a></li>
+    <li><a href="/programs/">{{ strings.allPrograms }}</a></li>
+    <li><a class="donate-link" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a></li>
+  </ul>
+</section>

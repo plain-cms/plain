@@ -1,0 +1,49 @@
+{{#if page.hero}}
+<article class="page is-mission">
+  <section class="panel{{#if data.impact.stat.number}} has-stat{{/if}}" aria-labelledby="mission-title">
+    <div class="panel-head">
+      <h1 id="mission-title" class="panel-title">{{ page.title }}</h1>
+      {{#if data.impact.stat.number}}<p class="impact">
+        <strong class="impact-number">{{ data.impact.stat.number }}</strong>
+        {{#if data.impact.stat.unit}}<span class="impact-unit">{{ data.impact.stat.unit }}</span>
+        {{/if}}{{#if data.impact.stat.verb}}<span class="impact-verb">{{ data.impact.stat.verb }}</span>
+      {{/if}}</p>
+      {{/if}}
+    </div>
+    <div class="panel-foot">
+      {{#if page.description}}<p class="small-print">{{ page.description }}</p>
+      {{/if}}<div class="signal" aria-hidden="true"><span></span><span></span></div>
+      <p class="give">
+        {{#if data.impact.donatePrompt}}<span class="give-prompt">{{ data.impact.donatePrompt }}</span>
+        {{/if}}<a class="slab" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a>
+      </p>
+    </div>
+  </section>
+  {{#if page.heroImage}}<figure class="print-photo hero-photo"><img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async"></figure>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if collections.programs}}<section class="board" aria-labelledby="board-title">
+    <h2 id="board-title" class="board-title">{{ strings.programsHeading }}</h2>
+    <ul class="entries">
+      {{#each collections.programs as item}}{{> entry-sub}}
+      {{/each}}
+    </ul>
+    <p class="board-more"><a href="/programs/">{{ strings.allPrograms }} →</a></p>
+  </section>
+  {{/if}}
+</article>
+{{else}}
+<article class="page">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.donateCta}}{{#if data.impact.donateUrl}}<p class="give give-page"><a class="slab" href="{{ data.impact.donateUrl }}">{{ strings.donateOnline }}</a>{{#if data.impact.donatePrompt}} <span class="give-prompt">{{ data.impact.donatePrompt }}</span>{{/if}}</p>
+  {{/if}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
+{{/if}}

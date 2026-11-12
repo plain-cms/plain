@@ -1,0 +1,57 @@
+{{#if page.hero}}
+<article class="home{{#if collections.programs}} has-rack{{/if}}">
+  <section class="hero">
+    {{#if data.impact.stat.number}}<p class="impact">
+      <strong class="impact-number">{{ data.impact.stat.number }}</strong>
+      {{#if data.impact.stat.unit}}<span class="impact-what"><span class="impact-unit">{{ data.impact.stat.unit }}</span>{{#if data.impact.stat.verb}} <span class="impact-verb">{{ data.impact.stat.verb }}</span>{{/if}}</span>
+      {{else}}{{#if data.impact.stat.verb}}<span class="impact-what"><span class="impact-verb">{{ data.impact.stat.verb }}</span></span>
+      {{/if}}{{/if}}
+    </p>
+    {{/if}}<h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="mission">{{ page.description }}</p>
+    {{/if}}<p class="give">
+      <a class="btn-donate" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a>
+      {{#if data.impact.donatePrompt}}<span class="donate-prompt">{{ data.impact.donatePrompt }}</span>{{/if}}
+    </p>
+    {{#if page.heroImage}}<figure class="hero-photo"><img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async"></figure>
+    {{/if}}
+  </section>
+  {{#if page.content}}<div class="prose home-body">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if collections.programs}}<section class="rack-section" aria-labelledby="rack-title">
+    <div class="rack-head">
+      <h2 id="rack-title">{{ strings.programsHeading }}</h2>
+      <a href="/programs/">{{ strings.allPrograms }}</a>
+    </div>
+    <ul class="rack">
+      {{#each collections.programs as item}}<li class="rack-row">
+        <span class="ball" aria-hidden="true"></span>
+        <article class="rack-card">
+          <h3 class="rack-title"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+          {{#if item.description}}<p>{{ item.description }}</p>
+          {{/if}}
+        </article>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+</article>
+{{else}}
+<article class="page wrap">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.donateCta}}{{#if data.impact.donateUrl}}<p class="give">
+    <a class="btn-donate" href="{{ data.impact.donateUrl }}">{{ strings.donateOnline }}</a>
+    {{#if data.impact.donatePrompt}}<span class="donate-prompt">{{ data.impact.donatePrompt }}</span>{{/if}}
+  </p>
+  {{/if}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
+{{/if}}

@@ -1,0 +1,6 @@
+<ol class="lines">
+      {{#if data.impact.volunteerEmail}}<li><span class="line-cell"><span class="line-body"><a class="line-link" href="mailto:{{ data.impact.volunteerEmail }}">{{ strings.giveTime }} <span class="line-addr">{{ data.impact.volunteerEmail }}</span></a></span></span></li>
+      {{else}}{{#if page.hero}}{{else}}<li><span class="line-cell"><span class="line-body"><a class="line-link" href="/about/">{{ strings.giveTime }} {{ strings.getInTouch }}</a></span></span></li>
+      {{/if}}{{/if}}<li><span class="line-cell"><span class="line-body"><a class="line-link" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a></span>{{#if data.impact.donatePrompt}} <span class="line-note">{{ data.impact.donatePrompt }}</span>{{/if}}</span></li>
+      <li><span class="line-cell"><span class="line-body"><a class="line-link" href="/programs/">{{ strings.everyWay }}</a></span></span></li>
+    </ol>

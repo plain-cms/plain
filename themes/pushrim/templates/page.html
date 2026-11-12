@@ -1,0 +1,44 @@
+{{#if page.hero}}
+<article class="page mission-page">
+  <section class="hero{{#if data.impact.stat.number}} hero-has-stat{{/if}}{{#if page.heroImage}} hero-has-photo{{/if}}">
+    {{#if data.impact.stat.number}}<p class="score">
+      <span class="stand">
+        <span class="cards"><span class="cards-face">{{ data.impact.stat.number }}</span></span>
+        {{#if data.impact.stat.unit}}<span class="stand-foot">{{ data.impact.stat.unit }}</span>{{/if}}
+      </span>
+      {{#if data.impact.stat.verb}}<span class="score-verb">{{ data.impact.stat.verb }}</span>{{/if}}
+    </p>
+    {{/if}}<div class="hero-mission">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="mission">{{ page.description }}</p>
+      {{/if}}{{> give}}
+    </div>
+    {{#if page.heroImage}}<figure class="hero-photo"><img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async"></figure>
+    {{/if}}
+  </section>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if collections.programs}}<section class="board" aria-labelledby="board-heading">
+    <h2 id="board-heading">{{ strings.programs }}</h2>
+    <ul class="entries">
+      {{#each collections.programs as item}}{{> entry-card}}
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+</article>
+{{else}}
+<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.donateCta}}{{#if data.impact.donateUrl}}<p class="give give-cta"><a class="card-btn" href="{{ data.impact.donateUrl }}">{{ strings.donateOnline }}</a>{{#if data.impact.donatePrompt}} <span class="give-prompt">{{ data.impact.donatePrompt }}</span>{{/if}}</p>
+  {{/if}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
+{{/if}}

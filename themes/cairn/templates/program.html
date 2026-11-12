@@ -1,0 +1,19 @@
+<article class="page is-program">
+  <header class="page-head">
+    <p class="eyebrow"><a href="/programs/">{{ strings.program }}</a></p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.cover}}<figure class="print-photo cover"><img src="{{ page.cover }}" alt="" loading="lazy" decoding="async"></figure>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<aside class="knockout" aria-labelledby="involved-title">
+    <h2 id="involved-title">{{ strings.getInvolved }}</h2>
+    {{#if data.impact.volunteerEmail}}<p>{{ strings.volunteerLead }} <a href="mailto:{{ data.impact.volunteerEmail }}">{{ data.impact.volunteerEmail }}</a></p>
+    {{else}}<p>{{ strings.volunteerFallback }} <a href="/about/">{{ strings.getInTouch }}</a></p>
+    {{/if}}<p class="give"><a class="slab" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a>{{#if data.impact.donatePrompt}} <span class="give-prompt">{{ data.impact.donatePrompt }}</span>{{/if}}</p>
+  </aside>
+  <p class="back"><a href="/programs/">← {{ strings.allPrograms }}</a></p>
+</article>

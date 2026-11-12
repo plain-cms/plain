@@ -1,0 +1,15 @@
+<article class="post">
+  <header class="band">
+    <time class="band-date" datetime="{{ page.date }}">{{ page.dateFormatted }}</time>
+    <h1>{{ page.title }}</h1>
+  </header>
+  <div class="sheet">
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{#if page.tagLinks}}<ul class="tags" aria-label="{{ strings.tagsLabel }}">{{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>{{/each}}</ul>
+    {{/if}}{{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+    {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </div>
+</article>

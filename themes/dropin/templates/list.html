@@ -1,0 +1,26 @@
+<section class="list wrap">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if tag}}<p class="lede">{{ strings.filedUnder }} <strong class="tag-name">{{ tag }}</strong></p>
+    {{/if}}
+  </header>
+  {{#if items}}<ul class="rack">
+    {{#each items as item}}<li class="rack-row">
+      <span class="ball" aria-hidden="true"></span>
+      <article class="rack-card">
+        {{#if item.date}}<time datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+        {{/if}}<h2 class="rack-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+        {{#if item.description}}<p>{{ item.description }}</p>
+        {{/if}}
+      </article>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.pageOf }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

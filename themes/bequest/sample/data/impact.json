@@ -1,0 +1,10 @@
+{
+  "stat": {
+    "number": "1,214",
+    "unit": "small grants",
+    "verb": "handed on to Haddleton groups since 2003"
+  },
+  "donateUrl": "https://give.example.org/haddleton",
+  "donatePrompt": "Fifteen pounds pays a week's hall hire for a lunch club.",
+  "volunteerEmail": "volunteer@example.org"
+}

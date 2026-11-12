@@ -1,0 +1,25 @@
+<article class="program wrap">
+  <header class="program-head">
+    <span class="cue" aria-hidden="true"></span>
+    <div class="program-titles">
+      <p class="eyebrow">{{ strings.program }}</p>
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </div>
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<aside class="get-involved" aria-labelledby="get-involved">
+    <h2 id="get-involved">{{ strings.getInvolved }}</h2>
+    {{#if data.impact.volunteerEmail}}<p>{{ strings.volunteerLead }} <a class="mail" href="mailto:{{ data.impact.volunteerEmail }}">{{ data.impact.volunteerEmail }}</a></p>
+    {{else}}<p>{{ strings.volunteerFallback }} <a href="/about/">{{ strings.getInTouch }}</a></p>
+    {{/if}}<p class="give">
+      <a class="btn-donate" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a>
+      {{#if data.impact.donatePrompt}}<span class="donate-prompt">{{ data.impact.donatePrompt }}</span>{{/if}}
+    </p>
+  </aside>
+  <p class="back-link"><a href="/programs/">{{ strings.allPrograms }}</a></p>
+</article>
