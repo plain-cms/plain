@@ -1,0 +1,14 @@
+<article class="page front">
+  <div class="roof">
+    <header class="page-header">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}<p class="reach">{{#if data.business.phone}}<a href="tel:{{ data.business.phone }}"><span>{{ strings.call }}</span> {{ data.business.phone }}</a>{{else}}{{#if data.business.email}}<a href="mailto:{{ data.business.email }}">{{ strings.emailUs }}</a>{{else}}<a href="/contact/">{{ strings.ctaContactLink }} →</a>{{/if}}{{/if}}{{#if data.business.hours}} <span class="when">{{ data.business.hours }}</span>{{/if}}</p>
+    </header>
+    {{> array}}
+  </div>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{> plate}}
+</article>

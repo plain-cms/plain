@@ -1,0 +1,5 @@
+<div class="duochrome">
+      {{> duo-green}}{{#if data.practice.emergencyPhone}}<p class="duo duo-red"><span class="duo-label">{{#if data.practice.emergencyNote}}{{ data.practice.emergencyNote }}{{else}}{{ strings.afterHours }}{{/if}}</span> <a class="duo-value" href="tel:{{ data.practice.emergencyPhone }}">{{ data.practice.emergencyPhone }}</a></p>
+      {{else}}<p class="duo duo-red"><a class="duo-book" href="{{#if data.practice.bookingUrl}}{{ data.practice.bookingUrl }}{{else}}/contact/{{/if}}">{{ strings.bookAppointment }}</a></p>
+      {{/if}}
+    </div>

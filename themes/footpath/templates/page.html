@@ -1,0 +1,10 @@
+<article class="leaf{{#if page.url.1}}{{else}} is-home{{/if}}">
+  <header class="leaf-head">
+    <h1 class="leaf-title">{{ page.title }}</h1>
+    {{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

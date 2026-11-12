@@ -1,0 +1,372 @@
+/* Tombola — a village-fête theme built around one object: the strip of
+   cloakroom raffle tickets. All colour, type and spacing live in the tokens
+   below. Restyle by editing tokens, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — numbering-machine figures over plain grotesque capitals */
+  --font-body: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", "Nimbus Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.55;
+  --tracking-caps: 0.05em;
+
+  /* Colour — light: a white paper tablecloth, four ticket papers, black ink */
+  --color-bg: #ffffff;
+  --color-text: #17171b;
+  --color-muted: #5a5a63;
+  --color-accent: #b0144d;
+  --color-accent-ink: #ffffff;
+  --color-rule: #d8d8de;
+  --color-code-bg: #f2f2f5;
+  --color-paper-1: #f9c6d5;
+  --color-paper-2: #bce6cc;
+  --color-paper-3: #f8e98f;
+  --color-paper-4: #bcdaf5;
+  --color-print: #17171b;
+  --color-print-soft: #3b3b44;
+
+  /* Layout */
+  --measure: 44rem;
+  --measure-wide: 72rem;
+  --stub: 5.5rem;
+  --stub-max: 9rem;
+  --hole: 4px;
+  --perf: 9px;
+  --band: 6px;
+  --radius: 3px;
+  --rule: 2px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* After the fair — the same tickets left on a trestle at dusk */
+    --color-bg: #2a2c33;
+    --color-text: #eeeef2;
+    --color-muted: #b6b7c1;
+    --color-accent: #ff9fbd;
+    --color-accent-ink: #2b0c19;
+    --color-rule: #4b4d58;
+    --color-code-bg: #363841;
+    --color-paper-1: #f3bccb;
+    --color-paper-2: #b0dcc1;
+    --color-paper-3: #eedf86;
+    --color-paper-4: #b1d0ec;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
+}
+/* Addresses are never hyphenated; a linked headline is ordinary words. */
+.prose a, .colophon-note a, code, pre, .reply-address { hyphens: manual; }
+.stub, .ticket-no, .ticket-title { hyphenate-limit-chars: 8 3 3; }
+/* Wide running text has room for whole words. */
+@media (min-width: 36rem) { .prose p, .prose li, .lede, .post-summary { hyphens: manual; } }
+
+.wrap { max-width: var(--measure-wide); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, 2.5rem); }
+main { padding-block: var(--space-4) var(--space-5); min-height: 60vh; }
+@media (min-width: 60rem) { main { padding-top: 2.75rem; } }
+
+::selection { background: var(--color-paper-3); color: var(--color-print); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-bg); }
+.skip-link:focus { left: var(--space-2); }
+
+h1, h2, h3, h4 { line-height: 1.15; margin: 0; }
+p { margin: 0 0 var(--space-3); }
+
+/* The poster voice: plain capitals */
+.site-title, .masthead nav a, .invite-name, .page-header h1, .section-h, .part-day, .ticket-title, .person-name,
+.prose h2, .btn, .colophon-name, .prose th, .tags a {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  font-weight: 700;
+}
+/* The numbering machine: figures */
+.stub, .ticket-no, .invite-date, .fact-time, .card-date, .post-date, .colophon-date, .pagination, .reply-address {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Masthead & footer ----------------------------------------------------- */
+
+/* The torn edge of a strip of tickets: the four papers, over and over, with
+   the half holes of a perforation along the lower edge. */
+.masthead::before {
+  content: "";
+  display: block;
+  height: calc(var(--band) * 2 + var(--hole) / 2);
+  background:
+    radial-gradient(circle closest-side, var(--color-bg) 80%, transparent) center bottom / var(--perf) var(--hole) space no-repeat,
+    repeating-linear-gradient(90deg, var(--color-paper-1) 0 2.5rem, var(--color-paper-2) 0 5rem, var(--color-paper-3) 0 7.5rem, var(--color-paper-4) 0 10rem) top / 100% calc(var(--band) * 2) no-repeat;
+}
+.masthead { border-bottom: 1px solid var(--color-rule); }
+.masthead-in { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-1) var(--space-4); padding-block: 0.8rem; }
+.site-title { color: var(--color-text); text-decoration: none; font-size: 1rem; line-height: 1.25; overflow-wrap: anywhere; min-width: 0; }
+.site-title:hover { color: var(--color-accent); }
+.masthead nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) 1.6rem; }
+.masthead nav a { display: inline-block; padding-block: 0.15rem; font-size: 0.82rem; color: var(--color-text); text-decoration: none; border-bottom: var(--rule) solid transparent; }
+.masthead nav a:hover { border-bottom-color: var(--color-text); }
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+
+.colophon { border-top: var(--rule) solid var(--color-text); color: var(--color-muted); font-size: 0.92rem; }
+.colophon-in { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--space-3) var(--space-4); padding-block: var(--space-4); }
+.colophon-in > div:empty { display: none; }
+.colophon p { margin: 0; }
+.colophon-name, .colophon-venue { color: var(--color-text); }
+.colophon-venue { font-weight: 700; }
+.colophon-date { font-size: 0.85rem; }
+.colophon-note > :last-child { margin-bottom: 0; }
+
+/* Home: the invitation beside the strip --------------------------------- */
+
+.home { display: grid; gap: var(--space-5) clamp(2rem, 5vw, 4.5rem); }
+.home > * { min-width: 0; }
+.home:not(.home-split) .home-main { max-width: var(--measure); }
+@media (min-width: 60rem) {
+  .home-split { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: start; }
+  .home-split .people { grid-column: 1 / -1; }
+}
+/* The invitation keeps the strip company down the page. It hangs from the
+   foot of its row and sticks by its lower edge, so a column taller than the
+   window scrolls through to its end before it stops; the minimum height makes
+   a short one stop with its head at the top of the window instead. */
+@media (min-width: 60rem) {
+  .home-split .home-main { position: sticky; bottom: var(--space-4); align-self: end; min-height: calc(100vh - 2 * var(--space-4)); }
+}
+/* The name is set to its column: a line holds thirteen or fourteen capitals
+   at any width, so a word of a place name is not cut in two. */
+.home-main { container-type: inline-size; }
+
+.invite { margin-bottom: var(--space-4); }
+.invite-date { margin: 0 0 var(--space-3); font-size: 0.95rem; font-weight: 700; line-height: 1.7; text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+.invite-date > * { padding: 0.2em 0.55em; background: var(--color-text); color: var(--color-bg); -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+.invite-name { font-size: clamp(1.9rem, 1.1rem + 4.4vw, 3rem); font-size: min(clamp(2.2rem, 1.1rem + 4.4vw, 4rem), 10.5cqi); line-height: 1; font-weight: 800; letter-spacing: -0.01em; overflow-wrap: anywhere; text-wrap: balance; }
+.invite-line { margin: var(--space-3) 0 var(--space-4); font-size: clamp(1.2rem, 1rem + 0.9vw, 1.5rem); line-height: 1.3; color: var(--color-accent); text-wrap: balance; }
+.fact { margin: 0; padding-block: 0.55rem; border-top: 1px solid var(--color-rule); }
+.fact-time { font-weight: 700; }
+.fact-venue { font-weight: 700; }
+.fact-venue + .fact-address { border-top: 0; padding-top: 0; margin-top: -0.5rem; }
+.fact-address { color: var(--color-muted); }
+.invite .reply { margin-top: var(--space-3); }
+
+/* The reply block ------------------------------------------------------- */
+
+.reply > p { margin: 0 0 var(--space-2); }
+.reply-by { font-weight: 700; }
+.reply-mail { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
+.reply-address { min-width: 0; font-size: 0.82rem; color: var(--color-muted); overflow-wrap: anywhere; }
+.btn { display: inline-block; padding: 0.6rem 1rem; font-size: 0.82rem; line-height: 1.2; color: var(--color-accent-ink); background: var(--color-accent); text-decoration: none; border-radius: var(--radius); transition: transform 0.12s; }
+.btn:hover { text-decoration: underline; transform: translateY(-1px); }
+
+/* The strip of tickets -------------------------------------------------- */
+
+.section-h { font-size: 1.3rem; font-weight: 800; margin-bottom: var(--space-3); }
+.programme { min-width: 0; }
+.part + .part { margin-top: var(--space-4); }
+.part-day { display: flex; align-items: center; gap: var(--space-3); margin-bottom: 0.7rem; font-size: 0.85rem; overflow-wrap: anywhere; }
+.part-day::after { content: ""; flex: 1 1 1.5rem; min-width: 1.5rem; border-top: var(--rule) solid currentColor; }
+
+.strip { position: relative; list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: fit-content(min(var(--stub-max), 34%)) minmax(0, 1fr); }
+.ticket { position: relative; grid-column: 1 / -1; display: grid; grid-template-columns: minmax(var(--stub), 22%) minmax(0, 1fr); background: var(--paper); color: var(--color-print); --paper: var(--color-paper-1); }
+@supports (grid-template-columns: subgrid) { .ticket { grid-template-columns: subgrid; } }
+.ticket:nth-child(4n+2) { --paper: var(--color-paper-2); }
+.ticket:nth-child(4n+3) { --paper: var(--color-paper-3); }
+.ticket:nth-child(4n+4) { --paper: var(--color-paper-4); }
+
+/* Perforations are holes: dots of the page showing through the paper.
+   Across, between one ticket and the next and along the torn ends of the
+   strip; down, between stub and ticket. */
+.strip::before, .strip::after, .ticket + .ticket::before, .stub::after { content: ""; position: absolute; pointer-events: none; }
+.strip::before, .strip::after, .ticket + .ticket::before {
+  left: 0; right: 0; top: calc(var(--hole) / -2); height: var(--hole); z-index: 1;
+  background: radial-gradient(circle closest-side, var(--color-bg) 80%, transparent) center / var(--perf) 100% space no-repeat;
+}
+.strip::after { top: auto; bottom: calc(var(--hole) / -2); }
+.stub::after {
+  top: 0; bottom: 0; right: calc(var(--hole) / -2); width: var(--hole);
+  background: radial-gradient(circle closest-side, var(--color-bg) 80%, transparent) center / 100% var(--perf) no-repeat space;
+}
+
+.stub { position: relative; display: flex; align-items: center; justify-content: center; min-width: var(--stub); padding: 0.75rem 0.8rem; text-align: center; font-size: clamp(1.05rem, 0.85rem + 0.9vw, 1.25rem); font-weight: 700; line-height: 1.15; overflow-wrap: anywhere; }
+/* No time, no number: a blank stub, half as wide when the whole part has none. */
+.stub:empty { min-width: calc(var(--stub) / 2); padding-inline: 0; }
+/* Every ticket is cut to one size, tall enough for a title, a place and a
+   line of note; only a longer note makes a longer ticket. */
+.ticket-body { container-type: inline-size; display: grid; align-content: center; min-width: 0; min-height: 5.6rem; padding: 0.75rem 1.1rem 0.75rem 1.2rem; }
+/* The number sits at the right of the ticket; one too long to share the line
+   with the title is printed above it instead. */
+.ticket-in { display: flex; flex-wrap: wrap-reverse; align-items: center; gap: var(--space-1) var(--space-3); min-width: 0; }
+.ticket-text { flex: 1 1 13rem; min-width: 0; }
+.ticket-text > *, .ticket-no { margin: 0; overflow-wrap: anywhere; }
+.ticket-no { order: 1; flex: 0 1 auto; min-width: 0; max-width: 100%; font-size: clamp(1.05rem, 0.85rem + 0.9vw, 1.25rem); font-weight: 700; line-height: 1.15; }
+.ticket-title { font-size: 0.98rem; line-height: 1.25; text-wrap: balance; }
+.ticket-place { margin-top: var(--space-1); font-size: 0.9rem; line-height: 1.3; }
+.ticket-note { margin-top: var(--space-1); font-size: 0.86rem; line-height: 1.35; color: var(--color-print-soft); }
+@media (max-width: 30rem) {
+  .ticket-body { padding-inline: 0.9rem; }
+  .stub { min-width: calc(var(--stub) - 0.75rem); padding-inline: 0.6rem; }
+  .stub:empty { min-width: calc(var(--stub) / 2 - 0.375rem); }
+}
+/* A narrow ticket (a phone, or a long time on the stub) prints its number
+   small in the corner: beside a title that has room, on its own line if not. */
+@container (max-width: 22rem) {
+  .ticket-in { display: flow-root; }
+  .ticket-no { float: right; max-width: 100%; margin: 0 0 var(--space-1) var(--space-2); font-size: 0.8rem; line-height: 1.5; }
+  .ticket-title { display: flow-root; min-width: min(100%, 9rem); text-wrap: wrap; }
+}
+
+/* People ---------------------------------------------------------------- */
+
+.people { min-width: 0; }
+.page-main .people, .page-main .prose + .people { margin-top: var(--space-5); }
+.people-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); gap: var(--space-4); }
+.person { min-width: 0; padding-top: 0.7rem; border-top: var(--band) solid var(--color-paper-1); overflow-wrap: anywhere; }
+.person:nth-child(4n+2) { border-top-color: var(--color-paper-2); }
+.person:nth-child(4n+3) { border-top-color: var(--color-paper-3); }
+.person:nth-child(4n+4) { border-top-color: var(--color-paper-4); }
+.person p { margin: 0; }
+.person-name { font-size: 0.95rem; line-height: 1.3; }
+.person-note { margin-top: var(--space-1); font-size: 0.9rem; color: var(--color-muted); }
+
+/* Pages, posts, lists --------------------------------------------------- */
+
+.page-header { max-width: var(--measure); margin-bottom: var(--space-4); }
+.page-header h1 { font-size: clamp(1.9rem, 1.2rem + 2.8vw, 3rem); line-height: 1.02; font-weight: 800; letter-spacing: 0; overflow-wrap: anywhere; text-wrap: balance; }
+.lede { margin: var(--space-3) 0 0; font-size: 1.2rem; line-height: 1.4; color: var(--color-muted); }
+.page-header::after { content: ""; display: block; width: 8rem; height: var(--band); margin-top: var(--space-3); background: linear-gradient(90deg, var(--color-paper-1) 25%, var(--color-paper-2) 0 50%, var(--color-paper-3) 0 75%, var(--color-paper-4) 0); }
+
+.page-cols { display: grid; gap: var(--space-5); }
+.page-cols > * { min-width: 0; }
+.page-main > .programme { margin-bottom: var(--space-5); }
+@media (min-width: 60rem) {
+  .page-cols { grid-template-columns: minmax(0, var(--measure)) minmax(0, 17rem); justify-content: space-between; align-items: start; }
+}
+/* The card follows the text only in a window tall enough to show the fullest card whole. */
+@media (min-width: 60rem) and (min-height: 44rem) {
+  .card { position: sticky; top: var(--space-4); }
+}
+
+.card { padding-top: var(--space-3); border-top: var(--rule) solid var(--color-text); font-size: 0.95rem; overflow-wrap: anywhere; }
+.card > p { margin: 0 0 var(--space-1); }
+.card-date { font-weight: 700; text-transform: uppercase; letter-spacing: var(--tracking-caps); font-size: 0.88rem; }
+.card-venue { font-weight: 700; padding-top: var(--space-2); }
+.card-time, .card-address { color: var(--color-muted); }
+.card > * + .card-entry, .card > * + .reply { margin-top: var(--space-3); padding-top: var(--space-3); border-top: 1px solid var(--color-rule); }
+.card > :last-child { margin-bottom: 0; }
+/* On a small screen the card is the last thing above the footer, which
+   would say the same date and place straight after it. */
+@media (max-width: 59.99rem) {
+  body:has(.card) .colophon-date, body:has(.card) .colophon-where { display: none; }
+}
+
+.post-date { margin: 0 0 var(--space-2); font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: var(--tracking-caps); color: var(--color-muted); }
+.post-list { list-style: none; margin: 0; padding: 0; border-top: var(--rule) solid var(--color-text); }
+.post-row { display: grid; grid-template-columns: 9.5rem minmax(0, 1fr); column-gap: var(--space-4); padding-block: 1.1rem; border-bottom: 1px solid var(--color-rule); }
+.post-row > * { grid-column: 2; min-width: 0; margin: 0; }
+.post-row .post-date { grid-column: 1; grid-row: 1 / span 2; padding-top: 0.3rem; }
+.post-row h2 { font-size: 1.2rem; line-height: 1.25; overflow-wrap: anywhere; }
+.post-row h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
+.post-row h2 a:hover { color: var(--color-accent); }
+.post-summary { margin-top: var(--space-1); color: var(--color-muted); }
+@media (max-width: 36rem) {
+  .post-row { display: block; }
+  .post-row .post-date { padding: 0; margin-bottom: var(--space-1); }
+}
+.empty { color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); font-size: 0.85rem; }
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; padding: 0; font-size: 0.8rem; }
+.back { margin: var(--space-4) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--color-rule); }
+
+.not-found { max-width: var(--measure); }
+.not-found .stub, .not-found .ticket-no { font-size: clamp(1.4rem, 1rem + 2vw, 2.2rem); }
+.not-found .ticket-body { padding-block: 1.4rem; }
+.not-found .stub { padding-inline: 1.1rem; }
+.not-found .ticket-title { font-size: 1.3rem; }
+.not-found .ticket-note { margin-top: var(--space-2); font-size: 1rem; color: var(--color-print); }
+.not-found-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-4); }
+
+/* Body text -------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-size: 1.05rem; font-weight: 800; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: 1.1rem; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1rem; color: var(--color-muted); }
+.prose ul, .prose ol { margin: 0 0 var(--space-3); padding-left: 1.3rem; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li::marker { font-family: var(--font-mono); font-size: 0.9em; font-weight: 700; }
+.prose a { overflow-wrap: anywhere; }
+.prose a[href^="tel:"], .prose a[href^="mailto:"] { font-weight: 700; }
+.prose blockquote { margin: var(--space-4) 0; padding: var(--space-1) 0 var(--space-1) var(--space-3); border-left: var(--band) solid var(--color-paper-1); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+/* A rule in the text is a perforation: tear here. */
+.prose hr { height: var(--hole); margin: var(--space-4) 0; border: 0; background: radial-gradient(circle closest-side, var(--color-text) 80%, transparent) center / var(--perf) 100% space no-repeat; }
+.prose table { display: block; width: max-content; max-width: 100%; overflow-x: auto; margin: 0 0 var(--space-3); border-collapse: collapse; font-size: 0.95rem; hyphens: manual; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { font-size: 0.78rem; border-bottom: var(--rule) solid var(--color-text); }
+.prose td { min-width: 6rem; }
+.prose code { font-family: var(--font-mono); font-size: 0.9em; padding: 0.1em 0.3em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { margin: 0 0 var(--space-3); padding: var(--space-3); overflow-x: auto; background: var(--color-code-bg); border-radius: var(--radius); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+.prose img { display: block; max-width: 100%; height: auto; }
+
+/* The search plugin's page, dressed to match */
+#search-app input { width: 100%; padding: 0.6rem 0.8rem; font: inherit; color: var(--color-text); background: var(--color-bg); border: var(--rule) solid var(--color-text); border-radius: var(--radius); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  /* Ink on paper, whatever the screen scheme or a site's own palette. */
+  html:root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #444444;
+    --color-accent: #000000;
+    --color-rule: #999999;
+    --color-code-bg: #ffffff;
+  }
+  body { font-size: 11pt; }
+  .skip-link, .masthead nav, .masthead::before, .page-header::after { display: none; }
+  main { padding-block: var(--space-3); min-height: 0; }
+  .home-split .home-main { position: static; align-self: start; min-height: 0; }
+  .card { position: static; }
+  .ticket { border: 1px solid var(--color-print); break-inside: avoid; }
+  .ticket + .ticket { border-top: 0; }
+  .stub { border-right: 1px dashed var(--color-print); }
+  .strip::before, .strip::after, .ticket + .ticket::before, .stub::after { display: none; }
+  .person, .post-row, .part-day { break-inside: avoid; break-after: auto; }
+  .part-day, .section-h, .prose h2, .prose h3 { break-after: avoid; }
+  a { color: inherit; }
+  /* Nothing printed may depend on a background: browsers leave them out. */
+  .invite-date > * { background: none; color: inherit; border: 1px solid; }
+  .btn { padding: 0; background: none; color: inherit; }
+  .prose hr { height: 0; background: none; border-top: 1px dashed; }
+  .reply-tickets .btn::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; overflow-wrap: anywhere; }
+  .reply-tickets .btn::after { font-weight: 400; letter-spacing: 0; text-transform: none; }
+}

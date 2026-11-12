@@ -1,0 +1,8 @@
+<aside class="card" aria-label="{{ strings.glance }}">
+  {{#if data.event.dateLabel}}<p class="card-date">{{#if data.event.date}}<time datetime="{{ data.event.date }}">{{ data.event.dateLabel }}</time>{{else}}{{ data.event.dateLabel }}{{/if}}</p>
+  {{/if}}{{#if data.event.time}}<p class="card-time">{{ data.event.time }}</p>
+  {{/if}}{{#if data.event.venue}}<p class="card-venue">{{ data.event.venue }}</p>
+  {{/if}}{{#if data.event.address}}<p class="card-address">{{ data.event.address }}</p>
+  {{/if}}{{#if data.event.entry}}<p class="card-entry">{{ data.event.entry }}</p>
+  {{/if}}{{> reply}}
+</aside>

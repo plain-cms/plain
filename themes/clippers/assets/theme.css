@@ -1,0 +1,601 @@
+/* Clippers — a walk-in barber shop (trades family). Every service hangs on a
+   clipper guard: a black tab with comb teeth carrying the price in heavy white
+   figures, the title beside it, hung from a chrome rail under one pole stripe.
+   Restyle by editing the tokens below, never selectors. */
+
+:root {
+  /* Type: heavy grotesque figures, as moulded on a guard, over a neo-grotesque */
+  --font-figure: "Arial Black", "Segoe UI Black", system-ui, "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.875rem;
+  --text-note: 0.9375rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-xxl: clamp(2rem, 1.3rem + 3.2vw, 3.5rem);
+  --leading: 1.55;
+  --leading-tight: 1.1;
+  --tracking-caps: 0.08em;
+
+  /* Colour: cape white, comb black, pole blue, chrome */
+  --color-bg: #f4f5f6;
+  --color-text: #14161a;
+  --color-muted: #474d57;
+  --color-accent: #1c4a9e;
+  --color-chrome: #8f979f;
+  --color-shine: #e2e6ea;
+  --color-guard: #14161a;
+  --color-figure: #ffffff;
+  --color-pole-red: #c41e2a;
+  --color-pole-white: #ffffff;
+  --color-pole-blue: #1c4a9e;
+
+  /* Layout */
+  --page-width: 70rem;
+  --measure: 36rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --rack-col: 19rem;
+  --gap-s: 0.5rem;
+  --gap-m: 1rem;
+  --gap-l: 2rem;
+  --gap-xl: 3.5rem;
+  --radius: 0.25rem;
+  --rail: 5px;
+  --focus: 3px;
+
+  /* The guard: every measure is in em of the figure, so one size scales it all */
+  --guard-size: clamp(1.625rem, 1.15rem + 2vw, 2.375rem);
+  --guard-width: 3em;
+  --guard-height: 1.9em;
+  --tooth-pitch: 0.3em;
+  --tooth-length: 0.9em;
+
+  /* The pole stripe */
+  --pole-height: 1.75rem;
+  --pole-band: 0.875rem;
+}
+
+/* After closing: the guards turn white; the pole keeps its colours */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #16181b;
+    --color-text: #eceef0;
+    --color-muted: #b2b9c1;
+    --color-accent: #8fb6ff;
+    --color-chrome: #59616a;
+    --color-shine: #8a929b;
+    --color-guard: #f0f2f4;
+    --color-figure: #14161a;
+  }
+}
+
+/* Base */
+
+*, ::before, ::after { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  /* Only a long word is hyphenated, and only in a narrow column (see .prose) */
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 5 4;
+  overflow-wrap: break-word;
+}
+
+.wrap {
+  max-width: calc(var(--page-width) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+main { min-height: 55vh; }
+
+::selection { background: var(--color-guard); color: var(--color-figure); }
+
+a { color: var(--color-accent); text-decoration-thickness: 0.07em; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 0.14em; }
+
+/* A number or an address stays in the line, cut only when longer than it */
+a[href^="tel:"], a[href^="mailto:"] { -webkit-hyphens: manual; hyphens: manual; }
+a[href^="tel:"] { font-family: var(--font-figure); font-weight: 900; font-variant-numeric: tabular-nums; }
+
+:focus-visible { outline: var(--focus) solid var(--color-accent); outline-offset: 2px; border-radius: var(--radius); }
+
+.skip {
+  position: absolute;
+  left: var(--gap-s);
+  top: var(--gap-s);
+  z-index: 5;
+  padding: var(--gap-s) var(--gap-m);
+  font-weight: 700;
+  color: var(--color-figure);
+  background: var(--color-guard);
+  transform: translateY(-300%);
+}
+.skip:focus { transform: none; }
+
+h1, h2, h3, h4 { line-height: var(--leading-tight); text-wrap: balance; }
+
+/* Masthead */
+
+.masthead .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--gap-l);
+  padding-block: var(--gap-s);
+}
+
+.shop {
+  min-width: 0;
+  margin-inline-end: auto;
+  padding-block: var(--gap-s);
+  font-family: var(--font-figure);
+  font-size: var(--text-l);
+  font-weight: 900;
+  line-height: var(--leading-tight);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text);
+}
+.shop:hover { text-decoration: underline; }
+
+.menu ul { display: flex; flex-wrap: wrap; gap: 0 var(--gap-m); margin: 0; padding: 0; list-style: none; }
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--color-text);
+}
+.menu a:hover { text-decoration: underline; }
+.menu a[aria-current] { font-weight: 700; box-shadow: inset 0 calc(-1 * var(--rail)) var(--color-text); }
+
+.ring { min-width: 0; padding-block: var(--gap-s); font-weight: 700; text-decoration: none; }
+.ring:hover { text-decoration: underline; }
+.ring span {
+  font-family: var(--font-body);
+  font-size: var(--text-s);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* THE POLE: the one stripe, capped in chrome like the pole by the door */
+.masthead::after {
+  content: "";
+  display: block;
+  height: calc(var(--pole-height) + 4px);
+  border-block: 2px solid var(--color-chrome);
+  background: repeating-linear-gradient(-55deg,
+    var(--color-pole-red) 0 var(--pole-band),
+    var(--color-pole-white) 0 calc(2 * var(--pole-band)),
+    var(--color-pole-blue) 0 calc(3 * var(--pole-band)),
+    var(--color-pole-white) 0 calc(4 * var(--pole-band))) 0 0 / calc(100% + 12rem) 100%;
+}
+
+@media (max-width: 47.99em) {
+  .menu { order: 3; flex-basis: 100%; }
+}
+
+/* Page headers */
+
+.page-header { padding-block: var(--gap-l); }
+
+h1 {
+  max-width: 20em;
+  margin: 0;
+  font-size: var(--text-xxl);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.lede {
+  max-width: calc(1.2 * var(--measure));
+  margin: var(--gap-m) 0 0;
+  font-size: var(--text-l);
+  line-height: 1.45;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+.eyebrow { margin: 0 0 var(--gap-m); font-size: var(--text-s); font-weight: 700; color: var(--color-muted); }
+.eyebrow a { color: inherit; }
+.eyebrow a:hover { color: var(--color-text); }
+.tag { margin-inline-start: var(--gap-s); }
+.tag::before { content: "#"; }
+
+/* The door sign (home page only): hours and address on a black board */
+.sign { margin: var(--gap-m) 0 0; padding: var(--gap-m); color: var(--color-figure); background: var(--color-guard); }
+.sign div + div { margin-top: var(--gap-s); padding-top: var(--gap-s); border-top: 1px solid var(--color-chrome); }
+.sign dt { font-size: 0.6875rem; font-weight: 700; letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.sign dd { margin: 0; font-weight: 700; line-height: 1.35; }
+@media (min-width: 60em) {
+  /* The same two columns as the page below, so the sign stands over the call block */
+  .home .page-header { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 19rem); column-gap: var(--gap-xl); align-items: start; }
+  .home .page-header > * { grid-column: 1; }
+  .home .sign { grid-area: 1 / 2 / span 2; margin-top: calc(-1 * var(--gap-l)); }
+}
+
+/* THE SIGNATURE: the guard rack */
+
+/* A long price widens the tab as far as the hanger (a size container) can
+   spare, then takes a second line; longer still, the words go under the teeth */
+.rack {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--rack-col)), 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.hang, .call {
+  background: linear-gradient(var(--color-shine), var(--color-chrome)) top / 100% var(--rail) no-repeat;
+}
+
+.hang {
+  container-type: inline-size;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: flex-start;
+  gap: 0 var(--gap-m);
+  min-width: 0;
+  padding: var(--rail) var(--gap-m) var(--gap-m) 0;
+}
+
+.guard {
+  position: relative;
+  order: -1;
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: column;
+  justify-content: center;
+  min-width: var(--guard-width);
+  max-width: 100%;
+  min-height: var(--guard-height);
+  margin: 0 0 var(--tooth-length);
+  padding: 0.14em 0.3em 0.1em;
+  font-family: var(--font-figure);
+  font-size: var(--guard-size);
+  font-weight: 900;
+  line-height: 1;
+  /* The tab and its teeth take the current colour; the figure sets its own */
+  color: var(--color-guard);
+  background: currentColor;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+/* No narrower than its longest word, never so wide the title loses its column */
+@supports (width: 1cqi) {
+  .guard { min-width: min-content; max-width: calc(100cqi - 9.5rem - var(--gap-m)); }
+}
+/* The teeth: a whole number of tapered teeth however wide the tab grows */
+.guard::after {
+  content: "";
+  position: absolute;
+  inset: 100% 0 auto;
+  height: var(--tooth-length);
+  background: conic-gradient(from -5.5deg at 50% 160%, transparent, currentColor 1.5deg 9.5deg, transparent 11deg) 0 0 / var(--tooth-pitch) 100% round no-repeat;
+}
+/* An unseen one-line copy of the price at half size sets the least width */
+.guard::before {
+  content: attr(data-price);
+  min-width: 4.8em;
+  max-width: calc(100cqi - 1.2em);
+  height: 0;
+  overflow: hidden;
+  font-size: 0.5em;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+  visibility: hidden;
+}
+.guard small, .guard b, .guard time { color: var(--color-figure); }
+.guard small {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+/* A word of the price is cut only when it is longer than the whole hanger */
+.guard b { max-width: calc(100cqi - 0.6em); font-weight: 900; letter-spacing: -0.02em; text-wrap: balance; }
+/* A post has no price: its guard carries the date */
+.guard time { max-width: calc(100cqi - 1.34em); font-size: 0.45em; line-height: 1.15; text-transform: uppercase; }
+
+/* Words never go in a column narrower than their longest word: they go under the guard */
+.hang-text { flex: 1 1 9.5rem; min-width: auto; max-width: 100%; padding-top: 0.55rem; }
+.hang-title { margin: 0; font-size: var(--text-l); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em; }
+.hang-title a { color: var(--color-text); text-decoration: none; }
+/* The whole hanger is the link */
+.hang-title a::after { content: ""; position: absolute; inset: 0; }
+.hang:hover .hang-title a { text-decoration: underline; }
+.rack .hang:hover .guard { color: var(--color-accent); }
+.summary { margin: var(--gap-s) 0 0; color: var(--color-muted); text-wrap: pretty; }
+
+/* The list page: fewer hangers to a rail, each with its description */
+.rack-full { grid-template-columns: repeat(auto-fill, minmax(min(100%, 1.35 * var(--rack-col)), 1fr)); margin-bottom: var(--gap-l); }
+.rack-full .hang { padding-bottom: var(--gap-l); padding-right: var(--gap-l); }
+.rack-full .hang-text { flex-basis: 14rem; }
+.rack-full .guard { max-width: calc(100cqi - 14rem - var(--gap-m)); }
+
+/* One column: the description takes the full width under the guard */
+@media (max-width: 40em) {
+  .hang, .rack-full .hang { padding-right: 0; }
+  .rack-full .hang-text, .hang-big .hang-text { display: contents; }
+  .rack-full .hang-title { flex: 1 1 9.5rem; min-width: auto; max-width: 100%; padding-top: 0.55rem; }
+  .hang-big h1 { flex: 1 1 9.5rem; min-width: auto; max-width: 100%; padding-top: var(--gap-m); }
+  .rack-full .guard, .hang-big .guard { max-width: calc(100cqi - 9.5rem - var(--gap-m)); }
+  /* These take the line and no more, so a long word or address is cut */
+  .rack-full .summary, .hang-big .lede, .hang-big .exits { flex: 1 1 100%; min-width: 0; max-width: 100%; }
+  .rack-full .summary { margin-top: 0.25rem; }
+  .hang-big .lede { margin-top: var(--gap-s); }
+}
+
+/* The rack on the home page and the 404: the first dozen, priced ones first.
+   The page template prints it where the first menu entry is current */
+.rack-strip { margin-bottom: var(--gap-xl); }
+.rack-strip .hang:nth-child(n + 13) { display: none; }
+.rack-strip .summary { margin-top: 0.25rem; font-size: var(--text-note); line-height: 1.45; }
+.rack-more { margin: 0; font-weight: 700; }
+
+/* A service page, and the 404: one large guard with the heading beside it */
+.hang-big { padding: var(--rail) 0 0; gap: 0 var(--gap-l); }
+.hang-big .guard { max-width: calc(100cqi - 6 * var(--text-xxl) - var(--gap-l)); font-size: calc(1.45 * var(--guard-size)); }
+/* The heading keeps a column six of its ems wide, and no narrower than its
+   longest whole word (an unseen, unhyphenated copy sets it) */
+.hang-big .hang-text { flex-basis: calc(6 * var(--text-xxl)); padding: var(--gap-m) 0; }
+.hang-big h1::before {
+  content: attr(data-title);
+  display: block;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+}
+
+/* Text pages: the words in one column, the call block beside them */
+
+.sheet, .list { padding-bottom: var(--gap-l); }
+
+@media (min-width: 60em) {
+  .sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(15rem, 19rem);
+    grid-template-rows: repeat(4, auto) 1fr;
+    column-gap: var(--gap-xl);
+    align-items: start;
+  }
+  .sheet > * { grid-column: 1; }
+  .sheet > .page-header { grid-area: 1 / 1 / auto / -1; }
+  .sheet > .rack-strip { grid-area: 2 / 1 / auto / -1; }
+  .sheet > .cover { grid-row: 2; }
+  .sheet > .prose { grid-row: 3; }
+  .sheet > .included { grid-row: 4; }
+  .sheet > .call { grid-area: 3 / 2 / span 3; margin-top: 0; }
+}
+/* The call block stays in view where the window is tall enough */
+@media (min-width: 60em) and (min-height: 44em) {
+  .sheet > .call { position: sticky; top: var(--gap-m); }
+}
+
+/* Prose */
+
+.prose { max-width: var(--measure); }
+/* A wide column needs no hyphens; a phone's narrow one keeps them */
+@media (min-width: 40.01em) {
+  .prose :is(p, li) { -webkit-hyphens: manual; hyphens: manual; }
+}
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+
+.prose h2, .prose h3, .prose h4 { margin: var(--gap-l) 0 var(--gap-s); }
+.prose h2, .included h2 { font-size: var(--text-xl); letter-spacing: -0.015em; }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-s); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+
+.prose p, .prose ul, .prose ol, .prose pre, .prose table { margin: 0 0 var(--gap-m); }
+.prose ul, .prose ol { padding-inline-start: 1.25em; }
+.prose li { margin-bottom: 0.25em; }
+.prose li > ul, .prose li > ol { margin: 0.25em 0 0; }
+.prose a[href^="tel:"] { font-size: 0.94em; }
+/* A phone number moves to the next line whole wherever a line can hold it */
+.prose > p a[href^="tel:"], .prose > :is(ul, ol) > li > a[href^="tel:"] { white-space: nowrap; }
+@media (min-width: 22.5em) {
+  .prose a[href^="tel:"] { white-space: nowrap; }
+  .prose :is(th, td) a { white-space: normal; }
+}
+
+.prose img, .cover { max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover { display: block; width: 100%; max-width: var(--measure); margin-bottom: var(--gap-l); }
+/* Two pictures in one paragraph stand side by side where there is room */
+@media (min-width: 30em) {
+  .prose p:has(> img + img) { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-m); align-items: start; }
+}
+
+/* A customer's words, said from the chair: the chrome rail stood on end */
+.prose blockquote {
+  margin: var(--gap-l) 0;
+  padding: 0.1em 0 0.1em calc(var(--rail) + var(--gap-m));
+  font-size: var(--text-l);
+  font-weight: 500;
+  line-height: 1.4;
+  background: linear-gradient(90deg, var(--color-shine), var(--color-chrome)) left / var(--rail) 100% no-repeat;
+}
+.prose blockquote p { margin: 0 0 var(--gap-s); text-wrap: pretty; }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose blockquote p:last-child:not(:first-child) { font-size: var(--text-s); font-weight: 700; color: var(--color-muted); }
+
+/* Tables are price lists and opening hours: the figure column in guard type */
+.prose table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td {
+  min-width: 5em;
+  padding: var(--gap-s) var(--gap-m) var(--gap-s) 0;
+  text-align: left;
+  vertical-align: baseline;
+  border-bottom: 1px solid var(--color-chrome);
+}
+/* In a table only a link (a long address) may be cut */
+.prose :is(th, td) a { overflow-wrap: anywhere; }
+.prose th {
+  font-size: var(--text-s);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  vertical-align: bottom;
+  color: var(--color-muted);
+  border-bottom: 2px solid var(--color-text);
+}
+.prose :is(th, td):last-child { padding-right: 0; }
+.prose [align="right"] { min-width: 0; text-align: right; overflow-wrap: break-word; }
+.prose td[align="right"] { font-family: var(--font-figure); font-weight: 900; }
+/* Three columns or more: a figure stays whole, and the columns share the width */
+.prose table:has(th:nth-child(3)) td[align="right"] { white-space: nowrap; }
+@media (min-width: 40.01em) {
+  .prose table:has(th:nth-child(3)):not(:has(th:nth-child(5))) :is(th, td):not([align="right"]) { min-width: 7.5em; }
+}
+/* On a phone a table of two columns fits the screen; one of three or more
+   scrolls in its own box, shaded on the right while there is more */
+@media (max-width: 40em) {
+  .prose td { overflow-wrap: anywhere; }
+  .prose table:has(th:nth-child(3)) {
+    display: block;
+    overflow-x: auto;
+    background:
+      linear-gradient(90deg, transparent, var(--color-bg) 60%) right / 3rem 100% no-repeat local,
+      linear-gradient(90deg, transparent, var(--color-chrome)) right / 0.75rem 100% no-repeat scroll;
+  }
+  .prose table:has(th:nth-child(3)) :is(th, td) { min-width: 7em; overflow-wrap: normal; -webkit-hyphens: manual; hyphens: manual; }
+}
+
+.prose code { font-family: var(--font-mono); font-size: 0.9em; -webkit-hyphens: manual; hyphens: manual; }
+.prose pre { padding: var(--gap-m); overflow-x: auto; border: 1px solid var(--color-chrome); border-radius: var(--radius); }
+.prose pre code { font-size: var(--text-s); }
+
+.prose hr {
+  height: var(--rail);
+  margin: var(--gap-l) 0;
+  border: 0;
+  background: linear-gradient(var(--color-shine), var(--color-chrome));
+}
+
+/* What the price covers */
+
+.included { max-width: var(--measure); margin-top: var(--gap-l); }
+.included h2 { margin: 0 0 var(--gap-m); }
+.included ul { margin: 0; padding: 0; list-style: none; }
+.included li { position: relative; padding: var(--gap-s) 0 var(--gap-s) 2rem; border-top: 1px solid var(--color-chrome); }
+/* A drawn tick: no glyph to go missing */
+.included li::before {
+  content: "";
+  position: absolute;
+  left: 0.2rem;
+  top: 0.95em;
+  width: 0.95rem;
+  height: 0.5rem;
+  border: solid var(--color-text);
+  border-width: 0 0 3px 3px;
+  transform: rotate(-45deg);
+}
+
+/* The call block: hung from the same rail */
+
+.call {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--gap-m) var(--gap-xl);
+  align-items: start;
+  margin-top: var(--gap-xl);
+  padding-top: calc(var(--rail) + var(--gap-m));
+}
+.call > * { min-width: 0; }
+.call h2, .call dt {
+  margin: 0;
+  font-size: var(--text-s);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.call-main { margin: var(--gap-s) 0 0; font-size: var(--text-xl); font-weight: 700; line-height: 1.2; }
+.call-word { font-size: var(--text-l); }
+.call dl { margin: 0; }
+.call dl div { padding-block: var(--gap-s); border-top: 1px solid var(--color-chrome); }
+.call dl div:first-child { padding-top: 0; border-top: 0; }
+.call dd { margin: 0; }
+
+/* Lists, pagination, the 404 */
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-s) var(--gap-m);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.pagination a { display: inline-flex; align-items: center; min-height: 2.75rem; font-weight: 700; }
+
+.empty { color: var(--color-muted); }
+
+.exits { display: flex; flex-wrap: wrap; gap: var(--gap-s) var(--gap-l); margin: var(--gap-m) 0 0; font-weight: 700; }
+
+/* Colophon */
+
+.colophon { margin-top: var(--gap-l); border-top: 1px solid var(--color-chrome); font-size: var(--text-s); color: var(--color-muted); }
+.colophon .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--gap-s) var(--gap-l); padding-block: var(--gap-m) var(--gap-l); }
+.colophon p { min-width: 0; margin: 0; }
+.colophon strong { margin-inline-end: var(--gap-s); color: var(--color-text); }
+.colophon-facts { display: flex; flex-wrap: wrap; gap: 0 var(--gap-m); }
+.colophon-facts > * { min-width: 0; }
+.colophon-note { flex-basis: 100%; }
+.colophon-note > * { margin: 0 0 var(--gap-s); }
+
+/* Motion: the pole makes one turn as you walk in, then stands still */
+
+@media (prefers-reduced-motion: no-preference) {
+  .masthead::after { animation: turn 2.4s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .guard { transition: color 0.15s; }
+}
+@keyframes turn { from { background-position-x: -12rem; } }
+
+/* Print: ink on paper. The guard prints as an outlined tab with black figures */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-chrome: #777;
+    --color-shine: #777;
+    --color-guard: #fff;
+    --color-figure: #000;
+  }
+  body { font-size: 11pt; }
+  main { min-height: 0; }
+  .wrap { max-width: none; padding: 0; }
+  .skip, .menu, .masthead::after, .pagination, .exits, .rack-more { display: none; }
+  .hang, .call { border-top: 1.5pt solid var(--color-chrome); }
+  .guard { margin-bottom: var(--gap-s); border: 1.5pt solid var(--color-text); border-bottom: 4pt dashed var(--color-text); }
+  .sign { border: 1.5pt solid var(--color-text); }
+  .guard::after { display: none; }
+  .hang, .call, .included, .prose blockquote, .prose tr { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  .prose blockquote { border-left: 2pt solid var(--color-chrome); }
+  .prose pre { white-space: pre-wrap; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

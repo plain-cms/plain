@@ -1,0 +1,13 @@
+<li class="row">
+      <p class="row-meta"><span class="row-when">{{#if entry.period}}{{ entry.period }}{{else}}<time datetime="{{ entry.date }}">{{ entry.dateFormatted }}</time>{{/if}}</span>{{#if entry.location}} <span class="row-where">{{ entry.location }}</span>{{/if}}</p>
+      <div class="row-what">
+        <h2 class="row-part">{{#if entry.content}}<a href="{{ entry.url }}">{{ entry.title }}</a>{{else}}{{ entry.title }}{{/if}}</h2>
+        {{#if entry.organization}}<p class="row-org">{{ entry.organization }}</p>
+        {{/if}}{{#if entry.summary}}<p class="row-summary">{{ entry.summary }}</p>
+        {{/if}}{{#if entry.highlights}}<ul class="highlights">
+          {{#each entry.highlights as point}}<li>{{ point }}</li>
+          {{/each}}
+        </ul>
+        {{/if}}
+      </div>
+    </li>

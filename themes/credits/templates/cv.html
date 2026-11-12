@@ -1,0 +1,35 @@
+<article class="cv">
+  <header class="bill bill-cv">
+    <div class="wrap bill-inner">
+      {{#if data.profile}}<h1 class="bill-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</h1>
+      {{#if data.profile.role}}<p class="bill-role">{{ data.profile.role }}</p>
+      {{/if}}{{else}}<h1 class="bill-name">{{ page.title }}</h1>
+      {{/if}}{{#if items}}<ul class="billing" role="list" aria-label="{{ strings.credits }}">
+        {{#each items as entry}}{{> credit}}{{/each}}
+      </ul>
+      {{/if}}{{> contacts}}
+    </div>
+  </header>
+  <div class="wrap sheet">
+    {{#if items}}<ol class="rows" role="list">
+      {{#each items as entry}}{{> cv-row}}{{/each}}
+    </ol>
+    {{else}}<p class="empty">{{ strings.noEntries }}</p>
+    {{/if}}{{#if data.profile.skills}}<section class="cv-skills" aria-labelledby="cv-skills">
+      <h2 class="cv-label" id="cv-skills">{{ strings.skills }}</h2>
+      <ul class="skills" role="list">
+        {{#each data.profile.skills as skill}}<li>{{ skill }}</li>
+        {{/each}}
+      </ul>
+    </section>
+    {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+      {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+      <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+      {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+    </nav>
+    {{/if}}<div class="print-note">
+      <p>{{ strings.printNote }} <span class="print-hint">{{ strings.printHint }}</span></p>
+      <button type="button" class="print-button" hidden>{{ strings.printButton }}</button>
+    </div>
+  </div>
+</article>

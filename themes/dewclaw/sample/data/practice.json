@@ -1,0 +1,13 @@
+{
+  "phone": "01632-960418",
+  "emergencyPhone": "01632-960990",
+  "emergencyNote": "Ill or injured after we close?",
+  "hours": [
+    { "days": "Mon–Fri", "time": "8 am – 7 pm" },
+    { "days": "Sat", "time": "9 am – 1 pm" },
+    { "days": "Sun & bank holidays", "time": "Closed" }
+  ],
+  "address": "27 Brindle Street, Ashby Moor, AM4 2LT",
+  "bookingUrl": "",
+  "email": "desk@brindlestreetvets.example"
+}

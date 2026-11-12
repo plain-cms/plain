@@ -1,9 +1,9 @@
 ---
 title: Troubleshooting
-order: "05"
+order: "08"
 description: The errors you'll actually see, what they mean, and the one-line fixes.
-prev: /docs/commands/
-prevTitle: Commands
+prev: /docs/deploying/
+prevTitle: Deploying
 example: true
 ---
 
@@ -66,4 +66,6 @@ For scripting and CI, mkweb keeps its exit codes boring:
 
 ## Still stuck?
 
-Re-read the relevant section — the manual is short on purpose: [Configuration](/docs/configuration/) for config errors, [Commands](/docs/commands/) for flags, or [search the manual](/search/) for anything else.
+Check the section that matches the error first: [Configuration](/docs/configuration/) for anything about `mkweb.json`, [Commands](/docs/commands/) for flags, [Deploying](/docs/deploying/) for a site that builds but looks wrong online.
+
+If the answer isn't in the manual, that's a gap in the manual. Write to [docs@mkweb.example](mailto:docs@mkweb.example) with the full error message and the output of `mkweb version`, and we'll fix both.

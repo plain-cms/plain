@@ -1,0 +1,12 @@
+<section class="people-block">
+  <h2 class="block-title">{{ strings.peopleHeading }}</h2>
+  <ul class="people" role="list">
+    {{#each collections.people as person}}<li class="person">
+      <p class="person-name">{{ person.title }}</p>
+      {{#if person.role}}<p class="person-role">{{ person.role }}</p>
+      {{/if}}{{#if person.phone}}<p class="person-line"><a href="tel:{{ person.phone }}">{{ person.phone }}</a></p>
+      {{/if}}{{#if person.email}}<p class="person-line"><a href="mailto:{{ person.email }}">{{ person.email }}</a></p>{{/if}}
+    </li>
+    {{/each}}
+  </ul>
+</section>

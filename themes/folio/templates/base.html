@@ -5,17 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
 {{#if page.description}}<meta name="description" content="{{ page.description }}">
-{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+{{else}}{{#if page.summary}}<meta name="description" content="{{ page.summary }}">
+{{/if}}{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 {{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
 {{#if page.description}}<meta property="og:description" content="{{ page.description }}">
-{{/if}}{{#if page.date}}<meta property="og:type" content="article">
+{{else}}{{#if page.summary}}<meta property="og:description" content="{{ page.summary }}">
+{{/if}}{{/if}}{{#if page.date}}<meta property="og:type" content="article">
 {{else}}<meta property="og:type" content="website">
 {{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
 <meta name="twitter:card" content="summary_large_image">
 {{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
 <meta name="twitter:card" content="summary_large_image">
 {{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
 {{/each}}<meta name="color-scheme" content="light dark">
 {{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
 {{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -23,10 +26,10 @@
 {{/if}}<link rel="stylesheet" href="/assets/theme.css">
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
 <header class="masthead">
   <a class="site-title" href="/">{{ site.title }}</a>
-  <nav aria-label="Main">
+  <nav aria-label="{{ strings.mainNav }}">
     <ul>
       {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
       {{/each}}
@@ -35,21 +38,23 @@
 </header>
 <div class="layout{{#if data.profile}} has-rail{{/if}}">
 {{#if data.profile}}
-<aside class="rail" aria-label="Profile">
-  <p class="rail-name">{{ data.profile.name }}</p>
+<aside class="rail" aria-label="{{ strings.profile }}">
+  <p class="rail-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</p>
   {{#if data.profile.role}}<p class="rail-role">{{ data.profile.role }}</p>
-  {{/if}}<ul class="rail-contact">
-    {{#if data.profile.email}}<li><a href="mailto:{{ data.profile.email }}">{{ data.profile.email }}</a></li>
-    {{/if}}{{#each data.profile.links as link}}<li><a href="{{ link.url }}">{{ link.label }}</a></li>
-    {{/each}}
+  {{/if}}{{#if data.profile.email}}<ul class="rail-contact">
+    {{> profile-contact}}
   </ul>
-  {{#if data.profile.skills}}
-  <p class="rail-label" id="rail-skills-label">Skills</p>
+  {{else}}{{#if data.profile.links}}<ul class="rail-contact">
+    {{> profile-contact}}
+  </ul>
+  {{/if}}{{/if}}{{#if data.profile.skills}}
+  <p class="rail-label" id="rail-skills-label">{{ strings.skills }}</p>
   <ul class="rail-skills" aria-labelledby="rail-skills-label">
     {{#each data.profile.skills as skill}}<li>{{ skill }}</li>
     {{/each}}
   </ul>
   {{/if}}
+  <a class="rail-cv" href="/experience/"><span class="sheet-mark" aria-hidden="true">A4</span> <span>{{ strings.readTheCv }}</span></a>
 </aside>
 {{/if}}
 <main id="main">
@@ -57,8 +62,9 @@
 </main>
 </div>
 <footer class="colophon">
-  <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
-  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
+  <p>{{ site.title }}{{#if site.description}} · {{ site.description }}{{/if}}</p>
+  {{#if data.profile.email}}<p><a href="mailto:{{ data.profile.email }}">{{ data.profile.email }}</a></p>
+  {{/if}}{{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

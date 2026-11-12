@@ -1,0 +1,13 @@
+{
+  "phone": "01632-960418",
+  "emergencyPhone": "111",
+  "emergencyNote": "Unwell when we’re closed?",
+  "hours": [
+    { "days": "Mon–Fri", "time": "8.30am – 6.30pm" },
+    { "days": "Sat", "time": "9am – 5pm" },
+    { "days": "Sun", "time": "Closed" }
+  ],
+  "address": "9 Weavers Row, Millbeck HX7 4QD",
+  "bookingUrl": "",
+  "email": "counter@pennockspharmacy.example"
+}

@@ -1,0 +1,412 @@
+/* Apostille — the bound notarial act: deed paper, a ruled margin, a twisted
+   cord sewn through eyelets into a gold-foil seal. Restyle by editing the
+   tokens, never the selectors. */
+
+:root {
+  /* Type — a transitional serif, and its letterspaced capitals */
+  --font-text: Baskerville, "Baskerville Old Face", "Libre Baskerville", "Hoefler Text", Georgia, "Times New Roman", serif;
+  --font-caps: Baskerville, "Baskerville Old Face", "Libre Baskerville", "Hoefler Text", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.0625rem;
+  --text-small: 0.875rem;
+  --leading: 1.55;
+  --tracking: 0.16em;
+
+  /* Colour — deed paper, blue-black ink, a navy-and-white cord, gold foil */
+  --color-bg: #fdfdfb;
+  --color-text: #1b2438;
+  --color-muted: #4f5a6f;
+  --color-accent: #a8841a;
+  --color-foil-line: #7d6010;
+  --color-link: #1f3d7a;
+  --color-strand-a: #1f3d7a;
+  --color-strand-b: #ffffff;
+  --color-eyelet: #8892a6;
+  --color-hole: #252c3a;
+  --color-margin-rule: #8892a6;
+  --color-rule: #cdd3dd;
+  --color-panel: #f3f5f9;
+  --color-mark: #f1e3a6;
+
+  /* Measures — the binding margin, the cord, its eyelets and the seal */
+  --page-width: 70rem;
+  --measure: 60rem;
+  --margin-width: clamp(2.75rem, 0.5rem + 9vw, 8.5rem);
+  --cord-width: clamp(6px, 0.2rem + 0.7vw, 13px);
+  --twist: 5px;
+  --eyelet-size: clamp(11px, 0.4rem + 0.95vw, 22px);
+  --eyelet-pitch: 7rem;
+  --eyelet-gap: 2.25rem;
+  --seal-size: clamp(2.5rem, 8vw, 7rem);
+  --fee-width: 14rem;
+  --gutter: 0.75rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Night-blue leaf: pale ink, the cord white and gold, the seal unchanged */
+    --color-bg: #0e1830;
+    --color-text: #e8ecf3;
+    --color-muted: #a9b4c8;
+    --color-accent: #d2a940;
+    --color-foil-line: #8f6e16;
+    --color-link: #a9c2f0;
+    --color-strand-a: #f4f4ef;
+    --color-strand-b: #d2a940;
+    --color-eyelet: #7d8aa3;
+    --color-hole: #040913;
+    --color-margin-rule: #5f6d88;
+    --color-rule: #2c3a59;
+    --color-panel: #162442;
+    --color-mark: #5a4a14;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 var(--gutter);
+  font-family: var(--font-text);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+
+/* Headings, and text in a phone's narrow column, may break a long word at a
+   syllable; wide text, prices and tables never do. */
+h1, h2, h3, .clause-title, .person-name, .site-title { hyphens: auto; }
+@media (max-width: 24rem) { .prose p, .prose li, .clause-note, .person-bio, .consult { hyphens: auto; } }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-link); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; hyphens: manual; }
+
+:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; box-shadow: 0 0 0 6px var(--color-bg); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 3; padding: var(--space-2) var(--space-3); background: var(--color-bg); color: var(--color-text); }
+.skip-link:focus { left: var(--space-2); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* small letterspaced serif capitals: labels, the menu, block headings */
+.masthead nav a, .block-heading, .prose h2, .points h2, .consult h2, .field-label, .crumb, .registration {
+  font-family: var(--font-caps);
+  font-size: 0.75rem;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+
+/* THE ACT — the signature. Two columns: the binding margin, then the leaf.
+   The cord is one repeating gradient, hidden between each pair of eyelets
+   where it runs behind the paper. The seal is sticky at the foot of the
+   binding: every screen shows the cord running down into it. */
+
+.act {
+  display: grid;
+  grid-template-columns: var(--margin-width) minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto auto;
+  column-gap: clamp(0.75rem, 3vw, 2.75rem);
+  max-width: var(--page-width);
+  min-height: 100vh;
+  margin: 0 auto;
+}
+.act > :not(.binding) { grid-column: 2; min-width: 0; }
+
+.binding {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border-right: 3px double var(--color-margin-rule);
+  background:
+    radial-gradient(circle at 50% 2rem, var(--color-hole) calc(var(--cord-width) * 0.62), var(--color-eyelet) 0 calc(var(--eyelet-size) * 0.5), transparent 0) 0 0 / 100% var(--eyelet-pitch) repeat-y,
+    radial-gradient(circle at 50% calc(2rem + var(--eyelet-gap)), var(--color-hole) calc(var(--cord-width) * 0.62), var(--color-eyelet) 0 calc(var(--eyelet-size) * 0.5), transparent 0) 0 0 / 100% var(--eyelet-pitch) repeat-y;
+}
+.binding::before, .seal::before, .seal::after {
+  content: "";
+  position: absolute;
+  width: var(--cord-width);
+  border-inline: 1px solid var(--color-strand-a);
+  background: repeating-linear-gradient(-58deg, var(--color-strand-a) 0 var(--twist), var(--color-strand-b) 0 calc(var(--twist) * 2));
+}
+.binding::before {
+  top: 0;
+  bottom: 0;
+  left: calc(50% - var(--cord-width) * 0.5);
+  mask: linear-gradient(var(--color-text) 2rem, transparent 0 calc(2rem + var(--eyelet-gap)), var(--color-text) 0) 0 0 / 100% var(--eyelet-pitch) repeat-y;
+}
+
+/* the cord's ends splay from under the foil disc; paper hides the rest */
+.seal {
+  position: sticky;
+  bottom: 0;
+  display: block;
+  height: calc(var(--seal-size) * 1.6);
+  margin-top: var(--space-4);
+  background: linear-gradient(transparent calc(var(--seal-size) * 0.5), var(--color-bg) 0);
+}
+.seal::before, .seal::after {
+  top: calc(var(--seal-size) * 0.5);
+  left: calc(50% - var(--cord-width) * 0.5);
+  height: calc(var(--seal-size) * 1.02);
+  transform-origin: 50% 0;
+  transform: rotate(19deg);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 86%);
+}
+.seal::after { transform: rotate(-15deg); clip-path: polygon(0 0, 100% 0, 100% 88%, 0 100%); }
+.seal-disc {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  left: calc(50% - var(--seal-size) * 0.5);
+  width: var(--seal-size);
+  height: var(--seal-size);
+  border-radius: 50%;
+  background:
+    radial-gradient(closest-side, transparent 52%, var(--color-foil-line) 0 55%, transparent 0 63%, var(--color-foil-line) 0 65%, transparent 0),
+    radial-gradient(closest-side, var(--color-accent) 87%, transparent 88%),
+    repeating-conic-gradient(var(--color-accent) 0 5deg, transparent 0 10deg);
+}
+.seal-disc::before {
+  content: "";
+  position: absolute;
+  inset: 26%;
+  border-radius: 50%;
+  background: repeating-conic-gradient(var(--color-foil-line) 0 5deg, transparent 0 15deg);
+  mask: radial-gradient(closest-side, transparent 80%, var(--color-text) 82%);
+}
+
+/* Masthead: the head of the act ----------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-4) 0 var(--space-3);
+  border-bottom: 3px double var(--color-text);
+}
+.site-title {
+  flex: 1 1 16rem;
+  margin: 0;
+  font-family: var(--font-caps);
+  font-size: clamp(1.0625rem, 0.9rem + 0.6vw, 1.375rem);
+  line-height: 1.3;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.site-title:hover { text-decoration: underline; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: inline-block; padding: var(--space-1) 0; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover, .masthead nav a[aria-current="page"] { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 0.4em; }
+.call { flex-basis: 100%; margin: 0; font-size: var(--text-small); }
+.call .field-label { margin-right: var(--space-2); }
+.call a { color: var(--color-text); }
+@media (min-width: 62rem) {
+  .call { flex-basis: auto; }
+}
+
+/* Page frame ------------------------------------------------------------ */
+
+main { padding-bottom: var(--space-5); }
+.page { max-width: var(--measure); padding-top: var(--space-4); }
+.page > * + * { margin-top: var(--space-4); }
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(1.75rem, 1.15rem + 2.2vw, 2.75rem);
+  font-weight: 400;
+  line-height: 1.14;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+}
+.lead { max-width: 42rem; margin: var(--space-3) 0 0; font-size: 1.1875rem; font-style: italic; line-height: 1.45; color: var(--color-muted); }
+.crumb { margin: 0 0 var(--space-3); }
+.crumb a { text-decoration: none; }
+.crumb a:hover { text-decoration: underline; }
+.empty { font-style: italic; color: var(--color-muted); }
+
+.block-heading, .prose h2, .points h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0 0 var(--space-3);
+  color: var(--color-text);
+}
+.block-heading::after, .prose h2::after, .points h2::after { content: ""; flex: 1 1 2rem; border-top: 1px solid var(--color-rule); }
+
+/* Clauses: a service row, numbered (i), (ii), (iii) like the clauses of an act */
+.clauses { counter-reset: clause; margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-text); }
+.clause {
+  counter-increment: clause;
+  display: grid;
+  grid-template-columns: 2.25rem minmax(0, 1fr);
+  column-gap: var(--space-2);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+.clause::before {
+  content: "(" counter(clause, lower-roman) ")";
+  justify-self: end;
+  padding-top: 0.2em;
+  font-size: var(--text-small);
+  font-style: italic;
+  white-space: nowrap;
+  color: var(--color-muted);
+}
+.clause-body { min-width: 0; }
+.clause-title { margin: 0; font-size: 1.1875rem; font-weight: 400; line-height: 1.3; }
+.clause-title a { color: var(--color-text); text-decoration: none; }
+.clause-title a:hover { text-decoration: underline; }
+.clause-note { margin: var(--space-1) 0 0; font-size: 0.9375rem; line-height: 1.5; color: var(--color-muted); }
+.clause-fee { grid-column: 2; margin: var(--space-2) 0 0; font-style: italic; }
+@media (min-width: 40rem) {
+  .clause { grid-template-columns: 3rem minmax(0, 1fr) minmax(0, var(--fee-width)); column-gap: var(--space-3); }
+  .clause-fee { grid-column: 3; margin: 0.1em 0 0; text-align: right; }
+  .clause-body:last-child { grid-column: 2 / -1; }
+}
+.more, .pagination { margin: var(--space-3) 0 0; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); }
+.pagination span { font-style: italic; color: var(--color-muted); }
+
+/* Prose --------------------------------------------------------------------- */
+
+.prose { max-width: 42rem; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin-top: var(--space-4); }
+.prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); font-size: 1.1875rem; font-weight: 400; font-style: italic; line-height: 1.3; }
+.prose h4 { font-size: 1rem; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose blockquote, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { max-width: 100%; height: auto; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 3px double var(--color-rule); }
+.prose blockquote { padding-left: var(--space-3); border-left: 3px double var(--color-margin-rule); font-style: italic; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose code { font-family: var(--font-mono); font-size: 0.85em; padding: 0.1em 0.3em; background: var(--color-panel); }
+.prose pre { padding: var(--space-3); overflow-x: auto; background: var(--color-panel); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.9375rem; font-variant-numeric: lining-nums tabular-nums; }
+.prose th, .prose td { min-width: 7rem; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-rule); text-align: left; vertical-align: top; }
+/* a wide table scrolls in its box: a shadow marks the cut edge */
+.prose table {
+  background:
+    linear-gradient(to left, transparent, var(--color-bg) 1.5rem) left / 2rem 100% no-repeat local,
+    linear-gradient(to right, transparent, var(--color-bg) 1.5rem) right / 2rem 100% no-repeat local,
+    linear-gradient(to left, transparent, color-mix(in srgb, var(--color-text) 30%, transparent)) left / 0.5rem 100% no-repeat scroll,
+    linear-gradient(to right, transparent, color-mix(in srgb, var(--color-text) 30%, transparent)) right / 0.5rem 100% no-repeat scroll;
+}
+@media (max-width: 24rem) { .prose th, .prose td { min-width: 4.5rem; } }
+.prose th { font-weight: 400; font-style: italic; border-bottom-color: var(--color-text); }
+
+/* Service page ---------------------------------------------------------------- */
+
+.fee { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-3); margin: var(--space-3) 0 0; padding-top: var(--space-2); border-top: 1px solid var(--color-rule); }
+.fee-value { font-size: 1.3125rem; font-style: italic; }
+.points ul { margin: 0; padding: 0; list-style: none; }
+.points li { position: relative; padding: var(--space-1) 0 var(--space-1) 1.75rem; overflow-wrap: anywhere; }
+.points li::before { content: ""; position: absolute; left: 0.35rem; top: 0.95em; width: 0.7rem; border-top: 1px solid var(--color-text); }
+
+/* People ---------------------------------------------------------------------- */
+
+.people-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+.person { display: flow-root; min-width: 0; padding-top: var(--space-3); border-top: 1px solid var(--color-text); }
+.person-photo { float: right; width: 5.5rem; height: 6.5rem; margin: 0 0 var(--space-2) var(--space-3); object-fit: cover; }
+.person-name { margin: 0; font-size: 1.25rem; font-weight: 400; line-height: 1.25; }
+.person-role { margin: var(--space-1) 0 0; font-style: italic; }
+.person-cred { margin: var(--space-2) 0 0; font-size: var(--text-small); color: var(--color-muted); }
+.person-bio { margin: var(--space-2) 0 0; font-size: 0.9375rem; }
+.person-bio p { margin: 0 0 var(--space-2); }
+.person-reach { margin: var(--space-1) 0 0; font-size: var(--text-small); }
+
+/* News ------------------------------------------------------------------------ */
+
+.post-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-text); }
+.post-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2) var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--color-rule); }
+.post-date { margin: 0; font-style: italic; color: var(--color-muted); }
+.page-header .post-date { margin-top: var(--space-3); }
+.post-thumb { width: 100%; max-width: 12rem; height: auto; }
+@media (min-width: 40rem) {
+  .post-row { grid-template-columns: 10rem minmax(0, 1fr) auto; }
+  .post-thumb { width: 7rem; height: 5rem; object-fit: cover; }
+}
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; font-size: var(--text-small); }
+.tags li { min-width: 0; overflow-wrap: anywhere; }
+.cover { display: block; width: 100%; height: auto; max-height: 26rem; object-fit: cover; margin-top: var(--space-3); }
+
+/* The consult block: the attestation clause at the end of every act ---------- */
+
+.consult {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
+  max-width: var(--measure);
+  margin-bottom: var(--space-4);
+  padding: var(--space-4) var(--space-3);
+  border: 3px double var(--color-text);
+  background: var(--color-panel);
+}
+.consult > * { flex: 1 1 15rem; min-width: 0; }
+.consult h2 { margin: 0; }
+.consult-note { margin: var(--space-2) 0 0; }
+.field { margin: 0 0 var(--space-2); }
+.field-label { display: block; color: var(--color-muted); }
+.consult .phone { font-size: 1.5rem; line-height: 1.25; color: var(--color-text); }
+.hours { margin: 0; font-size: 0.9375rem; }
+.hours div { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); padding: var(--space-1) 0; border-top: 1px solid var(--color-rule); }
+.hours dt { flex: 1 1 8rem; min-width: 0; }
+.hours dd { flex: 1 1 7rem; min-width: 0; margin: 0; font-style: italic; }
+@media (min-width: 48rem) { .consult { padding: var(--space-4); } }
+
+/* The foot of the act: the registration is lettered beside the seal */
+.colophon {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  min-height: calc(var(--seal-size) * 1.6);
+  max-width: var(--measure);
+  padding: var(--space-3) 0 var(--space-4);
+  border-top: 1px solid var(--color-rule);
+  font-size: var(--text-small);
+  color: var(--color-muted);
+}
+.colophon p, .colophon-note { margin: 0; }
+.colophon-name { color: var(--color-text); font-style: italic; }
+/* small capitals keep the case as written: "VAT no." */
+.registration { max-width: 46rem; font-size: var(--text-small); line-height: 1.7; letter-spacing: 0.06em; text-transform: none; font-variant-caps: small-caps; }
+.colophon a { color: inherit; }
+
+/* Motion & print ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { transition: none; animation: none; scroll-behavior: auto; }
+}
+
+@media print {
+  :root { --color-bg: #fff; --color-text: #000; --color-muted: #333; --color-link: #000; --color-rule: #999; --color-panel: #fff; }
+  body { padding: 0; }
+  .act { display: block; min-height: 0; }
+  .binding, .masthead nav, .skip-link, .crumb, .more, .pagination { display: none; }
+  a { text-decoration: none; }
+  .clause, .person, .post-row, .consult { break-inside: avoid; }
+}

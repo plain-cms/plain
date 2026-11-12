@@ -1,0 +1,1 @@
+<p class="action">{{#if data.business.phone}}<a href="tel:{{ data.business.phone }}"><span>{{ strings.call }}</span> {{ data.business.phone }}</a>{{else}}{{#if data.business.email}}<a href="mailto:{{ data.business.email }}">{{ strings.emailUs }}</a>{{else}}<a href="/contact/">{{ strings.contactLink }}</a>{{/if}}{{/if}}</p>

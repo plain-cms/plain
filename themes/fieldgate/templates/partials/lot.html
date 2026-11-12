@@ -1,0 +1,14 @@
+<li class="lot" data-status="{{ item.status }}">
+  <span class="parcel" aria-hidden="true"></span>
+  <div class="lot-box">
+    {{#if item.address}}<p class="lot-place">{{ item.address }}</p>
+    {{/if}}<h2 class="lot-name"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+    {{#if item.area}}<p class="lot-figure lot-figure--area">{{ item.area }}</p>
+    {{#if item.price}}<p class="lot-price">{{ item.price }}</p>
+    {{/if}}{{else}}{{#if item.price}}<p class="lot-figure">{{ item.price }}</p>
+    {{/if}}{{/if}}{{#if item.beds}}<ul class="facts"><li>{{ item.beds }} {{ strings.beds }}</li>{{#if item.baths}}<li>{{ item.baths }} {{ strings.baths }}</li>{{/if}}</ul>
+    {{else}}{{#if item.baths}}<ul class="facts"><li>{{ item.baths }} {{ strings.baths }}</li></ul>
+    {{/if}}{{/if}}{{#if item.status}}<p class="status" data-status="{{ item.status }}"><span class="status-raw">{{ item.status }}</span>{{> status-words}}</p>
+    {{/if}}
+  </div>
+</li>

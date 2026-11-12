@@ -1,0 +1,488 @@
+/* Lanes — a swimming-school theme (classes family).
+   The pool seen from the gallery: the timetable is the pool plan. Each day is
+   a full-width lane of water with its name set in it and its lessons running
+   along it; a white starting-block plate with a bare numeral sits at the deep
+   (left) end; red and white float ropes lie between the lanes. Teal, red and
+   the plates live in the pool only. Everything outside it is navy ink on
+   poolside white, neo-grotesque capitals over a humanist sans.
+   Restyle by editing the tokens below, never selectors (cms-spec.md §10.1). */
+
+:root {
+  --font-display: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-body: Seravek, "Segoe UI", Ubuntu, "Fira Sans", Calibri, "Noto Sans", sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --weight-heavy: 700;
+  --weight-medium: 600;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-title: clamp(1.75rem, 1.1rem + 2.6vw, 3rem);
+  --text-time: 1.375rem;
+  --text-figure: 2rem;
+  --leading-body: 1.55;
+  --leading-tight: 1.08;
+  --tracking-caps: 0.06em;
+
+  --color-bg: #f5f8f8;
+  --color-panel: #ffffff;
+  --color-text: #0f2540;
+  --color-muted: #4a5d72;
+  --color-accent: #0b6b77;
+  --color-line: #c5d3da;
+  --color-lane-text: #ffffff;
+  --color-lane-muted: #cdeef0;
+  --color-float-red: #e0393e;
+  --color-float-white: #ffffff;
+  --color-plate: #ffffff;
+  --color-figure: #111111;
+
+  --measure: 64ch;
+  --page-width: 76rem;
+  --space-s: 0.5rem;
+  --space-m: 1rem;
+  --space-l: 2rem;
+  --space-xl: 3.5rem;
+  --block: 3.5rem;
+  --rope: 0.625rem;
+  --float: 1.25rem;
+  --radius: 2px;
+  --rule: 3px;
+  --tap: 2.75rem;
+  --photo-ratio: 0.8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* A night swim: a navy hall, the pool lit from below so the water glows
+       and the lane words turn to deep ink. Plates stay white. */
+    --color-bg: #0b1626;
+    --color-panel: #13223a;
+    --color-text: #e6eef3;
+    --color-muted: #9fb4c6;
+    --color-accent: #3fb6bf;
+    --color-line: #2c4058;
+    --color-lane-text: #06202b;
+    --color-lane-muted: #0f3b48;
+    --color-float-red: #c8232b;
+    --color-float-white: #ffffff;
+  }
+}
+
+/* Base ---------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0 auto;
+  padding: 0 var(--space-m);
+  max-width: var(--page-width);
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+::selection { background: var(--color-accent); color: var(--color-lane-text); }
+
+a { color: var(--color-text); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: var(--rule); }
+a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
+
+:focus-visible {
+  outline: var(--rule) solid var(--color-text);
+  outline-offset: var(--rule);
+  box-shadow: 0 0 0 var(--rule) var(--color-bg);
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-s);
+  z-index: 5;
+  padding: var(--space-s) var(--space-m);
+  background: var(--color-panel);
+}
+.skip-link:focus { left: var(--space-s); }
+
+main { display: block; min-height: 50vh; }
+
+.pool-heading, .discipline, .masthead nav a, .btn, .colophon-name, .prose th {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+/* Masthead ------------------------------------------------------------------
+   Phone: name and button share a row when they fit (a long name pushes the
+   button under it), the menu below. Wide: one row. */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s) var(--space-l);
+  padding: var(--space-m) 0 var(--space-s);
+}
+.site-title {
+  flex: 1 1 12rem;
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: var(--weight-heavy);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  text-decoration: none;
+  hyphens: auto;
+}
+.masthead nav { order: 1; flex: 1 0 100%; }
+@media (min-width: 60em) {
+  .masthead { padding-bottom: var(--space-m); }
+  .site-title { flex: 0 1 auto; }
+  .masthead nav { order: 0; flex: 1 1 auto; }
+}
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 0.8rem; margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--text-s);
+  font-weight: var(--weight-medium);
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.masthead nav a:hover { color: var(--color-text); }
+.masthead nav a[aria-current="page"] { color: var(--color-text); box-shadow: inset 0 calc(-1 * var(--rule)) var(--color-text); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  padding: var(--space-s) var(--space-m);
+  font-size: var(--text-s);
+  font-weight: var(--weight-heavy);
+  line-height: var(--leading-tight);
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-bg);
+  background: var(--color-text);
+  border-radius: var(--radius);
+}
+.btn:hover { background: var(--color-muted); }
+
+/* Headers ------------------------------------------------------------------- */
+
+.page-header { margin: var(--space-l) 0; }
+.page-header h1 {
+  margin: 0;
+  max-width: 22em;
+  font-family: var(--font-display);
+  font-size: var(--text-title);
+  font-weight: var(--weight-heavy);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  hyphens: auto;
+}
+.lede { margin: var(--space-m) 0 0; max-width: var(--measure); font-size: var(--text-l); line-height: 1.4; color: var(--color-muted); text-wrap: pretty; }
+@media (min-width: 60em) {
+  .page-header { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-l); align-items: end; }
+  .lede { margin: 0; }
+}
+
+.eyebrow { margin: 0 0 var(--space-s); font-size: var(--text-s); font-weight: var(--weight-heavy); color: var(--color-muted); }
+.discipline { margin: var(--space-s) 0 0; font-size: var(--text-s); font-weight: var(--weight-medium); color: var(--color-muted); hyphens: auto; }
+.meta { margin: var(--space-s) 0 0; font-size: var(--text-s); color: var(--color-muted); }
+.tags a { margin-left: var(--space-m); color: var(--color-muted); }
+
+/* THE SIGNATURE: the timetable as a pool plan --------------------------------
+   One lane per day, in written order, numbered by a CSS counter on a white
+   starting-block plate (aria-hidden: decoration, not read out). The ropes are
+   pseudo-elements between lanes, so no text ever sits on the floats. Phone:
+   the plate heads the lane, the lessons run down under the day name. Wide:
+   plate, day name, then the lessons along the lane on one shared column grid,
+   so the times of every lane line up. */
+
+.timetable { margin: var(--space-l) 0 var(--space-xl); }
+.pool-heading {
+  margin: 0 0 var(--space-m);
+  font-size: var(--text-l);
+  font-weight: var(--weight-heavy);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+}
+
+.pool {
+  margin: 0 calc(-1 * var(--space-m));
+  padding: 0;
+  list-style: none;
+  counter-reset: lane;
+  background: var(--color-accent);
+  color: var(--color-lane-text);
+}
+.lane {
+  position: relative;
+  counter-increment: lane;
+  display: grid;
+  grid-template-columns: var(--block) minmax(0, 1fr);
+  gap: var(--space-s) var(--space-m);
+  align-items: center;
+  padding: calc(var(--space-m) + var(--rope) / 2) var(--space-m) calc(var(--space-m) + var(--rope) / 2) 0;
+}
+.lane + .lane::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--rope) / -2);
+  height: var(--rope);
+  background-image:
+    radial-gradient(closest-side at 25% 50%, var(--color-float-red) 78%, transparent 100%),
+    radial-gradient(closest-side at 75% 50%, var(--color-float-white) 78%, transparent 100%);
+  background-size: calc(var(--float) * 2) 100%;
+  /* round: the floats stretch a hair so the rope ends on a whole float */
+  background-repeat: round no-repeat;
+}
+
+.block {
+  grid-row: 1;
+  grid-column: 1;
+  align-self: start;
+  /* Mounted on the pool end: flush to the lane's left edge, its top just
+     under the rope, not floating in the water. */
+  margin-top: calc(-1 * var(--space-m));
+  display: grid;
+  place-items: center;
+  width: var(--block);
+  height: var(--block);
+  background: var(--color-plate);
+  color: var(--color-figure);
+  font-family: var(--font-display);
+  font-size: var(--text-figure);
+  font-weight: var(--weight-heavy);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.block::before { content: counter(lane); }
+
+.day-name {
+  grid-row: 1;
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: var(--weight-heavy);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  hyphens: auto;
+}
+.today-flag {
+  padding: 0.2em 0.45em;
+  font-size: var(--text-s);
+  background: var(--color-plate);
+  color: var(--color-figure);
+}
+
+.classes, .no-classes { grid-column: 2; }
+.classes { display: grid; gap: var(--space-m); margin: 0; padding: 0; list-style: none; }
+.session {
+  display: grid;
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+  column-gap: var(--space-m);
+  align-items: baseline;
+}
+.session-meta { align-self: start; }
+/* The narrowest phones: the lessons take the whole lane under the plate */
+@media (max-width: 23.99em) {
+  .classes, .no-classes { grid-column: 1 / -1; padding-left: var(--space-m); }
+}
+.session-time {
+  grid-row: 1 / span 2;
+  font-family: var(--font-display);
+  font-size: var(--text-time);
+  font-weight: var(--weight-heavy);
+  line-height: var(--leading-tight);
+  font-variant-numeric: tabular-nums;
+  hyphens: auto;
+}
+.session-name { font-weight: var(--weight-medium); line-height: 1.25; hyphens: auto; }
+/* Teacher and level share a line when they fit; when the level wraps, the
+   dot hanging in the gap falls outside the box and is clipped. */
+.session-meta {
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 0.75em;
+  overflow: hidden;
+  font-size: var(--text-s);
+  line-height: 1.35;
+  color: var(--color-lane-muted);
+  hyphens: auto;
+}
+.session-who, .session-level { min-width: 0; }
+.session-who + .session-level { position: relative; }
+.session-who + .session-level::before { content: "·"; position: absolute; left: -0.5em; }
+.no-classes { margin: 0; font-style: italic; color: var(--color-lane-muted); }
+
+@media (min-width: 48em), print {
+  .pool { margin: 0; }
+  .lane { grid-template-columns: var(--block) 9.5rem minmax(0, 1fr); align-items: start; padding-right: var(--space-m); }
+  .day-name { padding-top: 0.15em; }
+  .classes, .no-classes { grid-row: 1; grid-column: 3; }
+  .no-classes { padding-top: 0.2em; }
+  .classes { grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); gap: var(--space-m) 0.75rem; }
+  .session { display: flex; flex-direction: column; }
+  .session-time { margin-bottom: 0.2em; }
+}
+
+.trial-note {
+  margin: var(--space-m) 0 0;
+  max-width: var(--measure);
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: var(--weight-medium);
+  line-height: 1.35;
+  text-wrap: pretty;
+}
+
+/* Prose ---------------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); }
+.prose h2, .prose h3, .prose h4 {
+  margin: var(--space-l) 0 var(--space-s);
+  font-family: var(--font-display);
+  font-weight: var(--weight-heavy);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+  hyphens: auto;
+}
+.prose h2 { font-size: var(--text-xl); }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-m); }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-m); }
+.prose li { margin-bottom: 0.3em; }
+.prose img { max-width: 100%; height: auto; }
+.prose blockquote { margin: var(--space-l) 0; padding-left: var(--space-m); border-left: var(--rule) solid var(--color-text); font-size: var(--text-l); }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose code { font-family: var(--font-mono); font-size: 0.88em; padding: 0.1em 0.3em; background: var(--color-panel); border: 1px solid var(--color-line); }
+.prose pre { overflow-x: auto; padding: var(--space-m); background: var(--color-panel); border: 1px solid var(--color-line); }
+.prose pre code { padding: 0; border: 0; font-size: var(--text-s); }
+.prose hr { margin: var(--space-l) 0; border: 0; border-top: 1px solid var(--color-line); }
+
+.prose table { width: 100%; margin: 0 0 var(--space-m); border-collapse: collapse; font-variant-numeric: tabular-nums; hyphens: manual; }
+.prose th, .prose td { padding: var(--space-s) var(--space-m) var(--space-s) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-line); }
+.prose th { font-size: var(--text-s); font-weight: var(--weight-heavy); border-bottom: var(--rule) solid var(--color-text); }
+/* Phone: the table keeps its natural widths and wraps its cells, never
+   hyphenating them, to the screen; only a table that truly cannot fit
+   scrolls sideways, and then a shade at the right edge says there is more
+   (it is covered once the table is scrolled to its end). */
+@media (max-width: 47.99em) {
+  .prose table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    background:
+      linear-gradient(to left, var(--color-bg) 40%, transparent) right center / 1.5rem 100% no-repeat local,
+      linear-gradient(to left, var(--color-line), transparent) right center / 0.75rem 100% no-repeat scroll;
+  }
+  .prose th, .prose td { min-width: 4rem; padding-right: 0.75rem; }
+  .prose th:last-child, .prose td:last-child { padding-right: 0; }
+}
+
+.cover { display: block; width: 100%; height: auto; margin: 0 0 var(--space-l); }
+
+/* Roster: instructors (and posts) ------------------------------------------- */
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(21rem, 100%), 1fr));
+  gap: var(--space-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.card { display: flex; gap: var(--space-m); padding-top: var(--space-m); border-top: var(--rule) solid var(--color-text); }
+.card-body { flex: 1; min-width: 0; }
+.card h2 { margin: 0; font-family: var(--font-display); font-size: var(--text-xl); font-weight: var(--weight-heavy); line-height: var(--leading-tight); hyphens: auto; }
+.card h2 a { text-decoration: none; }
+.card h2 a:hover { text-decoration: underline; }
+.summary { margin: var(--space-s) 0 0; }
+.card-photo { flex: none; width: 5.5rem; aspect-ratio: var(--photo-ratio); object-fit: cover; }
+.empty { color: var(--color-muted); }
+
+.instructor-photo { display: block; width: 100%; max-width: 18rem; aspect-ratio: var(--photo-ratio); object-fit: cover; margin: 0 0 var(--space-l); }
+.find-lessons { max-width: var(--measure); margin: var(--space-xl) 0 0; padding-top: var(--space-m); border-top: var(--rule) solid var(--color-text); }
+.find-lessons p { margin: 0 0 var(--space-m); }
+.find-lessons .trial-note { font-size: var(--text-m); }
+@media (min-width: 60em) {
+  .instructor { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(0, 1fr); grid-template-rows: auto auto 1fr; column-gap: var(--space-xl); align-items: start; }
+  .instructor > .page-header { grid-column: 1 / -1; display: block; }
+  .instructor > .prose { grid-column: 1; grid-row: 2 / span 2; }
+  .instructor-photo { grid-column: 2; grid-row: 2; }
+  .find-lessons { grid-column: 2; grid-row: 3; margin: 0; }
+  /* No page text: the photo takes the left column, the panel sits beside it */
+  .instructor:has(> .instructor-photo):not(:has(> .prose)) { grid-template-columns: minmax(0, 18rem) minmax(0, var(--measure)); }
+  .instructor:not(:has(> .prose)) > .instructor-photo { grid-column: 1; grid-row: 2 / span 2; margin-bottom: 0; }
+  .instructor:not(:has(> .prose)) > .find-lessons { grid-row: 2; }
+  .instructor > .page-header + .find-lessons { grid-column: 1; grid-row: 2; }
+}
+
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-m); padding: var(--space-l) 0; font-size: var(--text-s); color: var(--color-muted); }
+.pagination a { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: var(--weight-medium); }
+
+/* Colophon ------------------------------------------------------------------- */
+
+.colophon { margin-top: var(--space-xl); padding: var(--space-m) 0 var(--space-l); border-top: 1px solid var(--color-line); font-size: var(--text-s); color: var(--color-muted); }
+.colophon p { margin: 0 0 var(--space-s); }
+.colophon-name { font-weight: var(--weight-heavy); color: var(--color-text); }
+.colophon-note > * { margin: 0 0 var(--space-s); }
+.colophon a { color: inherit; }
+
+/* Motion --------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Print: the timetable for the fridge door. Colour tokens reset to ink on
+   paper (html:root beats a site's own token overrides); the ropes, which are
+   backgrounds, become dashed rules; the plates keep an outline. */
+
+@media print {
+  html:root {
+    --color-bg: #ffffff;
+    --color-panel: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #ffffff;
+    --color-line: #999999;
+    --color-lane-text: #000000;
+    --color-lane-muted: #333333;
+    --color-plate: #ffffff;
+    --color-figure: #000000;
+  }
+  body { max-width: none; padding: 0; font-size: 10pt; }
+  main { min-height: 0; }
+  .masthead nav, .btn, .skip-link, .pagination, .colophon, .find-lessons, .today-flag { display: none; }
+  .pool { border: 1px solid var(--color-text); }
+  .lane { break-inside: avoid; padding-top: var(--space-s); padding-bottom: var(--space-s); }
+  .lane + .lane { border-top: 1px dashed var(--color-text); }
+  .lane + .lane::before { display: none; }
+  .block { border: 1px solid var(--color-text); }
+  a { color: inherit; text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }
+  .prose pre { white-space: pre-wrap; }
+}

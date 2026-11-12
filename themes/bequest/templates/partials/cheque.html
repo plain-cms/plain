@@ -1,0 +1,20 @@
+<div class="cheque-hold">
+  <div class="cheque">
+    {{#if page.hero}}{{#if data.impact.stat.number}}<p class="stub">
+      <strong class="stub-number">{{ data.impact.stat.number }}</strong>
+      {{#if data.impact.stat.unit}}<span class="stub-words">{{ data.impact.stat.unit }}{{#if data.impact.stat.verb}} {{ data.impact.stat.verb }}{{/if}}</span>
+      {{else}}{{#if data.impact.stat.verb}}<span class="stub-words">{{ data.impact.stat.verb }}</span>
+      {{/if}}{{/if}}
+    </p>
+    {{/if}}{{/if}}<div class="cheque-face">
+      <div class="cheque-body">
+        <p class="cheque-top" aria-hidden="true"><span class="caption">{{ strings.chequeLabel }}</span><span class="cheque-date"><span class="caption">{{ strings.chequeDate }}</span><span class="written"></span></span></p>
+        <p class="cheque-pay"><span class="caption">{{ strings.chequePay }}</span> <span class="written">{{ site.title }}</span></p>
+        {{#if data.impact.donatePrompt}}<p class="cheque-words written">{{ data.impact.donatePrompt }}</p>
+        {{else}}<p class="cheque-words written" aria-hidden="true"></p>
+        {{/if}}<a class="cheque-amount" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a>
+        <p class="cheque-sign" aria-hidden="true"><span class="sign-line"></span><span class="caption">{{ strings.chequeSignature }}</span></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,18 +3,24 @@
     <h1 class="front-label">{{ page.title }}{{#if tag}} · {{ tag }}{{/if}}</h1>
   </header>
   {{#if items}}
-  <ol class="front-grid" reversed>
+  <ol class="front-grid" role="list">
     {{#each items as item}}{{> story-card}}
     {{/each}}
   </ol>
+  {{else}}{{#if page.slug}}{{#if collections.stories}}
+  <ol class="front-grid front-latest" role="list">
+    {{#each collections.stories as item}}{{> story-card}}
+    {{/each}}
+  </ol>
+  <p class="front-more"><a href="/news/">{{ strings.allStories }}</a></p>
   {{else}}
-  <p class="empty">Nothing on the wire yet — the first story you publish leads this page.</p>
-  {{/if}}
-  {{#if pagination.multiple}}
-  <nav class="pagination" aria-label="Pages">
-    {{#if pagination.newer}}<a href="{{ pagination.newer }}">← Newer</a>{{/if}}
-    <span>Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
-    {{#if pagination.older}}<a href="{{ pagination.older }}">Older →</a>{{/if}}
-  </nav>
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{/if}}
+  {{> pagination}}
+  {{#if page.content}}<div class="prose front-note">
+{{{ page.content }}}
+  </div>
   {{/if}}
 </section>

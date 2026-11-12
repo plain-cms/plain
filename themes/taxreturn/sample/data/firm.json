@@ -1,0 +1,13 @@
+{
+  "phone": "01632 960412",
+  "email": "office@garsidetax.example",
+  "address": "9 Tanner Row, Ashby Vale AV2 6HN",
+  "hours": [
+    { "days": "Monday to Thursday", "time": "9:00 to 17:00" },
+    { "days": "Friday", "time": "9:00 to 13:00" },
+    { "days": "Saturdays in January", "time": "9:00 to 12:00" },
+    { "days": "Evenings", "time": "By appointment" }
+  ],
+  "registration": "Garside Tax & Accounts is the practice of Helen Garside FCCA, a member in practice of the Association of Chartered Certified Accountants, which supervises it under the money laundering regulations.",
+  "consultNote": "The first meeting is free and takes about forty minutes, at the office or by video. Ring or write and Helen will call you back within one working day to fix a time."
+}

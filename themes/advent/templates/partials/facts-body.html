@@ -1,0 +1,7 @@
+<div class="invite-facts">
+      {{#if data.event.time}}<p class="fact-time">{{ data.event.time }}</p>
+      {{/if}}{{#if data.event.venue}}<p class="fact-venue">{{ data.event.venue }}</p>
+      {{/if}}{{#if data.event.address}}<p class="fact-address">{{ data.event.address }}</p>
+      {{/if}}{{#if data.event.entry}}<p class="fact-entry">{{ data.event.entry }}</p>
+      {{/if}}{{> reply}}
+    </div>

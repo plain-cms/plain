@@ -1,0 +1,544 @@
+/* Reel — a filmmaker's portfolio built on the main title card: each project
+   is a letterboxed 2.39:1 picture between black bars, the title alone in it,
+   client and year burnt into its corners like timecode windows, the
+   description a yellow subtitle in the bar below. Around the frames the
+   house lights are up: grey-white ground, ink text, underlined ink links.
+   Restyle by editing tokens, never selectors (cms-spec.md §10.1). */
+
+:root {
+  --font-title: Baskerville, "Baskerville Old Face", "Libre Baskerville", "Hoefler Text", Georgia, "Times New Roman", serif;
+  --font-body: Georgia, Charter, "Iowan Old Style", "Times New Roman", serif;
+  --font-sub: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", "Nimbus Sans", sans-serif;
+  --font-tc: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.8125rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.375rem;
+  --text-xl: clamp(1.75rem, 3.2vw, 2.625rem);
+  --text-card: clamp(1.25rem, 5.4cqi, 3.25rem);
+  --text-card-lg: clamp(1.625rem, 5.8cqi, 4.5rem);
+  --text-sub: clamp(0.875rem, 2.5cqi, 1.375rem);
+  --text-tc: clamp(0.6875rem, 1.6cqi, 0.9375rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.15;
+
+  --color-bg: #e4e4e1;
+  --color-text: #18181a;
+  --color-muted: #505055;
+  --color-accent: #0b0b0c;
+  --color-rule: #a4a4a0;
+  --color-panel: #d6d6d2;
+  --color-frame: #000000;
+  --color-picture: #1b1b1b;
+  --color-card: #f2efe6;
+  --color-tc: #e6e6e0;
+  --color-subtitle: #f7d117;
+  --color-scrim: rgba(0, 0, 0, 0.66);
+
+  --measure: 38rem;
+  --page-width: 86rem;
+  --gutter: clamp(1rem, 3vw, 2.5rem);
+  --reel-gap: clamp(1.25rem, 2.4vw, 2rem);
+  --reel-min: 24rem;
+  --picture-ratio: 2.39;
+  --bar: 7.2cqi;
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1.5rem;
+  --space-4: 3rem;
+}
+
+/* The auditorium with the lights down: charcoal, the frames still blacker */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #202022;
+    --color-text: #e7e6e1;
+    --color-muted: #a6a6a2;
+    --color-accent: #e7e6e1;
+    --color-rule: #48484c;
+    --color-panel: #2c2c2f;
+    --color-frame: #000000;
+    --color-picture: #161616;
+    --color-card: #f2efe6;
+    --color-tc: #e6e6e0;
+    --color-subtitle: #f7d117;
+    --color-scrim: rgba(0, 0, 0, 0.66);
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-family: var(--font-sub);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+
+::selection { background: var(--color-subtitle); color: var(--color-frame); }
+
+img { max-width: 100%; height: auto; }
+
+h1, h2, h3, h4 { hyphens: auto; overflow-wrap: break-word; }
+
+.vh {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-1);
+  z-index: 5;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.skip-link:focus { left: var(--space-1); }
+
+/* A date shown as its year: the ISO date is in the page, four figures show */
+.year {
+  display: inline-block;
+  width: 4ch;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-family: var(--font-tc);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* Header — house lights up, nothing dark but the little frame by the name */
+
+.site-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0 var(--space-3);
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--space-1) var(--gutter) 0;
+}
+
+.site-title {
+  display: inline-block;
+  min-width: 0;
+  padding-block: var(--space-2);
+  font-family: var(--font-title);
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  text-decoration: none;
+  hyphens: auto;
+}
+.site-title:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.site-title::before {
+  content: "";
+  display: inline-block;
+  width: 1.45em;
+  height: 0.82em;
+  margin-right: 0.5em;
+  vertical-align: -0.04em;
+  background:
+    linear-gradient(var(--color-subtitle), var(--color-subtitle)) 50% 84% / 46% 0.1em no-repeat,
+    linear-gradient(var(--color-picture), var(--color-picture)) 50% 40% / 100% 58% no-repeat,
+    var(--color-frame);
+}
+
+.site-head ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.site-head nav a {
+  display: inline-block;
+  padding: var(--space-2) 0 calc(var(--space-2) - 3px);
+  border-bottom: 3px solid transparent;
+  font-size: var(--text-s);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.site-head nav a:hover { border-bottom-color: var(--color-rule); }
+.site-head nav a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+
+main { display: block; min-height: 60vh; }
+
+.work, .project, .not-found, .column {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+/* The statement over the programme */
+
+.intro { padding-block: var(--space-3); }
+.intro h1, .page-head h1 {
+  margin: 0;
+  font-family: var(--font-title);
+  font-size: var(--text-xl);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+.intro-text { max-width: var(--measure); margin-top: var(--space-2); }
+
+/* The frame: black bar, picture, black bar. The bars together turn the
+   2.39:1 picture into a 16:9 screen; the lower one carries the subtitle and
+   grows with it, and takes the slack so frames in one row end level.
+   Sizes inside follow the frame's own width (cqi). */
+
+.reel, .screen { container-type: inline-size; }
+.reel { position: relative; }
+
+.frame {
+  display: grid;
+  grid-template-rows: var(--bar) auto minmax(var(--bar), 1fr);
+  grid-template-columns: minmax(0, 1fr);
+  height: 100%;
+  background: var(--color-frame);
+  color: var(--color-card);
+}
+
+.picture {
+  grid-row: 2;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
+  aspect-ratio: var(--picture-ratio);
+  background: var(--color-picture);
+}
+
+/* A cover fills the picture behind a scrim; it never sets its height */
+.picture > img {
+  grid-area: 1 / 1 / -1 / -1;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  contain: size;
+}
+.picture:has(img)::before {
+  content: "";
+  grid-area: 1 / 1 / -1 / -1;
+  z-index: 1;
+  background: var(--color-scrim);
+}
+
+/* The burnt-in corners: client top left, year top right */
+.slate {
+  grid-area: 1 / 1;
+  z-index: 2;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5em;
+  margin: 0;
+  padding: clamp(0.375rem, 2cqi, 1rem);
+  font-family: var(--font-tc);
+  font-size: var(--text-tc);
+  line-height: 1.4;
+  pointer-events: none;
+}
+.tc {
+  min-width: 0;
+  padding: 0.15em 0.45em;
+  background: var(--color-frame);
+  color: var(--color-tc);
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+.tc-client { max-width: 70%; }
+.tc-year { flex: none; margin-left: auto; }
+
+/* An empty row the height of the corners, so the title sits mid-picture */
+.picture:has(.slate)::after {
+  content: "";
+  grid-area: 3 / 1;
+  height: calc(1.7em + 2 * clamp(0.375rem, 2cqi, 1rem));
+  font-size: var(--text-tc);
+}
+
+.card-title {
+  grid-row: 2;
+  grid-column: 1;
+  z-index: 2;
+  align-self: center;
+  justify-self: center;
+  max-width: 26em;
+  margin: 0;
+  padding: 0.2em 6cqi;
+  font-family: var(--font-title);
+  font-size: var(--text-card);
+  font-weight: 400;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-wrap: balance;
+}
+.frame-lg .card-title { font-size: var(--text-card-lg); }
+
+.subtitle {
+  grid-row: 3;
+  align-self: center;
+  justify-self: center;
+  max-width: 46em;
+  margin: 0;
+  padding: 0.6em 6cqi 0.8em;
+  font-family: var(--font-sub);
+  font-size: var(--text-sub);
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--color-subtitle);
+  text-align: center;
+  text-wrap: balance;
+  hyphens: manual;
+}
+
+/* In a narrow frame a long compound word in the subtitle is hyphenated */
+@container (max-width: 30rem) {
+  .subtitle { hyphens: auto; }
+}
+
+/* The programme: every project a frame, the whole frame one link */
+
+.reels {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--reel-min), 100%), 1fr));
+  gap: var(--reel-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.reel .card-title a { text-decoration: none; }
+.reel .card-title a::after { content: ""; position: absolute; inset: 0; z-index: 3; }
+.reel:hover .card-title a { text-decoration: underline; text-decoration-thickness: 0.05em; }
+.reel .card-title a:focus-visible { outline: none; }
+.reel .card-title a:focus-visible::after {
+  outline: 3px solid var(--color-subtitle);
+  outline-offset: -3px;
+  box-shadow: 0 0 0 3px var(--color-accent);
+}
+
+.empty { margin: 0; padding-block: var(--space-3); color: var(--color-muted); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-3);
+  margin-top: var(--space-3);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.pagination a { display: inline-block; padding-block: var(--space-2); color: var(--color-text); }
+
+/* A project: the title card full width, then credits and the story */
+
+.screen { margin-top: var(--space-2); }
+
+.project-body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+.project-body > .prose { max-width: var(--measure); }
+
+.credits h2, .more-work h2, .prose h2 {
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-sub);
+  font-size: var(--text-s);
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.credits { padding-top: var(--space-2); border-top: 1px solid var(--color-rule); }
+.roles { margin: 0; padding: 0; list-style: none; }
+.roles li {
+  padding-left: 1em;
+  text-indent: -1em;
+  font-size: var(--text-s);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  hyphens: auto;
+}
+.credit-name {
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-title);
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  hyphens: auto;
+}
+
+.more-work {
+  margin-top: var(--space-4);
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-rule);
+}
+.more-work ul { columns: 2 20rem; column-gap: var(--space-4); margin: 0; padding: 0; list-style: none; }
+.more-work li { break-inside: avoid; }
+.more-work li a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding-block: var(--space-1);
+  border-bottom: 1px solid var(--color-rule);
+  font-family: var(--font-title);
+  text-decoration: none;
+}
+.more-work li a:hover .more-title { text-decoration: underline; }
+.more-title { min-width: 0; hyphens: auto; }
+.more-work .year { flex: none; font-size: var(--text-s); color: var(--color-muted); }
+.more-work p, .go-home { margin: var(--space-2) 0 0; }
+.more-work p a, .go-home a { display: inline-block; padding-block: var(--space-1); }
+
+/* Pages, posts and lists */
+
+.page-head { padding-block: var(--space-3) var(--space-2); }
+.column > .prose, .column .entries, .column .empty { max-width: var(--measure); }
+.post-cover { display: block; width: 100%; max-width: var(--measure); margin-bottom: var(--space-3); }
+
+.meta { margin: var(--space-1) 0 0; font-size: var(--text-s); color: var(--color-muted); }
+.tags { margin-left: var(--space-2); }
+.tag { margin-right: var(--space-1); color: var(--color-text); }
+
+.entries { margin: 0; padding: 0; list-style: none; }
+.entry { padding-block: var(--space-2) var(--space-3); border-top: 1px solid var(--color-rule); }
+.entry h2 { margin: 0; font-family: var(--font-title); font-size: var(--text-l); font-weight: 400; line-height: var(--leading-tight); }
+.entry h2 a { text-decoration: none; }
+.entry h2 a:hover { text-decoration: underline; }
+.entry-text { margin: var(--space-1) 0 0; font-family: var(--font-body); }
+
+/* Prose ------------------------------------------------------------------- */
+
+.prose { font-family: var(--font-body); hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 1em; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose h2 { margin-top: var(--space-4); }
+.prose h3, .prose h4 { margin: var(--space-3) 0 0.5em; font-family: var(--font-title); font-weight: 600; line-height: var(--leading-tight); }
+.prose h3 { font-size: var(--text-m); }
+.prose h4 { font-size: var(--text-m); font-weight: 400; font-style: italic; }
+.prose a[href^="mailto:"], .prose a[href^="tel:"] { overflow-wrap: anywhere; }
+.prose img { display: block; margin: var(--space-3) 0; }
+.prose blockquote {
+  padding-left: var(--space-2);
+  border-left: 3px solid var(--color-rule);
+  font-style: italic;
+  color: var(--color-muted);
+}
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 1px solid var(--color-rule); }
+.prose code { font-family: var(--font-tc); font-size: 0.88em; padding: 0.05em 0.3em; background: var(--color-panel); }
+.prose pre { overflow-x: auto; padding: var(--space-2); background: var(--color-panel); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); }
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-family: var(--font-sub);
+  font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
+}
+.prose th, .prose td {
+  min-width: 8rem;
+  padding: 0.5em 1em 0.5em 0;
+  border-bottom: 1px solid var(--color-rule);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th { font-weight: 600; }
+
+/* On a phone a long compound word in the story is hyphenated, not cut */
+@media (max-width: 30rem) {
+  .prose { hyphens: auto; hyphenate-limit-chars: 14 5 5; }
+  .prose a, .prose table, .prose pre { hyphens: manual; }
+}
+
+/* Footer -------------------------------------------------------------------- */
+
+.colophon {
+  max-width: var(--page-width);
+  margin: var(--space-4) auto 0;
+  padding: var(--space-2) var(--gutter) var(--space-4);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon p { margin: 0; padding-top: var(--space-2); border-top: 1px solid var(--color-rule); }
+.colophon-name { margin-right: 0.5em; font-family: var(--font-title); font-size: var(--text-m); color: var(--color-text); }
+.colophon-note { margin-top: var(--space-1); }
+.colophon a { color: var(--color-text); }
+
+/* Wide screens ---------------------------------------------------------------- */
+
+@media (min-width: 56rem) {
+  .intro:not(.intro-list) {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: end;
+  }
+  .intro-text { margin-top: 0; }
+  .project-body { grid-template-columns: 14rem minmax(0, var(--measure)); column-gap: var(--space-4); }
+  .project-body > .prose { grid-column: 2; grid-row: 1; }
+  .credits { grid-column: 1; grid-row: 1; align-self: start; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .picture > img { transition: transform 0.6s ease; }
+  .reel:hover .picture > img { transform: scale(1.02); }
+}
+
+/* Print: the frames print as ruled boxes, dark text on white ------------------ */
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-rule: #999999;
+    --color-panel: #ffffff;
+    --color-frame: #ffffff;
+    --color-picture: #ffffff;
+    --color-card: #000000;
+    --color-tc: #000000;
+    --color-subtitle: #000000;
+    --color-scrim: rgba(255, 255, 255, 0.8);
+  }
+  body { font-size: 11pt; }
+  .site-head nav, .skip-link, .pagination, .more-work, .site-title::before { display: none; }
+  .frame { border: 1.5pt solid var(--color-text); break-inside: avoid; }
+  .tc { border: 0.75pt solid var(--color-text); }
+  .reels { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

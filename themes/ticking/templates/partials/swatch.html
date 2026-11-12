@@ -1,0 +1,10 @@
+<li class="swatch">
+      <div class="cutting">{{#if item.cover}}<img src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}</div>
+      <div class="label">
+        <h2 class="label-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+        <p class="typed ref-line"><span class="ref">{{ strings.patternNo }}</span><time class="year" datetime="{{ item.date }}">{{ item.date }}</time></p>
+        {{#if item.client}}<p class="typed client">{{ item.client }}</p>
+        {{/if}}{{#if item.description}}<p class="label-note">{{ item.description }}</p>
+        {{/if}}
+      </div>
+    </li>

@@ -1,0 +1,549 @@
+/* Grout — a theme for tilers and bathroom fitters (trades family).
+   The object is the lettered tile frieze: one fired capital per glazed tile,
+   in a course held between two courses of coloured border tiles. Every title
+   is such a frieze; the from-price sits on a cartouche tile; the rest is
+   matt plaster and stays quiet. Restyle by editing tokens, never selectors. */
+
+:root {
+  /* Type: fixed-pitch caps for the tiles, a geometric sans for reading */
+  --font-tile: ui-monospace, "SF Mono", "Cascadia Mono", Menlo, Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
+  --font-body: "Avenir Next", Avenir, "Century Gothic", "URW Gothic", "Segoe UI", system-ui, sans-serif;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --leading: 1.6;
+  --tracking: 0.1em;
+
+  /* Colour: plaster wall, gloss-white tiles, fired black, one glaze */
+  --color-bg: #eceae4;
+  --color-text: #1c1e1d;
+  --color-muted: #565c59;
+  --color-accent: #088a90;
+  --color-tile: #f3f5f2;
+  --color-shine: #ffffff;
+  --color-shade: rgba(24,48,52,0.2);
+  --color-fired: #151515;
+  --color-grout: #bcc3bf;
+  --color-glint: rgba(255,255,255,0.36);
+
+  /* The frieze: tiles to a row, letter size, border course, joint */
+  --tiles-s: 12;
+  --tiles-m: 16;
+  --tiles-l: 20;
+  --tile-letter: 0.9;
+  --course: 0.42;
+  --grout: 2px;
+  --scoop: 0.5rem;
+
+  /* Layout */
+  --measure: 40rem;
+  --page-width: 68.875rem;
+  --side-width: 20rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --focus-width: 3px;
+  --tap: 2.75rem;
+}
+
+/* Night: the wall goes dark, the tiles stay white, the grout turns charcoal */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1b1f20;
+    --color-text: #e8ebe8;
+    --color-muted: #a5ada9;
+    --color-accent: #2fb9b6;
+    --color-tile: #d7dcd7;
+    --color-shine: #eff2ef;
+    --color-shade: rgba(0,0,0,0.18);
+    --color-grout: #3b4344;
+    --color-glint: rgba(255,255,255,0.3);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 clamp(var(--space-3), 4vw, var(--space-4));
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+.masthead, main, .colophon { max-width: var(--page-width); margin-inline: auto; }
+main { min-height: 50vh; }
+
+/* Long compound words hyphenate; everyday words stay whole */
+h2, h3, h4, .gist, .included li, .jobs li, .prose th, .prose td { -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+
+/* Links are ink, underlined in the glaze */
+a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: var(--grout);
+  text-decoration-skip-ink: none;
+  text-underline-offset: 0.25em;
+}
+a:hover { text-decoration-thickness: calc(var(--grout) * 2); }
+/* A number or address breaks where the line ends, so the full stop after it stays with it */
+a[href^="tel:"], a[href^="mailto:"] { overflow-wrap: anywhere; }
+
+:focus-visible { outline: var(--focus-width) solid var(--color-text); outline-offset: var(--grout); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 5; padding: var(--space-2) var(--space-3); background: var(--color-bg); }
+.skip-link:focus { left: var(--space-2); }
+
+/* Masthead */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-4);
+  padding: var(--space-2) 0;
+}
+
+.site-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  min-height: var(--tap);
+  margin-right: auto;
+  font-weight: 700;
+  line-height: 1.2;
+  text-decoration: none;
+}
+/* Four tiles, one of them glazed */
+.site-title::before {
+  content: "";
+  flex: none;
+  width: 1.25em;
+  height: 1.25em;
+  border: 1px solid var(--color-grout);
+  background:
+    linear-gradient(var(--color-grout), var(--color-grout)) 50% 0 / 1px 100% no-repeat,
+    linear-gradient(var(--color-grout), var(--color-grout)) 0 50% / 100% 1px no-repeat,
+    linear-gradient(var(--color-accent), var(--color-accent)) 100% 0 / 50% 50% no-repeat,
+    var(--color-tile);
+}
+.site-title:hover { text-decoration: underline; text-decoration-color: var(--color-accent); }
+
+.masthead nav { order: 3; flex-basis: 100%; }
+.masthead ul { display: flex; flex-wrap: wrap; gap: 0 clamp(var(--space-2), 3vw, var(--space-3)); margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--text-s);
+  font-weight: 600;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-muted);
+}
+.masthead nav a:hover { color: var(--color-text); }
+.masthead nav a[aria-current="page"] { color: var(--color-text); box-shadow: inset 0 calc(var(--grout) * -2) var(--color-accent); }
+
+.ring { display: inline-block; max-width: 100%; padding: var(--space-2) 0; font-family: var(--font-tile); font-weight: 700; }
+.ring[href^="mailto:"] { font-family: var(--font-body); }
+.ring small, .back, .when, .cartouche small, .included h2, .jobs h2, .prose th, .pagination span, .call-meta, .call-more {
+  font-family: var(--font-body);
+  font-size: var(--text-s);
+}
+.ring small, .back, .cartouche small, .included h2, .jobs h2, .prose th, .call-more { font-weight: 600; letter-spacing: var(--tracking); text-transform: uppercase; }
+.ring small, .back, .when, .prose th, .pagination span, .call-meta { color: var(--color-muted); }
+
+@media (min-width: 48em) {
+  .masthead { padding: var(--space-3) 0; }
+  .masthead nav { order: 0; flex-basis: auto; }
+  .ring { order: 1; }
+}
+
+/* THE SIGNATURE: the frieze */
+/* Fixed-pitch capitals over a tile grid at one character's pitch: --p is the
+   box width over --n tiles, and letter spacing makes up the font's advance, so
+   one letter lands on one tile. Without container units the tiles are a fixed
+   size and the last in a row is cut, as a tiler would cut it. */
+
+.head, .card, .call-number { container-type: inline-size; }
+
+.frieze {
+  --n: var(--tiles-s);
+  --p: 1.75rem;
+  --gap: calc((var(--p) - 1ch) / 2);
+  --band: calc(var(--p) * var(--course));
+  display: block;
+  box-sizing: content-box;
+  margin: 0;
+  padding: calc(var(--band) + var(--grout)) 0 var(--band);
+  border: solid var(--color-grout);
+  border-width: var(--grout) 0 var(--grout) var(--grout);
+  overflow: hidden;
+  font-family: var(--font-tile);
+  font-size: calc(var(--p) * var(--tile-letter));
+  font-weight: 800;
+  font-kerning: none;
+  font-variant-ligatures: none;
+  line-height: var(--p);
+  letter-spacing: calc(var(--p) - 1ch);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-fired);
+  /* Two border courses of long glazed slips, jointed every second tile */
+  background:
+    linear-gradient(90deg, transparent calc(100% - var(--grout)), var(--color-grout) 0) 0 0 / calc(var(--p) * 2) 100%,
+    linear-gradient(var(--color-grout), var(--color-grout)) 0 var(--band) / 100% var(--grout) no-repeat,
+    linear-gradient(168deg, var(--color-glint), transparent 62%) 0 0 / calc(var(--p) * 2) var(--band) repeat-x,
+    linear-gradient(168deg, var(--color-glint), transparent 62%) 0 100% / calc(var(--p) * 2) var(--band) repeat-x,
+    var(--color-accent);
+}
+@supports (width: 1cqw) {
+  .frieze { --p: calc((100cqw - var(--grout)) / var(--n)); }
+}
+/* Whole pixels keep every joint crisp */
+@supports (width: round(down, 1cqw, 1px)) {
+  .frieze { --p: round(down, (100cqw - var(--grout)) / var(--n) + 0.02px, 1px); --band: round(var(--p) * var(--course), 1px); width: calc(var(--p) * var(--n)); }
+}
+@supports not (width: round(down, 1cqw, 1px)) {
+  .card .frieze { width: calc(100% - var(--grout)); }
+}
+
+/* The letter course: gloss-white tiles, each with its own highlight */
+.frieze > * {
+  display: block;
+  margin-right: calc(var(--gap) * -1);
+  padding-left: var(--gap);
+  color: inherit;
+  text-decoration: none;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 7 3 3;
+  overflow-wrap: break-word;
+  background:
+    linear-gradient(90deg, transparent calc(100% - var(--grout)), var(--color-grout) 0),
+    linear-gradient(transparent calc(100% - var(--grout)), var(--color-grout) 0),
+    radial-gradient(ellipse 34% 15% at 31% 19%, var(--color-shine) 45%, transparent),
+    linear-gradient(transparent 80%, var(--color-shade)),
+    linear-gradient(135deg, var(--color-shine) 8%, transparent 40%, transparent 50%, var(--color-shade)),
+    var(--color-tile);
+  background-size: var(--p) var(--p);
+}
+.frieze > a:hover, a.frieze:hover > * { text-decoration: underline; text-decoration-color: var(--color-accent); }
+.frieze > a:focus-visible { outline-color: var(--color-fired); outline-offset: calc(var(--focus-width) * -1); }
+/* The ring goes round the whole frieze, out on the wall, where it shows */
+@supports selector(:has(a)) {
+  .frieze > a:focus-visible { outline: none; }
+  .frieze:has(> a:focus-visible) { outline: var(--focus-width) solid var(--color-text); outline-offset: var(--grout); }
+}
+
+.card .frieze, .call-number .frieze { --n: calc(var(--tiles-s) + 2); }
+/* The phone frieze stops at its last figure: no blank tiles after the number */
+.call-number .frieze { display: block; width: fit-content; max-width: min(100%, calc(var(--p) * var(--n))); }
+@media (min-width: 34em) {
+  .frieze { --n: var(--tiles-m); }
+  .card .frieze { --n: calc(var(--tiles-m) * 1.5); }
+}
+@media (min-width: 60em) {
+  .frieze, .card .frieze { --n: var(--tiles-l); }
+}
+
+/* Headers */
+
+.head { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-3); margin: var(--space-2) 0 var(--space-3); }
+.list .head { margin-bottom: var(--space-4); }
+.back { margin: 0; }
+.lede { max-width: var(--measure); margin: 0 0 var(--space-4); font-size: var(--text-l); line-height: 1.45; text-wrap: pretty; }
+
+/* The cartouche tile: a glazed tile with a scooped white panel for the price */
+.cartouche {
+  display: inline-block;
+  max-width: 100%;
+  margin: 0;
+  padding: var(--space-2);
+  border: var(--grout) solid var(--color-grout);
+  color: var(--color-fired);
+  line-height: 1.2;
+  text-align: center;
+  background: linear-gradient(150deg, var(--color-glint), transparent 45%) var(--color-accent);
+}
+.cartouche > span {
+  --cut: transparent var(--scoop), black calc(var(--scoop) + 1px);
+  display: block;
+  padding: var(--space-2) var(--space-4);
+  background: linear-gradient(135deg, var(--color-shine), transparent 40%) var(--color-tile);
+  mask:
+    radial-gradient(circle at 0 0, var(--cut)) 0 0 / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 0, var(--cut)) 100% 0 / 51% 51% no-repeat,
+    radial-gradient(circle at 0 100%, var(--cut)) 0 100% / 51% 51% no-repeat,
+    radial-gradient(circle at 100% 100%, var(--cut)) 100% 100% / 51% 51% no-repeat;
+}
+.cartouche small { display: block; }
+.cartouche b { font-family: var(--font-tile); font-size: var(--text-l); }
+.side > .cartouche b { font-size: calc(var(--text-l) * 1.4); }
+
+/* Text pages. On a phone one column, the price lifted above the words; on
+   wide screens the side stack on the right. Only the last row stretches, so a
+   tall side column never pushes the standfirst and the words apart. */
+.sheet { display: flex; flex-direction: column; }
+.sheet > .prose, .sheet > .jobs { order: 1; }
+.side { display: contents; }
+.side > * { order: 2; margin-top: var(--space-4); }
+.side > .cartouche { display: block; order: 0; width: fit-content; margin: 0 0 var(--space-4); }
+@media (min-width: 60em) {
+  .sheet { display: grid; grid-template: repeat(4, auto) 1fr / minmax(0, 1fr) var(--side-width); column-gap: var(--space-5); align-items: start; }
+  .sheet > * { grid-column: 1; }
+  .sheet > .head { grid-column: 1 / -1; }
+  .sheet > .side { display: block; grid-column: 2; grid-row: 2 / -1; }
+  .sheet > .head + .side { grid-column: 1; }
+  .side > :first-child { margin-top: 0; }
+}
+
+/* Prose */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); line-height: 1.25; }
+.prose h2 {
+  padding-bottom: var(--space-1);
+  border-bottom: var(--grout) solid var(--color-grout);
+  font-family: var(--font-tile);
+  font-size: var(--text-m);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-m); }
+
+.prose p, .prose ul, .prose ol, .prose table, .prose pre { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: var(--space-4); }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose ul > li::marker { color: var(--color-accent); }
+
+.prose a[href^="tel:"] { font-family: var(--font-tile); font-weight: 700; }
+
+.prose img, .cover { max-width: 100%; height: auto; border: var(--grout) solid var(--color-grout); }
+.cover { display: block; align-self: flex-start; max-width: min(100%, var(--measure)); margin: 0 0 var(--space-4); }
+
+/* A customer's words, beside a standing course of glazed tiles */
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: 0 0 0 calc(var(--space-3) * 2);
+  font-size: var(--text-l);
+  line-height: 1.45;
+  background:
+    linear-gradient(var(--color-glint), transparent 60%) 0 0 / var(--space-3) var(--space-3) no-repeat round,
+    linear-gradient(transparent calc(100% - var(--grout)), var(--color-bg) 0) 0 0 / var(--space-3) var(--space-3) no-repeat round,
+    linear-gradient(var(--color-accent), var(--color-accent)) 0 0 / var(--space-3) 100% no-repeat;
+}
+.prose blockquote p { margin: 0 0 var(--space-2); text-wrap: pretty; }
+.prose blockquote p:last-child { margin: 0; }
+.prose blockquote p:last-child:not(:first-child) { font-family: var(--font-tile); font-size: var(--text-s); letter-spacing: var(--tracking); text-transform: uppercase; color: var(--color-muted); }
+
+.prose code { font-family: var(--font-tile); font-size: 0.9em; padding: 0 var(--space-1); background: var(--color-tile); color: var(--color-fired); }
+.prose pre { padding: var(--space-3); overflow-x: auto; border: var(--grout) solid var(--color-grout); background: var(--color-tile); }
+.prose pre code { padding: 0; font-size: var(--text-s); }
+
+/* Tables are price lists and opening hours: a grout line under each row */
+.prose table { width: 100%; border-spacing: 0; font-variant-numeric: tabular-nums; }
+.prose th, .prose td {
+  min-width: 5.5em;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: 1px solid var(--color-grout);
+  text-align: left;
+  vertical-align: baseline;
+  overflow-wrap: anywhere;
+}
+.prose th { border-bottom-width: var(--grout); vertical-align: bottom; }
+.prose :is(th, td):last-child { padding-right: 0; }
+/* A right-aligned column holds figures: fixed pitch, flush right */
+.prose [align="right"] { min-width: 0; text-align: right; overflow-wrap: break-word; -webkit-hyphens: manual; hyphens: manual; }
+.prose td[align="right"] { font-family: var(--font-tile); font-weight: 700; }
+/* In a two-column price list each figure sits on its own small cartouche
+   tile, with a grout joint all round it */
+.prose td[align="right"]:nth-child(2):last-child {
+  --f: calc(var(--grout) * 2);
+  --cut: var(--color-accent) var(--scoop), transparent calc(var(--scoop) + 1px);
+  width: 1%;
+  min-width: 8em;
+  padding: var(--space-2) calc(var(--space-2) * 1.5);
+  border: solid var(--color-grout);
+  border-width: calc(var(--grout) * 1.5) var(--grout);
+  box-shadow: inset 0 0 0 var(--f) var(--color-accent);
+  color: var(--color-fired);
+  background:
+    radial-gradient(circle at var(--f) var(--f), var(--cut)),
+    radial-gradient(circle at calc(100% - var(--f)) var(--f), var(--cut)),
+    radial-gradient(circle at var(--f) calc(100% - var(--f)), var(--cut)),
+    radial-gradient(circle at calc(100% - var(--f)) calc(100% - var(--f)), var(--cut)),
+    var(--color-tile);
+  background-clip: padding-box;
+}
+.prose th[align="right"]:nth-child(2):last-child { padding-right: calc(var(--space-2) * 1.5 + var(--grout)); }
+/* The job's name sits level with the middle of its price tile */
+.prose tr:has(> td[align="right"]:nth-child(2):last-child) > td { vertical-align: middle; }
+/* Three columns or more on a phone: smaller type, figures kept whole; a
+   word that cannot break scrolls the table in its own box, shadowed at the cut */
+@media (max-width: 40em) {
+  .prose table:has(th:nth-child(3)) {
+    display: block;
+    overflow-x: auto;
+    font-size: var(--text-s);
+    background:
+      linear-gradient(90deg, var(--color-bg) 40%, transparent) 0 0 / var(--space-4) 100% no-repeat local,
+      linear-gradient(270deg, var(--color-bg) 40%, transparent) 100% 0 / var(--space-4) 100% no-repeat local,
+      linear-gradient(90deg, var(--color-grout), transparent) 0 0 / var(--space-2) 100% no-repeat,
+      linear-gradient(270deg, var(--color-grout), transparent) 100% 0 / var(--space-2) 100% no-repeat;
+  }
+  .prose table:has(th:nth-child(3)) :is(th, td) { min-width: 0; padding-right: var(--space-2); overflow-wrap: break-word; }
+  .prose table:has(th:nth-child(3)) td[align="right"] { white-space: nowrap; }
+}
+
+/* A rule is one course of slips */
+.prose hr {
+  height: var(--space-3);
+  margin: var(--space-4) 0;
+  border: var(--grout) solid var(--color-grout);
+  background:
+    linear-gradient(90deg, transparent calc(100% - var(--grout)), var(--color-grout) 0) 0 0 / var(--space-5) 100%,
+    linear-gradient(168deg, var(--color-glint), transparent 62%) 0 0 / var(--space-5) 100%,
+    var(--color-accent);
+}
+
+/* The side column: what the price covers, and the phone */
+
+.included h2, .jobs h2 { margin: 0 0 var(--space-2); padding-bottom: var(--space-1); border-bottom: var(--grout) solid var(--color-grout); }
+.included ul, .jobs ul { margin: 0; padding: 0; list-style: none; }
+.included li, .jobs a { position: relative; padding-left: calc(var(--space-3) * 1.5); }
+.included li { margin: 0 0 var(--space-2); }
+/* Each line is ticked off with one small glazed tile */
+.included li::before, .jobs a::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.4em;
+  width: 0.75em;
+  height: 0.75em;
+  background: linear-gradient(150deg, var(--color-glint), transparent 60%) var(--color-accent);
+}
+
+.call { max-width: var(--side-width); }
+.list .call { margin-top: var(--space-5); }
+.call h2 { margin: 0 0 var(--space-2); font-size: var(--text-l); line-height: 1.25; text-wrap: balance; }
+.call p { margin: 0 0 var(--space-1); }
+.call .call-number, .call .call-way, .call .call-more { margin-bottom: var(--space-3); }
+.call-way { font-weight: 700; }
+/* The way to the contact page: one glazed tile and one long white one */
+.call-more a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: var(--space-1) var(--space-3) var(--space-1) calc(var(--tap) + var(--space-3));
+  border: var(--grout) solid var(--color-grout);
+  line-height: 1.3;
+  text-decoration: none;
+  color: var(--color-fired);
+  background:
+    linear-gradient(var(--color-grout), var(--color-grout)) calc(var(--tap) - var(--grout)) 0 / var(--grout) 100% no-repeat,
+    linear-gradient(150deg, var(--color-glint), transparent 60%) 0 0 / var(--tap) 100% no-repeat,
+    linear-gradient(var(--color-accent), var(--color-accent)) 0 0 / var(--tap) 100% no-repeat,
+    linear-gradient(135deg, var(--color-shine), transparent 40%) var(--color-tile);
+}
+.call-more a:hover, .jobs a:hover { text-decoration: underline; text-decoration-color: var(--color-accent); }
+/* On the contact page itself the number is enough */
+.call[data-at$="/contact/"] :is(.call-number, .call-way) ~ .call-more { display: none; }
+
+/* Every job by name, a grout line under each */
+.jobs { margin-top: var(--space-4); }
+.jobs ul { columns: 16rem; column-gap: var(--space-4); }
+.jobs li { break-inside: avoid; border-bottom: 1px solid var(--color-grout); }
+.jobs a { display: block; padding-top: var(--space-2); padding-bottom: var(--space-2); line-height: 1.4; text-decoration: none; }
+.jobs a::before { top: 0.85em; }
+
+/* The services wall */
+
+.wall { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-4) var(--space-5); margin: 0; padding: 0; list-style: none; }
+@media (min-width: 60em) { .wall { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.card { display: flex; flex-wrap: wrap; align-items: flex-start; align-content: flex-start; gap: var(--space-3) var(--space-4); }
+.card .frieze { flex: none; }
+.gist { flex: 1 1 16rem; margin: 0; }
+.when { margin: 0; }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); }
+.pagination a, .actions a { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 700; }
+.actions { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); }
+.empty { color: var(--color-muted); }
+
+/* Colophon */
+
+.colophon {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-5);
+  padding: var(--space-3) 0 var(--space-4);
+  border-top: var(--grout) solid var(--color-grout);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon p { margin: 0; min-width: 0; }
+.colophon strong { display: block; color: var(--color-text); }
+.colophon-contact { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); }
+.colophon-contact > * { min-width: 0; }
+.colophon a { color: var(--color-text); }
+.colophon-note { flex-basis: 100%; }
+.colophon-note > * { margin: 0 0 var(--space-1); }
+
+/* Motion */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  a { transition: text-decoration-thickness 0.12s; }
+}
+
+/* Print: ink on paper, the tiles left at home */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-tile: #fff;
+    --color-shine: #fff;
+    --color-shade: rgba(0,0,0,0);
+    --color-fired: #000;
+    --color-grout: #999;
+    --color-glint: rgba(0,0,0,0);
+  }
+  body { padding: 0; font-size: 11pt; }
+  main { min-height: 0; }
+  .masthead nav, .skip-link, .pagination, .actions, .call-more, .jobs, .site-title::before { display: none; }
+  .frieze { padding: 0; border: 0; border-bottom: 1pt solid; background: none; }
+  .frieze > *, .cartouche, .cartouche > span, .prose blockquote, .prose hr, .included li::before { background: none; }
+  .cartouche { border: 1pt solid; }
+  .prose td[align="right"]:nth-child(2):last-child { padding-right: 0; border: 0; border-bottom: 1px solid var(--color-grout); box-shadow: none; background: none; }
+  .prose th[align="right"]:nth-child(2):last-child { padding-right: 0; }
+  .prose blockquote { border-left: 2pt solid; }
+  .included li::before { border: 1pt solid; }
+  .card, .included, .call, .cartouche, .prose blockquote, .prose tr { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

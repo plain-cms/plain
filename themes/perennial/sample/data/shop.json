@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960418",
+  "email": "plants@haggwoodnursery.example",
+  "address": "Hagg Wood Nursery, Moor Lane, Skelderby, North Yorkshire YO63 4HW",
+  "hours": [
+    { "days": "Wednesday to Saturday", "time": "9:00 to 17:00" },
+    { "days": "Sunday", "time": "10:00 to 16:00" },
+    { "days": "Monday and Tuesday", "time": "Closed" },
+    { "days": "December and January", "time": "Fridays and Saturdays only" }
+  ],
+  "orderNote": "Ring or e-mail to reserve any plant and collect it at the nursery gate; we hold orders for a week. We deliver within fifteen miles on Thursdays for £8, and send bare-root trees and hedging by carrier from November to March."
+}

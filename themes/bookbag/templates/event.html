@@ -1,0 +1,20 @@
+<article class="event-page">
+  <p class="back"><a href="/events/">{{ strings.eventsLink }}</a></p>
+  <div class="board board-solo">
+    <div class="notice poster"{{#if page.status}} data-status="{{ page.status }}"{{/if}}>
+      <div class="poster-in">
+        <p class="when"><span class="day" aria-hidden="true"><span data-d="{{ page.date.8 }}">{{ page.date.8 }}</span>{{ page.date.9 }}</span><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+        <div class="poster-what">
+          <h1>{{ page.title }}</h1>
+          {{#if page.time}}<p class="row-meta"><span class="row-time">{{ page.time }}</span>{{#if page.place}} <span class="row-place">{{ page.place }}</span>{{/if}}</p>
+          {{else}}{{#if page.place}}<p class="row-meta"><span class="row-place">{{ page.place }}</span></p>
+          {{/if}}{{/if}}{{#if page.status}}<p class="status"><span>{{ page.status }}</span><b class="s-open">{{ strings.statusOpen }}</b><b class="s-members">{{ strings.statusMembers }}</b><b class="s-off">{{ strings.statusCancelled }}</b></p>
+          {{/if}}{{#if page.description}}<p class="lead">{{ page.description }}</p>
+          {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+          </div>{{/if}}
+        </div>
+      </div>
+    </div>
+  </div>
+</article>

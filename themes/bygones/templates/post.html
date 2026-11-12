@@ -1,0 +1,19 @@
+<article class="item">
+  <header class="card item-card">
+    <p class="tab">{{#if page.dateFormatted}}<time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{/if}}</p>
+    <div class="card-body">
+      <h1 class="card-head">{{ page.title }}</h1>
+      <div class="card-lines">
+        {{#if page.description}}<p class="ev-desc">{{ page.description }}</p>
+        {{/if}}{{#if page.tagLinks}}<p class="filed"><span class="filed-label">{{ strings.filedUnder }}</span>
+          {{#each page.tagLinks as tag}}<a href="{{ tag.url }}">{{ tag.name }}</a>
+          {{/each}}</p>{{/if}}
+      </div>
+    </div>
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<p class="back"><a href="/blog/">{{ strings.newsLink }}</a></p>
+</article>

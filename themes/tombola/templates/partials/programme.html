@@ -1,0 +1,21 @@
+<section class="programme">
+  <h2 class="section-h">{{ strings.programme }}</h2>
+  {{#each data.event.programme as part}}<div class="part">
+    {{#if part.day}}<h3 class="part-day">{{ part.day }}</h3>
+    {{/if}}<ol class="strip" role="list">
+      {{#each part.items as item}}<li class="ticket">
+        <span class="stub" aria-hidden="true">{{ item.time }}</span>
+        <div class="ticket-body"><div class="ticket-in">
+          {{#if item.time}}<p class="ticket-no">{{ item.time }}</p>
+          {{/if}}<div class="ticket-text">
+            <p class="ticket-title">{{ item.title }}</p>
+            {{#if item.place}}<p class="ticket-place">{{ item.place }}</p>
+            {{/if}}{{#if item.note}}<p class="ticket-note">{{ item.note }}</p>
+          {{/if}}</div>
+        </div></div>
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+  {{/each}}
+</section>

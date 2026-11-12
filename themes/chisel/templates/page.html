@@ -1,0 +1,9 @@
+<article class="page">
+  <header class="tablet tablet-plaque">
+    <h1 class="inscription">{{ page.title }}</h1>
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>

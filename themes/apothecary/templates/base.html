@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
+{{#if page.description}}<meta name="description" content="{{ page.description }}">
+{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+{{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
+{{#if page.description}}<meta property="og:description" content="{{ page.description }}">
+{{/if}}{{#if page.date}}<meta property="og:type" content="article">
+{{else}}<meta property="og:type" content="website">
+{{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
+<meta name="twitter:card" content="summary_large_image">
+{{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
+<meta name="twitter:card" content="summary_large_image">
+{{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
+{{/each}}<meta name="color-scheme" content="light dark">
+{{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
+{{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+{{/if}}{{#if site.appleTouchIcon}}<link rel="apple-touch-icon" href="{{ site.appleTouchIcon }}">
+{{/if}}<link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
+<header class="masthead">
+  <div class="wrap masthead-in">
+    <a class="site-title" href="/">{{ site.title }}</a>
+    <nav class="menu" aria-label="{{ strings.mainMenu }}">
+      <ul>
+        {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
+        {{/each}}
+      </ul>
+    </nav>
+    {{#if data.practice.bookingUrl}}<a class="book" href="{{ data.practice.bookingUrl }}">{{ strings.bookAppointment }}</a>
+    {{else}}<a class="book" href="/contact/">{{ strings.bookAppointment }}</a>
+    {{/if}}
+  </div>
+</header>
+<main id="main" class="wrap">
+{{{ body }}}
+</main>
+<footer class="base">
+  <div class="wrap">
+    {{#if data.practice}}
+    <div class="base-cols">
+      {{#if data.practice.hours}}
+      <div class="base-col">
+        <p class="base-label">{{ strings.openingHours }}</p>
+        <ul class="hours">
+          {{#each data.practice.hours as slot}}<li><span class="days">{{ slot.days }}</span> <span class="time">{{ slot.time }}</span></li>
+          {{/each}}
+        </ul>
+      </div>
+      {{/if}}
+      {{#if data.practice.phone}}
+      <div class="base-col">
+        <p class="base-label">{{ strings.callUs }}</p>
+        <p><a class="tel" href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></p>
+        {{#if data.practice.email}}<p class="base-label">{{ strings.writeToUs }}</p>
+        <p><a class="mail" href="mailto:{{ data.practice.email }}">{{ data.practice.email }}</a></p>
+        {{/if}}
+      </div>
+      {{else}}{{#if data.practice.email}}
+      <div class="base-col">
+        <p class="base-label">{{ strings.writeToUs }}</p>
+        <p><a class="mail" href="mailto:{{ data.practice.email }}">{{ data.practice.email }}</a></p>
+      </div>
+      {{/if}}{{/if}}
+      {{#if data.practice.address}}
+      <div class="base-col">
+        <p class="base-label">{{ strings.findUs }}</p>
+        <address>{{ data.practice.address }}</address>
+      </div>
+      {{/if}}
+      {{#if data.practice.emergencyPhone}}
+      <div class="base-col">
+        {{> sticker}}
+      </div>
+      {{/if}}
+    </div>
+    {{/if}}
+    <p class="base-name"><strong>{{ site.title }}</strong>{{#if site.description}} — {{ site.description }}{{/if}}</p>
+    {{#if data.footer.html}}<div class="base-note">{{{ data.footer.html }}}</div>{{/if}}
+  </div>
+</footer>
+</body>
+</html>

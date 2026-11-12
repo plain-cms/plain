@@ -1,0 +1,30 @@
+<article class="sheet show">
+  <div class="stand">
+  <header class="card card-big" data-status="{{ page.status }}">
+    {{> lyre}}
+    <div class="card-head">
+      <h1 class="card-title">{{ page.title }}</h1>
+      {{#if page.city}}<p class="card-sub">{{ page.city }}</p>
+      {{/if}}<time class="card-date" datetime="{{ page.date }}">{{ page.dateFormatted }}</time>
+    </div>
+    {{#if page.venue}}<div class="card-top">
+      <p class="card-part">{{ page.venue }}</p>
+      {{#if page.support}}<p class="card-composer">{{ strings.withSupport }} {{ page.support }}</p>
+      {{/if}}
+    </div>
+    {{else}}{{#if page.support}}<div class="card-top">
+      <p class="card-composer">{{ strings.withSupport }} {{ page.support }}</p>
+    </div>
+    {{/if}}{{/if}}<div class="card-foot">
+      <span class="staff" aria-hidden="true"></span>
+      {{#if page.status}}<p class="status"><span class="status-raw">{{ page.status }}</span><span class="st st-onsale">{{ strings.statusOnSale }}</span><span class="st st-soldout">{{ strings.statusSoldOut }}</span><span class="st st-free">{{ strings.statusFreeEntry }}</span></p>
+      {{/if}}{{#if page.ticketsUrl}}<a class="mark mark-tickets" href="{{ page.ticketsUrl }}" aria-label="{{ strings.tickets }}: {{ page.title }}">{{ strings.tickets }}</a>
+      {{/if}}
+    </div>
+  </header>
+  </div>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<p class="backlink"><a href="/shows/">{{ strings.allShows }}</a></p>
+</article>

@@ -1,26 +1,27 @@
 {{#if data.schedule.days}}
-<section class="timetable" aria-label="Weekly class schedule">
-  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
-  {{/if}}<div class="week">
+<section class="timetable" aria-labelledby="week-heading">
+  <h2 class="eyebrow" id="week-heading">{{ strings.thisWeek }}</h2>
+  <div class="week">
     {{#each data.schedule.days as day}}
-    <section class="day" data-day="{{ day.day }}">
-      <h2 class="day-name">{{ day.day }}</h2>
-      <ul class="classes">
+    <section class="day{{#if day.classes}}{{else}} day-closed{{/if}}" data-day="{{ day.day }}">
+      <h3 class="day-name">{{ day.day }} <span class="today-flag" hidden>{{ strings.today }}</span></h3>
+      {{#if day.classes}}<ul class="classes">
         {{#each day.classes as session}}
         <li class="session">
           <span class="session-time">{{ session.time }}</span>
           <span class="session-what">
             <span class="session-name">{{ session.name }}</span>
-            {{#if session.who}}<span class="session-who">with {{ session.who }}</span>
-            {{/if}}
+            <span class="session-meta">{{#if session.who}}<span class="session-who">{{ strings.withInstructor }} {{ session.who }}</span> {{/if}}{{#if session.level}}<span class="session-level">{{ session.level }}</span>{{/if}}</span>
           </span>
-          {{#if session.level}}<span class="chip">{{ session.level }}</span>
-          {{/if}}
         </li>
         {{/each}}
       </ul>
+      {{else}}<p>{{ strings.noClasses }}</p>
+      {{/if}}
     </section>
     {{/each}}
   </div>
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}<p class="print-only">{{ site.title }} · {{ site.url }}</p>
 </section>
 {{/if}}

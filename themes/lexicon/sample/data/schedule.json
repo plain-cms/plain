@@ -1,0 +1,53 @@
+{
+  "trialNote": "Not sure of your level? Book a free twenty-minute placement chat, then sit in on one lesson before you pay for the term.",
+  "days": [
+    {
+      "day": "Monday",
+      "classes": [
+        { "time": "18:00", "name": "Everyday English (ESOL)", "who": "Priya", "level": "Entry 1" },
+        { "time": "18:30", "name": "Spanish Beginners", "who": "Lucía", "level": "A1" },
+        { "time": "18:30", "name": "French Improvers", "who": "Jean-Baptiste", "level": "B1" },
+        { "time": "20:00", "name": "Spanish Conversation", "who": "Ana Belén", "level": "B1–B2" }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "classes": [
+        { "time": "18:00", "name": "IELTS Preparation", "who": "Dominic", "level": "B2–C1" },
+        { "time": "18:30", "name": "French Beginners", "who": "Margaux", "level": "A1" },
+        { "time": "18:30", "name": "Spanish Improvers", "who": "Inés", "level": "B1" },
+        { "time": "20:00", "name": "French Conversation", "who": "Jean-Baptiste", "level": "B2–C1" }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "classes": [
+        { "time": "18:00", "name": "Everyday English (ESOL)", "who": "Priya", "level": "Entry 2" },
+        { "time": "18:30", "name": "Spanish Beginners", "who": "Lucía", "level": "A1" },
+        { "time": "18:30", "name": "French Elementary", "who": "Camille", "level": "A2" },
+        { "time": "20:00", "name": "DELF B1 Exam Class", "who": "Camille", "level": "B1" }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "classes": [
+        { "time": "18:00", "name": "English Conversation", "who": "Dominic", "level": "B1" },
+        { "time": "18:30", "name": "Spanish Elementary", "who": "Inés", "level": "A2" },
+        { "time": "20:00", "name": "Spanish Grammar Clinic", "who": "Inés", "level": "A2–B1" },
+        { "time": "20:00", "name": "French Film Club", "who": "Margaux", "level": "B1 and up" }
+      ]
+    },
+    {
+      "day": "Friday",
+      "classes": []
+    },
+    {
+      "day": "Saturday",
+      "classes": [
+        { "time": "10:00", "name": "Spanish Beginners", "who": "Ana Belén", "level": "A1" },
+        { "time": "10:00", "name": "French Beginners", "who": "Camille", "level": "A1" },
+        { "time": "11:45", "name": "Conversation Café", "who": "", "level": "All levels" }
+      ]
+    }
+  ]
+}

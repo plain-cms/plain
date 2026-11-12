@@ -1,0 +1,15 @@
+<section class="page">
+  <header class="page-header">
+    <h1>{{#if tag}}{{ strings.tagged }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}<ul class="post-list">
+    {{#each items as item}}<li class="post-row">
+      {{#if item.dateFormatted}}<p class="post-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>{{/if}}
+      <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.description}}<p>{{ item.description }}</p>{{/if}}
+      {{#if item.cover}}<img class="post-thumb" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+    </li>
+    {{/each}}
+  </ul>{{else}}<p class="empty">{{ strings.nothingHere }}</p>{{/if}}
+  {{> pagination}}
+</section>

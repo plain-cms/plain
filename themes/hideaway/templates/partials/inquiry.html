@@ -1,0 +1,7 @@
+<aside class="inquiry" aria-labelledby="inquiry-heading">
+  <h2 id="inquiry-heading">{{#if page.date}}{{ strings.inquiryHeading }}{{else}}{{ strings.inquiryHeadingAll }}{{/if}}</h2>
+  {{#if data.agency.hours}}<p class="inquiry-hours">{{ data.agency.hours }}</p>
+  {{/if}}<p class="inquiry-actions">{{#if data.agency.phone}}<a class="lamp" href="tel:{{ data.agency.phone }}">{{ strings.call }} <span class="tel">{{ data.agency.phone }}</span></a>{{/if}}{{#if data.agency.email}}<a class="inquiry-mail" href="mailto:{{ data.agency.email }}">{{ strings.writeTo }} <span class="mail">{{ data.agency.email }}</span></a>{{/if}}{{#if data.agency.phone}}{{else}}{{#if data.agency.email}}{{else}}<a class="lamp" href="/contact/">{{ strings.contactUs }}</a>{{/if}}{{/if}}</p>
+  {{#if page.date}}<p class="inquiry-note">{{ strings.inquiryNote }}</p>
+  {{/if}}
+</aside>

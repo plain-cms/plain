@@ -1,0 +1,16 @@
+{{#if page.url.5}}{{> plain-page}}{{else}}{{#if page.slug.4}}{{#if collections.menu}}<article class="page front">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+  <section class="panel" aria-labelledby="panel-title">
+    <h2 class="panel-plate" id="panel-title">{{ strings.menu }}</h2>
+    <ol class="keys" role="list">
+      {{#each collections.menu as item}}{{> key}}
+      {{/each}}
+    </ol>
+    <p class="slot"><a class="stub" href="/menu/">{{ strings.fullMenu }}</a></p>
+  </section>
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+</article>{{else}}{{> plain-page}}{{/if}}{{else}}{{> plain-page}}{{/if}}{{/if}}

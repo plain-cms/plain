@@ -1,0 +1,14 @@
+<li class="bill">
+  <p class="bill-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  <div class="bill-body">
+    <div class="bill-head">
+      <h2 class="bill-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.tagLinks}}<ul role="list" class="support" aria-label="{{ strings.filedUnder }}">
+        {{#each item.tagLinks as t}}<li><a href="{{ t.url }}">{{ t.name }}</a></li>
+        {{/each}}
+      </ul>{{/if}}
+    </div>
+    {{#if item.description}}<p class="bill-note">{{ item.description }}</p>
+    {{/if}}
+  </div>
+</li>

@@ -1,0 +1,408 @@
+/* Dovetail — a theme for carpenters and joiners (trades family).
+   The object is the through-dovetail drawer corner. Every card and every page
+   heading is a walnut bar whose tails lock into the pale board below it; the
+   price is stamped on the face like a timber-yard size mark. Rules are the
+   striped edge of a sheet of birch ply. Restyle by editing tokens only. */
+
+:root {
+  /* Type: a tool-maker's slab over a humanist sans */
+  --font-slab: Rockwell, "Rockwell Nova", "Roboto Slab", "DejaVu Serif", "Sitka Text", Cambria, serif;
+  --font-body: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: 1.625rem;
+  --text-xxl: clamp(1.75rem, 1.1rem + 2.8vw, 3rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.12;
+  --tracking-caps: 0.08em;
+
+  /* Colour, by day: birch ply, maple, graphite, walnut, chalk-line blue */
+  --color-bg: #ebe1cb;
+  --color-panel: #f9f4e8;
+  --color-text: #2a2c30;
+  --color-muted: #5a5850;
+  --color-accent: #5c3a26;
+  --color-link: #1a55a6;
+  --color-walnut: #5c3a26;
+  --color-on-walnut: #f9f4e8;
+  --color-line: rgba(42,44,48,0.3);
+  --color-ply-light: #f8f0dc;
+  --color-ply-dark: #a98258;
+  --color-mark: #c9dcf5;
+
+  /* Measures */
+  --page-width: 68rem;
+  --measure: 41rem;
+  --card-min: 17rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --radius: 3px;
+  --rule: 2px;
+
+  /* The joint and the ply edge */
+  --joint-pitch: 4.25rem;
+  --joint-depth: 1.5rem;
+  --joint-neck: 0.7rem;
+  --joint-angle: 16deg;
+  --ply-layer: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The workshop after hours: fumed oak, lamp-lit walnut, chalk on a dark bench */
+    --color-bg: #1c1916;
+    --color-panel: #2b2520;
+    --color-text: #ebe3d2;
+    --color-muted: #b5aa95;
+    --color-accent: #d6aa7c;
+    --color-link: #93bdf2;
+    --color-walnut: #734a33;
+    --color-on-walnut: #f9f1e0;
+    --color-line: rgba(235,227,210,0.24);
+    --color-ply-light: #6c5b47;
+    --color-ply-dark: #3b3027;
+    --color-mark: #2d4a73;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font: var(--text-m)/var(--leading-body) var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4 { margin: 0; font-family: var(--font-slab); line-height: var(--leading-tight); text-wrap: balance; }
+
+/* Only a word too long for any column is hyphenated: ordinary words stay whole */
+h1, h2, h3, h4, .lede, .summary, .face li, .fact, .prose td, .prose th {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 14 5 5;
+}
+
+::selection { background: var(--color-mark); }
+
+a { color: var(--color-link); text-decoration-thickness: var(--rule); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: calc(var(--rule) + 1px); }
+/* A number, an address or a web address is copied as it reads: it may be cut where no line can hold it, never hyphenated */
+a[href^="tel:"], a[href^="mailto:"], .prose a[href^="http"], .prose code { overflow-wrap: anywhere; -webkit-hyphens: manual; hyphens: manual; }
+/* A number moves to the next line whole */
+a[href^="tel:"] { display: inline-block; max-width: 100%; }
+
+:focus-visible { outline: calc(var(--rule) + 1px) solid var(--color-link); outline-offset: 2px; }
+.tails a:focus-visible { outline-color: var(--color-on-walnut); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 9; padding: var(--space-2) var(--space-3); background: var(--color-panel); }
+.skip-link:focus { left: var(--space-2); }
+
+.wrap { max-width: calc(var(--page-width) + 2 * var(--gutter)); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* The edge of a sheet of birch ply: the only rule this theme draws */
+.masthead::after, .colophon::before, .prose hr {
+  content: "";
+  display: block;
+  height: calc(var(--ply-layer) * 5);
+  margin: 0;
+  border: 0;
+  background: repeating-linear-gradient(to bottom, var(--color-ply-dark) 0 var(--ply-layer), var(--color-ply-light) var(--ply-layer) calc(var(--ply-layer) * 2));
+}
+
+/* The joint -------------------------------------------------------------- */
+
+/* A walnut bar. Its last strip is a row of tails, flaring towards the end of
+   the board, with the pale pins of the board below showing between them.
+   --pin is the colour of that board; --k scales the joint. */
+.tails {
+  --k: 1;
+  --pin: var(--color-panel);
+  --pad: var(--space-3);
+  margin: 0;
+  padding: var(--space-2) var(--pad) 0;
+  background: var(--color-walnut);
+  color: var(--color-on-walnut);
+}
+.tails::after {
+  --w: calc(var(--joint-pitch) * var(--k));
+  --aa: calc(0.9deg / var(--k));
+  content: "";
+  display: block;
+  height: calc(var(--joint-depth) * var(--k));
+  margin: var(--space-2) calc(-1 * var(--pad)) 0;
+  /* One tail a tile: a wedge of walnut whose point sits above the bar's edge */
+  background: var(--pin) conic-gradient(from calc(180deg - var(--joint-angle) - var(--aa) / 2) at 50% calc((var(--joint-neck) * var(--k) - var(--w) / 2) / tan(var(--joint-angle))), transparent 0deg, var(--color-walnut) var(--aa), var(--color-walnut) calc(2 * var(--joint-angle)), transparent calc(2 * var(--joint-angle) + var(--aa))) 0 0 / var(--w) 100% round no-repeat;
+}
+.tails a { color: inherit; }
+
+/* Masthead --------------------------------------------------------------- */
+
+.masthead .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-4); padding-block: var(--space-2); }
+.site-title {
+  margin-right: auto;
+  padding-block: var(--space-2);
+  font: 700 var(--text-m)/1.2 var(--font-slab);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-text);
+}
+.masthead ul { display: flex; flex-wrap: wrap; gap: 0 clamp(0.25rem, 2vw, 1rem); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { position: relative; display: block; padding: var(--space-2) var(--space-1); font-weight: 600; text-decoration: none; color: var(--color-text); }
+.masthead nav a:hover { text-decoration: underline; }
+/* The current page hangs on one small tail */
+.masthead nav a[aria-current]::after {
+  content: "";
+  position: absolute;
+  inset: auto var(--space-1) 0;
+  height: 0.3rem;
+  background: var(--color-accent);
+  clip-path: polygon(0.3rem 0, calc(100% - 0.3rem) 0, 100% 100%, 0 100%);
+}
+.ring { font: 700 var(--text-l)/1.2 var(--font-slab); text-decoration: none; }
+.ring:hover { text-decoration: underline; }
+.ring span { font: 600 var(--text-s) var(--font-body); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-muted); }
+
+/* Page heading ----------------------------------------------------------- */
+
+main { padding-block: var(--space-4) var(--space-5); }
+
+/* The heading is a board of its own: the walnut bar is jointed to a pale face that holds the standfirst.
+   It runs a gutter past the column on both sides, so its lettering lines up with the text below */
+.page-head { margin: 0 calc(-1 * var(--gutter)) var(--space-4); background: var(--color-panel); box-shadow: inset 0 0 0 1px var(--color-line); }
+.page-head > .tails { --pad: var(--gutter); padding-top: var(--space-3); }
+.head-face { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3) var(--space-5); padding: var(--space-3) var(--gutter) var(--space-4); }
+/* With nothing to say, the face is the edge of the board the tails lock into */
+.head-face:empty { min-height: var(--space-3); padding-block: 0; }
+h1 { font-size: var(--text-xxl); }
+.eyebrow { margin: 0 0 var(--space-2); font-size: var(--text-s); font-weight: 600; letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.lede { flex: 1 1 34rem; max-width: 46rem; margin: 0; font-size: var(--text-l); line-height: 1.45; text-wrap: pretty; }
+.meta { flex: 1 1 100%; display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); margin: 0; font-weight: 600; }
+
+/* The one action of the home page: a block of chalk-line blue */
+.action { flex: 0 1 auto; min-width: 0; margin: 0; }
+.action a {
+  display: inline-block;
+  max-width: 100%;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--color-link);
+  color: var(--color-panel);
+  font: 700 var(--text-xl)/1.2 var(--font-slab);
+  text-decoration: none;
+}
+.action a:hover { text-decoration: underline; }
+.action span { font: 600 var(--text-s) var(--font-body); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+
+/* The stamp: a price or a date struck on the face ---------------------------- */
+
+.stamp {
+  display: inline-block;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0.1em 0.55em 0.15em;
+  border: var(--rule) solid;
+  border-radius: var(--radius);
+  font: 700 var(--text-l)/1.2 var(--font-slab);
+  color: var(--color-accent);
+  /* Turned about its middle, so a long price lifts one end no more than it drops the other */
+  transform: rotate(-1.5deg);
+}
+.stamp small { font: 600 0.75rem var(--font-body); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.stamp-big { flex: 0 1 auto; padding-inline: 0.6em; font-size: var(--text-xl); }
+.stamp-big small { font-size: var(--text-s); }
+
+/* Boards: service cards, the checklist and the call block ----------------- */
+
+.boards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(var(--card-min), 100%), 1fr)); gap: var(--space-4); margin: 0 0 var(--space-4); padding: 0; list-style: none; }
+.board { position: relative; display: flex; flex-direction: column; min-width: 0; background: var(--color-panel); box-shadow: inset 0 0 0 1px var(--color-line); }
+.board > .tails { font-size: var(--text-l); font-weight: 700; }
+.boards .tails a { text-decoration: none; }
+/* The whole board is the link */
+.boards .tails a::after { content: ""; position: absolute; inset: 0; }
+.boards .board:hover .tails a { text-decoration: underline; }
+.board:has(.tails a:focus-visible) { outline: calc(var(--rule) + 1px) solid var(--color-link); outline-offset: 2px; }
+
+.face { flex: 1; display: flex; flex-direction: column; margin: 0; padding: var(--space-2) var(--space-3) var(--space-3); }
+.summary { margin: 0 0 var(--space-3); font-size: 1rem; line-height: 1.45; }
+.foot { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-2); margin: auto 0 0; }
+/* The arrow is a snapped chalk line with a head on it */
+.foot i { position: relative; flex: none; width: 1.75rem; height: 1rem; margin: 0 0 var(--space-1) auto; color: var(--color-link); background: linear-gradient(currentColor, currentColor) 0 50% / calc(100% - 2px) calc(var(--rule) + 1px) no-repeat; transition: transform 0.15s; }
+.foot i::after { content: ""; position: absolute; top: 50%; right: 1px; width: 0.625rem; height: 0.625rem; border: solid currentColor; border-width: calc(var(--rule) + 1px) calc(var(--rule) + 1px) 0 0; transform: translateY(-50%) rotate(45deg); }
+.board:hover .foot i { transform: translateX(0.25rem); }
+
+/* Services on the home page: nine at most */
+.home-boards { margin-bottom: var(--space-5); }
+.home-boards .board:nth-child(n+10) { display: none; }
+.more, .actions { margin: 0 0 var(--space-4); font: 700 var(--text-m) var(--font-slab); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+
+/* Checklist: pencil ticks */
+.included .face { padding-top: var(--space-3); list-style: none; }
+.included li { position: relative; padding-left: 1.6em; }
+.included li + li { margin-top: var(--space-2); }
+.included li::before {
+  content: "";
+  position: absolute;
+  left: 0.2em;
+  top: 0.3em;
+  width: 0.45em;
+  height: 0.8em;
+  border: solid var(--color-accent);
+  border-width: 0 var(--rule) var(--rule) 0;
+  transform: rotate(40deg);
+}
+
+/* Call block */
+.call .face { flex-flow: row wrap; align-items: baseline; gap: var(--space-2) var(--space-5); padding-top: var(--space-3); }
+.call-main { flex: 1 1 100%; min-width: 0; margin: 0; font: 700 var(--text-xl)/1.2 var(--font-slab); }
+.call-main .word { font-size: var(--text-l); }
+.fact { min-width: 0; margin: 0; font-size: 1rem; }
+.fact b { margin-right: 0.4em; font-size: var(--text-s); font-weight: 600; letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-muted); }
+.list > .call, .not-found > .call { margin-top: var(--space-5); }
+
+/* Text beside the side column --------------------------------------------- */
+
+.split, .side { display: grid; gap: var(--space-5); }
+.side { gap: var(--space-4); }
+.split > * { min-width: 0; }
+
+/* Page text --------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-5) 0 var(--space-2); font-size: var(--text-xl); }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: var(--text-l); }
+.prose h4 { margin: var(--space-4) 0 var(--space-1); font: 700 var(--text-s) var(--font-body); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li::marker { color: var(--color-accent); font-weight: 700; }
+.prose a[href^="tel:"], .prose a[href^="mailto:"] { font-weight: 700; }
+.prose hr { margin: var(--space-5) 0; }
+
+.prose img, .cover { display: block; max-width: 100%; height: auto; }
+.prose img + img { margin-top: var(--space-2); }
+.cover { margin-bottom: var(--space-4); }
+
+/* A customer's words, held against a ply edge */
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: var(--space-1) 0 var(--space-1) calc(var(--ply-layer) * 5 + var(--space-3));
+  background: repeating-linear-gradient(to right, var(--color-ply-dark) 0 var(--ply-layer), var(--color-ply-light) var(--ply-layer) calc(var(--ply-layer) * 2)) 0 0 / calc(var(--ply-layer) * 5) 100% no-repeat;
+  font-size: var(--text-l);
+  font-style: italic;
+  line-height: 1.45;
+}
+.prose blockquote p { margin: 0 0 var(--space-2); text-wrap: pretty; }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose blockquote p:last-child:not(:first-child) { font-size: var(--text-s); font-style: normal; font-weight: 600; color: var(--color-muted); }
+
+/* Prices and hours: a cutting list */
+.prose table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+/* A column is never narrower than its longest word, so a long cell beside it cannot break the others mid-word */
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; }
+.prose th { border-bottom: var(--rule) solid var(--color-text); font-size: var(--text-s); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-muted); }
+.prose td { border-bottom: 1px solid var(--color-line); }
+.prose :is(th, td):last-child { padding-right: 0; }
+.prose :is(th, td)[align="right"] { text-align: right; overflow-wrap: normal; -webkit-hyphens: manual; hyphens: manual; }
+.prose td[align="right"] { font-family: var(--font-slab); font-weight: 700; color: var(--color-accent); }
+@media (max-width: 40rem) {
+  /* A table of three columns or more is set smaller and hyphenates sooner, so three columns fit a phone
+     with every word whole or properly hyphenated. A table still too wide scrolls in its own box, never
+     the page, with a pencil shade on the side where more is waiting */
+  .prose table:has(th:nth-child(3)) {
+    display: block;
+    overflow-x: auto;
+    font-size: var(--text-s);
+    background:
+      linear-gradient(to right, var(--color-bg) 40%, transparent) 0 0 / 2rem 100% no-repeat local,
+      linear-gradient(to left, var(--color-bg) 40%, transparent) 100% 0 / 2rem 100% no-repeat local,
+      linear-gradient(to right, var(--color-line), transparent) 0 0 / 0.75rem 100% no-repeat scroll,
+      linear-gradient(to left, var(--color-line), transparent) 100% 0 / 0.75rem 100% no-repeat scroll;
+  }
+  .prose table:has(th:nth-child(3)) :is(th, td) { min-width: 5.5rem; padding-right: var(--space-2); hyphenate-limit-chars: 8 3 3; }
+  .prose table:has(th:nth-child(3)) td[align="right"] { white-space: nowrap; }
+  /* A priced card shows its stamp; a job priced by quote keeps its description */
+  .home-boards .board:has(.stamp) .summary { display: none; }
+}
+
+.prose code { font-family: var(--font-mono); font-size: 0.9em; }
+.prose :not(pre) > code { padding: 0.1em 0.3em; border-radius: var(--radius); background: var(--color-panel); }
+.prose pre { overflow-x: auto; padding: var(--space-3); background: var(--color-panel); box-shadow: inset 0 0 0 1px var(--color-line); }
+
+/* List pages -------------------------------------------------------------- */
+
+.empty { color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); margin-top: var(--space-4); }
+.pagination a { font: 700 var(--text-m) var(--font-slab); }
+.pagination span { color: var(--color-muted); }
+
+/* Footer ------------------------------------------------------------------ */
+
+.colophon { font-size: var(--text-s); color: var(--color-muted); }
+.colophon .wrap { padding-block: var(--space-4) var(--space-5); }
+.colophon p { margin: 0 0 var(--space-2); }
+.colophon strong { margin-right: var(--space-2); font-family: var(--font-slab); letter-spacing: var(--tracking-caps); text-transform: uppercase; color: var(--color-text); }
+.colophon-contact { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); }
+.colophon-contact a { font-weight: 700; }
+
+/* Wide screens ------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  .page-head > .tails { --k: 1.5; padding-top: var(--space-4); }
+  .page-head > .tails::after { margin-top: var(--space-3); }
+  .page-head { margin-bottom: var(--space-5); }
+  .head-face { padding-block: var(--space-4); }
+}
+@media (min-width: 60rem) {
+  .split { grid-template-columns: minmax(0, var(--measure)) minmax(var(--card-min), 24rem); justify-content: space-between; align-items: start; }
+}
+
+/* Motion and print ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  /* Ink on paper, whatever scheme the screen is in */
+  :root {
+    --color-bg: #fff;
+    --color-panel: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-link: #000;
+    --color-walnut: #fff;
+    --color-on-walnut: #000;
+    --color-line: #999;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .foot i, .pagination, .more, .actions, .action { display: none; }
+  .masthead::after, .colophon::before, .tails::after { display: none; }
+  .tails { padding-bottom: var(--space-2); border-bottom: var(--rule) solid; }
+  .board { box-shadow: none; border: 1px solid var(--color-line); }
+  .page-head { margin-inline: 0; box-shadow: none; }
+  .page-head > .tails, .head-face { padding-inline: 0; }
+  .prose blockquote { padding-left: var(--space-3); border-left: var(--rule) solid; background: none; }
+  .prose table:has(th:nth-child(3)) { display: table; background: none; }
+  .stamp { transform: none; }
+  .board, .prose blockquote, .prose tr { break-inside: avoid; }
+  .split { display: block; }
+  .side, .split > .call { margin-top: var(--space-4); }
+}

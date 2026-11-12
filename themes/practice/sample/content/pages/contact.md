@@ -4,13 +4,19 @@ description: Where we are, when we're open, parking, and access — plus what to
 example: true
 ---
 
-*Replace the details on this page with your own. Keep the access notes — they matter to the people who need them most.*
-
 ## Book or ask
 
-Call **[+1 555 0104](tel:+1 555 0104)** — Rosa answers Monday to Friday 8:00–18:00 and Saturday 9:00–13:00. No phone menus, no hold music. If you'd rather not call, drop in during opening hours and we'll find you a time at the desk.
+Call **[+1-555-0104](tel:+1-555-0104)** — Rosa answers whenever we're open. No phone menus, no hold music. If you'd rather not call, write to [hello@alderstreetdental.example](mailto:hello@alderstreetdental.example), or drop in during opening hours and we'll find you a time at the desk.
 
-**In pain outside those hours?** Call **[+1 555 0199](tel:+1 555 0199)** and you'll reach whichever of our dentists is on duty. Don't sit up all night with a toothache — that's what the line is for.
+**In pain after hours?** Call **[+1-555-0199](tel:+1-555-0199)** and you'll reach whichever of our dentists is on duty. Don't sit up all night with a toothache — that's what the line is for.
+
+## Opening hours
+
+| Day | Open |
+| --- | --- |
+| Monday–Friday | 8 am – 6 pm |
+| Saturday | 9 am – 1 pm |
+| Sunday | Closed |
 
 ## Where we are
 

@@ -1,0 +1,20 @@
+<section class="listings">
+  <header class="board">
+    <h1>{{ page.title }}</h1>
+    <p class="lede">{{ strings.listingsLede }}</p>
+  </header>
+  {{#if items}}<div class="sheet">
+    <table class="plots">
+      {{> sheet-head}}
+      <tbody>
+        {{#each items as item}}{{> plot-row}}
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+  {{else}}<p class="empty">{{ strings.noListings }}</p>
+  {{/if}}{{#if pagination.multiple}}{{> pager}}
+  {{/if}}<div class="cols">
+    {{> inquiry}}
+  </div>
+</section>

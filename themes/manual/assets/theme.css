@@ -1,8 +1,9 @@
 /* Manual — a documentation theme built like an engineering handbook.
    All colors, type, and spacing live in the tokens below. Restyle by
    editing tokens, never selectors (cms-spec.md §10.1).
-   Signature: wayfinding — numbered section index, title-block breadcrumb,
-   amber "you are here" marker, prev/next sequence links. */
+   Signature: wayfinding. A numbered section index beside every page, a
+   title block that states where you are, prev/next sequence links — and
+   amber used for nothing but "you are here". */
 
 :root {
   /* Type — system stacks only, no external requests */
@@ -14,9 +15,11 @@
   --text-l: 1.1875rem;
   --text-xl: 1.4375rem;
   --text-xxl: clamp(1.75rem, 4vw, 2.375rem);
+  --text-code: 0.875em;
   --leading-body: 1.65;
   --leading-tight: 1.2;
   --tracking-label: 0.08em;
+  --tracking-title: -0.01em;
 
   /* Color — light scheme */
   --color-bg: #f2f4f6;
@@ -27,12 +30,13 @@
   --color-signal: #b26205;
   --color-border: #d4dae1;
   --color-border-strong: #7e8b98;
-  --color-code-bg: #ffffff;
+  --color-code-bg: #e9edf1;
   --color-chip-bg: #e5eaef;
   --color-mark: #ffe1a1;
 
   /* Layout */
   --measure: 70ch;
+  --measure-text: 60ch;
   --page-max: 74rem;
   --sidebar-w: 17rem;
   --space-1: 0.25rem;
@@ -40,8 +44,10 @@
   --space-3: 1rem;
   --space-4: 2rem;
   --space-5: 3.5rem;
+  --tap: 2.75rem;
   --radius: 3px;
   --rule: 2px;
+  --hairline: 1px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,19 +83,19 @@ body {
 
 ::selection { background: var(--color-mark); }
 
-a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
-a:hover { text-decoration-thickness: 2px; }
+a { color: var(--color-accent); text-decoration-thickness: var(--hairline); text-underline-offset: 0.15em; }
+a:hover { text-decoration-thickness: var(--rule); }
 
 :focus-visible {
   outline: var(--rule) solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline-offset: var(--rule);
+  border-radius: var(--radius);
 }
 
 .container {
   max-width: var(--page-max);
   margin: 0 auto;
-  padding: 0 var(--space-3);
+  padding-inline: var(--space-3);
 }
 
 .skip-link {
@@ -98,15 +104,15 @@ a:hover { text-decoration-thickness: 2px; }
   top: var(--space-2);
   z-index: 10;
   background: var(--color-panel);
-  border: 1px solid var(--color-border-strong);
+  border: var(--hairline) solid var(--color-border-strong);
   padding: var(--space-2) var(--space-3);
 }
 .skip-link:focus { left: var(--space-2); }
 
 /* Micro-label: the uppercase mono voice of the theme ---------------------- */
 
-.doc-id, .doc-num, .toc-num, .crumb, .pager-label, .meta,
-.doc-contents > summary, .prose th {
+.doc-id, .crumb, .pager-label, .meta, .doc-contents-title, .prose th,
+.prose blockquote > p:first-child > strong:first-child {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: var(--tracking-label);
@@ -123,183 +129,218 @@ a:hover { text-decoration-thickness: 2px; }
 .masthead-inner {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--space-2) var(--space-4);
-  padding-top: var(--space-3);
-  padding-bottom: var(--space-3);
+  align-items: center;
+  column-gap: var(--space-3);
 }
 
 .site-title {
   font-weight: 700;
   font-size: var(--text-l);
-  letter-spacing: 0.02em;
   color: var(--color-ink);
   text-decoration: none;
 }
 .site-title:hover { color: var(--color-accent); }
 
+/* The menu sits on the masthead rule, so the current entry's amber bar
+   replaces the rule beneath it. */
+.masthead nav { margin-bottom: calc(-1 * var(--rule)); }
 .masthead nav ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .masthead nav a {
+  display: flex;
+  align-items: center;
+  min-height: calc(var(--tap) + var(--space-3));
+  padding-inline: var(--space-2);
+  border-bottom: var(--rule) solid transparent;
   font-size: var(--text-s);
   color: var(--color-muted);
   text-decoration: none;
 }
 .masthead nav a:hover { color: var(--color-accent); text-decoration: underline; }
-.masthead nav a[aria-current="page"] {
+/* Doc pages mark their menu entry without JavaScript; enhance.js does the
+   same for every other section of the site. */
+.masthead nav a[aria-current],
+body:has(.doc) .masthead nav a[href$="/docs/"] {
   color: var(--color-ink);
   font-weight: 600;
-  box-shadow: 0 var(--rule) 0 var(--color-signal);
+  border-bottom-color: var(--color-signal);
 }
 
-main { min-height: 60vh; padding-top: var(--space-4); padding-bottom: var(--space-5); }
+main { min-width: 0; min-height: 60vh; padding-block: var(--space-4) var(--space-5); overflow-wrap: break-word; }
 
 .colophon {
-  border-top: 1px solid var(--color-border);
+  border-top: var(--hairline) solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
 }
-.colophon p { margin: var(--space-3) 0 var(--space-4); }
+.colophon p { margin: var(--space-3) 0; }
+.colophon a { color: inherit; }
+.colophon a:hover { color: var(--color-accent); }
 
-/* Title block — the breadcrumb strip on every inner page ------------------ */
-
-.titleblock {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  border: 1px solid var(--color-border);
-  border-left: calc(2 * var(--rule)) solid var(--color-signal);
-  background: var(--color-panel);
-  border-radius: var(--radius);
-  padding: var(--space-2) var(--space-3);
-  margin-bottom: var(--space-4);
-}
-
-.crumb ol {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  color: var(--color-muted);
-}
-.crumb li + li::before { content: "/"; margin-right: var(--space-2); color: var(--color-border-strong); }
-.crumb a { color: var(--color-muted); text-decoration: none; }
-.crumb a:hover { color: var(--color-accent); text-decoration: underline; }
-.crumb [aria-current="page"] { color: var(--color-ink); font-weight: 600; }
-
-.doc-id { color: var(--color-muted); white-space: nowrap; }
-
-/* Documentation layout ----------------------------------------------------- */
+/* Page frame: the contents rail beside every page -------------------------- */
 
 .doc-layout {
   display: grid;
   grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
-  gap: var(--space-5);
+  column-gap: var(--space-5);
   align-items: start;
 }
+/* The rail follows the page in the source (content first for keyboards and
+   phones) and is placed in the left column here. */
+.doc-layout > main { grid-column: 2; grid-row: 1; }
 
 .doc-sidebar {
+  grid-column: 1;
+  grid-row: 1;
   position: sticky;
   top: var(--space-3);
-  max-height: calc(100vh - 2 * var(--space-3));
-  overflow-y: auto;
   display: grid;
   gap: var(--space-3);
+  max-height: calc(100vh - 2 * var(--space-3));
+  margin-block: var(--space-4);
+  overflow-y: auto;
+  font-size: var(--text-s);
 }
+/* The rail scrolls, so a ring drawn outside its links would be clipped. */
+.doc-sidebar :focus-visible { outline-offset: calc(-1 * var(--rule)); }
+/* Titles are owner text: a long unbroken word wraps instead of widening the
+   page ("anywhere" also lowers the minimum width of flex and grid items). */
+.doc-sidebar, .crumb, .pager-link { overflow-wrap: anywhere; }
+/* Where the browser knows the page's language, a compound of twelve letters
+   or more breaks at a syllable, with a hyphen, before it is cut anywhere —
+   in titles and in table cells, whose columns are the narrowest text on a
+   phone. Code and link text are never given a hyphen. */
+.doc-sidebar, .crumb, .doc-id, .pager-link, h1, .toc-title,
+.prose h2, .prose h3, .prose h4, .prose th, .prose td {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
+}
+.prose code, .prose td a { -webkit-hyphens: manual; hyphens: manual; }
 
-/* The prominent search entry — always the first thing in the sidebar. */
 .doc-search {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: var(--space-2);
-  border: 1px solid var(--color-border-strong);
+  min-height: var(--tap);
+  border: var(--hairline) solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-panel);
   padding: var(--space-2) var(--space-3);
-  font-weight: 600;
-  color: var(--color-ink);
+  color: var(--color-muted);
   text-decoration: none;
 }
 .doc-search:hover { border-color: var(--color-accent); color: var(--color-accent); }
-.doc-search-arrow { color: var(--color-muted); }
-.doc-search:hover .doc-search-arrow { color: var(--color-accent); }
 
 .doc-contents {
-  border: 1px solid var(--color-border);
+  border: var(--hairline) solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-panel);
 }
-.doc-contents > summary {
-  cursor: pointer;
-  list-style: none;
-  padding: var(--space-2) var(--space-3);
-  color: var(--color-muted);
-  font-weight: 600;
-  user-select: none;
-}
-.doc-contents > summary::-webkit-details-marker { display: none; }
-.doc-contents > summary::after { content: "▸"; float: right; }
-.doc-contents[open] > summary::after { content: "▾"; }
-.doc-contents > summary:hover { color: var(--color-ink); }
-
-.doc-tree {
-  margin: 0;
-  padding: var(--space-1) 0 var(--space-2);
-  list-style: none;
-  border-top: 1px solid var(--color-border);
-}
-.doc-tree a {
-  display: flex;
-  gap: var(--space-2);
-  align-items: baseline;
+.doc-contents-title { margin: 0; border-bottom: var(--hairline) solid var(--color-border); }
+.doc-contents a {
   padding: var(--space-1) var(--space-3);
+  border-left: calc(2 * var(--rule)) solid transparent;
   color: var(--color-ink);
   text-decoration: none;
-  border-left: calc(2 * var(--rule)) solid transparent;
 }
-.doc-tree a:hover { color: var(--color-accent); }
-.doc-num { color: var(--color-muted); min-width: 2.5ch; }
-/* "You are here" — set by enhance.js; the breadcrumb covers no-JS readers. */
-.doc-tree a[aria-current="page"] {
+.doc-contents a:hover { color: var(--color-accent); }
+.doc-contents-title a { display: block; padding-block: var(--space-2); color: var(--color-muted); }
+
+/* Numbers share one column however long they are; names share the other. */
+.doc-tree {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-1) 0;
+  list-style: none;
+}
+.doc-tree li, .doc-tree a {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+}
+.doc-num { font-family: var(--font-mono); color: var(--color-muted); }
+.doc-name { grid-column: 2; }
+
+/* "You are here" — set by enhance.js; the title block covers no-JS readers. */
+.doc-contents a[aria-current] {
   border-left-color: var(--color-signal);
   background: var(--color-chip-bg);
+  color: var(--color-ink);
   font-weight: 600;
 }
+.doc-contents a[aria-current] .doc-num { color: inherit; }
 
-.doc-contents .empty { padding: var(--space-2) var(--space-3); }
+/* Title block — where you are, on every page ------------------------------- */
 
-/* Doc article -------------------------------------------------------------- */
+.titleblock {
+  display: flex;
+  min-height: var(--tap);
+  border: var(--hairline) solid var(--color-border);
+  border-left: calc(2 * var(--rule)) solid var(--color-signal);
+  border-radius: var(--radius);
+  background: var(--color-panel);
+  margin-bottom: var(--space-4);
+}
+.crumb, .doc-id { display: flex; align-items: center; padding: var(--space-2) var(--space-3); }
+.crumb { flex: 1; min-width: 0; }
 
-.doc { max-width: var(--measure); }
+.crumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  color: var(--color-muted);
+}
+.crumb li:not(:last-child)::after { content: "/"; content: "/" / ""; margin-left: var(--space-2); }
+.crumb a { color: inherit; text-decoration: none; }
+.crumb a:hover { color: var(--color-accent); text-decoration: underline; }
+.crumb [aria-current="page"] { color: var(--color-ink); font-weight: 600; }
 
-.page-header { margin: 0 0 var(--space-4); }
-.page-header h1 {
+/* The right-hand cell: section number, entry count, date, tag or error code.
+   It stays on one line until it would take more than its share of the block;
+   a long tag then wraps inside the cell. */
+.doc-id {
+  max-width: 60%;
+  border-left: var(--hairline) solid var(--color-border);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* Page header & article ---------------------------------------------------- */
+
+.doc, .page, .post, .list, .not-found { max-width: var(--measure); }
+
+.page-header, .doc-header { margin: 0 0 var(--space-4); }
+.page-header h1, .doc-header h1 {
   font-size: var(--text-xxl);
   line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-title);
   margin: 0 0 var(--space-2);
   text-wrap: balance;
 }
 .lede { color: var(--color-muted); font-size: var(--text-l); margin: 0; text-wrap: pretty; }
 
-.page, .post, .list, .not-found { max-width: var(--measure); }
-
 .meta { color: var(--color-muted); margin: var(--space-2) 0 0; }
-.tag { margin-right: var(--space-2); color: var(--color-accent); text-decoration: none; }
-.tag::before { content: "#"; opacity: 0.6; }
+.tag { margin-right: var(--space-2); text-decoration: none; }
+.tag::before { content: "#"; color: var(--color-muted); }
 .tag:hover { text-decoration: underline; }
 
 /* Prose -------------------------------------------------------------------- */
+
+/* Running text keeps a shorter line than the code and tables around it. */
+.lede, .prose > p, .prose > ul, .prose > ol, .prose > blockquote { max-width: var(--measure-text); }
 
 .prose h2, .prose h3, .prose h4 {
   line-height: var(--leading-tight);
@@ -309,47 +350,49 @@ main { min-height: 60vh; padding-top: var(--space-4); padding-bottom: var(--spac
 .prose h2 {
   font-size: var(--text-xl);
   padding-top: var(--space-3);
-  border-top: 1px solid var(--color-border);
+  border-top: var(--hairline) solid var(--color-border);
 }
 .prose h3 { font-size: var(--text-l); }
+.prose > :first-child { margin-top: 0; }
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
 .prose li { margin-bottom: var(--space-1); }
 .prose ul { padding-left: 1.25em; }
-.prose ul li::marker { color: var(--color-signal); }
-.prose ol li::marker { color: var(--color-muted); font-family: var(--font-mono); font-size: 0.9em; }
+.prose .search-results { padding-left: 0; }
+.prose li::marker { color: var(--color-muted); }
+.prose ol li::marker { font-family: var(--font-mono); font-size: var(--text-code); }
 
-.prose img { max-width: 100%; height: auto; border: 1px solid var(--color-border); border-radius: var(--radius); }
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border: var(--hairline) solid var(--color-border);
+  border-radius: var(--radius);
+}
 
-/* Callouts: blockquotes read as note panels. Bold the first words for a title. */
+/* Callouts: blockquotes read as margin notes. Start one with a bold word —
+   Tip, Note, Warning — and it becomes the note's label. */
 .prose blockquote {
   margin: var(--space-3) 0;
-  padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-left: calc(2 * var(--rule)) solid var(--color-signal);
-  border-radius: var(--radius);
-  background: var(--color-panel);
+  padding: var(--space-1) var(--space-3);
+  border-left: calc(2 * var(--rule)) solid var(--color-border-strong);
 }
 .prose blockquote > :last-child { margin-bottom: 0; }
 
-/* Code: the heart of a documentation theme. */
+/* Code sits in wells; white panels are kept for wayfinding. */
+.prose code, .prose kbd { font-family: var(--font-mono); font-size: var(--text-code); border-radius: var(--radius); }
 .prose code {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
   background: var(--color-chip-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border: var(--hairline) solid var(--color-border);
   padding: 0.1em 0.35em;
   overflow-wrap: break-word;
 }
 .prose pre {
   background: var(--color-code-bg);
-  border: 1px solid var(--color-border);
+  border: var(--hairline) solid var(--color-border);
   border-radius: var(--radius);
   padding: var(--space-3);
   margin: 0 0 var(--space-3);
   overflow-x: auto;
-  line-height: 1.6;
   tab-size: 2;
 }
 .prose pre code { background: none; border: 0; padding: 0; font-size: var(--text-s); overflow-wrap: normal; }
@@ -361,28 +404,22 @@ main { min-height: 60vh; padding-top: var(--space-4); padding-bottom: var(--spac
   font-size: var(--text-s);
   font-variant-numeric: tabular-nums;
 }
-.prose th {
-  text-align: left;
-  color: var(--color-muted);
-  border-bottom: var(--rule) solid var(--color-border-strong);
-  padding: var(--space-2) var(--space-3) var(--space-2) 0;
-}
-.prose td {
+.prose th, .prose td {
   text-align: left;
   vertical-align: top;
-  border-bottom: 1px solid var(--color-border);
   padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: var(--hairline) solid var(--color-border);
 }
+/* The last column needs no gutter: a table that only just fits must not scroll. */
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
+.prose th { color: var(--color-muted); border-bottom: var(--rule) solid var(--color-border-strong); }
 
-.prose hr { border: 0; border-top: 1px solid var(--color-border); margin: var(--space-4) 0; }
+.prose hr { border: 0; border-top: var(--hairline) solid var(--color-border); margin: var(--space-4) 0; }
 
 .prose kbd {
-  font-family: var(--font-mono);
-  font-size: 0.875em;
   background: var(--color-panel);
-  border: 1px solid var(--color-border-strong);
+  border: var(--hairline) solid var(--color-border-strong);
   border-bottom-width: var(--rule);
-  border-radius: var(--radius);
   padding: 0.05em 0.4em;
 }
 
@@ -399,75 +436,91 @@ main { min-height: 60vh; padding-top: var(--space-4); padding-bottom: var(--spac
 
 .pager-link {
   display: grid;
+  align-content: start;
   gap: var(--space-1);
-  border: 1px solid var(--color-border);
+  border: var(--hairline) solid var(--color-border);
   border-radius: var(--radius);
   background: var(--color-panel);
   padding: var(--space-2) var(--space-3);
   text-decoration: none;
 }
 .pager-link:hover { border-color: var(--color-accent); }
-.pager-next { grid-column: 2; text-align: right; }
+.doc-pager > :nth-child(2) { text-align: right; }
 .pager-label { color: var(--color-muted); }
-.pager-title { color: var(--color-accent); font-weight: 600; }
+.pager-title { font-weight: 600; }
 .pager-link:hover .pager-title { text-decoration: underline; }
 
 /* List pages: a table of contents ------------------------------------------- */
 
-.toc-list { margin: 0; padding: 0; list-style: none; }
-
-.toc-row {
+.toc-list {
   display: grid;
-  grid-template-columns: 3.5ch minmax(0, 1fr);
-  gap: var(--space-3);
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-border);
+  grid-template-columns: max-content minmax(0, 1fr);
+  column-gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: var(--rule) solid var(--color-border-strong);
 }
-.toc-num { color: var(--color-muted); padding-top: 0.4em; }
+.toc-row {
+  position: relative;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: baseline;
+  padding: var(--space-3) 0;
+  border-bottom: var(--hairline) solid var(--color-border);
+}
+.toc-num { font-family: var(--font-mono); font-size: var(--text-l); color: var(--color-muted); }
 .toc-title { font-size: var(--text-l); line-height: var(--leading-tight); margin: 0; }
-.toc-title a { color: var(--color-ink); text-decoration: none; }
-.toc-title a:hover { color: var(--color-accent); text-decoration: underline; }
+.toc-title a { text-decoration: none; }
+/* The whole row is the link's target. */
+.toc-title a::after { content: ""; position: absolute; inset: 0; }
+.toc-row:hover .toc-title a { text-decoration: underline; }
 .toc-desc { color: var(--color-muted); font-size: var(--text-s); margin: var(--space-1) 0 0; }
 
+/* Previous page on the left, the position in the middle, next page on the
+   right — each keeps its place when the other link is absent. */
 .pagination {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: baseline;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
+  padding-top: var(--space-4);
   color: var(--color-muted);
   font-size: var(--text-s);
 }
+.pagination-at { grid-column: 2; text-align: center; }
+.pagination-next { grid-column: 3; text-align: right; }
 
 .empty { color: var(--color-muted); }
 
 /* 404 — the "never lost" page ------------------------------------------------ */
 
-.lost-nav ul { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--space-3); }
-.lost-nav a {
+.lost-nav ul {
   display: grid;
-  gap: var(--space-1);
-  border: 1px solid var(--color-border);
-  border-left: calc(2 * var(--rule)) solid var(--color-signal);
-  border-radius: var(--radius);
-  background: var(--color-panel);
-  padding: var(--space-2) var(--space-3);
-  text-decoration: none;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
-.lost-nav a:hover { border-color: var(--color-accent); }
-.lost-nav a:hover .pager-title { text-decoration: underline; }
+.lost-nav .pager-link { height: 100%; }
 
 /* Small screens --------------------------------------------------------------- */
 
 @media (max-width: 52rem) {
-  .doc-layout { grid-template-columns: 1fr; gap: var(--space-4); }
-  .doc-sidebar { position: static; max-height: none; overflow: visible; }
-  /* The contents panel becomes a tap-to-collapse disclosure; the list is
-     capped so it never buries the article. */
-  .doc-tree { max-height: 50vh; overflow-y: auto; }
-  .doc-pager { grid-template-columns: 1fr; }
-  .pager-next { grid-column: auto; }
-  .titleblock { flex-direction: column; align-items: flex-start; gap: var(--space-1); }
+  /* One column: the page first, then search and the contents list. */
+  .doc-layout { display: block; }
+  main { min-height: 0; padding-bottom: var(--space-4); }
+  .doc-sidebar { position: static; max-height: none; margin-block: 0 var(--space-5); overflow: visible; }
+  .doc-tree a, .doc-contents-title a { min-height: var(--tap); align-content: center; }
+  .doc-contents-title a { display: grid; }
+  .doc-pager, .lost-nav ul { grid-template-columns: minmax(0, 1fr); }
+  .doc-pager > :nth-child(2) { text-align: left; }
 }
+
+/* Wide tables scroll inside themselves at every width. */
+.prose table { display: block; overflow-x: auto; }
 
 /* Motion & print ---------------------------------------------------------------- */
 
@@ -476,13 +529,28 @@ main { min-height: 60vh; padding-top: var(--space-4); padding-bottom: var(--spac
 }
 
 @media print {
-  body { background: #fff; color: #000; font-size: 11pt; }
-  .masthead, .colophon, .skip-link, .doc-sidebar, .doc-pager, .pagination, .lost-nav { display: none; }
-  .doc-layout { display: block; }
-  .doc, .page, .post, .list { max-width: none; }
-  .titleblock { border: 1px solid #000; border-left-width: 4pt; }
-  a { color: inherit; }
-  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
-  .prose pre { white-space: pre-wrap; border: 1px solid #000; }
+  /* Paper values for every scheme: a page printed from dark mode stays legible. */
+  :root {
+    --color-bg: #fff;
+    --color-panel: #fff;
+    --color-ink: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-signal: #000;
+    --color-border: #999;
+    --color-border-strong: #000;
+    --color-code-bg: #fff;
+    --color-chip-bg: #fff;
+    --measure: none;
+    --measure-text: none;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .colophon, .skip-link, .doc-sidebar, .doc-pager, .pagination, .lost-nav { display: none; }
+  .masthead { border: 0; }
+  .masthead-inner, .doc-layout { display: block; padding: 0; }
+  main { min-height: 0; padding-block: var(--space-3) 0; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: var(--text-code); }
+  .prose pre { white-space: pre-wrap; }
   .prose pre, .prose blockquote, .prose table, .toc-row { break-inside: avoid; }
+  .prose h2, .prose h3, .page-header, .doc-header, .titleblock { break-after: avoid; }
 }

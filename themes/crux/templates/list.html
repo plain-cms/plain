@@ -1,0 +1,23 @@
+<section class="list">
+  <header class="page-head">
+    {{#if tag}}<h1><span class="tagged">{{ strings.taggedWith }}</span> {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}</h1>{{else}}<h1>{{ page.title }}</h1>{{/if}}
+  </header>
+  {{#if items}}<ul class="roster">
+    {{#each items as item}}<li class="person{{#if item.photo}} has-photo{{/if}}">
+      {{#if item.photo}}<a class="person-photo" href="{{ item.url }}" tabindex="-1" aria-hidden="true"><img src="{{ item.photo }}" alt="" loading="lazy" decoding="async"></a>
+      {{/if}}<h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.discipline}}<p class="discipline">{{ item.discipline }}</p>
+      {{/if}}{{#if item.dateFormatted}}<p class="meta"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{/if}}{{#if item.description}}<p class="summary">{{ item.description }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

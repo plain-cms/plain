@@ -1,0 +1,16 @@
+<article class="instructor">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.discipline}}<p class="discipline">{{ page.discipline }}</p>
+    {{/if}}
+  </header>
+  {{#if page.photo}}<img class="instructor-photo" src="{{ page.photo }}" alt="{{ page.title }}" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose paste-up">
+{{{ page.content }}}
+  </div>
+  {{/if}}<aside class="pointer">
+    <h2>{{ strings.onTimetable }}</h2>
+    <p>{{ strings.onTimetableBody }}</p>
+    <p><a class="btn-trial" href="/schedule/">{{ strings.seeSchedule }}</a></p>
+  </aside>
+</article>

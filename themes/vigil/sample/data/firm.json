@@ -1,0 +1,25 @@
+{
+  "phone": "01632 960318",
+  "email": "family@ruddockdaughters.example",
+  "address": "17 Chantry Street, Kelsby KL4 2DS",
+  "hours": [
+    {
+      "days": "Monday to Friday",
+      "time": "9:00 to 17:00"
+    },
+    {
+      "days": "Saturday",
+      "time": "9:30 to 12:30"
+    },
+    {
+      "days": "Sundays and bank holidays",
+      "time": "By appointment"
+    },
+    {
+      "days": "Day and night",
+      "time": "The telephone is always answered"
+    }
+  ],
+  "registration": "Ruddock & Daughters Ltd, registered in England and Wales no. 04417263. VAT no. GB 318 2207 45. Our standardised price list is on the Services page and at the office.",
+  "consultNote": "Whatever the hour, ring and one of us will answer. Arranging a funeral starts with one unhurried conversation, at Chantry Street or in your own home, and it costs nothing."
+}

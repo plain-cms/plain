@@ -1,0 +1,7 @@
+<li class="brief">
+        <p class="brief-matter" aria-hidden="true">{{ strings.matterOf }}</p>
+        <p class="brief-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+        {{#if item.description}}<p class="brief-note">{{ item.description }}</p>{{/if}}
+        {{#if item.fee}}<p class="brief-fee"><span class="visually-hidden">{{ strings.feeLabel }}:</span> {{ item.fee }}</p>{{/if}}
+        <p class="brief-firm" aria-hidden="true">{{ site.title }}</p>
+      </li>

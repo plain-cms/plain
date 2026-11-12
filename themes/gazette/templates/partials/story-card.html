@@ -1,6 +1,7 @@
-<li class="story-card{{#if item.featured}} is-featured{{/if}}">
+<li class="story-card{{#if item.featured}} is-featured{{/if}}{{#if item.cover}} has-cover{{/if}}" data-section="{{ item.section }}" data-tier="{{ strings.inBrief }}">
   <article>
-    {{#if item.section}}<p class="kicker">{{ item.section }}</p>
+    {{#if item.cover}}<img class="story-card-cover" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+    {{/if}}{{#if item.section}}<p class="kicker">{{> section-labels}}<span class="section-raw">{{ item.section }}</span></p>
     {{/if}}<h2 class="story-card-headline"><a href="{{ item.url }}">{{ item.title }}</a></h2>
     {{#if item.standfirst}}<p class="standfirst">{{ item.standfirst }}</p>
     {{else}}{{#if item.description}}<p class="standfirst">{{ item.description }}</p>

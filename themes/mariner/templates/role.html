@@ -1,0 +1,22 @@
+<article class="role">
+  <header class="page-head">
+    <p class="leaf-head">{{ strings.recordHeading }}</p>
+    <h1>{{ page.title }}</h1>
+  </header>
+  <dl class="role-facts">
+    {{#if page.organization}}<div class="role-fact role-ship"><dt class="db-label">{{ strings.colShip }}</dt><dd class="db-org">{{ page.organization }}</dd></div>
+    {{/if}}<div class="role-fact role-dates"><dt class="db-label">{{ strings.colDates }}</dt><dd class="db-period">{{#if page.period}}{{ page.period }}{{else}}<time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{/if}}</dd></div>
+    {{#if page.location}}<div class="role-fact role-port"><dt class="db-label">{{ strings.colPlace }}</dt><dd><span class="stamp"><span>{{ page.location }}</span></span></dd></div>
+    {{/if}}
+  </dl>
+  {{#if page.summary}}<p class="db-voyage"><span class="db-voyage-label">{{#if page.location}}{{ strings.voyage }}{{else}}{{ strings.remarks }}{{/if}}</span> {{ page.summary }}</p>
+  {{/if}}{{#if page.highlights}}<ul class="db-highlights">
+    {{#each page.highlights as point}}<li>{{ point }}</li>
+    {{/each}}
+  </ul>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+  <p class="more back"><a href="/experience/">{{ strings.backToCv }}</a></p>
+</article>

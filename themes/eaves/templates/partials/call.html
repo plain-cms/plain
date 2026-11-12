@@ -1,0 +1,13 @@
+<aside class="call" aria-labelledby="call-heading">
+  <div class="call-ask">
+    <h2 id="call-heading">{{ strings.ctaHeading }}</h2>
+    <p>{{ strings.ctaLead }}</p>
+  </div>
+  <div class="call-how">
+    <p class="call-main">{{#if data.business.phone}}<a href="tel:{{ data.business.phone }}"><span>{{ strings.call }}</span> {{ data.business.phone }}</a>{{else}}{{#if data.business.email}}<a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a>{{else}}<a href="/contact/">{{ strings.ctaContactLink }}</a>{{/if}}{{/if}}</p>
+    {{#if data.business.hours}}<p class="call-meta">{{ data.business.hours }}</p>
+    {{/if}}{{#if data.business.area}}<p class="call-meta">{{ data.business.area }}</p>
+    {{/if}}{{#if data.business.phone}}{{#if data.business.email}}<p class="call-meta"><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></p>
+    {{/if}}{{/if}}
+  </div>
+</aside>

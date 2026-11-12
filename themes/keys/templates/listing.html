@@ -1,35 +1,26 @@
-<article class="listing" data-status="{{ page.status }}">
+<article class="listing with-aside" data-status="{{ page.status }}">
   <header class="listing-head">
-    <p class="listing-topline">
-      {{#if page.price}}<strong class="listing-price">{{ page.price }}</strong>
-      {{/if}}{{#if page.status}}<span class="status-flag">{{ page.status }}</span>
-      {{/if}}
-    </p>
-    <h1>{{ page.title }}</h1>
+    {{#if page.status}}<p class="status-flag"><span class="status-raw">{{ page.status }}</span>{{> status-labels}}</p>
+    {{/if}}{{#if page.price}}<p class="listing-price">{{ page.price }}</p>
+    {{/if}}<h1>{{ page.title }}</h1>
     {{#if page.address}}<p class="listing-address">{{ page.address }}</p>
+    {{/if}}<ul class="spec-row spec-strip">{{#if page.beds}}<li class="spec"><b>{{ page.beds }}</b> {{ strings.beds }}</li>{{/if}}{{#if page.baths}}<li class="spec"><b>{{ page.baths }}</b> {{ strings.baths }}</li>{{/if}}{{#if page.area}}<li class="spec"><b>{{ page.area }}</b></li>{{/if}}</ul>
+    {{#if page.dateFormatted}}<p class="listing-listed">{{ strings.listedOn }} <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
     {{/if}}
-    <p class="spec-row spec-strip">
-      {{#if page.beds}}<span class="spec">{{ page.beds }} bd</span>{{/if}}
-      {{#if page.baths}}<span class="spec">{{ page.baths }} ba</span>{{/if}}
-      {{#if page.area}}<span class="spec">{{ page.area }}</span>{{/if}}
-      {{#if page.dateFormatted}}<span class="spec spec-listed">Listed <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></span>{{/if}}
-    </p>
   </header>
   {{#if page.photos}}
-  <ul class="gallery" aria-label="Property photos">
-    {{#each page.photos as photo}}<li><img src="{{ photo }}" alt="" loading="lazy" decoding="async"></li>
+  <ul class="gallery" aria-label="{{ strings.photos }}">
+    {{#each page.photos as photo}}<li><img src="{{ photo }}" alt="{{ page.title }}" loading="lazy" decoding="async"></li>
     {{/each}}
   </ul>
   {{else}}{{#if page.cover}}
   <figure class="gallery-single">
-    <img src="{{ page.cover }}" alt="" decoding="async">
+    <img src="{{ page.cover }}" alt="{{ page.title }}" decoding="async">
   </figure>
   {{/if}}{{/if}}
   <div class="prose">
-{{{ page.content }}}
+{{#if page.body}}{{{ page.content }}}{{else}}{{#if page.description}}<p>{{ page.description }}</p>{{/if}}{{/if}}
   </div>
   {{> inquiry-cta}}
-  <nav class="listing-return" aria-label="Back to all listings">
-    <a href="/listings/">← All listings</a>
-  </nav>
+  <p class="listing-return"><a href="/listings/">← {{ strings.allListings }}</a></p>
 </article>

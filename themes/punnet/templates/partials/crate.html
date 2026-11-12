@@ -1,0 +1,8 @@
+<li class="crate" data-status="{{ item.status }}">
+  <div class="slat crate-body">
+    <h2 class="crate-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+    {{#if item.price}}<p class="showcard"><span class="star"><span class="price">{{ item.price }}</span></span>{{#if item.unit}}<span class="unit">{{ item.unit }}</span>{{/if}}</p>{{/if}}
+    {{#if item.description}}<p class="crate-desc">{{ item.description }}</p>{{/if}}
+  </div>
+  <p class="slat crate-foot"><span class="cat">{{ item.category }}</span>{{#if item.status}}<span class="status"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ item.status }}</span></span>{{/if}}</p>
+</li>

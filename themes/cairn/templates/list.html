@@ -1,0 +1,18 @@
+<section class="page is-list">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if tag}}<p class="lede">{{ strings.filedUnder }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}</p>
+    {{/if}}
+  </header>
+  {{#if items}}<ul class="entries">
+    {{#each items as item}}{{> entry}}
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pager" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a class="pager-newer" href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span class="pager-count">{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a class="pager-older" href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

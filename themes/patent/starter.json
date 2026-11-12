@@ -1,0 +1,49 @@
+{
+  "starter": "patent",
+  "sampleTitle": "Pellow & Strand",
+  "collections": {
+    "services": {
+      "path": "content/services",
+      "urlPattern": "/services/:slug/",
+      "template": "service",
+      "listUrl": "/services/",
+      "listTemplate": "services",
+      "label": "Services",
+      "sortBy": "order",
+      "sortOrder": "asc",
+      "pageSize": 100,
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "description", "type": "text" },
+        { "name": "fee", "type": "text" },
+        { "name": "points", "type": "list" },
+        { "name": "order", "type": "text", "default": "50" },
+        { "name": "draft", "type": "boolean", "default": false }
+      ]
+    },
+    "people": {
+      "path": "content/people",
+      "render": false,
+      "sortBy": "order",
+      "sortOrder": "asc",
+      "label": "People",
+      "fields": [
+        { "name": "title", "type": "text", "required": true },
+        { "name": "role", "type": "text" },
+        { "name": "credentials", "type": "text" },
+        { "name": "email", "type": "text" },
+        { "name": "phone", "type": "text" },
+        { "name": "photo", "type": "image" },
+        { "name": "order", "type": "text", "default": "50" },
+        { "name": "draft", "type": "boolean", "default": false }
+      ]
+    }
+  },
+  "navigation": [
+    { "label": "Home", "url": "/" },
+    { "label": "Services", "url": "/services/" },
+    { "label": "About", "url": "/about/" },
+    { "label": "Contact", "url": "/contact/" }
+  ],
+  "sampleContent": "sample/"
+}

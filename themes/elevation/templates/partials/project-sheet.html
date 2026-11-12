@@ -1,0 +1,10 @@
+<li class="card{{#if item.cover}} card-cover{{/if}}">
+    {{#if item.cover}}<img class="card-img" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+    {{else}}{{#if item.description}}<p class="card-note">{{ item.description }}</p>
+    {{/if}}<span class="card-mark" aria-hidden="true"></span>
+    {{/if}}<dl class="card-tb">
+      <div class="tb-project"><dt>{{ strings.labelProject }}</dt><dd class="card-title"><a href="{{ item.url }}">{{ item.title }}</a></dd></div>
+      {{#if item.client}}<div class="tb-client"><dt>{{ strings.labelClient }}</dt><dd>{{ item.client }}</dd></div>
+      {{/if}}<div class="tb-date"><dt>{{ strings.labelDate }}</dt><dd><time class="year" datetime="{{ item.date }}">{{ item.date }}</time></dd></div>
+    </dl>
+  </li>

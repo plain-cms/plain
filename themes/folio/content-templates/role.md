@@ -1,22 +1,21 @@
 ---
-title: The role title, as the org would write it
-date: 2020-01-01
-organization: Where it was
-period: 2020 — 2023
-location: City, or Remote
-summary: One line — what you owned, sized with a number if you can.
+title: Product designer
+date: 2022-03-01
+organization: Northbank Studio
+period: 2022–present
+location: Leeds
+summary: Lead designer for a booking app used by 300 independent salons.
+description: Product designer at Northbank Studio since 2022, leading the design of a booking app for independent salons.
 highlights:
-  - Replace with an outcome + a number, e.g. cut p95 latency from 6s to 800ms
-  - One more — two or three tight bullets print better than six loose ones
+  - Redesigned the booking flow and cut drop-off at the payment step from 31% to 12%
+  - Built the component library that three product teams now share
 draft: true
 ---
 
-*Fill this in, then delete these instructions. The `date` is the start date
-and only orders the CV — the visible range is `period`, written how a human
-would say it. Keep highlights to outcomes with numbers; the CV page prints
-on one sheet of A4 only if entries stay disciplined. Set `draft: false`
-when done.*
+Northbank Studio makes booking software for independent salons. The team is
+small, so the designer also runs the user research and writes most of the
+words in the interface.
 
-*The body below appears on the entry's own page (the CV links to it) — room
-for the story behind the bullets: what the situation was, what you actually
-did, what you'd do differently.*
+The booking flow was the main project. Watching twenty salon owners use the
+old one showed where people gave up, and the redesign removed two screens
+and moved payment to the end.

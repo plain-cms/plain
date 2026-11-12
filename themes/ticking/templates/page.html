@@ -1,0 +1,9 @@
+<article class="page">
+  {{> band}}
+  <header class="page-head wrap">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if page.content}}<div class="prose wrap">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

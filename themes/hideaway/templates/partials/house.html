@@ -1,0 +1,11 @@
+<aside class="inquiry house" aria-labelledby="inquiry-heading">
+  <h2 class="lintel" id="inquiry-heading">{{ strings.inquiryHeadingAll }}</h2>
+  <div class="reveal">
+    <div class="sash">
+      <p class="pane">{{#if data.agency.phone}}<a href="tel:{{ data.agency.phone }}"><span class="pane-label">{{ strings.call }}</span> <span class="tel">{{ data.agency.phone }}</span></a>{{else}}{{#if data.agency.email}}{{else}}<a href="/contact/">{{ strings.contactUs }}</a>{{/if}}{{/if}}</p>
+      <p class="pane">{{#if data.agency.email}}<a href="mailto:{{ data.agency.email }}"><span class="pane-label">{{ strings.writeTo }}</span> <span class="mail">{{ data.agency.email }}</span></a>{{/if}}</p>
+      <p class="pane pane-hours">{{ data.agency.hours }}</p>
+      <p class="pane"></p>
+    </div>
+  </div>
+</aside>

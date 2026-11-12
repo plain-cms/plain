@@ -1,0 +1,11 @@
+<li class="sleeve" data-status="{{ item.status }}">
+  <h2 class="sleeve-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  <div class="sleeve-foot">
+    <div class="sleeve-notes">
+      <p class="sleeve-cat">{{ item.category }}</p>
+      {{#if item.description}}<p class="sleeve-desc">{{ item.description }}</p>{{/if}}
+      {{#if item.status}}<p class="status">{{> status}}<span class="st st-raw">{{ item.status }}</span></p>{{/if}}
+    </div>
+    {{#if item.price}}<p class="sticker"><span class="sticker-in"><span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}</span></p>{{/if}}
+  </div>
+</li>

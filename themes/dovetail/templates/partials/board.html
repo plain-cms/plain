@@ -1,0 +1,7 @@
+<li class="board">
+  <h2 class="tails"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  <div class="face">
+    {{#if item.description}}<p class="summary">{{ item.description }}</p>
+    {{/if}}<p class="foot">{{#if item.priceFrom}}<span class="stamp"><small>{{ strings.from }}</small> <b>{{ item.priceFrom }}</b></span>{{else}}{{#if item.dateFormatted}}<time class="stamp" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>{{/if}}{{/if}}<i aria-hidden="true"></i></p>
+  </div>
+</li>

@@ -14,6 +14,7 @@
   --text-l: 1.375rem;
   --text-xl: 1.625rem;
   --text-xxl: clamp(2rem, 5vw, 2.75rem);
+  --text-code: 0.85em;
   --leading-body: 1.7;
   --leading-tight: 1.2;
   --tracking-caps: 0.14em;
@@ -25,32 +26,38 @@
   --color-wax: #8f1f2b;
   --color-on-wax: #fbfbfc;
   --color-border: #e3e3e8;
-  --color-leader: #b9bac2;
+  --color-leader: #9a9ca6;
   --color-code-bg: #f1f1f4;
   --color-mark: #f3dee0;
 
   /* Layout */
   --measure: 62ch;
   --toc-gutter: 2.5rem;
+  --leader-step: 0.4em;
+  --leader-dot: 0.12em;
+  --seal: 0.4em;
+  --field-width: 16rem;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
   --space-4: 2rem;
   --space-5: 4rem;
+  --rule: 1px;
+  --rule-heavy: 3px;
   --radius: 3px;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    /* Dark scheme: warm off-black paper, warm-white ink, the wax lightened */
+    /* Dark scheme: warm off-black paper, warm-white ink, the same wax by lamplight */
     --color-bg: #1c1917;
     --color-text: #ece7e0;
     --color-muted: #a8a199;
-    --color-wax: #e58b93;
+    --color-wax: #d27a78;
     --color-on-wax: #1c1917;
     --color-border: #37322e;
-    --color-leader: #5b544d;
-    --color-code-bg: #262220;
+    --color-leader: #7d756c;
+    --color-code-bg: #2b2623;
     --color-mark: #4a2a30;
   }
 }
@@ -70,21 +77,22 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  overflow-wrap: break-word;
 }
 
 ::selection { background: var(--color-mark); }
 
 a {
   color: var(--color-wax);
-  text-decoration-thickness: 1px;
+  text-decoration-thickness: var(--rule);
   text-underline-offset: 0.16em;
 }
-a:hover { text-decoration-thickness: 2px; }
+a:hover { text-decoration-thickness: calc(2 * var(--rule)); }
 
 :focus-visible {
-  outline: 2px solid var(--color-wax);
-  outline-offset: 2px;
-  border-radius: 2px;
+  outline: calc(2 * var(--rule)) solid var(--color-wax);
+  outline-offset: calc(2 * var(--rule));
+  border-radius: var(--radius);
 }
 
 .skip-link {
@@ -107,31 +115,42 @@ a:hover { text-decoration-thickness: 2px; }
   white-space: nowrap;
 }
 
-/* Masthead — a letterhead: centered title, a wax dot, the nav beneath ------ */
+/* The small caps line: nav, dates, tags, footer links ---------------------- */
+
+.masthead nav a, .essay-meta, .toc-date, .pagination, .essay-back, .not-found-links,
+.subscribe-feed, .subscribe-label, .subscribe-button, .prose th {
+  font-size: var(--text-s);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+/* Masthead — a letterhead: the title on the page's axis, its wax seal hung
+   outside the word, the nav beneath ---------------------------------------- */
 
 .masthead {
   text-align: center;
-  padding: var(--space-5) 0 var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-5) var(--space-3) 0;
+  border-bottom: var(--rule) solid var(--color-border);
 }
 
 .site-title {
-  font-family: var(--font-serif);
+  display: inline-block;
   font-size: var(--text-xl);
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  line-height: var(--leading-tight);
   color: var(--color-text);
   text-decoration: none;
 }
+/* The seal follows the last word and takes no room of its own (its margins
+   cancel its width), so the title stays on the axis however it wraps. */
 .site-title::after {
   content: "";
   display: inline-block;
-  width: 0.4em;
-  height: 0.4em;
-  margin-left: 0.45em;
+  vertical-align: 0.02em;
+  margin: 0 calc(-0.25em - var(--seal)) 0 0.25em;
+  width: var(--seal);
+  height: var(--seal);
   border-radius: 50%;
   background: var(--color-wax);
-  vertical-align: baseline;
 }
 .site-title:hover { color: var(--color-wax); }
 
@@ -139,22 +158,25 @@ a:hover { text-decoration-thickness: 2px; }
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--space-2) var(--space-4);
-  margin: var(--space-3) 0 0;
+  gap: 0 var(--space-4);
+  margin: var(--space-2) 0 0;
   padding: 0;
   list-style: none;
 }
 .masthead nav a {
+  display: inline-block;
+  padding: var(--space-2) 0 var(--space-3);
   color: var(--color-muted);
   text-decoration: none;
-  font-size: var(--text-s);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
 }
 .masthead nav a:hover { color: var(--color-wax); text-decoration: underline; }
-.masthead nav a[aria-current="page"] { color: var(--color-text); }
-
-main { min-height: 60vh; }
+/* The current page is underlined as well as darker — never colour alone. */
+.masthead nav a[aria-current="page"] {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-wax);
+  text-underline-offset: 0.5em;
+}
 
 /* Headers ------------------------------------------------------------------ */
 
@@ -164,12 +186,17 @@ main { min-height: 60vh; }
 }
 
 .essay-title {
-  font-family: var(--font-serif);
   font-size: var(--text-xxl);
   font-weight: 400;
   line-height: var(--leading-tight);
   margin: 0;
   text-wrap: balance;
+}
+
+/* A word longer than its line breaks with a hyphen where the browser can
+   keep hyphenation to such words; elsewhere it simply breaks. */
+@supports (hyphenate-limit-chars: 20 6 6) {
+  .essay-title, .toc-title, .prose :is(h1, h2, h3, h4) { hyphens: auto; hyphenate-limit-chars: 20 6 6; }
 }
 
 .essay-subtitle {
@@ -181,36 +208,35 @@ main { min-height: 60vh; }
   text-wrap: balance;
 }
 
-.essay-meta {
-  margin: var(--space-3) 0 0;
-  color: var(--color-muted);
-  font-size: var(--text-s);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
+/* Date, tags and reading time run on as one line of text, one separator
+   between them all. Each separator is tied to the item before it, so a
+   wrapped line never opens with one. */
+.essay-meta { margin: var(--space-3) 0 0; color: var(--color-muted); }
+.tags, .tags li { display: inline; margin: 0; padding: 0; list-style: none; }
+.essay-meta time, .read-time { white-space: nowrap; }
+.essay-meta > :not(:last-child, .tags)::after, .tags li:not(:last-child)::after, .tags:not(:last-child) li::after {
+  content: "\00a0·";
+  content: "\00a0·" / "";
 }
-
-.tags { margin-left: var(--space-2); }
-.tag {
-  display: inline-block;
-  margin-left: var(--space-2);
-  color: var(--color-wax);
-  text-decoration: none;
-}
-.tag:hover { text-decoration: underline; }
+.tag { color: inherit; text-decoration: none; }
+.tag:hover { color: var(--color-wax); text-decoration: underline; }
 
 /* Prose -------------------------------------------------------------------- */
 
-.prose h2, .prose h3, .prose h4 {
-  font-family: var(--font-serif);
+.prose h1, .prose h2, .prose h3, .prose h4 {
   font-weight: 400;
   line-height: var(--leading-tight);
   margin: var(--space-4) 0 var(--space-2);
   text-wrap: balance;
 }
-.prose h2 { font-size: var(--text-xl); }
+.prose h1, .prose h2 { font-size: var(--text-xl); }
 .prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-m); font-style: italic; }
 
+.prose > :first-child { margin-top: 0; }
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: var(--space-4); }
+.prose li::marker { color: var(--color-muted); }
 
 .prose img {
   max-width: 100%;
@@ -221,17 +247,18 @@ main { min-height: 60vh; }
 .prose blockquote {
   margin: var(--space-3) 0;
   padding: 0 var(--space-3);
-  border-left: 2px solid var(--color-wax);
+  border-left: calc(2 * var(--rule)) solid var(--color-leader);
   font-style: italic;
   color: var(--color-muted);
 }
 
 .prose code {
   font-family: var(--font-mono);
-  font-size: 0.85em;
+  font-size: var(--text-code);
   background: var(--color-code-bg);
   padding: 0.1em 0.35em;
   border-radius: var(--radius);
+  overflow-wrap: anywhere;
 }
 
 .prose pre {
@@ -239,27 +266,27 @@ main { min-height: 60vh; }
   padding: var(--space-3);
   border-radius: var(--radius);
   overflow-x: auto;
-  line-height: 1.5;
+  line-height: var(--leading-body);
 }
-.prose pre code { background: none; padding: 0; font-size: var(--text-s); }
+.prose pre code { background: none; padding: 0; font-size: var(--text-s); overflow-wrap: normal; }
 
+/* A wide table scrolls inside itself; the page never scrolls sideways. */
 .prose table {
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
-  width: 100%;
   margin: 0 0 var(--space-3);
   font-variant-numeric: tabular-nums;
 }
 .prose th, .prose td {
   text-align: left;
   padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: var(--rule) solid var(--color-border);
 }
-.prose th {
-  font-size: var(--text-s);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
-  font-weight: 400;
-}
+.prose th { font-weight: 400; }
+/* The outer cells sit flush with the text column. */
+.prose :is(th, td):first-child { padding-left: 0; }
+.prose :is(th, td):last-child { padding-right: 0; }
 
 .prose hr {
   border: 0;
@@ -269,10 +296,11 @@ main { min-height: 60vh; }
 .prose hr::after {
   content: "· · ·";
   color: var(--color-muted);
-  letter-spacing: 0.5em;
+  letter-spacing: var(--tracking-caps);
 }
 
 .cover {
+  display: block;
   width: 100%;
   height: auto;
   border-radius: var(--radius);
@@ -280,99 +308,129 @@ main { min-height: 60vh; }
 }
 
 /* The essay ----------------------------------------------------------------
-   Centered single column, a modest drop cap where `initial-letter` is
-   supported (degrades to nothing — taste over trick), and an end mark. */
+   Opens the way a book chapter does — the first line in spaced small capitals
+   and, where `initial-letter` is supported, a two-line initial in plain ink
+   (degrades to nothing — taste over trick). It closes with the wax seal.
+   Small caps, not `text-transform`: WebKit ignores that inside ::first-line. */
+
+/* A one-line greeting is shorter than its initial: the paragraph holds the
+   letter, so it never sinks into the paragraph below. */
+.essay-body > p:first-child { display: flow-root; }
+.essay-body > p:first-child::first-line {
+  font-variant-caps: all-small-caps;
+  letter-spacing: calc(var(--tracking-caps) / 2);
+}
 
 @supports (initial-letter: 2) or (-webkit-initial-letter: 2) {
   .essay-body > p:first-child::first-letter {
     -webkit-initial-letter: 2;
     initial-letter: 2;
-    color: var(--color-wax);
-    padding-right: var(--space-2);
+    font-variant-caps: normal;
+    font-size: var(--text-m);
+    letter-spacing: 0;
+    padding-right: var(--space-1);
   }
 }
 
 .essay-body::after {
-  content: "❦";
-  content: "❦" / "";
+  content: "";
   display: block;
-  text-align: center;
-  color: var(--color-wax);
-  font-size: var(--text-l);
-  margin-top: var(--space-4);
+  font-size: var(--text-xl);
+  width: var(--seal);
+  height: var(--seal);
+  margin: var(--space-4) auto 0;
+  border-radius: 50%;
+  background: var(--color-wax);
 }
 
-/* The archive — the signature. Each essay is a table-of-contents line:
-   number, title, a dot leader out to the date, the excerpt beneath. -------- */
+.essay-back { margin: var(--space-3) 0 0; text-align: center; }
+.essay-back a, .not-found-links a { color: var(--color-muted); text-decoration: none; }
+.essay-back a:hover, .not-found-links a:hover { color: var(--color-wax); text-decoration: underline; }
+
+/* The archive — the signature. Each essay is a line in a table of contents:
+   its number in wax, the title, a dot leader out to the date, the excerpt
+   beneath. The numbers are the list's own markers: `<ol reversed>` gives the
+   first letter No. 1. A marker counts only the lines of one page, so the
+   numbers are shown while the archive fits on one and dropped once it
+   paginates — a number that restarts on every page would be a wrong one. -- */
 
 .toc {
-  list-style: none;
-  counter-reset: essay;
   margin: 0;
-  padding: 0;
-}
-
-.toc-entry {
-  counter-increment: essay;
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-border);
-}
-.toc-entry:last-child { border-bottom: 0; }
-
-.toc-link {
-  display: flex;
-  align-items: baseline;
-  gap: var(--space-2);
-  color: var(--color-text);
-  text-decoration: none;
-}
-
-.toc-link::before {
-  content: counter(essay, decimal-leading-zero);
-  flex: 0 0 var(--toc-gutter);
-  font-family: var(--font-mono);
-  font-size: var(--text-s);
-  color: var(--color-muted);
-}
-
-.toc-title {
+  padding: 0 0 0 var(--toc-gutter);
+  list-style: decimal;
   font-size: var(--text-l);
   line-height: var(--leading-tight);
-  text-wrap: balance;
+  font-variant-numeric: tabular-nums;
+}
+/* Tag pages are extracts and a paginated archive cannot count: the entries
+   keep their leaders but are not numbered. */
+.toc-plain { padding-left: 0; list-style: none; }
+
+.toc-entry { position: relative; padding: var(--space-2) 0 var(--space-3); }
+.toc-entry::marker { color: var(--color-wax); }
+
+/* The leader is drawn behind the whole line, on the title's last baseline;
+   the title and the date sit on paper-coloured grounds that cover it, so the
+   dots run from the end of the title to the date however the title wraps,
+   and line up from one entry to the next. The date's wrapper keeps the
+   title's type size, so bottom-aligning the two puts them on one baseline. */
+.toc-link {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  color: var(--color-text);
+  text-decoration: none;
+  background: radial-gradient(circle closest-side, var(--color-leader) 80%, transparent) 0 calc(100% - 0.3em) repeat-x;
+  background-size: var(--leader-step) var(--leader-dot);
+}
+/* The whole entry is the link, number and excerpt included. */
+.toc-link::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 calc(-1 * var(--toc-gutter));
 }
 
-/* The dot leader: an empty baseline-aligned span whose bottom border sits
-   on the text baseline, exactly like leader dots in a set table of contents. */
-.toc-leader {
-  flex: 1 1 auto;
-  min-width: var(--space-4);
-  height: 0;
-  border-bottom: 2px dotted var(--color-leader);
+.toc-title { min-width: 0; padding-right: var(--space-4); overflow-wrap: anywhere; text-wrap: balance; }
+/* The title's ground covers only the foot of each line, where the leader
+   runs — a full-height ground would paint over the descenders of the line
+   above when a title wraps. */
+.toc-when { background: var(--color-bg); }
+.toc-title span {
+  padding-right: calc(var(--leader-step) / 2);
+  background: linear-gradient(var(--color-bg), var(--color-bg)) 0 100% / 100% 0.7em no-repeat;
 }
+.toc-when { padding-left: calc(var(--leader-step) / 2); white-space: nowrap; }
+.toc-date { color: var(--color-muted); letter-spacing: calc(var(--tracking-caps) / 2); }
 
-.toc-date {
-  font-size: var(--text-s);
-  color: var(--color-muted);
-  white-space: nowrap;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+.toc-link:hover .toc-title span {
+  color: var(--color-wax);
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule);
+  text-underline-offset: 0.16em;
 }
-
-.toc-link:hover .toc-title { color: var(--color-wax); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
-.toc-link:hover::before { color: var(--color-wax); }
 
 .toc-excerpt {
+  margin: var(--space-1) var(--space-4) 0 0;
+  font-size: calc((var(--text-s) + var(--text-m)) / 2);
+  line-height: var(--leading-body);
   font-style: italic;
   color: var(--color-muted);
-  margin: var(--space-1) 0 0 var(--toc-gutter);
-  padding-left: var(--space-2);
+  text-wrap: pretty;
 }
 
-/* At phone widths the leader retires and the date stacks under the title. */
+/* On a phone the line is kept — number, title, leader, date — at body size. */
 @media (max-width: 30rem) {
-  .toc-link { flex-wrap: wrap; }
-  .toc-leader { display: none; }
-  .toc-date { flex-basis: 100%; margin-left: calc(var(--toc-gutter) + var(--space-2)); }
+  .masthead nav ul { column-gap: var(--space-3); }
+  .toc { padding-left: calc(var(--toc-gutter) * 0.8); font-size: var(--text-m); }
+  .toc-plain { padding-left: 0; }
+  .toc-title { padding-right: var(--space-3); }
+  .toc-excerpt { margin-right: 0; }
+}
+/* Narrower than any current phone: no room for a leader, so the date stacks. */
+@media (max-width: 21rem) {
+  .toc-link { display: block; background: none; }
+  .toc-title { padding-right: 0; }
+  .toc-when { display: block; padding-left: 0; }
 }
 
 .empty { color: var(--color-muted); font-style: italic; text-align: center; }
@@ -381,25 +439,37 @@ main { min-height: 60vh; }
   display: flex;
   justify-content: space-between;
   gap: var(--space-3);
-  padding: var(--space-4) 0;
+  padding: var(--space-4) 0 0;
   color: var(--color-muted);
-  font-size: var(--text-s);
 }
 
-/* The subscribe slot — a reply card. Renders only when data/newsletter.json
-   has a formAction; the page is complete without it. --------------------- */
+/* The 404 — a title page with two ways on. -------------------------------- */
+
+.not-found-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The subscribe slot — a reply card under every page. With a formAction in
+   data/newsletter.json it carries the e-mail form; with an `email` instead,
+   the address to write to; with neither it is still a finished card that
+   points at the feed. ---------------------------------------------------- */
 
 .subscribe {
   margin-top: var(--space-5);
   padding: var(--space-4) var(--space-3);
-  border: 1px solid var(--color-border);
-  border-top: 3px solid var(--color-wax);
+  border: var(--rule) solid var(--color-border);
+  border-top: var(--rule-heavy) solid var(--color-wax);
   border-radius: var(--radius);
   text-align: center;
 }
 
 .subscribe-prompt {
-  font-family: var(--font-serif);
   font-weight: 400;
   font-style: italic;
   font-size: var(--text-l);
@@ -408,6 +478,18 @@ main { min-height: 60vh; }
   text-wrap: balance;
 }
 
+.subscribe-alt {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0 var(--space-2);
+  margin: 0;
+}
+/* Without a provider the card is an address to write to, set as written. */
+.subscribe-label { color: var(--color-muted); }
+.subscribe-mail { min-width: 0; overflow-wrap: anywhere; }
+
 .subscribe-form {
   display: flex;
   flex-wrap: wrap;
@@ -415,23 +497,23 @@ main { min-height: 60vh; }
   gap: var(--space-2);
 }
 
+/* The field's edge is the muted ink, not the hairline: a form control needs
+   3:1 against the paper (WCAG 1.4.11). */
 .subscribe-input {
   font: inherit;
   color: var(--color-text);
   background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  border: var(--rule) solid var(--color-muted);
   border-radius: var(--radius);
   padding: var(--space-2) var(--space-3);
-  min-width: 16rem;
-  flex: 0 1 auto;
+  flex: 0 1 var(--field-width);
+  min-width: 0;
 }
 .subscribe-input::placeholder { color: var(--color-muted); }
 
 .subscribe-button {
-  font: inherit;
-  font-size: var(--text-s);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-caps);
+  font-family: inherit;
+  line-height: inherit;
   color: var(--color-on-wax);
   background: var(--color-wax);
   border: 0;
@@ -439,10 +521,10 @@ main { min-height: 60vh; }
   padding: var(--space-2) var(--space-4);
   cursor: pointer;
 }
-.subscribe-button:hover { filter: brightness(1.12); }
+.subscribe-button:hover { text-decoration: underline; }
 
 @media (max-width: 30rem) {
-  .subscribe-input, .subscribe-button { width: 100%; }
+  .subscribe-input, .subscribe-button { flex-basis: 100%; }
 }
 
 /* Footer ------------------------------------------------------------------- */
@@ -450,11 +532,16 @@ main { min-height: 60vh; }
 .colophon {
   margin-top: var(--space-5);
   padding: var(--space-3) 0 var(--space-4);
-  border-top: 1px solid var(--color-border);
+  border-top: var(--rule) solid var(--color-border);
   color: var(--color-muted);
   font-size: var(--text-s);
   text-align: center;
 }
+.colophon p { margin: 0; }
+.colophon a { color: inherit; }
+.colophon a:hover { color: var(--color-wax); }
+/* The card above already closes the page; the footer needs no second rule. */
+.subscribe + .colophon { margin-top: var(--space-4); border-top: 0; padding-top: 0; }
 
 /* Motion & print ------------------------------------------------------------ */
 
@@ -463,10 +550,25 @@ main { min-height: 60vh; }
 }
 
 @media print {
-  body { max-width: none; font-size: 11pt; color: #000; background: #fff; }
-  .masthead nav, .subscribe, .colophon, .skip-link { display: none; }
+  /* Ink on paper whatever scheme the screen was in. */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #444;
+    --color-wax: #000;
+    --color-border: #999;
+    --color-leader: #777;
+    --color-code-bg: #fff;
+  }
+  body { max-width: none; font-size: 11pt; }
+  .masthead nav, .subscribe, .colophon, .skip-link, .essay-back, .not-found-links, .pagination { display: none; }
+  /* The leaders and the seal are backgrounds; ask the printer to keep them. */
+  .toc-link, .site-title::after, .essay-body::after { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .masthead { padding-top: 0; padding-bottom: var(--space-3); }
+  .essay-header { margin-top: var(--space-4); }
   a { color: inherit; }
-  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
-  .prose pre { white-space: pre-wrap; }
-  .toc-link::before, .toc-date { color: #000; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: var(--text-code); }
+  .prose pre { white-space: pre-wrap; border: var(--rule) solid; }
+  .toc-entry, .prose pre, .prose blockquote { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
 }

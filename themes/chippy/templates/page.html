@@ -1,0 +1,26 @@
+{{#if page.url.4}}<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+</article>{{else}}<article class="page front">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if collections.menu}}<aside class="board front-board" aria-labelledby="board-title">
+    <h2 class="board-title" id="board-title">{{ strings.menu }}</h2>
+    <ol class="pegs" role="list">
+      {{#each collections.menu as item}}<li class="peg" data-section="{{ item.section }}">
+        {{#if item.section}}<h3 class="peg-section">{{ item.section }}</h3>{{/if}}
+        <p class="peg-line"><span class="peg-name">{{ item.title }}</span>{{#if item.price}} <span class="peg-price">{{ item.price }}</span>{{/if}}</p>
+      </li>
+      {{/each}}
+    </ol>
+    <p class="board-foot"><a href="/menu/">{{ strings.fullMenu }}</a></p>
+  </aside>{{/if}}
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+</article>{{/if}}

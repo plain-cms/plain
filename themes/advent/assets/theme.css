@@ -1,0 +1,404 @@
+/* Advent — a Christmas-market theme built around one object: the printed
+   advent calendar, a night-green card of little doors cut on three sides and
+   lettered in gilt. All colour, type and spacing live in the tokens below.
+   Restyle by editing tokens, never selectors (cms-spec.md §10.1).
+   The page is dark by default, so instead of the usual
+   (prefers-color-scheme: dark) block there is a light one: a snowed-in morning.
+   The calendar card itself stays night-green in both schemes: its own
+   --color-card-* tokens are not overridden by the light block. */
+
+:root {
+  /* Type — slab capitals and figures on the doors, a humanist sans for words */
+  --font-slab: Rockwell, "Rockwell Nova", "Roboto Slab", "Zilla Slab", "Noto Serif", "DejaVu Serif", Georgia, serif;
+  --font-sans: Seravek, "Gill Sans Nova", "Segoe UI", Ubuntu, "Source Sans 3", "Noto Sans", Calibri, "DejaVu Sans", sans-serif;
+  --text-base: 1.0625rem;
+  --leading: 1.55;
+  --tracking-caps: 0.06em;
+  --tracking-label: 0.16em;
+
+  /* Colour — dark: night behind spruce, snow-white type, gilt; never red */
+  --color-bg: #0a1f18;
+  --color-text: #f3f6f1;
+  --color-muted: #a9c2b6;
+  --color-accent: #e2c06a;
+  --color-accent-ink: #0f2b22;
+  --color-gilt: #dcb85e;
+  --color-rule: #2a473c;
+  --color-code-bg: #13342a;
+
+  /* The calendar card — night-green in both schemes */
+  --color-card: #0f2b22;
+  --color-card-text: #f3f6f1;
+  --color-card-muted: #b3cbbf;
+  --color-card-accent: #e8c873;
+  --color-card-accent-ink: #0f2b22;
+  --color-card-gilt: #e0bd63;
+  --color-card-rule: #2e5446;
+  --color-card-snow: rgba(243,246,241,0.16);
+  --color-door: #163d2f;
+  --color-hinge: #8f8150;
+
+  /* Layout */
+  --measure: 42rem;
+  --measure-wide: 76rem;
+  --door-min: 8.75rem;
+  --door-gap: 0.85rem;
+  --door-figure: 2.1rem;
+  --cut: 2px;
+  --knob: 0.5rem;
+  --radius: 2px;
+  --double: 4px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* A snowed-in morning — white card, green ink, darker gilt */
+    --color-bg: #fcfcfa;
+    --color-text: #13392c;
+    --color-muted: #4d6a5e;
+    --color-accent: #7a5b0c;
+    --color-accent-ink: #ffffff;
+    --color-gilt: #86650f;
+    --color-rule: #cddad2;
+    --color-code-bg: #eef3ef;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: dark light; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+/* Display type hyphenates; running text, figures and addresses do not. */
+.invite-name, .page-header h1, .door-title, .door-time, .part-day, .person-name, .post-row h2, .site-title, .colophon-name, .prose h2, .prose h3 { hyphens: auto; }
+
+/* A narrow column has no room for a long word whole. */
+@media (max-width: 30rem) { .prose p, .prose li, .lede, .door-note, .person-note { hyphens: auto; } }
+/* …but never inside an address someone may copy or type. */
+.prose a, .reply-address { hyphens: manual; }
+
+.wrap { max-width: var(--measure-wide); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, 2.75rem); }
+main { padding-block: var(--space-4) var(--space-5); min-height: 60vh; }
+
+::selection { background: var(--color-gilt); color: var(--color-bg); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); color: var(--color-text); background: var(--color-bg); }
+.skip-link:focus { left: var(--space-2); }
+
+h1, h2, h3, h4 { line-height: 1.15; margin: 0; font-weight: 700; }
+p { margin: 0 0 var(--space-3); }
+
+/* The calendar's lettering: slab capitals */
+.site-title, .invite-name, .invite-date, .page-header h1, .board-h, .part-day, .door-title, .person-name,
+.section-h, .colophon-name, .masthead-when, .btn, .prose h2, .prose th, .post-date, .tags a {
+  font-family: var(--font-slab);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+/* Gilt figures */
+.door-time, .fact-time, .post-date, .colophon-date, .pagination span { font-family: var(--font-slab); font-variant-numeric: lining-nums tabular-nums; }
+
+/* Masthead & footer ----------------------------------------------------- */
+
+.masthead { border-bottom: 1px solid var(--color-rule); }
+.masthead-in { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: 0.9rem; }
+.site-title { min-width: 0; font-size: 1rem; font-weight: 700; line-height: 1.25; color: var(--color-text); text-decoration: none; }
+.site-title:hover { color: var(--color-accent); }
+.masthead nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) 1.5rem; }
+.masthead nav a { display: inline-block; padding-block: 0.1rem; font-size: 0.98rem; color: var(--color-text); text-decoration: none; border-bottom: var(--cut) solid transparent; }
+.masthead nav a:hover { border-bottom-color: var(--color-muted); }
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-gilt); }
+.masthead-when { margin-block: 0; padding-bottom: 0.8rem; font-size: 0.78rem; line-height: 1.5; letter-spacing: var(--tracking-label); color: var(--color-gilt); }
+.masthead-when span + span::before { content: "·"; padding-inline: 0.6em; }
+
+.colophon { border-top: var(--double) double var(--color-gilt); color: var(--color-muted); font-size: 0.95rem; }
+.colophon-in { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--space-3) var(--space-4); padding-block: var(--space-4); }
+.colophon-in > div:empty { display: none; }
+.colophon p { margin: 0; }
+.colophon-name { color: var(--color-text); font-weight: 700; }
+.colophon-date { color: var(--color-gilt); }
+.colophon-venue { color: var(--color-text); }
+.colophon-note > :last-child { margin-bottom: 0; }
+
+/* The calendar card ----------------------------------------------------- */
+
+/* A card of night-green board, framed in a gilt double rule and dusted with
+   snow. The page around it is night (dark) or a snowed-in morning (light);
+   inside it the colour tokens are the card's own, whatever the scheme. */
+.card {
+  --color-bg: var(--color-card);
+  --color-text: var(--color-card-text);
+  --color-muted: var(--color-card-muted);
+  --color-accent: var(--color-card-accent);
+  --color-accent-ink: var(--color-card-accent-ink);
+  --color-gilt: var(--color-card-gilt);
+  --color-rule: var(--color-card-rule);
+  color-scheme: dark;
+  min-width: 0;
+  padding: clamp(1.25rem, 3.5vw, 2.5rem);
+  position: relative;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--double) double var(--color-gilt);
+}
+.card > * { position: relative; }
+/* Snow over the head of the card, thinning out before the doors begin */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(circle, var(--color-card-snow) 0 1.1px, transparent 1.7px),
+    radial-gradient(circle, var(--color-card-snow) 0 1.5px, transparent 2.1px),
+    radial-gradient(circle, var(--color-card-snow) 0 0.9px, transparent 1.5px);
+  background-size: 2.9rem 3.3rem, 5.3rem 4.7rem, 7.1rem 6.1rem;
+  background-position: 0.4rem 0.9rem, 2.1rem 2.6rem, 4.6rem 0.3rem;
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 85%);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 85%);
+  max-height: 26rem;
+}
+.board::before { content: none; }
+.card .card { margin: 0; padding: var(--space-3) 0 0; background: none; border: 0; border-top: var(--double) double var(--color-gilt); }
+/* On a phone the card runs to the edges of the screen. */
+@media (max-width: 30rem) {
+  .card { margin-inline: calc(var(--space-3) * -1); padding-inline: var(--space-3); border-inline: 0; }
+}
+
+/* Home: the invitation, printed at the head of the card ------------------ */
+
+.home { margin-top: calc(var(--space-4) * -0.5); }
+.invite { container-type: inline-size; margin-bottom: var(--space-4); }
+.invite > * { min-width: 0; }
+.invite-date { text-wrap: balance; margin: 0 0 var(--space-3); font-size: 0.9rem; font-weight: 700; line-height: 1.45; letter-spacing: var(--tracking-label); color: var(--color-gilt); }
+/* The name runs across the card, about twenty capitals to the line, so a
+   word of a place name fits whole before it is ever hyphenated. */
+.invite-name { font-size: clamp(2.2rem, 6.6cqi, 4.6rem); line-height: 1; letter-spacing: 0.01em; text-wrap: balance; }
+.invite-foot { display: grid; gap: var(--space-4); margin-top: var(--space-3); }
+@media (min-width: 48rem) {
+  .invite-foot { grid-template-columns: minmax(0, 1fr) minmax(15rem, 24rem); align-items: start; column-gap: clamp(2rem, 4vw, 3.5rem); }
+}
+.invite-line { margin: 0; font-size: clamp(1.2rem, 1rem + 0.9vw, 1.6rem); line-height: 1.3; text-wrap: pretty; }
+.invite-facts { padding-left: 1.1rem; border-left: var(--cut) solid var(--color-gilt); }
+.invite-facts > p { margin: 0 0 var(--space-1); }
+.invite-facts > :last-child { margin-bottom: 0; }
+.fact-time { text-wrap: balance; font-size: 1.1rem; font-weight: 700; line-height: 1.35; color: var(--color-gilt); }
+.fact-venue { hyphens: auto; font-weight: 700; }
+.fact-address { color: var(--color-muted); }
+.fact-entry { padding-top: var(--space-1); }
+.invite-facts .reply { margin-top: var(--space-3); }
+.home-body { max-width: var(--measure); margin-top: var(--space-5); }
+
+/* The reply block ------------------------------------------------------ */
+
+.reply > p { margin: 0 0 var(--space-2); }
+.reply > :last-child { margin-bottom: 0; }
+.reply-by { font-weight: 700; }
+.reply-mail { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); }
+.reply-address { min-width: 0; font-size: 0.88rem; color: var(--color-muted); overflow-wrap: anywhere; }
+.btn { display: inline-block; padding: 0.55rem 1rem 0.5rem; font-size: 0.85rem; font-weight: 700; line-height: 1.2; color: var(--color-accent-ink); background: var(--color-accent); text-decoration: none; border-radius: var(--radius); }
+.btn:hover { text-decoration: underline; }
+.reply-end { max-width: var(--measure); margin-top: var(--space-5); padding-top: var(--space-3); border-top: var(--double) double var(--color-gilt); }
+.reply-entry { font-weight: 700; }
+
+/* The programme ---------------------------------------------------------- */
+
+.board { min-width: 0; counter-reset: door; }
+.board-h { margin-bottom: var(--space-3); font-size: 0.82rem; letter-spacing: var(--tracking-label); color: var(--color-gilt); }
+.part + .part { margin-top: var(--space-4); }
+.part-day { display: flex; align-items: baseline; gap: 0.7rem; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.25; }
+/* A small gilt lozenge before each day, as printed on the card */
+.part-day::before { content: ""; flex: none; width: 0.5em; height: 0.5em; background: var(--color-gilt); transform: rotate(45deg) translateY(-0.1em); }
+
+/* Doors: every door is cut in gilt on three sides and hinged on the left,
+   where the card is only scored (a dashed fold). A gilt knob sits on the
+   opening edge; the door's number is stamped by the hinge and its time in
+   gilt figures in the top corner of the opening side. Doors come in three
+   widths, in a sequence of nine that fills every row; the last row's doors
+   widen to close it. On a phone two widths, on the narrowest screens one
+   door to the row. The numbers run on through the whole programme. */
+.doors { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--door-gap); }
+.door {
+  --w: 1;
+  --per: 1;
+  counter-increment: door;
+  position: relative;
+  flex: 1 1 calc((100% - var(--door-gap) * (var(--per) - 1)) * var(--w) - 1px);
+  min-width: 0;
+  min-height: var(--door-min);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: 0.9rem 1.35rem 1rem 1.05rem;
+  background: var(--color-door);
+  border: var(--cut) solid var(--color-gilt);
+  border-left: var(--cut) dashed var(--color-hinge);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  container-type: inline-size;
+}
+/* The knob, on the opening edge */
+.door::after { content: ""; position: absolute; top: 50%; right: 0.4rem; width: var(--knob); height: var(--knob); margin-top: calc(var(--knob) / -2); border-radius: 50%; background: var(--color-gilt); pointer-events: none; }
+
+.door-head { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-2) var(--space-3); }
+.door-num { flex: none; display: flex; align-items: center; justify-content: center; min-width: 1.9rem; height: 1.9rem; padding-inline: 0.35rem; font-family: var(--font-slab); font-size: 0.95rem; font-weight: 700; line-height: 1; font-variant-numeric: lining-nums; color: var(--color-gilt); border: var(--cut) solid var(--color-gilt); border-radius: 1rem; }
+.door-num::before { content: counter(door); content: counter(door) / ""; }
+/* The time, always at the top of the opening side, always one size */
+.door-time { flex: 1 0 auto; max-width: 100%; margin: 0 0 0 auto; font-size: var(--door-figure); font-weight: 700; line-height: 1; text-align: right; color: var(--color-gilt); }
+/* No time: a gilt star in its place. */
+.door-star { flex: none; width: 1.2rem; height: 1.2rem; margin: 0.35rem 0 0 auto; background: var(--color-gilt); clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%); }
+.door-text { margin-top: auto; min-width: 0; max-width: 100%; }
+.door-text > p { margin: 0; }
+.door-title { font-size: clamp(0.92rem, 0.7rem + 2.2cqi, 1.22rem); font-weight: 700; line-height: 1.15; text-wrap: balance; }
+.door-place { hyphens: auto; margin-top: 0.3rem; font-size: 0.88rem; line-height: 1.3; letter-spacing: 0.02em; color: var(--color-gilt); }
+.door-note { margin-top: 0.35rem; font-size: 0.88rem; line-height: 1.4; color: var(--color-muted); }
+
+/* Each part starts the sequence at a different row, so parts of three
+   doors do not all look alike. */
+.doors { --g0: 0.44; --g1: 0.32; --g2: 0.24; --h0: 0.56; --h1: 0.44; }
+.part:nth-of-type(3n+2) .doors { --g0: 0.24; --g1: 0.44; --g2: 0.32; --h0: 0.44; --h1: 0.56; }
+.part:nth-of-type(3n) .doors { --g0: 0.32; --g1: 0.24; --g2: 0.44; }
+@media (max-width: 30rem) {
+  .door { --door-figure: 1.45rem; padding-inline: 0.8rem 1.2rem; }
+  .door::after { right: 0.35rem; }
+}
+@media (min-width: 22rem) {
+  .door { --per: 2; --w: var(--h0); }
+  .door:nth-child(4n+2), .door:nth-child(4n+3) { --w: var(--h1); }
+}
+@media (min-width: 48rem) {
+  .door { --per: 3; }
+  .door:nth-child(9n+1), .door:nth-child(9n+5), .door:nth-child(9n) { --w: var(--g0); }
+  .door:nth-child(9n+2), .door:nth-child(9n+6), .door:nth-child(9n+7) { --w: var(--g1); }
+  .door:nth-child(9n+3), .door:nth-child(9n+4), .door:nth-child(9n+8) { --w: var(--g2); }
+}
+
+/* People ---------------------------------------------------------------- */
+
+.people { min-width: 0; margin-top: var(--space-5); }
+.section-h { margin-bottom: var(--space-3); font-size: 0.82rem; letter-spacing: var(--tracking-label); color: var(--color-gilt); }
+.people-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: var(--space-3) var(--space-4); }
+.person { min-width: 0; padding-top: 0.6rem; border-top: 1px solid var(--color-rule); }
+.person p { margin: 0; }
+.person-name { font-size: 1rem; font-weight: 700; line-height: 1.25; }
+.person-role { hyphens: auto; margin-top: 0.15rem; font-size: 0.95rem; color: var(--color-gilt); }
+.person-note { margin-top: var(--space-1); font-size: 0.92rem; color: var(--color-muted); }
+
+/* Pages, posts, lists --------------------------------------------------- */
+
+.page-header { max-width: var(--measure); margin-bottom: var(--space-4); }
+.page-header h1 { font-size: clamp(1.75rem, 1.1rem + 3vw, 3rem); line-height: 1.04; text-wrap: balance; }
+.lede { margin: var(--space-3) 0 0; font-size: 1.2rem; line-height: 1.45; color: var(--color-muted); }
+.page > .board { margin-bottom: var(--space-5); }
+.page > .prose, .post > .prose { max-width: var(--measure); }
+
+.post-date { margin: 0 0 var(--space-2); font-size: 0.85rem; letter-spacing: var(--tracking-label); color: var(--color-gilt); }
+.post-list { list-style: none; max-width: var(--measure); margin: 0; padding: 0; border-top: var(--double) double var(--color-gilt); }
+.post-row { padding-block: 1.1rem; border-bottom: 1px solid var(--color-rule); }
+.post-row > * { margin: 0; min-width: 0; }
+.post-row h2 { font-family: var(--font-slab); font-size: 1.25rem; line-height: 1.25; }
+.post-row h2 a { color: var(--color-text); text-decoration-color: var(--color-gilt); }
+.post-row h2 a:hover { color: var(--color-accent); }
+.post-summary { margin-top: var(--space-1); color: var(--color-muted); }
+.empty { color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); max-width: var(--measure); margin-top: var(--space-4); }
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; padding: 0; font-size: 0.82rem; }
+.back { max-width: var(--measure); margin: var(--space-4) 0 0; padding-top: var(--space-3); border-top: 1px solid var(--color-rule); }
+
+/* The 404 is one shut door. */
+.not-found { max-width: 32rem; }
+.not-found .door { --door-figure: 3rem; min-height: 15rem; }
+.not-found h1.door-title { font-size: 1.5rem; }
+.not-found .door-note { font-size: 1rem; }
+.not-found-links { display: flex; margin-bottom: 0; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-4); }
+
+/* Body text -------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-size: 1.1rem; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-family: var(--font-slab); font-size: 1.1rem; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1rem; color: var(--color-muted); }
+.prose ul, .prose ol { margin: 0 0 var(--space-3); padding-left: 1.3rem; }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li::marker { color: var(--color-gilt); }
+.prose a { overflow-wrap: anywhere; }
+.prose blockquote { margin: var(--space-4) 0; padding: var(--space-1) 0 var(--space-1) var(--space-3); border-left: var(--cut) solid var(--color-gilt); font-size: 1.1rem; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose hr { height: 0; margin: var(--space-4) 0; border: 0; border-top: var(--double) double var(--color-gilt); }
+/* A table wider than the column scrolls in its own box; a soft shade at the
+   cut edge shows there is more, and goes once the end is reached. */
+.prose table {
+  display: block; width: max-content; max-width: 100%; overflow-x: auto; margin: 0 0 var(--space-3); border-collapse: collapse; font-size: 0.95rem;
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) left / 1.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) right / 1.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--color-rule), transparent) left / 0.7rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--color-rule), transparent) right / 0.7rem 100% no-repeat scroll;
+}
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { font-size: 0.8rem; font-weight: 700; color: var(--color-gilt); border-bottom: var(--cut) solid var(--color-gilt); }
+.prose td { min-width: 7rem; }
+.prose code { font-size: 0.9em; padding: 0.1em 0.3em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { margin: 0 0 var(--space-3); padding: var(--space-3); overflow-x: auto; background: var(--color-code-bg); border-radius: var(--radius); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+.prose img { display: block; max-width: 100%; height: auto; }
+
+/* The search plugin's page, dressed to match */
+#search-app input { width: 100%; padding: 0.6rem 0.8rem; font: inherit; color: var(--color-text); background: var(--color-door); border: var(--cut) solid var(--color-gilt); border-radius: var(--radius); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  /* Ink on paper, whatever the screen scheme or a site's own palette. */
+  html:root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-accent-ink: #000000;
+    --color-gilt: #000000;
+    --color-rule: #999999;
+    --color-code-bg: #ffffff;
+    --color-card: #ffffff;
+    --color-card-text: #000000;
+    --color-card-muted: #333333;
+    --color-card-accent: #000000;
+    --color-card-accent-ink: #000000;
+    --color-card-gilt: #000000;
+    --color-card-rule: #999999;
+    --color-card-snow: transparent;
+    --color-hinge: #999999;
+    --color-door: #ffffff;
+  }
+  body { font-size: 11pt; }
+  .skip-link, .masthead nav { display: none; }
+  main { padding-block: var(--space-3); min-height: 0; }
+  .card { color-scheme: light; padding: 0; border: 0; background: none; }
+  .door, .person, .post-row { break-inside: avoid; }
+  .part-day, .board-h, .section-h, .prose h2, .prose h3 { break-after: avoid; }
+  a { color: inherit; }
+  .btn { padding: 0; background: none; color: inherit; }
+  .reply-tickets .btn::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; font-weight: 400; letter-spacing: 0; text-transform: none; overflow-wrap: anywhere; }
+}

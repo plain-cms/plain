@@ -1,0 +1,17 @@
+<div class="bay-window">
+<span class="glass flank" aria-hidden="true"></span>
+<div class="glass">
+<div class="hang"><span class="cord"></span>
+<div class="board">
+{{#if data.agency.phone}}<p class="board-call">{{ strings.call }}</p>
+<p class="price"><a href="tel:{{ data.agency.phone }}">{{ data.agency.phone }}</a></p>
+{{else}}<p class="price"><a href="/listings/">{{ strings.allListings }}</a></p>
+{{/if}}<p class="board-title">{{#if data.agency.name}}{{ data.agency.name }}{{else}}{{ site.title }}{{/if}}</p>
+</div>
+{{#if data.agency.phone}}<p class="plate"><a href="/listings/">{{ strings.allListings }}</a></p>
+{{/if}}
+</div>
+</div>
+<span class="glass flank" aria-hidden="true"></span>
+<span class="sill"></span>
+</div>

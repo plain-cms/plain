@@ -1,0 +1,1 @@
+{{#if data.business.hours}}<dl class="sign"><div><dt>{{ strings.hoursLabel }}</dt><dd>{{ data.business.hours }}</dd></div>{{#if data.business.area}}<div><dt>{{ strings.areaLabel }}</dt><dd>{{ data.business.area }}</dd></div>{{/if}}</dl>{{else}}{{#if data.business.area}}<dl class="sign"><div><dt>{{ strings.areaLabel }}</dt><dd>{{ data.business.area }}</dd></div></dl>{{/if}}{{/if}}

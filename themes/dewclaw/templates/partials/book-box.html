@@ -1,0 +1,10 @@
+<aside class="box box-book" aria-labelledby="book-caption">
+  <h2 class="caption" id="book-caption">{{ strings.toBook }}</h2>
+  <p class="book-actions">
+    {{#if data.practice.bookingUrl}}<a class="btn-book" href="{{ data.practice.bookingUrl }}">{{ strings.bookAppointment }}</a>
+    {{else}}<a class="btn-book" href="/contact/">{{ strings.bookAppointment }}</a>
+    {{/if}}{{#if data.practice.phone}}<span class="book-or">{{ strings.orCall }} <a href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></span>
+    {{else}}{{#if data.practice.email}}<span class="book-or">{{ strings.orWrite }} <a class="mail" href="mailto:{{ data.practice.email }}">{{ data.practice.email }}</a></span>
+    {{/if}}{{/if}}
+  </p>
+</aside>

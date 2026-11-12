@@ -1,0 +1,8 @@
+{{#if collections.projects}}<nav class="dummy" aria-labelledby="dummy-title">
+    <h2 class="dummy-title" id="dummy-title">{{ strings.moreWork }}</h2>
+    <ol class="sheet sheet-mini">
+      {{#each collections.projects as item}}<li class="spread"><a class="spread-link" href="{{ item.url }}"><span class="book"><span class="leaf leaf-l"><span class="spread-title">{{ item.title }}</span></span><span class="leaf leaf-r"><time class="year" datetime="{{ item.date }}">{{ item.date }}</time></span></span></a></li>
+      {{/each}}
+    </ol>
+    <p class="dummy-all"><a href="/work/">{{ strings.allWork }}</a></p>
+  </nav>{{/if}}

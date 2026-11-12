@@ -1,0 +1,6 @@
+{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+      {{#if pagination.newer}}<a class="pagination-link" href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+      <span class="pagination-count">{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+      {{#if pagination.older}}<a class="pagination-link" href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+    </nav>
+    {{/if}}

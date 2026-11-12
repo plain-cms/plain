@@ -1,0 +1,22 @@
+{{#if page.url.4}}{{> plain-page}}{{else}}{{#if collections.menu}}<article class="split front">
+  <div class="side">
+    <header>
+      <h1>{{ page.title }}</h1>
+    </header>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>{{/if}}
+  </div>
+  <aside class="entry" aria-labelledby="order-title">
+    <div class="order">
+      <h2 class="heads" id="order-title"><a href="/menu/">{{ strings.menu }}</a><span aria-hidden="true">{{ strings.price }}</span></h2>
+      <ol class="rows" role="list">
+        {{#each collections.menu as item}}<li class="row" data-section="{{ item.section }}">
+          {{#if item.section}}<h3 class="row-section">{{ item.section }}</h3>{{/if}}
+          <p class="row-line"><a class="row-name" href="{{ item.url }}">{{ item.title }}</a>{{#if item.price}} <span class="row-price">{{ item.price }}</span>{{/if}}</p>
+        </li>
+        {{/each}}<li class="row-foot"><a href="/menu/">{{ strings.fullMenu }}</a></li>
+      </ol>
+    </div>
+  </aside>
+</article>{{else}}{{> plain-page}}{{/if}}{{/if}}

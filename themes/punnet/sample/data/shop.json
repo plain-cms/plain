@@ -1,0 +1,11 @@
+{
+  "phone": "01632 960174",
+  "email": "stall@hobdaysveg.example",
+  "address": "Hobday's Fruit & Veg, Stalls 14 to 16, Market Place, Wragmere, Lincolnshire PE99 3HD",
+  "hours": [
+    { "days": "Tuesday, Thursday and Friday", "time": "7:30 to 16:00" },
+    { "days": "Saturday", "time": "7:00 to 16:30" },
+    { "days": "Sunday, Monday and Wednesday", "time": "No market" }
+  ],
+  "orderNote": "Ring or e-mail by four o'clock and we will bag your order and keep it behind the stall for the next market day. Veg boxes go out by van on Fridays, within five miles of Wragmere, for £2. We do not post."
+}

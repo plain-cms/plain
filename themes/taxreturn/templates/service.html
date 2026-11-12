@@ -1,0 +1,18 @@
+<article class="page service{{#if page.content}}{{else}} is-brief{{/if}}">
+  <header class="page-header">
+    <p class="crumb"><a href="/services/">{{ strings.backToServices }}</a></p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lead">{{ page.description }}</p>{{/if}}
+    {{#if page.fee}}<p class="field fee-field"><span class="field-label">{{ strings.feeLabel }}</span> <span class="entry">{{ page.fee }}</span></p>{{/if}}
+  </header>
+  {{#if page.points}}<section class="points">
+    <h2>{{ strings.pointsHeading }}</h2>
+    <ul>
+      {{#each page.points as point}}<li>{{ point }}</li>
+      {{/each}}
+    </ul>
+  </section>{{/if}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

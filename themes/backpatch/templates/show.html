@@ -1,0 +1,17 @@
+<article class="show" data-status="{{ page.status }}">
+  <header class="patch show-patch">
+    <time class="patch-date" datetime="{{ page.date }}">{{ page.dateFormatted }}</time>
+    <h1>{{ page.title }}</h1>
+    {{#if page.venue}}<p class="patch-venue">{{ page.venue }}{{#if page.city}}, {{ page.city }}{{/if}}</p>
+    {{else}}{{#if page.city}}<p class="patch-venue">{{ page.city }}</p>
+    {{/if}}{{/if}}{{#if page.support}}<p class="patch-support">{{ strings.withSupport }} {{ page.support }}</p>
+    {{/if}}<span class="patch-foot">{{#if page.status}}<span class="status"><span class="status-raw">{{ page.status }}</span><span class="status-on">{{ strings.statusOnSale }}</span><span class="status-sold">{{ strings.statusSoldOut }}</span><span class="status-free">{{ strings.statusFreeEntry }}</span></span>{{/if}}{{#if page.ticketsUrl}}<a class="tickets" href="{{ page.ticketsUrl }}" aria-label="{{ strings.getTickets }}: {{ page.title }}">{{ strings.getTickets }}</a>{{/if}}</span>
+  </header>
+  {{#if page.content}}<div class="canvas">
+    <div class="prose">
+{{{ page.content }}}
+    </div>
+  </div>
+  {{/if}}
+  <p class="backlink"><a href="/shows/">{{ strings.allShows }}</a></p>
+</article>

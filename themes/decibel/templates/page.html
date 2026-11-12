@@ -1,0 +1,32 @@
+{{#if page.url.4}}<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+</article>
+{{else}}<article class="page home{{#if collections.services}} has-chart{{/if}}">
+  <header class="page-header home-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if collections.services}}
+  <section class="chart home-chart" aria-labelledby="chart-cap">
+    <h2 class="chart-cap" id="chart-cap"><a href="/care/">{{ strings.homeChart }}</a></h2>
+    {{> chart-head}}
+    <ul class="chart-rows">
+      {{#each collections.services as item}}<li class="chart-row"><p class="chart-text"><a href="{{ item.url }}">{{ item.title }}</a></p>{{> mk}}</li>
+      {{/each}}
+    </ul>
+    {{> appointment}}
+  </section>
+  {{/if}}
+  <div class="prose home-body">
+{{{ page.content }}}
+  </div>
+</article>
+{{/if}}

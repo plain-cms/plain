@@ -1,0 +1,7 @@
+{{#if data.profile.email}}<ul class="contacts" role="list">
+      {{> profile-contact}}
+    </ul>
+    {{else}}{{#if data.profile.links}}<ul class="contacts" role="list">
+      {{> profile-contact}}
+    </ul>
+    {{/if}}{{/if}}

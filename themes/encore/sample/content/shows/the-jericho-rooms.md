@@ -1,6 +1,6 @@
 ---
 title: The Jericho Rooms
-date: 2026-06-05
+date: 2027-06-04
 city: Westfield
 venue: The Jericho Rooms
 ticketsUrl: https://tickets.example.com/jericho

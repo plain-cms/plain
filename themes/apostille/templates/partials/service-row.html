@@ -1,0 +1,7 @@
+<li class="clause">
+        <div class="clause-body">
+          <h3 class="clause-title"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+          {{#if item.description}}<p class="clause-note">{{ item.description }}</p>{{/if}}
+        </div>
+        {{#if item.fee}}<p class="clause-fee"><span class="visually-hidden">{{ strings.feeLabel }}</span> {{ item.fee }}</p>{{/if}}
+      </li>

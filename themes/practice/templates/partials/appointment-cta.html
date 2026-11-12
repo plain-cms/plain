@@ -1,14 +1,11 @@
 <aside class="appointment-cta">
-  <h2>Questions, or ready to book?</h2>
-  {{#if data.practice.phone}}
-  <p class="cta-meta">Call us — a person answers, and no question is too small.</p>
+  <h2>{{ strings.appointmentHeading }}</h2>
+  <p class="cta-meta">{{#if data.practice.phone}}{{ strings.appointmentBody }}{{else}}{{#if data.practice.email}}{{ strings.appointmentEmail }}{{else}}{{ strings.appointmentNoPhone }}{{/if}}{{/if}}</p>
   <p class="cta-actions">
-    <a class="btn-call" href="tel:{{ data.practice.phone }}">Call {{ data.practice.phone }}</a>
-    {{#if data.practice.bookingUrl}}<a class="btn-book" href="{{ data.practice.bookingUrl }}">Book an appointment</a>
-    {{else}}<a class="btn-book" href="/contact/">Book an appointment</a>
+    {{#if data.practice.phone}}<a class="btn-call" href="tel:{{ data.practice.phone }}">{{ strings.call }} {{ data.practice.phone }}</a>
+    {{else}}{{#if data.practice.email}}<a class="btn-call" href="mailto:{{ data.practice.email }}">{{ strings.writeToUs }}</a>
+    {{/if}}{{/if}}{{#if data.practice.bookingUrl}}<a class="btn-book" href="{{ data.practice.bookingUrl }}">{{ strings.bookAppointment }}</a>
+    {{else}}<a class="btn-book" href="/contact/">{{ strings.bookAppointment }}</a>
     {{/if}}
   </p>
-  {{else}}
-  <p class="cta-meta"><a href="/contact/">Get in touch</a> and we will find you a time that suits.</p>
-  {{/if}}
 </aside>

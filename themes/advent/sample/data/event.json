@@ -1,0 +1,56 @@
+{
+  "dateLabel": "The four Advent weekends, 28 November to 20 December 2026",
+  "date": "2026-11-28",
+  "time": "Saturdays 10 am–7 pm, Sundays 11 am–5 pm",
+  "venue": "Market Place, Keldwick",
+  "address": "Market Place and Church Street, Keldwick, North Yorkshire DL8 4QF",
+  "entry": "Free entry. Mulled wine comes in a Keldwick mug: £2 deposit, back at any hut.",
+  "replyBy": "",
+  "replyEmail": "",
+  "ticketsUrl": "",
+  "peopleLabel": "Some of the huts",
+  "programme": [
+    {
+      "day": "Saturday 28 November, opening day",
+      "items": [
+        { "time": "10:00", "title": "The huts open", "place": "Market Place and Church Street", "note": "Forty-two wooden huts round the Market Cross and down to the church gate." },
+        { "time": "15:45", "title": "Lantern walk", "place": "From St Oswald’s School", "note": "Children carry the lanterns they made in class. Walk with them from the school gate." },
+        { "time": "16:30", "title": "The lights go on", "place": "Market Cross", "note": "Switched on by Elsie Thorpe, who has kept the toffee hut since the first market in 1994." }
+      ]
+    },
+    {
+      "day": "Every Saturday and Sunday",
+      "items": [
+        { "time": "On the hour", "title": "A choir on the cross steps", "place": "Market Cross", "note": "Twenty minutes of carols, a different choir each hour, from 11 until the huts close." },
+        { "time": "12:00", "title": "Father Christmas in the Corn Exchange", "place": "The Old Corn Exchange", "note": "Until 4. £5 a child, with a small present. Queue at the Church Street door." },
+        { "time": "14:00", "title": "Make a wreath", "place": "Holly & Ivy hut, Church Street", "note": "£18 with everything you need. Eight places a day; book at the hut." }
+      ]
+    },
+    {
+      "day": "Every Sunday",
+      "items": [
+        { "time": "10:00", "title": "Advent service", "place": "St Oswald’s Church", "note": "Everyone welcome. The huts open when it ends." },
+        { "time": "13:00", "title": "Keldwick Town Band", "place": "The bandstand", "note": "" },
+        { "time": "15:00", "title": "Christmas stories", "place": "Keldwick Library hut", "note": "Read aloud for under-eights. Free, twenty minutes." }
+      ]
+    },
+    {
+      "day": "Sunday 20 December, last day",
+      "items": [
+        { "time": "16:00", "title": "All the choirs together", "place": "Market Cross", "note": "Every choir of the season on the steps at once. Song sheets from the information hut." },
+        { "time": "17:00", "title": "The huts close for another year", "place": "", "note": "" }
+      ]
+    }
+  ],
+  "people": [
+    { "name": "Thorpe’s Toffee", "role": "Treacle toffee, broken with a hammer while you wait", "note": "Elsie Thorpe has had the hut beside the cross since the first market in 1994." },
+    { "name": "The Mulled Wine Hut", "role": "Mulled wine, and hot spiced apple for drivers", "note": "Run by Keldwick Rotary. 50p from every cup goes to Swaledale Hospice." },
+    { "name": "Ainsley’s Bakehouse", "role": "Mince pies, stollen and parkin", "note": "" },
+    { "name": "Holly & Ivy", "role": "Wreaths, holly and door garlands", "note": "Wreath-making at 2 every Saturday and Sunday." },
+    { "name": "Moorside Woodturners", "role": "Bowls, spinning tops and tree decorations", "note": "" },
+    { "name": "Fell Wool Co-operative", "role": "Hats, mittens and fleeces from local flocks", "note": "" },
+    { "name": "Bell’s Chestnuts", "role": "Roast chestnuts and hot pork rolls", "note": "" },
+    { "name": "Keldwick Library", "role": "Christmas stories on Sundays at 3", "note": "Free, for under-eights, with a grown-up." },
+    { "name": "The information hut", "role": "Song sheets, lost children and first aid", "note": "By the Market Cross, kept by the Town Council." }
+  ]
+}

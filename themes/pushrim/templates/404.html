@@ -1,0 +1,12 @@
+<section class="page not-found">
+  <header class="page-header">
+    <p class="score score-small"><span class="stand"><span class="cards"><span class="cards-face">404</span></span></span></p>
+    <h1>{{ strings.notFoundTitle }}</h1>
+    <p class="lede">{{ strings.notFoundBody }}</p>
+  </header>
+  <ul class="way-out">
+    <li><a href="/">{{ strings.goHome }}</a></li>
+    <li><a href="/programs/">{{ strings.seeWhatWeDo }}</a></li>
+    <li><a class="card-btn" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.helpKeepItGoing }}</a></li>
+  </ul>
+</section>

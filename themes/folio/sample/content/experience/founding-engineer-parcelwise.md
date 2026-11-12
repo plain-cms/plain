@@ -2,24 +2,26 @@
 title: Founding engineer
 date: 2020-06-01
 organization: Parcelwise
-period: 2020 — 2023
+period: 2020–2023
 location: Rotterdam
-summary: First hire; built the tracking platform from an empty repo to 2M shipments/month and a 9-person team.
-description: First hire; built the tracking platform from an empty repo to 2M shipments/month and a 9-person team.
+summary: First hire. Built the tracking platform from an empty repository to 2M shipments a month and a team of nine.
+description: Sam Kessler was the first engineer at Parcelwise from 2020 to 2023, building its parcel-tracking platform and hiring the first six engineers.
 highlights:
   - Designed the event-ingestion pipeline that scaled 1,000× on the same Postgres-first architecture
-  - Hired and mentored the first six engineers; wrote the onboarding that got new hires shipping in week one
+  - Hired and mentored the first six engineers; wrote the onboarding that had new hires shipping in week one
 example: true
 ---
 
-Parcelwise aggregates delivery tracking for mid-size retailers. I was the
-first hire and, for eight months, the whole engineering team.
+Parcelwise gathers delivery tracking from dozens of carriers into one feed
+for mid-size retailers. For the first eight months I was the whole
+engineering team.
 
-Built the original platform: carrier-event ingestion, the merchant dashboard,
-and the notification system, all on a deliberately boring stack (Node,
-Postgres, one queue). The architecture drawn on a whiteboard in 2020
-survived to 2M shipments a month with component swaps but no rewrite.
+I built the original platform: carrier-event ingestion, the merchant
+dashboard and the notification system, all on a deliberately plain stack of
+Node, Postgres and one queue. The architecture drawn on a whiteboard in 2020
+was still standing at two million shipments a month, with parts swapped out
+but nothing rewritten.
 
-The second half of the job was people: hiring the first six engineers,
-writing the interview loop, and learning that documentation is a founding
-engineer's highest-leverage code.
+The second half of the job was people. I hired the first six engineers,
+wrote the interview loop, and learned that documentation is the most useful
+code a founding engineer writes.

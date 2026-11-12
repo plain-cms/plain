@@ -1,0 +1,24 @@
+<article class="page service">
+  <p class="crumb"><a href="/services/">{{ strings.backToServices }}</a></p>
+  <div class="service-frame">
+    <header class="brief">
+      <p class="brief-matter" aria-hidden="true">{{ strings.matterOf }}</p>
+      <h1 class="brief-title">{{ page.title }}</h1>
+      {{#if page.fee}}<p class="brief-fee"><span class="visually-hidden">{{ strings.feeLabel }}:</span> {{ page.fee }}</p>{{/if}}
+      <p class="brief-firm" aria-hidden="true">{{ site.title }}</p>
+    </header>
+    <div class="service-text">
+      {{#if page.description}}<p class="lead">{{ page.description }}</p>{{/if}}
+      {{#if page.points}}<section class="points" aria-labelledby="points-heading">
+        <h2 class="caps" id="points-heading">{{ strings.pointsHeading }}</h2>
+        <ol>
+          {{#each page.points as point}}<li>{{ point }}</li>
+          {{/each}}
+        </ol>
+      </section>{{/if}}
+      {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+      </div>{{/if}}
+    </div>
+  </div>
+</article>

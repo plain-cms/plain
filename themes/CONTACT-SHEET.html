@@ -1,0 +1,1350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plain themes — contact sheet</title>
+<style>
+:root { --bg: #f6f5f1; --text: #1c1b19; --muted: #5d5a54; --line: #d9d6ce; --card: #ffffff; --accent: #0b5cad; }
+@media (prefers-color-scheme: dark) { :root { --bg: #17171a; --text: #ecebe7; --muted: #a5a29b; --line: #34343a; --card: #202024; --accent: #8cc0ff; } }
+* { box-sizing: border-box; }
+body { margin: 0; padding: 1.5rem 1rem 4rem; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header, section { max-width: 110rem; margin: 0 auto; }
+h1 { font-size: 1.75rem; margin: 0 0 .25rem; }
+header p { margin: 0 0 1rem; color: var(--muted); max-width: 60rem; }
+nav { display: flex; flex-wrap: wrap; gap: .25rem .9rem; font-size: .9rem; padding-bottom: 1rem; border-bottom: 1px solid var(--line); }
+a { color: var(--accent); }
+a:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+h2 { font-size: 1.3rem; margin: 2.5rem 0 1rem; }
+h2 span { font-size: .85rem; font-weight: 400; color: var(--muted); margin-left: .5rem; }
+.sheet { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr)); gap: 1.25rem; }
+article { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: .75rem; min-width: 0; }
+img { display: block; width: 100%; height: auto; border: 1px solid var(--line); border-radius: 3px; }
+h3 { font-size: 1.05rem; margin: .7rem 0 .2rem; }
+code { font: .85em ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); }
+.for { margin: 0 0 .5rem; font-weight: 600; }
+dl { margin: 0; font-size: .875rem; }
+dt { font-weight: 700; font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin-top: .45rem; }
+dd { margin: 0; overflow-wrap: break-word; }
+.tags, .noshot { margin: .6rem 0 0; font-size: .8rem; color: var(--muted); }
+@media print { body { background: #fff; color: #000; } article { break-inside: avoid; } nav { display: none; } }
+</style>
+</head>
+<body>
+<header>
+  <h1>plain themes — contact sheet</h1>
+  <p>115 themes in 17 families. Each screenshot is the theme's home page at 1280×800, built from its own sample content. Themes in one family share a content contract, so a site can move between them without touching its content. The text under each is the theme's row in <a href="CATALOGUE.md">CATALOGUE.md</a>.</p>
+  <nav aria-label="Families">
+      <a href="#family-restaurant">Restaurant and café (11)</a>
+      <a href="#family-trades">Trades and local services (11)</a>
+      <a href="#family-shop">Shop window (10)</a>
+      <a href="#family-clinic">Clinic and practice (8)</a>
+      <a href="#family-classes">Studio and classes (8)</a>
+      <a href="#family-portfolio">Portfolio (8)</a>
+      <a href="#family-personal">Personal page and CV (7)</a>
+      <a href="#family-club">Club and community group (8)</a>
+      <a href="#family-event">Event (6)</a>
+      <a href="#family-property">Property, accommodation and rental (7)</a>
+      <a href="#family-nonprofit">Nonprofit and campaign (7)</a>
+      <a href="#family-music">Musician and performer (6)</a>
+      <a href="#family-professional">Professional services (7)</a>
+      <a href="#family-writing">Newsletter and writing (8)</a>
+      <a href="#family-docs">Manual and handbook (1)</a>
+      <a href="#family-news">News and magazine (1)</a>
+      <a href="#family-product">Product and software (1)</a>
+  </nav>
+</header>
+<main>
+  <section id="family-restaurant">
+    <h2>Restaurant and café <span>11 themes · <code>families/restaurant.md</code></span></h2>
+    <div class="sheet">
+      <article id="bistro">
+        <a href="bistro/screenshot.png"><img src="bistro/screenshot.png" alt="Bistro home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Bistro <code>bistro</code></h3>
+        <p class="for">A restaurant and café theme where the menu is the one designed object — a printed carte with a thick-and-thin ruled frame, course headings, dot leaders and tabular prices, in bottle green and wine on linen, turning to chalk on a green board after dark.</p>
+        <p class="tags">restaurant, bistro, café, wine bar, brasserie, pizzeria, gastropub, tapas bar</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="chippy">
+        <a href="chippy/screenshot.png"><img src="chippy/screenshot.png" alt="Chippy home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Chippy <code>chippy</code></h3>
+        <p class="for">A fish-and-chip shop or seaside takeaway with a short fried menu and a queue out of the door</p>
+        <dl>
+          <dt>Object</dt><dd>The peg-letter menu board above the fryer: black grooved felt, push-in plastic capitals, prices in a column down the right</dd>
+          <dt>Signature</dt><dd>The /menu/ list is the board: every title and price in wide-tracked caps on a grooved black panel (CSS line gradient), prices in a ragged right column, the section name spelled in yellow letters on the first row of each section.</dd>
+          <dt>Look</dt><dd>Black felt board in both schemes: white peg letters, chip-yellow for section names and prices. The light scheme changes only the page round it, chip-paper white with black ink; no red. Wide-tracked grotesque caps.</dd>
+        </dl>
+        <p class="tags">yellow · dark ground · tracked grotesque caps + humanist sans</p>
+      </article>
+      <article id="slurp">
+        <a href="slurp/screenshot.png"><img src="slurp/screenshot.png" alt="Slurp home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Slurp <code>slurp</code></h3>
+        <p class="for">A ramen, udon or noodle bar where you pay at the door and eat at the counter</p>
+        <dl>
+          <dt>Object</dt><dd>The meal-ticket vending machine by the door: a dark fascia of square lit buttons, colour-grouped by kind of dish, a price on each</dd>
+          <dt>Signature</dt><dd>The menu is the machine's button panel: a grid of lit keys, two across on phones, more on wider screens. Title and description on each key face; section name in small caps and price on its foot strip. Each section takes one of four tints.</dd>
+          <dt>Look</dt><dd>Charcoal enamel fascia; keys lit yellow (meals), pink (bakes, sweets), pale green (sides, snacks) or white (drinks, no section), lettered soy-black; vermilion header strip and pressed key. Light: cream fascia. Bold sans.</dd>
+        </dl>
+        <p class="tags">orange · dark ground · bold humanist sans + mono figures</p>
+      </article>
+      <article id="calzone">
+        <a href="calzone/screenshot.png"><img src="calzone/screenshot.png" alt="Calzone home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Calzone <code>calzone</code></h3>
+        <p class="for">A neighbourhood pizzeria that lives on phone orders, collection and delivery</p>
+        <dl>
+          <dt>Object</dt><dd>The corrugated pizza box: white board, a one-ink flexo lid print in one fat border, a row of printed tick boxes on the flap</dd>
+          <dt>Signature</dt><dd>The menu is the box flap's order panel inside the lid's one fat border: every dish line starts with an empty printed tick square, its price ranged right; section names in underscored oblique caps. site.title stays masthead size, same ink.</dd>
+          <dt>Look</dt><dd>White clay-coated board, one basil-green ink for every letter, rule and tick square; no black, no solid bars; a fluted kraft edge to the menu panel. Dark scheme: the print reversed, white on deep basil. Oblique caps.</dd>
+        </dl>
+        <p class="tags">green · light ground · heavy oblique grotesque + neo-grotesque</p>
+      </article>
+      <article id="crumb">
+        <a href="crumb/screenshot.png"><img src="crumb/screenshot.png" alt="Crumb home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Crumb <code>crumb</code></h3>
+        <p class="for">An artisan bakery selling sourdough, pastries and coffee over the counter until it sells out</p>
+        <dl>
+          <dt>Object</dt><dd>The printed greaseproof sheet and its seal label: thin white paper, the bakery's name step-and-repeated in one ink, a blank label</dd>
+          <dt>Signature</dt><dd>The first screen is the sheet: site.title in typewriter caps repeated as slanted running rows, full bleed — a fixed run of empty spans, each printing it from a data attribute, so any length wraps. Title and nav sit on a white seal label.</dd>
+          <dt>Look</dt><dd>Greaseproof-white ground, one rye-crust brown ink for print, type and rules; the repeat is clipped to its band and silent to screen readers. Dark: white print on a crust-brown sheet, white labels. Typewriter caps, sans.</dd>
+        </dl>
+        <p class="tags">brown · light ground · typewriter caps + humanist sans</p>
+      </article>
+      <article id="alehouse">
+        <a href="alehouse/screenshot.png"><img src="alehouse/screenshot.png" alt="Alehouse home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Alehouse <code>alehouse</code></h3>
+        <p class="for">A village pub with cask ales, a short kitchen menu and a Sunday roast</p>
+        <dl>
+          <dt>Object</dt><dd>The pub fascia: the long painted board over the windows, the house name in fat gilt Egyptian capitals with a red drop shade</dd>
+          <dt>Signature</dt><dd>The masthead is the pub fascia: site.title in fat slab capitals, gilt with a hard red drop shade, on a black board the full width of the page. The menu's section names are lettered the same way, smaller. Nothing else is gilded or shaded.</dd>
+          <dt>Look</dt><dd>Polished-mahogany brown ground, ivory text, black fascia board, gold leaf and pump-clip red on the lettering only; the light scheme is the whitewashed front in black and red. Fat slab caps over a transitional serif.</dd>
+        </dl>
+        <p class="tags">brown · dark ground · fat Egyptian slab caps + transitional serif</p>
+      </article>
+      <article id="kerbside">
+        <a href="kerbside/screenshot.png"><img src="kerbside/screenshot.png" alt="Kerbside home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Kerbside <code>kerbside</code></h3>
+        <p class="for">A street-food truck or market stall with five to eight dishes and a different pitch each day</p>
+        <dl>
+          <dt>Object</dt><dd>The cut-vinyl menu panel beside the serving hatch, lettered large enough to read from the back of the queue</dd>
+          <dt>Signature</dt><dd>The menu at queue-reading size: every title in rounded heavy caps at one fixed large size (clamp, near 9vw), stacking over two or three lines like cut vinyl, its price the same size on its own line ranged right. Full-bleed bands, no cards.</dd>
+          <dt>Look</dt><dd>Deep ultramarine truck-paint ground: white cut vinyl for the big lettering, descriptions black on white vinyl strips, checker-plate grey footer; dark scheme: the hatch at night, navy lettered pale blue. Rounded caps.</dd>
+        </dl>
+        <p class="tags">indigo · colour ground · rounded heavy sans + humanist sans</p>
+      </article>
+      <article id="saucer">
+        <a href="saucer/screenshot.png"><img src="saucer/screenshot.png" alt="Saucer home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Saucer <code>saucer</code></h3>
+        <p class="for">A tea room serving afternoon tea, scones and cakes on mismatched china</p>
+        <dl>
+          <dt>Object</dt><dd>The willow-pattern plate: white earthenware, a cobalt transfer rim of fish-roe lattice and round rosettes, scalloped at the well</dd>
+          <dt>Signature</dt><dd>The menu sits in the plate's well: a white panel inside a transfer rim of fish-roe lattice broken by round rosettes (one SVG tile as a mask, so cobalt stays a token), its inner edge scalloped. A straight length of rim crosses the masthead.</dd>
+          <dt>Look</dt><dd>White earthenware-glaze ground, cobalt transfer blue for rim, links and prices, tea-stain brown for small notes; the dark scheme is cobalt glaze with a white rim. Flared sans caps for masthead and dishes, serif italics.</dd>
+        </dl>
+        <p class="tags">blue · light ground · flared sans caps + transitional italic</p>
+      </article>
+      <article id="tandoor">
+        <a href="tandoor/screenshot.png"><img src="tandoor/screenshot.png" alt="Tandoor home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Tandoor <code>tandoor</code></h3>
+        <p class="for">A high-street curry house with white tablecloths, a long takeaway menu and Friday-night regulars</p>
+        <dl>
+          <dt>Object</dt><dd>The flock wallpaper of the classic British curry house: a raised crimson damask repeat on maroon, behind white linen</dd>
+          <dt>Signature</dt><dd>The wallpaper is the ground in both schemes: one damask motif (an SVG tile masked over a flock token) covers the page in two reds. site.title sits straight on it in brass yellow; nav, menu and page text sit on linen panels cut square.</dd>
+          <dt>Look</dt><dd>Light: crimson damask on maroon, white linen panels, black ink, maroon links. Dark, the lights down: oxblood flock, dim ivory panels, near-black ink. Brass-yellow title, 3:1 or more on both reds. Didone caps, serif text.</dd>
+        </dl>
+        <p class="tags">red · colour ground · high-contrast serif caps + transitional serif</p>
+      </article>
+      <article id="nightcap">
+        <a href="nightcap/screenshot.png"><img src="nightcap/screenshot.png" alt="Nightcap home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Nightcap <code>nightcap</code></h3>
+        <p class="for">A small cocktail bar with a short list of house drinks, open late</p>
+        <dl>
+          <dt>Object</dt><dd>The matchbook from the bowl on the bar: a saturated printed cover, the bar's name in deco capitals, a sandpaper striker strip</dd>
+          <dt>Signature</dt><dd>The masthead is the closed matchbook: site.title in deco capitals on a peacock-teal cover the full page width, the speckled sandpaper striker along its lower edge, one brass staple through it. The menu below is the cream inside cover.</dd>
+          <dt>Look</dt><dd>Peacock-teal cover in both schemes, cream print, sandpaper-brown striker; pages on cream card in teal ink. Dark scheme: the same cover on a black-walnut bar top, cream text. Geometric deco caps, old-style italic notes.</dd>
+        </dl>
+        <p class="tags">teal · light ground · geometric deco caps + old-style italic</p>
+      </article>
+      <article id="fryup">
+        <a href="fryup/screenshot.png"><img src="fryup/screenshot.png" alt="Fry-up home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Fry-up <code>fryup</code></h3>
+        <p class="for">A breakfast cafe or greasy spoon serving all-day breakfasts, set meals and mugs of tea</p>
+        <dl>
+          <dt>Object</dt><dd>The pink duplicate torn from the waitress's order pad: carbonless paper, ruled, a red-printed 'No.' box, the order in soft violet</dd>
+          <dt>Signature</dt><dd>The menu is written on the pad's pink duplicate: ruled rows, printed column heads, a double rule before the price column, a red-printed 'No.' box left blank in the corner. Every word is carbon-copy violet, never black; links are underlined.</dd>
+          <dt>Look</dt><dd>Carbonless pink ground, deep carbon violet for all text (4.5:1 on the pink), blue-grey pad rules, red only on the 'No.'; the dark scheme is the carbon sheet, violet-black, pale writing. Humanist italic, grotesque caps.</dd>
+        </dl>
+        <p class="tags">violet · colour ground · humanist italic + grotesque small caps</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-trades">
+    <h2>Trades and local services <span>11 themes · <code>families/trades.md</code></span></h2>
+    <div class="sheet">
+      <article id="toolbox">
+        <a href="toolbox/screenshot.png"><img src="toolbox/screenshot.png" alt="Toolbox home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Toolbox <code>toolbox</code></h3>
+        <p class="for">For plumbers, electricians and other call-out trades: workwear navy and hi-vis yellow, van-side headings and phone numbers, job-sheet prices, and a hazard-striped call-now bar fixed to the bottom of every phone screen.</p>
+        <p class="tags">plumber, electrician, heating engineer, locksmith, handyman, roofer, drain clearing, appliance repair</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="clippers">
+        <a href="clippers/screenshot.png"><img src="clippers/screenshot.png" alt="Clippers home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Clippers <code>clippers</code></h3>
+        <p class="for">a walk-in barber shop</p>
+        <dl>
+          <dt>Object</dt><dd>the clipper guard: the black comb attachment with its figure moulded on the back, racked in a row by the mirror</dd>
+          <dt>Signature</dt><dd>Every service hangs on a clipper guard: a black comb tab with CSS-cut teeth carrying priceFrom in heavy white type, the tab widening for a long price (a blank guard when there is none), the title beside it. The list is the guard rack.</dd>
+          <dt>Look</dt><dd>Barber's-cape white ground, comb-black ink and tabs, pole-blue links, one red-white-blue pole stripe under the masthead, chrome-grey rules. Heavy grotesque figures, as moulded on a guard, over a neo-grotesque body.</dd>
+        </dl>
+        <p class="tags">blue · light ground · heavy grotesque numerals + neo-grotesque</p>
+      </article>
+      <article id="eaves">
+        <a href="eaves/screenshot.png"><img src="eaves/screenshot.png" alt="Eaves home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Eaves <code>eaves</code></h3>
+        <p class="for">a roofer — slating, tiling, leadwork and gutters</p>
+        <dl>
+          <dt>Object</dt><dd>the roofing slate: holed twice, chalk-marked, hung in half-bond courses that lap one another</dd>
+          <dt>Signature</dt><dd>Service cards are slates in courses: slabs in fixed columns, alternate rows shifted half a slate by nth-child (one lapped column on phones), a hard shadow line at each lap, two CSS nail holes, title in chalk white, priceFrom at the tail.</dd>
+          <dt>Look</dt><dd>Overcast-sky pale grey ground, heather-purple Welsh slate cards lettered in chalk white, lead-flashing grey rules, copper nail heads the only warm dots. Transitional serif heads and figures, humanist sans body.</dd>
+        </dl>
+        <p class="tags">violet · light ground · transitional serif + humanist sans</p>
+      </article>
+      <article id="eggshell">
+        <a href="eggshell/screenshot.png"><img src="eggshell/screenshot.png" alt="Eggshell home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Eggshell <code>eggshell</code></h3>
+        <p class="for">a painter and decorator</p>
+        <dl>
+          <dt>Object</dt><dd>the trade paint tin: white label, one broad band of colour, the finish name in bold caps, a size flash, a spec panel on the back</dd>
+          <dt>Signature</dt><dd>Each service is a tin on the painted wall: a white label under a CSS wire handle, the title in bold caps across one colour band (three band tokens cycle by nth-child), priceFrom in a size flash that widens; included is the spec panel.</dd>
+          <dt>Look</dt><dd>Ground: the rolled wall in one emulsion token, shipped deep raspberry, lettered white. White tin labels print black; three band tokens (kingfisher, sunflower, slate). A restyle is a repaint. Bold caps, serif spec print.</dd>
+        </dl>
+        <p class="tags">pink · colour ground · bold neo-grotesque caps + transitional serif</p>
+      </article>
+      <article id="dualcontrol">
+        <a href="dualcontrol/screenshot.png"><img src="dualcontrol/screenshot.png" alt="Dual Control home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Dual Control <code>dualcontrol</code></h3>
+        <p class="for">an independent driving instructor</p>
+        <dl>
+          <dt>Object</dt><dd>the stack-type advance direction sign: a rectangular green panel, white border, white lettering, route numbers in yellow brackets</dd>
+          <dt>Signature</dt><dd>Services are stack-type direction signs: rectangular green panels with inset white borders and rounded corners, the title in sign lettering over a white rule, priceFrom in yellow brackets as the route number, a small white CSS arrow inside.</dd>
+          <dt>Look</dt><dd>Road-marking white ground, tarmac-grey ink, primary-route green panels, route-number yellow figures; L-plate red kept for the call button. One humanist sans in mixed case, as on the signs.</dd>
+        </dl>
+        <p class="tags">green · light ground · humanist sans, mixed case</p>
+      </article>
+      <article id="carton">
+        <a href="carton/screenshot.png"><img src="carton/screenshot.png" alt="Carton home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Carton <code>carton</code></h3>
+        <p class="for">a removals and storage firm</p>
+        <dl>
+          <dt>Object</dt><dd>the packed removal box: kraft board, a printed ROOM and CONTENTS panel, this-way-up arrows, FRAGILE tape</dd>
+          <dt>Signature</dt><dd>Each service is a box face on kraft: the title in the printed ROOM panel, included ruled beneath as CONTENTS, one strip of red-and-white FRAGILE tape across the top, its word repeated through attr() from strings.json, priceFrom on its end.</dd>
+          <dt>Look</dt><dd>Transit-blanket slate-blue ground with a zigzag quilting stitch for rules, kraft box faces printed in black, parcel-tape red and white the one loud colour; van-interior dark at night. Heavy grotesque caps, mono figures.</dd>
+        </dl>
+        <p class="tags">red · colour ground · heavy grotesque caps + mono</p>
+      </article>
+      <article id="grout">
+        <a href="grout/screenshot.png"><img src="grout/screenshot.png" alt="Grout home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Grout <code>grout</code></h3>
+        <p class="for">a tiler and bathroom fitter</p>
+        <dl>
+          <dt>Object</dt><dd>the lettered tile frieze: one fired capital per glazed tile in a single course, held between coloured border-tile courses</dd>
+          <dt>Signature</dt><dd>Titles are friezes: mono capitals over a tile grid drawn at one-character pitch, each letter on its own gloss-white tile, a long word breaking at any tile, between two border courses in turquoise glaze. priceFrom sits on a cartouche tile.</dd>
+          <dt>Look</dt><dd>Matt plaster-white ground, gloss-white tiles each with a highlight, black fired letters, pale grey grout; one glaze token, shipped baths turquoise, for border courses, cartouche and links. Mono tile caps, geometric sans.</dd>
+        </dl>
+        <p class="tags">teal · light ground · mono tile caps + geometric sans</p>
+      </article>
+      <article id="topsoil">
+        <a href="topsoil/screenshot.png"><img src="topsoil/screenshot.png" alt="Topsoil home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Topsoil <code>topsoil</code></h3>
+        <p class="for">a gardener and landscaper — lawns, hedges, borders, fencing</p>
+        <dl>
+          <dt>Object</dt><dd>the striped lawn: alternate light and dark bands left by a roller mower, finished with a spade-cut edge</dd>
+          <dt>Signature</dt><dd>The services list is one mown lawn: broad mower stripes run down its whole length (one gradient on the list). Title, description and priceFrom sit straight on the grass in soil black, no boxes or row colours; it ends in a spade-cut edge.</dd>
+          <dt>Look</dt><dd>Paving-grey ground, soil-black ink and underlined links; one lawn in two fresh mower greens lettered black, a soil strip under its cut edge, green nowhere else. Dark: a dusk lawn lettered white. Flared sans caps.</dd>
+        </dl>
+        <p class="tags">green · light ground · flared sans caps + humanist sans</p>
+      </article>
+      <article id="dovetail">
+        <a href="dovetail/screenshot.png"><img src="dovetail/screenshot.png" alt="Dovetail home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Dovetail <code>dovetail</code></h3>
+        <p class="for">a carpenter and joiner — fitted furniture, doors, stairs</p>
+        <dl>
+          <dt>Object</dt><dd>the through-dovetail drawer corner: walnut tails locked into pale maple pins</dd>
+          <dt>Signature</dt><dd>Every card and page header is jointed: a walnut-brown title bar meets the pale body through a row of CSS dovetails, tails and pins interlocking. priceFrom is stamped on the face in slab figures, like a timber-yard size mark.</dd>
+          <dt>Look</dt><dd>Birch-ply pale ground with laminated-edge stripes for rules, graphite-pencil ink, walnut end-grain brown bars, one snapped chalk-line blue for links. Slab heads like a tool-maker's stamp over a humanist sans.</dd>
+        </dl>
+        <p class="tags">brown · light ground · slab + humanist sans</p>
+      </article>
+      <article id="suntrap">
+        <a href="suntrap/screenshot.png"><img src="suntrap/screenshot.png" alt="Suntrap home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Suntrap <code>suntrap</code></h3>
+        <p class="for">a solar-panel and battery installer fitting domestic roofs</p>
+        <dl>
+          <dt>Object</dt><dd>the photovoltaic module: cobalt-blue cells with clipped corners, silver busbars, white backsheet gaps, an aluminium frame</dd>
+          <dt>Signature</dt><dd>The services list is one solar module in an aluminium frame: each service a cobalt cell with clipped corners, white backsheet showing where cells meet, a lone last cell spanning its row, title and priceFrom between silver busbars.</dd>
+          <dt>Look</dt><dd>Roof-slate charcoal ground, saturated cobalt cells lettered white, white backsheet gaps, busbar-silver rules and underlined links, no blue outside the cells. Day: the module under a white sky. Wide geometric sans.</dd>
+        </dl>
+        <p class="tags">indigo · dark ground · wide geometric sans, mixed case</p>
+      </article>
+      <article id="gasket">
+        <a href="gasket/screenshot.png"><img src="gasket/screenshot.png" alt="Gasket home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Gasket <code>gasket</code></h3>
+        <p class="for">an independent car mechanic and MOT garage</p>
+        <dl>
+          <dt>Object</dt><dd>the pressed front number plate: white reflective acrylic, heavy black characters, a blue band at the left, supplier’s name beneath</dd>
+          <dt>Signature</dt><dd>Numbers live on white front plates: call-cta is one full-size plate, the phone in heavy spaced black characters (two lines if long; the e-mail if no phone), a blue band at its left, title and area as supplier line; priceFrom is a small one.</dd>
+          <dt>Look</dt><dd>Tyre-black ground, a tread band the only rule, white text and links, white plates lettered black, plate-band blue the one colour, no yellow. Day: floor-paint mid grey, black ink, keylined white plates. Fixed-pitch caps.</dd>
+        </dl>
+        <p class="tags">blue · dark ground · bold fixed-pitch plate caps + humanist sans</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-shop">
+    <h2>Shop window <span>10 themes · <code>families/shop.md</code></span></h2>
+    <div class="sheet">
+      <article id="cleaver">
+        <a href="cleaver/screenshot.png"><img src="cleaver/screenshot.png" alt="Cleaver home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Cleaver <code>cleaver</code></h3>
+        <p class="for">a high-street family butcher selling cuts, sausages and weekend roasts by the kilo</p>
+        <dl>
+          <dt>Object</dt><dd>the white counter ticket spiked into each tray of meat: name in black, price per kilo in fat red numerals</dd>
+          <dt>Signature</dt><dd>Every product is a counter ticket: price in huge red slab numerals with the unit small beside it, title in black caps beneath, on a white card with a spike tab, laid in rows like a filled tray. Sold out greys the whole ticket.</dd>
+          <dt>Look</dt><dd>White glazed-tile ground with pale grout lines, black ink, ox-blood red prices, a navy-and-white apron stripe under the masthead; slab numerals over plain grotesque caps. Dark: the cold room, slate tiles.</dd>
+        </dl>
+        <p class="tags">red · light ground · slab numerals + grotesque caps</p>
+      </article>
+      <article id="punnet">
+        <a href="punnet/screenshot.png"><img src="punnet/screenshot.png" alt="Punnet home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Punnet <code>punnet</code></h3>
+        <p class="for">a market-stall greengrocer or farm shop selling fruit, veg and eggs by the pound, bunch and box</p>
+        <dl>
+          <dt>Object</dt><dd>the day-glo starburst showcard pegged into the produce on green display-grass matting</dd>
+          <dt>Signature</dt><dd>The price sits on a fluorescent starburst: a clipped shape behind the numerals, sized in em from its content so nothing is ever cut, lapping the head of each product; the unit is set on the card just below it. Nothing else is loud.</dd>
+          <dt>Look</dt><dd>Display-grass green ground, white crate-slat cards, black marker ink, saturn-yellow stars with their own fill and ink tokens; heavy poster condensed numerals over a humanist sans. Dark: the stall after dusk, green-black.</dd>
+        </dl>
+        <p class="tags">yellow · colour ground · poster condensed + humanist sans</p>
+      </article>
+      <article id="flyleaf">
+        <a href="flyleaf/screenshot.png"><img src="flyleaf/screenshot.png" alt="Flyleaf home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Flyleaf <code>flyleaf</code></h3>
+        <p class="for">an independent bookshop listing staff picks, signed copies and second-hand finds</p>
+        <dl>
+          <dt>Object</dt><dd>a pile of cloth-bound books seen spine-on, no two the same size or square on the next: foil-stamped titles, a paper price label</dd>
+          <dt>Signature</dt><dd>The list is a pile of books spine-on: bars in five widths and three cloths on co-prime cycles, offset so none sits square, each with head and tail bands and a hard overhang shadow. A long title makes a thicker book; price on a paper label.</dd>
+          <dt>Look</dt><dd>Shelf-paper white ground, graphite ink; navy, oxblood and bottle-green buckram spines, pale-gold titles in old-style small caps, category in italic as the imprint; widths still vary on phones. Dark: unlit stockroom.</dd>
+        </dl>
+        <p class="tags">indigo · light ground · old-style serif small caps + italic</p>
+      </article>
+      <article id="gatefold">
+        <a href="gatefold/screenshot.png"><img src="gatefold/screenshot.png" alt="Gatefold home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Gatefold <code>gatefold</code></h3>
+        <p class="for">an independent record shop selling new and second-hand vinyl, with gradings and pressings noted</p>
+        <dl>
+          <dt>Object</dt><dd>the 12-inch sleeve in the rack: square, type-led like a 1960s jazz cover, a round price sticker on the front</dd>
+          <dt>Signature</dt><dd>Every product is a sleeve, square at least and taller if the title needs it: title huge and tight to one edge (clamp, wraps), black on white or black on flat orange by turns, a round price sticker in the other colour askew on top.</dd>
+          <dt>Look</dt><dd>Sleeve-board white ground, press black, one flat orange spot ink carrying black type only; price dots orange on white, white on orange, keylined black; tight neo-grotesque caps, mono gradings. Dark: inner-sleeve black.</dd>
+        </dl>
+        <p class="tags">orange · light ground · tight neo-grotesque caps + mono</p>
+      </article>
+      <article id="rivet">
+        <a href="rivet/screenshot.png"><img src="rivet/screenshot.png" alt="Rivet home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Rivet <code>rivet</code></h3>
+        <p class="for">an old-fashioned ironmonger and hardware store selling screws by the dozen, tools, paint and paraffin</p>
+        <dl>
+          <dt>Object</dt><dd>the wall of small oak drawers behind the counter, each with a brass card-holder and a typed label</dd>
+          <dt>Signature</dt><dd>The product list is a drawer wall: a tight grid of drawer fronts, each with a brass-framed manila card typed with title, unit and price above a CSS-drawn cup pull; the category sits on a small white enamel plate at the drawer's top edge.</dd>
+          <dt>Look</dt><dd>Dark-stained oak ground, manila cards in black typewriter ink, white enamel plates lettered black, brass for frames, pulls and rules only, never text; light scheme: scrubbed pine. Typewriter labels, heavy slab headings.</dd>
+        </dl>
+        <p class="tags">brown · dark ground · typewriter + slab</p>
+      </article>
+      <article id="skein">
+        <a href="skein/screenshot.png"><img src="skein/screenshot.png" alt="Skein home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Skein <code>skein</code></h3>
+        <p class="for">a yarn and haberdashery shop selling hand-dyed wool, needles, buttons and patterns</p>
+        <dl>
+          <dt>Object</dt><dd>the ball band on a hank of hand-dyed wool: a paper sleeve in panels for shade, weight, length, needle size and dye lot</dd>
+          <dt>Signature</dt><dd>Each product is a hank: a textless woad-blue lozenge with diagonal ply lines, in three tints of one dye token like a dye lot, wrapped by a white ball band in three panels: title and category, details as a spec grid, heavy price on the lap.</dd>
+          <dt>Look</dt><dd>Bright-white ground; the hanks its only colour, one woad-blue dye token, bright mid blue in three tints; ply lines one gradient, bands white printed black; bold condensed label caps, humanist sans. Dark: charcoal tweed.</dd>
+        </dl>
+        <p class="tags">blue · light ground · bold condensed sans caps + humanist sans</p>
+      </article>
+      <article id="perennial">
+        <a href="perennial/screenshot.png"><img src="perennial/screenshot.png" alt="Perennial home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Perennial <code>perennial</code></h3>
+        <p class="for">a plant nursery selling perennials, shrubs and fruit trees by pot size, with height and flowering notes</p>
+        <dl>
+          <dt>Object</dt><dd>the engraved botanic-garden bed label: a black plate on a stake, white-cut Latin name, plant family above</dd>
+          <dt>Signature</dt><dd>Every product is a bed label: a black plate with two screw heads, category top-left in small caps like the plant family, title in white italic serif as the botanical name, the details list engraved beneath as height, spread and season.</dd>
+          <dt>Look</dt><dd>Horticultural-fleece white ground, potting-soil ink, black engraved plates with white lettering, moss-green links and status; italic transitional serif names, grotesque caps for the rest. Dark: zinc plates.</dd>
+        </dl>
+        <p class="tags">green · light ground · italic transitional serif + grotesque caps</p>
+      </article>
+      <article id="kiln">
+        <a href="kiln/screenshot.png"><img src="kiln/screenshot.png" alt="Kiln home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Kiln <code>kiln</code></h3>
+        <p class="for">a studio potter selling stoneware mugs, bowls and plates in small batches after each firing</p>
+        <dl>
+          <dt>Object</dt><dd>the glaze test tile: a clay tab dipped at one end, a hole punched for the nail, a code scratched in the raw end</dd>
+          <dt>Signature</dt><dd>Each product is a test tile: the top third dipped in the one glaze, uneven-edged and never an image slot, with price and unit written on it in iron oxide; a punched nail hole, title on the raw clay below, category incised in mono.</dd>
+          <dt>Look</dt><dd>Grey stoneware ground with iron speckle, paler raw-clay tiles, celadon glaze as a fill only, iron-oxide brown ink and underlined links; rounded sans, mono codes. Dark: the reduced kiln, celadon now the text colour.</dd>
+        </dl>
+        <p class="tags">teal · colour ground · rounded sans + mono codes</p>
+      </article>
+      <article id="loupe">
+        <a href="loupe/screenshot.png"><img src="loupe/screenshot.png" alt="Loupe home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Loupe <code>loupe</code></h3>
+        <p class="for">a goldsmith and jeweller selling handmade rings, repairs and commissions from a workshop counter</p>
+        <dl>
+          <dt>Object</dt><dd>the hallmark under the loupe: a row of deep punched cartouches in polished silver — maker, fineness, office, date letter</dd>
+          <dt>Signature</dt><dd>Each product is headed by a bevelled silver bar of punches: category in a lozenge-ended cartouche, price in a cut-corner punch, the bar's tallest thing (a long price wraps and the punch grows taller), any status but In stock in a shield.</dd>
+          <dt>Look</dt><dd>Black display-velvet ground, satin-white text and underlined links; sterling-grey bars with a bright top bevel, punches sunk dark, figures bright; heavy lining figures, small spaced geometric caps. Light: tissue white.</dd>
+        </dl>
+        <p class="tags">neutral · dark ground · heavy punch figures + spaced geometric caps</p>
+      </article>
+      <article id="diecast">
+        <a href="diecast/screenshot.png"><img src="diecast/screenshot.png" alt="Diecast home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Diecast <code>diecast</code></h3>
+        <p class="for">a toy and model shop selling plastic kits, paints, die-cast, board games and pocket-money toys</p>
+        <dl>
+          <dt>Object</dt><dd>the kit sprue: plastic parts moulded on a runner frame, each held by short gates beside a raised number tab</dd>
+          <dt>Signature</dt><dd>The product list is a sprue: one runner frame round the grid, each product a part held to it by short gates, title and price on the part, a counter-numbered tab at its corner. Sold out is snipped off: stubs, tab and a dashed outline stay.</dd>
+          <dt>Look</dt><dd>Instruction-sheet white ground, black line and print; runner and parts in one kit-plastic token, shipped bubblegum pink, lettered black; links underlined black. Rounded sans numerals, grotesque text. Dark: black bench.</dd>
+        </dl>
+        <p class="tags">pink · light ground · rounded sans numerals + neo-grotesque</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-clinic">
+    <h2>Clinic and practice <span>8 themes · <code>families/clinic.md</code></span></h2>
+    <div class="sheet">
+      <article id="practice">
+        <a href="practice/screenshot.png"><img src="practice/screenshot.png" alt="Practice home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Practice <code>practice</code></h3>
+        <p class="for">A calm clinic theme in soft clinical white with one blue-green accent, oversized type and big tap targets, built around a ruled strip under the masthead that shows opening hours, the phone number and the after-hours emergency line on every page.</p>
+        <p class="tags">dentist, dental practice, family doctor, doctor's office, physiotherapist, optician, chiropractor, podiatrist, health clinic</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="eyechart">
+        <a href="eyechart/screenshot.png"><img src="eyechart/screenshot.png" alt="Eyechart home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Eyechart <code>eyechart</code></h3>
+        <p class="for">an independent high-street optician: eye tests, glasses and contact lenses</p>
+        <dl>
+          <dt>Object</dt><dd>the back-lit letter chart in a dimmed test room, with its red-and-green duochrome panel under the last line</dd>
+          <dt>Signature</dt><dd>The care index is the test chart: each caps title, centred on a lit panel, opens on a first letter stepping from poster to body size over the first five rows, beside 6/60–6/6 fractions; the last row is duochrome: phone green, emergency red.</dd>
+          <dt>Look</dt><dd>Dimmed-room charcoal ground, one lightbox-white panel with pure black letters; duochrome green and red only in the chart’s last row and on appointment-cta, black figures on both; lights on in the light scheme. Slab caps.</dd>
+        </dl>
+        <p class="tags">neutral · dark ground · slab caps + neo-grotesque</p>
+      </article>
+      <article id="apothecary">
+        <a href="apothecary/screenshot.png"><img src="apothecary/screenshot.png" alt="Apothecary home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Apothecary <code>apothecary</code></h3>
+        <p class="for">a community pharmacy dispensing prescriptions and giving walk-in advice at the counter</p>
+        <dl>
+          <dt>Object</dt><dd>the amber glass medicine bottle and its white dispensing label: typed directions, the pharmacy’s name, a yellow cautionary sticker</dd>
+          <dt>Signature</dt><dd>appointment-cta is a white dispensing label on amber glass: phone and hours rows typed as caps directions, site.title and address as the pharmacy line below, emergencyNote + emergencyPhone on a yellow caution sticker lapping its corner.</dd>
+          <dt>Look</dt><dd>Amber-glass brown ground with cream text, one label-white panel typed in black, cautionary yellow on the sticker only; focus rings black on the label, white on the glass. Mono caps on the label, grotesque elsewhere.</dd>
+        </dl>
+        <p class="tags">yellow · colour ground · mono caps + neo-grotesque</p>
+      </article>
+      <article id="lumbar">
+        <a href="lumbar/screenshot.png"><img src="lumbar/screenshot.png" alt="Lumbar home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Lumbar <code>lumbar</code></h3>
+        <p class="for">an osteopath or chiropractor treating backs, necks and joints from one treatment room</p>
+        <dl>
+          <dt>Object</dt><dd>the laminated spine chart on the treatment-room wall: stacked vertebrae with blue discs between, a column of labels down each side</dd>
+          <dt>Signature</dt><dd>The care index is a spine chart: one outlined vertebra per service in a touching stack, blue disc pads between, wider after the third and sixth, a red counter number on each; title left, description right on leaders; spine left on phones.</dd>
+          <dt>Look</dt><dd>Laminate white ground; print black ink, outlines and underlined links; bone-ivory vertebrae, disc blue in the pads only; arterial red for vertebra numbers and one red-ruled emergency label; condensed caps, humanist sans.</dd>
+        </dl>
+        <p class="tags">red · light ground · condensed sans caps + humanist sans</p>
+      </article>
+      <article id="syllable">
+        <a href="syllable/screenshot.png"><img src="syllable/screenshot.png" alt="Syllable home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Syllable <code>syllable</code></h3>
+        <p class="for">a speech and language therapist seeing late-talking children and adults after a stroke</p>
+        <dl>
+          <dt>Object</dt><dd>the laminated communication board: a grid of thick-bordered cells, one word in each, borders colour-coded by word class</dd>
+          <dt>Signature</dt><dd>The care index is a communication board: a gapless grid of thick-bordered cells cycling five code colours, a service title large in each; the first cells are solid core words from practice.json — CALL (phone), BOOK, HELP (emergencyPhone).</dd>
+          <dt>Look</dt><dd>Laminate white ground, black print, cell borders in the board’s code colours — pink, yellow, green, blue, orange — with deep pink for links and the solid core-word cells; one heavy humanist sans, set large.</dd>
+        </dl>
+        <p class="tags">pink · light ground · heavy humanist sans, set large</p>
+      </article>
+      <article id="trimester">
+        <a href="trimester/screenshot.png"><img src="trimester/screenshot.png" alt="Trimester home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Trimester <code>trimester</code></h3>
+        <p class="for">an independent midwife: antenatal care, home birth and postnatal visits, on call day and night</p>
+        <dl>
+          <dt>Object</dt><dd>the card pregnancy wheel: two pinned discs, forty week marks round the rim, an arrow pointing to the due date</dd>
+          <dt>Signature</dt><dd>appointment-cta is the wheel: a CSS disc with forty week ticks and three trimester arcs round its rim, phone and booking link in the hub, and the arrow at week forty pointing to emergencyNote + emergencyPhone.</dd>
+          <dt>Look</dt><dd>Gentian-violet ground, muslin-white disc and reading panels, uniform-navy ink on the white, violet links and rim arcs; a flared humanist sans throughout, small lining figures round the rim.</dd>
+        </dl>
+        <p class="tags">violet · colour ground · flared humanist sans, lining rim figures</p>
+      </article>
+      <article id="dewclaw">
+        <a href="dewclaw/screenshot.png"><img src="dewclaw/screenshot.png" alt="Dewclaw home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Dewclaw <code>dewclaw</code></h3>
+        <p class="for">a small-animal veterinary practice: consultations, operations and an out-of-hours line</p>
+        <dl>
+          <dt>Object</dt><dd>the wipe-clean kennel card in the steel card-holder on the ward kennel door: boxed fields with small printed captions, marker pen</dd>
+          <dt>Signature</dt><dd>A service page is a kennel card in a steel holder, four corner tabs, nothing hanging: marker caps in captioned boxes — IN FOR the title, BEFORE ADMISSION the steps, a tick box each, a red-edged OUT OF HOURS box the emergency note and phone.</dd>
+          <dt>Look</dt><dd>Brushed stainless-grey kennel-door ground; one white wipe-clean card, marker-black ink, collar-leather brown captions, box rules and links (7:1 on white), red only round the out-of-hours box; rounded marker caps.</dd>
+        </dl>
+        <p class="tags">brown · light ground · rounded sans caps + humanist sans</p>
+      </article>
+      <article id="decibel">
+        <a href="decibel/screenshot.png"><img src="decibel/screenshot.png" alt="Decibel home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Decibel <code>decibel</code></h3>
+        <p class="for">a hearing-aid audiologist: hearing tests, fittings and repairs, mostly for older clients</p>
+        <dl>
+          <dt>Object</dt><dd>the audiogram: a ruled grid with frequencies along the top, decibels down the side, red circles and blue crosses stepping down</dd>
+          <dt>Signature</dt><dd>A service page ends on an audiogram: a ruled grid under 125–8k labels, each Before-your-visit step a row whose marker — red circle or blue cross by turns — sits one column further right, wrapping after 8k; phone and Book link end the grid.</dd>
+          <dt>Look</dt><dd>Chart-paper white ground, pale grey-blue grid, pencil black ink, ballpoint indigo for crosses and links, red for circles only, outline markers that print; large-print transitional serif text, mono figures on the axes.</dd>
+        </dl>
+        <p class="tags">indigo · light ground · mono axis figures + transitional serif</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-classes">
+    <h2>Studio and classes <span>8 themes · <code>families/classes.md</code></span></h2>
+    <div class="sheet">
+      <article id="form">
+        <a href="form/screenshot.png"><img src="form/screenshot.png" alt="Form home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Form <code>form</code></h3>
+        <p class="for">A fitness and yoga studio theme in chalk white, charcoal and one coral-red accent whose signature is the timetable: big tabular class times you can read at arm's length on a phone, day blocks that never scroll sideways, and a print layout that pins to the fridge.</p>
+        <p class="tags">yoga studio, pilates studio, gym, fitness classes, personal trainer, dance school, martial arts club, boot camp, swimming lessons</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="lanes">
+        <a href="lanes/screenshot.png"><img src="lanes/screenshot.png" alt="Lanes home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Lanes <code>lanes</code></h3>
+        <p class="for">a swimming school teaching children's stages and adult learn-to-swim in a 25 m pool</p>
+        <dl>
+          <dt>Object</dt><dd>the pool seen from the gallery: numbered starting blocks at the deep end, lane ropes of red and white floats between the lanes</dd>
+          <dt>Signature</dt><dd>The timetable as a pool plan: each day a full-width lane of water, the day name set in it, its classes running down it; at its left end a square white starting-block plate bearing only a bare black counter numeral; float ropes between.</dd>
+          <dt>Look</dt><dd>Poolside-white ground, navy ink, pool-water teal inside the lanes only, float red and white in the ropes, block plates white with a bare black figure (not read out); nothing else drawn. Neo-grotesque caps, humanist sans.</dd>
+        </dl>
+        <p class="tags">teal · light ground · neo-grotesque caps + humanist sans</p>
+      </article>
+      <article id="bout">
+        <a href="bout/screenshot.png"><img src="bout/screenshot.png" alt="Bout home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Bout <code>bout</code></h3>
+        <p class="for">a boxing gym running fundamentals, sparring nights and youth classes</p>
+        <dl>
+          <dt>Object</dt><dd>the letterpress fight poster: wood-type names stacked in red and black on yellow stock, small slab lines and stars between</dd>
+          <dt>Signature</dt><dd>The timetable as a fight bill: each day a bill under its day name, every class an equal centred line of poster capitals, alternating black and red, wrapping balanced; time, coach and level in a small black slab line; a row of stars between.</dd>
+          <dt>Look</dt><dd>Poster-yellow ground, wood-type black ink, a deep fight-bill red kept to large capitals only (links underlined black; yellow and warm red on black when dark), no cards; poster condensed capitals over a slab body.</dd>
+        </dl>
+        <p class="tags">red · colour ground · poster condensed caps + slab</p>
+      </article>
+      <article id="crux">
+        <a href="crux/screenshot.png"><img src="crux/screenshot.png" alt="Crux home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Crux <code>crux</code></h3>
+        <p class="for">an indoor bouldering and climbing gym with taught sessions and kids' clubs</p>
+        <dl>
+          <dt>Object</dt><dd>the route tag at the foot of each climb: a white laminated card with a band of hold-colour tape, grade, setter and date in marker</dd>
+          <dt>Signature</dt><dd>Each timetable class is a route tag: a hard-cornered white card, a fifth of its width a full-height band of hold-colour tape, time and class in marker capitals, 'with {who}' in mono, the level in a ruled grade box at the far end.</dd>
+          <dt>Look</dt><dd>Anthracite paint with a T-nut grid, chalk-white ink (birch ply, dark ink when light); tags white laminate in both, marker black, no shadow; six tape colours by day, led by violet, never under text; condensed caps, mono.</dd>
+        </dl>
+        <p class="tags">violet · dark ground · condensed sans caps + mono</p>
+      </article>
+      <article id="lexicon">
+        <a href="lexicon/screenshot.png"><img src="lexicon/screenshot.png" alt="Lexicon home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Lexicon <code>lexicon</code></h3>
+        <p class="for">a language school teaching evening Spanish, French and English to adults</p>
+        <dl>
+          <dt>Object</dt><dd>the bilingual pocket dictionary page: bold headwords, italic part-of-speech labels, run-in senses in two narrow columns</dd>
+          <dt>Signature</dt><dd>The instructor list as a dictionary page: two narrow columns, a centre rule, each teacher an entry (name the bold headword, discipline the italic label, description run in on a hanging indent) under a ruled running head: the page title.</dd>
+          <dt>Look</dt><dd>Thin-paper cool white ground, black ink, dictionary blue for headwords and links the only colour, black thumb-index half-moons down the fore-edge; bold grotesque run-in heads over a Times-like serif at 1rem, set tight.</dd>
+        </dl>
+        <p class="tags">blue · light ground · bold grotesque run-ins + Times-like serif</p>
+      </article>
+      <article id="etude">
+        <a href="etude/screenshot.png"><img src="etude/screenshot.png" alt="Etude home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Etude <code>etude</code></h3>
+        <p class="for">a music school teaching piano, strings and voice to children and adults</p>
+        <dl>
+          <dt>Object</dt><dd>the Urtext study-edition cover: blue-grey card with title and instrumentation centred in spaced capitals, imprint at the foot</dd>
+          <dt>Signature</dt><dd>Every page opens as an edition cover: the h1 in spaced capitals centred in a double-rule frame; beneath it, as the ‘for violin’ line, the page’s description or an instructor’s discipline; the site title as the imprint at the frame’s foot.</dd>
+          <dt>Look</dt><dd>Urtext blue-grey cover-stock ground, deep navy ink, ivory music-paper panels for reading text, no second colour; engraved-style spaced transitional capitals over a transitional text serif.</dd>
+        </dl>
+        <p class="tags">indigo · colour ground · spaced transitional caps + transitional serif</p>
+      </article>
+      <article id="tearoff">
+        <a href="tearoff/screenshot.png"><img src="tearoff/screenshot.png" alt="Tearoff home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Tearoff <code>tearoff</code></h3>
+        <p class="for">a lone teacher or small collective running evening classes in a hired hall: life drawing, pottery, French</p>
+        <dl>
+          <dt>Object</dt><dd>the photocopied flyer on coloured copier paper with a fringe of tear-off strips cut along its bottom edge</dd>
+          <dt>Signature</dt><dd>The timetable is the flyer’s fringe of tear-off strips: each day one strip between dashed scissor cuts, its day name set sideways at the head, its classes down it; a day with no classes is a torn-off stub. On phones the strips lie stacked.</dd>
+          <dt>Look</dt><dd>Lilac copier-paper ground, black toner ink and nothing else, white paste-up panels with hard edges (a white-on-black negative copy in the dark scheme); typewriter body under heavy grotesque headlines.</dd>
+        </dl>
+        <p class="tags">neutral · colour ground · typewriter + heavy grotesque</p>
+      </article>
+      <article id="barre">
+        <a href="barre/screenshot.png"><img src="barre/screenshot.png" alt="Barre home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Barre <code>barre</code></h3>
+        <p class="for">a ballet and dance school with graded children's classes and adult beginners</p>
+        <dl>
+          <dt>Object</dt><dd>the end-of-year recital programme: a folded card, the cast set either side of the crease, role to the left, dancer to the right</dd>
+          <dt>Signature</dt><dd>A programme's fold crease runs down the page. Each timetable day is an act centred on it, each class a cast line: time ranged right to the crease, class in spaced capitals left from it, teacher and level in italic beneath. Instructors too.</dd>
+          <dt>Look</dt><dd>Pale pointe-satin pink card ground, leotard-black ink, deep ribbon rose for links and the trial note, the fold crease the only rule (backstage black, pink crease, when dark); light geometric capitals, italic roles.</dd>
+        </dl>
+        <p class="tags">pink · light ground · spaced geometric caps + old-style italic</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-portfolio">
+    <h2>Portfolio <span>8 themes · <code>families/portfolio.md</code></span></h2>
+    <div class="sheet">
+      <article id="studio">
+        <a href="studio/screenshot.png"><img src="studio/screenshot.png" alt="Studio home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Studio <code>studio</code></h3>
+        <p class="for">A white-cube portfolio for designers and photographers whose signature is a full-bleed, edge-to-edge project grid on a bare gallery wall, labelled in small uppercase wall-label type with one red dot of colour — photographs carry the page when you have them, typographic plates when you don't.</p>
+        <p class="tags">graphic designer, photographer, illustrator, design studio, architect, interior designer, art director, artist</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="elevation">
+        <a href="elevation/screenshot.png"><img src="elevation/screenshot.png" alt="Elevation home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Elevation <code>elevation</code></h3>
+        <p class="for">a small architecture practice showing built and unbuilt projects</p>
+        <dl>
+          <dt>Object</dt><dd>the blueprint drawing sheet: white line on Prussian blue, a ruled border with zone letters, a block of ruled cells bottom-right</dd>
+          <dt>Signature</dt><dd>Each page is a drawing sheet: a ruled frame and a title block. A project gets cells for PROJECT, CLIENT, DATE, SCOPE and practice, none drawn empty; other pages only SHEET and practice. It closes the sheet bottom-right and grows to fit.</dd>
+          <dt>Look</dt><dd>Cyanotype sheet: Prussian-blue ground, white line for frame, zone letters, cells and underlined links; white monoline capitals in the cells, plain grotesque text. Light scheme: a dyeline, off-white with blue-violet line.</dd>
+        </dl>
+        <p class="tags">indigo · colour ground · mono caps + neo-grotesque</p>
+      </article>
+      <article id="roughs">
+        <a href="roughs/screenshot.png"><img src="roughs/screenshot.png" alt="Roughs home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Roughs <code>roughs</code></h3>
+        <p class="for">a picture-book and editorial illustrator</p>
+        <dl>
+          <dt>Object</dt><dd>the picture-book dummy: the storyboard sheet of small open books, a gutter down each, a page number pencilled in each outer corner</dd>
+          <dt>Signature</dt><dd>The work index is a book dummy: each project an open book in blue pencil, gutter shaded — title on the left page, description on the right, or the cover across both with the title beneath; date and client below, a folio in each foot corner.</dd>
+          <dt>Look</dt><dd>Layout-pad white ground, turquoise blue-pencil line for the books, folios, links and the current spread, soft graphite gutter shadow, ink-black text; picture-book geometric sans titles, humanist sans notes.</dd>
+        </dl>
+        <p class="tags">teal · light ground · geometric sans titles + humanist sans notes</p>
+      </article>
+      <article id="ticking">
+        <a href="ticking/screenshot.png"><img src="ticking/screenshot.png" alt="Ticking home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Ticking <code>ticking</code></h3>
+        <p class="for">an interior designer furnishing private homes</p>
+        <dl>
+          <dt>Object</dt><dd>the furnishing-fabric sample book: pinked-edge cuttings of ticking, gingham and trellis, each with a stapled paper label</dd>
+          <dt>Signature</dt><dd>Each project is a fabric cutting with a pinked edge, woven in CSS gradients — ticking, gingham, trellis, spot, cycling by position — and a stapled label with title, client and date. Plain pages keep one ticking-stripe band at the head.</dd>
+          <dt>Look</dt><dd>Sample-book white ground, soft-black ink; weaves on natural linen in indigo ticking, turkey-red gingham and bottle-green trellis, rose-madder accent; labels in small spaced grotesque capitals over a typed reference line.</dd>
+        </dl>
+        <p class="tags">pink · light ground · small grotesque caps + typewriter reference</p>
+      </article>
+      <article id="reel">
+        <a href="reel/screenshot.png"><img src="reel/screenshot.png" alt="Reel home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Reel <code>reel</code></h3>
+        <p class="for">a freelance filmmaker and videographer: documentaries, shorts, commissioned films</p>
+        <dl>
+          <dt>Object</dt><dd>the main title card and its burnt-in subtitle, letterboxed: a 2.39:1 picture between black bars, timecode in the corner</dd>
+          <dt>Signature</dt><dd>Each project is a letterbox: a black picture, 2.39:1 or taller if the title needs it, holding only the title (any cover behind a scrim), client and date in its corners as burnt-in timecode, the description a yellow subtitle in a bar below.</dd>
+          <dt>Look</dt><dd>House-lights grey-white ground, ink text, underlined ink links; black frames are the only dark thing and the only home of subtitle yellow. Dark: auditorium charcoal. Serif title cards in mixed case, grotesque subtitles.</dd>
+        </dl>
+        <p class="tags">yellow · light ground · transitional serif titles + grotesque subtitles</p>
+      </article>
+      <article id="stet">
+        <a href="stet/screenshot.png"><img src="stet/screenshot.png" alt="Stet home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Stet <code>stet</code></h3>
+        <p class="for">a freelance copywriter with campaigns, taglines and web copy to show and few pictures</p>
+        <dl>
+          <dt>Object</dt><dd>the typed copy sheet on canary second-sheet paper, marked up in an editor's blue pencil</dd>
+          <dt>Signature</dt><dd>Each project opens with a typed slug — CLIENT, DATE, FOR (its services) in capitals at one tab stop, a blank line left out — its title takes a blue-pencil double underline, and the piece closes with a centred ENDS.</dd>
+          <dt>Look</dt><dd>Canary copy-paper ground, typewriter-ribbon black, editor's deep cobalt pencil for links and the double underline (7:1); dark scheme: carbon-paper blue-black, pale yellow type, sky-blue pencil; one typewriter face.</dd>
+        </dl>
+        <p class="tags">blue · colour ground · typewriter throughout</p>
+      </article>
+      <article id="chisel">
+        <a href="chisel/screenshot.png"><img src="chisel/screenshot.png" alt="Chisel home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Chisel <code>chisel</code></h3>
+        <p class="for">a letter-cutter and stonemason carving memorials, plaques and architectural lettering</p>
+        <dl>
+          <dt>Object</dt><dd>the cut inscription on Welsh slate: centred capitals between the cutter's white-pencil setting-out lines, words parted by mid-dots</dd>
+          <dt>Signature</dt><dd>Titles are inscriptions: centred, wide-spaced capitals, every line ruled above and below with the cutter's pencilled setting-out lines (one repeating gradient), services beneath between mid-dots, the work index one tablet-shaped column.</dd>
+          <dt>Look</dt><dd>Welsh-slate blue-grey ground, pale cut lettering, white-pencil guide lines, no colour accent, links underlined; day scheme: Portland stone, painted black letters, graphite lines; flared capitals, old-style serif text.</dd>
+        </dl>
+        <p class="tags">neutral · dark ground · flared caps + old-style serif</p>
+      </article>
+      <article id="linocut">
+        <a href="linocut/screenshot.png"><img src="linocut/screenshot.png" alt="Linocut home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Linocut <code>linocut</code></h3>
+        <p class="for">a relief printmaker selling editions of linocuts and woodcuts</p>
+        <dl>
+          <dt>Object</dt><dd>the pulled proof: a lino block printed in one coloured ink on a wide-margined white sheet, the pencil line under the print</dd>
+          <dt>Signature</dt><dd>Each project is a pulled proof: an umber block, fixed in width, as tall as its title needs, cut in white capitals that wrap between words; only a word wider than the block is broken. Pencilled below: date, client if any, site.title signed.</dd>
+          <dt>Look</dt><dd>Uncut-lino brown ground, proofing-paper white sheets, every block inked from one burnt-umber token, never black; links ink-dark on a thick umber underline; heavy grotesque block capitals, pencil-grey old-style italic.</dd>
+        </dl>
+        <p class="tags">brown · colour ground · heavy grotesque caps + old-style italic</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-personal">
+    <h2>Personal page and CV <span>7 themes · <code>families/personal.md</code></span></h2>
+    <div class="sheet">
+      <article id="folio">
+        <a href="folio/screenshot.png"><img src="folio/screenshot.png" alt="Folio home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Folio <code>folio</code></h3>
+        <p class="for">A résumé site on white paper in graphite ink with one steel-blue accent: a hire-me page plus an experience record that is the CV, drawn as a sheet on screen and printed onto a single sheet of A4.</p>
+        <p class="tags">freelancer, job seeker, consultant, software developer, designer, contractor, recent graduate, online CV, résumé</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="mariner">
+        <a href="mariner/screenshot.png"><img src="mariner/screenshot.png" alt="Mariner home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Mariner <code>mariner</code></h3>
+        <p class="for">a merchant navy deck officer or marine engineer looking for the next ship</p>
+        <dl>
+          <dt>Object</dt><dd>the seaman's discharge book: ruled columns for ship, capacity, dates and place, a line describing the voyage, a stamp at each port</dd>
+          <dt>Signature</dt><dd>The CV as a discharge-book spread: heads printed once, each role a ruled row with its location in an upright double-ruled oval stamp that grows to fit, then a full-width 'Description of voyage' line; phone rows stack as captioned cells.</dd>
+          <dt>Look</dt><dd>Pale azure-laid book paper, column rules and entries in blue-black ink, navy bookcloth masthead, port-office green stamp ink as the one accent; small grotesque capitals for printed heads over slab-serif entries.</dd>
+        </dl>
+        <p class="tags">green · light ground · small grotesque caps + slab serif</p>
+      </article>
+      <article id="credits">
+        <a href="credits/screenshot.png"><img src="credits/screenshot.png" alt="Credits home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Credits <code>credits</code></h3>
+        <p class="for">a screen and stage actor whose list of credits is the record</p>
+        <dl>
+          <dt>Object</dt><dd>the billing block at the foot of a film poster: tall narrow capitals in one centred block, each credit under a tiny stacked label</dd>
+          <dt>Signature</dt><dd>The CV opens on an aubergine billing panel in both schemes: the name largest, then every role run into one centred block of tall capitals, each title led by its organization as a tiny stacked label; the dated rows beneath are what print.</dd>
+          <dt>Look</dt><dd>Deep aubergine, never black: the whole sheet after dark; by day a full-bleed billing panel on white stock, with periods, rules and links in aubergine ink. Lilac billing, white name; print black. Tall condensed sans caps.</dd>
+        </dl>
+        <p class="tags">violet · colour ground · condensed sans caps, scaled tall + grotesque</p>
+      </article>
+      <article id="souschef">
+        <a href="souschef/screenshot.png"><img src="souschef/screenshot.png" alt="Sous Chef home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Sous Chef <code>souschef</code></h3>
+        <p class="for">a working chef, from chef de partie to head chef, looking for the next kitchen</p>
+        <dl>
+          <dt>Object</dt><dd>the order docket on the pass: a narrow kitchen-printer ticket in black and red, torn off and slid into the steel ticket rail</dd>
+          <dt>Signature</dt><dd>The CV as the pass in service: roles hang as narrow dockets with torn serrated feet from one steel rail per row, one across on a phone and three on A4; kitchen and period on the header line, the station (title) in double-height capitals.</dd>
+          <dt>Look</dt><dd>Black enamel ground, steel rails; bond-white dockets in both schemes, each keylined in printer grey with a saw-tooth stroke at its torn foot, to hold on the white day wall and A4; ribbon red. Mono caps, condensed sans.</dd>
+        </dl>
+        <p class="tags">red · dark ground · mono caps + condensed sans</p>
+      </article>
+      <article id="jotter">
+        <a href="jotter/screenshot.png"><img src="jotter/screenshot.png" alt="Jotter home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Jotter <code>jotter</code></h3>
+        <p class="for">a primary or secondary school teacher applying for a new post</p>
+        <dl>
+          <dt>Object</dt><dd>the school exercise book: a manila cover with a printed Name and Subject label, feint-ruled pages inside with a red margin line</dd>
+          <dt>Signature</dt><dd>The CV is a ruled page of the book: each role's period sits in the margin left of the red line, where a pupil writes the date; its title is ruled under as a heading; feint-blue lines at the leading run behind summary and highlights.</dd>
+          <dt>Look</dt><dd>Exercise-book orange cover ground, white feint-ruled pages, a marking-red margin line and link underlines, black ink (slate cover, dusk-grey pages when dark); Gill-style capitals for print, Georgia or Charter text.</dd>
+        </dl>
+        <p class="tags">orange · colour ground · humanist sans caps + transitional serif</p>
+      </article>
+      <article id="strata">
+        <a href="strata/screenshot.png"><img src="strata/screenshot.png" alt="Strata home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Strata <code>strata</code></h3>
+        <p class="for">a geotechnical or civil engineer whose career has moved from site to site</p>
+        <dl>
+          <dt>Object</dt><dd>the borehole log: a strata column hatched by soil type, depths marked at each boundary, descriptions ruled to the right</dd>
+          <dt>Signature</dt><dd>The CV as a borehole log: one stratum per role down a left column, newest at ground level, hatched in CSS by nth-child (sand stipple, clay dashes, gravel rings, rock courses), the period at each boundary where the depth goes.</dd>
+          <dt>Look</dt><dd>White log-sheet ground, black linework and hatching over three earth washes (sand buff, clay brown, chalk grey), clay brown for links and the current-page mark; upright drafting capitals for heads over a humanist sans.</dd>
+        </dl>
+        <p class="tags">brown · light ground · geometric drafting caps + humanist sans</p>
+      </article>
+      <article id="mandate">
+        <a href="mandate/screenshot.png"><img src="mandate/screenshot.png" alt="Mandate home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Mandate <code>mandate</code></h3>
+        <p class="for">an interim finance director or turnaround chief executive between assignments</p>
+        <dl>
+          <dt>Object</dt><dd>the tombstone announcement on the financial pages: a ruled box, every line centred, published 'as a matter of record only'</dd>
+          <dt>Signature</dt><dd>Each assignment is a tombstone: a ruled box with the organization in wide capitals, the role beneath, period and location in small capitals, every line centred, boxes set two across like a financial page's announcements.</dd>
+          <dt>Look</dt><dd>Salmon-pink financial newsprint ground, black ink and nothing else, 2pt box rules (charcoal ground with salmon ink in the dark scheme); letterspaced transitional-serif capitals centred over small grotesque lines.</dd>
+        </dl>
+        <p class="tags">pink · colour ground · centred serif caps + small grotesque</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-club">
+    <h2>Club and community group <span>8 themes · <code>families/club.md</code></span></h2>
+    <div class="sheet">
+      <article id="vestry">
+        <a href="vestry/screenshot.png"><img src="vestry/screenshot.png" alt="Vestry home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Vestry <code>vestry</code></h3>
+        <p class="for">a parish church with Sunday and midweek services, a choir, bell-ringers and a church hall</p>
+        <dl>
+          <dt>Object</dt><dd>the hymn board by the pulpit: an oak frame with grooved rails holding slide-in white cards of heavy black numerals</dd>
+          <dt>Signature</dt><dd>The regular week as a hymn board: each meets time is a white slide-in card in heavy black figures on a grooved rail in an oak frame (a time in words wraps on its card), what and place beside it in small capitals. Nothing else is framed.</dd>
+          <dt>Look</dt><dd>Limewash-white ground, prayer-book black ink, waxed-oak brown frame and links, rubric red for day names only; no display type: the heavy grotesque card numerals are the one large thing, over an old-style serif.</dd>
+        </dl>
+        <p class="tags">brown · light ground · heavy grotesque numerals + old-style serif</p>
+      </article>
+      <article id="quorum">
+        <a href="quorum/screenshot.png"><img src="quorum/screenshot.png" alt="Quorum home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Quorum <code>quorum</code></h3>
+        <p class="for">a village or parish council publishing meetings, councillors, notices and the clerk's contact details</p>
+        <dl>
+          <dt>Object</dt><dd>the public notice in the parish noticeboard: a sheet ruled across in heavy black, headed in bold capitals, signed by the clerk</dd>
+          <dt>Signature</dt><dd>The event page is a statutory notice: a sheet ruled in 3px black, headed PUBLIC NOTICE (a strings key a council may reword), then title, captioned Date, Time and Place, status, club email and phone as the clerk's line. The list: one head.</dd>
+          <dt>Look</dt><dd>Notice-paper white ground, black ink, 3px black rules and a black masthead bar; no second colour, tints or shadows, AAA contrast; one neo-grotesque family, left-aligned; people as a plain ruled register. Dark: reversed.</dd>
+        </dl>
+        <p class="tags">neutral · light ground · neo-grotesque, bold caps + regular</p>
+      </article>
+      <article id="bookbag">
+        <a href="bookbag/screenshot.png"><img src="bookbag/screenshot.png" alt="Bookbag home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Bookbag <code>bookbag</code></h3>
+        <p class="for">a primary school or kindergarten writing to parents about term dates, trips and assemblies</p>
+        <dl>
+          <dt>Object</dt><dd>the corridor display board: bright backing paper inside a scalloped corrugated border, white laminated notices pinned on it</dd>
+          <dt>Signature</dt><dd>The display board: events and the regular week, on any page, are white notices pinned to yellow backing paper in a scalloped blue border: Dates (one ruled column, date largest; an optional script hides those a week past) and Regular times.</dd>
+          <dt>Look</dt><dd>Corridor-wall off-white ground, black ink, sunflower-yellow backing paper, a royal-blue scalloped border that is also the link colour, white pinned notices (a navy wall when dark); heavy sans dates, humanist sans.</dd>
+        </dl>
+        <p class="tags">yellow · light ground · heavy sans date figures + humanist sans</p>
+      </article>
+      <article id="switchback">
+        <a href="switchback/screenshot.png"><img src="switchback/screenshot.png" alt="Switchback home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Switchback <code>switchback</code></h3>
+        <p class="for">a hiking and alpine club with a tour programme, hut weekends and weekly training walks</p>
+        <dl>
+          <dt>Object</dt><dd>the mountain path on a walker's map: a dashed line climbing in hairpins across the contours, spot heights printed at the bends</dd>
+          <dt>Signature</dt><dd>The events list is a path on the map: one dashed magenta line runs down the page in hairpins (alternate rows turn left and right through rounded corners), an event at each bend, its date in bold tabular figures where the spot height goes.</dd>
+          <dt>Look</dt><dd>Map-paper white ground with a pale blue kilometre grid, survey-black ink, contour-brown rules, footpath magenta for the path and links, lake-blue italic for place names; spaced sans capitals over a transitional serif.</dd>
+        </dl>
+        <p class="tags">pink · light ground · spaced sans caps + transitional serif</p>
+      </article>
+      <article id="hydrant">
+        <a href="hydrant/screenshot.png"><img src="hydrant/screenshot.png" alt="Hydrant home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Hydrant <code>hydrant</code></h3>
+        <p class="for">a volunteer fire brigade posting drill nights, open days, recruitment and station news</p>
+        <dl>
+          <dt>Object</dt><dd>the hydrant marker plate on its roadside post: a yellow enamel plate, one heavy black H, a figure above its crossbar and one below</dd>
+          <dt>Signature</dt><dd>The regular week is a row of hydrant plates: each meets entry a yellow enamel plate built on a heavy black H, day above the crossbar, time in heavy letters below (both wrap), what and place in white capitals beside. Statuses: small plates.</dd>
+          <dt>Look</dt><dd>Appliance signal-red ground, reflective-white ink and bands, white report-sheet panels with black text; hydrant-yellow enamel plates lettered black, the only other colour; DIN-style signage capitals, humanist sans.</dd>
+        </dl>
+        <p class="tags">red · colour ground · DIN signage caps + humanist sans</p>
+      </article>
+      <article id="jamboree">
+        <a href="jamboree/screenshot.png"><img src="jamboree/screenshot.png" alt="Jamboree home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Jamboree <code>jamboree</code></h3>
+        <p class="for">a scout group with beaver, cub and scout sections, camps, badge work and a waiting list</p>
+        <dl>
+          <dt>Object</dt><dd>the group neckerchief as worn: rolled cloth in the group's two colours, a V from the collar to a leather slide ring, tails hanging</dd>
+          <dt>Signature</dt><dd>The masthead wears the neckerchief: site.title on a white name-tape panel; from its lower edge two rolled bands drop at a fixed 35 degrees to a slide ring, a centred V at most 12rem wide, tails and founded below. The same on every page.</dd>
+          <dt>Look</dt><dd>Khaki-drill ground with topstitched seams for rules, dark-olive ink and underlined links, white name-tape panels; a teal neckerchief, gold border and leather-brown slide ring (three tokens); bold grotesque capitals.</dd>
+        </dl>
+        <p class="tags">teal · colour ground · bold grotesque caps + humanist sans</p>
+      </article>
+      <article id="bygones">
+        <a href="bygones/screenshot.png"><img src="bygones/screenshot.png" alt="Bygones home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Bygones <code>bygones</code></h3>
+        <p class="for">a local history society and village museum with a winter talks programme and an archive</p>
+        <dl>
+          <dt>Object</dt><dd>the card-index drawer: buff cards on a rod, guide cards with raised tabs staggered left, centre and right, headings typed</dd>
+          <dt>Signature</dt><dd>The events list is an index drawer seen from the front: each event a card overlapping the one behind, its raised tab stepping left, centre, right by nth-child and carrying the date; title typed on the red head line, place and time below.</dd>
+          <dt>Look</dt><dd>Catalogue-card off-white ground, typewriter-ribbon black ink, feint-ruling blue lines and links, one red head rule and a punched rod hole per card, manila tabs; typewriter text, small grotesque capitals on the tabs.</dd>
+        </dl>
+        <p class="tags">blue · light ground · typewriter + small grotesque caps</p>
+      </article>
+      <article id="dugout">
+        <a href="dugout/screenshot.png"><img src="dugout/screenshot.png" alt="Dugout home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Dugout <code>dugout</code></h3>
+        <p class="for">an amateur football club with a first team, reserves, youth sides and a clubhouse</p>
+        <dl>
+          <dt>Object</dt><dd>the pocket fixture card printed each season: a narrow folded card, club colours and the season on its cover, fixtures ruled inside</dd>
+          <dt>Signature</dt><dd>The events list is one narrow fixture card: a cover leaf (site.title, founded, the list title on the two-colour band), a fold crease, then ruled two-column rows: date over time, title over place. Cancelled is boxed in the time's place.</dd>
+          <dt>Look</dt><dd>Sky-blue cover-card ground, white inner leaves for fixture card and notices, boot-black print, a claret cover band with one white stripe (tokens: any club colours), black links on thick claret underlines; condensed caps.</dd>
+        </dl>
+        <p class="tags">red · colour ground · condensed sans caps + tabular grotesque</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-event">
+    <h2>Event <span>6 themes · <code>families/event.md</code></span></h2>
+    <div class="sheet">
+      <article id="vows">
+        <a href="vows/screenshot.png"><img src="vows/screenshot.png" alt="Vows home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Vows <code>vows</code></h3>
+        <p class="for">a couple's wedding: the invitation, the order of the day, how to get there and a reply by email</p>
+        <dl>
+          <dt>Object</dt><dd>the engraved invitation suite: a cotton card on its lined envelope, with the smaller reply card tucked under one corner</dd>
+          <dt>Signature</dt><dd>The reply card, on the invitation and closing every page: 'The favour of a reply is requested by' replyBy, then two ruled lines, accepts with pleasure and declines with regret, each a mailto: link to replyEmail carrying that subject.</dd>
+          <dt>Look</dt><dd>Sage-green envelope ground with a darker leaf-print liner band at its head, white cotton card with a blind-embossed border, engraver's black ink; wide roman capitals over an old-style italic. Dark: deep-green liner.</dd>
+        </dl>
+        <p class="tags">green · colour ground · wide engraved serif caps + old-style italic</p>
+      </article>
+      <article id="tombola">
+        <a href="tombola/screenshot.png"><img src="tombola/screenshot.png" alt="Tombola home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Tombola <code>tombola</code></h3>
+        <p class="for">a village fête or church summer fair on the green: stalls, teas, a dog show and a raffle drawn at four</p>
+        <dl>
+          <dt>Object</dt><dd>the strip of cloakroom raffle tickets: pastel paper, the number printed twice, a perforation between stub and ticket</dd>
+          <dt>Signature</dt><dd>Each programme part is a strip of raffle tickets under its day: time in numbering-machine mono on stub and ticket (stub copy aria-hidden; a plain stub if there is no time), title and place beside, a perforation between; four papers cycle.</dd>
+          <dt>Look</dt><dd>White paper-tablecloth ground; sugar-pink, mint, primrose and sky ticket papers (four tokens), black numbering ink, raspberry links; mono figures over plain grotesque capitals. Dark: the same pastel tickets on dusk grey.</dd>
+        </dl>
+        <p class="tags">pink · light ground · mono numerals + grotesque caps</p>
+      </article>
+      <article id="lanyard">
+        <a href="lanyard/screenshot.png"><img src="lanyard/screenshot.png" alt="Lanyard home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Lanyard <code>lanyard</code></h3>
+        <p class="for">a one- or two-day professional conference of 50 to 300 people: a trade association, a symposium, a meetup</p>
+        <dl>
+          <dt>Object</dt><dd>the delegate badge on its lanyard: a white card clipped to a flat woven strap, one-word satin ribbons foil-stamped along its foot</dd>
+          <dt>Signature</dt><dd>The invitation is a delegate badge on a strap at the page top: site.title heavy; dateLabel, venue and entry in plain print; one foot ribbon, a single foil word, is the join link (tickets, else /join/). People: small badges, role ribbons.</dd>
+          <dt>Look</dt><dd>Pale-grey exhibition-carpet ground, white badge card, black laser-print ink; burgundy satin strap, ribbons and links, ribbon lettering in pale gold foil; bold neo-grotesque, small spaced capitals. Dark: lights down.</dd>
+        </dl>
+        <p class="tags">red · light ground · bold neo-grotesque + spaced foil caps</p>
+      </article>
+      <article id="advent">
+        <a href="advent/screenshot.png"><img src="advent/screenshot.png" alt="Advent home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Advent <code>advent</code></h3>
+        <p class="for">a town Christmas market: wooden huts, mulled wine, a choir on the hour, open over the four Advent weekends</p>
+        <dl>
+          <dt>Object</dt><dd>the printed advent calendar: a night-green card of little doors in different sizes, each cut on three sides and lettered in gilt</dd>
+          <dt>Signature</dt><dd>The programme is an advent calendar: each item a door cut on three sides and hinged on the fourth, its time in gilt slab figures in the corner, title and place on the door; each day heads its run of doors; three door widths fill each row.</dd>
+          <dt>Look</dt><dd>Spruce-at-night green card ground, snow-white type, gilt door edges and time figures, no red; slab-serif capitals and figures on the doors over a humanist sans. Light scheme: a snowed-in morning — white card, green ink.</dd>
+        </dl>
+        <p class="tags">yellow · dark ground · slab serif caps and figures + humanist sans</p>
+      </article>
+      <article id="eulogy">
+        <a href="eulogy/screenshot.png"><img src="eulogy/screenshot.png" alt="Eulogy home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Eulogy <code>eulogy</code></h3>
+        <p class="for">a memorial service or celebration of life, shared with family and friends who will travel to it</p>
+        <dl>
+          <dt>Object</dt><dd>the order of service handed out at the door: a stapled booklet, the name on its coloured cover, each part headed in capitals</dd>
+          <dt>Signature</dt><dd>The home invitation is the booklet's cover: one solid violet portrait panel, site.title reversed out in large roman capitals, dateLabel, time and venue small beneath, two staples on its spine. Inside, the programme is the order of service.</dd>
+          <dt>Look</dt><dd>Half-mourning violet cover on bright white stock; black ink, violet rubrics in small letterspaced capitals, italic notes on a hanging indent, ranged left, no frames; one Times-like serif. Dark: black cloth, lilac.</dd>
+        </dl>
+        <p class="tags">violet · light ground · large Times-like capitals + italic</p>
+      </article>
+      <article id="wristband">
+        <a href="wristband/screenshot.png"><img src="wristband/screenshot.png" alt="Wristband home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Wristband <code>wristband</code></h3>
+        <p class="for">a weekend music festival in a field: two stages, camping, a few hundred to a few thousand people</p>
+        <dl>
+          <dt>Object</dt><dd>the woven fabric wristband: a satin strip with the festival's name in the weave, closed by a sliding bead clasp</dd>
+          <dt>Signature</dt><dd>The wristband is the masthead of every page: one full-bleed woven strip — site.title and dateLabel in tight capitals (wrapping on phones), a diamond repeat filling the rest, stitched selvedges — closed by a clasp, the join link.</dd>
+          <dt>Look</dt><dd>Last-light indigo ground, festoon-bulb warm white text, the band woven in chalk white with indigo lettering and diamonds; condensed capitals over a humanist sans for notes. Light scheme: marquee white, indigo ink.</dd>
+        </dl>
+        <p class="tags">indigo · dark ground · condensed sans caps + humanist sans</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-property">
+    <h2>Property, accommodation and rental <span>7 themes · <code>families/property.md</code></span></h2>
+    <div class="sheet">
+      <article id="keys">
+        <a href="keys/screenshot.png"><img src="keys/screenshot.png" alt="Keys home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Keys <code>keys</code></h3>
+        <p class="for">Estate-agent listings on clean white and agency-board green: every property card flies a corner status flag in one of three colours — open, pending or closed, for sales, lets and stays alike — with the price first and biggest and a ruled row of figures beneath, the phone number in the masthead and an inquiry box on every page.</p>
+        <p class="tags">estate agent, real estate agent, realtor, property sales, houses for sale, apartments for sale, property developer, new-build homes</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="tenancy">
+        <a href="tenancy/screenshot.png"><img src="tenancy/screenshot.png" alt="Tenancy home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Tenancy <code>tenancy</code></h3>
+        <p class="for">a letting agent or small landlord with a dozen flats and houses to rent by the month</p>
+        <dl>
+          <dt>Object</dt><dd>the key cabinet in the lettings office: rows of zinc hooks, each bunch on a coloured plastic tag with a typed paper insert</dd>
+          <dt>Signature</dt><dd>The listings page is the open key cabinet: each listing a plastic tag hung by its lug from a plain hook, with title, price and the status word typed on its paper insert. Tag colour only repeats the word: lilac free, amber agreed, grey gone.</dd>
+          <dt>Look</dt><dd>Powder-coated cabinet grey ground, label-black ink, white paper inserts, translucent lilac tags as the accent with amber and smoke grey for the other states, zinc hooks. Dark scheme: graphite cabinet. Mono label caps.</dd>
+        </dl>
+        <p class="tags">violet · light ground · mono label caps + humanist sans</p>
+      </article>
+      <article id="buzzer">
+        <a href="buzzer/screenshot.png"><img src="buzzer/screenshot.png" alt="Buzzer home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Buzzer <code>buzzer</code></h3>
+        <p class="for">a landlord letting single rooms in shared student houses near a university</p>
+        <dl>
+          <dt>Object</dt><dd>the brass entry-phone plate by a shared front door: a round speaker grille of drilled holes above a row of lit push-buttons</dd>
+          <dt>Signature</dt><dd>Every page ends at the front door: the inquiry box is the entry-phone plate, a round grille of drilled holes over Call and Email as two lit pushes, the hours engraved beneath. Rooms list as plain engraved rows, each status in words only.</dd>
+          <dt>Look</dt><dd>Satin-brass ground; black-filled engraving for text, links and focus; ebonite pushes ringed in backlit yellow, the grille drilled dark. Dark scheme: the plate at night, the rings glowing. Engraved grotesque caps.</dd>
+        </dl>
+        <p class="tags">yellow · colour ground · engraved grotesque caps + humanist sans</p>
+      </article>
+      <article id="seaview">
+        <a href="seaview/screenshot.png"><img src="seaview/screenshot.png" alt="Sea View home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Sea View <code>seaview</code></h3>
+        <p class="for">a seaside bed and breakfast or guest house letting five or six rooms by the night</p>
+        <dl>
+          <dt>Object</dt><dd>the VACANCIES board hung by a cord in the front bay window, with the small NO plate that hooks on beneath when the house is full</dd>
+          <dt>Signature</dt><dd>Each room is a hanging sign: a white board on a cord across the card, the nightly price largest in pillar-box red, the room title beneath. A plate hooks on below when status is set: plain if free, barred if pending, white on red if taken.</dd>
+          <dt>Look</dt><dd>Seafront-render pink ground, navy ink and links, gloss-white sign boards, pillar-box red only for the price and the hook-on plate. Dark scheme: dusk, render gone plum. Geometric sign capitals, old-style serif text.</dd>
+        </dl>
+        <p class="tags">pink · colour ground · geometric sans caps + old-style serif</p>
+      </article>
+      <article id="fieldgate">
+        <a href="fieldgate/screenshot.png"><img src="fieldgate/screenshot.png" alt="Fieldgate home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Fieldgate <code>fieldgate</code></h3>
+        <p class="for">a rural land agent selling farms, pasture, woodland and smallholdings, often in lots, by the hectare or acre</p>
+        <dl>
+          <dt>Object</dt><dd>the auction sale plan: each lot a field parcel washed in its own tint and edged red, its name and area lettered in the middle</dd>
+          <dt>Signature</dt><dd>Each listing is a lot on the sale plan: a parcel drawn behind a plain text box (four shapes and washes by nth-child), edged red, area lettered largest, or price when area is empty. Status in words; pending and taken lots add a hatched band.</dd>
+          <dt>Look</dt><dd>Map-sheet white ground, engraver's black line and lettering, lots washed rose, straw, sky and sage, sale-plan red for edging and links. Dark scheme: pale line on slate, deeper washes. Old-style italic, upright caps.</dd>
+        </dl>
+        <p class="tags">red · light ground · old-style italic + old-style caps</p>
+      </article>
+      <article id="hideaway">
+        <a href="hideaway/screenshot.png"><img src="hideaway/screenshot.png" alt="Hideaway home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Hideaway <code>hideaway</code></h3>
+        <p class="for">an owner letting one to three holiday cottages by the week</p>
+        <dl>
+          <dt>Object</dt><dd>the cottage window seen from the lane after dark: four small panes in a deep stone reveal, lamplight behind the glazing bars</dd>
+          <dt>Signature</dt><dd>Each cottage is a four-pane window in the night wall, its title on the lintel above: price, status, beds and baths, and area each in a pane, a blank pane just lit. Panes glow lamp-amber when free, burn low when pending, go dark when taken.</dd>
+          <dt>Look</dt><dd>Blue-black whinstone wall at night, stone-white text and underlined links; panes lamp-amber under black lettering, glazing bars white; no other colour. Light scheme: grey harl by day, the panes sky-pale. Old-style serif.</dd>
+        </dl>
+        <p class="tags">orange · dark ground · old-style serif + small caps</p>
+      </article>
+      <article id="showhome">
+        <a href="showhome/screenshot.png"><img src="showhome/screenshot.png" alt="Show Home home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Show Home <code>showhome</code></h3>
+        <p class="for">a small housebuilder selling a development of new homes plot by plot</p>
+        <dl>
+          <dt>Object</dt><dd>the release price list in the sales cabin: one ruled row per plot, a round sticker stuck on each as it is reserved or sold</dd>
+          <dt>Signature</dt><dd>The listings page is the price list: one ruled row per plot — title, beds, baths, area, price in tabular figures, a dash for any gap — stacking on phones. A row with a status ends in the word and a round sticker, askew: green, amber or red.</dd>
+          <dt>Look</dt><dd>Site-hoarding navy ground with white lettering and rules; sticker green, amber and red the only other colours; white panels for reading text. Dark scheme: the hoarding at night. Flared hoarding capitals, tabular figures.</dd>
+        </dl>
+        <p class="tags">blue · colour ground · flared hoarding caps + tabular humanist sans</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-nonprofit">
+    <h2>Nonprofit and campaign <span>7 themes · <code>families/nonprofit.md</code></span></h2>
+    <div class="sheet">
+      <article id="cause">
+        <a href="cause/screenshot.png"><img src="cause/screenshot.png" alt="Cause home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Cause <code>cause</code></h3>
+        <p class="for">A trust-first charity theme whose mission hero is one impact number set huge in warm ochre, one verb and — when you have it — one human photograph, then a donate button, in deep teal on white with nothing decorative.</p>
+        <p class="tags">charity, nonprofit, food bank, animal rescue, community group, youth club, homeless shelter, literacy project, foundation</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="undersigned">
+        <a href="undersigned/screenshot.png"><img src="undersigned/screenshot.png" alt="Undersigned home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Undersigned <code>undersigned</code></h3>
+        <p class="for">a save-our-library campaign, or any residents' group gathering names against a closure</p>
+        <dl>
+          <dt>Object</dt><dd>the photocopied petition sheet on the campaign stall: the demand in bold capitals, numbered ruled lines, the next ones highlighted</dd>
+          <dt>Signature</dt><dd>The mission hero is a petition sheet: page.title the demand in heavy capitals, the stat its header figure, then ruled lines numbered by CSS counter, each a live link under a highlighter stroke: volunteerEmail (if set), donate, /programs/.</dd>
+          <dt>Look</dt><dd>Copier-white ground, toner-grey edge, black ink and rules; highlighter yellow, the one colour, swiped behind the three lines and every link, never as type (yellow type on charcoal at night). Heavy grotesque caps, serif.</dd>
+        </dl>
+        <p class="tags">yellow · light ground · heavy grotesque caps + transitional serif</p>
+      </article>
+      <article id="cairn">
+        <a href="cairn/screenshot.png"><img src="cairn/screenshot.png" alt="Cairn home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Cairn <code>cairn</code></h3>
+        <p class="for">a volunteer mountain rescue team paid for by donations and collecting tins in walkers' pubs</p>
+        <dl>
+          <dt>Object</dt><dd>the orange polythene survival bag: instructions and the distress signal printed on it in one pass of black</dd>
+          <dt>Signature</dt><dd>The mission hero is the bag's printed panel: title and impact stat in heavy black caps on safety orange, the description under a weld-seam rule as small-print instructions in sentence case, then the distress signal: six bars, a gap, six.</dd>
+          <dt>Look</dt><dd>Safety-orange polythene ground, one-pass black print, no white, a heat-welded seam as the only rule; dark scheme: the hill at night, orange type on peat black. One neo-grotesque family: heavy caps, regular small print.</dd>
+        </dl>
+        <p class="tags">orange · colour ground · heavy neo-grotesque caps, one family</p>
+      </article>
+      <article id="bequest">
+        <a href="bequest/screenshot.png"><img src="bequest/screenshot.png" alt="Bequest home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Bequest <code>bequest</code></h3>
+        <p class="for">a community foundation that pools local gifts and hands them on as small grants</p>
+        <dl>
+          <dt>Object</dt><dd>the giant presentation cheque handed over for the local paper: payee line, amount in words, amount box, signature</dd>
+          <dt>Signature</dt><dd>The donate block, in the hero too, is a presentation cheque made out to site.title: the amount box is the donate button, strings.donate written large where the figure goes; donatePrompt on the amount-in-words line; signature line blank.</dd>
+          <dt>Look</dt><dd>Foamboard-white ground, marker-black ink, bank green for the cheque's border, heavy amount-box frame, printed captions and links, a pale green tint behind written lines (deep green at night); flared bank caps, mono hand.</dd>
+        </dl>
+        <p class="tags">green · light ground · flared caps + cheque-writer mono</p>
+      </article>
+      <article id="pushrim">
+        <a href="pushrim/screenshot.png"><img src="pushrim/screenshot.png" alt="Pushrim home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Pushrim <code>pushrim</code></h3>
+        <p class="for">a disability sports charity running boccia, wheelchair basketball and goalball sessions in school sports halls</p>
+        <dl>
+          <dt>Object</dt><dd>the tabletop flip scoreboard on the hall floor: a row of black digit cards, each on its own pair of rings, in a blue A-frame stand</dd>
+          <dt>Signature</dt><dd>The impact stat is the score: each character of stat.number on its own black flip card (fixed-pitch white figures over a repeating card-edge and ring-pair background) in a solid blue A-frame; stat.unit on its foot strip, verb a caption.</dd>
+          <dt>Look</dt><dd>Honey-lacquered beech strip-floor ground, black ink, underlined links; court tapes in white, yellow and red the only rules; blue on the stand alone; donate a black card. Dark: charcoal. Mono figures, rounded sans.</dd>
+        </dl>
+        <p class="tags">blue · colour ground · fixed-pitch flip figures + rounded sans</p>
+      </article>
+      <article id="hustings">
+        <a href="hustings/screenshot.png"><img src="hustings/screenshot.png" alt="Hustings home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Hustings <code>hustings</code></h3>
+        <p class="for">an independent council candidate: each pledge a program, doors knocked the figure, leaflet rounds the ask</p>
+        <dl>
+          <dt>Object</dt><dd>the candidate's rosette: pleated satin ribbon round a printed centre button, two tails hanging below</dd>
+          <dt>Signature</dt><dd>A rosette pinned in the mission hero: conic-gradient pleats round a centre button lettered with stat.number (a circle padded to the figure, plain if blank), two notched satin tails, unit + verb as one caption. One accent token recolours it.</dd>
+          <dt>Look</dt><dd>Leaflet-white ground, poster-black ink, satin violet for the rosette, links, donate button and the correx band behind each page heading (band ink is a token); violet-black at night. Stake-board geometric caps, serif.</dd>
+        </dl>
+        <p class="tags">violet · light ground · geometric sans caps + transitional serif</p>
+      </article>
+      <article id="dropin">
+        <a href="dropin/screenshot.png"><img src="dropin/screenshot.png" alt="Drop-in home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Drop-in <code>dropin</code></h3>
+        <p class="for">a youth centre running drop-in evenings, holiday clubs and a pool table that is never free</p>
+        <dl>
+          <dt>Object</dt><dd>the racked set of pool balls: fifteen numbered spots and stripes, each numeral in a white disc, on green baize</dd>
+          <dt>Signature</dt><dd>After the home page's body and on the programs list each card is led by a flat pool ball: solid disc, numeral on a white spot by :nth-child, stripe band from nine up, 1 again after 15 and on each list page. Program pages: cue ball.</dd>
+          <dt>Look</dt><dd>Breeze-block gloss-white ground, eight-ball black ink and links, baize green only in the ball cells (stacked, one strip), the seven ball colours nowhere else (lights-off at night); grotesque numerals, humanist sans.</dd>
+        </dl>
+        <p class="tags">neutral · light ground · bold grotesque numerals + humanist sans</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-music">
+    <h2>Musician and performer <span>6 themes · <code>families/music.md</code></span></h2>
+    <div class="sheet">
+      <article id="encore">
+        <a href="encore/screenshot.png"><img src="encore/screenshot.png" alt="Encore home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Encore <code>encore</code></h3>
+        <p class="for">A band and artist theme built around the tour-dates list — a date block, the city in heavy capitals, a ticket button on the right and a magenta strike through every sold-out show — in stage-light magenta on warm near-black, with a real daylight scheme.</p>
+        <p class="tags">band, singer-songwriter, DJ, choir, orchestra, tribute band, wedding band, comedian, touring artist</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="bandstand">
+        <a href="bandstand/screenshot.png"><img src="bandstand/screenshot.png" alt="Bandstand home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Bandstand <code>bandstand</code></h3>
+        <p class="for">a brass band playing park bandstands, contests, parades and a Christmas concert</p>
+        <dl>
+          <dt>Object</dt><dd>the march card: a pocket-size landscape part clipped to the instrument's lyre, title in fat slab capitals over tight staves</dd>
+          <dt>Signature</dt><dd>Each show is a march card: a buff landscape card, the city centred in slab capitals (the title if there is no city), venue top left where the part name goes, support top right for the composer, date beneath, five staff lines along the foot.</dd>
+          <dt>Look</dt><dd>Tunic-navy ground carrying buff march cards in engraving black; collar-facing scarlet for status and links on the cards, one gold-braid rule on the navy; slab capitals, old-style italic; band-room white when light.</dd>
+        </dl>
+        <p class="tags">red · colour ground · slab caps + old-style italic</p>
+      </article>
+      <article id="backpatch">
+        <a href="backpatch/screenshot.png"><img src="backpatch/screenshot.png" alt="Backpatch home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Backpatch <code>backpatch</code></h3>
+        <p class="for">a metal, punk or hardcore band touring small venues and all-dayers</p>
+        <dl>
+          <dt>Object</dt><dd>the battle jacket: a denim vest crowded with sewn-on woven patches, one big patch on the back, rows of pyramid studs</dd>
+          <dt>Signature</dt><dd>The tour list is a crowded vest: each show a woven patch in a 2px merrow border of bone thread, tilted a degree either way (nth-child), city in capitals over date and venue, status in small woven capitals; section rules are rows of studs.</dd>
+          <dt>Look</dt><dd>Washed-denim blue ground, twill only in the gutters; black woven patches lettered in bone, prose on one bone back patch, a red merrow on sold-out patches only. Dark: black denim, bone canvas patches screen-printed black.</dd>
+        </dl>
+        <p class="tags">blue · colour ground · black-weight grotesque caps, one family</p>
+      </article>
+      <article id="squeezebox">
+        <a href="squeezebox/screenshot.png"><img src="squeezebox/screenshot.png" alt="Squeezebox home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Squeezebox <code>squeezebox</code></h3>
+        <p class="for">a folk and trad group or ceilidh band playing sessions, festivals and barn dances</p>
+        <dl>
+          <dt>Object</dt><dd>the melodeon's bellows: black cloth folds lined with patterned bellows paper, a nickel corner piece on every fold</dd>
+          <dt>Signature</dt><dd>The tour list is an open bellows: each show a pleat of two faces, always visible: black cloth with date and city in ivory capitals, then leaf-green paper edged in a gold dot repeat with venue, support, status and tickets; nickel corners.</dd>
+          <dt>Look</dt><dd>Ivory celluloid ground, bellows-cloth black and leaf-green paper faces, gold dots along the paper edge, nickel-grey corners; deco geometric capitals as on an accordion grille, over a transitional serif; ebony when dark.</dd>
+        </dl>
+        <p class="tags">green · light ground · geometric deco caps + transitional serif</p>
+      </article>
+      <article id="mixtape">
+        <a href="mixtape/screenshot.png"><img src="mixtape/screenshot.png" alt="Mixtape home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Mixtape <code>mixtape</code></h3>
+        <p class="for">a rapper or MC putting out tapes and playing club nights, support slots and showcases</p>
+        <dl>
+          <dt>Object</dt><dd>the cassette inlay card: ruled track lines under A and B, small printed captions, a row of tick-boxes for the tape settings</dd>
+          <dt>Signature</dt><dd>The tour list is the inlay's track panel: shows on ruled lines numbered by CSS counter, five under SIDE A, the rest under SIDE B (nth-child; stacked on a phone); three tick-boxes a row, the status crossed, a sold-out line struck through.</dd>
+          <dt>Look</dt><dd>White inlay-card ground, black ruled lines and type, one band of teal stripes across the head of every page as on blank-tape packaging; typewriter entries under tiny geometric capitals; smoked-plastic dark scheme.</dd>
+        </dl>
+        <p class="tags">teal · light ground · typewriter + small geometric caps</p>
+      </article>
+      <article id="drawstop">
+        <a href="drawstop/screenshot.png"><img src="drawstop/screenshot.png" alt="Drawstop home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Drawstop <code>drawstop</code></h3>
+        <p class="for">a concert organist giving recitals in churches, cathedrals and town halls</p>
+        <dl>
+          <dt>Object</dt><dd>the organ console's stop jamb: turned ivory drawknobs set in a walnut panel, each engraved in black, the couplers in red</dd>
+          <dt>Signature</dt><dd>Each show row is led by an ivory drawknob in the walnut jamb beside the list, engraved in small capitals: any status stands drawn on a deep shadow, a link when there are tickets (engraved Tickets if no status); Sold out is pushed in, red.</dd>
+          <dt>Look</dt><dd>Ebony-black page, ivory text; a walnut jamb as the header band of every page, site.title inlaid in ivory, and beside the list; coupler red only on Sold out. Light: cool bone-white key covering, ebony ink. Roman caps.</dd>
+        </dl>
+        <p class="tags">brown · dark ground · engraved roman caps + old-style italic</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-professional">
+    <h2>Professional services <span>7 themes · <code>families/professional.md</code></span></h2>
+    <div class="sheet">
+      <article id="chambers">
+        <a href="chambers/screenshot.png"><img src="chambers/screenshot.png" alt="Chambers home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Chambers <code>chambers</code></h3>
+        <p class="for">a small law firm handling property, wills, family and employment matters for private clients</p>
+        <dl>
+          <dt>Object</dt><dd>the brief tied in pink tape: foolscap folded lengthwise, its backsheet endorsed with the matter, the fee and the firm's name</dd>
+          <dt>Signature</dt><dd>Each service is a brief's backsheet: a tall narrow panel, title in centred underlined capitals, fee marked low, site.title at the foot, one flat band of legal tape across it. The tape is knotted once a page, on consult-cta: two cut tails.</dd>
+          <dt>Look</dt><dd>White bond ground, grey-blue draft-paper panels, typescript black ink, dull crimson-pink legal tape on the bands and one knot only, navy links; old-style serif, capitals centred and underlined, no bold. Dark: on black.</dd>
+        </dl>
+        <p class="tags">pink · light ground · old-style serif, centred underlined caps</p>
+      </article>
+      <article id="taxreturn">
+        <a href="taxreturn/screenshot.png"><img src="taxreturn/screenshot.png" alt="Tax Return home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Tax Return <code>taxreturn</code></h3>
+        <p class="for">a sole-practitioner accountant and tax adviser: self-assessment, payroll, small-company accounts</p>
+        <dl>
+          <dt>Object</dt><dd>the tax return form: tinted paper, white entry boxes, a bold number on every box and guidance notes in small type</dd>
+          <dt>Signature</dt><dd>The services list is a page of the return: each service a numbered box (CSS counter), title as its caption, description as the guidance note, and the fee, when set, entered in a white box at the right in ballpoint-blue figures.</dd>
+          <dt>Look</dt><dd>Return-form teal tint ground, white entry boxes, black form print, entries in ballpoint blue; neo-grotesque with heavy box numbers and mono entries. Dark: the form reversed — deep teal ground, boxes a shade lighter.</dd>
+        </dl>
+        <p class="tags">teal · colour ground · neo-grotesque + mono entries</p>
+      </article>
+      <article id="apostille">
+        <a href="apostille/screenshot.png"><img src="apostille/screenshot.png" alt="Apostille home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Apostille <code>apostille</code></h3>
+        <p class="for">a notary public certifying signatures, copies and powers of attorney for use abroad</p>
+        <dl>
+          <dt>Object</dt><dd>the bound notarial act: pages sewn through the margin with a twisted two-colour cord, its ends caught under a foil seal</dd>
+          <dt>Signature</dt><dd>Every page is a bound act: a twisted two-strand cord (one repeating gradient, each strand its own token) runs down the left margin through punched eyelets to a serrated gold-foil seal at the foot, firm.registration lettered beside it.</dd>
+          <dt>Look</dt><dd>Bright-white deed paper, a ruled margin line, blue-black ink, navy-and-white cord, flat gold foil on the seal only; small letterspaced serif capitals over a transitional serif. Dark: night-blue leaf, cord white and gold.</dd>
+        </dl>
+        <p class="tags">yellow · light ground · letterspaced transitional serif caps + text</p>
+      </article>
+      <article id="patent">
+        <a href="patent/screenshot.png"><img src="patent/screenshot.png" alt="Patent home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Patent <code>patent</code></h3>
+        <p class="for">a patent and trade mark attorney acting for inventors, start-ups and small manufacturers</p>
+        <dl>
+          <dt>Object</dt><dd>the patent drawing sheet: black line figures captioned FIG. 1, FIG. 2, hatched parts tagged with reference numerals on lead lines</dd>
+          <dt>Signature</dt><dd>Each service row is a figure: three hatched parts (ring, plate, nut, pin, cycling by nth-child) on a dash-dot centre line, a lead line each, captioned FIG. n. Its page draws one part per point under 10, 12, 14, and a key; else the figure.</dd>
+          <dt>Look</dt><dd>Bristol-board white ground, Indian-ink black for every line and letter, no colour, no grey fills: section hatching is the only tone, FIG. captions the only display type; slab captions, humanist sans. Dark: a negative.</dd>
+        </dl>
+        <p class="tags">neutral · light ground · slab captions + humanist sans</p>
+      </article>
+      <article id="vigil">
+        <a href="vigil/screenshot.png"><img src="vigil/screenshot.png" alt="Vigil home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Vigil <code>vigil</code></h3>
+        <p class="for">a family funeral director arranging burials, cremations and repatriation, on call day and night</p>
+        <dl>
+          <dt>Object</dt><dd>the night bell by the undertaker's door: a small white enamel plate lettered NIGHT BELL beside one round push in a lit ring</dd>
+          <dt>Signature</dt><dd>consult-cta is the night bell, on door paint in both schemes: a small plate lettered only NIGHT BELL (a theme string), one large push in a lit orange ring, firm.phone beside it in large serif figures as the tel: link, consultNote under.</dd>
+          <dt>Look</dt><dd>Green-black door-paint ground: pale text, underlined links, one small white enamel plate, lit orange on the bell ring only; flared plate capitals, large serif text. Light: frosted-glass white, the bell on door paint.</dd>
+        </dl>
+        <p class="tags">orange · dark ground · flared plate caps + large transitional serif</p>
+      </article>
+      <article id="lintel">
+        <a href="lintel/screenshot.png"><img src="lintel/screenshot.png" alt="Lintel home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Lintel <code>lintel</code></h3>
+        <p class="for">a structural engineer doing beam calculations, wall removals and loft conversions for homeowners and builders</p>
+        <dl>
+          <dt>Object</dt><dd>the beam diagram on a calculation sheet: a span on a pin and a roller, load arrows above, a dimension line beneath</dd>
+          <dt>Signature</dt><dd>Each service is a loaded beam: the title sits over a row of load arrows on a heavy beam line carried by a CSS pin triangle and roller; beneath, the fee, when set, is written into a dimension line between two ticked witness lines.</dd>
+          <dt>Look</dt><dd>Mid-tone shuttered-concrete grey ground, 8:1 under black ink, tie-bolt dimples at the joints; white calculation panels; red-oxide primer on beam, pin and roller and under links; condensed caps, mono figures. Dark: slate.</dd>
+        </dl>
+        <p class="tags">red · colour ground · condensed sans caps + mono figures</p>
+      </article>
+      <article id="retrofit">
+        <a href="retrofit/screenshot.png"><img src="retrofit/screenshot.png" alt="Retrofit home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Retrofit <code>retrofit</code></h3>
+        <p class="for">a domestic energy assessor issuing energy performance certificates and retrofit plans</p>
+        <dl>
+          <dt>Object</dt><dd>the energy rating chart: seven arrow-ended bands lettered A to G, each longer than the last, green through yellow to red</dd>
+          <dt>Signature</dt><dd>One fixed A–G chart, drawn in CSS (seven bands, black letters, aria-hidden), heads consult-cta, on every page; its black pointer, at band A, carries firm.phone as the tel: link. Service rows stay plain, each fee in a small black pointer.</dd>
+          <dt>Look</dt><dd>Certificate-white ground, black print; seven fixed chart tokens, green to red, in the chart only, lettered black; a separate accent token, A-band green, for links; heavy grotesque letters, humanist sans. Dark: charcoal.</dd>
+        </dl>
+        <p class="tags">green · light ground · heavy grotesque letters + humanist sans</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-writing">
+    <h2>Newsletter and writing <span>8 themes · <code>families/writing.md</code></span></h2>
+    <div class="sheet">
+      <article id="default">
+        <a href="default/screenshot.png"><img src="default/screenshot.png" alt="Journal home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Journal <code>default</code></h3>
+        <p class="for">A quiet, typography-first journal for personal blogs and small-organisation news, whose signature is the type itself: a bookish display serif over a humanist sans body on a 65ch measure, with one deep-cobalt accent.</p>
+        <p class="tags">personal blog, journal, writer, author, freelancer, consultant, club news, community group, notes and essays</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="letters">
+        <a href="letters/screenshot.png"><img src="letters/screenshot.png" alt="Letters home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Letters <code>letters</code></h3>
+        <p class="for">A newsletter and essay theme in book serif on cool paper white with one sealing-wax red accent, whose signature is the archive: every essay set like a line in a book's table of contents, dot-leadered out to its date and numbered while the archive fits on one page.</p>
+        <p class="tags">newsletter, essays, personal blog, writer, author, columnist, journal, book notes, poetry</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="terminal">
+        <a href="terminal/screenshot.png"><img src="terminal/screenshot.png" alt="Terminal home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Terminal <code>terminal</code></h3>
+        <p class="for">A dark-first developer blog in blue-charcoal and amber whose signature is the code — terminal-window frames with an amber top edge, a language tab and a copy button, set wider than the text — beside a changelog-style archive of dated posts.</p>
+        <p class="tags">developer blog, programming tutorials, software engineer, freelance developer, open-source project, indie software maker, tech notes, sysadmin</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+      <article id="datestamp">
+        <a href="datestamp/screenshot.png"><img src="datestamp/screenshot.png" alt="Datestamp home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Datestamp <code>datestamp</code></h3>
+        <p class="for">a book reviewer writing up what they read, one title at a time</p>
+        <dl>
+          <dt>Object</dt><dd>the date-due slip pasted inside a library book's cover: ruled columns filled with rubber-stamped dates, none quite straight</dd>
+          <dt>Signature</dt><dd>The archive is a date-due slip: a ruled grid of columns, each cell one review led by its date (item.dateFormatted) as a red rubber stamp in mono capitals, knocked a degree or two off true by nth-child, the title beneath in plain print.</dd>
+          <dt>Look</dt><dd>Bottle-green library-buckram ground, a buff slip pasted on it, black printed rules and headings, date-stamp red for the stamped dates only; links underlined black. Mono capitals for stamps, neo-grotesque for print.</dd>
+        </dl>
+        <p class="tags">red · colour ground · mono stamp caps + neo-grotesque</p>
+      </article>
+      <article id="seedtime">
+        <a href="seedtime/screenshot.png"><img src="seedtime/screenshot.png" alt="Seedtime home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Seedtime <code>seedtime</code></h3>
+        <p class="for">a garden diarist keeping a month-by-month record of one plot through the year</p>
+        <dl>
+          <dt>Object</dt><dd>the back of a seed packet: the sowing calendar, a strip of twelve boxes lettered J to D with the months to sow blocked in</dd>
+          <dt>Signature</dt><dd>Each entry carries the packet's month strip: twelve aria-hidden cells written out in the partial, J to D from strings keys, a 12-column grid of equal ruled boxes, a slab capital in each; twelve attribute rules on item.date ink its month.</dd>
+          <dt>Look</dt><dd>Manila packet ground, black one-colour print for all text and underlined links; leaf green only fills the inked month box, never type. Dark: the packet in the shed at dusk. Slab caps for titles and strip, humanist sans.</dd>
+        </dl>
+        <p class="tags">green · colour ground · slab caps + humanist sans</p>
+      </article>
+      <article id="doublebill">
+        <a href="doublebill/screenshot.png"><img src="doublebill/screenshot.png" alt="Double Bill home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Double Bill <code>doublebill</code></h3>
+        <p class="for">a film critic reviewing new releases and repertory screenings week by week</p>
+        <dl>
+          <dt>Object</dt><dd>the repertory cinema's printed monthly programme: one spot ink on tinted stock, titles in bold capitals, a short note under each</dd>
+          <dt>Signature</dt><dd>The archive is the programme: each review a billing, title in bold capitals with its date, each tag (item.tagLinks) billed after it behind a large + as a supporting feature, item.description the programme note. No tags: title and date, no +</dd>
+          <dt>Look</dt><dd>Pale primrose programme paper printed in one deep teal ink: type, rules, the '+' and underlined links, no black. Dark: house lights down, primrose type on teal-black. Bold geometric capitals over a transitional serif.</dd>
+        </dl>
+        <p class="tags">teal · light ground · bold geometric caps + transitional serif</p>
+      </article>
+      <article id="backissue">
+        <a href="backissue/screenshot.png"><img src="backissue/screenshot.png" alt="Back Issue home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Back Issue <code>backissue</code></h3>
+        <p class="for">a small-press zine publishing each issue's pieces online, back numbers and all</p>
+        <dl>
+          <dt>Object</dt><dd>the stencil-duplicated zine page: two spot inks on uncoated stock, laid down in separate passes and never quite in register</dd>
+          <dt>Signature</dt><dd>Every title is printed in two passes: deep blue type over a fluorescent-pink copy of itself (a data-title pseudo-element) knocked a few pixels out of register, the overlap multiplying to violet. Pink flood blocks cross headings likewise.</dd>
+          <dt>Look</dt><dd>Uncoated natural-white stock; deep spot blue (7:1) for all text, fluorescent pink only as flood blocks and the off-register copy. Dark is its own job: pale inks on black, set overlap colour. Poster condensed caps, mono.</dd>
+        </dl>
+        <p class="tags">pink · light ground · poster condensed caps + mono</p>
+      </article>
+      <article id="footpath">
+        <a href="footpath/screenshot.png"><img src="footpath/screenshot.png" alt="Footpath home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Footpath <code>footpath</code></h3>
+        <p class="for">a long-distance walker logging a trail one day's stage at a time</p>
+        <dl>
+          <dt>Object</dt><dd>the yellow hiking fingerpost: pointed enamel arms bolted to a timber post under a white plate naming the spot, times ranged right</dd>
+          <dt>Signature</dt><dd>The masthead is the fingerpost on every page: site.title on the white place plate, nav entries as yellow arms cut to a point by clip-path, left and right of the post by turns, the current one black-tipped. The archive: arms, dates at right.</dd>
+          <dt>Look</dt><dd>Weathered-oak silver-brown ground, the post's timber; waymark yellow for the arms only: nav, archive, a left-pointing back link; black lettering, text, underlined links. Dark: dusk. Bold humanist sans, old-style serif.</dd>
+        </dl>
+        <p class="tags">yellow · colour ground · bold humanist sans + old-style serif</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-docs">
+    <h2>Manual and handbook <span>1 theme · <code>families/docs.md</code></span></h2>
+    <div class="sheet">
+      <article id="manual">
+        <a href="manual/screenshot.png"><img src="manual/screenshot.png" alt="Manual home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Manual <code>manual</code></h3>
+        <p class="for">A documentation handbook that keeps a numbered section index beside every page and a title block above it, with a single amber marker for the section you are reading, so a reader always knows exactly where they are.</p>
+        <p class="tags">user manual, product documentation, software docs, help centre, knowledge base, staff handbook, installation guide, policies and procedures, club rulebook</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-news">
+    <h2>News and magazine <span>1 theme · <code>families/news.md</code></span></h2>
+    <div class="sheet">
+      <article id="gazette">
+        <a href="gazette/screenshot.png"><img src="gazette/screenshot.png" alt="Gazette home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Gazette <code>gazette</code></h3>
+        <p class="for">A digital newsroom for local papers, magazines and bulletins whose front page ranks up to twelve stories by type alone — one lead, five secondaries, a column of briefs — in bold sans headlines under a press-blue masthead rule, with no photos needed.</p>
+        <p class="tags">local newspaper, community newsletter, parish magazine, school newspaper, student paper, neighbourhood news, club bulletin, residents’ association, trade magazine</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+    </div>
+  </section>
+  <section id="family-product">
+    <h2>Product and software <span>1 theme · <code>families/product.md</code></span></h2>
+    <div class="sheet">
+      <article id="launch">
+        <a href="launch/screenshot.png"><img src="launch/screenshot.png" alt="Launch home page" width="1280" height="800" loading="lazy"></a>
+        <h3>Launch <code>launch</code></h3>
+        <p class="for">A crisp product site for software and apps — hero, numbered features, a pricing table and, as its signature, a colour-coded release timeline that starts on the home page and proves the product is alive, one node per release.</p>
+        <p class="tags">software startup, SaaS product, mobile app, developer tool, open-source project, browser extension, online service, indie app maker</p>
+        <p class="tags">Shipped before the catalogue; the family's contract is taken from themes like this one.</p>
+      </article>
+    </div>
+  </section>
+</main>
+</body>
+</html>

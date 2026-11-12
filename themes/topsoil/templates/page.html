@@ -1,0 +1,12 @@
+<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{#if data.business.area}}<p class="where">{{ data.business.area }}</p>
+    {{/if}}
+  </header>
+  {{#if page.url.4}}{{else}}{{> plot}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>

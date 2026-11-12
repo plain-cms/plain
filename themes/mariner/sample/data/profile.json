@@ -1,0 +1,19 @@
+{
+  "name": "Morag Tulloch",
+  "role": "Chief officer with a Master (Unlimited) certificate — DP vessels and ro-pax, North Sea",
+  "email": "morag@moragtulloch.example",
+  "links": [
+    { "label": "01632 960418", "url": "tel:+441632960418" },
+    { "label": "moragtulloch.example", "url": "https://moragtulloch.example" }
+  ],
+  "skills": [
+    "Master (Unlimited) CoC, STCW II/2",
+    "DP Unlimited certificate",
+    "ECDIS, generic and type-specific",
+    "Deck cargo and stability planning",
+    "Bridge resource management",
+    "Ship security officer",
+    "Medical care on board",
+    "English, Norwegian (working)"
+  ]
+}

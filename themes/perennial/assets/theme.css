@@ -1,0 +1,428 @@
+/* Perennial — a nursery bed: every product is an engraved bed label, a black
+   plate on a stake with two screw heads, the name cut in white italic.
+   Restyle by editing the tokens below, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — italic transitional serif names, grotesque caps for the rest */
+  --font-serif: Baskerville, "Baskerville Old Face", "Libre Baskerville", "Nimbus Roman", Tinos, "Liberation Serif", "Times New Roman", Times, serif;
+  --font-grot: "Helvetica Neue", Helvetica, "Arial Nova", "Nimbus Sans", "Liberation Sans", Arimo, Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.55;
+  --tracking-caps: 0.09em;
+  --name-size: 1.75rem;
+
+  /* Colour — light: horticultural fleece, potting-soil ink, black plates */
+  --color-bg: #f5f6f1;
+  --color-text: #2b231c;
+  --color-muted: #63594e;
+  --color-accent: #456a25;
+  --color-line: #cdd0c5;
+  --color-soil: #4a382a;
+  --color-stake: #8a918a;
+  --color-plate: #151617;
+  --color-plate-edge: #ffffff;
+  --color-plate-ink: #ffffff;
+  --color-plate-muted: #c9cdc8;
+  --color-plate-rule: #5b5f60;
+  --color-plate-status: #b7da9a;
+  --color-screw: #cdd2d3;
+  --color-screw-slot: #2c2f31;
+  --color-code-bg: #e8eae1;
+  --shadow-plate: 0 0 0 1px rgba(43,35,28,0.45), 0 2px 0 rgba(43,35,28,0.45);
+
+  /* Measure */
+  --page: 76rem;
+  --measure: 38rem;
+  --radius: 4px;
+  --stake: 2.5rem;
+  --screw: 0.8125rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The bed at dusk — dark soil, and the older kind of label: stamped zinc */
+    --color-bg: #1d1b17;
+    --color-text: #ece7dd;
+    --color-muted: #b5ab9b;
+    --color-accent: #a8c98a;
+    --color-line: #3d3a33;
+    --color-soil: #8d7a63;
+    --color-stake: #6d736d;
+    --color-plate: #bdc2c2;
+    --color-plate-edge: #e6e9e9;
+    --color-plate-ink: #131415;
+    --color-plate-muted: #32373a;
+    --color-plate-rule: #878d8d;
+    --color-plate-status: #284812;
+    --color-screw: #7b8285;
+    --color-screw-slot: #26292b;
+    --color-code-bg: #2a2722;
+    --shadow-plate: 0 0 0 1px rgba(0,0,0,0.7), 0 2px 0 rgba(0,0,0,0.7);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-grot);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+.masthead-in, main, .colophon-in {
+  max-width: var(--page);
+  margin-inline: auto;
+  padding-inline: clamp(var(--space-3), 4vw, var(--space-4));
+}
+main { min-height: 50vh; padding-bottom: var(--space-5); }
+
+h1, h2, h3, .prose, .lede, .family, .engraved, .plate-desc, .summary, .shop-note { hyphens: auto; }
+h1, h2, h3 { hyphenate-limit-chars: 12 4 4; }
+a[href^="tel:"], a[href^="mailto:"], code, .prose th, .prose td { hyphens: manual; }
+/* a wide column breaks at spaces; only a narrow one hyphenates */
+@media (min-width: 40rem) { .prose, .lede, .summary, .shop-note { hyphens: manual; } }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+::selection { background: var(--color-accent); color: var(--color-bg); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 3; padding: var(--space-2) var(--space-3); background: var(--color-bg); font-weight: 700; }
+.skip-link:focus { left: var(--space-2); }
+
+/* The label voice: small bold grotesque caps */
+.masthead nav a, .call-word, .plate-top, .unit, .more, .back, .pagination, .shop-card h2, .shop-word, .meta, .tags, .prose th, .prose h3 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+/* The name voice: italic serif, as a botanical name is set */
+h1, .site-title, .name, .prose h2, .post-card h2, .call-number, .shop-value, .home-go, .colophon-name, .prose blockquote {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Masthead */
+
+.masthead { border-bottom: 1px solid var(--color-line); }
+.masthead-in { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-4); padding-block: 0.8rem 0.7rem; }
+.site-title { flex: 1 1 auto; min-width: 0; font-size: clamp(1.4rem, 1.1rem + 1.2vw, 1.75rem); line-height: 1.15; color: var(--color-text); text-decoration: none; }
+.masthead nav { flex: 1 0 100%; order: 3; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 1.25rem; margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: var(--space-2) 0 var(--space-1); border-bottom: 2px solid transparent; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { border-color: var(--color-line); }
+.masthead nav a[aria-current="page"] { border-color: var(--color-accent); }
+.masthead-call { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 var(--space-2); min-width: 0; text-decoration: none; }
+.call-word { color: var(--color-muted); }
+.call-number { font-size: 1.2rem; line-height: 1.2; white-space: nowrap; }
+@media (min-width: 48rem) {
+  .masthead nav { flex: 0 1 auto; order: 0; }
+}
+
+.colophon { border-top: 1px solid var(--color-line); color: var(--color-muted); font-size: 0.9rem; }
+.colophon-in { padding-block: var(--space-3) var(--space-4); }
+.colophon p { margin: 0; }
+.colophon a { color: inherit; }
+.colophon-name { font-size: 1.15rem; color: var(--color-text); }
+
+/* Page headings */
+
+.page-header { margin: var(--space-4) 0 var(--space-3); }
+h1 { margin: 0; max-width: 24ch; font-size: clamp(2rem, 1.3rem + 3vw, 3.25rem); line-height: 1.08; text-wrap: balance; }
+.lede { margin: var(--space-2) 0 0; max-width: var(--measure); font-size: 1.125rem; line-height: 1.45; }
+.meta { margin: 0 0 var(--space-1); color: var(--color-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.tags a { display: block; padding-block: var(--space-1); }
+
+/* The home page: the words down the left, the bed down the right */
+
+.home { margin-top: var(--space-3); }
+.home h1 { font-size: clamp(2rem, 1.2rem + 2vw, 2.75rem); }
+/* the one action of the opening: into the shop */
+.home-go { margin: var(--space-3) 0 0; font-size: 1.3rem; line-height: 1.25; }
+.home-go a { display: inline-block; padding-block: var(--space-2); }
+.featured { margin-top: var(--space-4); }
+/* no featured product: the bed goes with its link; the one under the headline stays */
+.featured:not(:has(li)) { display: none; }
+.home-body { margin-top: var(--space-4); }
+@media (min-width: 60rem) {
+  .home:has(.label) { display: grid; grid-template: "head bed" auto "body bed" 1fr / minmax(0, 4fr) minmax(0, 8fr); column-gap: var(--space-4); margin-top: var(--space-4); }
+  .home-head { grid-area: head; }
+  .home-body { grid-area: body; }
+  .home:has(.label) :is(.lede, .home-body) { hyphens: auto; }
+  .home:has(.label) .featured { grid-area: bed; margin-top: var(--space-2); }
+  .home .bed { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  /* two to a row: the tall stake changes side with every row */
+  .home .bed .label:nth-child(4n) { --stake-h: var(--stake); }
+  .home .bed .label:nth-child(4n+3) { --stake-h: calc(var(--stake) * 1.6); }
+}
+
+/* THE BED AND ITS LABELS — the signature
+   Rows of plates standing in a line of soil, every other one on a taller stake. */
+
+.bed {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  align-items: end;
+  row-gap: var(--space-4);
+  margin: 0;
+  padding: 0 0 var(--space-2);
+  list-style: none;
+}
+.bed:empty { display: none; }
+
+.label {
+  --stake-h: var(--stake);
+  position: relative;
+  min-width: 0;
+  padding: 0 0.625rem var(--stake-h);
+  border-bottom: 2px solid var(--color-soil);
+}
+.bed .label:nth-child(even) { --stake-h: calc(var(--stake) * 1.6); }
+/* the stake, behind the plate and down into the soil */
+.label::before {
+  content: "";
+  position: absolute;
+  left: calc(50% - 0.25rem);
+  bottom: 0;
+  width: 0.5rem;
+  height: calc(var(--stake-h) + var(--space-2));
+  background: var(--color-stake);
+}
+/* the soil under the line, hatched as on a planting plan */
+.label::after, .stand::after, .prose hr {
+  content: "";
+  display: block;
+  height: 0.4rem;
+  /* one stroke a tile, a whole number of tiles a label, so rows join without a seam */
+  background: linear-gradient(-45deg, transparent 42%, var(--color-soil) 42% 58%, transparent 58%) 0 0 / 0.4rem 0.4rem round;
+}
+.label::after, .stand::after { position: absolute; inset: calc(100% + 2px) 0 auto; }
+
+.plate {
+  --ink: var(--color-plate-ink);
+  --sub: var(--color-plate-muted);
+  --stat: var(--color-plate-status);
+  --rule: var(--color-plate-rule);
+  position: relative;
+  z-index: 1;
+  container-type: inline-size;
+  padding: 0.75rem 2.1rem 0.8rem;
+  background: var(--color-plate);
+  color: var(--ink);
+  /* the bevel: the pale core of the laminate shows at the cut edge */
+  border: 2px solid var(--color-plate-edge);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-plate);
+}
+/* two screw heads, their slots at odd angles */
+.plate::before, .plate::after {
+  content: "";
+  position: absolute;
+  top: calc(50% - var(--screw) / 2);
+  left: 0.65rem;
+  width: var(--screw);
+  height: var(--screw);
+  border-radius: 50%;
+  background: linear-gradient(115deg, transparent 41%, var(--color-screw-slot) 41% 59%, transparent 59%) var(--color-screw);
+  box-shadow: 0 0 0 1px var(--color-screw-slot);
+}
+.plate::after { left: auto; right: 0.65rem; transform: rotate(75deg); }
+
+/* Sold out: the holder is still on its stake, the plate is gone */
+.plate[data-status="Sold out"] {
+  --ink: var(--color-text);
+  --sub: var(--color-muted);
+  --stat: var(--color-text);
+  --rule: var(--color-line);
+  background: var(--color-bg);
+  border: 2px dashed var(--color-muted);
+  box-shadow: none;
+}
+
+.plate-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-1) var(--space-3); min-height: 1rem; margin: 0; color: var(--sub); }
+.family, .status { min-width: 0; }
+.status { color: var(--stat); }
+
+.name {
+  margin: 0.7rem 0 0.8rem;
+  font-size: clamp(1.3rem, 8cqi, var(--name-size));
+  line-height: 1.12;
+  text-align: center;
+  text-wrap: balance;
+}
+.name a { color: inherit; text-decoration: none; }
+.name a::after { content: ""; position: absolute; inset: -2px; border-radius: var(--radius); }
+.name a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+/* the ring is drawn round the whole plate, on the page ground */
+.name a:focus-visible { outline: none; }
+.name a:focus-visible::after { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+
+.plate-foot { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-2) var(--space-3); padding-top: 0.55rem; border-top: 1px solid var(--rule); }
+.plate-foot:empty { display: none; }
+.engraved { flex: 1 1 auto; min-width: 0; margin: 0; padding: 0; list-style: none; font-size: 0.7rem; font-weight: 500; line-height: 1.5; letter-spacing: 0.06em; text-transform: uppercase; }
+.bed .engraved li:nth-child(n+4) { display: none; }
+.cost { flex: 0 1 auto; min-width: 0; max-width: 100%; margin: 0 0 0 auto; text-align: right; }
+/* a word in a price ("from £6") is cut in small capitals like the unit; the figure keeps its size */
+.price { display: block; font-size: 1.3rem; font-weight: 700; font-variant: small-caps lining-nums; line-height: 1.15; }
+.unit { display: block; margin-top: 0.15rem; color: var(--sub); font-weight: 500; }
+
+/* Status: four labels are printed, the matching one is shown, with its mark */
+.st { display: none; }
+.st-raw { display: inline; }
+.st::before { content: ""; display: inline-block; width: 0.62em; height: 0.62em; margin-right: 0.45em; border: 1.5px solid; border-radius: 50%; }
+.st-raw::before { content: none; }
+.st-in::before { background: currentColor; }
+.st-season::before { background: linear-gradient(90deg, currentColor 50%, transparent 0); }
+.st-out::before { border-radius: 0; border-width: 0 0 2px; height: 0; width: 0.9em; vertical-align: 0.3em; }
+[data-status="To order"] .st-order, [data-status="Seasonal"] .st-season, [data-status="Sold out"] .st-out, .plate-big[data-status="In stock"] .st-in { display: inline; }
+:is([data-status="In stock"], [data-status="To order"], [data-status="Seasonal"], [data-status="Sold out"]) .st-raw { display: none; }
+
+.more, .back { margin: var(--space-2) 0.625rem 0; }
+.more { text-align: right; }
+.back { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin-inline: 0; }
+/* each a full-height target, so two that stack on a phone do not touch */
+.more a, .back a { display: inline-block; padding-block: 0.9rem; }
+.more a, .back a, .pagination a, .tags a { color: var(--color-text); }
+
+/* A plate is screwed down: nothing lifts on hover */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .masthead nav a { transition: border-color 0.15s ease-out; }
+}
+
+/* One product: the label at full size, the photograph growing beside it */
+
+.specimen, .not-found { margin-top: var(--space-4); }
+/* here the soil runs the width of the page, under label and photograph alike */
+.stand { position: relative; display: flex; flex-direction: column; gap: var(--space-3); border-bottom: 2px solid var(--color-soil); }
+.stand .label { border-bottom: 0; }
+.stand .label::after { content: none; }
+.stand .label, .not-found .label { --stake-h: calc(var(--stake) * 1.4); width: 100%; padding-inline: 0; }
+.stand .label { margin-top: auto; }
+.not-found .label { max-width: 36rem; }
+.specimen-photo { order: -1; display: block; max-width: 100%; height: auto; }
+.plate-big { padding: 1.1rem clamp(2.1rem, 7cqi, 3.25rem) 1.2rem; }
+.plate-big .name { margin: 1rem auto 0.9rem; max-width: 22ch; font-size: clamp(1.6rem, 6.5cqi, calc(var(--name-size) * 1.7)); line-height: 1.06; }
+.plate-desc { margin: 0 auto 1.1rem; max-width: 36rem; color: var(--sub); font-size: 1rem; line-height: 1.45; text-align: center; text-wrap: balance; }
+.plate-big .plate-foot { padding-top: 0.8rem; }
+.plate-big .engraved { flex-basis: 14rem; columns: 2 13rem; column-gap: var(--space-4); font-size: 0.76rem; }
+.plate-big .engraved li { break-inside: avoid; }
+.plate-big .price { font-size: 1.9rem; }
+.specimen .prose { margin-top: var(--space-5); }
+.specimen .back, .not-found .back { margin-top: var(--space-3); }
+@media (min-width: 56rem) {
+  .stand { flex-direction: row; align-items: stretch; gap: 0; }
+  .stand .label { flex: 1 1 0; }
+  .stand:not(:has(img)) .label { padding-right: calc(100% - 46rem); }
+  .stand:not(:has(img)) .label::before { left: min(50% - 0.25rem, 23rem - 0.25rem); }
+  .specimen-photo { order: 0; flex: 0 1 42%; width: 42%; min-width: 0; max-height: 28rem; padding-left: var(--space-4); object-fit: cover; }
+}
+
+/* Page text */
+
+.prose { max-width: var(--measure); }
+.page .prose, .post .prose { margin-top: var(--space-4); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .post-card h2 { margin: var(--space-4) 0 var(--space-2); font-size: 1.6rem; line-height: 1.15; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: 0.8rem; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-accent); }
+.prose img, .cover { display: block; max-width: 100%; height: auto; margin: var(--space-3) 0; }
+.cover { width: 100%; max-width: 52rem; max-height: 30rem; object-fit: cover; }
+.prose a[href^="tel:"] { font-weight: 700; white-space: nowrap; }
+.prose blockquote { padding-left: var(--space-3); border-left: 2px solid var(--color-soil); font-size: 1.2rem; line-height: 1.4; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 2px solid var(--color-soil); }
+.prose code { padding: 0.1em 0.3em; font-family: var(--font-mono); font-size: 0.9em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.45; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-line); }
+.prose th { border-bottom: 2px solid var(--color-text); }
+
+/* News list and page numbers */
+
+.post-list { max-width: var(--measure); margin: 0; padding: 0; list-style: none; }
+.post-card { padding: var(--space-3) 0; border-top: 1px solid var(--color-line); }
+.post-card h2 { margin: 0; }
+.post-card h2 a { color: var(--color-text); text-decoration: none; }
+.post-card h2 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.summary { margin: var(--space-1) 0 0; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; color: var(--color-muted); }
+.empty { margin: 0; color: var(--color-muted); }
+
+/* The shop card: how to order, the hours and the address, under one ruled line */
+
+.shop-card { display: grid; gap: 0 var(--space-4); margin-top: var(--space-5); border-top: 2px solid var(--color-text); }
+.shop-card > div { min-width: 0; padding-top: var(--space-3); }
+/* the number and the address are sized to this column, so a long one shrinks instead of leaving it */
+.shop-order { container-type: inline-size; }
+.shop-card > div + div { margin-top: var(--space-3); border-top: 1px solid var(--color-line); }
+.shop-card h2 { margin: 0 0 var(--space-2); color: var(--color-muted); }
+.shop-note { margin: 0 0 var(--space-3); max-width: 34rem; }
+.shop-links { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-3) var(--space-4); margin: 0; }
+.shop-link { display: flex; flex-direction: column; min-width: 0; max-width: 100%; text-decoration: none; }
+.shop-word { color: var(--color-muted); }
+.shop-value { font-size: clamp(1rem, 5cqi, 1.3rem); line-height: 1.2; }
+.shop-phone .shop-value { font-size: clamp(1.25rem, 7cqi, 2rem); line-height: 1.1; }
+.shop-link:hover .shop-value, .shop-visit .shop-value { text-decoration: underline; text-decoration-thickness: 1px; }
+.shop-visit:hover .shop-value { text-decoration-thickness: 2px; }
+.shop-hours dl { margin: 0; font-variant-numeric: tabular-nums; }
+.shop-hours dl > div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-3); padding: var(--space-1) 0; border-bottom: 1px dotted var(--color-muted); }
+.shop-hours dt { font-weight: 700; }
+.shop-hours dd { margin: 0 0 0 auto; text-align: right; }
+.shop-address address { font-style: normal; text-wrap: balance; }
+/* no phone or e-mail: the visit link stands in, except on the visit page */
+body:has(.masthead a[href$="/visit/"][aria-current="page"]) :is(.shop-visit, .shop-order:not(:has(h2, .shop-note)), .shop-card:not(:has(h2))) { display: none; }
+body:has(.masthead a[href$="/visit/"][aria-current="page"]) .shop-order:not(:has(h2, .shop-note)) + div { margin-top: 0; border-top: 0; }
+@media (min-width: 56rem) {
+  .shop-card { grid-template-columns: minmax(0, 5fr) minmax(0, 4fr) minmax(0, 3fr); }
+  .shop-card > div + div { margin-top: 0; border-top: 0; }
+}
+
+/* Print: ink on white, the plates outlined */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-line: #999;
+    --color-soil: #000;
+    --color-plate: #fff;
+    --color-plate-edge: #000;
+    --color-plate-ink: #000;
+    --color-plate-muted: #333;
+    --color-plate-rule: #999;
+    --color-plate-status: #000;
+    --color-code-bg: #fff;
+    --shadow-plate: none;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .home-go, .more, .back, .pagination, .label::before, .label::after, .stand::after, .plate::before, .plate::after { display: none; }
+  main { min-height: 0; }
+  .bed { row-gap: var(--space-2); align-items: stretch; }
+  .label { padding-bottom: 0; border: 0; }
+  .stand { border: 0; }
+  .plate { border-width: 1px; }
+  .plate, .shop-card, .post-card { break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}

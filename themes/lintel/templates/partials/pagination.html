@@ -1,0 +1,5 @@
+{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+      {{#if pagination.newer}}<a href="{{ pagination.newer }}" rel="prev">{{ strings.prevPage }}</a>{{/if}}
+      <span class="pagination-count">{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+      {{#if pagination.older}}<a href="{{ pagination.older }}" rel="next">{{ strings.nextPage }}</a>{{/if}}
+    </nav>{{/if}}

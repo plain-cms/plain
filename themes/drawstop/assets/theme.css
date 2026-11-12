@@ -1,0 +1,467 @@
+/* Drawstop: the organ console's stop jamb. Walnut band with the name inlaid
+   in ivory; each date led by an ivory drawknob, drawn out on a deep shadow,
+   pushed in and engraved red when sold out. Dark is the default; where other
+   themes have a (prefers-color-scheme: dark) block this one has light, the
+   bone white of a key covering. Restyle by editing tokens, never selectors. */
+
+:root {
+  /* Type: engraved roman capitals, old-style text and italic */
+ --font-caps: "Big Caslon", "Hoefler Text", Baskerville, "Baskerville Old Face", "Palatino Linotype", "Book Antiqua", "Times New Roman", serif;
+ --font-text: "Iowan Old Style", "Hoefler Text", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+ --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+ --text-s: 0.875rem;
+ --text-m: 1.0625rem;
+ --text-l: 1.3125rem;
+ --text-xl: clamp(1.35rem, 1.05rem + 1.4vw, 2rem);
+ --text-xxl: clamp(1.85rem, 1.2rem + 2.8vw, 3.1rem);
+ --leading: 1.6;
+ --tracking-caps: 0.08em;
+
+  /* Colour: ebony and ivory (dark, the default) */
+ --color-bg: #0f0d0c;
+ --color-text: #ede4d0;
+ --color-muted: #b0a48d;
+ --color-accent: #c8955f;
+ --color-rule: #3a322b;
+ --color-code-bg: #1b1815;
+
+  /* The console: these stay the same in both schemes */
+ --color-walnut: #4b2f1c;
+ --color-walnut-deep: #2a190e;
+ --color-grain: rgba(18,8,2,0.34);
+ --color-figure: rgba(255,222,170,0.07);
+ --color-inlay: #f1e8d4;
+ --color-inlay-muted: #dccaa6;
+ --color-ivory: #f0e7d2;
+ --color-ivory-shade: #e0d3b8;
+ --color-engrave: #1c1712;
+ --color-coupler: #9e2019;
+ --color-shank: #1e130b;
+ --color-shadow: rgba(0,0,0,0.6);
+
+  /* Layout */
+ --page-width: 76rem;
+ --measure: 38rem;
+ --gutter: clamp(1rem, 3vw, 2rem);
+ --jamb: clamp(7rem, 5rem + 5.5vw, 10rem);
+ --knob: clamp(6rem, 4.6rem + 3.2vw, 7.5rem);
+ --space-2: 0.5rem;
+ --space-3: 1rem;
+ --space-4: 1.75rem;
+ --space-5: 3.5rem;
+ --radius: 3px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: #e9ece8;
+    --color-text: #15120f;
+    --color-muted: #4e4943;
+    --color-accent: #6b3f20;
+    --color-rule: #c3c7c0;
+    --color-code-bg: #dde1dc;
+    --color-shadow: rgba(20,12,4,0.5);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark light; }
+
+body {
+ margin: 0;
+ font-family: var(--font-text);
+ font-size: var(--text-m);
+ line-height: var(--leading);
+ color: var(--color-text);
+ background: var(--color-bg);
+ overflow-wrap: break-word;
+ min-height: 100vh;
+ min-height: 100dvh;
+ display: flex;
+ flex-direction: column;
+}
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+.band :focus-visible, .knob:focus-visible { outline-color: var(--color-inlay); }
+
+::selection { background: var(--color-walnut); color: var(--color-inlay); }
+
+.skip-link {
+ position: absolute;
+ left: -100vw;
+ top: var(--space-2);
+ z-index: 2;
+ padding: var(--space-2) var(--space-3);
+ background: var(--color-inlay);
+ color: var(--color-engrave);
+}
+.skip-link:focus { left: var(--space-2); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+h1, h2, h3, h4, .stop-name { hyphens: auto; overflow-wrap: break-word; text-wrap: balance; }
+
+/* The walnut band: header and footer */
+
+.band { position: relative; isolation: isolate; background-color: var(--color-walnut); color: var(--color-inlay); border-bottom: 4px solid var(--color-walnut-deep); }
+/* Grain on its own layer: text sits on flat walnut. */
+.band::before, .jambed::before {
+ content: "";
+ position: absolute;
+ z-index: -1;
+ background-color: var(--color-walnut);
+ background-image:
+    repeating-linear-gradient(var(--grain-dir, 180deg), var(--color-grain) 0 1px, transparent 1px 7px, var(--color-figure) 7px 9px, transparent 9px 17px, var(--color-grain) 17px 19px, transparent 19px 31px),
+    repeating-linear-gradient(calc(var(--grain-dir, 180deg) - 3deg), transparent 0 23px, var(--color-grain) 23px 24px, transparent 24px 53px);
+}
+.band::before { inset: 0; }
+
+.band-in {
+ display: flex;
+ flex-wrap: wrap;
+ align-items: center;
+ justify-content: space-between;
+ gap: var(--space-3) var(--space-4);
+ max-width: var(--page-width);
+ margin: 0 auto;
+ padding: var(--space-4) var(--gutter);
+}
+
+/* The name, inlaid: ivory capitals inside a double line of stringing. */
+.nameplate {
+ max-width: 100%;
+ padding: 0.4em 0.85em 0.3em;
+ border: 1px solid var(--color-inlay);
+ box-shadow: 0 0 0 3px var(--color-walnut), 0 0 0 4px var(--color-inlay-muted);
+ color: var(--color-inlay);
+ font-family: var(--font-caps);
+ font-size: clamp(1.15rem, 0.95rem + 1.1vw, 1.8rem);
+ line-height: 1.2;
+ letter-spacing: 0.16em;
+ text-transform: uppercase;
+ text-decoration: none;
+ hyphens: auto;
+ text-wrap: balance;
+}
+.nameplate:hover { background: var(--color-walnut-deep); }
+
+.stops-nav ul { display: flex; flex-wrap: wrap; gap: 0 clamp(1rem, 2.5vw, 1.75rem); margin: 0; padding: 0; list-style: none; }
+.stops-nav a {
+ display: inline-flex;
+ align-items: center;
+ min-height: 2.75rem;
+ border-bottom: 2px solid transparent;
+ color: var(--color-inlay-muted);
+ font-family: var(--font-caps);
+ font-variant-caps: all-small-caps;
+ font-size: var(--text-l);
+ letter-spacing: var(--tracking-caps);
+ text-decoration: none;
+}
+.stops-nav a:hover { color: var(--color-inlay); }
+.stops-nav a[aria-current="page"] { color: var(--color-inlay); border-bottom-color: var(--color-inlay); }
+
+.band-foot { margin-top: var(--space-5); border-bottom: 0; border-top: 4px solid var(--color-walnut-deep); font-size: var(--text-s); }
+.band-foot .band-in { justify-content: flex-start; align-items: baseline; padding-block: var(--space-4) var(--space-5); }
+.band-foot p { margin: 0; }
+.foot-name { flex: 1 1 100%; font-family: var(--font-caps); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.foot-desc { display: block; color: var(--color-inlay-muted); font-family: var(--font-text); font-style: italic; letter-spacing: 0; text-transform: none; }
+.contact { min-width: 0; }
+.contact-label { display: block; color: var(--color-inlay-muted); font-family: var(--font-caps); font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); font-size: var(--text-m); }
+.band-foot a { color: var(--color-inlay); }
+.contact a { overflow-wrap: anywhere; }
+.foot-note { flex: 1 1 100%; color: var(--color-inlay-muted); }
+
+/* Page frame */
+
+.wrap { display: block; flex: 1 0 auto; width: 100%; max-width: var(--page-width); margin: 0 auto; padding: 0 var(--gutter); }
+
+.page-head { padding: var(--space-5) 0 var(--space-4); max-width: 52rem; }
+.page-head h1, .show-title { margin: 0; font-family: var(--font-caps); font-size: var(--text-xxl); font-weight: 400; line-height: 1.12; letter-spacing: 0.01em; }
+.lede { margin: var(--space-3) 0 0; max-width: var(--measure); color: var(--color-muted); font-size: var(--text-l); font-style: italic; line-height: 1.45; }
+
+.meta { display: flex; flex-wrap: wrap; column-gap: var(--space-3); margin: 0 0 var(--space-2); color: var(--color-muted); font-family: var(--font-caps); font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); font-size: var(--text-l); }
+.tags { min-width: 0; }
+.tag { margin-right: var(--space-3); }
+.meta time { white-space: nowrap; }
+.tag-name { font-style: italic; color: var(--color-text); }
+
+/* The jamb: a walnut strip down the left, one knob per date */
+
+.jambed { position: relative; isolation: isolate; }
+.jambed::before { --grain-dir: 90deg; top: 0; bottom: 0; left: 0; width: var(--jamb); box-shadow: inset -3px 0 0 var(--color-walnut-deep), inset -5px 0 0 var(--color-figure); }
+.jamb-side { padding-left: calc(var(--jamb) + var(--space-4)); }
+
+.jamb { margin: 0; padding: 0; list-style: none; }
+
+.stop { display: grid; grid-template-columns: var(--jamb) minmax(0, 1fr); }
+
+/* The cast shadow stays on the walnut: clipped at the jamb's dark edge. */
+.stop-knob { display: grid; place-items: center; padding: calc(var(--knob) * 0.22) 0; clip-path: inset(-20rem 3px -20rem 0); }
+
+.stop-text {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ gap: 0.1rem;
+ hyphens: auto;
+ min-width: 0;
+ padding: var(--space-3) 0 var(--space-3) var(--space-4);
+ border-top: 1px solid var(--color-rule);
+}
+.stop:first-child .stop-text { border-top: 0; }
+
+.stop-date { color: var(--color-muted); font-family: var(--font-caps); font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); font-size: var(--text-l); line-height: 1.3; }
+.stop-day::after { content: " · "; }
+.stop-name {
+ align-self: flex-start;
+ max-width: 100%;
+ color: var(--color-text);
+ font-family: var(--font-caps);
+ font-size: var(--text-xl);
+ line-height: 1.15;
+ letter-spacing: 0.07em;
+ text-transform: uppercase;
+ text-decoration: none;
+}
+/* With no city the occasion heads the row: a size down, so a long one keeps the rhythm. */
+.stop-occasion { font-size: calc(var(--text-xl) * 0.78); letter-spacing: 0.045em; line-height: 1.2; }
+a.stop-name:hover { color: var(--color-accent); text-decoration: underline; text-decoration-thickness: 1px; }
+.stop-title { font-style: italic; }
+.stop-venue { margin: 0; color: var(--color-muted); }
+.stop-with { margin: 0; color: var(--color-muted); font-style: italic; font-size: var(--text-s); }
+
+/* The drawknob: --k sizes the knob and its engraving (the longest status word of
+   every shipped language fits the ring), --face the ivory disc. A longer label
+   stretches the knob to an oval rather than spill. */
+.knob {
+ --k: var(--knob);
+ --face: var(--k);
+ position: relative;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ width: var(--face);
+ min-height: var(--face);
+ padding: calc(var(--k) * 0.08) calc(var(--k) * 0.075);
+ border-radius: 50%;
+ background-color: var(--color-ivory);
+ color: var(--color-engrave);
+ font-family: var(--font-caps);
+ font-size: calc(var(--k) * 0.134);
+ font-variant-caps: all-small-caps;
+ letter-spacing: 0.02em;
+ line-height: 1.02;
+ text-align: center;
+ text-decoration: none;
+ hyphens: manual;
+ overflow-wrap: normal;
+ box-shadow:
+    inset 0 0 0 calc(var(--k) * 0.045) var(--color-ivory),
+    inset 0 0 0 calc(var(--k) * 0.045 + 1px) var(--color-engrave),
+    0 0 0 calc(var(--k) * 0.04) var(--color-shank),
+    calc(var(--k) * 0.06) calc(var(--k) * 0.1) 0 calc(var(--k) * 0.03) var(--color-shank),
+    calc(var(--k) * 0.1) calc(var(--k) * 0.17) calc(var(--k) * 0.14) var(--color-shadow);
+}
+.knob::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: radial-gradient(circle at 70% 76%, var(--color-ivory-shade), transparent 62%); }
+.knob > * { position: relative; max-width: 100%; }
+.knob .st-raw { overflow-wrap: anywhere; }
+/* One word to a line, as stop names are engraved. */
+.knob .st-on, .knob .st-sold, .knob .st-free { width: min-content; }
+.knob-pitch { margin-top: 0.3em; font-size: 0.9em; letter-spacing: 0.06em; }
+a.knob:hover { transform: translate(-1px, -2px); }
+
+/* The stored English status reveals its label; an unknown value prints as written. */
+.st, .knob-link + .knob-still { display: none; }
+.st-raw,
+[data-status="On sale"] .st-on,
+[data-status="Sold out"] .st-sold,
+[data-status="Free entry"] .st-free { display: block; }
+[data-status="On sale"] .st-raw,
+[data-status="Sold out"] .st-raw,
+[data-status="Free entry"] .st-raw { display: none; }
+[data-status=""] .knob-pitch { margin: 0; font-size: 1em; letter-spacing: 0.05em; }
+
+/* At rest (no status, no tickets): nothing engraved, neither drawn nor pushed in. */
+[data-status=""] .knob-still {
+ box-shadow:
+    inset 0 0 0 calc(var(--k) * 0.045) var(--color-ivory),
+    inset 0 0 0 calc(var(--k) * 0.045 + 1px) var(--color-engrave),
+    0 0 0 calc(var(--k) * 0.04) var(--color-shank),
+    calc(var(--k) * 0.02) calc(var(--k) * 0.035) 0 calc(var(--k) * 0.04) var(--color-shank);
+}
+
+/* Pushed in: sold out (red) or played (enhance.js). A smaller face sunk in a dark
+   bushing, the rim shadow inside it, nothing cast. */
+[data-status="Sold out"] .knob-link, .played .knob-link { display: none; }
+[data-status="Sold out"] .knob-link + .knob-still, .played .knob-link + .knob-still { display: flex; }
+[data-status="Sold out"] .knob, .played .knob {
+ --face: calc(var(--k) * 0.9);
+ padding-inline: calc(var(--k) * 0.04);
+ font-size: calc(var(--k) * 0.127);
+ letter-spacing: 0.01em;
+ box-shadow:
+    inset calc(var(--k) * 0.04) calc(var(--k) * 0.065) calc(var(--k) * 0.015) var(--color-shadow),
+    inset calc(var(--k) * 0.02) calc(var(--k) * 0.03) calc(var(--k) * 0.09) var(--color-shadow),
+    inset 0 0 0 calc(var(--k) * 0.035) var(--color-ivory-shade),
+    inset 0 0 0 calc(var(--k) * 0.035 + 1px) var(--color-engrave),
+    0 0 0 calc(var(--k) * 0.085) var(--color-walnut-deep),
+    calc(var(--k) * 0.01) calc(var(--k) * 0.015) 0 calc(var(--k) * 0.085) var(--color-figure);
+}
+[data-status="Sold out"] .knob::before, .played .knob::before { display: none; }
+[data-status="Sold out"] .knob { color: var(--color-coupler); }
+.played .stop-name, .played .stop-date { color: var(--color-muted); }
+
+/* The stop label over the jamb: an ivory plate the jamb's full width. */
+.plate {
+ width: calc(var(--jamb) - 0.75rem);
+ margin: 0 0.375rem;
+ padding: 0.4rem 0.3rem 0.35rem;
+ background: var(--color-ivory);
+ color: var(--color-engrave);
+ box-shadow: inset 0 0 0 3px var(--color-ivory), inset 0 0 0 4px var(--color-engrave), 0 2px 0 var(--color-walnut-deep);
+ font-family: var(--font-caps);
+ font-size: clamp(1.0625rem, 0.95rem + 0.45vw, 1.375rem);
+ font-weight: 400;
+ font-variant-caps: all-small-caps;
+ letter-spacing: 0.06em;
+ line-height: 1.15;
+ text-align: center;
+ hyphens: manual;
+ overflow-wrap: anywhere;
+}
+.home-dates { padding-top: var(--space-4); }
+.home-dates .plate { margin-bottom: var(--space-2); }
+
+.more, .backlink { margin: 0; padding-block: var(--space-4); }
+.more a, .backlink a, .pagination a, .actions a { display: inline-flex; align-items: center; min-height: 2.75rem; font-family: var(--font-caps); font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); font-size: var(--text-l); }
+
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-3); padding-block: var(--space-4); color: var(--color-muted); }
+.empty { margin: 0; padding-block: var(--space-4); color: var(--color-muted); font-style: italic; }
+
+/* One date: the row opened up, with a larger knob */
+.show-head { display: grid; grid-template-columns: var(--jamb) minmax(0, 1fr); padding-top: var(--space-4); }
+.show-knob .knob { --k: min(calc(var(--knob) * 1.2), calc(var(--jamb) - 1rem)); }
+.show-text { border-top: 0; padding-block: var(--space-4); }
+.show-text .stop-venue { font-size: var(--text-l); }
+.show-text .stop-with { font-size: var(--text-m); }
+
+/* The home page: the dates on the jamb, the words beside them */
+.home-head { padding-bottom: var(--space-3); }
+.home-prose { padding-top: var(--space-4); }
+
+@media (min-width: 960px) {
+  .home-dated {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    grid-template-areas: "dates head" "dates prose";
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(2rem, 4vw, 4.5rem);
+    align-items: start;
+  }
+  .home-dated .home-head { grid-area: head; }
+  .home-dated .home-dates { grid-area: dates; }
+  .home-dated .home-prose { grid-area: prose; padding-top: var(--space-2); }
+  .home-dated .page-head h1 { font-size: clamp(1.8rem, 1rem + 1.7vw, 2.6rem); }
+}
+/* Six dates on the home page: without JS the six earliest in the folder, once
+   enhance.js has sorted the list the six soonest ahead. */
+.home .jamb:not(.sorted) .stop:nth-last-child(n+7), .home .jamb.sorted .stop:nth-child(n+7) { display: none; }
+
+@media (max-width: 699.98px) {
+  .jambed { margin-left: calc(var(--gutter) * -1); }
+  .stop-text { padding-left: var(--space-3); }
+  .jamb-side { padding-left: calc(var(--jamb) + var(--space-3)); }
+  .stop-date { font-size: var(--text-m); }
+}
+
+/* Prose */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose h2, .prose h3, .prose h4 { font-family: var(--font-caps); font-weight: 400; line-height: 1.2; margin: var(--space-4) 0 var(--space-2); }
+.prose h2 { font-size: var(--text-l); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.prose h2::before {
+ content: "";
+ display: inline-block;
+ width: 0.62em;
+ height: 0.62em;
+ margin-right: 0.55em;
+ border-radius: 50%;
+ background: var(--color-ivory);
+ box-shadow: 0 0 0 2px var(--color-shank), 0.08em 0.12em 0 2px var(--color-walnut);
+ vertical-align: 0.02em;
+}
+.prose h3 { font-size: var(--text-l); font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); }
+.prose h4 { font-size: var(--text-m); font-style: italic; }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li { margin-bottom: 0.3rem; }
+.prose li::marker { color: var(--color-muted); }
+.prose a { overflow-wrap: anywhere; }
+.prose blockquote { padding-left: var(--space-3); border-left: 3px solid var(--color-walnut); color: var(--color-muted); font-style: italic; }
+.prose img, .cover { display: block; max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover { margin: 0 0 var(--space-4); }
+.prose code { font-family: var(--font-mono); font-size: 0.88em; padding: 0.1em 0.3em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { max-width: 100%; overflow-x: auto; padding: var(--space-3); background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; hyphens: manual; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { min-width: 7rem; padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-rule); text-align: left; vertical-align: top; }
+.prose th { font-family: var(--font-caps); font-weight: 400; font-variant-caps: all-small-caps; letter-spacing: var(--tracking-caps); }
+.prose hr { border: 0; border-top: 1px solid var(--color-rule); margin: var(--space-4) 0; }
+
+/* Posts */
+
+.post-list { margin: 0; padding: 0; list-style: none; max-width: var(--measure); }
+.post-item { padding: var(--space-4) 0; border-top: 1px solid var(--color-rule); }
+.post-item:first-child { border-top: 0; padding-top: 0; }
+.post-item h2 { margin: 0; font-family: var(--font-caps); font-weight: 400; font-size: var(--text-xl); line-height: 1.2; }
+.post-item h2 a { color: var(--color-text); text-decoration: none; }
+.post-item h2 a:hover { color: var(--color-accent); text-decoration: underline; }
+.summary { margin: var(--space-2) 0 0; color: var(--color-muted); }
+
+.actions { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin: 0; padding: 0; list-style: none; }
+
+/* Motion and print */
+
+@media (prefers-reduced-motion: no-preference) {
+ a.knob { transition: transform 0.15s ease; }
+}
+
+@media print {
+ html:root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-rule: #999;
+    --color-code-bg: #fff;
+    --color-walnut: #fff;
+    --color-walnut-deep: #fff;
+    --color-grain: rgba(0,0,0,0);
+    --color-figure: rgba(0,0,0,0);
+    --color-inlay: #000;
+    --color-inlay-muted: #333;
+    --color-ivory: #fff;
+    --color-ivory-shade: #fff;
+    --color-engrave: #000;
+    --color-coupler: #000;
+    --color-shank: #999;
+    --color-shadow: rgba(0,0,0,0);
+  }
+ body { font-size: 11pt; }
+  .stops-nav, .skip-link, .pagination, .more, .backlink { display: none; }
+  .band-in { padding-block: 0.5rem; }
+  .band-foot { margin-top: 1rem; }
+  .knob { transform: none; }
+  .stop { break-inside: avoid; }
+ a { text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

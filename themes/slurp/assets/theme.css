@@ -1,0 +1,558 @@
+/* Slurp — a noodle-bar theme built round the meal-ticket machine by the door:
+   an enamel fascia, a vermilion header strip, and the menu as a panel of lit
+   keys. Every colour, font and measure is a token below; restyle by editing
+   tokens, never selectors. The charcoal room is the default, so where another
+   theme has a (prefers-color-scheme: dark) block this one has a light block:
+   the same charcoal machine standing against a cream wall. */
+
+:root {
+  /* Type — one bold humanist sans, and mono for anything with a figure in it */
+  --font-sans: Seravek, "Gill Sans Nova", "Segoe UI", Ubuntu, Calibri, "Trebuchet MS", "DejaVu Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --text-base: 1.0625rem;
+  --leading: 1.55;
+  --tracking-caps: 0.08em;
+
+  /* Colour — charcoal enamel, vermilion strip, four lit key tints */
+  --color-bg: #26282c;
+  --color-text: #f4efe4;
+  --color-muted: #b8b2a4;
+  --color-accent: #ff7350;
+  --color-strip: #c8351c;
+  --color-strip-ink: #ffffff;
+  --color-well: #18191b;
+  --color-plate: #303338;
+  --color-rule: #4b4e55;
+  --color-rim: #0b0b0c;
+  --color-focus: #ffd23a;
+  --color-panel: #18191b;
+  --panel-ink: #b8b2a4;
+  --panel-rule: #4b4e55;
+  --panel-slot: #060607;
+  --key-yellow: #ffd23a;
+  --key-pink: #ffaec4;
+  --key-green: #bfe8a4;
+  --key-white: #fffdf5;
+  --key-ink: #1e1511;
+  --key-foot: rgba(30,21,17,0.13);
+  --key-lamp: #ff4a26;
+  --key-shadow: 0 3px 0 rgba(0,0,0,0.75), 0 0 18px rgba(255,226,150,0.14), inset 0 2px 0 rgba(255,255,255,0.45);
+  --ticket-paper: #fffdf5;
+  --ticket-ink: #1e1511;
+
+  /* Layout */
+  --page-width: 76rem;
+  --side: 23rem;
+  --measure: 40rem;
+  --gutter: clamp(0.75rem, 4vw, 2rem);
+  --key-min: 10.5rem;
+  --key-gap: 0.5rem;
+  --radius: 5px;
+  --rim: 2px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* The cream room. The machine keeps its charcoal fascia (the --panel-* and
+       --key-* tokens are not overridden here), so the keys stay lit. */
+    --color-bg: #ece3cb;
+    --color-text: #1e1511;
+    --color-muted: #5c5140;
+    --color-accent: #ad2812;
+    --color-well: #ded2b2;
+    --color-plate: #f7f1df;
+    --color-rule: #b9aa83;
+    --color-rim: #1e1511;
+    --color-panel: #26282c;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { color-scheme: dark light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word; /* the last resort: a word longer than its line breaks, the page never scrolls sideways */
+}
+
+/* Headings and narrow boxes break long compounds at a syllable; wide prose,
+   tables, links, code and prices never gain a hyphen. */
+h1, h2, h3, h4, .key, .ticket, .front .prose { hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+@media (max-width: 30rem) { .prose, .summary { hyphens: auto; hyphenate-limit-chars: 10 4 4; } }
+.prose a, .prose code, .prose table, .hours-card a, .key-price, .ticket-price { hyphens: manual; }
+
+::selection { background: var(--color-strip); color: var(--color-strip-ink); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* A lit ring between two dark ones: it shows on enamel, on the strip, on a key and on paper. */
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 7px var(--color-rim);
+}
+/* A key takes the ring for the link inside it. Both rules need :has(), so a
+   browser without it keeps the plain ring on the link. */
+.key:has(a:focus-visible) {
+  z-index: 1;
+  outline: 3px solid var(--color-focus);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 7px var(--color-rim);
+}
+.key:has(a:focus-visible) a { outline: 0; box-shadow: none; }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--ticket-paper);
+  color: var(--ticket-ink);
+}
+.skip-link:focus { left: var(--space-2); }
+
+/* The small-caps label voice: nav keys, plate labels, section names */
+.strip nav a, .panel-plate, .key-section, .hours-card dt, .btn-reserve, .meta, .ticket-section, .stub, .base-name, .prose h4, .prose th, .tags a {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+/* Figures are set in mono */
+.key-price, .hours-card dd, .ticket-price, .ticket-section, .meta, .stub, .pagination, .tags a, .prose a[href^="tel:"]:not(.btn-reserve) {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Header strip & footer --------------------------------------------------- */
+
+.strip { background: var(--color-strip); color: var(--color-strip-ink); border-bottom: var(--rim) solid var(--color-rim); }
+.strip-in, .base-in, main { max-width: var(--page-width); margin-inline: auto; padding-inline: var(--gutter); }
+.strip-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  padding-block: var(--space-2);
+}
+.site-title {
+  font-size: clamp(1.2rem, 3.4vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: inherit;
+  text-decoration: none;
+}
+.strip nav ul { display: flex; flex-wrap: wrap; gap: var(--key-gap); margin: 0; padding: 0; list-style: none; }
+.strip nav a {
+  display: block;
+  padding: 0.4em 0.75em;
+  border: var(--rim) solid var(--color-strip-ink);
+  border-radius: var(--radius);
+  font-size: 0.78rem;
+  color: inherit;
+  text-decoration: none;
+}
+.strip nav a:hover, .strip nav a[aria-current="page"] { background: var(--color-strip-ink); color: var(--color-strip); }
+
+main { flex: 1; width: 100%; padding-block: var(--space-4); }
+
+.base { border-top: var(--rim) solid var(--color-rim); background: var(--color-well); color: var(--color-muted); }
+.base-in { padding-block: var(--space-3) var(--space-4); }
+.base-in > * { font-size: 0.875rem; }
+.base p { margin: 0 0 var(--space-1); }
+.base a { color: inherit; overflow-wrap: anywhere; }
+.base-name { color: var(--color-text); }
+
+/* Page frame: a label column beside the text column ------------------------ */
+
+.page-header { margin: 0 0 var(--space-3); }
+.page-header h1, .ticket h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 6vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+@media (min-width: 64rem) {
+  .cols, .front {
+    display: grid;
+    grid-template-columns: var(--side) minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: start;
+  }
+}
+
+.meta { margin: var(--space-2) 0 0; font-size: 0.78rem; color: var(--color-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.tags a {
+  display: block;
+  padding: 0.1em 0.5em;
+  border: 1px solid var(--color-rule);
+  border-radius: var(--radius);
+  font-size: 0.72rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.tags a:hover { border-color: var(--color-accent); }
+.cover { display: block; width: 100%; max-width: var(--measure); height: auto; margin: 0 0 var(--space-3); border-radius: var(--radius); }
+
+/* Prose ------------------------------------------------------------------- */
+
+.prose > * { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); line-height: 1.15; }
+.prose h2 { font-size: 1.4rem; }
+.prose h3 { font-size: 1.15rem; }
+.prose h4 { font-size: 0.85rem; }
+/* each section opens with a small unlit key */
+.prose h2::before {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 0.55em;
+  margin-right: 0.45em;
+  border-radius: 2px;
+  background: var(--color-strip);
+}
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: var(--rim) dashed var(--color-rule); }
+/* a phone number runs inline; one wider than the line breaks within itself */
+.prose a[href^="tel:"]:not(.btn-reserve) { overflow-wrap: anywhere; font-size: 0.95em; }
+
+.prose blockquote { padding-left: var(--space-3); border-left: var(--space-1) solid var(--color-strip); color: var(--color-muted); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.prose code { font-family: var(--font-mono); font-size: 0.88em; padding: 0.1em 0.3em; border-radius: var(--radius); background: var(--color-well); }
+.prose pre { padding: var(--space-3); border: 1px solid var(--color-rule); border-radius: var(--radius); background: var(--color-well); overflow-x: auto; line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+
+/* a table wider than its column scrolls inside its own box */
+.prose table { display: block; width: fit-content; max-width: min(100%, var(--measure)); overflow-x: auto; border-collapse: collapse; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; border-bottom: 1px solid var(--color-rule); text-align: left; vertical-align: top; }
+.prose th { font-size: 0.72rem; color: var(--color-muted); }
+.prose td { font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+
+/* THE PANEL — the signature: the menu as the machine's field of lit keys --- */
+
+.panel {
+  padding: var(--space-2);
+  border: var(--rim) solid var(--color-rim);
+  border-radius: calc(var(--radius) * 2);
+  background: var(--color-panel);
+}
+.panel-plate {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 var(--space-1) var(--space-2);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  color: var(--panel-ink);
+}
+.panel-plate::after { content: ""; flex: 1; border-top: 1px solid var(--panel-rule); }
+
+/* two keys across on a phone, as many as fit on anything wider */
+.keys {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--key-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 36rem) {
+  .keys { grid-template-columns: repeat(auto-fill, minmax(var(--key-min), 1fr)); }
+}
+
+/* A key is square, as on the machine: its strut (::before) is as tall as the
+   key is wide. One with more to say than a square holds grows, and its row
+   with it. Face above, foot strip below. */
+.key {
+  position: relative;
+  display: grid;
+  grid-template: minmax(0, 1fr) auto / minmax(0, 1fr);
+  min-width: 0;
+  border: var(--rim) solid var(--color-rim);
+  border-radius: var(--radius);
+  background: var(--tint, var(--key-white));
+  color: var(--key-ink);
+  box-shadow: var(--key-shadow);
+}
+.key::before { content: ""; grid-area: 1 / 1 / 3 / 2; padding-top: 100%; }
+.key-face { grid-area: 1 / 1; padding: 0.55rem 0.55rem 0.65rem; }
+.key-foot { grid-area: 2 / 1; }
+.key-name { margin: 0; font-size: clamp(0.9rem, 4.5vw, 1rem); font-weight: 700; line-height: 1.15; }
+.key-name a { color: inherit; text-decoration: none; }
+.key-name a::after { content: ""; position: absolute; inset: 0; } /* the whole key is the button */
+/* the lamp in the corner of every key: lit red, yellow while the key is pressed */
+.key-name::before {
+  content: "";
+  float: right;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin: 0.15rem 0 0.15rem 0.4rem;
+  border: 1.5px solid var(--key-ink);
+  border-radius: 50%;
+  background: var(--key-lamp);
+}
+.key-desc { margin: 0.35rem 0 0; font-size: 0.8rem; line-height: 1.3; }
+.key-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-2);
+  margin: 0;
+  padding: 0.3rem 0.55rem;
+  background: var(--key-foot);
+  line-height: 1.3;
+}
+.key-section { font-size: 0.68rem; }
+/* a price is free text: one too long for the strip takes its own line, and breaks where it must */
+.key-section, .key-price { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.key-price { margin-left: auto; font-size: clamp(0.78rem, 3.9vw, 0.85rem); font-weight: 700; text-align: right; }
+
+/* the pressed key: vermilion, sunk by the depth of its shadow, lamp lit */
+.key:hover, .key:has(a:active) { background: var(--color-strip); color: var(--color-strip-ink); box-shadow: none; }
+.key:hover .key-name::before { border-color: var(--color-rim); background: var(--key-yellow); }
+@media (prefers-reduced-motion: no-preference) {
+  .key:hover, .btn-reserve:hover { transform: translateY(2px); }
+}
+
+/* Four tints. Breakfast and Mains are meals; Bread, Pastries and Desserts are
+   bakes and sweets; Starters, Sides and Snacks are small plates; drinks, a key
+   with no section and any section outside the ten stay white. */
+[data-section="Breakfast"], [data-section="Mains"] { --tint: var(--key-yellow); }
+[data-section="Bread"], [data-section="Pastries"], [data-section="Desserts"] { --tint: var(--key-pink); }
+[data-section="Starters"], [data-section="Sides"], [data-section="Snacks"] { --tint: var(--key-green); }
+
+/* The build sorts by section name; `order` seats the keys in service order
+   (enhance.js then moves them in the document to match). No section, or one
+   outside these ten, keeps order 0 and comes first. */
+.key[data-section="Breakfast"] { order: 1; }
+.key[data-section="Bread"] { order: 2; }
+.key[data-section="Pastries"] { order: 3; }
+.key[data-section="Starters"] { order: 4; }
+.key[data-section="Mains"] { order: 5; }
+.key[data-section="Sides"] { order: 6; }
+.key[data-section="Desserts"] { order: 7; }
+.key[data-section="Hot drinks"] { order: 8; }
+.key[data-section="Drinks"] { order: 9; }
+.key[data-section="Snacks"] { order: 10; }
+
+/* the pay bar under the keys: a coin slot, a note slot, and the ticket tray
+   with one ticket in it — the way to the full menu */
+.slot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border: 1px solid var(--panel-rule);
+  border-radius: var(--radius);
+  background: var(--panel-slot);
+}
+.slot::before, .slot::after {
+  content: "";
+  border: var(--rim) solid var(--panel-ink);
+  background: linear-gradient(var(--key-yellow), var(--key-yellow)) 50% 50% no-repeat;
+}
+.slot::before { width: 1.7rem; height: 1.7rem; border-radius: 50%; background-size: 3px 55%; }
+.slot::after { order: -1; width: 3.6rem; height: 1.1rem; border-radius: var(--radius); background-size: 76% 3px; }
+.stub {
+  order: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.7em;
+  max-width: 100%;
+  margin-left: auto;
+  padding: 0.4em 0.9em;
+  background: var(--ticket-paper);
+  color: var(--ticket-ink);
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+.stub::before { content: ""; align-self: stretch; border-left: 1px dashed currentColor; }
+.stub:hover { text-decoration: underline; }
+
+.menu-page .page-header { margin-bottom: var(--space-3); }
+.empty { color: var(--color-muted); }
+
+/* Home (page.html: the index page with a menu): the panel beside the text. On
+   one column the prose box dissolves so the panel can sit after the house card
+   and before the rest of the page. */
+.front { display: flex; flex-direction: column; }
+.front .prose { display: contents; }
+.front .prose > * { order: 3; }
+.front .prose > .hours-card, .front .prose > :has(~ .hours-card) { order: 1; }
+.front .panel { order: 2; margin-bottom: var(--space-4); }
+.front .hours-card { max-width: none; }
+@media (min-width: 64rem) {
+  .front { display: grid; grid-template-rows: auto 1fr; }
+  .front .prose { display: block; grid-column: 1; }
+  .front .panel { grid-column: 2; grid-row: 1 / span 2; margin-bottom: 0; }
+}
+/* A menu of more than sixteen shows the home panel a selection: the first four
+   keys of each section. The ticket in the tray leads to the rest. */
+.front .keys:has(> :nth-child(17)) > :is(:nth-child(n+5 of [data-section=""]), :nth-child(n+5 of [data-section="Breakfast"]), :nth-child(n+5 of [data-section="Bread"]), :nth-child(n+5 of [data-section="Pastries"]), :nth-child(n+5 of [data-section="Starters"]), :nth-child(n+5 of [data-section="Mains"]), :nth-child(n+5 of [data-section="Sides"]), :nth-child(n+5 of [data-section="Desserts"]), :nth-child(n+5 of [data-section="Hot drinks"]), :nth-child(n+5 of [data-section="Drinks"]), :nth-child(n+5 of [data-section="Snacks"])) { display: none; }
+
+/* The house card: the notice plate screwed to the fascia --------------------- */
+
+.hours-card {
+  margin: 0 0 var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  border: var(--rim) solid var(--color-rim);
+  border-radius: var(--radius);
+  background: var(--color-plate);
+}
+/* label and value share a line; a value too long for that drops whole to the next */
+.hours-card dl {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-3);
+  margin: 0;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+.hours-card dt { max-width: 100%; font-size: 0.72rem; color: var(--color-muted); }
+.hours-card dd { min-width: 0; max-width: 100%; margin: 0 0 0 auto; font-size: 0.88rem; text-align: right; }
+.hours-card dd a[href^="mailto:"] { font-family: var(--font-sans); }
+/* One list holding several pairs: a row per pair, ruled like the rest. The
+   label column never takes more than two fifths, so the value always has room. */
+.hours-card dl:has(dt ~ dt) { display: grid; grid-template-columns: fit-content(40%) minmax(0, 1fr); align-items: stretch; gap: 0; padding: 0; }
+.hours-card dl:has(dt ~ dt) > * { margin: 0; padding: 0.45rem 0; line-height: 1.35rem; overflow-wrap: anywhere; }
+.hours-card dl:has(dt ~ dt) > dt { padding-right: var(--space-3); }
+.hours-card dl:has(dt ~ dt) > dd ~ * { border-top: 1px solid var(--color-rule); }
+.hours-card > dl:last-child, .hours-card > dl:last-child > :nth-last-child(-n+2) { padding-bottom: 0; border-bottom: 0; }
+
+/* the one button: a vermilion key */
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.7em 1.4em;
+  border: var(--rim) solid var(--color-rim);
+  border-radius: var(--radius);
+  background: var(--color-strip);
+  color: var(--color-strip-ink);
+  box-shadow: var(--key-shadow);
+  font-size: 0.95rem;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+}
+.btn-reserve:hover { box-shadow: none; }
+.btn-reserve:focus-visible { box-shadow: 0 0 0 7px var(--color-rim); } /* the dark band of the focus ring, in place of the key edge */
+.hours-card .btn-reserve { display: block; }
+.prose .reserve { margin: var(--space-3) 0 var(--space-4); }
+.hours-card .reserve { margin: var(--space-3) 0 0; }
+
+/* The ticket: one item's page, and the 404 ----------------------------------- */
+
+.ticket {
+  position: relative;
+  max-width: var(--side);
+  padding: var(--space-3) var(--space-3) calc(var(--space-3) + 0.35rem);
+  border-top: 0.6rem solid var(--tint, var(--key-white));
+  background: var(--ticket-paper);
+  color: var(--ticket-ink);
+}
+/* the torn edge: bites of the fascia colour along the foot */
+.ticket::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 0.35rem;
+  background: radial-gradient(circle at 50% 100%, var(--color-bg) 0.3rem, transparent 0.32rem) 50% 0 / 0.95rem 100% repeat-x;
+}
+.ticket-section { margin: 0 0 var(--space-2); font-size: 0.72rem; }
+.ticket h1 { font-size: clamp(1.5rem, 6vw, 1.9rem); }
+.ticket-desc { margin: var(--space-2) 0 0; }
+.ticket-price { margin: var(--space-3) 0 0; padding-top: var(--space-2); border-top: var(--rim) dashed var(--ticket-ink); font-size: 1.2rem; font-weight: 700; text-align: right; }
+.ticket-links { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding-top: var(--space-2); border-top: var(--rim) dashed var(--ticket-ink); }
+.ticket a { color: inherit; }
+.back { margin: var(--space-3) 0; font-size: 0.9rem; }
+
+/* Post list & pagination ----------------------------------------------------- */
+
+.post-list { max-width: var(--measure); margin: 0; padding: 0; list-style: none; }
+.post-list li { padding: var(--space-3) 0; border-bottom: 1px solid var(--color-rule); }
+.post-list li:first-child { padding-top: 0; }
+.post-list h2 { margin: 0; font-size: 1.3rem; line-height: 1.2; }
+.post-list h2 a { color: inherit; text-decoration: none; }
+.post-list h2 a:hover { color: var(--color-accent); text-decoration: underline; }
+.summary { margin: var(--space-1) 0 0; color: var(--color-muted); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  max-width: var(--measure);
+  margin: var(--space-4) 0 0;
+  font-size: 0.85rem;
+  color: var(--color-muted);
+}
+.menu-page .pagination { max-width: none; }
+
+/* Print ------------------------------------------------------------------------ */
+
+@media print {
+  /* ink on white, whichever machine the screen showed */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-strip: #fff;
+    --color-strip-ink: #000;
+    --color-well: #fff;
+    --color-plate: #fff;
+    --color-rule: #999;
+    --color-rim: #000;
+    --color-panel: #fff;
+    --panel-ink: #333;
+    --panel-rule: #999;
+    --key-yellow: #fff;
+    --key-pink: #fff;
+    --key-green: #fff;
+    --key-white: #fff;
+    --key-ink: #000;
+    --key-foot: rgba(0,0,0,0);
+    --key-shadow: none;
+    --ticket-paper: #fff;
+    --ticket-ink: #000;
+  }
+  body { font-size: 11pt; }
+  body { display: block; }
+  .strip nav, .skip-link, .slot, .back, .pagination, .reserve, .btn-reserve, .key::before, .key-name::before, .prose h2::before { display: none; }
+  .strip, .base, .panel { border-width: 1px; }
+  .key-foot { border-top: 1px solid var(--color-rim); }
+  .ticket { border: 1px solid var(--color-rim); }
+  a { color: inherit; text-decoration: none; }
+  .key, .hours-card, .ticket { break-inside: avoid; }
+}

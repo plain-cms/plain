@@ -1,0 +1,358 @@
+/* Tandoor — a curry-house theme built around one object: flock wallpaper.
+   A crimson damask repeat on maroon is the ground of every page; the name
+   sits straight on it in brass, and every word to be read sits on white
+   linen cut square. Restyle by editing tokens, never selectors. */
+
+:root {
+  /* Type — Didone capitals over a transitional text serif */
+  --font-display: Didot, "Bodoni 72", "Bodoni MT", "Playfair Display", "Bodoni Moda", "Times New Roman", serif;
+  --font-body: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.0625rem;
+  --text-title: clamp(1.6rem, 7.4vw, 4.25rem);
+  --leading: 1.55;
+  --tracking-title: 0.08em;
+  --tracking-caps: 0.13em;
+
+  /* Colour — the linen and what is written on it */
+  --color-bg: #fbfaf5;
+  --color-text: #17120f;
+  --color-muted: #5c524a;
+  --color-accent: #7a1322;
+  --color-rule: #d8d2c4;
+  --color-code-bg: #efece2;
+  --color-mark: #f3dc9a;
+  --color-btn: #7a1322;
+  --color-btn-hover: #570c17;
+  --color-btn-ink: #fffdf7;
+
+  /* Colour — the wall behind it */
+  --color-wall: #560d19;
+  --color-flock: #96192a;
+  --color-relief: #380710;
+  --color-brass: #e9b949;
+  --shadow-panel: 0 0.5rem 1rem rgba(18,0,4,0.5);
+
+  /* Layout */
+  --measure: 44rem;
+  --tile: 12rem;
+  --gutter: clamp(0.75rem, 4vw, 2rem);
+  --pad: clamp(1.1rem, 5vw, 2.75rem);
+  --rule: 2px;
+  --radius: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The lights down: oxblood flock, linen gone to dim ivory, the ink still dark */
+    --color-bg: #d5ccb7;
+    --color-text: #15100e;
+    --color-muted: #453c33;
+    --color-accent: #6a0f1d;
+    --color-rule: #b2a88f;
+    --color-code-bg: #c5bba4;
+    --color-mark: #e6c877;
+    --color-btn: #5e0d1a;
+    --color-btn-hover: #430812;
+    --color-btn-ink: #efe6d2;
+    --color-wall: #24060a;
+    --color-flock: #450c16;
+    --color-relief: #100203;
+    --color-brass: #c99a3a;
+    --shadow-panel: 0 0.5rem 1.2rem rgba(0,0,0,0.7);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { background: var(--color-wall); color-scheme: light dark; }
+
+body {
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0 var(--gutter) var(--space-5);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-wall);
+  overflow-wrap: break-word;
+}
+
+/* THE WALLPAPER — the signature. One damask tile is used as a mask over two
+   flat colours: the flock, and under it a darker copy set off by a hair, the
+   shadow that makes the pile stand up. No text but brass ever sits on it. */
+body::before, body::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: var(--color-flock);
+  -webkit-mask: url(damask.svg) 50% 0 / var(--tile) auto;
+  mask: url(damask.svg) 50% 0 / var(--tile) auto;
+}
+body::before {
+  background: var(--color-relief);
+  -webkit-mask-position: calc(50% + 1px) 2px;
+  mask-position: calc(50% + 1px) 2px;
+}
+/* a smaller repeat on a phone, so the pattern still reads as a pattern */
+@media (max-width: 40rem) {
+  body::before, body::after { -webkit-mask-size: calc(var(--tile) * 0.75) auto; mask-size: calc(var(--tile) * 0.75) auto; }
+}
+
+/* Linen: every panel is the same cloth, cut square; the shadow is cast by
+   the whole table, so panels that touch read as one sheet. */
+.linen, .dish-body { background: var(--color-bg); border-radius: var(--radius); }
+.linen { padding: var(--pad); }
+main, .masthead nav, .colophon { filter: drop-shadow(var(--shadow-panel)); }
+main > *, .colophon { max-width: var(--measure); margin-inline: auto; }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.16em; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* Ink ring for linen, brass band for the wall: one of them always shows. */
+:focus-visible { outline: 2px solid var(--color-text); outline-offset: 1px; box-shadow: 0 0 0 5px var(--color-brass); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-bg); color: var(--color-text); }
+.skip-link:focus { left: var(--space-2); }
+
+/* Long words break at a syllable in headings and names, and in text only on a
+   phone; wide text, tables, an address or a number is never given a hyphen. */
+h1, h2, h3, .site-title, .dish-name { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+@media (max-width: 34rem) {
+  .prose, .dish-desc, .standfirst, .summary, .hours-card { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+}
+.prose :is(a, code, table), .hours-card a { hyphens: manual; }
+/* a phone number or an e-mail address too long for the line breaks inside itself */
+a:is([href^="tel:"], [href^="mailto:"]):not(.btn-reserve) { overflow-wrap: anywhere; }
+
+/* The Didone voice */
+.site-title, .masthead nav a, h1, h2, h3, .kicker, .hours-card dt, .btn-reserve, .dish-name, .dish-price, .colophon-name, .pagination {
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+.masthead nav a, .kicker, .hours-card dt, .btn-reserve, .colophon-name, .pagination, .section-name {
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  font-size: 0.78rem;
+}
+
+/* Masthead & footer ------------------------------------------------------ */
+
+.masthead { padding: clamp(1.4rem, 4.5vw, 2.6rem) 0 var(--space-4); text-align: center; }
+
+/* brass on the wall; the left padding balances the tracking after the last letter */
+.site-title {
+  display: inline-block;
+  max-width: 100%;
+  padding-left: var(--tracking-title);
+  font-size: var(--text-title);
+  line-height: 1.08;
+  letter-spacing: var(--tracking-title);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--color-brass);
+  text-shadow: 0 0.03em 0 var(--color-relief), 0 0 0.3em var(--color-wall);
+}
+
+.masthead nav { width: fit-content; max-width: 100%; margin: var(--space-3) auto 0; background: var(--color-bg); }
+.masthead nav ul { display: flex; flex-wrap: wrap; justify-content: center; margin: 0; padding: 0 var(--space-3); list-style: none; }
+.masthead nav a { display: block; padding: 0.85rem 1.1rem 0.8rem; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { color: var(--color-accent); }
+.masthead nav a[aria-current="page"] { color: var(--color-accent); box-shadow: inset 0 calc(-1 * var(--rule) - 1px) 0 var(--color-accent); }
+.masthead nav a:focus-visible { outline-offset: -4px; box-shadow: none; }
+
+.colophon { margin-top: var(--space-5); padding: var(--space-3) var(--pad); text-align: center; color: var(--color-muted); }
+.colophon > * { margin: 0; font-size: 0.9rem; }
+.colophon-name { color: var(--color-text); }
+
+/* Page headers & prose --------------------------------------------------- */
+
+/* closed by a hairline with a lozenge on it — the knot where the wallpaper's curves meet */
+.page-header { position: relative; margin: 0 0 var(--space-4); padding-bottom: 1.75rem; text-align: center; }
+.page-header::before, .page-header::after { content: ""; position: absolute; bottom: 0; left: 50%; }
+.page-header::before { width: 9px; height: 9px; margin: 0 0 -4px -4.5px; background: var(--color-accent); transform: rotate(45deg); }
+.page-header::after { width: 8rem; max-width: 60%; height: 1px; transform: translateX(-50%); background: linear-gradient(90deg, var(--color-accent) calc(50% - 11px), transparent 0, transparent calc(50% + 11px), var(--color-accent) 0); }
+
+h1 { margin: 0; font-size: clamp(1.7rem, 5.2vw, 2.7rem); font-weight: 400; line-height: 1.12; text-wrap: balance; }
+.kicker { margin: 0 0 var(--space-2); color: var(--color-accent); }
+.standfirst { margin: var(--space-3) auto 0; max-width: 34rem; font-size: 1.15rem; font-style: italic; color: var(--color-muted); }
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); line-height: 1.2; }
+.prose h2 { font-size: 1.05rem; text-transform: uppercase; letter-spacing: var(--tracking-caps); color: var(--color-accent); }
+.prose h3 { font-size: 1.3rem; }
+.prose h4 { font-size: 1rem; font-style: italic; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose table, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-accent); }
+.prose img, .cover { display: block; max-width: 100%; height: auto; }
+.cover { width: 100%; margin: 0 0 var(--space-4); }
+.prose hr { height: 1px; margin: var(--space-4) 0; border: 0; background: var(--color-rule); }
+.prose blockquote { padding-left: var(--space-3); border-left: var(--rule) solid var(--color-accent); font-style: italic; color: var(--color-muted); }
+.prose code { font-family: var(--font-mono); font-size: 0.88em; background: var(--color-code-bg); padding: 0.1em 0.3em; }
+.prose pre { padding: var(--space-3); overflow-x: auto; background: var(--color-code-bg); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+/* a table wider than the cloth scrolls inside its own box */
+.prose table { display: block; width: fit-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { border-bottom: var(--rule) solid var(--color-text); }
+
+/* The house card: ruled rows, label then value, closed by the button ----- */
+
+.hours-card { margin: var(--space-4) 0; border-top: var(--rule) solid var(--color-text); border-bottom: var(--rule) solid var(--color-text); }
+.prose :is(h2, h3, h4) + .hours-card { margin-top: var(--space-3); }
+.hours-card dl { display: grid; grid-template-columns: minmax(7rem, 34%) 1fr; align-items: baseline; gap: 0.6rem var(--space-3); margin: 0; padding: 0.65rem 0; border-top: 1px solid var(--color-rule); }
+.hours-card dl:first-child { border-top: 0; }
+.hours-card dt, .hours-card dd { min-width: 0; margin: 0; }
+.hours-card dt { line-height: 1.4; color: var(--color-accent); }
+.hours-card dd a { color: inherit; }
+.hours-card:has(> .reserve) { border-bottom: 0; }
+.hours-card .btn-reserve { display: block; }
+
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.95rem 1.6rem 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-btn-ink);
+  background: var(--color-btn);
+  border-radius: var(--radius);
+}
+.btn-reserve:hover { background: var(--color-btn-hover); }
+.prose p:where(.reserve, :has(> .btn-reserve:only-child)) { margin: var(--space-4) 0; text-align: center; }
+.hours-card .reserve { margin: var(--space-1) 0 0; }
+
+@media (max-width: 34rem) {
+  .hours-card dl { display: block; }
+  .hours-card dd + dt { margin-top: 0.6rem; }
+}
+
+/* The menu --------------------------------------------------------------
+   Each section is its own table: a run of dishes on one cloth, the section
+   name in brass on the wall above it. The list arrives sorted by section
+   name; `order` seats the sections in service order (enhance.js then moves
+   them in the document to match). No section, or one outside these ten:
+   order 0, first, the name printed small on the linen. */
+
+.menu-page .page-header:last-child { margin-bottom: var(--space-2); }
+.menu-list { display: flex; flex-direction: column; margin: 0; padding: 0; list-style: none; }
+.menu-list::after { content: ""; order: 11; height: var(--space-3); background: var(--color-bg); }
+.dish[data-section="Breakfast"] { order: 1; }
+.dish[data-section="Bread"] { order: 2; }
+.dish[data-section="Pastries"] { order: 3; }
+.dish[data-section="Starters"] { order: 4; }
+.dish[data-section="Mains"] { order: 5; }
+.dish[data-section="Sides"] { order: 6; }
+.dish[data-section="Desserts"] { order: 7; }
+.dish[data-section="Hot drinks"] { order: 8; }
+.dish[data-section="Drinks"] { order: 9; }
+.dish[data-section="Snacks"] { order: 10; }
+
+.dish-body { padding: 0.7rem var(--pad); }
+.dish-line { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 var(--space-3); margin: 0; line-height: 1.35; }
+.dish-what { flex: 1 1 60%; min-width: 0; }
+/* on a phone a short name leaves room for a long price on the same line */
+@media (max-width: 34rem) { .dish-what { flex-basis: 45%; } }
+.dish-name { font-size: 1rem; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; }
+.dish-name:hover { text-decoration: underline; }
+.dish-price { max-width: 100%; margin-left: auto; font-size: 1.05rem; text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+.dish-desc { max-width: 33rem; margin: 0.1rem 0 0; font-size: 0.95rem; color: var(--color-muted); }
+
+.section-name { margin: 0; padding: 0.9rem var(--pad) 0; background: var(--color-bg); color: var(--color-muted); }
+.dish:is([data-section="Breakfast"], [data-section="Bread"], [data-section="Pastries"], [data-section="Starters"], [data-section="Mains"], [data-section="Sides"], [data-section="Desserts"], [data-section="Hot drinks"], [data-section="Drinks"], [data-section="Snacks"]) .section-name {
+  --strip: "";
+  padding: 0 0 0 var(--tracking-title);
+  background: none;
+  font-size: clamp(1.4rem, 5vw, 1.9rem);
+  line-height: 1.1;
+  letter-spacing: var(--tracking-title);
+  text-align: center;
+  color: var(--color-brass);
+  text-shadow: 0 0.03em 0 var(--color-relief), 0 0 0.3em var(--color-wall);
+}
+/* the strip of cloth above the name ends the table before it; the strip below starts this one */
+.section-name::before, .section-name::after { content: var(--strip, none); display: block; height: var(--space-3); margin-left: calc(-1 * var(--tracking-title)); background: var(--color-bg); }
+.section-name::before { margin-bottom: var(--space-4); }
+.section-name::after { margin-top: 0.9rem; }
+.dish[data-section="Breakfast"] ~ .dish[data-section="Breakfast"] .section-name,
+.dish[data-section="Bread"] ~ .dish[data-section="Bread"] .section-name,
+.dish[data-section="Pastries"] ~ .dish[data-section="Pastries"] .section-name,
+.dish[data-section="Starters"] ~ .dish[data-section="Starters"] .section-name,
+.dish[data-section="Mains"] ~ .dish[data-section="Mains"] .section-name,
+.dish[data-section="Sides"] ~ .dish[data-section="Sides"] .section-name,
+.dish[data-section="Desserts"] ~ .dish[data-section="Desserts"] .section-name,
+.dish[data-section="Hot drinks"] ~ .dish[data-section="Hot drinks"] .section-name,
+.dish[data-section="Drinks"] ~ .dish[data-section="Drinks"] .section-name,
+.dish[data-section="Snacks"] ~ .dish[data-section="Snacks"] .section-name { display: none; }
+
+/* One dish, a post, the 404 */
+.price { margin: var(--space-3) 0 0; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; line-height: 1.2; font-variant-numeric: lining-nums; }
+.back { margin: var(--space-4) 0 0; text-align: center; font-size: 0.95rem; }
+.tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; font-size: 0.95rem; }
+.not-found { text-align: center; }
+
+/* Post list & pagination */
+.post-list { margin: 0; padding: 0; list-style: none; }
+.post-list li { padding: var(--space-3) 0; border-top: 1px solid var(--color-rule); }
+.post-list li:first-child { padding-top: 0; border-top: 0; }
+.post-list h2 { margin: 0; font-size: 1.35rem; line-height: 1.2; }
+.post-list h2 a { text-decoration: none; }
+.post-list h2 a:hover { text-decoration: underline; }
+.summary { margin: var(--space-1) 0 0; }
+.empty { margin: 0; text-align: center; color: var(--color-muted); }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); padding: var(--space-3) var(--pad); }
+.linen .pagination { padding-inline: 0; border-top: 1px solid var(--color-rule); }
+
+/* Motion & print --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .btn-reserve, .masthead nav a { transition: background-color 0.15s, color 0.15s; }
+}
+
+@media print {
+  /* black ink on white paper: no wall, no flock, no shadow */
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-rule: #999;
+    --color-code-bg: #fff;
+    --color-btn: #fff;
+    --color-btn-ink: #000;
+    --color-wall: #fff;
+    --color-brass: #000;
+    --color-relief: #fff;
+    --shadow-panel: 0 0 0 #fff;
+  }
+  body { padding: 0; font-size: 11pt; }
+  body::before, body::after, .masthead nav, .skip-link, .back, .pagination { display: none; }
+  main, .colophon { filter: none; }
+  main > *, .colophon { max-width: none; }
+  .linen, .dish-body, .section-name { padding-inline: 0; }
+  .site-title, .section-name { text-shadow: none; }
+  .btn-reserve { border: 1px solid; }
+  a { text-decoration: none; }
+  .dish, .hours-card dl { break-inside: avoid; }
+  .section-name { break-after: avoid; }
+}

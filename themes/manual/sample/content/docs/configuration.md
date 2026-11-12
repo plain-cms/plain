@@ -1,9 +1,9 @@
 ---
 title: Configuration
-order: "03"
+order: "05"
 description: The complete mkweb.json reference — every option, its default, and when to change it.
-prev: /docs/installation/
-prevTitle: Installation
+prev: /docs/images-and-files/
+prevTitle: Images and files
 next: /docs/commands/
 nextTitle: Commands
 example: true
@@ -47,7 +47,7 @@ Configuration lives in one file, `mkweb.json`, at the root of your project. **Ev
 
 ## Per-page settings
 
-Anything page-specific — titles, descriptions, draft status — belongs in that page's frontmatter, not in `mkweb.json`:
+Anything page-specific — titles, descriptions, draft status — belongs in that page's frontmatter, not in `mkweb.json` (the full list is in [Writing pages](/docs/writing-pages/)):
 
 ```markdown
 ---

@@ -1,0 +1,11 @@
+<li class="stratum">
+        {{> depth}}
+        <div class="stratum-desc">
+          <h2 class="stratum-title">{{#if entry.content}}<a href="{{ entry.url }}">{{ entry.title }}</a>{{else}}{{ entry.title }}{{/if}}</h2>
+          {{> stratum-meta}}{{#if entry.highlights}}<ul class="stratum-points">
+            {{#each entry.highlights as point}}<li>{{ point }}</li>
+            {{/each}}
+          </ul>
+          {{/if}}
+        </div>
+      </li>

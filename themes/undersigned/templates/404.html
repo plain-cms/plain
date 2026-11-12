@@ -1,0 +1,14 @@
+<section class="page not-found">
+  <header class="page-header">
+    <h1>{{ strings.notFoundTitle }}</h1>
+    <p class="lede">{{ strings.notFoundBody }}</p>
+  </header>
+  <div class="involved-lines">
+    <h2 class="lines-head"><span aria-hidden="true">{{ strings.lineNo }}</span><span>{{ strings.whereNext }}</span></h2>
+    <ol class="lines">
+      <li><span class="line-cell"><span class="line-body"><a class="line-link" href="/">{{ strings.goHome }}</a></span></span></li>
+      <li><span class="line-cell"><span class="line-body"><a class="line-link" href="/programs/">{{ strings.everyWay }}</a></span></span></li>
+      <li><span class="line-cell"><span class="line-body"><a class="line-link" href="{{#if data.impact.donateUrl}}{{ data.impact.donateUrl }}{{else}}/donate/{{/if}}">{{ strings.donate }}</a></span></span></li>
+    </ol>
+  </div>
+</section>

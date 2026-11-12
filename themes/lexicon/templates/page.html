@@ -1,0 +1,19 @@
+<article class="page">
+  {{#if page.url.4}}<header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{else}}<header class="page-head front-head">
+    <h1>{{ page.title }}</h1>
+    <div class="school">
+      <p class="entry school-entry"><span class="hw">{{ site.title }}</span> <span class="pos">{{ strings.entryLabel }}</span>{{#if page.description}} <span class="def">{{ page.description }}</span>{{/if}}</p>
+      <p class="school-xref"><span class="xref-label">{{ strings.seeAlso }}</span> <a href="/schedule/">{{ strings.timetableName }}</a><span class="sep">;</span> <a href="/contact/">{{ strings.tryAClass }}</a></p>
+    </div>
+  </header>
+  {{#if collections.instructors}}{{> front-entries}}{{/if}}
+  {{/if}}{{#if page.showSchedule}}{{> timetable}}
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

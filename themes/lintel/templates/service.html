@@ -1,0 +1,19 @@
+<article class="page service">
+  <p class="crumb"><a href="/services/">{{ strings.backToServices }}</a></p>
+  <header class="calc">
+    <h1 class="beam-title">{{ page.title }}</h1>
+    <span class="fig" aria-hidden="true"><span class="fig-load"></span></span>
+    {{#if page.fee}}<p class="dim"><span class="visually-hidden">{{ strings.feeLabel }}</span> <span class="dim-text">{{ page.fee }}</span></p>{{/if}}
+    {{#if page.description}}<p class="lead">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.points}}<section class="points" aria-labelledby="points-heading">
+    <h2 class="block-heading" id="points-heading">{{ strings.pointsHeading }}</h2>
+    <ul>
+      {{#each page.points as point}}<li>{{ point }}</li>
+      {{/each}}
+    </ul>
+  </section>{{/if}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

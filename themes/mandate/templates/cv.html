@@ -1,0 +1,39 @@
+<article class="cv">
+  <header class="lh cv-head">
+    {{#if data.profile}}<h1 class="lh-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</h1>
+    {{#if data.profile.role}}<p class="lh-role">{{ data.profile.role }}</p>
+    {{/if}}{{> profile-contact}}
+    {{else}}<h1 class="lh-name">{{ page.title }}</h1>
+    {{/if}}
+  </header>
+  {{#if items}}<p class="record-note">{{ strings.recordNote }}</p>
+  <ol class="stones" role="list">
+    {{#each items as entry}}<li class="stone">
+    {{> stone-head}}{{#if entry.highlights}}<ul class="stone-points">
+      {{#each entry.highlights as point}}<li>{{ point }}</li>
+      {{/each}}
+    </ul>
+    {{/if}}{{> stone-when}}</li>
+    {{/each}}
+  </ol>
+  {{else}}<p class="empty">{{ strings.noEntries }}</p>
+  {{/if}}
+  {{#if data.profile.skills}}<section class="cv-skills lh" aria-labelledby="cv-skills-head">
+    <h2 class="lh-label" id="cv-skills-head">{{ strings.skills }}</h2>
+    <ul class="skills" role="list">
+      {{#each data.profile.skills as skill}}<li>{{ skill }}</li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+  {{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+  <div class="cv-print">
+    <p>{{ strings.printNote }} <span class="print-hint">{{ strings.printHint }}</span></p>
+    <button type="button" class="print-button" hidden>{{ strings.printButton }}</button>
+  </div>
+</article>

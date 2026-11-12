@@ -1,0 +1,19 @@
+<article class="sheet{{#if nav.0.current}} sheet-home{{/if}}">
+  <header class="sheet-head">
+    <h1 class="sheet-title">{{ page.title }}</h1>
+    {{#if page.description}}<p class="sheet-standfirst">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose sheet-body">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if nav.0.current}}{{#if nav.1}}<nav class="playbill" aria-labelledby="playbill-head">
+    <h2 class="playbill-head" id="playbill-head">{{ strings.programme }}</h2>
+    <ul role="list" class="playbill-list">
+      <li><a class="playbill-link" href="{{ nav.1.url }}">{{ nav.1.label }}</a> <span class="playbill-note">{{ strings.programmeArchive }}</span></li>
+      {{#if nav.3}}<li><a class="playbill-link" href="{{ nav.3.url }}">{{ nav.3.label }}</a> <span class="playbill-note">{{ strings.programmeSubscribe }}</span></li>
+      {{/if}}
+    </ul>
+  </nav>
+  {{/if}}{{/if}}
+</article>

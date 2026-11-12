@@ -21,7 +21,7 @@ range alcove, and a sitting room with a wood burner that heats most of the
 house shoulder-season. Outside: the orchard (six apples, two plums), a
 stone outbuilding with power and light, and parking for three.
 
-**The area:** the town's edge, deliberately. The center is a nine-minute
+**The area:** the town's edge, deliberately. The centre is a nine-minute
 cycle or a twenty-five minute walk; the primary school run passes the door;
 the fields start where the garden ends.
 

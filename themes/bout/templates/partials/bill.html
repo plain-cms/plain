@@ -1,0 +1,23 @@
+{{#if data.schedule.days}}
+<section class="fight-card" aria-labelledby="bill-heading">
+  <h2 class="bill-heading" id="bill-heading"><span>{{ strings.billHeading }}</span></h2>
+  <div class="week">
+    {{#each data.schedule.days as day}}
+    <section class="bill{{#if day.classes}}{{else}} bill-off{{/if}}" data-day="{{ day.day }}">
+      <h3 class="bill-day">{{ day.day }} <span class="today-flag" hidden>{{ strings.today }}</span></h3>
+      {{#if day.classes}}<ul class="bouts">
+        {{#each day.classes as session}}<li class="bout">
+          <span class="bout-name">{{ session.name }}</span>
+          <span class="bout-line">{{#if session.time}}<span class="bout-time">{{ session.time }}</span>{{/if}}{{#if session.who}} <span class="bout-who">{{ strings.withCoach }} {{ session.who }}</span>{{/if}}{{#if session.level}} <span class="bout-level">{{ session.level }}</span>{{/if}}</span>
+        </li>
+        {{/each}}
+      </ul>
+      {{else}}<p class="bill-none">{{ strings.noClasses }}</p>
+      {{/if}}
+    </section>
+    {{/each}}
+  </div>
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}
+</section>
+{{/if}}

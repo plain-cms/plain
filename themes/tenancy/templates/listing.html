@@ -1,0 +1,27 @@
+<article class="listing cols" data-status="{{ page.status }}">
+  <div class="listing-main">
+    <div class="hang hang--single"><span class="hook" aria-hidden="true"></span><div class="fob"><div class="insert">
+      {{#if page.status}}<p class="status"><span class="status-raw">{{ page.status }}</span>{{> status-words}}</p>
+      {{/if}}<h1>{{ page.title }}</h1>
+      {{#if page.address}}<p class="tag-address">{{ page.address }}</p>
+      {{/if}}{{#if page.price}}<p class="tag-price">{{ page.price }}</p>
+      {{/if}}<ul class="facts">{{#if page.beds}}<li><b>{{ page.beds }}</b> {{ strings.beds }}</li>{{/if}}{{#if page.baths}}<li><b>{{ page.baths }}</b> {{ strings.baths }}</li>{{/if}}{{#if page.area}}<li><b>{{ page.area }}</b></li>{{/if}}</ul>
+      {{#if page.dateFormatted}}<p class="listed">{{ strings.listedOn }} <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+      {{/if}}
+    </div></div></div>
+    {{#if page.description}}<p class="lede listing-lede">{{ page.description }}</p>
+    {{/if}}{{#if page.photos}}<ul class="gallery" aria-label="{{ strings.photos }}">
+      {{#each page.photos as photo}}<li><img src="{{ photo }}" alt="{{ page.title }}" loading="lazy" decoding="async"></li>
+      {{/each}}
+    </ul>
+    {{else}}{{#if page.cover}}<figure class="cover"><img src="{{ page.cover }}" alt="{{ page.title }}" decoding="async"></figure>
+    {{/if}}{{/if}}{{#if page.body}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </div>
+  <div class="listing-side">
+    {{> inquiry}}
+    <p class="back"><a href="/listings/"><span aria-hidden="true">←</span> {{ strings.allListings }}</a></p>
+  </div>
+</article>

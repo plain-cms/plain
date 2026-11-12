@@ -1,7 +1,7 @@
 ---
 title: Espresso
 price: "€3"
-section: Drinks
+section: Hot drinks
 description: A dark, local roast. Also as a macchiato or long black.
 example: true
 ---

@@ -1,0 +1,21 @@
+<section class="list">
+  <header class="page-head">
+    <h1>{{#if tag}}{{ strings.taggedBefore }}{{ tag }}{{ strings.taggedAfter }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}<ul class="post-list" role="list">
+    {{#each items as item}}<li class="post-item">
+      <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.date}}<p class="meta"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{/if}}{{#if item.description}}<p class="post-desc">{{ item.description }}</p>
+      {{/if}}</li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

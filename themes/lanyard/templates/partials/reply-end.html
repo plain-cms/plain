@@ -1,0 +1,2 @@
+{{#if data.event.entry}}<div class="reply reply-end"><p class="reply-entry">{{ data.event.entry }}</p>
+{{> reply-lines}}</div>{{else}}{{#if data.event.replyBy}}<div class="reply reply-end">{{> reply-lines}}</div>{{else}}{{#if data.event.replyEmail}}<div class="reply reply-end">{{> reply-lines}}</div>{{else}}{{#if data.event.ticketsUrl}}<div class="reply reply-end">{{> reply-lines}}</div>{{/if}}{{/if}}{{/if}}{{/if}}

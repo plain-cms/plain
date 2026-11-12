@@ -1,0 +1,8 @@
+<li class="cast-line entry">
+  <div class="cast-left">{{#if item.discipline}}<p class="entry-role">{{ item.discipline }}</p>{{/if}}{{#if item.dateFormatted}}<p class="entry-role"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>{{/if}}{{#if item.photo}}<a class="entry-photo" href="{{ item.url }}" tabindex="-1" aria-hidden="true"><img src="{{ item.photo }}" alt="" loading="lazy" decoding="async"></a>{{/if}}</div>
+  <div class="cast-right">
+    <h2 class="entry-name"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+    {{#if item.description}}<p class="entry-note">{{ item.description }}</p>
+    {{/if}}
+  </div>
+</li>

@@ -1,13 +1,10 @@
 <section class="page not-found">
   <header class="page-header">
     <p class="eyebrow">404</p>
-    <h1>Not on this résumé.</h1>
+    <h1>{{ strings.notFoundTitle }}</h1>
   </header>
   <div class="prose">
-    <p>The page you followed a link to isn’t here — the address may be old or mistyped. Nothing is broken on your end.</p>
-    <ul>
-      <li><a href="/">Back to the front page</a></li>
-      <li><a href="/experience/">Read the CV</a></li>
-    </ul>
+    <p>{{ strings.notFoundBody }}</p>
+    <p class="actions"><a href="/">{{ strings.goHome }}</a> <a href="/experience/">{{ strings.readTheCv }}</a></p>
   </div>
 </section>

@@ -1,0 +1,11 @@
+<article class="page">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="intro">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.showMeets}}{{#if data.club.meets}}{{> board}}{{else}}{{> board-events}}{{/if}}{{else}}{{> board-events}}{{/if}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.showEvents}}{{> slip}}{{/if}}
+</article>

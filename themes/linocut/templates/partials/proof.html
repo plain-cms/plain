@@ -1,0 +1,8 @@
+<li class="proof">
+      <div class="print">
+        {{#if item.cover}}<img class="print-cut" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+        {{/if}}<h2 class="block"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+        <p class="pencil">{{#if item.client}}<span class="pencil-client">{{ item.client }}</span> {{/if}}<span class="pencil-sign">{{ site.title }} <time class="year" datetime="{{ item.date }}">{{ item.date }}</time></span></p>
+      </div>
+      {{#if item.description}}<p class="proof-note">{{ item.description }}</p>
+      {{/if}}</li>

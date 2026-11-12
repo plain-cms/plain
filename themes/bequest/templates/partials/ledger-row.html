@@ -1,0 +1,8 @@
+<li class="ledger-row">
+  <article>
+    {{#if item.date}}<time class="ledger-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+    {{/if}}<h2 class="ledger-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+    {{#if item.description}}<p class="ledger-desc">{{ item.description }}</p>
+    {{/if}}
+  </article>
+</li>

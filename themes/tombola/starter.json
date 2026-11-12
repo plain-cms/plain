@@ -1,0 +1,12 @@
+{
+  "starter": "tombola",
+  "sampleTitle": "Hallowby Summer Fair",
+  "collections": {},
+  "navigation": [
+    { "label": "Home", "url": "/" },
+    { "label": "Programme", "url": "/programme/" },
+    { "label": "Getting there", "url": "/getting-there/" },
+    { "label": "Join us", "url": "/join/" }
+  ],
+  "sampleContent": "sample/"
+}

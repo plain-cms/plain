@@ -1,0 +1,11 @@
+<li class="tin">
+  <div class="tin-can">
+    <p class="tin-brand" aria-hidden="true">{{ site.title }}</p>
+    <h2 class="tin-band"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+    {{#if item.dateFormatted}}<p class="tin-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+    {{/if}}{{#if item.description}}{{#if items}}<p class="tin-spec">{{ item.description }}</p>
+    {{else}}{{#if page.url}}{{#if page.url.4}}{{else}}<p class="tin-spec">{{ item.description }}</p>
+    {{/if}}{{/if}}{{/if}}{{/if}}{{#if item.priceFrom}}<p class="tin-flash flash"><span>{{ strings.from }}</span> <strong>{{ item.priceFrom }}</strong></p>
+    {{/if}}
+  </div>
+</li>

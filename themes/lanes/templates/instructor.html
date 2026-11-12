@@ -1,0 +1,17 @@
+<article class="instructor">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.discipline}}<p class="discipline">{{ page.discipline }}</p>
+    {{/if}}
+  </header>
+  {{#if page.photo}}<img class="instructor-photo" src="{{ page.photo }}" alt="{{ page.title }}" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<aside class="find-lessons">
+    <h2 class="pool-heading">{{ strings.inThePool }}</h2>
+    <p>{{ strings.inThePoolBody }}</p>
+    {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+    {{/if}}<p><a class="btn" href="/schedule/">{{ strings.seeTimetable }}</a></p>
+  </aside>
+</article>

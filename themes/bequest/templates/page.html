@@ -1,0 +1,46 @@
+{{#if page.hero}}
+<article class="page mission-page">
+  <section class="hero{{#if page.heroImage}} has-photo{{/if}}">
+    <div class="hero-top">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="mission">{{ page.description }}</p>
+      {{/if}}{{#if page.heroImage}}<figure class="hero-photo"><img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async"></figure>
+      {{/if}}
+    </div>
+    {{> cheque}}
+  </section>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if collections.programs}}<section class="home-ledger" aria-labelledby="home-ledger">
+    <div class="ledger-head">
+      <h2 id="home-ledger">{{ strings.programsHeading }}</h2>
+      <a href="/programs/">{{ strings.allPrograms }} →</a>
+    </div>
+    <ul class="ledger">
+      {{#each collections.programs as item}}<li class="ledger-row">
+        <article>
+          <h3 class="ledger-title"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+          {{#if item.description}}<p class="ledger-desc">{{ item.description }}</p>
+          {{/if}}
+        </article>
+      </li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+</article>
+{{else}}
+<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.donateCta}}{{#if data.impact.donateUrl}}{{> cheque}}
+  {{/if}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
+{{/if}}

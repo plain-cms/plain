@@ -1,0 +1,16 @@
+<article class="coach">
+  <header class="poster-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.discipline}}<p class="discipline">{{ page.discipline }}</p>
+    {{/if}}
+  </header>
+  {{#if page.photo}}<img class="coach-photo" src="{{ page.photo }}" alt="{{ page.title }}" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<aside class="on-the-bill">
+    <h2>{{ strings.onTheBill }}</h2>
+    <p>{{ strings.onTheBillBody }}</p>
+    <p><a class="ticket" href="/schedule/">{{ strings.seeSchedule }}</a></p>
+  </aside>
+</article>

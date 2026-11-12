@@ -1,0 +1,586 @@
+/* Bequest — a community foundation's giant presentation cheque on
+   foamboard: marker-black ink, bank green for the security border and
+   printed captions, a pale tint behind written lines. Pay <site title>,
+   the prompt on the amount-in-words line, the donate link as the amount
+   box, a blank signature line; the impact figure on a counterfoil.
+   Restyle by editing tokens, never selectors (cms-spec.md §10.1). */
+
+:root {
+  --font-print: Optima, Candara, "URW Classico", "Noto Sans", "Segoe UI", sans-serif;
+  --font-body: Optima, Candara, "URW Classico", "Noto Sans", "Segoe UI", sans-serif;
+  --font-hand: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", "Courier New", monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-xl: 1.75rem;
+  --text-xxl: clamp(2rem, 1.3rem + 2.2vw, 2.875rem);
+  --text-figure: 4rem;
+  --text-amount: clamp(1.75rem, 8cqi, 3rem);
+  --text-payee: clamp(1.125rem, 3.6cqi, 1.875rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.12;
+  --leading-written: 1.9;
+  --tracking-caps: 0.1em;
+
+  --color-bg: #fbfcfa;
+  --color-face: #ffffff;
+  --color-text: #141714;
+  --color-muted: #525a54;
+  --color-accent: #0e6a3e;
+  --color-tint: #e2f1e7;
+  --color-rule: #c8d4cc;
+  --color-edge: #d5dbd6;
+
+  --page-width: 75rem;
+  --measure: 42rem;
+  --gutter: 1rem;
+  --space-s: 0.5rem;
+  --space-m: 1rem;
+  --space-l: 2rem;
+  --space-xl: 3.5rem;
+  --band: 0.875rem;
+  --frame: 5px;
+  --rule-written: 2px;
+  --focus-ring: 3px;
+  --tap-target: 2.75rem;
+  --tilt: -0.8deg;
+  --edge-depth: 7px;
+  --radius: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0e1310;
+    --color-face: #141b16;
+    --color-text: #eef2ed;
+    --color-muted: #a7b3aa;
+    --color-accent: #5fc890;
+    --color-tint: #173d2b;
+    --color-rule: #2f3d34;
+    --color-edge: #050806;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 var(--gutter);
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  overflow-wrap: break-word;
+}
+
+body > header, body > main, body > footer {
+  max-width: var(--page-width);
+  margin-inline: auto;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-print);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+/* Display type and narrow boxes break long words at a syllable. */
+h1, h2, h3, h4, .mission, .stub-words, .caption, .site-title {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 5 4;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+a:hover { text-decoration-thickness: 2px; }
+a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
+
+:focus-visible {
+  outline: var(--focus-ring) solid var(--color-text);
+  outline-offset: 3px;
+}
+
+img { max-width: 100%; height: auto; }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-s);
+  z-index: 2;
+  padding: var(--space-s) var(--space-m);
+  background: var(--color-face);
+  color: var(--color-text);
+  border: 2px solid var(--color-text);
+}
+.skip-link:focus { left: var(--gutter); }
+
+/* Printed captions, as on the cheque. */
+.caption, .eyebrow {
+  font-family: var(--font-print);
+  font-size: var(--text-s);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+/* Masthead & colophon ---------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-s) var(--space-l);
+  padding: var(--space-m) 0;
+  border-bottom: 2px solid var(--color-text);
+}
+
+.site-title {
+  font-family: var(--font-print);
+  font-size: var(--text-m);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  min-width: 0;
+}
+
+.masthead ul {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s) var(--space-m);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  font-family: var(--font-print);
+  font-size: var(--text-s);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+  text-decoration: none;
+  border-bottom: var(--focus-ring) solid transparent;
+}
+.masthead nav a:hover { border-bottom-color: var(--color-rule); }
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+
+/* Donate stays last: drawn as a small amount box. */
+.masthead li:last-child a {
+  padding: 0 0.85rem;
+  border: var(--focus-ring) solid var(--color-text);
+  font-family: var(--font-hand);
+  letter-spacing: 0.04em;
+}
+.masthead li:last-child a:hover,
+.masthead li:last-child a[aria-current="page"] { background: var(--color-tint); }
+.masthead li:last-child a[aria-current="page"] { text-decoration: underline var(--focus-ring) var(--color-accent); text-underline-offset: 0.3em; }
+
+.colophon {
+  margin-top: var(--space-xl);
+  padding-bottom: var(--space-xl);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon::before {
+  content: "";
+  display: block;
+  height: var(--band);
+  margin-bottom: var(--space-l);
+  background: repeating-linear-gradient(-45deg, var(--color-accent) 0 2px, transparent 2px 7px);
+}
+.colophon p { margin: 0 0 var(--space-s); max-width: var(--measure); }
+.colophon-name {
+  font-family: var(--font-print);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+/* The cheque -------------------------------------------------------------- */
+
+.cheque-hold {
+  container: hold / inline-size;
+  margin: 0 0 var(--space-l);
+  padding: 0 var(--edge-depth) var(--edge-depth) 0;
+}
+
+.cheque {
+  display: grid;
+  padding: var(--band);
+  border-radius: var(--radius);
+  background: repeating-linear-gradient(-45deg, var(--color-accent) 0 2px, var(--color-face) 2px 7px);
+  box-shadow: var(--edge-depth) var(--edge-depth) 0 var(--color-edge);
+}
+
+.stub, .cheque-face {
+  min-width: 0;
+  background: var(--color-face);
+  border: 2px solid var(--color-accent);
+}
+
+.stub {
+  container: stub / inline-size;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-s);
+  margin: 0;
+  padding: var(--space-m);
+  border-bottom: 3px dotted var(--color-accent);
+}
+.stub + .cheque-face { border-top: 0; }
+
+.stub-number {
+  font-family: var(--font-hand);
+  font-size: min(var(--text-figure), 16cqi);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
+}
+
+.cheque-face {
+  container: face / inline-size;
+  /* A faint guilloche, the engraved rosette printed behind a bank cheque. */
+  background:
+    repeating-radial-gradient(circle at 0 100%, transparent 0 10px, color-mix(in srgb, var(--color-accent) 11%, transparent) 10px 11px),
+    repeating-radial-gradient(circle at 100% 0, transparent 0 10px, color-mix(in srgb, var(--color-accent) 11%, transparent) 10px 11px),
+    var(--color-face);
+}
+/* The code line along the foot of a cheque: serial, sort code, account. */
+.cheque-face::after {
+  content: "\2448 001214\2448    40\2449 12\2449 08\2446    31057729\2448 " / "";
+  display: block;
+  padding: 0 var(--space-m) var(--space-s);
+  font-family: var(--font-hand);
+  font-size: var(--text-s);
+  letter-spacing: 0.06em;
+  white-space: pre;
+  overflow: hidden;
+  color: var(--color-muted);
+}
+
+.cheque-body {
+  display: grid;
+  gap: var(--space-m);
+  padding: var(--space-m);
+}
+.cheque-body p { margin: 0; }
+
+/* A written line: pale tint, a printed rule under every line of text. */
+.written, .stub-words {
+  display: block;
+  padding: 0 0.4em;
+  font-family: var(--font-hand);
+  line-height: var(--leading-written);
+  color: var(--color-text);
+  background: linear-gradient(transparent calc(100% - var(--rule-written)), var(--color-accent) 0) 0 0 / 100% calc(var(--leading-written) * 1em) var(--color-tint);
+}
+.stub-words { font-size: var(--text-s); }
+
+.cheque-top {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: var(--space-s) var(--space-m);
+}
+.cheque-date { display: flex; align-items: flex-end; gap: var(--space-s); }
+.cheque-date .written { width: 8rem; height: calc(var(--leading-written) * 1em); }
+
+.cheque-pay { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0 var(--space-m); }
+.cheque-pay .caption { flex: none; line-height: var(--leading-written); }
+.cheque-pay .written { flex: 1 1 12rem; min-width: 0; -webkit-hyphens: auto; hyphens: auto; font-size: var(--text-payee); font-weight: 700; }
+
+.cheque-words { font-size: var(--text-m); }
+/* No prompt given: the line is left blank, waiting to be written in. */
+.cheque-words:empty { min-height: calc(var(--leading-written) * 2em); }
+
+.cheque-amount {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 5.5rem;
+  padding: var(--space-s) var(--space-m);
+  border: var(--frame) solid var(--color-text);
+  background: var(--color-face);
+  color: var(--color-text);
+  font-family: var(--font-hand);
+  font-size: var(--text-amount);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: none;
+  -webkit-hyphens: manual;
+  hyphens: manual;
+  transition: background-color 0.12s;
+}
+.cheque-amount:hover { background: var(--color-tint); }
+
+.cheque-sign { display: flex; flex-direction: column; align-items: flex-end; gap: 0.25rem; padding-top: var(--space-m); }
+.sign-line { display: block; width: 100%; border-bottom: 2px solid var(--color-text); }
+
+@container hold (min-width: 50rem) {
+  .cheque:has(> .stub) { grid-template-columns: minmax(15rem, 30%) minmax(0, 1fr); }
+  .stub { padding: var(--space-l) var(--space-m) var(--space-l) var(--space-l); border-bottom: 2px solid var(--color-accent); border-right: 3px dotted var(--color-accent); }
+  .stub + .cheque-face { border-top: 2px solid var(--color-accent); border-left: 0; }
+}
+
+@container face (min-width: 32rem) {
+  .cheque-body {
+    grid-template-columns: minmax(0, 1fr) minmax(11rem, 38%);
+    grid-template-areas: "top top" "pay pay" "words amount" "note sign";
+    gap: var(--space-m) var(--space-l);
+    padding: var(--space-m) var(--space-l) var(--space-l);
+  }
+  .cheque-face::after { padding: 0 var(--space-l) var(--space-m); letter-spacing: 0.18em; }
+  .cheque-top { grid-area: top; }
+  .cheque-pay { grid-area: pay; }
+  .cheque-words { grid-area: words; align-self: start; font-size: var(--text-l); }
+  .cheque-amount { grid-area: amount; min-height: 6.5rem; }
+  .cheque-sign { grid-area: sign; }
+}
+
+/* Mission page ------------------------------------------------------------ */
+
+.hero { padding: var(--space-l) 0 0; }
+
+.hero-top {
+  display: grid;
+  gap: var(--space-m) var(--space-xl);
+  margin-bottom: var(--space-l);
+}
+.hero h1 { margin: 0; font-size: var(--text-xxl); max-width: 24ch; }
+.mission { margin: 0; font-size: var(--text-l); line-height: 1.45; max-width: 34rem; }
+.hero-photo { margin: 0; }
+.hero-photo img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border: 2px solid var(--color-text); }
+
+@media (min-width: 60rem) {
+  .hero-top { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; }
+  .hero h1 { max-width: 26ch; }
+  .mission { padding-top: 0.35em; }
+  .hero.has-photo .hero-top { grid-template-areas: "title photo" "mission photo"; align-items: start; }
+  .hero.has-photo h1 { grid-area: title; align-self: end; }
+  .hero.has-photo .mission { grid-area: mission; }
+  .hero-photo { grid-area: photo; }
+  .hero .cheque-hold { transform: rotate(var(--tilt)); }
+}
+
+/* On the mission page each section heading hangs in its own column. */
+@media (min-width: 60rem) {
+  .mission-page .prose { max-width: none; padding-left: 40%; }
+  .mission-page .prose > * { max-width: var(--measure); }
+  .mission-page .prose > h2 { float: left; clear: both; width: 60%; margin: calc(var(--space-xl) - 1em) 0 0 -66.667%; padding: 0.3em var(--space-l) 0 0; }
+  .mission-page .prose > h2:first-child, .mission-page .prose > h2:first-child + * { margin-top: 0; }
+  .mission-page .prose > h2 + * { margin-top: var(--space-xl); }
+}
+
+.home-ledger { margin-top: var(--space-xl); }
+.ledger-head {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-s) var(--space-l);
+  margin-bottom: var(--space-m);
+}
+.ledger-head h2 { margin: 0; font-size: var(--text-xl); }
+.ledger-head a { font-weight: 700; }
+
+/* Lists --------------------------------------------------------------------- */
+
+.ledger { margin: 0; padding: 0; list-style: none; border-top: 2px solid var(--color-text); }
+.ledger-row { border-bottom: 1px solid var(--color-rule); }
+.ledger-row article { display: grid; gap: 0.25rem var(--space-l); padding: var(--space-m) 0; }
+.ledger-title { margin: 0; font-size: var(--text-l); }
+.ledger-title a { color: var(--color-text); text-decoration: none; }
+.ledger-title a:hover { color: var(--color-accent); text-decoration: underline; }
+.ledger-desc { margin: 0; color: var(--color-muted); }
+.ledger-date { font-family: var(--font-hand); font-size: var(--text-s); color: var(--color-muted); }
+
+@media (min-width: 48rem) {
+  .ledger-row article { grid-template-columns: 40% minmax(0, 1fr); column-gap: 0; align-items: baseline; }
+  .ledger-date, .ledger-title { grid-column: 1; padding-right: var(--space-l); }
+  .ledger-desc { grid-column: 2; grid-row: 1 / span 2; }
+}
+
+.empty { color: var(--color-muted); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-s) var(--space-l);
+  margin-top: var(--space-l);
+  font-family: var(--font-hand);
+  font-size: var(--text-s);
+}
+.pagination a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+
+/* Page heads & pages ------------------------------------------------------- */
+
+.page-header { padding: var(--space-xl) 0 var(--space-l); }
+.page-header h1 { margin: 0; font-size: var(--text-xxl); max-width: 30ch; }
+.eyebrow { display: block; margin: 0 0 var(--space-s); }
+.lede { margin: var(--space-m) 0 0; max-width: var(--measure); font-size: var(--text-l); line-height: 1.45; color: var(--color-muted); }
+
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: var(--space-m) 0 0; padding: 0; list-style: none; }
+.tags a {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border: 2px solid var(--color-accent);
+  font-family: var(--font-hand);
+  font-size: var(--text-s);
+  text-decoration: none;
+}
+.tags a:hover { background: var(--color-tint); }
+
+.cover { display: block; width: 100%; max-height: 30rem; object-fit: cover; margin-bottom: var(--space-l); border: 2px solid var(--color-text); }
+
+.get-involved {
+  max-width: 56rem;
+  margin-top: var(--space-xl);
+  padding-top: var(--space-l);
+  border-top: 2px solid var(--color-text);
+}
+.get-involved h2 { margin: 0 0 var(--space-s); font-size: var(--text-xl); }
+.volunteer { max-width: var(--measure); margin: 0 0 var(--space-l); }
+
+.back-link { margin-top: var(--space-l); font-weight: 700; }
+
+.page-links { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-m) var(--space-l); margin: 0; padding: 0; list-style: none; font-weight: 700; }
+.donate-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  padding: 0 var(--space-m);
+  border: var(--frame) solid var(--color-text);
+  color: var(--color-text);
+  font-family: var(--font-hand);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.donate-link:hover { background: var(--color-tint); }
+
+/* Prose -------------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose h2 {
+  margin: var(--space-xl) 0 var(--space-s);
+  font-size: var(--text-m);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.prose h3 { margin: var(--space-l) 0 var(--space-s); font-size: var(--text-l); }
+.prose h4 { margin: var(--space-l) 0 var(--space-s); font-size: var(--text-m); }
+.prose li + li { margin-top: 0.25rem; }
+.prose strong { font-weight: 700; }
+
+.prose blockquote {
+  margin: var(--space-l) 0;
+  padding: 0 0 0 var(--space-m);
+  border-left: 4px solid var(--color-accent);
+  font-style: italic;
+}
+.prose blockquote p { margin: 0 0 var(--space-s); }
+
+.prose code { font-family: var(--font-hand); font-size: 0.9em; padding: 0.05em 0.3em; background: var(--color-tint); }
+.prose pre { overflow-x: auto; padding: var(--space-m); background: var(--color-tint); line-height: 1.5; }
+.prose pre code { padding: 0; background: none; }
+
+.prose hr {
+  height: var(--band);
+  margin: var(--space-xl) 0;
+  border: 0;
+  background: repeating-linear-gradient(-45deg, var(--color-accent) 0 2px, transparent 2px 7px);
+}
+
+/* Tables are where the sums go: the figure column is written large. */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: var(--space-l) 0;
+  border-collapse: collapse;
+}
+.prose th, .prose td { padding: var(--space-s) var(--space-m) var(--space-s) 0; text-align: left; vertical-align: baseline; }
+.prose th {
+  font-family: var(--font-print);
+  font-size: var(--text-s);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  border-bottom: 2px solid var(--color-text);
+}
+.prose td { border-bottom: 1px solid var(--color-rule); }
+/* Later columns hold the words; a long word breaks rather than widen the table. */
+.prose :is(th, td) + :is(th, td) { min-width: 6rem; overflow-wrap: anywhere; }
+.prose :is(th, td):first-child { white-space: nowrap; padding-right: var(--space-l); }
+.prose td:first-child { font-family: var(--font-hand); font-size: var(--text-l); font-weight: 700; }
+
+/* On a phone each row is a stub entry: the figure written across the top,
+   the words in columns under it. */
+@media (max-width: 30rem) {
+  .prose :is(thead, tbody) { display: block; }
+  .prose tr {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    column-gap: var(--space-m);
+    padding: var(--space-s) 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .prose thead tr { border-bottom: 2px solid var(--color-text); }
+  .prose :is(th, td) { min-width: 0; padding: 0.15rem 0; border: 0; }
+  .prose :is(th, td) + :is(th, td) { min-width: 0; }
+  .prose :is(th, td):first-child,
+  .prose :is(th, td):nth-child(2):last-child { grid-column: 1 / -1; padding-right: 0; }
+  .prose :is(th, td):first-child { white-space: normal; overflow-wrap: anywhere; }
+}
+
+/* Motion & print ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-face: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-tint: #ffffff;
+    --color-rule: #999999;
+    --color-edge: #ffffff;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .back-link, .colophon::before { display: none; }
+  .hero .cheque-hold { transform: none; }
+  .cheque { box-shadow: none; background: var(--color-face); border: 2px solid var(--color-text); }
+  .cheque, .ledger-row, .prose table { break-inside: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

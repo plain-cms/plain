@@ -1,0 +1,23 @@
+<section class="listing listing-news">
+  <header class="page-head">
+    {{#if tag}}<p class="kicker">{{ strings.tagged }}</p>
+    <h1>{{ tag }}</h1>
+    <p class="back"><a href="/blog/">{{ strings.allNews }}</a></p>{{else}}<h1>{{ page.title }}</h1>{{/if}}
+  </header>
+  {{#if items}}<ul class="panel rows" role="list">
+    {{#each items as item}}<li class="row row-news{{#if item.cover}} has-cover{{/if}}">
+      <p class="row-when">{{#if item.dateFormatted}}<time datetime="{{ item.date }}">{{ item.dateFormatted }}</time>{{/if}}</p>
+      <div class="row-what">
+        <h2 class="row-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+        {{#if item.description}}<p class="row-desc">{{ item.description }}</p>{{/if}}
+      </div>
+      {{#if item.cover}}<img class="row-cover" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+    </li>
+    {{/each}}
+  </ul>{{else}}<p class="empty">{{ strings.nothingHere }}</p>{{/if}}
+  {{#if pagination.multiple}}<nav class="pager" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>{{/if}}
+</section>

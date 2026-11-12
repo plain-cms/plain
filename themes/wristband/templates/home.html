@@ -1,0 +1,14 @@
+<div class="home{{#if page.showPeople}}{{#if data.event.people}} home-split{{/if}}{{/if}}{{#if page.showProgramme}}{{#if data.event.programme}} home-split{{/if}}{{/if}}">
+  <div class="home-main">
+    <header class="invite">
+      <h1 class="invite-line">{{ page.title }}</h1>
+      {{> facts}}
+      {{> reply}}
+    </header>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>{{/if}}
+  </div>
+  {{#if page.showProgramme}}{{#if data.event.programme}}{{> programme}}{{/if}}{{/if}}
+  {{#if page.showPeople}}{{#if data.event.people}}{{> people}}{{/if}}{{/if}}
+</div>

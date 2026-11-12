@@ -1,0 +1,14 @@
+<aside class="bottle" aria-labelledby="label-head">
+  <div class="label{{#if data.practice.emergencyPhone}} has-sticker{{/if}}">
+    <h2 class="label-head" id="label-head">{{ strings.appointmentHeading }}</h2>
+    {{#if data.practice.phone}}<dl class="label-row"><dt>{{ strings.callUs }}</dt><dd><a class="tel" href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></dd></dl>
+    {{else}}{{#if data.practice.email}}<dl class="label-row"><dt>{{ strings.writeToUs }}</dt><dd><a class="mail" href="mailto:{{ data.practice.email }}">{{ data.practice.email }}</a></dd></dl>
+    {{/if}}{{/if}}{{#if data.practice.hours}}<dl class="label-row"><dt>{{ strings.openingHours }}</dt><dd><ul class="hours">
+      {{#each data.practice.hours as slot}}<li><span class="days">{{ slot.days }}</span> <span class="time">{{ slot.time }}</span></li>
+      {{/each}}</ul></dd></dl>
+    {{/if}}<p class="label-book">{{#if data.practice.bookingUrl}}<a href="{{ data.practice.bookingUrl }}">{{ strings.bookAppointment }}</a>{{else}}<a href="/contact/">{{ strings.bookAppointment }}</a>{{/if}}</p>
+    <p class="label-pharmacy"><strong>{{ site.title }}</strong>{{#if data.practice.address}} <span class="label-address">{{ data.practice.address }}</span>{{/if}}</p>
+  </div>
+  {{#if data.practice.emergencyPhone}}{{> sticker}}
+  {{/if}}
+</aside>

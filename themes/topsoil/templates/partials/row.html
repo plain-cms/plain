@@ -1,0 +1,7 @@
+<li class="row">
+  <h2 class="row-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.description}}<p class="row-text">{{ item.description }}</p>
+  {{/if}}{{#if item.priceFrom}}<p class="price"><span>{{ strings.from }}</span> <b>{{ item.priceFrom }}</b></p>
+  {{else}}{{#if item.dateFormatted}}<p class="price"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  {{/if}}{{/if}}
+</li>

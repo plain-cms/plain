@@ -1,0 +1,10 @@
+<aside class="call" aria-labelledby="call-heading">
+  <div>
+    <h2 id="call-heading">{{ strings.callHeading }}</h2>
+    {{#if data.business.phone}}<p class="call-main"><a href="tel:{{ data.business.phone }}">{{ data.business.phone }}</a></p>
+    {{else}}{{#if data.business.email}}<p class="call-main call-word"><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></p>
+    {{else}}<p class="call-main call-word"><a href="/contact/">{{ strings.contactLink }}</a></p>
+    {{/if}}{{/if}}
+  </div>
+  {{#if data.business.hours}}{{> details}}{{else}}{{#if data.business.area}}{{> details}}{{else}}{{#if data.business.phone}}{{#if data.business.email}}{{> details}}{{/if}}{{/if}}{{/if}}{{/if}}
+</aside>

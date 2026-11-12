@@ -1,0 +1,13 @@
+{
+  "phone": "01632-960318",
+  "emergencyPhone": "",
+  "emergencyNote": "",
+  "hours": [
+    { "days": "Mon–Thu", "time": "9 am – 5 pm" },
+    { "days": "Fri", "time": "9 am – 1 pm" },
+    { "days": "Sat & Sun", "time": "Closed" }
+  ],
+  "address": "3 Calder Row, Ollerby",
+  "bookingUrl": "",
+  "email": "hello@calderrowhearing.example"
+}

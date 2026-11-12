@@ -1,0 +1,18 @@
+<section class="list">
+  <header class="page-head">
+    <h1>{{#if tag}}{{ strings.tagged }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}<div class="sheet">
+    <ul class="entries">
+      {{#each items as item}}<li class="entry">
+        <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+        <p class="pencil"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+        {{#if item.description}}<p>{{ item.description }}</p>{{/if}}
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{> pagination}}
+</section>

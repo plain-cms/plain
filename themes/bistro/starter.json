@@ -1,5 +1,6 @@
 {
   "starter": "bistro",
+  "sampleTitle": "The Print Works",
   "collections": {
     "menu": {
       "path": "content/menu",
@@ -14,7 +15,7 @@
       "fields": [
         { "name": "title", "type": "text", "required": true },
         { "name": "price", "type": "text" },
-        { "name": "section", "type": "select", "options": ["Starters", "Mains", "Desserts", "Drinks"] },
+        { "name": "section", "type": "select", "options": ["Starters", "Mains", "Desserts", "Drinks", "Breakfast", "Bread", "Pastries", "Sides", "Hot drinks", "Snacks"] },
         { "name": "description", "type": "text" },
         { "name": "draft", "type": "boolean", "default": false }
       ]

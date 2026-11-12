@@ -1,0 +1,8 @@
+{{#if collections.projects}}<nav class="register" aria-labelledby="register-title">
+      <h2 id="register-title">{{ strings.projectIndex }}</h2>
+      <ol>
+        {{#each collections.projects as item}}<li><a href="{{ item.url }}"><span>{{ item.title }}</span> <time class="year" datetime="{{ item.date }}">{{ item.date }}</time></a></li>
+        {{/each}}
+      </ol>
+      <p><a href="/work/">{{ strings.allWork }}</a></p>
+    </nav>{{/if}}

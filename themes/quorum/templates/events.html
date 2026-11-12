@@ -1,0 +1,15 @@
+<section class="notice notice-list">
+  <header class="notice-head">
+    {{> notice-head}}
+    <div class="notice-sub"><h1>{{ page.title }}</h1></div>
+  </header>
+  {{#if items}}<ul class="rows" role="list">
+    {{#each items as item}}{{> event-row}}{{/each}}
+  </ul>{{else}}<p class="notice-empty">{{ strings.eventsEmpty }}</p>{{/if}}
+  {{> notice-foot}}
+</section>
+{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+  {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.eventsEarlier }}</a>{{/if}}
+  <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+  {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.eventsLater }}</a>{{/if}}
+</nav>{{/if}}

@@ -1,0 +1,11 @@
+{
+  "phone": "01632 960418",
+  "email": "shop@tappendens.example",
+  "address": "Tappenden's Toys & Models, 9 Butter Row, Ludbrook, Shropshire SY8 4DN",
+  "hours": [
+    { "days": "Tuesday to Friday", "time": "9:30 to 17:30" },
+    { "days": "Saturday", "time": "9:00 to 17:00" },
+    { "days": "Sunday and Monday", "time": "Closed" }
+  ],
+  "orderNote": "Ring or e-mail and we will put anything on the shelves aside for a week under your name, or order in a kit we do not stock with the Thursday delivery. We also post within the UK, from £3.95 a parcel."
+}

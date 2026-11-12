@@ -1,0 +1,6 @@
+<li class="tile" data-status="{{ item.status }}">
+  <h2 class="tile-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  <div class="dip"><div class="glaze">{{#if item.price}}<p class="tile-price"><span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}</p>{{/if}}</div></div>
+  {{#if item.description}}<p class="tile-desc">{{ item.description }}</p>{{/if}}
+  <p class="tile-code code"><span class="cat">{{ item.category }}</span>{{#if item.status}}<span class="status"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ item.status }}</span></span>{{/if}}</p>
+</li>

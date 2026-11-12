@@ -1,0 +1,29 @@
+<section class="run">
+  <header class="leaf-head">
+    <h1 class="title ink" data-title="{{#if tag}}{{ strings.taggedHeading }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}"><span>{{#if tag}}{{ strings.taggedHeading }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</span></h1>
+  </header>
+  {{#if items}}
+  <ol class="lines" role="list">
+    {{#each items as item}}<li class="line">
+      <h2 class="line-title"><a class="ink" href="{{ item.url }}" data-title="{{ item.title }}"><span>{{ item.title }}</span></a></h2>
+      <p class="line-date"><time class="stamp" datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{#if item.description}}<p class="line-desc">{{ item.description }}</p>
+      {{/if}}{{#if item.tagLinks}}<ul class="tags" role="list" aria-label="{{ strings.tagsLabel }}">
+        {{#each item.tagLinks as tag}}<li><a class="tag" href="{{ tag.url }}">{{ tag.name }}</a></li>
+        {{/each}}
+      </ul>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}
+  <nav class="pager" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span class="pager-count">{{ strings.page }} {{ pagination.page }} {{ strings.pageOf }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

@@ -1,0 +1,20 @@
+<article class="home">
+  <header class="home-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>{{/if}}
+    <p class="more"><a href="/products/">{{ strings.allProducts }}</a></p>
+    {{#if data.shop.hours}}<div class="key shop-hours">
+      <p class="key-label">{{ strings.hours }}</p>
+      <dl>
+        {{#each data.shop.hours as row}}<div><dt>{{ row.days }}</dt><dd>{{ row.time }}</dd></div>
+        {{/each}}
+      </dl>
+      {{#if data.shop.address}}<p class="key-label">{{ strings.address }}</p>
+      <address>{{ data.shop.address }}</address>{{/if}}
+    </div>{{/if}}
+  </header>
+  <ul class="sprue" role="list" aria-label="{{ strings.featuredLabel }}">{{#each collections.products as item}}{{#if item.featured}}{{> part}}{{/if}}{{/each}}</ul>
+  {{#if page.content}}<div class="prose steps">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

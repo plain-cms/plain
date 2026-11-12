@@ -10,7 +10,7 @@ separately, to the same exhausted person, on different evenings.
 
 Reading Together does both at one table. Groups of three learners share a
 tutor and work from the documents their week actually contains: school
-letters, tenancy agreements, payslips, the citizenship handbook. Vocabulary
+letters, leases, pay stubs, the citizenship handbook. Vocabulary
 and decoding travel together, and the table of three means nobody performs
 alone but everybody reads aloud.
 
@@ -23,5 +23,5 @@ leaflet.
 tracks. The fastest-growing part of the program is the Saturday table for
 shift workers.
 
-**What it costs us:** £6 per learner-hour — the extra over one-to-one is
+**What it costs us:** $6 per learner-hour — the extra over one-to-one is
 interpreted induction sessions and specialist tutor training.

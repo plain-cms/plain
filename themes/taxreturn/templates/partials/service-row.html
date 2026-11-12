@@ -1,0 +1,7 @@
+<li class="box">
+        <div class="box-what">
+          <p class="box-caption"><a href="{{ item.url }}">{{ item.title }}</a></p>
+          {{#if item.description}}<p class="box-note">{{ item.description }}</p>{{/if}}
+        </div>
+        {{#if item.fee}}<p class="box-entry"><span class="visually-hidden">{{ strings.feeLabel }}</span> <span class="entry">{{ item.fee }}</span></p>{{/if}}
+      </li>

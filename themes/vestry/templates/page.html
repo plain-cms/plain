@@ -1,0 +1,28 @@
+<article class="page{{#if page.showMeets}}{{#if data.club.meets}} has-board{{/if}}{{/if}}">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="intro">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.showMeets}}{{#if data.club.meets}}{{> meets}}{{/if}}{{/if}}
+  {{#if page.content}}<div class="prose page-text">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.showEvents}}{{#if collections.events}}<section class="block block-events">
+    <div class="block-head"><h2>{{ strings.eventsHeading }}</h2> <a href="/events/">{{ strings.eventsLink }}</a></div>
+    <ul class="evs" role="list">
+      {{#each collections.events as item}}{{> event-row}}{{/each}}
+    </ul>
+  </section>{{/if}}{{/if}}
+  {{#if page.showPeople}}{{#if collections.people}}<section class="block block-people">
+    <div class="block-head"><h2>{{ strings.peopleHeading }}</h2></div>
+    <ul class="people" role="list">
+      {{#each collections.people as person}}<li class="person">
+        {{#if person.role}}<p class="person-role">{{ person.role }}</p>
+        {{/if}}<p class="person-name">{{ person.title }}</p>
+        {{#if person.phone}}<p class="person-contact"><a href="tel:{{ person.phone }}">{{ person.phone }}</a>{{#if person.email}} <a href="mailto:{{ person.email }}">{{ person.email }}</a>{{/if}}</p>
+        {{else}}{{#if person.email}}<p class="person-contact"><a href="mailto:{{ person.email }}">{{ person.email }}</a></p>
+        {{/if}}{{/if}}</li>
+      {{/each}}
+    </ul>
+  </section>{{/if}}{{/if}}
+</article>

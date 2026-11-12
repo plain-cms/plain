@@ -1,0 +1,565 @@
+/* Back Issue — a small-press zine theme.
+   The object is the stencil-duplicated zine page: uncoated stock, two spot
+   inks laid down in separate passes and never quite in register. Every
+   title is printed twice: deep blue type over a fluorescent-pink copy of
+   itself (the data-title pseudo-element) knocked a few pixels off, the
+   overlap multiplying to violet. Pink is used only as flood blocks and as
+   that off-register copy. All design decisions are tokens below. */
+
+:root {
+  /* Type: poster condensed capitals for titles, a typewriter mono for the rest */
+  --font-poster: "DIN Condensed", "Bahnschrift Condensed", "Avenir Next Condensed", "Roboto Condensed", "Arial Narrow", "Liberation Sans Narrow", Impact, sans-serif-condensed, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, "Cascadia Mono", Consolas, "Liberation Mono", "DejaVu Sans Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-s: 0.875rem;
+  --text-m: 1rem;
+  --text-l: clamp(1.75rem, 1.2rem + 2.2vw, 2.75rem);
+  --text-xl: clamp(2.5rem, 1.6rem + 4vw, 5rem);
+  --text-cover: clamp(3.5rem, 0.5rem + 17vw, 11rem);
+  --text-mast: clamp(1.75rem, 1.3rem + 1.6vw, 2.5rem);
+  --leading-body: 1.7;
+  --leading-poster: 0.95;
+  --tracking-mono: 0.08em;
+
+  /* Colour: natural uncoated stock, deep spot blue, fluorescent pink */
+  --color-bg: #f3f1ec;
+  --color-text: #1f39a6;
+  --color-muted: #4c5aa0;
+  --color-accent: #f03d9c;
+  --color-flood: #f03d9c;
+  --color-on-flood: #1a0b5c;
+  --color-code-bg: #e5e5ee;
+  --ink-blend: multiply;
+  --cover-blend: multiply;
+
+  /* The second pass: how far the pink lands from the blue */
+  --misreg-x: -3px;
+  --misreg-y: 3px;
+
+  /* Layout */
+  --measure: 66ch;
+  --page-width: 76rem;
+  --gutter: clamp(1rem, 4vw, 3rem);
+  --date-col: 11.5rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --rule: 2px;
+  --rule-thin: 1px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Pale inks on black stock: the pink thins to magenta where it floods,
+       and the two passes add light where they cross */
+    --color-bg: #111113;
+    --color-text: #b4c0ff;
+    --color-muted: #8e98cc;
+    --color-accent: #ff5cb4;
+    --color-flood: #8c1a5c;
+    --color-on-flood: #fde8f4;
+    --color-code-bg: #1d1e2b;
+    --ink-blend: screen;
+    --cover-blend: normal;
+  }
+}
+
+/* Base -------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+::selection { background: var(--color-flood); color: var(--color-on-flood); }
+
+a {
+  color: var(--color-text);
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 0.14em;
+  text-underline-offset: 0.2em;
+}
+a:hover { background: var(--color-flood); color: var(--color-on-flood); text-decoration-color: currentColor; }
+
+:focus-visible {
+  outline: 3px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg);
+}
+.skip-link:focus { left: var(--space-2); }
+
+.masthead, main, .colophon {
+  max-width: var(--page-width);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The two-pass title. The element carries a copy of its own text; the copy
+   is printed first, in pink, a few pixels out; the blue span goes over it
+   and multiplies, so where the inks cross they read violet. The copy is
+   decoration only (alt text ""), and nothing is lost where it is absent.
+   The copy lays out in the same box with the same type as the real text,
+   so it wraps and hyphenates the same way. */
+.ink { position: relative; isolation: isolate; }
+.ink::before {
+  content: attr(data-title);
+  content: attr(data-title) / "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  color: var(--color-accent);
+  padding: inherit;
+  transform: translate(var(--misreg-x), var(--misreg-y));
+  pointer-events: none;
+}
+.ink > span { mix-blend-mode: var(--ink-blend); }
+
+.title, .line-title, .site-title, .drop-title, .prose :is(h1, h2, h3) {
+  font-family: var(--font-poster);
+  font-weight: 700;
+  text-transform: uppercase;
+  line-height: var(--leading-poster);
+  letter-spacing: 0.01em;
+  hyphens: manual;
+  overflow-wrap: break-word;
+}
+
+/* Mono labels: menu, dates, tags, pager */
+.menu, .stamp, .tag, .pager, .back, .exits, .drop-label, .drop-button, .colophon-name, .prose th {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-mono);
+  line-height: 1.4;
+}
+
+/* Rules are printed twice too: a blue line and its pink pass below it */
+.masthead, .line, .colophon {
+  background:
+    linear-gradient(var(--color-text), var(--color-text)) 0 0 / 100% var(--rule) no-repeat,
+    linear-gradient(var(--color-accent), var(--color-accent)) var(--misreg-x) var(--misreg-y) / 100% var(--rule) no-repeat;
+}
+.masthead, .colophon { background-origin: content-box; }
+.masthead { background-position: 0 calc(100% - var(--misreg-y)), var(--misreg-x) 100%; padding-bottom: var(--space-3); }
+.colophon { background-position: 0 calc(-1 * var(--space-4)), var(--misreg-x) calc(var(--misreg-y) - var(--space-4)); }
+
+/* Masthead ---------------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding-top: var(--space-3);
+}
+
+.site-title {
+  display: inline-block;
+  max-width: 100%;
+  font-size: var(--text-mast);
+  text-decoration: none;
+  padding-top: 0.12em;
+}
+.site-title:hover { background: none; color: var(--color-text); }
+
+.menu ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.menu a {
+  display: block;
+  padding: var(--space-1) var(--space-2);
+  text-decoration: none;
+}
+/* The current page sits on a flood block, with a blue rule under it on the
+   paper: the rule is the cue that never depends on the pink. */
+.menu a[aria-current="page"] {
+  background: var(--color-flood);
+  color: var(--color-on-flood);
+  box-shadow: 0 var(--rule) 0 var(--color-text);
+}
+
+/* The cover: the home page gets the zine's front page. The title runs as
+   big as the sheet allows over a pink flood block bled off the left edge. */
+.sheet-cover .masthead {
+  display: grid;
+  justify-content: stretch;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+  padding-bottom: var(--space-4);
+}
+.sheet-cover .menu { order: -1; }
+.sheet-cover .site-title {
+  justify-self: start;
+  font-size: var(--text-cover);
+  line-height: 0.92;
+  padding-top: 0.08em;
+  margin-bottom: -0.1em;
+  letter-spacing: 0;
+}
+.sheet-cover .site-title::before { transform: translate(calc(var(--misreg-x) * 2), calc(var(--misreg-y) * 1.5)); }
+.sheet-cover .site-title::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 34%;
+  bottom: 24%;
+  left: calc(-1 * var(--gutter) - max(0px, (100vw - var(--page-width)) / 2));
+  width: calc(var(--gutter) + 58%);
+  background: var(--color-flood);
+  transform: rotate(-0.6deg);
+}
+.strapline {
+  margin: 0;
+  max-width: 44ch;
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+
+/* Headings of pages --------------------------------------------------------
+   A flood block crosses the start of the first line, a little skew. */
+
+.leaf-head { margin: var(--space-5) 0 var(--space-4); }
+
+.title {
+  font-size: var(--text-xl);
+  margin: 0;
+  max-width: 18em;
+  text-wrap: balance;
+}
+.title::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0.28em;
+  left: -0.18em;
+  width: min(3.4em, 70%);
+  height: 0.5em;
+  background: var(--color-flood);
+  transform: rotate(-1.2deg);
+}
+
+.standfirst {
+  margin: var(--space-3) 0 0;
+  max-width: 52ch;
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+
+.meta { margin: 0 0 var(--space-3); }
+
+.stamp {
+  display: inline-block;
+  padding: 0.2em 0.6em;
+  background: var(--color-flood);
+  color: var(--color-on-flood);
+  white-space: nowrap;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.tag {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.15em 0.55em;
+  border: var(--rule-thin) solid currentColor;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+/* The home page: headline and standfirst beside the body on a wide sheet */
+.sheet-cover .leaf { margin-top: var(--space-4); }
+.sheet-cover .leaf-head { margin-top: 0; }
+@media (min-width: 60rem) {
+  .sheet-cover .leaf {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: var(--space-5);
+    align-items: start;
+  }
+  .sheet-cover .leaf-head { margin: 0; }
+}
+.sheet-cover .prose ul { padding-left: 0; list-style: none; }
+.sheet-cover .prose li { margin: 0 0 var(--space-3); }
+.sheet-cover .prose li > a:first-child {
+  font-family: var(--font-poster);
+  font-weight: 700;
+  font-size: 1.75em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  text-shadow: calc(var(--misreg-x) * 0.67) calc(var(--misreg-y) * 0.67) 0 var(--color-accent);
+}
+.sheet-cover .prose li > a:first-child:hover { text-shadow: none; }
+
+/* Display capitals hyphenate only on a phone, where a word can outrun the line */
+@media (max-width: 44rem) {
+  .title, .line-title, .site-title, .drop-title, .prose :is(h1, h2, h3), .sheet-cover .prose li > a:first-child { hyphens: auto; }
+}
+
+/* Inner pages on a wide sheet: the same two columns as the archive, the
+   date stamp in the margin beside the title, the text under the title. */
+@media (min-width: 60rem) {
+  .sheet:not(.sheet-cover) .leaf {
+    display: grid;
+    grid-template-columns: var(--date-col) minmax(0, 1fr);
+    column-gap: var(--space-4);
+  }
+  .sheet:not(.sheet-cover) .leaf > * { grid-column: 2; }
+  .sheet:not(.sheet-cover) .leaf > .leaf-head {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+  .leaf-head > * { grid-column: 2; }
+  .leaf-head > .title { grid-column: 1 / -1; }
+  .piece .leaf-head > .title { grid-column: 2; grid-row: 1; }
+  .piece .leaf-head > .meta { grid-column: 1; grid-row: 1; margin: 0.6em 0 0; }
+}
+
+/* The archive: back numbers in a run -------------------------------------- */
+
+.lines { margin: 0; padding: 0; list-style: none; }
+
+.line {
+  display: grid;
+  grid-template-columns: var(--date-col) minmax(0, 1fr);
+  column-gap: var(--space-4);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-4);
+}
+.line-title { grid-column: 2; grid-row: 1; margin: 0; font-size: var(--text-l); }
+.line-title a { display: block; text-decoration: none; }
+.line-title a:hover { background: none; color: var(--color-text); text-decoration: underline var(--color-accent); text-decoration-thickness: 0.08em; }
+.line-date { grid-column: 1; grid-row: 1; margin: 0.35em 0 0; }
+.line-desc { grid-column: 2; margin: var(--space-2) 0 0; max-width: var(--measure); color: var(--color-muted); }
+.line .tags { grid-column: 2; }
+/* An odd pass drifts the other way: separate sheets, separate registers */
+.line:nth-child(even) .ink::before { transform: translate(calc(var(--misreg-x) * -0.5), calc(var(--misreg-y) * 1.5)); }
+
+@media (max-width: 44rem) {
+  .line { grid-template-columns: minmax(0, 1fr); }
+  .line-date { grid-row: 1; grid-column: 1; margin: 0 0 var(--space-2); }
+  .line-title, .line-desc, .line .tags { grid-column: 1; grid-row: auto; }
+}
+
+.empty { margin: var(--space-4) 0; }
+
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin: var(--space-4) 0;
+}
+.pager a { padding: var(--space-2) var(--space-3); border: var(--rule) solid currentColor; text-decoration: none; }
+
+/* Prose ------------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose table, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: var(--space-4); }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-accent); }
+
+.prose h1, .prose h2 { font-size: 2.25rem; margin: var(--space-5) 0 var(--space-3); text-shadow: var(--misreg-x) var(--misreg-y) 0 var(--color-accent); }
+.prose h3 { font-size: 1.5rem; margin: var(--space-4) 0 var(--space-2); }
+.prose h4 { font-size: var(--text-m); margin: var(--space-4) 0 var(--space-2); text-transform: uppercase; letter-spacing: var(--tracking-mono); }
+
+.prose strong { font-weight: 700; }
+
+.prose blockquote {
+  padding: var(--space-1) 0 var(--space-1) var(--space-4);
+  border-left: 0.6rem solid var(--color-flood);
+  font-style: italic;
+}
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  background: var(--color-code-bg);
+  padding: 0.05em 0.3em;
+  overflow-wrap: anywhere;
+}
+.prose pre {
+  padding: var(--space-3);
+  border: var(--rule) solid var(--color-text);
+  background: var(--color-code-bg);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); overflow-wrap: normal; }
+
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
+  /* A pink edge where more of the table lies off to the side; a paper patch
+     that travels with the table covers it once the reader reaches that end */
+  background:
+    linear-gradient(90deg, var(--color-bg), var(--color-bg)) 0 0 / 1rem 100% no-repeat local,
+    linear-gradient(90deg, var(--color-bg), var(--color-bg)) 100% 0 / 1rem 100% no-repeat local,
+    linear-gradient(90deg, var(--color-flood), transparent) 0 0 / 0.6rem 100% no-repeat scroll,
+    linear-gradient(270deg, var(--color-flood), transparent) 100% 0 / 0.6rem 100% no-repeat scroll;
+}
+.prose th, .prose td {
+  min-width: 8em;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--rule-thin) solid var(--color-muted);
+}
+.prose th { border-bottom: var(--rule) solid var(--color-text); }
+
+.prose hr {
+  height: calc(var(--rule) + var(--misreg-y));
+  margin: var(--space-4) 0;
+  border: 0;
+  background:
+    linear-gradient(var(--color-text), var(--color-text)) 0 0 / 40% var(--rule) no-repeat,
+    linear-gradient(var(--color-accent), var(--color-accent)) 4px 100% / 40% var(--rule) no-repeat;
+}
+
+.prose img { display: block; max-width: 100%; height: auto; }
+
+.prose a[href^="mailto:"], .prose a[href^="tel:"], .drop-mail { overflow-wrap: anywhere; }
+
+.cover {
+  margin: 0 0 var(--space-4);
+  max-width: var(--measure);
+  background: var(--color-flood);
+}
+.cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: grayscale(1) contrast(1.15);
+  mix-blend-mode: var(--cover-blend);
+}
+
+.back, .exits { margin: var(--space-5) 0 0; }
+.exits { display: flex; flex-wrap: wrap; gap: var(--space-3); padding: 0; list-style: none; }
+.back a, .exits a { display: inline-block; padding: var(--space-2) var(--space-3); border: var(--rule) solid currentColor; text-decoration: none; }
+
+/* The subscribe box: one flood block across the sheet, the blue pass of
+   its frame landed a few pixels up and to the left. -------------------- */
+
+.drop {
+  position: relative;
+  width: min(100% - 2 * var(--gutter), var(--page-width) - 2 * var(--gutter));
+  margin: var(--space-5) auto;
+  padding: clamp(1rem, 4vw, 2.5rem);
+  color: var(--color-on-flood);
+  background: var(--color-flood);
+}
+.drop::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translate(var(--misreg-x), calc(var(--misreg-y) * -1));
+  border: var(--rule) solid var(--color-text);
+  pointer-events: none;
+}
+.drop-title, .drop-line, .drop-form { position: relative; margin: 0; }
+.drop-title { font-size: clamp(1.4rem, 1rem + 2vw, 2.5rem); max-width: 24em; }
+.drop-line { padding-top: var(--space-3); }
+.drop a { color: var(--color-on-flood); text-decoration-color: currentColor; }
+.drop a:hover { background: var(--color-on-flood); color: var(--color-flood); }
+.drop :focus-visible { outline-color: var(--color-on-flood); }
+.drop-form { display: flex; flex-wrap: wrap; align-items: end; gap: var(--space-2); padding-top: var(--space-3); }
+.drop-label { flex-basis: 100%; }
+.drop-input {
+  flex: 1 1 14rem;
+  min-width: 0;
+  padding: var(--space-2);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--rule) solid var(--color-on-flood);
+  border-radius: 0;
+}
+.drop-button {
+  max-width: 100%;
+  padding: var(--space-2) var(--space-3);
+  color: var(--color-flood);
+  background: var(--color-on-flood);
+  border: var(--rule) solid var(--color-on-flood);
+  border-radius: 0;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+/* Footer ------------------------------------------------------------------ */
+
+.colophon {
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-5);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon p { margin: 0 0 var(--space-2); max-width: var(--measure); }
+.colophon-name { color: var(--color-text); }
+.colophon-note a { color: inherit; }
+
+@media (prefers-reduced-motion: no-preference) {
+  a { transition: background-color 0.12s, color 0.12s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none; animation: none; scroll-behavior: auto; }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #1f39a6;
+    --color-muted: #333344;
+    --color-accent: #f03d9c;
+    --color-flood: transparent;
+    --color-on-flood: #1a0b5c;
+    --color-code-bg: #ffffff;
+    --ink-blend: multiply;
+    --cover-blend: normal;
+  }
+  .menu, .drop, .skip-link, .back, .exits, .pager, .sheet-cover .site-title::after, .title::after { display: none; }
+  .masthead, main, .colophon { max-width: none; padding-inline: 0; }
+  .stamp { padding: 0; }
+  .leaf-head { margin-top: var(--space-4); }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: var(--text-xs); overflow-wrap: anywhere; }
+  .prose pre, .prose table { overflow: visible; white-space: pre-wrap; }
+  .line, .prose blockquote, .prose pre { break-inside: avoid; }
+}

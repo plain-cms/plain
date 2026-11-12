@@ -1,0 +1,12 @@
+<article class="item">
+  <header class="label item-label">
+    {{#if page.section}}<p class="typed item-shelf">{{ page.section }}</p>{{/if}}
+    <h1>{{ page.title }}</h1>
+    {{#if page.price}}<p class="price item-price">{{ page.price }}</p>{{/if}}
+    {{#if page.description}}<p class="item-desc">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  <p class="back"><a href="/menu/">{{ strings.backToMenu }}</a></p>
+</article>

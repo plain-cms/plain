@@ -1,0 +1,29 @@
+<article class="service">
+  <p class="back"><a href="/services/">← {{ strings.allServices }}</a></p>
+  <div class="views">
+    <header class="tin tin-front">
+      <div class="tin-can">
+        <p class="tin-brand" aria-hidden="true">{{ site.title }}</p>
+        <h1 class="tin-band">{{ page.title }}</h1>
+        {{#if page.description}}<p class="tin-spec">{{ page.description }}</p>
+        {{/if}}{{#if page.priceFrom}}<p class="tin-flash flash"><span>{{ strings.from }}</span> <strong>{{ page.priceFrom }}</strong></p>
+        {{/if}}
+      </div>
+    </header>
+    {{#if page.included}}
+    <section class="tin tin-back" aria-labelledby="included-heading">
+      <div class="tin-can">
+        <h2 id="included-heading">{{ strings.includedHeading }}</h2>
+        <ul>
+          {{#each page.included as point}}<li>{{ point }}</li>
+          {{/each}}
+        </ul>
+      </div>
+    </section>
+    {{/if}}
+  </div>
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+  {{> call}}
+</article>

@@ -1,11 +1,8 @@
 ---
 title: About
-description: Pulse is four people who carried pagers for bigger companies and built the monitor they wished had paged them.
+description: A small, profitable team that carried pagers for bigger companies — and answers its own support email.
 example: true
 ---
-
-*Replace with your team's real story. Small and specific beats big and
-vague — customers are choosing who answers the support email.*
 
 Pulse is four people: two former SREs, one designer, and one person who
 does everything else and won't be more specific. We carried pagers for
@@ -25,3 +22,9 @@ broke and read the next entry.
 Pulse monitors Pulse, from outside our own infrastructure, and our status
 page runs on the same code yours does. The month we wouldn't trust our own
 product to page us about itself is the month we stop charging for it.
+
+## Say hello
+
+Questions about a plan, a security review or a bug you'd like to
+embarrass us with all go to the same four people. [Get in touch](/contact/)
+and one of us will answer, usually the same day.

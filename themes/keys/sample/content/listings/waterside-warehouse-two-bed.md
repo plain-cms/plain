@@ -11,7 +11,7 @@ description: Sold in May — the double-aspect granary conversion with the crane
 example: true
 ---
 
-Sold in May, four percent over asking, to the second viewer. We leave sold
+Sold in May, four per cent over asking, to the second viewer. We leave sold
 listings up because an honest record of what sold, and for what, tells you
 more about this market than any brochure.
 
@@ -21,7 +21,7 @@ a double-aspect living room. Water on one side, the boatyard on the other.
 
 **What the sale says:** wharf conversions are moving inside three weeks
 when priced straight, and the buyers are overwhelmingly two-person
-households trading up from the town center. If you own one and are
+households trading up from the town centre. If you own one and are
 curious, that's a conversation we'll have honestly — including whether
 now is actually your moment, which sometimes it isn't.
 

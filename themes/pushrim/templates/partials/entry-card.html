@@ -1,0 +1,6 @@
+<li class="entry">
+  {{#if item.date}}<time datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+  {{/if}}{{#if page.hero}}<h3><a href="{{ item.url }}">{{ item.title }}</a></h3>{{else}}<h2><a href="{{ item.url }}">{{ item.title }}</a></h2>{{/if}}
+  {{#if item.description}}<p>{{ item.description }}</p>
+  {{/if}}
+</li>

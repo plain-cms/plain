@@ -1,0 +1,12 @@
+<article class="page">
+  <header class="poster-head{{#if page.showSchedule}} top-line{{/if}}">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.showSchedule}}{{> bill}}
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>

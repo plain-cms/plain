@@ -1,0 +1,457 @@
+/* Saucer — a tea-room theme built around one object: the willow-pattern
+   plate. The menu sits in the plate's well, inside a transfer-printed rim.
+   Every colour, face and measure is a token below: restyle by editing
+   tokens, never selectors. */
+
+:root {
+  /* Type — flared sans for the masthead and the dishes, a transitional serif for reading */
+  --font-display: Optima, "Optima Nova", "URW Classico", Candara, "Linux Biolinum O", "Gill Sans", "Gill Sans MT", Calibri, sans-serif;
+  --font-body: "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.125rem;
+  --leading: 1.5;
+  --tracking-caps: 0.1em;
+
+  /* Colour — light: glazed white earthenware, cobalt transfer print, tea stain */
+  --color-bg: #f8f6f0;
+  --color-text: #17203c;
+  --color-muted: #8a4b16;
+  --color-accent: #1d3b93;
+  --color-rim: #1d3b93;
+  --color-well: #fffefb;
+  --color-line: #c6cee0;
+  --color-button: #1d3b93;
+  --color-button-hover: #142a6e;
+  --color-button-ink: #ffffff;
+  --color-code-bg: #e2e7f0;
+  --color-mark: #cbd8f6;
+
+  /* Layout */
+  --rim: 1.875rem;
+  --band: 3px;
+  --radius: 2px;
+  --measure: 34rem;
+  --measure-plate: 35rem;
+  --measure-page: 70rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.75rem;
+  --space-5: 3rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The same plate reversed: cobalt glaze, the rim printed in white */
+    --color-bg: #15296a;
+    --color-text: #f3f5fb;
+    --color-muted: #e3cfae;
+    --color-accent: #c9d6fb;
+    --color-rim: #f1f3f9;
+    --color-well: #0f1f54;
+    --color-line: #3a4f94;
+    --color-button: #f1f3f9;
+    --color-button-hover: #ffffff;
+    --color-button-ink: #15296a;
+    --color-code-bg: #0f1f54;
+    --color-mark: #3552b0;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+/* Long compounds break at a syllable, with a hyphen, in headings and narrow
+   boxes; wide prose, tables, prices, addresses and code read as written. In
+   the house card a phone number wraps whole unless longer than its line; in
+   running text a phone number or address stays inline and breaks itself. */
+h1, h2, h3, h4, p, li, dt, dd { hyphens: auto; hyphenate-limit-chars: 12 4 4; }
+.prose a, code, .dish-price { hyphens: manual; }
+@media (min-width: 36em) { .prose :is(p, li) { hyphens: manual; } }
+.hours-card a[href^="tel:"] { display: inline-block; width: max-content; max-width: 100%; }
+.prose :is(p, li) > a:is([href^="tel:"], [href^="mailto:"]) { overflow-wrap: anywhere; }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-well); }
+.skip-link:focus { left: var(--space-2); }
+
+.masthead-in, .foot-in, main { max-width: var(--measure-page); margin-inline: auto; padding-inline: var(--space-3); }
+main { min-height: 55vh; padding-block: calc(var(--space-5) - var(--space-3)) var(--space-5); }
+main > * { max-width: var(--measure); margin-inline: auto; }
+main > .front { max-width: none; }
+main > :is(.menu-page, .dish-page, .not-found) { max-width: var(--measure-plate); }
+
+/* The flared capitals of the masthead and the dishes */
+.site-title, .masthead nav a, .well-title, .dish-name, .dish-price, .prose h3, .prose h4, .hours-card dt, .btn-reserve, .meta, .foot-name, .tags, .pagination {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+/* THE RIM — the signature. One rosette tile and a fish-roe ground drawn in
+   gradients, used as masks over a block of --color-rim, so the print takes
+   its colour from the token. The gradients' own colour is only mask ink. */
+.plate, .masthead {
+  --r: var(--rim);
+  --t: calc(var(--r) / 2);
+  --x: calc(var(--r) * 1.5);
+  --s: calc(var(--r) * 2 / 3);
+  --rose: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30' fill='none' stroke='black'%3E%3Ccircle cx='15' cy='15' r='11.7' stroke-width='1.3'/%3E%3Ccircle cx='15' cy='15' r='6.4' stroke-width='4.1' stroke-linecap='round' stroke-dasharray='0 5.027'/%3E%3Ccircle cx='15' cy='15' r='1.8' fill='black' stroke='none'/%3E%3C/svg%3E");
+  --roe: radial-gradient(circle closest-side, var(--color-rim) 16%, transparent 26% 56%, var(--color-rim) 66%);
+  --disc: radial-gradient(circle closest-side, var(--color-rim) 89%, transparent 93%);
+}
+/* The scalloped shape: a rectangle with a row of touching lobes on each side.
+   Declared on both so each resolves its own --lobe and --inset. */
+.plate, .well {
+  --lobe: radial-gradient(ellipse closest-side, var(--color-rim) 95%, transparent);
+  --inset: calc(var(--s) * 0.7);
+  --scallop:
+    linear-gradient(var(--color-rim) 0 0) center / calc(100% - var(--inset)) calc(100% - var(--inset)) no-repeat,
+    var(--lobe) 0 0 / var(--s) var(--s) round no-repeat,
+    var(--lobe) 0 100% / var(--s) var(--s) round no-repeat,
+    var(--lobe) 0 0 / var(--s) var(--s) no-repeat round,
+    var(--lobe) 100% 0 / var(--s) var(--s) no-repeat round;
+}
+@media (max-width: 36em) {
+  .plate, .masthead { --r: calc(var(--rim) * 0.8); }
+}
+@media (max-width: 24em) {
+  .plate { --r: calc(var(--rim) * 0.7); }
+}
+
+/* Masthead & footer ------------------------------------------------------ */
+
+/* Under the name: a hairline, a straight length of rim, the heavy band. */
+.masthead {
+  padding-bottom: 3px;
+  border-bottom: var(--band) solid var(--color-rim);
+  background: linear-gradient(var(--color-rim) 0 0) 0 calc(100% - var(--r) - 6px) / 100% 1px no-repeat;
+}
+.masthead::after {
+  content: "";
+  display: block;
+  height: var(--r);
+  margin-top: 4px;
+  background: var(--color-rim);
+  mask-image: var(--rose), var(--roe), var(--roe), var(--disc);
+  mask-size: calc(var(--r) * 4) var(--r), var(--t) var(--t), var(--t) var(--t), calc(var(--r) * 4) var(--r);
+  mask-position: 50% 0, 50% 0, calc(50% + var(--t) / 2) calc(var(--t) / 2), 50% 0;
+  mask-repeat: space no-repeat, repeat, repeat, space no-repeat;
+  mask-composite: add, intersect, subtract, add;
+}
+.masthead-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  padding-block: var(--space-3) var(--space-2);
+}
+.site-title { font-size: clamp(1.3rem, 1rem + 1.6vw, 1.7rem); line-height: 1.2; letter-spacing: 0.16em; color: var(--color-accent); text-decoration: none; }
+.site-title:hover { text-decoration: underline; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: var(--space-2) 0; font-size: 0.8rem; color: var(--color-text); text-decoration: none; }
+.masthead nav a:hover { color: var(--color-accent); }
+.masthead nav a[aria-current="page"] { color: var(--color-accent); box-shadow: inset 0 calc(-1 * var(--band)) 0 var(--color-rim); }
+
+.foot { border-top: var(--band) solid var(--color-rim); padding-top: 3px; color: var(--color-muted); }
+.foot-in { border-top: 1px solid var(--color-rim); max-width: none; padding-block: var(--space-3) var(--space-4); font-size: 0.95rem; font-style: italic; }
+.foot-in > * { max-width: calc(var(--measure-page) - 2 * var(--space-3)); margin: 0 auto var(--space-1); }
+.foot a { color: inherit; }
+.foot-name { font-size: 0.8rem; font-style: normal; color: var(--color-text); }
+
+/* Page headers & prose --------------------------------------------------- */
+
+.page-header { margin: 0 0 var(--space-4); }
+.page-header h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 1.3rem + 2.6vw, 2.9rem);
+  font-weight: 400;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.meta { margin: 0 0 var(--space-2); font-size: 0.75rem; color: var(--color-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; font-size: 0.75rem; }
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre { margin: 0 0 var(--space-3); }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; line-height: 1.2; color: var(--color-accent); }
+.prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); font-size: 0.9rem; font-weight: 700; line-height: 1.3; }
+.prose h4 { font-weight: 400; color: var(--color-muted); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-accent); }
+/* italics are the small notes: tea-stain brown */
+.prose em { color: var(--color-muted); }
+.prose a em { color: inherit; }
+.prose img, .cover { max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover { display: block; width: 100%; margin-bottom: var(--space-4); }
+.prose hr { height: var(--band); margin: var(--space-4) 0; border: 0; border-block: 1px solid var(--color-line); }
+.prose blockquote { margin: var(--space-4) 0; padding-left: var(--space-3); border-left: var(--band) double var(--color-rim); font-style: italic; color: var(--color-muted); }
+.prose code { font-family: var(--font-mono); font-size: 0.82em; background: var(--color-code-bg); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; line-height: 1.5; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre code { padding: 0; background: none; }
+/* a table wider than its column scrolls inside its own box */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.95em; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-line); }
+.prose th { font-family: var(--font-display); font-weight: 700; border-bottom-color: var(--color-rim); }
+
+/* THE PLATE --------------------------------------------------------------
+   Edge band, a gap of glaze, the printed rim, then the well: a white panel
+   whose edge is scalloped by a mask of touching circles. */
+
+.plate {
+  position: relative;
+  padding: calc(var(--r) + 3px);
+  border: var(--band) solid var(--color-rim);
+  border-radius: var(--radius);
+  background: var(--color-well);
+  overflow: hidden; /* the rim's mask is laid out wider than the plate */
+}
+/* The rosettes sit one in each corner and evenly between. `space` leaves
+   half a tile at each end of a row, so the rosette rows are laid out on a
+   box 1.5 rims wider than the rim all round (--x), which brings the first
+   and last of each row into the corners; the mask is clipped back to the
+   rim, and the roe is laid out on the rim itself. */
+.plate::before {
+  content: "";
+  position: absolute;
+  inset: calc(3px - var(--x));
+  padding: var(--x);
+  background: var(--color-rim);
+  mask-image: var(--rose), var(--rose), var(--rose), var(--rose), var(--roe), var(--roe), var(--disc), var(--disc), var(--disc), var(--disc);
+  mask-origin: border-box, border-box, border-box, border-box, content-box, content-box, border-box, border-box, border-box, border-box;
+  mask-clip: content-box;
+  mask-size: calc(var(--r) * 4) var(--r), calc(var(--r) * 4) var(--r), var(--r) calc(var(--r) * 4), var(--r) calc(var(--r) * 4), var(--t) var(--t), var(--t) var(--t), calc(var(--r) * 4) var(--r), calc(var(--r) * 4) var(--r), var(--r) calc(var(--r) * 4), var(--r) calc(var(--r) * 4);
+  mask-position: 50% var(--x), 50% calc(100% - var(--x)), var(--x) 50%, calc(100% - var(--x)) 50%, 0 0, calc(var(--t) / 2) calc(var(--t) / 2), 50% var(--x), 50% calc(100% - var(--x)), var(--x) 50%, calc(100% - var(--x)) 50%;
+  mask-repeat: space no-repeat, space no-repeat, no-repeat space, no-repeat space, round, round, space no-repeat, space no-repeat, no-repeat space, no-repeat space;
+  mask-composite: add, add, add, add, intersect, subtract, add, add, add, add;
+}
+/* the same scalloped shape in rim colour behind the well: its lobes are a
+   line's width larger, which prints the edge of the well */
+.plate::after { content: ""; position: absolute; inset: calc(var(--r) + 3px); background: var(--color-rim); mask: var(--scallop); }
+.well {
+  position: relative;
+  z-index: 1;
+  padding: calc(var(--s) + 0.75rem) calc(var(--s) + var(--space-2));
+  background: var(--color-well);
+  --lobe: radial-gradient(ellipse closest-side, var(--color-rim) 78%, transparent 84%);
+  --inset: calc(var(--s) * 0.7 + 3px);
+  mask: var(--scallop);
+}
+/* a hairline just inside the scallops */
+.well::before { content: ""; position: absolute; inset: calc(var(--s) * 0.35 + 8px); border: 1px solid var(--color-rim); pointer-events: none; }
+.well > :last-child { margin-bottom: 0; }
+/* on phones the well keeps room for a dish and its price */
+@media (max-width: 36em) {
+  .well { padding-inline: calc(var(--s) * 0.35 + 18px); }
+}
+
+.well-title { margin: 0 0 var(--space-3); font-size: 1.15rem; font-weight: 400; line-height: 1.25; letter-spacing: 0.2em; text-align: center; color: var(--color-accent); text-wrap: balance; }
+/* one rosette under the title */
+.well-title::after { content: ""; display: block; width: 1.5rem; height: 1.5rem; margin: var(--space-2) auto 0; background: var(--color-rim); mask: var(--rose) center / contain no-repeat; }
+.well > p { margin: 0 0 var(--space-3); }
+.well > .well-foot { margin-top: 1.25rem; text-align: center; font-style: italic; }
+.empty { text-align: center; font-style: italic; color: var(--color-muted); }
+
+/* The build sorts dishes by section name; `order` seats the sections in
+   service order (enhance.js then moves them in the document to match). A
+   dish with no section, or one outside the ten, keeps order 0: first. */
+.dishes { display: flex; flex-direction: column; gap: 0.45rem; margin: 0; padding: 0; list-style: none; }
+.dish[data-section="Breakfast"] { order: 1; }
+.dish[data-section="Bread"] { order: 2; }
+.dish[data-section="Pastries"] { order: 3; }
+.dish[data-section="Starters"] { order: 4; }
+.dish[data-section="Mains"] { order: 5; }
+.dish[data-section="Sides"] { order: 6; }
+.dish[data-section="Desserts"] { order: 7; }
+.dish[data-section="Hot drinks"] { order: 8; }
+.dish[data-section="Drinks"] { order: 9; }
+.dish[data-section="Snacks"] { order: 10; }
+
+/* The section name: serif italic between two hairlines, once per section */
+.dish-section {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin: 0.8rem 0 var(--space-1);
+  font-family: var(--font-body);
+  font-size: 1.3rem;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--color-accent);
+}
+.dish-section::before, .dish-section::after { content: ""; flex: 1; min-width: var(--space-3); border-top: 1px solid var(--color-line); }
+.dish[data-section="Breakfast"] ~ .dish[data-section="Breakfast"] .dish-section,
+.dish[data-section="Bread"] ~ .dish[data-section="Bread"] .dish-section,
+.dish[data-section="Pastries"] ~ .dish[data-section="Pastries"] .dish-section,
+.dish[data-section="Starters"] ~ .dish[data-section="Starters"] .dish-section,
+.dish[data-section="Mains"] ~ .dish[data-section="Mains"] .dish-section,
+.dish[data-section="Sides"] ~ .dish[data-section="Sides"] .dish-section,
+.dish[data-section="Desserts"] ~ .dish[data-section="Desserts"] .dish-section,
+.dish[data-section="Hot drinks"] ~ .dish[data-section="Hot drinks"] .dish-section,
+.dish[data-section="Drinks"] ~ .dish[data-section="Drinks"] .dish-section,
+.dish[data-section="Snacks"] ~ .dish[data-section="Snacks"] .dish-section { display: none; }
+
+/* The plate on the home page is a taste of the menu: the first four dishes
+   of each section, and of those with none. The menu page carries them all. */
+.front .dish:nth-child(n+5 of [data-section=""]),
+.front .dish:nth-child(n+5 of [data-section="Breakfast"]),
+.front .dish:nth-child(n+5 of [data-section="Bread"]),
+.front .dish:nth-child(n+5 of [data-section="Pastries"]),
+.front .dish:nth-child(n+5 of [data-section="Starters"]),
+.front .dish:nth-child(n+5 of [data-section="Mains"]),
+.front .dish:nth-child(n+5 of [data-section="Sides"]),
+.front .dish:nth-child(n+5 of [data-section="Desserts"]),
+.front .dish:nth-child(n+5 of [data-section="Hot drinks"]),
+.front .dish:nth-child(n+5 of [data-section="Drinks"]),
+.front .dish:nth-child(n+5 of [data-section="Snacks"]) { display: none; }
+
+/* name left, price right. The name keeps two fifths of the line, or its
+   longest word if that is wider; a price that leaves it less drops below,
+   still right */
+.dish-line { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: flex-end; gap: 0 var(--space-3); margin: 0; font-size: 0.9rem; line-height: 1.4; }
+.dish-name { flex: 1 1 40%; max-width: 100%; color: var(--color-text); text-decoration: none; }
+a.dish-name:hover { color: var(--color-accent); text-decoration: underline; }
+.dish-price { max-width: 100%; margin: 0; text-align: right; text-transform: none; letter-spacing: 0.04em; color: var(--color-accent); font-variant-numeric: tabular-nums; }
+.dish-desc { max-width: 46ch; margin: 0; font-size: 0.95em; font-style: italic; line-height: 1.4; color: var(--color-muted); }
+.menu-page .dishes { gap: var(--space-3); }
+
+/* One dish on its own plate, and the empty plate of the 404 */
+.dish-page .well, .not-found .well { text-align: center; }
+.not-found .well-foot { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-1) var(--space-4); }
+.dish-page .dish-section { margin-top: 0; }
+.dish-page .well-title { font-size: clamp(1.25rem, 1rem + 1.4vw, 1.6rem); letter-spacing: 0.12em; }
+.dish-page .dish-price { margin: 0 0 var(--space-3); font-size: 1.1rem; text-align: center; }
+.dish-page .dish-desc { margin: 0 auto var(--space-3); font-size: 1.05em; }
+.dish-page .prose { padding-top: var(--space-3); border-top: 1px solid var(--color-line); text-align: left; }
+.back { margin: var(--space-4) 0 0; text-align: center; font-style: italic; }
+
+/* The home page (page.html: "/", or the page the first menu link leads to,
+   such as "/fr/"): text left, the plate right; one column on narrow screens */
+@media (max-width: 59.99em) {
+  .front > * { max-width: var(--measure-plate); margin-inline: auto; }
+  .front > .plate { margin-top: var(--space-5); }
+}
+/* on the smallest phones the plate takes most of the gutter too */
+@media (max-width: 24em) {
+  main .plate { margin-inline: calc(4px - var(--space-3)); }
+}
+@media (min-width: 60em) {
+  .front {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure-plate));
+    grid-template-rows: auto 1fr;
+    column-gap: var(--space-5);
+    align-items: start;
+  }
+  .front > .plate { grid-area: 1 / 2 / span 2; }
+}
+
+/* The house card (class names written in page content): hours and address
+   as label over value, between two banded rules. Two pairs to a row where
+   each has 9.5rem; a pair whose label or value cannot fit half the card (an
+   e-mail address, a long phone number) takes a row to itself, as does the
+   odd pair out. */
+.hours-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-4);
+  margin: var(--space-4) 0;
+  padding: 4px 0;
+  border-block: var(--band) solid var(--color-rim);
+  background:
+    linear-gradient(var(--color-rim) 0 0) 0 3px / 100% 1px no-repeat,
+    linear-gradient(var(--color-rim) 0 0) 0 calc(100% - 3px) / 100% 1px no-repeat;
+}
+.hours-card dl { flex: 1 1 max(9.5rem, calc(50% - var(--space-4) / 2 - 0.5px)); max-width: 100%; margin: 0; padding: var(--space-2) 0; }
+.hours-card dt { margin-top: var(--space-1); font-size: 0.78rem; line-height: 1.4; color: var(--color-muted); }
+.hours-card dd { margin: 0; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.hours-card dd + dt { margin-top: var(--space-3); }
+.hours-card .reserve { flex: 0 0 100%; margin: var(--space-3) 0; }
+
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.8em 1.6em;
+  font-size: 0.85rem;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-button-ink);
+  background: var(--color-button);
+  border-radius: var(--radius);
+  outline: 1px solid var(--color-button-ink);
+  outline-offset: -5px;
+}
+.btn-reserve:hover { background: var(--color-button-hover); }
+.btn-reserve:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.prose .reserve, .prose p:has(> .btn-reserve:only-child) { margin: var(--space-4) 0; }
+
+/* Posts ------------------------------------------------------------------ */
+
+.post-list { margin: 0; padding: 0; list-style: none; }
+.post-list li { padding: var(--space-3) 0 var(--space-4); border-top: 1px solid var(--color-line); }
+.post-list h2 { margin: 0 0 var(--space-1); font-family: var(--font-display); font-size: 1.45rem; font-weight: 400; line-height: 1.2; }
+.post-list h2 a { text-decoration: none; }
+.post-list h2 a:hover { text-decoration: underline; }
+.summary { margin: 0; font-style: italic; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin: var(--space-4) 0 0; font-size: 0.75rem; color: var(--color-muted); }
+.pagination a { padding: var(--space-2) 0; }
+
+/* Motion & print --------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  a, .btn-reserve { transition: color 0.15s, background-color 0.15s; }
+}
+
+@media print {
+  /* dark ink on white paper, whichever scheme the screen was in */
+  :root {
+    --color-bg: #fff;
+    --color-well: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-rim: #000;
+    --color-line: #999;
+    --color-button: #fff;
+    --color-button-ink: #000;
+    --color-code-bg: #fff;
+  }
+  body { font-size: 11pt; }
+  main, main > *, .masthead-in, .foot-in { max-width: none; }
+  main { min-height: 0; padding-block: var(--space-4); }
+  .masthead nav, .skip-link, .masthead::after, .plate::before, .back, .pagination, .well-foot { display: none; }
+  .masthead { background: none; }
+  .front { display: block; }
+  .plate { padding: 0; border-width: 1px; }
+  .well { mask: none; }
+  .well::before, .plate::after { display: none; }
+  .btn-reserve { border: 1px solid; outline: 0; }
+  a { color: inherit; text-decoration: none; }
+  .dish, .hours-card dl { break-inside: avoid; }
+  .dish-section { break-after: avoid; }
+}

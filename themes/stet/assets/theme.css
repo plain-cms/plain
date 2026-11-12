@@ -1,0 +1,488 @@
+/* Stet — a copywriter's portfolio on typed copy paper.
+   Point of view: the copy sheet as it comes back from the editor. Every piece
+   is typed on canary second-sheet paper; it opens with a slug (client, date,
+   what it was for) at one tab stop, its headline carries the editor's
+   blue-pencil double underline, and it closes with a centred ENDS. One
+   typewriter face, one size of body type, double-spaced copy. All design
+   decisions are the tokens below — restyle by editing tokens, never
+   selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — one typewriter, as if every page came off the same machine */
+  --font-type: "Courier New", Courier, "Nimbus Mono PS", "Liberation Mono", monospace;
+  --text-s: 0.9375rem;
+  --text-m: 1.0625rem;
+  --text-l: clamp(1.25rem, 1rem + 0.9vw, 1.625rem);
+  --text-xl: clamp(1.625rem, 1.15rem + 1.6vw, 2.375rem);
+  --leading-copy: 2;
+  --leading-body: 1.75;
+  --leading-tight: 1.4;
+  --weight-strike: 700;
+
+  /* Colour — canary copy paper, ribbon black, the editor's cobalt pencil */
+  --color-bg: #f6e9a3;
+  --color-paper: #efdc86;
+  --color-text: #1c1a16;
+  --color-muted: #5c5330;
+  --color-accent: #1d3ba5;
+  --color-rule: rgba(28, 26, 22, 0.42);
+
+  /* Layout */
+  --measure: 66ch;
+  --side-min: 15rem;
+  --tab-stop: 10ch;
+  --indent: 4ch;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --desk-gap: clamp(2rem, 5vw, 5rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.75rem;
+  --space-5: 3.5rem;
+  --space-6: 6rem;
+  --pencil-weight: 2px;
+  --ring-tilt: -4deg;
+  --dash: 0.55ch;
+  --cover-max-height: 70vh;
+}
+
+/* Carbon paper: the blue-black copy under the top sheet, pale yellow type,
+   a sky-blue pencil */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #131a2b;
+    --color-paper: #1c2540;
+    --color-text: #f1e6a9;
+    --color-muted: #bcb28b;
+    --color-accent: #8cbaff;
+    --color-rule: rgba(241, 230, 169, 0.42);
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-type);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+
+::selection { background: var(--color-accent); color: var(--color-bg); }
+
+a {
+  color: var(--color-accent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+a:hover { text-decoration-thickness: var(--pencil-weight); }
+
+/* An e-mail address or a phone number wider than the line breaks inside
+   itself rather than running past the margin; a phone number is kept in one
+   piece wherever a long one still fits on a line */
+a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
+a[href^="tel:"] { white-space: nowrap; }
+@media (max-width: 21rem) { a[href^="tel:"] { white-space: normal; } }
+
+:focus-visible {
+  outline: var(--pencil-weight) solid var(--color-accent);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg);
+}
+.skip-link:focus { left: var(--space-2); }
+
+/* Titles in grid columns and narrow boxes: hyphenated in the page's
+   language, cut only as the last resort */
+h1, h2, h3, h4,
+.slug dd,
+.spike li span,
+.site-title {
+  min-width: 0;
+  hyphens: auto;
+  hyphenate-limit-chars: 6 3 3;
+  overflow-wrap: break-word;
+}
+
+/* A date shown as its year: the ISO date is in the page, the slug shows the
+   first four figures (dates are always YYYY-MM-DD) */
+.year {
+  display: inline-block;
+  width: 4ch;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: top;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A typed rule: a line of hyphens struck across the sheet */
+.masthead::after,
+.colophon::before {
+  content: "";
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  height: 1px;
+  background: repeating-linear-gradient(90deg, var(--color-rule) 0 var(--dash), transparent var(--dash) 1ch);
+}
+
+/* Masthead ---------------------------------------------------------------- */
+
+.masthead {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  column-gap: var(--space-4);
+  padding: var(--space-2) var(--gutter);
+}
+.masthead::after { bottom: 0; }
+
+.site-title {
+  display: inline-block;
+  padding-block: var(--space-2);
+  color: var(--color-text);
+  font-weight: var(--weight-strike);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+}
+.site-title:hover { text-decoration: underline; }
+
+.masthead nav ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1ch;
+  margin: 0 -0.8ch;
+  padding: 0;
+  list-style: none;
+}
+.masthead nav a {
+  position: relative;
+  display: inline-block;
+  padding: var(--space-2) 0.8ch;
+  color: var(--color-text);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.masthead nav a:hover { text-decoration: underline; }
+
+/* The page you are on is ringed in blue pencil, as an editor rings an
+   instruction that is not to be set: the ENDS under every piece too */
+.ends span { position: relative; display: inline-block; padding: 0 0.6ch 0 0.9ch; }
+.ends span::before,
+.masthead nav a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  inset: 0.1em -0.1ch;
+  border: var(--pencil-weight) solid var(--color-accent);
+  border-radius: 50%;
+  transform: rotate(var(--ring-tilt));
+  pointer-events: none;
+}
+.ends span::before { inset: -0.15em -0.6ch; transform: rotate(calc(-0.5 * var(--ring-tilt))); }
+
+main {
+  display: block;
+  min-height: 60vh;
+  padding: var(--space-5) var(--gutter) 0;
+}
+
+.colophon {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  margin-top: var(--space-6);
+  padding: var(--space-3) var(--gutter) var(--space-4);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon::before { top: 0; }
+.colophon p { margin: 0; }
+.colophon-name { text-transform: uppercase; letter-spacing: 0.12em; }
+
+/* The desk: notes in the margin, the copy sheet beside them -------------- */
+
+.desk {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: var(--space-5);
+  max-width: 82rem;
+  margin-inline: auto;
+}
+.desk > .side, .desk > .tray, .desk > .sheets { min-width: 0; }
+.tray, .sheets { max-width: var(--measure); }
+
+.desk h1 {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-strike);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+.side-title { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.22em; }
+
+.intro .prose { margin-top: var(--space-4); }
+.intro .prose > p + p { margin-top: var(--space-3); text-indent: 0; }
+
+/* The copy sheet ---------------------------------------------------------- */
+
+.sheets { list-style: none; margin: 0; padding: 0; }
+.sheet + .sheet { margin-top: var(--space-5); }
+
+/* The slug: each label in capitals, its value at one tab stop; a blank
+   field leaves its line out, and a blank line follows */
+.slug { margin: 0 0 calc(var(--leading-body) * 1em); }
+.slug div {
+  display: grid;
+  grid-template-columns: var(--tab-stop) minmax(0, 1fr);
+}
+.slug dt { text-transform: uppercase; }
+.slug dt::after { content: ":"; }
+.slug dd { margin: 0; }
+.for { display: inline; margin: 0; padding: 0; list-style: none; }
+/* Browsers count the space after a service towards its last syllable, so
+   asking for four characters after a hyphen leaves at least three letters */
+.for li { display: inline; hyphenate-limit-chars: 6 3 4; }
+.for li + li::before { content: " / "; }
+
+/* The headline, double-underlined in the editor's blue pencil */
+.headline {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-l);
+  font-weight: var(--weight-strike);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+.desk h1.headline { font-size: var(--text-xl); margin-bottom: var(--space-4); }
+h1.headline,
+.headline a {
+  text-decoration: underline double var(--color-accent);
+  text-decoration-thickness: var(--pencil-weight);
+  text-underline-offset: 0.22em;
+  text-decoration-skip-ink: none;
+}
+.headline a { color: var(--color-text); }
+.headline a:hover { color: var(--color-accent); }
+
+/* Copy is typed double-spaced, each paragraph indented */
+.copy, .lede {
+  margin: 0;
+  line-height: var(--leading-copy);
+  text-indent: var(--indent);
+}
+
+/* ENDS, centred under the last line */
+.ends {
+  clear: both;
+  margin: var(--space-3) 0 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+}
+
+/* A print clipped to the sheet, when the project has one */
+.print {
+  display: block;
+  float: right;
+  width: min(38%, 15rem);
+  height: auto;
+  margin: 0 0 var(--space-3) var(--space-4);
+  border: 1px solid var(--color-rule);
+}
+
+/* A case study ------------------------------------------------------------ */
+
+.piece-head { margin-bottom: var(--space-4); }
+.piece-print { margin: 0 0 var(--space-4); }
+.piece-print img {
+  display: block;
+  width: 100%;
+  max-height: var(--cover-max-height);
+  object-fit: cover;
+  border: 1px solid var(--color-rule);
+}
+.piece .ends { margin-top: var(--space-4); }
+
+/* The spike: the rest of the work, typed as a run-down */
+.spike h2,
+.prose h2 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-m);
+  font-weight: var(--weight-strike);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+}
+.spike ul { margin: 0; padding: 0; list-style: none; }
+.spike li:nth-child(n+9) { display: none; }
+.spike li a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2ch;
+  padding-block: var(--space-2);
+  color: var(--color-text);
+  text-decoration: none;
+}
+.spike li a:hover span { text-decoration: underline; }
+.spike .year { flex: none; color: var(--color-muted); }
+.spike p { margin: var(--space-2) 0 0; }
+.spike p a { display: inline-block; padding-block: var(--space-2); }
+.tray .spike { margin-top: var(--space-5); }
+
+/* Page text ---------------------------------------------------------------- */
+
+.prose > * { margin-block: 0; }
+.prose > * + * { margin-top: var(--space-3); }
+.prose > p + p { margin-top: 0; text-indent: var(--indent); }
+.prose > h2 { margin-top: var(--space-4); }
+.prose > * + h2, .prose > * + h3, .prose > * + h4 { margin-top: var(--space-4); }
+.prose h3 { font-size: var(--text-m); font-weight: var(--weight-strike); }
+.prose h4 { font-size: var(--text-m); font-weight: 400; text-decoration: underline; text-underline-offset: 0.22em; }
+
+.prose ul, .prose ol { padding-left: var(--indent); }
+.prose ul { list-style-type: "- "; }
+.prose li + li { margin-top: var(--space-1); }
+.prose li > ul, .prose li > ol { margin-top: var(--space-1); }
+
+/* A blockquote is marked off in the margin with the pencil */
+.prose blockquote {
+  margin-inline: 0;
+  padding-left: calc(var(--indent) - var(--pencil-weight));
+  border-left: var(--pencil-weight) solid var(--color-accent);
+}
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--color-rule);
+}
+
+.prose code { font-family: var(--font-type); background: var(--color-paper); padding: 0 0.3ch; }
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: var(--space-3);
+  background: var(--color-paper);
+  font-size: var(--text-s);
+  line-height: var(--leading-body);
+}
+.prose pre code { padding: 0; background: none; }
+
+/* A table keeps readable cells and scrolls in its own box */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+}
+.prose th, .prose td {
+  min-width: 11ch;
+  padding: var(--space-2) 2ch var(--space-2) 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px dashed var(--color-rule);
+}
+.prose th { text-transform: uppercase; font-weight: 400; }
+
+.prose hr {
+  height: auto;
+  border: 0;
+  text-align: center;
+  color: var(--color-muted);
+}
+.prose hr::before { content: "*   *   *"; white-space: pre; }
+
+/* Lists of posts, pagination, empty trays --------------------------------- */
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 3ch;
+  margin-top: var(--space-5);
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+.pagination a { display: inline-block; padding-block: var(--space-2); }
+
+.empty { margin: 0; color: var(--color-muted); }
+
+/* Phones: the print goes above the headline, full width ------------------- */
+
+@media (max-width: 36rem) {
+  /* Three or more columns scroll sideways: each cell keeps a readable
+     width, the last (usually the longest) a little more */
+  .prose table:has(th:nth-child(3)) :is(th, td) { min-width: 14ch; }
+  .prose table:has(th:nth-child(3)) td:last-child { min-width: 24ch; }
+  .print {
+    float: none;
+    width: 100%;
+    max-height: 16rem;
+    object-fit: cover;
+    margin: 0 0 var(--space-3);
+  }
+}
+
+/* Wide screens: the margin notes on the left, the sheet on the right ------ */
+
+@media (min-width: 60rem) {
+  .desk {
+    grid-template-columns: minmax(var(--side-min), 1fr) minmax(0, var(--measure));
+    column-gap: var(--desk-gap);
+    align-items: start;
+  }
+  .desk > .side { grid-column: 1; grid-row: 1; }
+  .desk > .tray, .desk > .sheets { grid-column: 2; grid-row: 1 / span 2; }
+  .desk:not(:has(> .tray, > .sheets)) { grid-template-columns: minmax(0, var(--measure)); }
+  .side .spike { margin-top: 0; }
+  .side > .spike h2 { margin-top: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none; animation: none; scroll-behavior: auto; }
+}
+
+/* Print ------------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-paper: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #1d3ba5;
+    --color-rule: #888888;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .pagination, .spike { display: none; }
+  main { padding-top: var(--space-4); }
+  .desk { display: block; }
+  .desk > .side { margin-bottom: var(--space-4); }
+  .sheet { break-inside: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }
+  .prose pre { white-space: pre-wrap; }
+  .colophon { margin-top: var(--space-4); }
+}

@@ -1,0 +1,45 @@
+{{#if page.hero}}
+<article class="page has-hero">
+  <section class="hero{{#if page.heroImage}} hero-has-photo{{/if}}">
+    <div class="hero-pin">
+      {{#if page.heroImage}}<figure class="hero-photo"><img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async"></figure>
+      {{/if}}{{> rosette}}
+    </div>
+    <div class="hero-mission">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="mission">{{ page.description }}</p>
+      {{/if}}{{> donate}}
+    </div>
+  </section>
+  {{#if page.content}}<div class="sheet"><div class="prose">
+{{{ page.content }}}
+  </div></div>
+  {{/if}}{{#if collections.programs}}<section class="sheet programme" aria-labelledby="programme">
+    <h2 id="programme" class="section-head">{{ strings.programmeHeading }}</h2>
+    <ul class="entries">
+      {{#each collections.programs as item}}<li class="entry">
+        <h3><a href="{{ item.url }}">{{ item.title }}</a></h3>
+        {{#if item.description}}<p>{{ item.description }}</p>
+        {{/if}}
+      </li>
+      {{/each}}
+    </ul>
+    <p class="more"><a href="/programs/">{{ strings.allPrograms }}</a></p>
+  </section>
+  {{/if}}
+</article>
+{{else}}
+<article class="page">
+  <header class="band">
+    <h1>{{ page.title }}</h1>
+  </header>
+  <div class="sheet">
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{#if page.donateCta}}{{#if data.impact.donateUrl}}<p class="give-line"><a class="btn-donate" href="{{ data.impact.donateUrl }}">{{ strings.donateOnline }}</a>{{#if data.impact.donatePrompt}} <span class="donate-prompt">{{ data.impact.donatePrompt }}</span>{{/if}}</p>
+    {{/if}}{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </div>
+</article>
+{{/if}}

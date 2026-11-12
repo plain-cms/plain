@@ -21,5 +21,5 @@ the first time; the rest are learning English and reading together.
 than any method — trust is the curriculum. Sessions run mornings, evenings,
 and Saturdays. Childcare is available during the busiest sessions.
 
-**What it costs us:** £4 per learner-hour, mostly books, rooms, and
+**What it costs us:** $4 per learner-hour, mostly books, rooms, and
 childcare. The tutoring itself is given free by trained volunteers.

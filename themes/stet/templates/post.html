@@ -1,0 +1,19 @@
+<div class="desk">
+  <article class="tray piece">
+    <header class="piece-head">
+      <dl class="slug">
+        <div><dt>{{ strings.date }}</dt><dd><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></dd></div>
+        {{#if page.tagLinks}}<div><dt>{{ strings.tagsLabel }}</dt><dd><ul class="for">{{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>{{/each}}</ul></dd></div>
+        {{/if}}
+      </dl>
+      <h1 class="headline">{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </header>
+    {{#if page.cover}}<figure class="piece-print"><img src="{{ page.cover }}" alt="" decoding="async"></figure>
+    {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}<p class="ends"><span>{{ strings.ends }}</span></p>
+  </article>
+</div>

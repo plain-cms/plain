@@ -1,10 +1,21 @@
 {{#if data.newsletter.formAction}}
-<aside class="subscribe" aria-label="Newsletter sign-up">
-  <h2 class="subscribe-prompt">{{#if data.newsletter.prompt}}{{ data.newsletter.prompt }}{{else}}Get new letters by email.{{/if}}</h2>
+<aside class="subscribe" aria-labelledby="subscribe-prompt">
+  <h2 class="subscribe-prompt" id="subscribe-prompt">{{#if data.newsletter.prompt}}{{ data.newsletter.prompt }}{{else}}{{ strings.subscribePrompt }}{{/if}}</h2>
   <form class="subscribe-form" action="{{ data.newsletter.formAction }}" method="post">
-    <label class="visually-hidden" for="subscribe-email">Email address</label>
-    <input class="subscribe-input" type="email" name="email" id="subscribe-email" required autocomplete="email" placeholder="you@example.com">
-    <button class="subscribe-button" type="submit">{{#if data.newsletter.buttonLabel}}{{ data.newsletter.buttonLabel }}{{else}}Subscribe{{/if}}</button>
+    <label class="visually-hidden" for="subscribe-email">{{ strings.emailAddress }}</label>
+    <input class="subscribe-input" type="email" name="email" id="subscribe-email" required autocomplete="email" placeholder="{{ strings.emailPlaceholder }}">
+    <button class="subscribe-button" type="submit">{{#if data.newsletter.buttonLabel}}{{ data.newsletter.buttonLabel }}{{else}}{{ strings.subscribe }}{{/if}}</button>
   </form>
 </aside>
-{{/if}}
+{{else}}{{#if data.newsletter.email}}
+<aside class="subscribe" aria-labelledby="subscribe-prompt">
+  <h2 class="subscribe-prompt" id="subscribe-prompt">{{#if data.newsletter.prompt}}{{ data.newsletter.prompt }}{{else}}{{ strings.subscribePrompt }}{{/if}}</h2>
+  <p class="subscribe-alt"><span class="subscribe-label">{{ strings.writeTo }}</span> <a class="subscribe-mail" href="mailto:{{ data.newsletter.email }}">{{ data.newsletter.email }}</a></p>
+</aside>
+{{else}}{{#if feeds}}
+<aside class="subscribe" aria-labelledby="subscribe-prompt">
+  <h2 class="subscribe-prompt" id="subscribe-prompt">{{ strings.feedPrompt }}</h2>
+  <p class="subscribe-alt">{{#each feeds as feed}}<a class="subscribe-feed" href="{{ feed }}">{{ strings.followFeed }}</a>
+  {{/each}}</p>
+</aside>
+{{/if}}{{/if}}{{/if}}

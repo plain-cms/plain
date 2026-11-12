@@ -1,0 +1,16 @@
+<article class="leaf stage">
+  <header class="leaf-head">
+    <p class="stage-meta" data-read="{{ strings.minRead }}"><time datetime="{{ page.date }}">{{#if page.dateFormatted}}{{ page.dateFormatted }}{{else}}{{ page.date }}{{/if}}</time></p>
+    <h1 class="leaf-title">{{ page.title }}</h1>
+    {{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}{{#if page.tagLinks}}<ul class="tags" aria-label="{{ strings.tagsLabel }}">
+      {{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>
+      {{/each}}
+    </ul>{{/if}}
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  <p class="back"><a class="arm-back" href="/blog/">{{ strings.backToArchive }}</a></p>
+</article>

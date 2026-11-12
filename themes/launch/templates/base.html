@@ -9,13 +9,13 @@
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
 {{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
 {{#if page.description}}<meta property="og:description" content="{{ page.description }}">
-{{/if}}{{#if page.date}}<meta property="og:type" content="article">
-{{else}}<meta property="og:type" content="website">
-{{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
+{{/if}}<meta property="og:type" content="{{#if page.date}}article{{else}}website{{/if}}">
+{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
 <meta name="twitter:card" content="summary_large_image">
 {{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
 <meta name="twitter:card" content="summary_large_image">
 {{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
 {{/each}}<meta name="color-scheme" content="light dark">
 {{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
 {{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -23,23 +23,27 @@
 {{/if}}<link rel="stylesheet" href="/assets/theme.css">
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
 <header class="masthead">
   <a class="site-title" href="/">{{ site.title }}</a>
-  <nav aria-label="Main">
+  <nav aria-label="{{ strings.mainNav }}">
     <ul>
       {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
       {{/each}}
     </ul>
   </nav>
-  {{#if collections.changelog}}<a class="whats-new" href="/changelog/"><span class="live-dot" aria-hidden="true"></span>What's new</a>
+  {{#if collections.changelog}}<a class="whats-new" href="/changelog/"><span class="live-dot" aria-hidden="true"></span>{{ strings.whatsNew }}</a>
   {{/if}}
 </header>
 <main id="main">
 {{{ body }}}
 </main>
 <footer class="colophon">
-  <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
+  <p><strong>{{ site.title }}</strong>{{#if site.description}} — {{ site.description }}{{/if}}</p>
+  <ul role="list">
+    {{#each nav as entry}}<li><a href="{{ entry.url }}">{{ entry.label }}</a></li>
+    {{/each}}
+  </ul>
   {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>

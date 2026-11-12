@@ -1,0 +1,32 @@
+{{#if data.schedule.days}}
+<section class="timetable" aria-labelledby="timetable-heading">
+  <div class="timetable-head">
+    <h2 id="timetable-heading">{{ strings.everyWeek }}</h2>
+    <p class="take-one" aria-hidden="true">{{ strings.takeOne }}</p>
+  </div>
+  <ul class="fringe" role="list">
+    {{#each data.schedule.days as day}}
+    <li class="strip{{#if day.classes}}{{else}} strip-stub{{/if}}" data-day="{{ day.day }}">
+      <h3 class="strip-day">{{ day.day }}</h3>
+      <div class="strip-body">
+        <p class="today-flag" hidden>{{ strings.today }}</p>
+        {{#if day.classes}}<ul class="sessions" role="list">
+          {{#each day.classes as session}}<li class="session">
+            <span class="session-time">{{ session.time }}</span>
+            <span class="session-name">{{ session.name }}</span>
+            {{#if session.who}}<span class="session-who">{{ strings.withInstructor }} {{ session.who }}</span>
+            {{/if}}{{#if session.level}}<span class="session-level">{{ session.level }}</span>
+            {{/if}}</li>
+          {{/each}}
+        </ul>
+        <span class="strip-tail" aria-hidden="true">{{ site.title }}</span>
+        {{else}}<p class="strip-none">{{ strings.noClasses }}</p>
+        {{/if}}
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}
+</section>
+{{/if}}

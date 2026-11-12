@@ -1,0 +1,53 @@
+{
+  "name": "saucer",
+  "title": "Saucer",
+  "description": "A tea-room theme built on the willow-pattern plate: the menu sits in a white well inside a cobalt transfer-printed rim of fish-roe lattice and round rosettes with a scalloped inner edge, set in flared capitals and serif italics, turning to cobalt glaze with a white rim after dark.",
+  "family": "restaurant",
+  "bestFor": [
+    "tea room",
+    "afternoon tea",
+    "tea shop",
+    "cake shop",
+    "village café",
+    "garden café",
+    "scones and cream teas",
+    "vintage café"
+  ],
+  "mood": [
+    "dainty",
+    "traditional",
+    "crisp",
+    "homely"
+  ],
+  "tokens": {
+    "--font-display": "the flared capitals: site title, menu links, dish names, prices, the titles in the plate, small labels and the button; also page titles and headings in mixed case",
+    "--font-body": "body text, and the italics of dish descriptions, section names and notes",
+    "--font-mono": "inline code and code blocks in page text",
+    "--text-base": "size of ordinary body text",
+    "--leading": "line spacing of body text",
+    "--tracking-caps": "letter spacing of the small capitals: dish names, labels, menu links, the button",
+    "--color-bg": "page background (the white glaze by day, cobalt glaze at night)",
+    "--color-text": "body text, dish names, page titles and menu links",
+    "--color-muted": "small notes in tea-stain brown: italics in page text, dish descriptions, hours labels, dates, quotations, the footer",
+    "--color-accent": "links, prices, the site title, section names, headings, plate titles, list markers and focus rings",
+    "--color-rim": "the printed rim round the plate and across the masthead, the plate's edge band, the scalloped edge and inner hairline of the well, the rosette under a plate title, and the heavy rules of the masthead, footer and hours card, under the current menu link and beside a quotation",
+    "--color-well": "the well of the plate where the menu sits, and the glaze that shows through the plate's rim",
+    "--color-line": "thin dividing lines: beside section names, between posts, in tables, the horizontal rule",
+    "--color-button": "background of the booking button",
+    "--color-button-hover": "background of the booking button on hover",
+    "--color-button-ink": "text and inner line of the booking button",
+    "--color-code-bg": "background of code in page text",
+    "--color-mark": "background of selected text",
+    "--rim": "width of the printed rim round the plate and across the masthead (narrower on phones); the roe, rosettes and scallops scale with it",
+    "--band": "weight of the heavy lines: the plate's edge, the rules of the masthead, footer and hours card, the mark under the current menu link, the rule beside a quotation",
+    "--radius": "corner rounding of the plate, the button, code, images and focus rings",
+    "--measure": "width of the text column on ordinary pages",
+    "--measure-plate": "width of the plate on the home page, the menu, a dish page and the 404",
+    "--measure-page": "greatest width of the masthead, the home page and the footer",
+    "--space-1": "smallest gap: above a label, between tags, under a post title",
+    "--space-2": "small gap: under headings, round menu links, in table cells, between hours",
+    "--space-3": "page gutter, the gap between paragraphs, and between dishes on the menu page",
+    "--space-4": "gap between blocks, above headings, and between menu links",
+    "--space-5": "large gap: under the page, and between the home page's text and its plate"
+  }
+}

@@ -1,0 +1,277 @@
+/* Patent — a patent attorney's theme drawn as a patent drawing sheet.
+   Ink is the only colour; hatching is the only tone. Edit the tokens below,
+   never the selectors. */
+
+:root {
+  /* Type — a humanist sans for the text, a slab for captions, numerals and fees */
+  --font-sans: Seravek, "Gill Sans Nova", "Gill Sans", Ubuntu, Calibri, "Segoe UI", "DejaVu Sans", sans-serif;
+  --font-slab: Rockwell, "Rockwell Nova", "Roboto Slab", "Zilla Slab", "DejaVu Serif", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.0625rem;
+  --text-small: 0.875rem;
+  --leading: 1.55;
+  --caption-size: clamp(1.375rem, 1.05rem + 1.1vw, 1.875rem);
+
+  /* Colour — Indian ink on Bristol board, nothing else */
+  --color-bg: #fdfdfa;
+  --color-text: #141414;
+  --color-muted: #3b3b3b;
+  --color-accent: #141414;
+  --color-ink: #141414;
+  --color-hatch: #141414;
+  --color-mark: #141414;
+
+  /* Measures */
+  --page-width: 74rem;
+  --measure: 42rem;
+  --gutter: 1rem;
+  --cell: 6rem;
+  --fig-zone: 2.5rem;
+  --fig-depth: 5rem;
+  --stroke: 2px;
+  --hair: 1px;
+  --hatch-gap: 6px;
+  --radius: 0;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* the negative: white line work on black film */
+    --color-bg: #0c0d0e;
+    --color-text: #f2f1eb;
+    --color-muted: #c9c8c1;
+    --color-accent: #f2f1eb;
+    --color-ink: #f2f1eb;
+    --color-hatch: #deddd6;
+    --color-mark: #f2f1eb;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body { margin: 0; padding: 0 var(--gutter); font-family: var(--font-sans); font-size: var(--text-base); line-height: var(--leading); color: var(--color-text); background: var(--color-bg); overflow-wrap: break-word; hyphens: manual; }
+
+.masthead, main, .consult, .colophon { max-width: var(--page-width); margin-inline: auto; }
+main { min-height: 40vh; }
+
+h1, h2, h3, .row-title, .person-name, .person-role, .person-cred { hyphens: auto; }
+
+::selection { background: var(--color-mark); color: var(--color-bg); }
+
+a { color: var(--color-accent); text-decoration-thickness: var(--hair); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: var(--stroke); }
+a[href^="mailto:"], a[href^="tel:"] { overflow-wrap: anywhere; }
+
+/* an ink ring with a ring of paper outside it: shows on white, on hatching and in the negative */
+:focus-visible { outline: var(--stroke) solid var(--color-ink); outline-offset: 3px; box-shadow: 0 0 0 6px var(--color-bg); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 3; padding: var(--space-2) var(--space-3); background: var(--color-bg); color: var(--color-text); border: var(--stroke) solid var(--color-ink); }
+.skip-link:focus { left: var(--space-2); }
+
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Masthead: the header line printed across the top of every drawing sheet */
+
+.masthead { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-4); padding: var(--space-3) 0 var(--space-2); border-bottom: var(--hair) solid var(--color-ink); }
+.site-title { margin-right: auto; font-family: var(--font-slab); font-size: 1.1875rem; font-weight: 700; line-height: 1.2; letter-spacing: 0.04em; color: var(--color-text); text-decoration: none; }
+.site-title:hover { text-decoration: underline; }
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: inline-block; padding: var(--space-1) 0; font-size: 0.9375rem; color: var(--color-text); text-decoration: none; border-bottom: var(--stroke) solid transparent; }
+.masthead nav a:hover { border-bottom-color: var(--color-ink); }
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-ink); font-weight: 700; }
+.call { margin: 0; font-family: var(--font-slab); font-size: 0.9375rem; white-space: nowrap; }
+.call a { text-decoration: none; }
+.call a:hover { text-decoration: underline; }
+
+/* Page frame -------------------------------------------------------------- */
+
+.page { padding: var(--space-4) 0 var(--space-5); }
+.page > * + * { margin-top: var(--space-4); }
+.page-header > * { max-width: var(--measure); }
+.page-header h1 { margin: 0; font-size: clamp(1.625rem, 1.15rem + 1.6vw, 2.375rem); font-weight: 500; line-height: 1.12; letter-spacing: -0.01em; text-wrap: balance; }
+.lead { margin: var(--space-3) 0 0; font-size: 1.125rem; line-height: 1.45; color: var(--color-muted); }
+.crumb { margin: 0 0 var(--space-2); font-size: var(--text-small); }
+@media (min-width: 60rem) {
+  .split:has(.lead) { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: var(--space-5); align-items: end; max-width: none; }
+  .split:has(.lead) > .crumb { grid-column: 1 / -1; }
+  .split:has(.lead) > :not(.crumb, h1) { grid-column: 2; }
+  .split:has(.lead) .lead { margin-top: 0; }
+}
+
+.block-title, .sheet-title, .key h2 { margin: 0; font-size: var(--text-small); font-weight: 700; line-height: 1.3; letter-spacing: 0.1em; text-transform: uppercase; }
+
+/* Prose: the specification, every paragraph numbered as in a published application */
+
+.prose { max-width: var(--measure); counter-reset: para; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose > p { counter-increment: para; }
+.prose > p::before { content: "[00" counter(para, decimal-leading-zero) "]"; margin-right: 0.6em; font-family: var(--font-mono); font-size: 0.75em; font-weight: 700; color: var(--color-muted); }
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); line-height: 1.25; }
+.prose h2 { font-size: 1rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.prose h3 { font-size: 1.0625rem; font-weight: 700; }
+.prose h4 { font-size: 1rem; font-weight: 600; font-style: italic; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose blockquote, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { max-width: 100%; height: auto; border: var(--hair) solid var(--color-ink); }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: var(--hair) solid var(--color-ink); }
+.prose blockquote { padding: 0 0 0 var(--space-3); border-left: var(--stroke) solid var(--color-ink); font-style: italic; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose code { font-family: var(--font-mono); font-size: 0.875em; }
+.prose pre { padding: var(--space-3); border: var(--hair) solid var(--color-ink); overflow-x: auto; line-height: 1.45; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.9375rem; font-variant-numeric: tabular-nums; }
+.prose th, .prose td { min-width: 7rem; padding: 0.4375rem 0.75rem 0.4375rem 0; text-align: left; vertical-align: top; border-bottom: var(--hair) solid var(--color-ink); }
+.prose th { border-bottom-width: var(--stroke); font-size: var(--text-small); vertical-align: bottom; }
+
+/* THE DRAWING SHEET — the signature. Each service is a figure: three hatched
+   parts on a dash-dot centre line, tagged 10, 12, 14 on curved lead lines,
+   captioned FIG. n by a counter. Parts cycle ring, plate, nut, pin by
+   nth-child; each part cell carries its own stretch of centre line, so
+   wrapped parts keep their line. */
+
+.sheet { position: relative; margin-top: var(--space-5); padding: var(--space-4) var(--space-3) var(--space-3); border: var(--stroke) solid var(--color-ink); }
+.sheet-title, .key h2 { position: absolute; top: 0; left: var(--space-2); max-width: calc(100% - var(--space-4)); padding: 0 var(--space-2); background: var(--color-bg); transform: translateY(-50%); }
+.sheet-more { margin: var(--space-3) 0 0; padding-top: var(--space-3); border-top: var(--hair) solid var(--color-ink); font-weight: 600; }
+
+.fig { display: flex; flex-direction: column; align-items: center; width: max-content; max-width: 100%; }
+.parts { display: flex; flex-wrap: wrap; counter-reset: ref 8; }
+.part { counter-increment: ref 2; position: relative; flex: none; width: var(--cell); height: calc(var(--fig-zone) + var(--fig-depth)); background: repeating-linear-gradient(90deg, var(--color-ink) 0 calc(var(--cell) * 0.13), transparent 0 calc(var(--cell) * 0.165), var(--color-ink) 0 calc(var(--cell) * 0.195), transparent 0 calc(var(--cell) * 0.25)) 0 calc(var(--fig-zone) + var(--fig-depth) / 2) / 100% var(--hair) no-repeat; }
+.part i { position: absolute; left: 50%; top: calc(var(--fig-zone) + var(--fig-depth) / 2); width: var(--w); height: var(--h); transform: translate(-50%, -50%); border: var(--stroke) solid var(--color-ink); border-left-width: var(--head); border-radius: var(--r); background: var(--rim), repeating-linear-gradient(var(--a), var(--color-hatch) 0 var(--hair), transparent 0 var(--hatch-gap)) var(--color-bg); mask: var(--hole); }
+/* the lead line: a curved hair from the numeral down onto the part */
+.part::before { content: ""; position: absolute; top: 1.3rem; bottom: calc(var(--fig-depth) / 2 + var(--h) / 2 - 0.3rem); left: 50%; width: var(--lead, 1.125rem); border-top: var(--hair) solid var(--color-ink); border-left: var(--hair) solid var(--color-ink); border-top-left-radius: 100% 100%; }
+.part::after { content: counter(ref); position: absolute; top: 0.55rem; left: calc(50% + var(--tag, 1.3rem)); font-family: var(--font-slab); font-size: 0.9375rem; line-height: 1.5rem; }
+.part:nth-child(even)::before { left: auto; right: 50%; border-left: 0; border-right: var(--hair) solid var(--color-ink); border-top-left-radius: 0; border-top-right-radius: 100% 100%; }
+.part:nth-child(even)::after { left: auto; right: calc(50% + var(--tag, 1.3rem)); }
+
+/* the four parts. Row 1 of a sheet (and any run of parts) draws ring, plate,
+   nut, pin, ring …; each further row starts one part later in the cycle. */
+.part, .row:nth-child(4n+3) .part:nth-child(3), .row:nth-child(4n+4) .part:nth-child(2) { --w: 3.25rem; --h: 3.25rem; --r: 50%; --a: 45deg; --head: var(--stroke); --hole: radial-gradient(circle closest-side, transparent 34%, var(--color-ink) 0); --rim: radial-gradient(circle closest-side, var(--color-ink) 44%, transparent 0); }
+.parts > :nth-child(4n+2), .row:nth-child(4n+2) .part:nth-child(1), .row:nth-child(4n+4) .part:nth-child(3) { --w: 1.25rem; --h: 4.5rem; --r: 0; --a: -45deg; --head: var(--stroke); --hole: linear-gradient(var(--color-ink) calc(50% - 0.375rem), transparent 0 calc(50% + 0.375rem), var(--color-ink) 0); --rim: linear-gradient(transparent calc(50% - 0.5rem), var(--color-ink) 0 calc(50% + 0.5rem), transparent 0); }
+.parts > :nth-child(4n+3), .row:nth-child(4n+2) .part:nth-child(2), .row:nth-child(4n+3) .part:nth-child(1) { --w: 2.75rem; --h: 3.25rem; --r: 0.4375rem; --a: 45deg; --head: var(--stroke); --hole: none; --rim: linear-gradient(90deg, transparent calc(28% - 1px), var(--color-ink) 0 calc(28% + 1px), transparent 0 calc(72% - 1px), var(--color-ink) 0 calc(72% + 1px), transparent 0); }
+.parts > :nth-child(4n+4), .row:nth-child(4n+2) .part:nth-child(3), .row:nth-child(4n+3) .part:nth-child(2), .row:nth-child(4n+4) .part:nth-child(1) { --w: 4.5rem; --h: 0.9375rem; --r: 0 0.5rem 0.5rem 0; --a: -45deg; --head: 0.5rem; --hole: none; --rim: linear-gradient(transparent, transparent); }
+
+.fig-cap { margin: var(--space-1) 0 0; font-family: var(--font-slab); font-size: var(--caption-size); font-style: italic; font-weight: 700; line-height: 1.1; letter-spacing: 0.03em; white-space: nowrap; }
+.fig-cap::after { content: "\00a0" counter(fig); }
+
+.rows { counter-reset: fig; margin: 0; padding: 0; list-style: none; container-type: inline-size; }
+.row { counter-increment: fig; padding: var(--space-3) 0 var(--space-4); }
+.row + .row { border-top: var(--hair) dashed var(--color-ink); }
+.row-text { min-width: 0; margin-top: var(--space-2); }
+.row > .fee { margin-top: var(--space-2); }
+.row-title { margin: 0; font-size: 1.1875rem; font-weight: 700; line-height: 1.25; }
+.row-note { margin: var(--space-1) 0 0; max-width: 38rem; color: var(--color-muted); line-height: 1.45; }
+
+/* a fee is lettered in a box, as a block of a patent flow chart */
+.fee { display: inline-block; justify-self: start; max-width: 100%; margin: var(--space-3) 0 0; padding: 0.5rem 0.75rem 0.3125rem; border: var(--stroke) solid var(--color-ink); border-radius: var(--radius); font-family: var(--font-slab); font-size: 1.0625rem; line-height: 1.3; }
+@container (min-width: 40rem) {
+  .row { display: grid; grid-template-columns: max-content minmax(0, 1fr); column-gap: var(--space-4); align-items: center; padding: var(--space-3) 0; }
+  .row-text { margin-top: 0; }
+}
+@container (min-width: 58rem) {
+  .row { grid-template-columns: max-content minmax(0, 1fr) 13rem; }
+  .row > .fee { margin: 0; }
+  .row-text:last-child { grid-column: 2 / -1; }
+}
+@media (max-width: 23.99rem) {
+  .sheet { padding-inline: var(--space-2); }
+  .fig { --cell: 5.25rem; --lead: 0.75rem; --tag: 0.925rem; } /* shorter leads keep facing numerals apart */
+}
+
+.pagination, .empty { margin: var(--space-3) 0 0; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); font-size: var(--text-small); font-weight: 600; }
+.pagination span { font-family: var(--font-slab); font-weight: 400; color: var(--color-muted); }
+
+/* A service page: one part per point, and the key of reference numerals */
+.key { counter-reset: fig; }
+.key .fig { counter-increment: fig; margin: 0 auto; }
+.key-list { counter-reset: key 8; margin: var(--space-4) 0 0; padding: var(--space-3) 0 0; list-style: none; border-top: var(--hair) solid var(--color-ink); }
+.key-list li { counter-increment: key 2; display: grid; align-items: baseline; grid-template-columns: 2.5rem minmax(0, 1fr); column-gap: var(--space-2); padding: 0.3125rem 0; line-height: 1.45; hyphens: auto; }
+.key-list li::before { content: counter(key); font-family: var(--font-slab); font-weight: 700; }
+.service .fee { font-size: 1.25rem; }
+@media (min-width: 48rem) {
+  .key-list { columns: 2 20rem; column-gap: var(--space-5); }
+  .key-list li { break-inside: avoid; }
+  .key .fig { zoom: 1.3; }
+  .sheet:not(.key) + .prose { max-width: none; columns: 2 18rem; column-gap: var(--space-5); }
+  .sheet:not(.key) + .prose > * { break-inside: avoid; }
+  .sheet:not(.key) + .prose h2 { break-after: avoid; }
+}
+
+/* People: the named attorneys, as on the front page of a patent */
+.people { max-width: var(--page-width); }
+.people-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: var(--space-4) var(--space-5); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.person { display: flow-root; min-width: 0; padding-top: var(--space-3); border-top: var(--stroke) solid var(--color-ink); }
+.person-name { margin: 0; font-size: 1.25rem; font-weight: 700; line-height: 1.25; }
+.person-photo { float: right; width: 5.5rem; height: 6.5rem; margin: 0 0 var(--space-2) var(--space-3); object-fit: cover; border: var(--hair) solid var(--color-ink); filter: grayscale(1); }
+.person-role { margin: var(--space-1) 0 0; font-weight: 600; line-height: 1.35; }
+.person-cred { margin: var(--space-1) 0 0; font-size: var(--text-small); line-height: 1.45; color: var(--color-muted); }
+.person-bio { margin: var(--space-2) 0; font-size: 0.9375rem; }
+.person-bio p { margin: 0 0 var(--space-2); }
+.person-reach { margin: var(--space-1) 0 0; font-size: var(--text-small); }
+
+/* News ------------------------------------------------------------------- */
+
+.post-list { max-width: 52rem; margin-bottom: 0; padding: 0; list-style: none; }
+.post-row { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-1) var(--space-4); padding: var(--space-3) 0; border-top: var(--hair) solid var(--color-ink); }
+.post-row h2 { margin: 0; font-size: 1.1875rem; line-height: 1.3; }
+.row-title a, .post-row h2 a { color: inherit; text-decoration: none; }
+.row-title a:hover, .post-row h2 a:hover { text-decoration: underline; }
+.post-row p { margin: 0; color: var(--color-muted); }
+.post-date { margin: 0; font-family: var(--font-slab); font-size: 0.9375rem; }
+.page-header .post-date { margin-top: var(--space-3); }
+.post-thumb { display: block; width: 100%; max-width: 14rem; height: auto; border: var(--hair) solid var(--color-ink); }
+@media (min-width: 40rem) {
+  .post-row { grid-template-columns: 10rem minmax(0, 1fr); }
+  .post-row > :not(.post-date) { grid-column: 2; }
+  .post-thumb { width: 9rem; aspect-ratio: 4 / 3; object-fit: cover; }
+}
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; font-size: var(--text-small); }
+.tags li { min-width: 0; overflow-wrap: anywhere; }
+.cover { display: block; width: 100%; height: auto; max-height: 26rem; object-fit: cover; margin-top: var(--space-3); border: var(--hair) solid var(--color-ink); }
+
+/* The consult block: a ruled box of standing facts on every page ----------- */
+
+.consult { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); border: var(--stroke) solid var(--color-ink); }
+.consult > * { min-width: 0; margin: -1px 0 0; padding: var(--space-3); border-top: var(--hair) solid var(--color-ink); }
+.consult h2 { margin: 0; font-size: 1.3125rem; font-weight: 700; line-height: 1.2; }
+.consult-note { margin: var(--space-2) 0 0; color: var(--color-muted); }
+.consult-reach p { margin: 0 0 var(--space-2); }
+.consult-reach p:last-child { margin-bottom: 0; }
+.label { display: block; font-size: var(--text-small); font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.4; }
+.big { font-family: var(--font-slab); font-size: min(1.5rem, 5.6vw); line-height: 1.25; }
+.hours { margin: var(--space-1) 0 0; font-size: 0.9375rem; line-height: 1.4; }
+.hours div { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); padding: 0.3125rem 0; border-bottom: var(--hair) dashed var(--color-ink); }
+.hours dt { flex: 1 1 8rem; min-width: 0; font-weight: 600; }
+.hours dd { flex: 1 1 7rem; min-width: 0; margin: 0; }
+@media (min-width: 52rem) {
+  .consult > * { border-top: 0; margin-top: 0; border-left: var(--hair) solid var(--color-ink); margin-left: -1px; padding: var(--space-4) var(--space-3); }
+}
+
+.colophon { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-4); padding: var(--space-3) 0 var(--space-4); color: var(--color-muted); }
+.colophon > * { margin: 0; font-size: var(--text-small); max-width: 46rem; }
+.colophon a { color: inherit; }
+.colophon-name { font-family: var(--font-slab); font-weight: 700; color: var(--color-text); }
+
+/* Motion & print ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { transition: none; animation: none; scroll-behavior: auto; }
+}
+
+@media print {
+  :root { --color-bg: #ffffff; --color-text: #000000; --color-muted: #000000; --color-accent: #000000; --color-ink: #000000; --color-hatch: #000000; --color-mark: #000000; }
+  body { padding: 0; background: none; }
+  .masthead nav, .skip-link, .sheet-more, .pagination, .crumb { display: none; }
+  a { color: inherit; text-decoration: none; }
+  .row, .person, .post-row, .key, .consult { break-inside: avoid; }
+  .fig { print-color-adjust: exact; }
+}

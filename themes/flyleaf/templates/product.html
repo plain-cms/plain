@@ -1,0 +1,15 @@
+<article class="product">
+  <header class="pile"><div class="book" data-status="{{ page.status }}"><div class="spine">
+    <h1 class="spine-title">{{ page.title }}</h1>
+    <div class="tail"><p class="imprint">{{ page.category }}</p>
+    {{#if page.price}}<p class="label"><span class="price">{{ page.price }}</span>{{#if page.unit}} <span class="unit">{{ page.unit }}</span>{{/if}}</p>{{/if}}
+    {{#if page.status}}<p class="status"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ page.status }}</span></p>{{/if}}</div>
+  </div></div></header>
+  <div class="product-cols">
+    <div>{{#if page.description}}<p class="lede">{{ page.description }}</p>{{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>{{/if}}</div>
+    <aside>{{#if page.cover}}<img class="plate" src="{{ page.cover }}" alt="{{ page.title }}" decoding="async">{{/if}}{{#if page.details}}<ul class="details" aria-label="{{ strings.details }}">{{#each page.details as fact}}<li>{{ fact }}</li>{{/each}}</ul>{{/if}}</aside>
+  </div>
+  <p class="back"><a href="/products/">{{ strings.backToShop }}</a></p>
+</article>

@@ -1,0 +1,585 @@
+/* Ticking — a portfolio for an interior designer, built as a furnishing-fabric
+   sample book. Each project is a cutting with pinked edges, woven in CSS
+   (ticking, gingham, trellis, spot, herringbone, by position — five weaves, so
+   no column of the grid repeats one cloth) with a paper label stapled
+   over it. Plain pages carry one band of ticking at the head. Every look
+   decision is a token below: restyle by editing tokens, never selectors. */
+
+:root {
+  --font-body: Charter, "Bitstream Charter", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-label: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", system-ui, sans-serif;
+  --font-typed: "American Typewriter", "Courier New", Courier, ui-monospace, monospace;
+  --font-figures: "Courier New", Courier, ui-monospace, monospace;
+  --text-xs: 0.6875rem;
+  --text-s: 0.8125rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-xl: clamp(1.75rem, 1.1rem + 2.6vw, 3.1rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.14;
+  --tracking-caps: 0.14em;
+
+  --color-bg: #fbfaf8;
+  --color-text: #24221f;
+  --color-muted: #5f5a54;
+  --color-accent: #b0375c;
+  --color-rule: #d8d2c8;
+  --color-paper: #ffffff;
+  --color-paper-ink: #24221f;
+  --color-paper-muted: #5f5a54;
+  --color-paper-accent: #b0375c;
+  --color-linen: #e6dcc8;
+  --weave-indigo: #2f416f;
+  --weave-red: #ad2a31;
+  --weave-green: #285a43;
+  --weave-rose: #c25a7b;
+  --weave-tweed: #3a3632;
+  --color-staple: #8a8e94;
+  --color-shadow: rgba(36, 34, 31, 0.18);
+
+  --measure: 64ch;
+  --page-max: 82rem;
+  --gutter: clamp(1rem, 3.2vw, 2.5rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --pinking: 0.4375rem;
+  --swatch-min: 16.5rem;
+  --swatch-ratio: 1.45;
+  --label-overlap: 2.75rem;
+  --band-height: clamp(3.5rem, 8vw, 6rem);
+}
+
+/* After dark the book lies open on its indigo cloth cover: the cuttings and
+   their paper labels stay the physical things they are, only dimmed. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1c1e26;
+    --color-text: #ece8e0;
+    --color-muted: #aba59c;
+    --color-accent: #e88aa5;
+    --color-rule: #3b3e4a;
+    --color-paper: #ebe5d9;
+    --color-paper-ink: #24221f;
+    --color-paper-muted: #575149;
+    --color-paper-accent: #952b4b;
+    --color-linen: #d3c7b1;
+    --color-staple: #a7abb1;
+    --color-shadow: rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* Base ---------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, .label-title, .chip-title, .spec dd, .site-title {
+  hyphens: auto;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+a { color: inherit; text-decoration-color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+a[href^="mailto:"] { overflow-wrap: anywhere; }
+a[href^="tel:"] { white-space: nowrap; }
+
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+
+::selection { background: var(--color-linen); color: var(--color-paper-ink); }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 3;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-paper);
+  color: var(--color-paper-ink);
+}
+.skip-link:focus { left: var(--space-2); }
+
+.wrap {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* The label voice: small spaced grotesque capitals */
+.caps, .menu, .site-title, .label-title, .spec dt, .pagination, .colophon-name, .prose h2, .prose th {
+  font-family: var(--font-label);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  line-height: 1.45;
+}
+
+/* The typed reference line */
+.typed {
+  font-family: var(--font-typed);
+  font-size: var(--text-s);
+  line-height: 1.45;
+  color: var(--color-muted);
+  margin: 0;
+}
+.typed > * + *::before { content: "\00b7"; margin-inline: 0.5em; }
+
+/* A date shown as its year: the label shows the first four figures. The
+   figures face is monospaced, so 4ch is exactly four figures whatever they are. */
+.year {
+  display: inline-block;
+  width: 4ch;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-family: var(--font-figures);
+  font-weight: 700;
+}
+
+/* The weaves --------------------------------------------------------------------
+   Every cutting is linen with a slub texture under one of five patterns. Five,
+   so the cycle never lines up with a grid of two, three or four columns. */
+
+.cutting, .band, .chip, .mark {
+  --slub: repeating-linear-gradient(0deg, color-mix(in srgb, var(--color-paper-ink) 6%, transparent) 0 1px, transparent 0 3px),
+    repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-paper) 22%, transparent) 0 1px, transparent 0 4px),
+    var(--color-linen);
+  --ticking: repeating-linear-gradient(90deg, transparent 0 1.15rem, var(--weave-indigo) 0 1.28rem, transparent 0 1.5rem, var(--weave-indigo) 0 1.95rem, transparent 0 2.17rem, var(--weave-indigo) 0 2.3rem);
+  background: var(--ticking) center, var(--slub);
+}
+/* On a cutting or the band the same ticking is laid as whole repeats (stops in
+   %, so the tile can stretch to fit), each starting and ending mid-gap: no
+   sliver of stripe is left at either cut edge */
+.cutting, .band {
+  background: linear-gradient(90deg, transparent 25%, var(--weave-indigo) 0 30.65%, transparent 0 40.22%, var(--weave-indigo) 0 59.78%, transparent 0 69.35%, var(--weave-indigo) 0 75%, transparent 0) 0 0 / 2.3rem 100% round, var(--slub);
+}
+.swatch:nth-child(5n+2) .cutting, .chips li:nth-child(5n+2) .chip {
+  --check: color-mix(in srgb, var(--weave-red) 52%, transparent);
+  background:
+    linear-gradient(90deg, var(--check) 50%, transparent 0) 0 0 / 1.1rem 1.1rem,
+    linear-gradient(var(--check) 50%, transparent 0) 0 0 / 1.1rem 1.1rem,
+    var(--slub);
+}
+.swatch:nth-child(5n+3) .cutting, .chips li:nth-child(5n+3) .chip {
+  background:
+    repeating-linear-gradient(45deg, transparent 0 1.05rem, var(--weave-green) 0 1.13rem, transparent 0 1.25rem, var(--weave-green) 0 1.33rem),
+    repeating-linear-gradient(-45deg, transparent 0 1.05rem, var(--weave-green) 0 1.13rem, transparent 0 1.25rem, var(--weave-green) 0 1.33rem),
+    var(--slub);
+}
+.swatch:nth-child(5n+4) .cutting, .chips li:nth-child(5n+4) .chip {
+  background:
+    radial-gradient(circle, var(--weave-rose) 0 0.2rem, transparent 0.24rem) 0 0 / 1.2rem 1.2rem,
+    radial-gradient(circle, var(--weave-rose) 0 0.2rem, transparent 0.24rem) 0.6rem 0.6rem / 1.2rem 1.2rem,
+    var(--slub);
+}
+/* Herringbone: a soft-black twill, its diagonal turning back every other
+   column (the second direction is laid over the first through a striped mask) */
+.swatch:nth-child(5n) .cutting, .chips li:nth-child(5n) .chip {
+  --hb: color-mix(in srgb, var(--weave-tweed) 58%, transparent);
+  background: repeating-linear-gradient(55deg, transparent 0 0.2rem, var(--hb) 0 0.34rem), var(--slub);
+}
+.swatch:nth-child(5n) .cutting::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(-55deg, transparent 0 0.2rem, var(--hb) 0 0.34rem), var(--slub);
+  mask: repeating-linear-gradient(90deg, var(--color-paper-ink) 0 0.75rem, transparent 0 1.5rem);
+}
+
+/* Pinking: zigzag teeth on all four edges, cut with a mask (it reads alpha
+   only, so any opaque colour will do) */
+.cutting, .chip, .mark, .prose img {
+  --t: var(--pinking);
+  --w: calc(2 * var(--t));
+  --o: var(--color-paper-ink);
+  mask:
+    conic-gradient(from 135deg at top, var(--o) 90deg, transparent 0) top / var(--w) var(--t) round no-repeat,
+    conic-gradient(from -45deg at bottom, var(--o) 90deg, transparent 0) bottom / var(--w) var(--t) round no-repeat,
+    conic-gradient(from 45deg at left, var(--o) 90deg, transparent 0) left / var(--t) var(--w) no-repeat round,
+    conic-gradient(from 225deg at right, var(--o) 90deg, transparent 0) right / var(--t) var(--w) no-repeat round,
+    linear-gradient(var(--o) 0 0) center / calc(100% - 2 * var(--t) + 2px) calc(100% - 2 * var(--t) + 2px) no-repeat;
+}
+.chip, .mark { --t: 0.15rem; }
+
+/* The band at the head of a plain page: ticking, pinked along its lower edge */
+.band {
+  height: var(--band-height);
+  --t: var(--pinking);
+  mask:
+    conic-gradient(from -45deg at bottom, var(--color-paper-ink) 90deg, transparent 0) bottom / calc(2 * var(--t)) var(--t) round no-repeat,
+    linear-gradient(var(--color-paper-ink) 0 0) top / 100% calc(100% - var(--t) + 1px) no-repeat;
+}
+/* On the book pages the band narrows to a selvedge: the edge of the cloth the
+   sample book is cut from */
+.selvedge { height: calc(var(--band-height) * 0.3 + var(--pinking)); }
+
+/* Masthead ---------------------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding: var(--space-2) var(--gutter);
+}
+.site-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  padding-block: var(--space-3);
+  font-size: var(--text-s);
+  text-decoration: none;
+}
+.mark { flex: none; width: 1.25rem; height: 1.25rem; }
+.menu ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin: 0; padding: 0; list-style: none; }
+.menu a {
+  display: inline-block;
+  padding-block: var(--space-3) calc(var(--space-3) - 2px);
+  border-bottom: 2px solid transparent;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.menu a:hover { color: var(--color-text); border-bottom-color: var(--color-rule); }
+.menu a[aria-current="page"] { color: var(--color-text); border-bottom-color: var(--color-accent); }
+
+main { min-height: 60vh; }
+
+/* Headings ---------------------------------------------------------------------- */
+
+h1 {
+  font-family: var(--font-label);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.015em;
+  margin: 0;
+  text-wrap: balance;
+  max-width: 24ch;
+}
+.page-head { margin-block: var(--space-4) var(--space-4); }
+.page-head .typed { margin-top: var(--space-3); }
+h1 q { quotes: auto; }
+
+/* The sample book: home and /work/ -------------------------------------------------- */
+
+.book-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3) var(--space-5);
+  padding-block: var(--space-4) var(--space-4);
+}
+.intro-text { max-width: var(--measure); }
+.book-head { padding-block: var(--space-4) var(--space-3); }
+
+/* The typed line at the head of the book, like the spine label of a sample book */
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  color: var(--color-accent);
+}
+.kicker::before {
+  content: "";
+  flex: none;
+  width: 1.5rem;
+  height: 0.2rem;
+  border-radius: 0.1rem;
+  background: var(--color-staple);
+  box-shadow: 0 1px 0 var(--color-shadow);
+}
+
+.swatches {
+  counter-reset: swatch;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--swatch-min), 100%), 1fr));
+  gap: var(--space-5) var(--space-4);
+  align-items: stretch;
+  margin-block: 0;
+  list-style: none;
+}
+.swatch {
+  counter-increment: swatch;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  filter: drop-shadow(0 1px 1.5px var(--color-shadow));
+}
+.cutting { position: relative; display: block; aspect-ratio: var(--swatch-ratio); overflow: hidden; }
+/* Cut by hand: no two cuttings sit quite square on the page */
+.swatch:nth-child(3n+1) .cutting { rotate: -0.7deg; }
+.swatch:nth-child(3n+2) .cutting { rotate: 0.5deg; }
+.swatch:nth-child(5n+3) .cutting { rotate: -0.3deg; }
+.swatch:nth-child(odd) .label::before { transform: rotate(4deg); left: 38%; }
+.cutting img { position: relative; display: block; width: 100%; height: 100%; object-fit: cover; }
+
+/* The paper label, stapled over the lower edge of its cutting */
+.label {
+  position: relative;
+  flex: 1;
+  margin: calc(-1 * var(--label-overlap)) var(--space-3) 0;
+  padding: var(--space-3) var(--space-3) var(--space-3);
+  background: var(--color-paper);
+  color: var(--color-paper-ink);
+}
+.label::before {
+  content: "";
+  position: absolute;
+  top: 0.55rem;
+  left: 50%;
+  width: 1.6rem;
+  height: 0.2rem;
+  margin-left: -0.8rem;
+  border-radius: 0.1rem;
+  background: var(--color-staple);
+  box-shadow: 0 1px 0 var(--color-shadow), inset 0 1px 0 color-mix(in srgb, var(--color-paper) 55%, transparent);
+  transform: rotate(-3deg);
+}
+.label-title { margin: var(--space-2) 0 var(--space-2); font-size: var(--text-s); line-height: 1.35; }
+.label-title a { text-decoration: none; }
+.label-title a::after { content: ""; position: absolute; inset: 0; z-index: 1; }
+.label-title a:focus-visible { outline: none; }
+.label-title a:focus-visible::after { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+.swatch:hover .label-title a { text-decoration: underline; text-decoration-color: var(--color-accent); }
+.label .typed { color: var(--color-paper-muted); font-size: var(--text-xs); }
+/* Reference line: pattern number at the left, year at the right */
+.ref-line { display: flex; align-items: baseline; justify-content: space-between; gap: var(--space-3); }
+.ref-line > * + *::before { content: none; }
+.ref { color: var(--color-paper-accent); }
+.ref::after { content: "\00a0" counter(swatch, decimal-leading-zero); }
+.label .client { margin-top: var(--space-1); }
+.label-note {
+  margin: var(--space-2) 0 0;
+  padding-top: var(--space-2);
+  border-top: 1px dashed var(--color-rule);
+  font-size: var(--text-s);
+  line-height: 1.5;
+  hyphens: manual;
+}
+
+/* Case study ---------------------------------------------------------------------- */
+
+.project-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4) var(--space-5);
+  margin-block: var(--space-4);
+}
+.lede { margin: var(--space-3) 0 0; max-width: 46ch; font-size: var(--text-l); line-height: 1.45; text-wrap: pretty; }
+
+/* The spec is a large stapled label */
+.spec {
+  position: relative;
+  align-self: start;
+  margin: 0;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+  background: var(--color-paper);
+  color: var(--color-paper-ink);
+  box-shadow: 0 1px 2px var(--color-shadow);
+}
+.spec::before {
+  content: "";
+  position: absolute;
+  top: 0.8rem;
+  left: var(--space-3);
+  width: 1.9rem;
+  height: 0.22rem;
+  border-radius: 0.1rem;
+  background: var(--color-staple);
+  box-shadow: 0 1px 0 var(--color-shadow);
+  transform: rotate(-4deg);
+}
+.spec div {
+  display: grid;
+  grid-template-columns: minmax(0, 7.5rem) minmax(0, 1fr);
+  gap: 0 var(--space-3);
+  padding-block: var(--space-2);
+  border-top: 1px dashed var(--color-rule);
+}
+.spec dt { grid-row: span 8; color: var(--color-paper-muted); padding-top: 0.15em; hyphens: auto; }
+.spec dd { grid-column: 2; margin: 0; font-family: var(--font-typed); font-size: var(--text-s); }
+
+.project-cover { margin-block: 0 var(--space-4); }
+/* The cover is cut to the picture's own shape, so a tall one is shown whole */
+.project-cover .cutting { aspect-ratio: auto; width: fit-content; max-width: 100%; }
+.project-cover .cutting img { width: auto; max-width: 100%; height: auto; max-height: 80vh; }
+
+/* The way on: an index of cuttings */
+.more { margin-top: var(--space-5); }
+.more h2 { margin: 0 0 var(--space-3); color: var(--color-muted); }
+.chips { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr)); gap: 0 var(--space-4); }
+.chips a {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-block: var(--space-2);
+  border-top: 1px solid var(--color-rule);
+  text-decoration: none;
+}
+.chips a:hover .chip-title { text-decoration: underline; text-decoration-color: var(--color-accent); }
+.chip { flex: none; align-self: center; width: 1.75rem; height: 1.25rem; }
+.chip-title { flex: 1; font-family: var(--font-label); font-size: var(--text-s); font-weight: 700; line-height: 1.35; }
+.chips .year { flex: none; font-size: var(--text-xs); color: var(--color-muted); }
+.more p { margin: var(--space-2) 0 0; padding-top: var(--space-2); border-top: 1px solid var(--color-rule); }
+.more p a { display: inline-block; padding-block: var(--space-2); }
+
+/* Prose ---------------------------------------------------------------------- */
+
+.prose > * { max-width: var(--measure); }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose > :last-child { margin-bottom: 0; }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li + li { margin-top: var(--space-1); }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-size: var(--text-xs); color: var(--color-text); }
+.prose h3, .prose h4 { font-family: var(--font-label); font-size: var(--text-m); margin: var(--space-4) 0 var(--space-2); line-height: 1.3; }
+.prose h4 { font-size: var(--text-s); }
+.prose img { display: block; max-width: 100%; height: auto; margin-block: var(--space-4); }
+.prose blockquote {
+  margin-left: 0;
+  padding-left: var(--space-3);
+  border-left: 3px solid var(--color-accent);
+  font-style: italic;
+}
+.prose code { font-family: var(--font-typed); font-size: 0.9em; }
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-3);
+  background: var(--color-paper);
+  color: var(--color-paper-ink);
+  border: 1px dashed var(--color-rule);
+  line-height: 1.5;
+}
+/* A wide table scrolls in its own box; a shadow at the cut edge says there is more */
+.prose table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  hyphens: manual;
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) left / 1.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) right / 1.5rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, var(--color-shadow), transparent) left / 0.6rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, var(--color-shadow), transparent) right / 0.6rem 100% no-repeat scroll;
+}
+.prose th, .prose td { min-width: 7.5em; padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { color: var(--color-muted); }
+.prose hr, .colophon::before {
+  height: 0.375rem;
+  border: 0;
+  margin: var(--space-4) 0;
+  background:
+    linear-gradient(135deg, var(--color-rule) 25%, transparent 25%) -0.1875rem 0 / 0.375rem 0.375rem repeat-x,
+    linear-gradient(225deg, var(--color-rule) 25%, transparent 25%) -0.1875rem 0 / 0.375rem 0.375rem repeat-x;
+}
+.intro-text p:last-child { font-family: var(--font-typed); font-size: var(--text-s); }
+.intro-text p:last-child a { color: var(--color-accent); }
+
+/* Posts and lists ------------------------------------------------------------------ */
+
+.post-meta .tags a { margin-right: 0.6em; }
+.entries { list-style: none; margin-block: 0; }
+.entries li { max-width: calc(var(--measure) + 2 * var(--gutter)); padding-block: var(--space-3); border-top: 1px solid var(--color-rule); }
+.entries h2 { margin: 0 0 var(--space-1); font-family: var(--font-label); font-size: var(--text-l); line-height: var(--leading-tight); }
+.entries h2 a { text-decoration: none; }
+.entries h2 a:hover { text-decoration: underline; text-decoration-color: var(--color-accent); }
+.entry-note { margin: var(--space-2) 0 0; }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-4);
+  margin-top: var(--space-4);
+  color: var(--color-muted);
+}
+.pagination a { display: inline-block; padding-block: var(--space-3); color: var(--color-text); }
+
+.empty { color: var(--color-muted); margin-block: var(--space-4); }
+
+/* Footer ---------------------------------------------------------------------- */
+
+.colophon {
+  max-width: var(--page-max);
+  margin: var(--space-5) auto 0;
+  padding: 0 var(--gutter) var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--text-s);
+}
+.colophon::before { content: ""; display: block; margin-top: 0; }
+.colophon p { margin: 0 0 var(--space-1); }
+.colophon-name { color: var(--color-text); }
+
+/* Wide screens ---------------------------------------------------------------- */
+
+@media (min-width: 56rem) {
+  .book-intro { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: end; padding-block: var(--space-4) var(--space-5); }
+  .intro-text { padding-bottom: 0.3em; }
+  .project-head { grid-template-columns: minmax(0, 1fr) minmax(16rem, 23rem); }
+  .spec { margin-top: calc(-1 * var(--space-5)); }
+}
+
+@media (max-width: 22.5rem) {
+  .prose p, .prose li { hyphens: auto; }
+}
+
+/* Small screens ---------------------------------------------------------------- */
+
+@media (max-width: 30rem) {
+  .lede { hyphens: auto; }
+  .menu ul { gap: 0 var(--space-3); }
+  .swatches { gap: var(--space-4); }
+  .cutting { aspect-ratio: 2; }
+  .swatches .swatch:nth-child(n) .cutting { rotate: none; }
+  .prose th, .prose td { min-width: 8em; }
+  .prose th:last-child, .prose td:last-child { min-width: 14em; }
+  .project-cover .cutting { aspect-ratio: auto; }
+  .spec div { grid-template-columns: minmax(0, 6rem) minmax(0, 1fr); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .swatch { transition: transform 0.2s ease; }
+  .swatch:hover { transform: translateY(-3px); }
+}
+
+/* Print: no weaves, no menu; labels become plain ruled entries in dark ink -------- */
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-rule: #999999;
+    --color-paper: #ffffff;
+    --color-paper-ink: #000000;
+    --color-paper-muted: #333333;
+  }
+  body { font-size: 11pt; }
+  .menu, .skip-link, .band, .cutting:not(:has(img)), .chip, .mark, .pagination, .more { display: none; }
+  .swatches { display: block; padding: 0; }
+  .swatch { filter: none; break-inside: avoid; margin-bottom: var(--space-3); }
+  .label { margin: 0; padding: var(--space-2) 0 0; border-top: 1px solid var(--color-rule); }
+  .label::before, .spec::before { display: none; }
+  .spec { box-shadow: none; padding: 0; margin: 0; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

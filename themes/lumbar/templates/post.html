@@ -1,0 +1,18 @@
+<article class="post">
+  <header class="page-header">
+    <p class="eyebrow"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.tagLinks}}
+  <ul class="tags" aria-label="{{ strings.tagsLabel }}">
+    {{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>
+    {{/each}}
+  </ul>
+  {{/if}}
+</article>

@@ -1,0 +1,68 @@
+{
+  "dateLabel": "6–8 August 2027",
+  "date": "2027-08-06",
+  "time": "Gates open noon Friday, music from 4\u00a0pm",
+  "venue": "Lower Hartwell Farm",
+  "address": "Bosbury Lane, Hartwell Cross, near Ledbury HR8 2LW",
+  "entry": "Weekend £95 with camping, Saturday or Sunday £45, under-12s free with an adult",
+  "replyBy": "",
+  "replyEmail": "",
+  "ticketsUrl": "https://tickets.example.com/hartwell-meadows-2027",
+  "peopleLabel": "Line-up",
+  "programme": [
+    {
+      "day": "Friday 6 August",
+      "items": [
+        { "time": "12 noon", "title": "Gates and campsite open", "place": "Box office, top of the car park", "note": "Swap your ticket for a wristband here. Pitch anywhere in the Long Meadow; the Quiet Field is for families." },
+        { "time": "4 pm", "title": "Rosa Quintero", "place": "Orchard tent", "note": "" },
+        { "time": "5.30 pm", "title": "Lowland Radio", "place": "Meadow stage", "note": "" },
+        { "time": "7 pm", "title": "Kit Fennimore", "place": "Orchard tent", "note": "" },
+        { "time": "8 pm", "title": "Hollow Pines", "place": "Meadow stage", "note": "" },
+        { "time": "9.30 pm", "title": "The Calloway Stringband", "place": "Meadow stage", "note": "Friday headliners. Two hours, with an interval for the bar." },
+        { "time": "11.30 pm", "title": "Songs round the fire", "place": "Firepit, Long Meadow", "note": "Bring an instrument or a voice. The fire is out at one." }
+      ]
+    },
+    {
+      "day": "Saturday 7 August",
+      "items": [
+        { "time": "9 am", "title": "Yoga in the orchard", "place": "Orchard tent", "note": "Mats provided, £3 in the pot." },
+        { "time": "11 am", "title": "Dandelion Clock", "place": "Orchard tent", "note": "Songs for small people and their grown-ups." },
+        { "time": "1 pm", "title": "Ama Osei Quartet", "place": "Meadow stage", "note": "" },
+        { "time": "2.30 pm", "title": "Mabel Thorne", "place": "Orchard tent", "note": "" },
+        { "time": "3 pm", "title": "Lantern making", "place": "Craft tent", "note": "Willow, tissue and a tea light. Free; ages five and up." },
+        { "time": "4 pm", "title": "The Sideboard Orchestra", "place": "Meadow stage", "note": "" },
+        { "time": "6 pm", "title": "Bramwell & the Night Shift", "place": "Meadow stage", "note": "" },
+        { "time": "8.30 pm", "title": "Lantern parade", "place": "From the orchard to the Meadow stage", "note": "Follow the drums. Lanterns from the craft tent, or bring your own." },
+        { "time": "9 pm", "title": "Juniper Vale", "place": "Meadow stage", "note": "Saturday headliners." },
+        { "time": "11 pm", "title": "DJ Sorrel", "place": "Orchard tent", "note": "Until 1 am. The Quiet Field stays quiet from midnight." }
+      ]
+    },
+    {
+      "day": "Sunday 8 August",
+      "items": [
+        { "time": "11 am", "title": "Hartwell Cross School choir", "place": "Orchard tent", "note": "" },
+        { "time": "12.30 pm", "title": "The Hartwell Ceilidh Band", "place": "Orchard tent", "note": "Every dance is called. Nobody needs to know the steps." },
+        { "time": "2 pm", "title": "Fen & Furrow", "place": "Meadow stage", "note": "" },
+        { "time": "4 pm", "title": "Odette Marsh", "place": "Meadow stage", "note": "The last set of the weekend." },
+        { "time": "6 pm", "title": "Last orders", "place": "The bar", "note": "The campsite stays open until 10 am on Monday." }
+      ]
+    }
+  ],
+  "people": [
+    { "name": "Juniper Vale", "role": "Saturday headliners", "note": "Five-piece folk-rock from Bristol, with the whole of their second album." },
+    { "name": "The Calloway Stringband", "role": "Friday headliners", "note": "Fiddle, banjo and three-part harmony from Shetland." },
+    { "name": "Odette Marsh", "role": "Sunday, closing the festival", "note": "Songs from the Fens, with a string trio." },
+    { "name": "Bramwell & the Night Shift", "role": "Saturday, Meadow stage", "note": "" },
+    { "name": "Hollow Pines", "role": "Friday, Meadow stage", "note": "" },
+    { "name": "The Sideboard Orchestra", "role": "Saturday, Meadow stage", "note": "" },
+    { "name": "Ama Osei Quartet", "role": "Saturday, Meadow stage", "note": "" },
+    { "name": "Fen & Furrow", "role": "Sunday, Meadow stage", "note": "" },
+    { "name": "Lowland Radio", "role": "Friday, Meadow stage", "note": "" },
+    { "name": "Kit Fennimore", "role": "Friday, Orchard tent", "note": "" },
+    { "name": "Mabel Thorne", "role": "Saturday, Orchard tent", "note": "" },
+    { "name": "Rosa Quintero", "role": "Friday, Orchard tent", "note": "" },
+    { "name": "The Hartwell Ceilidh Band", "role": "Sunday, Orchard tent", "note": "" },
+    { "name": "Dandelion Clock", "role": "For children, Saturday morning", "note": "" },
+    { "name": "DJ Sorrel", "role": "Saturday late, Orchard tent", "note": "" }
+  ]
+}

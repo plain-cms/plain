@@ -1,0 +1,9 @@
+{{#if collections.projects}}<nav class="roll" aria-labelledby="roll-title">
+  <h2 class="roll-title" id="roll-title">{{ strings.moreWork }}</h2>
+  <ul>
+    {{#each collections.projects as item}}<li><a href="{{ item.url }}">{{ item.title }}</a></li>
+    {{/each}}
+  </ul>
+  <p class="roll-all"><a href="/work/">{{ strings.allWork }}</a></p>
+</nav>
+{{/if}}

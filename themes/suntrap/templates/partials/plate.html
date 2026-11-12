@@ -1,0 +1,16 @@
+<aside class="plate" aria-labelledby="plate-heading">
+  <div class="plate-ask">
+    <h2 id="plate-heading">{{ strings.ctaHeading }}</h2>
+    <p>{{ strings.ctaLead }}</p>
+    {{#if data.business.phone}}{{else}}{{#if data.business.email}}{{else}}<p class="plate-go"><a href="/contact/">{{ strings.ctaContactLink }} →</a></p>
+    {{/if}}{{/if}}
+  </div>
+  {{#if data.business.phone}}<dl>{{else}}{{#if data.business.email}}<dl>{{else}}{{#if data.business.hours}}<dl>{{else}}{{#if data.business.area}}<dl>{{/if}}{{/if}}{{/if}}{{/if}}
+    {{#if data.business.phone}}<div class="main"><dt>{{ strings.call }}</dt><dd><a href="tel:{{ data.business.phone }}">{{ data.business.phone }}</a></dd></div>
+    {{else}}{{#if data.business.email}}<div class="main"><dt>{{ strings.emailLabel }}</dt><dd><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></dd></div>
+    {{/if}}{{/if}}{{#if data.business.hours}}<div><dt>{{ strings.hoursLabel }}</dt><dd>{{ data.business.hours }}</dd></div>
+    {{/if}}{{#if data.business.area}}<div><dt>{{ strings.whereLabel }}</dt><dd>{{ data.business.area }}</dd></div>
+    {{/if}}{{#if data.business.phone}}{{#if data.business.email}}<div><dt>{{ strings.emailLabel }}</dt><dd><a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a></dd></div>
+    {{/if}}{{/if}}
+  {{#if data.business.phone}}</dl>{{else}}{{#if data.business.email}}</dl>{{else}}{{#if data.business.hours}}</dl>{{else}}{{#if data.business.area}}</dl>{{/if}}{{/if}}{{/if}}{{/if}}
+</aside>

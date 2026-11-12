@@ -1,0 +1,344 @@
+/* Eulogy — a memorial theme built around one object: the order of service
+   handed out at the door. The home page is the booklet's violet cover with
+   two staples on its spine; inside, black ink on white stock, violet rubrics
+   in spaced capitals, italic notes on a hanging indent. Restyle by editing
+   tokens, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type — one Times-like serif, roman capitals and italic */
+  --font-serif: "Times New Roman", Times, "Liberation Serif", "Nimbus Roman", "TeX Gyre Termes", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-base: 1.1875rem;
+  --leading: 1.5;
+  --tracking-caps: 0.16em;
+  --tracking-name: 0.045em;
+
+  /* Colour — light: white stock, black ink, a half-mourning violet cover */
+  --color-bg: #ffffff;
+  --color-text: #141216;
+  --color-muted: #5b5662;
+  --color-accent: #6a3fa0;
+  --color-rule: #d9d3e1;
+  --color-code-bg: #f4f1f7;
+  --color-cover: #5d3b85;
+  --color-cover-ink: #ffffff;
+  --color-cover-soft: #e2d6f0;
+  --color-fold: rgba(22,8,40,0.38);
+  --color-staple: #9d9aa4;
+  --color-staple-shine: #f1eff4;
+  --shadow-cover: 0 1px 2px rgba(30,16,48,0.2), 0 22px 40px -22px rgba(30,16,48,0.55);
+
+  /* Layout */
+  --measure: 38rem;
+  --measure-wide: 74rem;
+  --cover-width: 29rem;
+  --cover-ratio: 0.72;
+  --staple: 2.75rem;
+  --time-col: 7.5rem;
+  --hang: 1.4em;
+  --radius: 2px;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Black cloth, lilac ink, the violet cover lying on it */
+    --color-bg: #121014;
+    --color-text: #ece7f1;
+    --color-muted: #b3abbd;
+    --color-accent: #c4a5ea;
+    --color-rule: #3a3441;
+    --color-code-bg: #1e1b22;
+    --color-cover: #553a7c;
+    --color-cover-ink: #ffffff;
+    --color-cover-soft: #dccdf0;
+    --color-fold: rgba(0,0,0,0.42);
+    --color-staple: #8f8c96;
+    --color-staple-shine: #dedbe3;
+    --shadow-cover: 0 1px 2px rgba(0,0,0,0.6), 0 22px 44px -20px rgba(0,0,0,0.9);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, *::before, *::after { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  hyphens: manual;
+  font-variant-numeric: oldstyle-nums;
+}
+::selection { background: var(--color-accent); color: var(--color-bg); }
+
+.wrap { max-width: var(--measure-wide); margin-inline: auto; padding-inline: clamp(var(--space-3), 4vw, 2.75rem); }
+main { padding-block: var(--space-4) var(--space-5); min-height: 60vh; }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: var(--radius); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-bg); }
+.skip-link:focus { left: var(--space-2); }
+
+h1, h2, h3, h4 { margin: 0; font-weight: 400; line-height: 1.15; }
+p { margin: 0 0 var(--space-3); }
+
+/* Headings and narrow boxes may hyphenate; wide prose, tables and figures keep whole words. */
+.cover-name, .cover-line, .page-head h1, .section-h, .part-day, .rite-title, .rite-place, .person-name,
+.post-row h2, .prose h2, .prose h3, .prose h4, .site-title, .colophon-name { hyphens: auto; }
+/* A narrow screen has no room for a long word whole. */
+@media (max-width: 36rem) { .prose p, .prose li, .prose blockquote, .lede, .post-summary, .rite-note, .person-note, .person-role, .cover-facts, .colophon p { hyphens: auto; } }
+
+/* The rubric: violet, small, spaced capitals — the voice of the booklet's headings */
+.rubric, .part-day, .prose h2, .prose th, .colophon-name, .tags a, .post-date, .reply-by .rubric {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  font-variant-numeric: lining-nums;
+}
+
+/* Masthead -------------------------------------------------------------- */
+
+.masthead-in { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-block: 1.1rem 0.9rem; border-bottom: 1px solid var(--color-rule); }
+.site-title { display: inline-flex; align-items: baseline; gap: 0.6em; min-width: 0; color: var(--color-text); text-decoration: none; font-size: 0.95rem; line-height: 1.3; letter-spacing: 0.1em; text-transform: uppercase; }
+/* A booklet in miniature beside the name */
+.site-title::before { content: ""; flex: none; width: 0.62em; height: 0.86em; background: var(--color-cover); box-shadow: inset 2px 0 0 var(--color-fold); }
+.site-title:hover { color: var(--color-accent); }
+.masthead nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: var(--space-1) 1.5rem; }
+.masthead nav a { display: inline-block; padding-block: 0.1rem; font-size: 1rem; color: var(--color-text); text-decoration: none; border-bottom: 2px solid transparent; }
+.masthead nav a:hover { border-bottom-color: var(--color-muted); }
+.masthead nav a[aria-current="page"] { font-style: italic; border-bottom-color: var(--color-accent); }
+
+/* Home: the cover, and the first pages inside ---------------------------- */
+
+.home { display: grid; gap: var(--space-5) clamp(2.5rem, 6vw, 5.5rem); align-items: start; }
+.home > * { min-width: 0; }
+@media (min-width: 58rem) {
+  .home { grid-template-columns: var(--cover-width) minmax(0, var(--measure)); padding-top: var(--space-2); }
+  /* The cover stays beside the order of service as it scrolls. Its holder
+     hangs from the foot of the row and sticks by its lower edge, so a cover
+     taller than the window still scrolls through to its end; the holder's
+     minimum height keeps a short cover's head level with the page's top. */
+  .cover-hold { position: sticky; bottom: var(--space-4); align-self: end; min-height: calc(100vh - 2 * var(--space-4)); }
+}
+
+/* The booklet: violet card, a fold down the spine, two staples through it */
+.booklet { position: relative; color: var(--color-cover-ink); background: var(--color-cover); box-shadow: var(--shadow-cover); --len: var(--staple); }
+.booklet::before, .booklet::after { content: ""; position: absolute; top: 0; bottom: 0; pointer-events: none; }
+.booklet::before { left: 0; width: 1.3rem; background: linear-gradient(90deg, var(--color-fold), transparent 70%); }
+.booklet::after {
+  left: 0.4rem; width: 4px;
+  background:
+    linear-gradient(90deg, var(--color-staple), var(--color-staple-shine) 45%, var(--color-staple)) 0 17% / 100% var(--len) no-repeat,
+    linear-gradient(90deg, var(--color-staple), var(--color-staple-shine) 45%, var(--color-staple)) 0 83% / 100% var(--len) no-repeat;
+  filter: drop-shadow(1px 1px 0 var(--color-fold));
+}
+.cover {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-4);
+  width: 100%;
+  max-width: var(--cover-width);
+  aspect-ratio: var(--cover-ratio);
+  padding: clamp(1.75rem, 8%, 2.9rem) clamp(1.4rem, 8%, 2.6rem) clamp(1.6rem, 7%, 2.5rem) calc(clamp(1.4rem, 8%, 2.6rem) + 0.8rem);
+}
+.cover-head { container-type: inline-size; min-width: 0; }
+.cover-name {
+  font-size: clamp(1.9rem, 14cqi, 4.6rem);
+  line-height: 1.04;
+  letter-spacing: var(--tracking-name);
+  text-transform: uppercase;
+  font-variant-numeric: lining-nums;
+  text-wrap: balance;
+}
+.cover-line { margin: 1.1rem 0 0; max-width: 24em; font-size: clamp(1.1rem, 5.6cqi, 1.45rem); font-style: italic; line-height: 1.3; text-wrap: pretty; }
+.cover-facts { min-width: 0; font-size: 1.05rem; line-height: 1.4; }
+.cover-facts::before { content: ""; display: block; width: 2.75rem; margin-bottom: 1.1rem; border-top: 1px solid var(--color-cover-soft); }
+.cover-facts p { margin: 0; }
+.cover-date { font-size: 1.15rem; letter-spacing: 0.02em; }
+.cover-time { color: var(--color-cover-soft); }
+.cover-venue { margin-top: var(--space-2) !important; font-style: italic; }
+.cover-address { font-size: 0.92rem; color: var(--color-cover-soft); }
+.cover-entry { margin-top: var(--space-3) !important; font-size: 0.92rem; font-style: italic; color: var(--color-cover-soft); }
+
+.inside { min-width: 0; max-width: var(--measure); }
+.inside > .reply { margin-bottom: var(--space-4); padding-bottom: var(--space-3); border-bottom: 1px solid var(--color-rule); }
+.inside > .prose + .programme, .inside > .reply + .programme, .inside > * + .people { margin-top: var(--space-5); }
+
+/* The reply block ------------------------------------------------------- */
+
+.reply > p { margin: 0 0 var(--space-2); }
+.reply > :last-child { margin-bottom: 0; }
+.reply-by { font-size: 1.05rem; }
+.reply-by .rubric { margin-right: 0.4em; }
+.reply-mail a, .reply-tickets a { font-size: 1.15rem; font-style: italic; }
+.reply-address { color: var(--color-muted); font-size: 0.95rem; overflow-wrap: anywhere; }
+/* The dot is tied to the address, so a wrapped line never ends on it; on the
+   smallest phones the address takes its own line and needs no dot. */
+.reply-mail .reply-address::before { content: "·\a0"; color: var(--color-rule); }
+@media (max-width: 22.5rem) { .reply-mail .reply-address { display: block; } .reply-mail .reply-address::before { content: none; } }
+.reply-entry { font-style: italic; }
+.reply-end { margin-top: var(--space-5); padding-top: var(--space-3); border-top: 1px solid var(--color-rule); max-width: var(--measure); }
+
+/* The order of service --------------------------------------------------- */
+
+.programme, .people { container-type: inline-size; min-width: 0; }
+.section-h { margin-bottom: var(--space-3); font-size: 1.35rem; letter-spacing: 0.14em; text-transform: uppercase; }
+.part + .part { margin-top: var(--space-4); }
+.part-day { margin: 0 0 var(--space-3); }
+.section-h + .part > .part-day { margin-top: var(--space-4); }
+
+/* Times hang in the left margin; titles, places and notes share one edge.
+   A part with no times has no margin. */
+.rites { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: fit-content(var(--time-col)) minmax(0, 1fr); row-gap: 1.15rem; }
+.rite { grid-column: 1 / -1; display: grid; grid-template-columns: subgrid; align-content: start; min-width: 0; }
+.rite > * { grid-column: 2; min-width: 0; margin: 0; }
+.rite > .rite-time { grid-column: 1; grid-row: 1 / span 3; min-width: 5.5rem; padding-right: 1.25rem; color: var(--color-accent); font-size: 1rem; line-height: 1.5; }
+.rite-title { font-size: 1.02rem; line-height: 1.45; letter-spacing: 0.07em; text-transform: uppercase; font-variant-numeric: lining-nums; }
+.rite-place { font-size: 0.98rem; color: var(--color-muted); }
+.rite-note { padding-left: var(--hang); text-indent: calc(var(--hang) * -1); font-style: italic; font-size: 1.02rem; line-height: 1.4; }
+.rite-title + .rite-note, .rite-place + .rite-note { margin-top: 0.1rem; }
+@container (max-width: 25rem) {
+  .rites { display: block; }
+  .rite { display: block; }
+  .rite + .rite { margin-top: 1.15rem; }
+  .rite > .rite-time { padding: 0; font-size: 0.95rem; }
+}
+
+/* People ---------------------------------------------------------------- */
+
+.people-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 1.25rem var(--space-4); }
+.person { min-width: 0; }
+.person p { margin: 0; }
+.person-name { font-size: 1.02rem; letter-spacing: 0.07em; text-transform: uppercase; font-variant-numeric: lining-nums; }
+.person-role { font-style: italic; color: var(--color-accent); }
+.person-note { padding-left: var(--hang); text-indent: calc(var(--hang) * -1); font-size: 0.98rem; color: var(--color-muted); }
+
+/* Pages, posts, lists --------------------------------------------------- */
+
+.page, .post, .list, .not-found { max-width: var(--measure); min-width: 0; }
+/* Beside every inner page, on a wide screen, the booklet itself lies closed. */
+.cover-mini { display: none; }
+@media (min-width: 64rem) {
+  .leaf { display: grid; grid-template-columns: minmax(0, var(--measure)) 14rem; justify-content: space-between; align-items: start; gap: var(--space-5); }
+  .cover-mini { --len: calc(var(--staple) * 0.6); display: block; aspect-ratio: var(--cover-ratio); margin: 0.6rem 0 0; padding: 1.4rem 1.2rem 1.4rem 2rem; font-size: 0.95rem; line-height: 1.35; overflow-wrap: break-word; hyphens: auto; }
+  .cover-mini p { margin: 0; }
+  .cover-mini-name { margin-bottom: var(--space-3) !important; font-size: 1.35rem; line-height: 1.1; letter-spacing: var(--tracking-name); text-transform: uppercase; font-variant-numeric: lining-nums; }
+  .cover-mini-venue { font-style: italic; color: var(--color-cover-soft); }
+}
+@media (min-width: 64rem) and (min-height: 40rem) { .cover-mini { position: sticky; top: var(--space-4); } }
+.page-head { margin-bottom: var(--space-4); }
+.page-head h1 { font-size: clamp(1.7rem, 1.15rem + 2.3vw, 2.7rem); line-height: 1.1; letter-spacing: 0.06em; text-transform: uppercase; font-variant-numeric: lining-nums; text-wrap: balance; }
+.lede { margin: var(--space-3) 0 0; font-size: 1.3rem; line-height: 1.35; font-style: italic; color: var(--color-muted); text-wrap: pretty; }
+.page-head + .programme { margin-bottom: var(--space-5); }
+.page .people { margin-top: var(--space-5); }
+
+.post-date { margin: 0 0 var(--space-2); }
+.post-cover { margin: 0 0 var(--space-4); }
+.post-cover img { display: block; width: 100%; height: auto; }
+.post-list { list-style: none; margin: 0; padding: 0; }
+.post-row { padding-block: 1.2rem; border-top: 1px solid var(--color-rule); }
+.post-row:last-child { border-bottom: 1px solid var(--color-rule); }
+.post-row > * { margin: 0; }
+.post-row h2 { font-size: 1.4rem; line-height: 1.25; }
+.post-row h2 a { color: var(--color-text); text-decoration-color: var(--color-accent); }
+.post-row h2 a:hover { color: var(--color-accent); }
+.post-summary { margin-top: var(--space-1) !important; font-style: italic; color: var(--color-muted); }
+.empty { font-style: italic; color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); font-style: italic; }
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-2) 1.25rem; margin: var(--space-4) 0 0; padding: 0; }
+.back { margin: var(--space-4) 0 0; font-style: italic; }
+.not-found-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin-top: var(--space-4); font-style: italic; }
+
+/* Body text -------------------------------------------------------------- */
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: 1.25rem; font-style: italic; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1rem; letter-spacing: 0.07em; text-transform: uppercase; }
+.prose ul, .prose ol { margin: 0 0 var(--space-3); padding-left: var(--hang); }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li::marker { color: var(--color-accent); }
+.prose a[href^="tel:"], .prose a[href^="mailto:"], .colophon-note a[href^="mailto:"] { overflow-wrap: anywhere; }
+.prose a[href^="http"] { overflow-wrap: anywhere; }
+/* A quotation is set like a poem in the booklet: italic, indented, no box. */
+.prose blockquote { margin: var(--space-4) 0; padding-left: var(--space-4); font-style: italic; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose hr { width: 2.75rem; margin: var(--space-4) 0; border: 0; border-top: 1px solid var(--color-accent); }
+/* A table wider than the column scrolls in its own box; a soft shadow at
+   the cut edge shows there is more, and vanishes when the table fits. */
+.prose table {
+  display: block; width: max-content; max-width: 100%; overflow-x: auto; margin: 0 0 var(--space-3); border-collapse: collapse; font-size: 1rem; line-height: 1.35;
+  background:
+    linear-gradient(90deg, var(--color-bg) 40%, transparent) 0 0 / 2rem 100% no-repeat local,
+    linear-gradient(270deg, var(--color-bg) 40%, transparent) 100% 0 / 2rem 100% no-repeat local,
+    linear-gradient(90deg, var(--color-rule), transparent) 0 0 / 0.75rem 100% no-repeat scroll,
+    linear-gradient(270deg, var(--color-rule), transparent) 100% 0 / 0.75rem 100% no-repeat scroll;
+}
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { font-weight: 400; }
+.prose td { min-width: 7rem; }
+.prose code { font-family: var(--font-mono); font-size: 0.82em; padding: 0.1em 0.3em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre { margin: 0 0 var(--space-3); padding: var(--space-3); overflow-x: auto; background: var(--color-code-bg); border-radius: var(--radius); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+.prose img { display: block; max-width: 100%; height: auto; }
+
+/* Footer: the back page ------------------------------------------------- */
+
+.colophon { color: var(--color-muted); font-size: 1rem; }
+.colophon-in { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: var(--space-3) var(--space-4); padding-block: var(--space-4) var(--space-5); border-top: 1px solid var(--color-rule); }
+.colophon-in > div:empty { display: none; }
+.colophon p { margin: 0; }
+.colophon-name { margin-bottom: var(--space-1) !important; }
+.colophon-date, .colophon-venue { color: var(--color-text); }
+.colophon-venue { font-style: italic; }
+.colophon-note > :last-child { margin-bottom: 0; }
+
+#search-app input { width: 100%; padding: 0.55rem 0.75rem; font: inherit; color: var(--color-text); background: var(--color-bg); border: 1px solid var(--color-muted); border-radius: var(--radius); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  /* Ink on paper: the cover prints as a ruled panel, black on white. */
+  html:root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-rule: #999999;
+    --color-code-bg: #ffffff;
+    --color-cover: #ffffff;
+    --color-cover-ink: #000000;
+    --color-cover-soft: #333333;
+  }
+  body { font-size: 11pt; }
+  .skip-link, .masthead nav, .site-title::before, .booklet::before, .booklet::after, .cover-mini { display: none !important; }
+  .leaf { display: block; }
+  main { padding-block: var(--space-3); min-height: 0; }
+  .home { display: block; }
+  .cover-hold { position: static; min-height: 0; }
+  .cover { aspect-ratio: auto; max-width: none; margin-bottom: var(--space-4); border: 1px solid var(--color-text); box-shadow: none; break-inside: avoid; }
+  .rite, .person, .post-row { break-inside: avoid; }
+  .prose pre { white-space: pre-wrap; overflow: visible; overflow-wrap: anywhere; }
+  .prose table { overflow: visible; background: none; }
+  .section-h, .part-day, .prose h2, .prose h3 { break-after: avoid; }
+  a { color: inherit; }
+  .reply-tickets a::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; overflow-wrap: anywhere; }
+}

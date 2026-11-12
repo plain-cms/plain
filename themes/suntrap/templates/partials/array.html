@@ -1,0 +1,12 @@
+{{#if collections.services}}<section class="array glance" aria-label="{{ strings.arrayLabel }}">
+  <ul class="module">
+    {{#each collections.services as item}}<li class="cell">
+      <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.priceFrom}}<p class="tail"><span>{{ strings.from }}</span> <b>{{ item.priceFrom }}</b></p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ul>
+  <p class="more"><a href="/services/">{{ strings.allServices }} →</a></p>
+</section>
+{{/if}}

@@ -1,0 +1,10 @@
+<li class="band" data-section="{{ item.section }}">
+  {{#if item.section}}<p class="band-section">{{ item.section }}</p>{{/if}}
+  <h2 class="vinyl"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.description}}<div class="band-foot">
+    <p class="strips"><span>{{ item.description }}</span></p>
+    {{#if item.price}}<p class="vinyl price">{{ item.price }}</p>{{/if}}
+  </div>{{else}}{{#if item.price}}<div class="band-foot">
+    <p class="vinyl price">{{ item.price }}</p>
+  </div>{{/if}}{{/if}}
+</li>

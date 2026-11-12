@@ -1,0 +1,5 @@
+<div class="plate">
+      {{#if page.status}}<p class="status" data-status="{{ page.status }}"><span class="status-raw">{{ page.status }}</span>{{> status-words}}<span class="sticker" aria-hidden="true"></span></p>
+      {{/if}}{{#if page.price}}<p class="plate-price">{{ page.price }}</p>
+      {{/if}}
+    </div>

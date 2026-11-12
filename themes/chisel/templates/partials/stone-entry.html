@@ -1,0 +1,8 @@
+<li class="stone-entry">
+      {{#if item.cover}}<img class="entry-cover" src="{{ item.cover }}" alt="" decoding="async">
+      {{/if}}<h2 class="inscription inscription-s"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.services}}<ul class="services" aria-label="{{ strings.services }}">{{#each item.services as service}}<li>{{ service }}</li> {{/each}}</ul>
+      {{/if}}<p class="entry-meta"><time class="year" datetime="{{ item.date }}">{{ item.date }}</time>{{#if item.client}} <span class="client">{{ item.client }}</span>{{/if}}</p>
+      {{#if item.description}}<p class="entry-text">{{ item.description }}</p>
+      {{/if}}
+    </li>

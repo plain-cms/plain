@@ -1,0 +1,18 @@
+<section class="tour">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if data.band.tagline}}<p class="lede">{{ data.band.tagline }}</p>
+    {{/if}}
+  </header>
+  {{#if items}}<ul class="bellows" role="list" data-sortable>
+    {{#each items as item}}{{> pleat}}
+    {{/each}}<li class="bellows-divider" hidden>{{ strings.playedShows }}</li>
+  </ul>
+  {{else}}<p class="empty">{{ strings.noShows }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.laterShows }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.earlierShows }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

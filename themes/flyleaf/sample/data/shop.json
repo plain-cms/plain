@@ -1,0 +1,11 @@
+{
+  "phone": "01632 960418",
+  "email": "shop@tolliverandwren.example",
+  "address": "Tolliver & Wren, 14 Fish Street, Aldermouth, Norfolk NR36 2BW",
+  "hours": [
+    { "days": "Tuesday to Saturday", "time": "9:30 to 17:30" },
+    { "days": "Sunday", "time": "11:00 to 16:00" },
+    { "days": "Monday", "time": "Closed" }
+  ],
+  "orderNote": "Ring or e-mail and we will put any book aside under your name for a week. Collect it at the till, or we post anywhere in Britain for £3.50 a parcel. Second-hand copies are one-offs, so the first to ask has it."
+}

@@ -1,0 +1,19 @@
+<section class="blog">
+  <header class="board">
+    <h1>{{ page.title }}</h1>
+    {{#if tag}}<p class="lede">{{ strings.filedUnder }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}</p>
+    {{/if}}
+  </header>
+  {{#if items}}<ul class="notes">
+    {{#each items as item}}<li>
+      <time class="fig" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+      <div><h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.description}}<p>{{ item.description }}</p>
+      {{/if}}</div>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}{{> pager}}
+  {{/if}}
+</section>

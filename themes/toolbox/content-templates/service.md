@@ -1,26 +1,25 @@
 ---
-title: Name the job the way a customer would say it
-description: One sentence on what this fixes — write it like the customer describing the problem, not like a brochure.
-priceFrom: $95
+title: Outside taps & garden pipework
+description: A tap where you actually need one, for the hose, the car or the allotment end of the garden.
+priceFrom: £85
 included:
-  - Replace this with something every visit includes, e.g. a firm price before work starts
-  - Replace this with a second promise, e.g. floors sheeted and old parts taken away
-  - Replace this with a third, e.g. a 12-month workmanship guarantee in writing
+  - A proper isolating valve indoors, so the tap can be shut off for winter
+  - A double check valve, which the water regulations ask for
+  - The hole through the wall sleeved and sealed, inside and out
+  - The pipework tested under pressure before we leave
 draft: true
 ---
 
-*Fill in each section below, then delete these instructions. Keep the currency symbol in `priceFrom` (or delete that line to hide the price). Set `draft: false` when you're ready to publish.*
+Carrying watering cans through the kitchen gets old quickly. An outside tap is a morning's work, and most are fitted off the cold feed under the kitchen sink.
 
-## What we fix
+## What we fit
 
-*Replace this: the problems this service covers, in the words a customer would use. "Dripping overflow" finds more customers than "float valve replacement".*
+Wall-mounted garden taps, taps on a post further down the garden, and hot and cold pairs for washing the dog or the bikes. We also replace taps that split in the frost.
 
 ## How the visit goes
 
-*Replace this: what happens from the moment you arrive — how you diagnose, when they hear the price, what "done" looks like.*
+We check where the nearest cold feed is, agree the spot with you, and give you the price before we drill. The water is off for about half an hour. When we're done we show you where the indoor valve is and how to drain the tap down for winter.
 
 ## What it costs
 
-*Replace this: how your pricing works. Call-out fee or free quote? What does the from-price actually cover? When could it cost more, and how will they know first?*
-
-*Got photos? Put a before-and-after pair on one line — `![Before: what we found](/media/before.jpg) ![After: the finished job](/media/after.jpg)` — and the theme shows them side by side with labels.*
+The from-price covers a tap on the outside of a kitchen or utility room wall, up to a metre from the feed. Longer runs and taps away from the house are priced by the metre, and you hear the figure before we start.

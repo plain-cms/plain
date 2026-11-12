@@ -1,0 +1,17 @@
+<article class="leaf piece">
+  <header class="leaf-head">
+    <p class="meta"><time class="stamp" datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+    <h1 class="title ink" data-title="{{ page.title }}"><span>{{ page.title }}</span></h1>
+    {{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}{{#if page.tagLinks}}<ul class="tags" role="list" aria-label="{{ strings.tagsLabel }}">
+      {{#each page.tagLinks as tag}}<li><a class="tag" href="{{ tag.url }}">{{ tag.name }}</a></li>
+      {{/each}}
+    </ul>
+    {{/if}}
+  </header>
+  {{#if page.cover}}<div class="cover"><img src="{{ page.cover }}" alt="" decoding="async"></div>
+  {{/if}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  <p class="back"><a href="/blog/">{{ strings.backToArchive }}</a></p>
+</article>

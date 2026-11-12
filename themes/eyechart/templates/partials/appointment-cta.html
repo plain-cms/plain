@@ -1,0 +1,7 @@
+<aside class="appointment" aria-labelledby="appointment-heading">
+    <h2 id="appointment-heading">{{ strings.appointmentHeading }}</h2>
+    <p class="appointment-note">{{#if data.practice.phone}}{{ strings.appointmentBody }}{{else}}{{#if data.practice.email}}{{ strings.appointmentEmail }}{{else}}{{ strings.appointmentNoPhone }}{{/if}}{{/if}}</p>
+    <div class="duochrome">
+      {{> duo-green}}<p class="duo duo-red"><a class="duo-book" href="{{#if data.practice.bookingUrl}}{{ data.practice.bookingUrl }}{{else}}/contact/{{/if}}">{{ strings.bookAppointment }}</a></p>
+    </div>
+  </aside>

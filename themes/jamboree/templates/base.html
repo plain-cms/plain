@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
+{{#if page.description}}<meta name="description" content="{{ page.description }}">
+{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+{{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
+{{#if page.description}}<meta property="og:description" content="{{ page.description }}">
+{{/if}}{{#if page.date}}<meta property="og:type" content="article">
+{{else}}<meta property="og:type" content="website">
+{{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
+<meta name="twitter:card" content="summary_large_image">
+{{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
+<meta name="twitter:card" content="summary_large_image">
+{{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
+{{/each}}<meta name="color-scheme" content="light dark">
+{{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
+{{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+{{/if}}{{#if site.appleTouchIcon}}<link rel="apple-touch-icon" href="{{ site.appleTouchIcon }}">
+{{/if}}<link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
+<header class="masthead">
+<div class="masthead-in">
+  <nav class="menu" aria-label="{{ strings.mainNav }}">
+    <ul>
+      {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
+      {{/each}}
+    </ul>
+  </nav>
+  <div class="kerchief">
+    <p class="tape"><a class="site-title" href="/">{{ site.title }}</a></p>
+    <div class="vee" aria-hidden="true"><span class="band band-l"></span><span class="band band-r"></span><span class="tail tail-l"></span><span class="tail tail-r"></span><span class="ring"></span></div>
+    {{#if data.club.founded}}<p class="founded">{{ data.club.founded }}</p>{{/if}}
+  </div>
+  <p class="call">{{#if data.club.phone}}<a class="call-phone" href="tel:{{ data.club.phone }}">{{ data.club.phone }}</a>{{#if data.club.email}} <a class="call-mail" href="mailto:{{ data.club.email }}">{{ data.club.email }}</a>{{/if}}{{else}}{{#if data.club.email}}<a class="call-mail" href="mailto:{{ data.club.email }}">{{ data.club.email }}</a>{{else}}<a class="call-join" href="/join/">{{ strings.joinLink }}</a>{{/if}}{{/if}}</p>
+</div>
+</header>
+<main id="main">
+{{{ body }}}
+</main>
+<footer class="foot">
+  <div class="foot-in" data-language-switcher>
+    <div class="foot-join">
+      {{#if data.club.joinNote}}<p class="join-note">{{ data.club.joinNote }}</p>
+      {{/if}}<a class="join-link" href="/join/">{{ strings.joinLink }}</a>
+    </div>
+    <address class="card">
+      <span class="card-name">{{ site.title }}</span>
+      {{#if data.club.address}}<span class="card-address">{{ data.club.address }}</span>
+      {{/if}}{{#if data.club.phone}}<a class="card-phone" href="tel:{{ data.club.phone }}">{{ data.club.phone }}</a>
+      {{/if}}{{#if data.club.email}}<a class="card-mail" href="mailto:{{ data.club.email }}">{{ data.club.email }}</a>{{/if}}
+    </address>
+    {{#if data.footer.html}}<div class="footer-note">{{{ data.footer.html }}}</div>{{/if}}
+  </div>
+</footer>
+<script type="module" src="/assets/enhance.js"></script>
+</body>
+</html>

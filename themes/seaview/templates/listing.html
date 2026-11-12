@@ -1,0 +1,24 @@
+<article class="listing">
+<header class="listing-head">
+<h1>{{ page.title }}</h1>
+{{#if page.description}}<p class="lede">{{ page.description }}</p>
+{{/if}}{{#if page.address}}<p class="addr">{{ page.address }}</p>
+{{/if}}<ul class="facts-row">{{#if page.beds}}<li><b>{{ page.beds }}</b> {{ strings.beds }}</li>{{/if}}{{#if page.baths}}<li><b>{{ page.baths }}</b> {{ strings.baths }}</li>{{/if}}{{#if page.area}}<li><b>{{ page.area }}</b></li>{{/if}}</ul>
+{{#if page.dateFormatted}}<p class="listed">{{ strings.listedOn }} <time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+{{/if}}
+</header>
+<div class="side">
+{{#if page.price}}{{> sign}}
+{{else}}{{#if page.status}}{{> sign}}
+{{/if}}{{/if}}{{> inquiry}}
+</div>
+{{#if page.photos}}<ul class="gallery" aria-label="{{ strings.photos }}">
+{{#each page.photos as photo}}<li><img src="{{ photo }}" alt="{{ page.title }}" loading="lazy" decoding="async"></li>
+{{/each}}
+</ul>
+{{else}}{{#if page.cover}}<figure class="cover-single"><img src="{{ page.cover }}" alt="{{ page.title }}" decoding="async"></figure>
+{{/if}}{{/if}}{{#if page.body}}<div class="prose">
+{{{ page.content }}}
+</div>
+{{/if}}<p class="back"><a href="/listings/">← {{ strings.allListings }}</a></p>
+</article>

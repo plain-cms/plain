@@ -1,19 +1,11 @@
-<li class="listing-card" data-status="{{ item.status }}">
-  <div class="card-photo">
-    {{#if item.cover}}<img src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
-    {{else}}<span class="card-photo-blank" aria-hidden="true"></span>
-    {{/if}}{{#if item.status}}<span class="status-flag">{{ item.status }}</span>
-    {{/if}}
-  </div>
-  <div class="card-body">
+<li class="listing-card{{#if item.cover}}{{else}} listing-card--text{{/if}}" data-status="{{ item.status }}">
+  {{#if item.cover}}<div class="card-photo"><img src="{{ item.cover }}" alt="" loading="lazy" decoding="async"></div>
+  {{/if}}{{#if item.status}}<p class="status-flag"><span class="status-raw">{{ item.status }}</span>{{> status-labels}}</p>
+  {{/if}}<div class="card-body">
     {{#if item.price}}<p class="card-price">{{ item.price }}</p>
     {{/if}}<h2 class="card-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
-    <p class="spec-row">
-      {{#if item.beds}}<span class="spec">{{ item.beds }} bd</span>{{/if}}
-      {{#if item.baths}}<span class="spec">{{ item.baths }} ba</span>{{/if}}
-      {{#if item.area}}<span class="spec">{{ item.area }}</span>{{/if}}
-    </p>
     {{#if item.address}}<p class="card-address">{{ item.address }}</p>
     {{/if}}
   </div>
+  <ul class="spec-row">{{#if item.beds}}<li class="spec"><b>{{ item.beds }}</b> {{ strings.beds }}</li>{{/if}}{{#if item.baths}}<li class="spec"><b>{{ item.baths }}</b> {{ strings.baths }}</li>{{/if}}{{#if item.area}}<li class="spec"><b>{{ item.area }}</b></li>{{/if}}</ul>
 </li>

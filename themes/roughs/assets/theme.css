@@ -1,0 +1,568 @@
+/* Roughs — a portfolio theme for picture-book and editorial illustrators.
+   The object is the dummy sheet: rows of small open books drawn in blue
+   pencil on a layout pad, a shaded gutter down each, a page number in each
+   foot corner. Every project is one spread of that sheet. All design
+   decisions are the tokens below — restyle by editing tokens, never
+   selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type: a picture-book geometric sans for titles, a humanist sans for notes */
+  --font-display: Futura, "Futura PT", "Century Gothic", "Avenir Next", Avenir, "URW Gothic", "Trebuchet MS", sans-serif;
+  --font-body: "Gill Sans", "Gill Sans MT", Seravek, "Segoe UI", Candara, Calibri, "Fira Sans", sans-serif;
+  --font-pencil: "Bradley Hand", "Segoe Print", "Chalkboard SE", "Gill Sans", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-book: clamp(1.25rem, 0.9rem + 0.9vw, 1.75rem);
+  --text-xl: clamp(2rem, 1.2rem + 2.4vw, 3.25rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.12;
+  --weight-title: 500;
+
+  /* Colour: layout-pad white, ink, graphite and one blue pencil */
+  --color-bg: #f7f9f8;
+  --color-leaf: #ffffff;
+  --color-text: #15191c;
+  --color-muted: #545c61;
+  --color-accent: #007684;
+  --color-pencil: rgba(32, 150, 166, 0.72);
+  --color-gutter: rgba(46, 56, 62, 0.16);
+  --color-wash: #e9f5f6;
+  --color-rule: #d3dadb;
+  --color-code-bg: #edf1f1;
+
+  /* Layout */
+  --measure: 38rem;
+  --page-margin: clamp(1rem, 3.4vw, 2.75rem);
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --spread-min: 21rem;
+  --spread-mini: 13.5rem;
+  --spread-ratio: 1.7;
+  --line: 1.5px;
+  --overshoot: 7px;
+  --cover-max-height: 80vh;
+}
+
+/* Night: the same sheet on a dark drawing board, pages faintly lit */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #121618;
+    --color-leaf: #1a2023;
+    --color-text: #e8eceb;
+    --color-muted: #a3adb0;
+    --color-accent: #5ccfdc;
+    --color-pencil: rgba(70, 182, 196, 0.7);
+    --color-gutter: rgba(0, 0, 0, 0.5);
+    --color-wash: #1d2c30;
+    --color-rule: #2e373b;
+    --color-code-bg: #1b2225;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-title);
+  line-height: var(--leading-tight);
+  hyphens: auto;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+a { color: var(--color-accent); text-decoration-color: var(--color-pencil); text-decoration-thickness: var(--line); text-underline-offset: 0.18em; }
+a:hover { color: var(--color-text); }
+
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+
+::selection { background: var(--color-wash); color: var(--color-text); }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 3;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-leaf);
+  border: var(--line) solid var(--color-pencil);
+}
+.skip-link:focus { left: var(--space-2); }
+
+/* A date shown as its year: the ISO date is in the page, the box shows its
+   first four figures */
+.year {
+  display: inline-block;
+  width: 4ch;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Masthead: the strip across the top of a dummy sheet ------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  margin: 0 var(--page-margin);
+  padding: var(--space-3) 0 var(--space-2);
+  border-bottom: var(--line) solid var(--color-pencil);
+}
+
+.site-title {
+  min-width: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: var(--weight-title);
+  line-height: var(--leading-tight);
+  letter-spacing: 0.01em;
+  color: var(--color-text);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.masthead ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.masthead nav a {
+  display: inline-block;
+  padding: var(--space-1) var(--space-2);
+  border: var(--line) solid transparent;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.masthead nav a:hover { color: var(--color-accent); }
+/* The page you are on is boxed in blue pencil, like the spread being drawn */
+.masthead nav a[aria-current="page"] { border-color: var(--color-accent); color: var(--color-accent); }
+
+main { min-height: 60vh; padding: 0 var(--page-margin); }
+
+/* Headings of pages ------------------------------------------------------ */
+
+.intro,
+.page-head,
+.project-head { padding: var(--space-4) 0 var(--space-4); }
+
+.intro h1,
+.page-head h1,
+.project-head h1 {
+  max-width: 22ch;
+  margin: 0;
+  font-size: var(--text-xl);
+}
+
+.intro-text { max-width: var(--measure); margin-top: var(--space-3); }
+
+/* The home page is page 1 of the dummy: its title ruled under in blue
+   pencil, its folio pencilled in the outer corner */
+.intro:not(.intro-list) { position: relative; padding-bottom: calc(var(--space-4) + var(--space-3)); }
+.intro:not(.intro-list) h1 {
+  text-decoration: underline var(--line) var(--color-pencil);
+  text-underline-offset: 0.16em;
+  text-decoration-skip-ink: none;
+}
+.intro:not(.intro-list)::after {
+  content: "1";
+  position: absolute;
+  right: 0;
+  bottom: var(--space-2);
+  font-family: var(--font-pencil);
+  font-size: 0.9375rem;
+  line-height: 1.2;
+  color: var(--color-accent);
+}
+.intro-list { padding-bottom: var(--space-3); }
+
+/* The sheet: the work as a page of open books ----------------------------- */
+
+.sheet {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--spread-min), 100%), 1fr));
+  gap: var(--space-4) calc(var(--space-3) + var(--space-2));
+  margin: var(--space-3) 0 0;
+  padding: 0 0 var(--space-3);
+  list-style: none;
+  counter-reset: verso 0 recto 1;
+}
+
+.spread { min-width: 0; counter-increment: verso 2 recto 2; }
+
+.spread-link { display: block; color: var(--color-text); text-decoration: none; }
+.spread-link:focus-visible { outline-offset: calc(var(--overshoot) + 4px); }
+
+/* One open book: four pencil strokes, each run past the corner the way a
+   quick rough is (darker where two strokes cross), two leaves meeting at
+   the fold */
+.book {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  aspect-ratio: var(--spread-ratio);
+  border: var(--line) solid transparent;
+  background: var(--color-leaf);
+  /* a second, fainter pass of the pencil that missed the first by a hair */
+  box-shadow: 2.5px 2px 0 -0.5px color-mix(in srgb, var(--color-pencil) 40%, transparent);
+}
+.book::before,
+.book::after {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  border: 0 solid var(--color-pencil);
+}
+.book::before { inset: calc(-1 * var(--line)) calc(-0.6 * var(--overshoot)) calc(-1 * var(--line)) calc(-1.3 * var(--overshoot)); border-block-width: var(--line); }
+.book::after { inset: calc(-1.25 * var(--overshoot)) calc(-1 * var(--line)) calc(-0.7 * var(--overshoot)); border-inline-width: var(--line); }
+
+.leaf {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+  padding: var(--space-3) var(--space-3) calc(var(--space-4) + var(--space-2));
+}
+/* The fold: a pencil line, and graphite shading that deepens into it */
+.leaf-l {
+  padding-right: calc(var(--space-3) + 6%);
+  border-right: var(--line) solid var(--color-pencil);
+  background: linear-gradient(to left, var(--color-gutter), color-mix(in srgb, var(--color-gutter) 35%, transparent) 9%, transparent 26%);
+}
+.leaf-r {
+  padding-left: calc(var(--space-3) + 6%);
+  background: linear-gradient(to right, var(--color-gutter), color-mix(in srgb, var(--color-gutter) 35%, transparent) 9%, transparent 26%);
+}
+
+/* Folios, pencilled in the foot corners: 2–3, 4–5, … down the sheet */
+.leaf::after {
+  position: absolute;
+  bottom: var(--space-2);
+  padding: 0 var(--space-1);
+  font-family: var(--font-pencil);
+  font-size: 0.9375rem;
+  line-height: 1.2;
+  color: var(--color-accent);
+  background: var(--color-leaf);
+  font-variant-numeric: tabular-nums;
+}
+.leaf-l::after { content: counter(verso); left: var(--space-2); }
+.leaf-r::after { content: counter(recto); right: var(--space-2); }
+
+
+.spread-title {
+  display: block;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: var(--weight-title);
+  line-height: var(--leading-tight);
+  font-size: var(--text-book);
+  hyphens: auto;
+  text-wrap: balance;
+}
+.spread-text {
+  margin: 0;
+  font-size: var(--text-s);
+  line-height: 1.4;
+  hyphens: auto;
+  hyphenate-limit-chars: 12 5 4;
+  text-wrap: pretty;
+}
+
+.spread-link:hover .book { background-color: var(--color-wash); }
+.spread-link:hover .spread-title { text-decoration: underline var(--line) var(--color-pencil); text-underline-offset: 0.15em; }
+.spread-link:hover .leaf::after { background: var(--color-wash); }
+
+/* With a picture: it lies across both pages, shaded at the fold; the title
+   is written beneath the book */
+.book-cover { overflow: visible; }
+.book-cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.book-cover .leaf { padding: 0; }
+.spread-under { margin-top: var(--space-3); }
+
+/* Date and client, noted under the book */
+.spread-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-3);
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-s);
+  line-height: 1.4;
+  color: var(--color-muted);
+}
+.spread-meta .year { color: var(--color-text); }
+.spread-client { min-width: 0; hyphens: auto; }
+
+/* Case study --------------------------------------------------------------- */
+
+.project-head { display: grid; gap: var(--space-4); }
+.project-name { min-width: 0; }
+
+.lede {
+  max-width: var(--measure);
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-l);
+  line-height: 1.4;
+  text-wrap: pretty;
+}
+
+/* The margin notes: year, client, what was done */
+.spec {
+  align-self: end;
+  min-width: 0;
+  margin: 0;
+  border-top: var(--line) solid var(--color-pencil);
+  font-size: var(--text-s);
+}
+.spec div {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, max-content) minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-rule);
+}
+.spec dt { color: var(--color-muted); }
+.spec dd { min-width: 0; margin: 0; hyphens: auto; }
+.spec-list { margin: 0; padding: 0; list-style: none; }
+
+.plate { margin: 0 0 var(--space-4); }
+.plate img {
+  display: block;
+  max-width: 100%;
+  max-height: var(--cover-max-height);
+  height: auto;
+  border: var(--line) solid var(--color-pencil);
+  padding: var(--space-2);
+  background: var(--color-leaf);
+}
+
+/* Prose -------------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-size: 1.4rem; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-size: 1.15rem; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1rem; }
+.prose a[href^="mailto:"], .prose a[href^="tel:"] { overflow-wrap: anywhere; }
+
+.prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: var(--line) solid var(--color-pencil);
+  padding: var(--space-1);
+  background: var(--color-leaf);
+}
+
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: 0 0 0 var(--space-3);
+  border-left: 3px solid var(--color-pencil);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  line-height: 1.4;
+}
+
+.prose hr {
+  width: 5rem;
+  margin: var(--space-4) 0;
+  border: 0;
+  border-top: var(--line) solid var(--color-pencil);
+}
+
+.prose code { font-family: var(--font-mono); font-size: 0.875em; background: var(--color-code-bg); padding: 0.1em 0.3em; }
+.prose pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: var(--space-3);
+  background: var(--color-code-bg);
+  border-left: 3px solid var(--color-pencil);
+  line-height: 1.45;
+}
+.prose pre code { padding: 0; background: none; }
+
+/* A table scrolls inside its own box, never the page */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  /* When it is wider than the column, a pencil line and graphite shading at
+     the cut edge say there is more, as at a book's fold */
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) left center / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) right center / 2rem 100% no-repeat local,
+    linear-gradient(var(--color-pencil), var(--color-pencil)) left center / var(--line) 100% no-repeat scroll,
+    linear-gradient(var(--color-pencil), var(--color-pencil)) right center / var(--line) 100% no-repeat scroll,
+    linear-gradient(to right, var(--color-gutter), transparent) left center / 0.75rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--color-gutter), transparent) right center / 0.75rem 100% no-repeat scroll;
+  margin: 0 0 var(--space-3);
+  border-collapse: collapse;
+  font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
+}
+.prose th, .prose td {
+  min-width: 7rem;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-rule);
+}
+.prose th { font-weight: 600; border-bottom: var(--line) solid var(--color-pencil); }
+
+/* The rest of the book: a small dummy sheet of every project -------------- */
+
+.dummy {
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  border-top: var(--line) solid var(--color-pencil);
+}
+.dummy-title { margin: 0 0 var(--space-3); font-size: 1.15rem; }
+.sheet-mini {
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--spread-mini), 100%), 1fr));
+  gap: var(--space-4) var(--space-3);
+}
+.sheet-mini li:nth-child(n+13):not(:has([aria-current])) { display: none; }
+.sheet-mini .leaf { padding: var(--space-2) var(--space-2) var(--space-4); }
+.sheet-mini .leaf-l { padding-right: calc(var(--space-2) + 6%); }
+.sheet-mini .leaf::after { bottom: var(--space-1); font-size: 0.8125rem; }
+.sheet-mini .spread-title { font-size: 0.9375rem; line-height: 1.2; }
+/* The right-hand page of a small book carries its year, noted at the head */
+.sheet-mini .leaf-r { display: flex; align-items: flex-start; justify-content: flex-end; font-size: var(--text-s); line-height: 1.4; color: var(--color-muted); }
+/* Every book in a row of the small sheet is drawn to the same height */
+.sheet-mini .spread { display: flex; flex-direction: column; }
+.sheet-mini .spread-link { display: flex; flex: 1 0 auto; min-width: 0; }
+.sheet-mini .book { flex: 1 1 0; min-width: 0; }
+/* The spread you are reading, gone over in a firmer pencil */
+.sheet-mini [aria-current] .book { background-color: var(--color-wash); }
+.sheet-mini [aria-current] .book::before,
+.sheet-mini [aria-current] .book::after { border-color: var(--color-accent); }
+.sheet-mini [aria-current] .leaf::after { background: var(--color-wash); }
+.dummy-all { margin: var(--space-3) 0 0; }
+
+/* Posts and lists ------------------------------------------------------------ */
+
+.page-meta { margin: var(--space-2) 0 0; font-size: var(--text-s); color: var(--color-muted); }
+
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin: var(--space-3) 0 0; padding: 0; list-style: none; font-size: var(--text-s); }
+.tags a { display: inline-block; max-width: 100%; padding: 0 var(--space-2); border: 1px solid var(--color-pencil); text-decoration: none; overflow-wrap: anywhere; }
+
+.entries { max-width: var(--measure); margin: 0; padding: 0; list-style: none; }
+.entry { padding: var(--space-3) 0; border-top: 1px solid var(--color-rule); }
+.entry h2 { margin: 0; font-size: 1.3rem; }
+.entry h2 a { color: var(--color-text); text-decoration: none; }
+.entry h2 a:hover { text-decoration: underline var(--line) var(--color-pencil); }
+.entry-text { margin: var(--space-2) 0 0; }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-4);
+  font-size: var(--text-s);
+}
+.pagination a { display: inline-block; padding: var(--space-2) 0; }
+.pagination-count { color: var(--color-muted); }
+
+.empty { margin: var(--space-3) 0; color: var(--color-muted); }
+
+/* Footer -------------------------------------------------------------------- */
+
+.colophon {
+  margin: var(--space-5) var(--page-margin) 0;
+  padding: var(--space-3) 0 var(--space-4);
+  border-top: var(--line) solid var(--color-pencil);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon p { max-width: var(--measure); margin: 0; }
+.colophon-name { font-family: var(--font-display); color: var(--color-text); }
+.colophon-line::before { content: "— "; }
+.colophon-note { margin-top: var(--space-2); }
+
+/* Wide screens ------------------------------------------------------------- */
+
+@media (min-width: 60rem) {
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: var(--space-4);
+    align-items: end;
+  }
+  .intro-list { display: block; }
+  .intro-text { margin-top: 0; }
+  .project-head { grid-template-columns: minmax(0, 2fr) minmax(16rem, 1fr); align-items: end; }
+}
+
+/* On a phone the pages keep narrower margins, so they hold their words */
+@media (max-width: 30rem) {
+  .leaf { padding-inline: var(--space-2); }
+  .leaf-l { padding-right: calc(var(--space-2) + 5%); }
+  .leaf-r { padding-left: calc(var(--space-2) + 5%); }
+  /* the small sheet stacks one book a row, so each is a landscape book */
+  .sheet-mini .book { aspect-ratio: calc(var(--spread-ratio) * 1.35); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .book, .leaf::after { transition: background-color 0.15s ease; }
+}
+
+/* Print ---------------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-leaf: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-pencil: #666666;
+    --color-gutter: rgba(0, 0, 0, 0.08);
+    --color-wash: #ffffff;
+    --color-rule: #bbbbbb;
+    --color-code-bg: #ffffff;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip-link, .pagination, .dummy { display: none; }
+  main, .masthead, .colophon { margin-inline: 0; padding-inline: 0; }
+  .sheet { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); padding-inline: var(--overshoot); }
+  .spread { break-inside: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

@@ -1,0 +1,18 @@
+<article class="page service">
+  <header class="page-header">
+    <p class="crumb"><a href="/services/">{{ strings.backToServices }}</a></p>
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lead">{{ page.description }}</p>{{/if}}
+    {{#if page.fee}}<p class="fee"><span class="label">{{ strings.feeLabel }}</span> <span class="fee-value">{{ page.fee }}</span></p>{{/if}}
+  </header>
+  {{#if page.points}}<section class="points" aria-labelledby="points-heading">
+    <h2 class="block-head" id="points-heading">{{ strings.pointsHeading }}</h2>
+    <ul>
+      {{#each page.points as point}}<li>{{ point }}</li>
+      {{/each}}
+    </ul>
+  </section>{{/if}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

@@ -1,0 +1,13 @@
+{
+  "founded": "Founded 1891",
+  "meets": [
+    { "day": "Monday", "time": "7.30 pm", "what": "Drill night, all crew", "place": "Fire station, Beck Lane" },
+    { "day": "Wednesday", "time": "6.30 pm", "what": "Fire cadets, ages 13 to 17", "place": "Station drill yard" },
+    { "day": "Saturday", "time": "10 am to noon", "what": "Station open for smoke alarm checks", "place": "Fire station, Beck Lane" },
+    { "day": "First Sunday of the month", "time": "9 am", "what": "Hydrant round, testing and marking", "place": "Meet at the station" }
+  ],
+  "joinNote": "Come to any Monday drill night and ask for the station officer. You need to be 18 or over and live or work within five minutes of Beck Lane. We train you from scratch.",
+  "email": "station@marrowbyfire.example",
+  "phone": "01632 960147",
+  "address": "Fire Station, Beck Lane, Marrowby, North Yorkshire YO62 9ZX"
+}

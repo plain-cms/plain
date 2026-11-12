@@ -1,0 +1,10 @@
+<aside class="appointment" aria-labelledby="appointment-heading">
+  <h2 id="appointment-heading">{{ strings.appointmentHeading }}</h2>
+  <p class="appointment-meta">{{#if data.practice.phone}}{{ strings.appointmentBody }}{{else}}{{#if data.practice.email}}{{ strings.appointmentEmail }}{{else}}{{ strings.appointmentNoPhone }}{{/if}}{{/if}}</p>
+  <ul class="board board-mini">
+    <li class="cell cell-core"><a class="cell-link" href="{{#if data.practice.bookingUrl}}{{ data.practice.bookingUrl }}{{else}}/contact/{{/if}}" aria-label="{{ strings.bookAppointment }}"><span class="core-word">{{ strings.coreBook }}</span></a></li>
+    {{#if data.practice.phone}}<li class="cell cell-line"><a class="cell-link" href="tel:{{ data.practice.phone }}"><span class="core-word">{{ strings.coreCall }}</span> <span class="core-number">{{ data.practice.phone }}</span></a></li>
+    {{else}}{{#if data.practice.email}}<li class="cell cell-line"><a class="cell-link" href="mailto:{{ data.practice.email }}"><span class="core-word">{{ strings.coreWrite }}</span> <span class="core-number">{{ data.practice.email }}</span></a></li>
+    {{/if}}{{/if}}
+  </ul>
+</aside>

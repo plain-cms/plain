@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960481",
+  "email": "counter@deadwaxrecords.example",
+  "address": "Dead Wax Records, 9 Tanner Row, Kelderby, North Yorkshire KB3 4DW",
+  "hours": [
+    { "days": "Tuesday to Friday", "time": "10:00 to 17:30" },
+    { "days": "Saturday", "time": "9:30 to 17:30" },
+    { "days": "Sunday", "time": "11:00 to 16:00" },
+    { "days": "Monday", "time": "Closed" }
+  ],
+  "orderNote": "Ring or e-mail and we will hold any record for three days. Collect it at the counter, or we post within the UK for £4.50 a parcel, in a stiff mailer with the record outside its sleeve."
+}

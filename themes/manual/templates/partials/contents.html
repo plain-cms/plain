@@ -1,0 +1,10 @@
+<aside class="doc-sidebar">
+  <a class="doc-search" href="/search/"><span class="doc-search-label">{{ strings.searchManual }}</span><span class="doc-search-arrow" aria-hidden="true">→</span></a>
+  <nav class="doc-contents" aria-labelledby="contents">
+    <h2 class="doc-contents-title" id="contents"><a href="/docs/">{{ strings.contents }}</a></h2>
+    <ol class="doc-tree">
+      {{#each collections.docs as doc}}<li><a href="{{ doc.url }}">{{#if doc.order}}<span class="doc-num">{{ doc.order }}</span>{{/if}}<span class="doc-name">{{ doc.title }}</span></a></li>
+      {{/each}}
+    </ol>
+  </nav>
+</aside>

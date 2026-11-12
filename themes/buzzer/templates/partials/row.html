@@ -1,0 +1,16 @@
+<li class="row row--place">
+      <div class="row-main">
+      <h2 class="row-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.address}}<p class="row-address">{{ item.address }}</p>
+      {{/if}}{{#if item.beds}}<ul class="facts">{{> facts}}</ul>
+      {{else}}{{#if item.baths}}<ul class="facts">{{> facts}}</ul>
+      {{else}}{{#if item.area}}<ul class="facts">{{> facts}}</ul>
+      {{/if}}{{/if}}{{/if}}{{#if item.description}}<p class="row-desc">{{ item.description }}</p>
+      {{/if}}
+      </div>
+      <div class="row-side">
+      {{#if item.price}}<p class="row-price">{{ item.price }}</p>
+      {{/if}}{{#if item.status}}<p class="status" data-status="{{ item.status }}"><span class="status-raw">{{ item.status }}</span>{{> status-labels}}</p>
+      {{/if}}
+      </div>
+    </li>

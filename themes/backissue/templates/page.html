@@ -1,0 +1,10 @@
+<article class="leaf">
+  <header class="leaf-head">
+    <h1 class="title ink" data-title="{{ page.title }}"><span>{{ page.title }}</span></h1>
+    {{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+</article>

@@ -1,0 +1,10 @@
+{
+  "stat": {
+    "number": "9,140",
+    "unit": "visits",
+    "verb": "through our door in 2025"
+  },
+  "donateUrl": "https://give.example.org/corner-pocket",
+  "donatePrompt": "£14 covers a child's day at holiday club, lunch included.",
+  "volunteerEmail": "volunteers@cornerpocket.example.org"
+}

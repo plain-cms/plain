@@ -1,0 +1,20 @@
+<article class="post">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    <p class="role"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+    {{#if page.tagLinks}}<p class="tags">{{#each page.tagLinks as tag}}<a href="{{ tag.url }}">{{ tag.name }}</a>{{/each}}</p>
+    {{/if}}{{#if page.cover}}{{else}}{{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{/if}}
+  </header>
+  <div class="spread">
+  {{#if page.cover}}<div class="portrait">
+    <img class="portrait-photo cover" src="{{ page.cover }}" alt="" decoding="async">
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </div>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+  </div>
+</article>

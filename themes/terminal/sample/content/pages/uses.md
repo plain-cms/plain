@@ -1,7 +1,6 @@
 ---
 title: Uses
 description: The hardware, software, and services behind a one-person software company.
-lede: Asked often enough that it earned a page.
 example: true
 ---
 

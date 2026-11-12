@@ -1,0 +1,11 @@
+{
+  "phone": "01632 960418",
+  "email": "bench@penhalewray.example",
+  "address": "Penhale & Wray, 4 Tanners Row, Skelderby, North Yorkshire YO62 9QT",
+  "hours": [
+    { "days": "Tuesday to Friday", "time": "10:00 to 17:00" },
+    { "days": "Saturday", "time": "10:00 to 16:00" },
+    { "days": "Sunday and Monday", "time": "Closed" }
+  ],
+  "orderNote": "Ring or e-mail to reserve a piece, book a fitting or ask for an estimate. Collect at the workshop counter, or we send by insured post within the UK for £9. No repair is started until you have agreed the price."
+}

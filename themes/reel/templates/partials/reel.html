@@ -1,0 +1,11 @@
+<li class="reel">
+  <div class="frame">
+    <div class="picture">
+      {{#if item.cover}}<img src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+      {{/if}}<h2 class="card-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      <p class="slate">{{#if item.client}}<span class="tc tc-client"><span class="vh">{{ strings.client }} </span>{{ item.client }}</span> {{/if}}<span class="tc tc-year"><span class="vh">{{ strings.year }} </span><time class="year" datetime="{{ item.date }}">{{ item.date }}</time></span></p>
+    </div>
+    {{#if item.description}}<p class="subtitle">{{ item.description }}</p>
+    {{/if}}
+  </div>
+</li>

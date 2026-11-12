@@ -4,15 +4,10 @@ description: Two records and an EP — where to hear them, where buying them act
 example: true
 ---
 
-*Replace with your own releases. The theme keeps these as honest links
-rather than embedded players — the page loads instantly, works without
-JavaScript, and nobody's cookies come to the party (the site makes no
-external requests until a listener chooses to leave it).*
-
 ## Small Hours (2026)
 
-The new one: ten songs recorded in six nights in the chapel we later
-played. Start with *Riverside*, then *Last Bus Standing*.
+The new one: ten songs recorded in six nights in a decommissioned chapel.
+Start with *Riverside*, then *Last Bus Standing*.
 
 - [Bandcamp](https://example.bandcamp.com) — buying here pays the band
   most, by a distance
@@ -26,8 +21,11 @@ The first record — rowdier, hornier, recorded mostly live. Start with
 
 - [Bandcamp](https://example.bandcamp.com) ·
   [Spotify](https://open.spotify.com) · [Apple Music](https://music.apple.com)
+- CD only at shows; the vinyl is long gone
 
 ## Harbor Steps EP (2021)
 
-Four songs and a field recording of the harbor at 5am. Free on Bandcamp,
-because it was free to the harbor too.
+Four songs and a field recording of the harbor at 5am.
+
+- [Bandcamp](https://example.bandcamp.com) — free, because it was free to
+  the harbor too

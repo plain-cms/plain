@@ -1,0 +1,8 @@
+{{#if collections.services}}<section class="home-boards" aria-label="{{ strings.servicesLabel }}">
+  <ul class="boards">
+    {{#each collections.services as item}}{{> board}}
+    {{/each}}
+  </ul>
+  <p class="more"><a href="/services/">{{ strings.allServices }} →</a></p>
+</section>
+{{/if}}

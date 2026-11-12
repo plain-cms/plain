@@ -1,5 +1,6 @@
 {
   "starter": "encore",
+  "sampleTitle": "The Low Bridge",
   "collections": {
     "shows": {
       "path": "content/shows",
@@ -18,6 +19,7 @@
         { "name": "ticketsUrl", "type": "text" },
         { "name": "status", "type": "select", "options": ["On sale", "Sold out", "Free entry"] },
         { "name": "support", "type": "text" },
+        { "name": "description", "type": "text" },
         { "name": "draft", "type": "boolean", "default": false }
       ]
     }

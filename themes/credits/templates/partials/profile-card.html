@@ -1,0 +1,14 @@
+{{#if data.profile}}<aside class="card" aria-label="{{ strings.profile }}">
+  <div class="wrap card-inner">
+    <p class="card-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</p>
+    {{#if data.profile.role}}<p class="card-role">{{ data.profile.role }}</p>
+    {{/if}}{{> contacts}}
+    {{#if data.profile.skills}}<p class="card-label" id="card-skills">{{ strings.skills }}</p>
+    <ul class="skills" role="list" aria-labelledby="card-skills">
+      {{#each data.profile.skills as skill}}<li>{{ skill }}</li>
+      {{/each}}
+    </ul>
+    {{/if}}<p class="to-cv"><a href="/experience/">{{ strings.readTheCv }}</a></p>
+  </div>
+</aside>
+{{/if}}

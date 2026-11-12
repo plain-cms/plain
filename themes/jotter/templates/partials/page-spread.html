@@ -1,0 +1,27 @@
+<div class="spread{{#if collections.experience}} is-open{{/if}}">
+  <article class="sheet leaf">
+    <header class="sheet-head">
+      <h1 class="sheet-title">{{ page.title }}</h1>
+    </header>
+    <div class="sheet-body">
+      {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+      </div>
+      {{/if}}<div class="filler"></div>
+    </div>
+  </article>
+  {{#if collections.experience}}<section class="sheet leaf" aria-labelledby="record-head">
+    <header class="sheet-head">
+      <h2 class="leaf-head" id="record-head">{{ strings.experience }}</h2>
+    </header>
+    <div class="sheet-body">
+      <ol class="entries" role="list">
+        {{#each collections.experience as entry}}{{> entry-brief}}
+        {{/each}}
+      </ol>
+      <p class="more"><a href="/experience/">{{ strings.readTheCv }}</a></p>
+      <div class="filler"></div>
+    </div>
+  </section>
+  {{/if}}
+</div>

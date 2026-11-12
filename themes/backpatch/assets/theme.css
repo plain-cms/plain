@@ -1,0 +1,400 @@
+/* Backpatch — a battle jacket for a band that tours small rooms.
+   Washed denim, twill showing only in the gutters; every show a black woven
+   patch with a bone merrow edge, tilted as if sewn on by hand; prose on one
+   bone back patch; rows of pyramid studs for section rules.
+   Restyle by editing the tokens below, never the selectors. */
+:root {
+  --font-sans: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --font-code: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --weight-display: 900;
+  --text-s: 0.8125rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-xl: clamp(1.2rem, 0.85rem + 1.7vw, 2.1rem);
+  --text-xxl: clamp(2.25rem, 1.5rem + 3.4vw, 4.25rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.06;
+  --tracking-caps: 0.12em;
+  --color-bg: #3b5b80;
+  --color-twill: #2e4a6a;
+  --color-text: #f2ead8;
+  --color-muted: #cfdbe8;
+  --color-accent: #b9d7f7;
+  --color-patch: #141414;
+  --color-weave: #2b2b2b;
+  --color-patch-ink: #efe5cc;
+  --color-patch-muted: #bdb39b;
+  --color-thread: #e6d9b8;
+  --color-sold: #b3261f;
+  --color-canvas: #ece3cb;
+  --color-canvas-ink: #18181a;
+  --color-canvas-muted: #575348;
+  --color-link: #1c4a85;
+  --color-code-bg: #ddd3b8;
+  --color-shadow: rgba(8,18,32,0.45);
+  --color-stud-hi: #f4f5f6;
+  --color-stud-lo: #59616b;
+  --measure: 68ch;
+  --page-width: 78rem;
+  --gap: 1.25rem;
+  --space-m: 1rem;
+  --space-l: 2rem;
+  --radius: 1px;
+  --radius-shaped: 0.7rem;
+  --merrow: 4px;
+  --stud: 0.95rem;
+  --tilt: 1deg;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #17191d;
+    --color-twill: #22252b;
+    --color-text: #ece3cd;
+    --color-muted: #aaa59b;
+    --color-accent: #8fb3dc;
+    --color-patch: #e2d7bc;
+    --color-weave: #d3c7aa;
+    --color-patch-ink: #111111;
+    --color-patch-muted: #4a463e;
+    --color-thread: #b5a684;
+    --color-sold: #8c1c16;
+    --color-canvas: #d6ccb2;
+    --color-canvas-ink: #121212;
+    --color-canvas-muted: #4a463e;
+    --color-link: #1b416e;
+    --color-code-bg: #c7bca1;
+    --color-shadow: rgba(0,0,0,0.6);
+    --color-stud-hi: #c9cdd2;
+    --color-stud-lo: #3e434a;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background-color: var(--color-twill);
+  background-image: repeating-linear-gradient(-62deg, var(--color-twill) 0 2px, var(--color-bg) 2px 5px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  color: var(--color-text);
+  font: var(--text-m) / var(--leading-body) var(--font-sans);
+  --ring: var(--color-accent);
+}
+
+/* The vest panel: flat washed denim; the twill shows only in the gutters. */
+.panel {
+  width: min(100% - 0.75rem, var(--page-width));
+  margin: 0 auto;
+  padding: 0 clamp(0.6rem, 3vw, 2.5rem) var(--space-m);
+  background: var(--color-bg);
+  min-height: 100vh;
+  border-inline: 2px dashed var(--color-twill);
+}
+
+a { color: inherit; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--ring); outline-offset: 3px; }
+img { max-width: 100%; height: auto; }
+
+.skip-link {
+  position: absolute; left: var(--space-m); top: -10rem; z-index: 2;
+  padding: 0.6rem 1rem; background: var(--color-patch); color: var(--color-patch-ink);
+  --ring: var(--color-patch-ink);
+}
+.skip-link:focus { top: var(--space-m); }
+
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; overflow: hidden;
+  clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap;
+}
+
+/* ---------- caps: black condensed grotesque, one family ---------- */
+.name-tape, h1, h2, h3, .patch-city, .tickets, .contact-label, .status, .masthead nav, .patch-date,
+.pagination, .backlink, .actions a {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+}
+h1, h2, h3, .name-tape, .patch-city, .tickets {
+  font-weight: var(--weight-display);
+  font-stretch: condensed;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.005em;
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+/* ---------- the merrow: a band of slanted bone thread wrapped round the edge ---------- */
+.patch, .name-tape, .canvas {
+  position: relative;
+  --edge: var(--color-thread);
+  --edge-w: var(--merrow);
+  --slant: -58deg;
+}
+.patch::before, .name-tape::before, .canvas::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  border-radius: inherit;
+  padding: var(--edge-w);
+  background: repeating-linear-gradient(var(--slant), var(--edge) 0 1.7px, color-mix(in srgb, var(--edge) 55%, transparent) 1.7px 2.8px);
+  -webkit-mask: linear-gradient(var(--color-text) 0 0) content-box, linear-gradient(var(--color-text) 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(var(--color-text) 0 0) content-box exclude, linear-gradient(var(--color-text) 0 0);
+}
+/* the woven ground: weft lines across, fainter warp lines down */
+.patch, .name-tape {
+  background-color: var(--color-patch);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 2px, var(--color-weave) 2px 3px),
+    repeating-linear-gradient(90deg, transparent 0 3px, color-mix(in srgb, var(--color-weave) 55%, transparent) 3px 4px);
+}
+
+/* ---------- masthead ---------- */
+.masthead {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--space-m) var(--space-l);
+  padding: 1.4rem 0 1.1rem;
+}
+.name-tape {
+  display: inline-block; max-width: 100%;
+  padding: calc(0.4rem + var(--edge-w)) calc(0.8rem + var(--edge-w)) calc(0.3rem + var(--edge-w));
+  font-size: var(--text-xl);
+  text-decoration: none;
+  color: var(--color-patch-ink);
+  border-radius: var(--radius);
+  box-shadow: 3px 4px 0 var(--color-shadow);
+  rotate: calc(var(--tilt) * -1.5);
+  --ring: var(--color-accent);
+}
+.masthead ul { display: flex; flex-wrap: wrap; gap: 0.25rem 1.25rem; margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-block; padding: 0.55rem 0 0.35rem;
+  font-size: var(--text-s); font-weight: 700; letter-spacing: var(--tracking-caps);
+  color: var(--color-text); text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+.masthead nav a:hover { border-bottom-color: var(--color-muted); }
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+
+/* ---------- studs: rows of pyramid studs as section rules ----------
+   The row is cut to a whole number of studs and centred, so it ends on a stud. */
+.studs, .prose hr {
+  --pitch: calc(var(--stud) * 1.6);
+  --mid: color-mix(in srgb, var(--color-stud-hi), var(--color-stud-lo));
+  width: 100%;
+  width: calc(round(down, 100% + var(--pitch) - var(--stud), var(--pitch)) - var(--pitch) + var(--stud));
+  height: var(--stud); border: 0; margin: 0 auto var(--space-l);
+  background: conic-gradient(from -45deg at calc(var(--stud) / 2) 50%, var(--color-stud-hi) 0 25%, var(--mid) 0 50%, var(--color-stud-lo) 0 75%, color-mix(in srgb, var(--color-stud-hi) 75%, var(--color-stud-lo)) 0) 0 0 / var(--pitch) 100% repeat-x;
+  -webkit-mask: linear-gradient(90deg, var(--color-text) var(--stud), transparent 0) 0 0 / var(--pitch) 100% repeat-x;
+  mask: linear-gradient(90deg, var(--color-text) var(--stud), transparent 0) 0 0 / var(--pitch) 100% repeat-x;
+}
+.studs-foot { margin: var(--space-l) auto var(--space-m); }
+.prose hr { margin: var(--space-l) 0; }
+
+/* ---------- the patches: the tour list is a crowded vest ---------- */
+/* Patches pack down the columns like a vest sewn full: each one sits straight
+   under the last, so a short patch leaves no hole of bare denim. Reading order
+   runs down each column, latest date first, as in the markup. */
+.vest-patches {
+  columns: 14rem; column-gap: var(--gap);
+  margin: 0; padding: 0.4rem 0 0; list-style: none;
+}
+.vest-patches > .patch { break-inside: avoid; margin: 0 0 calc(var(--gap) * 1.1); }
+.patch {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 0.3rem;
+  padding: calc(0.75rem + var(--edge-w)) calc(0.9rem + var(--edge-w)) calc(0.85rem + var(--edge-w));
+  color: var(--color-patch-ink);
+  border-radius: var(--radius);
+  box-shadow: 3px 4px 0 var(--color-shadow);
+  font-size: var(--text-s);
+  line-height: 1.35;
+  hyphens: manual;
+  --ring: var(--color-patch-ink);
+}
+.patch[hidden] { display: none; }
+.vest-patches .patch { rotate: calc(var(--tilt) * -1); }
+.vest-patches .patch:nth-child(even) { rotate: var(--tilt); --slant: 58deg; }
+.vest-patches .patch:nth-child(3n) { rotate: calc(var(--tilt) * -0.5); --edge-w: calc(var(--merrow) + 1px); }
+.vest-patches .patch:nth-child(4n+2) { border-radius: var(--radius-shaped); }
+.vest-patches .patch:nth-child(5n+4) { top: 0.4rem; }
+.vest-patches .patch:nth-child(7n+5) { rotate: calc(var(--tilt) * 1.4); top: -0.3rem; --edge-w: calc(var(--merrow) - 1px); }
+.vest-patches .patch:hover { rotate: 0deg; }
+
+.patch > * { max-width: 100%; min-width: 0; }
+.patch p { margin: 0; }
+.patch-date { font-weight: 700; letter-spacing: var(--tracking-caps); color: var(--color-patch-muted); }
+.patch-city {
+  display: block; align-self: stretch; margin: 0.1rem 0 0.15rem;
+  font-size: var(--text-xl); color: var(--color-patch-ink); text-decoration: none;
+  hyphens: auto;
+}
+a.patch-city:hover { text-decoration: underline; text-decoration-thickness: 3px; }
+.patch-venue { font-weight: 700; overflow-wrap: break-word; }
+.patch-support { color: var(--color-patch-muted); overflow-wrap: break-word; }
+
+/* status and the ticket label sit together at the foot of the patch */
+.patch-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem 0.55rem; margin-top: auto; padding-top: 0.5rem; }
+.patch-foot:empty { display: none; }
+
+/* status in small woven capitals; the matching label is revealed */
+.status {
+  display: inline-block; padding: 0.2rem 0.45rem 0.15rem;
+  font-size: 0.6875rem; font-weight: 700; letter-spacing: var(--tracking-caps);
+  border: 1px solid var(--color-patch-muted); border-radius: 0;
+}
+.status > span { display: none; }
+.status > .status-raw { display: inline; text-transform: none; letter-spacing: 0; }
+[data-status="On sale"] .status > .status-raw, [data-status="Sold out"] .status > .status-raw, [data-status="Free entry"] .status > .status-raw { display: none; }
+[data-status="On sale"] .status-on, [data-status="Sold out"] .status-sold, [data-status="Free entry"] .status-free { display: inline; }
+[data-status="Free entry"] .status { background: var(--color-patch-ink); color: var(--color-patch); border-color: var(--color-patch-ink); }
+[data-status="Sold out"] .status { background: var(--color-sold); color: var(--color-canvas); border-color: var(--color-sold); }
+/* sold out: a red merrow, wound twice as thick */
+.patch[data-status="Sold out"], [data-status="Sold out"] > .show-patch { --edge: var(--color-sold); --edge-w: calc(var(--merrow) * 1.75); }
+[data-status="Sold out"] .tickets { display: none; }
+
+/* the ticket link: a small woven label, bone ground, stitched inside its edge */
+.tickets {
+  position: relative;
+  display: inline-flex; align-items: center; min-height: 2.25rem;
+  padding: 0.3rem 0.75rem 0.2rem;
+  font-size: var(--text-s); letter-spacing: 0.08em; text-decoration: none;
+  color: var(--color-patch);
+  background-color: var(--color-patch-ink);
+  background-image: repeating-linear-gradient(0deg, transparent 0 2px, color-mix(in srgb, var(--color-patch-ink) 82%, var(--color-patch)) 2px 3px);
+  border: 2px solid var(--color-patch-ink);
+  border-radius: 0;
+}
+.tickets::before { content: ""; position: absolute; inset: 2px; border: 1px dashed currentColor; pointer-events: none; }
+.tickets::after { content: "\2192"; margin-left: 0.35em; font-stretch: normal; }
+.tickets:hover { color: var(--color-patch-ink); background-color: var(--color-patch); background-image: none; }
+
+/* ---------- canvas: the bone back patch that carries prose ---------- */
+.canvas {
+  --edge: var(--color-canvas-ink);
+  --edge-w: calc(var(--merrow) + 1px);
+  --slant: 58deg;
+  max-width: calc(var(--measure) + 5rem);
+  padding: calc(clamp(1.1rem, 3vw, 2.25rem) + var(--edge-w)) calc(clamp(1rem, 3.5vw, 2.5rem) + var(--edge-w)) calc(clamp(1.25rem, 3vw, 2.5rem) + var(--edge-w));
+  color: var(--color-canvas-ink);
+  background-color: var(--color-canvas);
+  background-image: repeating-linear-gradient(0deg, transparent 0 3px, color-mix(in srgb, var(--color-canvas) 92%, var(--color-canvas-ink)) 3px 4px);
+  border-radius: var(--radius);
+  box-shadow: 4px 6px 0 2px var(--color-shadow);
+  margin: 4px 4px var(--space-l);
+  --ring: var(--color-canvas-ink);
+}
+.canvas a { color: var(--color-link); text-underline-offset: 0.15em; }
+.canvas h1 { margin: 0 0 0.6rem; font-size: var(--text-xxl); }
+.lede { margin: 0 0 var(--space-m); font-size: var(--text-l); line-height: 1.4; color: var(--color-canvas-muted); max-width: var(--measure); }
+.canvas-head + .prose { border-top: 3px solid var(--color-canvas-ink); padding-top: 0.25rem; }
+.meta { margin: 0 0 0.7rem; font-size: var(--text-s); font-weight: 700; letter-spacing: var(--tracking-caps); text-transform: uppercase; display: flex; flex-wrap: wrap; gap: 0.4rem 1rem; }
+.tags { display: inline-flex; flex-wrap: wrap; gap: 0.4rem; }
+.tag { padding: 0.1rem 0.45rem; border: 1px solid currentColor; border-radius: var(--radius); }
+.cover { display: block; width: 100%; margin: 0 0 var(--space-m); border: 2px solid var(--color-canvas-ink); }
+
+.prose { max-width: var(--measure); hyphens: manual; overflow-wrap: break-word; }
+.prose > :first-child { margin-top: 0.6rem; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: 1.8rem 0 0.5rem; font-size: var(--text-l); letter-spacing: 0.02em; }
+.prose h3, .prose h4 { margin: 1.4rem 0 0.4rem; font-size: var(--text-m); }
+.prose h4 { text-transform: none; font-stretch: normal; font-weight: 700; }
+.prose blockquote { margin: 1.2rem 0; padding: 0.2rem 0 0.2rem 1rem; border-left: 4px solid var(--color-canvas-ink); font-size: var(--text-l); }
+.prose pre { overflow-x: auto; padding: 0.8rem 1rem; background: var(--color-code-bg); border-radius: var(--radius); font-size: 0.875rem; }
+.prose code { font-family: var(--font-code); font-size: 0.92em; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 0.9375rem; }
+.prose th, .prose td { padding: 0.4rem 0.8rem 0.4rem 0; border-bottom: 1px solid var(--color-canvas-muted); text-align: left; vertical-align: top; min-width: 7rem; }
+.prose th { font-size: var(--text-s); letter-spacing: 0.06em; text-transform: uppercase; }
+.prose td:last-child { min-width: 13rem; }
+.prose a[href^="mailto:"], .prose a[href^="tel:"], .prose a:not([href*=" "]) { overflow-wrap: anywhere; }
+.prose li + li { margin-top: 0.25rem; }
+
+/* ---------- the front: the big back patch, small patches sewn on beside it ---------- */
+.vest { display: grid; gap: var(--space-l) calc(var(--gap) * 1.5); align-items: start; margin-bottom: var(--space-l); }
+.backpatch { max-width: none; margin: 0.6rem 4px 0; rotate: calc(var(--tilt) * -0.35); --edge-w: calc(var(--merrow) + 2px); }
+.vest-front { display: flex; flex-wrap: wrap; gap: calc(var(--gap) * 1.1) var(--gap); padding: 0.6rem 0 0; columns: auto; }
+.vest-front > .patch { flex: 1 1 9rem; margin: 0; }
+.vest-front > .patch-wide { flex-basis: 100%; }
+.patch-link { justify-content: center; min-height: 6.5rem; }
+.patch-link .patch-city { margin: 0; font-size: calc(var(--text-xl) * 1.2); }
+.patch-link .patch-city::after { content: "\2192"; margin-left: 0.3em; font-stretch: normal; font-weight: 700; }
+.patch-tagline p { font-size: var(--text-l); font-weight: 800; line-height: 1.2; text-transform: uppercase; letter-spacing: 0.01em; font-stretch: condensed; overflow-wrap: break-word; }
+.patch-contact .patch-mail { font-size: var(--text-m); font-weight: 700; color: var(--color-patch-ink); overflow-wrap: anywhere; text-underline-offset: 0.15em; }
+
+/* ---------- shows list ---------- */
+.tour-head { margin: 0.5rem 0 var(--space-l); max-width: 60rem; }
+.tour-head h1 { margin: 0 0 0.6rem; font-size: var(--text-xxl); }
+.tour-head .lede, .colophon .lede { color: var(--color-muted); }
+.empty { font-size: var(--text-l); }
+
+/* ---------- one show ---------- */
+.show-patch { max-width: 44rem; margin: 0.5rem 0 var(--space-l); align-self: start; padding: calc(1.2rem + var(--edge-w)) calc(1.3rem + var(--edge-w)) calc(1.3rem + var(--edge-w)); font-size: var(--text-m); rotate: calc(var(--tilt) * -0.6); }
+.show-patch h1 { margin: 0.2rem 0 0.4rem; font-size: calc(var(--text-xl) * 1.6); color: var(--color-patch-ink); }
+.show .canvas { margin-top: 0.5rem; align-self: start; }
+.show-patch .tickets { min-height: 2.75rem; font-size: var(--text-m); }
+
+.backlink, .actions { font-size: var(--text-s); font-weight: 700; letter-spacing: var(--tracking-caps); }
+.backlink a, .actions a { display: inline-block; padding: 0.55rem 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; margin: var(--space-m) 0 0; }
+
+/* ---------- blog list ---------- */
+.post-list { margin: var(--space-m) 0 0; padding: 0; list-style: none; max-width: var(--measure); }
+.post-list li { padding: 1rem 0; border-top: 3px solid var(--color-canvas-ink); }
+.post-list h2 { margin: 0.2rem 0 0.3rem; font-size: var(--text-xl); }
+.post-list h2 a { color: inherit; text-decoration: none; }
+.post-list h2 a:hover { text-decoration: underline; }
+.post-list p { margin: 0; }
+.post-list .meta { margin: 0; }
+
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.5rem; margin: var(--space-l) 0 0; font-size: var(--text-s); font-weight: 700; letter-spacing: var(--tracking-caps); }
+.pagination a { display: inline-block; padding: 0.55rem 0; }
+
+/* ---------- footer ---------- */
+.colophon { display: grid; gap: 0.4rem; padding: 0 0 var(--space-l); font-size: 0.9375rem; color: var(--color-muted); }
+.colophon p { margin: 0; overflow-wrap: break-word; }
+.colophon-name { color: var(--color-text); }
+.colophon-name strong { font-weight: var(--weight-display); font-stretch: condensed; text-transform: uppercase; letter-spacing: 0.03em; }
+.contact { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 0.75rem; }
+.contact a { flex: 1 1 14rem; min-width: 0; color: var(--color-text); overflow-wrap: anywhere; }
+.contact-label { display: inline-block; min-width: 6.5rem; font-size: 0.6875rem; font-weight: 700; letter-spacing: var(--tracking-caps); }
+
+/* ---------- widths ---------- */
+@media (min-width: 52rem) {
+  .vest { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); }
+}
+@media (min-width: 66rem) {
+  .show { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); column-gap: var(--space-l); }
+  .show .backlink { grid-column: 1 / -1; }
+}
+@media (max-width: 22rem) {
+  .patch-city { font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .vest-patches .patch { transition: rotate 0.15s ease-out; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
+
+/* ---------- print: dark text on white, no studs, no menu ---------- */
+@media print {
+  :root {
+    --color-bg: #ffffff; --color-twill: #ffffff; --color-text: #000000; --color-muted: #333333;
+    --color-patch: #ffffff; --color-weave: #ffffff; --color-patch-ink: #000000; --color-patch-muted: #333333;
+    --color-thread: #000000; --color-sold: #000000; --color-canvas: #ffffff; --color-canvas-ink: #000000;
+    --color-canvas-muted: #333333; --color-link: #000000; --color-code-bg: #ffffff; --color-shadow: rgba(0,0,0,0);
+  }
+  html { background: none; }
+  .panel { width: auto; padding: 0; min-height: 0; }
+  .masthead nav, .studs, .skip-link, .tickets, .backlink, .actions, .pagination, .vest-front { display: none; }
+  .patch, .name-tape, .canvas, .show-patch, .backpatch { rotate: none; box-shadow: none; background: none; break-inside: avoid; }
+  .patch::before, .name-tape::before, .canvas::before { background: var(--edge); }
+  .vest { display: block; }
+  .status, [data-status] .status { color: var(--color-text); background: none; border: 2px solid var(--color-text); }
+  .vest-patches .patch { rotate: none; top: 0; }
+  a { text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

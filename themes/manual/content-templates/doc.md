@@ -1,40 +1,41 @@
 ---
-title: Replace this — the section title as it should appear in the sidebar
-order: "10"
-description: Replace this — one sentence shown in the docs index, search results, and under the page title.
-prev: /docs/previous-section/
-prevTitle: Previous section's title
-next: /docs/next-section/
-nextTitle: Next section's title
+title: Backing up your work
+order: "90"
+description: What to copy, how often, and how to put everything back after a lost or replaced computer.
 ---
 
-Replace this paragraph: state in two sentences what this section covers and what the reader will be able to do at the end of it.
+A backup is a second copy kept somewhere else. This section covers what to copy, a routine that takes two minutes, and how to restore from it.
 
-**How the manual is wired together (delete this block once set up):**
+## Before you start
 
-- `order` positions this page in the sidebar and the docs index. Always quote it (`"10"`, not `10`) so `"02"` sorts before `"10"`. Leave gaps (10, 20, 30…) so you can insert sections later without renumbering.
-- `prev` / `next` draw the sequence links at the bottom of the page. They are plain URL paths; `prevTitle` / `nextTitle` are their labels. **Delete the `prev` pair on your first section and the `next` pair on your last** — and remember to update the neighbours when you insert a page between them.
+You need a second place to keep the copy: an external drive, a network share, or a private online folder. One is enough to begin with.
 
-## Replace this — first task or concept
+## Make a backup
 
-Explain one thing. Show, don't tell — a short command or config example beats a paragraph:
+1. Close anything that is still writing to the project folder.
+2. Copy the whole folder to the backup location:
 
-```sh
-replace-this --with "a real command the reader can run"
-```
+   ```sh
+   cp -R my-project /Volumes/Backup/my-project-2026-07-05
+   ```
 
-Then say what the reader should see when it works.
+3. Put the date in the name of the copy, so older copies are never overwritten.
 
-## Replace this — second task or concept
+## Check it worked
 
-Keep sections small enough to skim. Use a table when values need comparing:
+Open the copy and look for the newest file you changed. If it is there with today's date, the backup is good.
 
-| Replace  | With                    |
-| -------- | ----------------------- |
-| A column | Of real, useful values  |
+| How often     | Keep for  |
+| ------------- | --------- |
+| Every Friday  | One month |
+| Every month   | One year  |
 
-> **Tip** — Blockquotes render as callout panels. Start one with a bold word — **Tip**, **Note**, **Warning** — to give it a title.
+> **Note** — A copy on the same disk is not a backup. If the disk fails, both go together.
 
-## Where to next
+## Restore from a backup
 
-End by pointing somewhere: the next section in the sequence, or a related page like [another section](/docs/next-section/).
+Copy the dated folder back and remove the date from its name. Nothing else needs to be reinstalled or reset.
+
+## Related sections
+
+Every section is listed in the [contents](/docs/).

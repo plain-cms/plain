@@ -1,0 +1,38 @@
+<section class="tour">
+  <header class="tour-head">
+    <h1>{{ page.title }}</h1>
+    {{#if data.band.tagline}}<p class="lede">{{ data.band.tagline }}</p>
+    {{/if}}
+  </header>
+  {{#if items}}<ul class="cards" role="list">
+    {{#each items as item}}<li class="card" data-status="{{ item.status }}">
+      <div class="card-head">
+        <h2 class="card-title"><a href="{{ item.url }}">{{#if item.city}}{{ item.city }}{{else}}{{ item.title }}{{/if}}</a></h2>
+        {{#if item.city}}<p class="card-sub">{{ item.title }}</p>
+        {{/if}}<time class="card-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+      </div>
+      {{#if item.venue}}<div class="card-top">
+        <p class="card-part">{{ item.venue }}</p>
+        {{#if item.support}}<p class="card-composer">{{ strings.withSupport }} {{ item.support }}</p>
+        {{/if}}
+      </div>
+      {{else}}{{#if item.support}}<div class="card-top">
+        <p class="card-composer">{{ strings.withSupport }} {{ item.support }}</p>
+      </div>
+      {{/if}}{{/if}}<div class="card-foot">
+        <span class="staff" aria-hidden="true"></span>
+        {{#if item.status}}<p class="status"><span class="status-raw">{{ item.status }}</span><span class="st st-onsale">{{ strings.statusOnSale }}</span><span class="st st-soldout">{{ strings.statusSoldOut }}</span><span class="st st-free">{{ strings.statusFreeEntry }}</span></p>
+        {{/if}}{{#if item.ticketsUrl}}<a class="mark mark-tickets" href="{{ item.ticketsUrl }}" aria-label="{{ strings.tickets }}: {{ item.title }}">{{ strings.tickets }}</a>
+        {{/if}}
+      </div>
+    </li>
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.noShows }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.laterShows }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.pageOf }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.earlierShows }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

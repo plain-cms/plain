@@ -1,0 +1,22 @@
+<article class="service">
+  <p class="back"><a href="/services/">← {{ strings.allServices }}</a></p>
+  <div class="posts">
+    <header class="sign sign-ahead">
+      <h1 class="sign-name">{{ page.title }}</h1>
+      {{#if page.description}}<p class="sign-note">{{ page.description }}</p>
+      {{/if}}{{#if page.priceFrom}}<p class="route"><span>{{ strings.from }}</span> {{ page.priceFrom }}</p>
+      {{/if}}
+    </header>
+    {{#if page.included}}<section class="plate included" aria-labelledby="included-heading">
+      <h2 id="included-heading">{{ strings.includedHeading }}</h2>
+      <ul>
+        {{#each page.included as point}}<li>{{ point }}</li>
+        {{/each}}
+      </ul>
+    </section>{{/if}}
+  </div>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{> call}}
+</article>

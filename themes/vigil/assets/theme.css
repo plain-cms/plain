@@ -1,0 +1,367 @@
+/* Vigil — a family funeral director's theme built around one object: the
+   night bell by the undertaker's door. A green-black painted door, a small
+   white enamel plate lettered NIGHT BELL, one round push in a lit orange
+   ring, and the number beside it. Everything else is quiet: pale serif text
+   on door paint, underlined links, flared capitals for the signwriting.
+   Dark by default, so in place of a (prefers-color-scheme: dark) block it
+   has a light one. Restyle by editing the tokens, never the selectors. */
+
+:root {
+  /* Type — flared plate capitals for signwriting, a large transitional serif */
+  --font-plate: Optima, Candara, "Segoe UI", "Noto Sans", "Gill Sans", sans-serif;
+  --font-serif: Baskerville, "Baskerville Old Face", "Hoefler Text", Georgia, "Times New Roman", serif;
+  --text-base: 1.1875rem;
+  --text-small: 1rem;
+  --leading: 1.6;
+  --track: 0.16em;
+
+  /* Colour — green-black door paint, pale text, lit orange on the ring only */
+  --color-bg: #13211c;
+  --color-text: #e9ece4;
+  --color-muted: #a7b3aa;
+  --color-accent: #ff8a2a;
+  --color-ring: #ff8a2a;
+  --color-rule: #3b4f46;
+  --color-shade: #1b2c26;
+  --color-mark: #5b4a2c;
+  --color-door: #172a23;
+  --color-door-ink: #ecefe7;
+  --color-door-muted: #b1bcb3;
+  --color-door-rule: #3c5248;
+  --color-moulding-hi: rgba(255,255,255,0.1);
+  --color-moulding-lo: rgba(0,0,0,0.55);
+  --color-enamel: #f4f2eb;
+  --color-enamel-ink: #17241e;
+  --color-bezel: #9aa29b;
+  --color-push: #0b100e;
+  --color-sheen: rgba(255,255,255,0.34);
+  --color-lamp: #ffd2a3;
+  --color-glow: rgba(255,138,42,0.42);
+
+  /* Measures */
+  --page-width: 78rem;
+  --measure: 42rem;
+  --jamb: 25rem;
+  --push-size: 6rem;
+  --radius: 3px;
+  --gutter: 1rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Frosted glass of the door's upper pane; the bell stays on door paint */
+    --color-bg: #e6eae7;
+    --color-text: #15231d;
+    --color-muted: #4a5951;
+    --color-accent: #c45a0e;
+    --color-rule: #a9b6af;
+    --color-shade: #d8dfdb;
+    --color-mark: #f3c995;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+*, ::before, ::after { box-sizing: border-box; }
+html { color-scheme: dark light; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 var(--gutter);
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+/* only headings and names, set large, may break a long word at a syllable */
+h1, h2, h3, h4, .rite-title, .person-name, .notice-title, .plate { hyphens: auto; }
+.rite-fee, .fee-value, .prose table, .hours { hyphens: manual; }
+/* on the narrowest phones a long word in page text breaks at a syllable
+   instead of stranding the comma after it on a line of its own */
+@media (max-width: 22.5rem) {
+  .prose p, .prose li { hyphens: auto; }
+}
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: inherit; text-decoration: underline; text-decoration-color: var(--color-muted); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-color: currentColor; text-decoration-thickness: 2px; }
+.mail, .person-reach a, .jamb-field a { overflow-wrap: anywhere; }
+
+/* a ring on a pad of the ground: shows on glass and on paint */
+:focus-visible { outline: 2px solid var(--color-text); outline-offset: 3px; box-shadow: 0 0 0 6px var(--color-bg); border-radius: var(--radius); }
+.jamb :focus-visible { outline-color: var(--color-door-ink); box-shadow: 0 0 0 6px var(--color-door); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-bg); color: var(--color-text); }
+.skip-link:focus { left: var(--space-2); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* signwriting: flared capitals, spaced out */
+.label, .crumb, .block-head, .fascia nav, .post-date, .tags {
+  font-family: var(--font-plate);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: var(--track);
+  text-transform: uppercase;
+}
+.label { display: block; margin: 0 0 var(--space-1); color: var(--color-muted); }
+
+/* The fascia: the firm's name signwritten over the door ------------------ */
+
+.fascia, .doorway, .colophon { max-width: var(--page-width); margin-inline: auto; }
+.fascia {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-4) 0 var(--space-3);
+  border-bottom: 4px double var(--color-rule);
+}
+.site-title {
+  margin-right: auto;
+  font-family: var(--font-plate);
+  font-size: clamp(1.125rem, 0.85rem + 1.2vw, 1.625rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.fascia nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-4); margin: 0; padding: 0; list-style: none; }
+.fascia nav a { display: inline-block; padding: var(--space-2) 0; text-decoration: none; }
+.fascia nav a:hover, .fascia nav a[aria-current="page"] { text-decoration: underline; text-decoration-color: currentColor; text-decoration-thickness: 2px; text-underline-offset: 0.5em; }
+.fascia-call { flex-basis: 100%; margin: 0; }
+.fascia-call .label { display: inline; margin-right: var(--space-2); }
+.fascia-call a { font-size: 1.25rem; font-variant-numeric: lining-nums; white-space: nowrap; }
+.fascia-call a::before { content: ""; display: inline-block; width: 0.75em; height: 0.75em; margin: 0 0.5em 0 0.15em; vertical-align: -0.05em; border-radius: 50%; background: var(--color-push); box-shadow: 0 0 0 0.15em var(--color-accent), 0 0 0.45em 0.15em var(--color-glow); }
+
+/* The doorway: the page as the door leaf, the bell on the jamb beside it -- */
+
+main { min-width: 0; }
+.page { max-width: var(--measure); padding: var(--space-4) 0 var(--space-5); }
+.page > * + * { margin-top: var(--space-4); }
+
+.page-header h1 {
+  margin: 0;
+  font-size: clamp(2rem, 1.3rem + 2.3vw, 3.125rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+.lead { margin: var(--space-3) 0 0; font-size: 1.3125rem; font-style: italic; line-height: 1.45; color: var(--color-muted); }
+.crumb { margin: 0 0 var(--space-3); color: var(--color-muted); }
+.fee { margin: var(--space-3) 0 0; }
+.fee-value { font-size: 1.5rem; font-style: italic; font-variant-numeric: lining-nums; }
+.empty { margin-bottom: 0; font-style: italic; color: var(--color-muted); }
+
+@media (min-width: 64rem) {
+  .doorway { display: grid; grid-template-columns: minmax(0, 1fr) var(--jamb); column-gap: var(--space-5); align-items: start; }
+  .fascia-call { display: none; }
+  .page { max-width: 48rem; }
+}
+
+/* Prose ------------------------------------------------------------------ */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2 { margin: var(--space-4) 0 var(--space-2); font-size: 1.625rem; font-weight: 400; line-height: 1.2; }
+.prose h3 { margin: var(--space-4) 0 var(--space-2); font-family: var(--font-plate); font-size: 0.9375rem; font-weight: 600; line-height: 1.35; letter-spacing: 0.1em; text-transform: uppercase; }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1.0625rem; font-style: italic; font-weight: 400; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose blockquote, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { max-width: 100%; height: auto; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 4px double var(--color-rule); }
+.prose blockquote { padding: 0 0 0 var(--space-3); border-left: 1px solid var(--color-muted); font-style: italic; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+.prose code { font-size: 0.85em; background: var(--color-shade); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); background: var(--color-shade); border-radius: var(--radius); overflow-x: auto; font-size: 0.9375rem; line-height: 1.45; }
+.prose pre code { background: none; padding: 0; }
+/* a table wider than its column scrolls inside its own box */
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: 1.0625rem; font-variant-numeric: lining-nums tabular-nums; }
+.prose th, .prose td { min-width: 7.5rem; padding: 0.5rem 1rem 0.5rem 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { font-family: var(--font-plate); font-size: 0.8125rem; font-weight: 600; letter-spacing: 0.08em; vertical-align: bottom; border-bottom-color: var(--color-muted); }
+
+/* Blocks: services and people, each under a signwritten heading ---------- */
+
+.block-head { margin: 0; padding-bottom: var(--space-2); color: var(--color-muted); border-bottom: 1px solid var(--color-muted); }
+.block-more { margin: var(--space-3) 0 0; }
+
+.rites { margin-bottom: 0; padding: 0; list-style: none; }
+.block-head + .rites { margin-top: 0; }
+.page-header + .rites { border-top: 1px solid var(--color-muted); }
+.rite { display: grid; grid-template-columns: minmax(0, 1fr); padding: 1.125rem 0 1.25rem; border-bottom: 1px solid var(--color-rule); }
+.rite-title { margin: 0; font-size: 1.375rem; line-height: 1.25; }
+.rite-title a { text-decoration-color: var(--color-rule); }
+.rite-title a:hover { text-decoration-color: currentColor; }
+.rite-note { margin: var(--space-1) 0 0; font-size: 1.0625rem; line-height: 1.5; color: var(--color-muted); }
+.rite-fee { margin: var(--space-2) 0 0; font-size: 1.125rem; font-style: italic; line-height: 1.35; font-variant-numeric: lining-nums; }
+@media (min-width: 36rem) {
+  .rite { grid-template-columns: minmax(0, 1fr) minmax(0, max-content); column-gap: var(--space-4); }
+  .rite-title, .rite-note { grid-column: 1; }
+  .rite-fee { grid-column: 2; grid-row: 1 / span 2; max-width: 13rem; margin: 0.1875rem 0 0; text-align: right; }
+}
+
+.points ul { margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.points li { position: relative; padding: 0.375rem 0 0.375rem 1.75rem; border-bottom: 1px solid var(--color-rule); line-height: 1.45; overflow-wrap: anywhere; }
+.points li::before { content: ""; position: absolute; left: 0.125rem; top: 1.0625rem; width: 0.875rem; border-top: 1px solid var(--color-text); }
+
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr)); gap: var(--space-4); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.person { display: flow-root; min-width: 0; }
+.person-photo { float: right; width: 5rem; height: 5rem; margin: 0 0 var(--space-2) var(--space-3); object-fit: cover; border-radius: var(--radius); }
+.person-name { margin: 0; font-family: var(--font-plate); font-size: 1rem; font-weight: 600; line-height: 1.35; letter-spacing: 0.1em; text-transform: uppercase; }
+.person-role { margin: var(--space-1) 0 0; font-style: italic; line-height: 1.4; }
+.person-cred { margin: var(--space-1) 0 0; font-size: var(--text-small); line-height: 1.45; color: var(--color-muted); }
+.person-bio { margin: var(--space-2) 0 0; font-size: 1.0625rem; }
+.person-bio p { margin: 0 0 var(--space-2); }
+.person-reach { margin: var(--space-1) 0 0; font-size: var(--text-small); font-variant-numeric: lining-nums; }
+
+/* News --------------------------------------------------------------------- */
+
+.notices { margin-bottom: 0; padding: 0; list-style: none; border-top: 1px solid var(--color-muted); }
+.notice { display: flow-root; padding: var(--space-3) 0; border-bottom: 1px solid var(--color-rule); }
+.notice-cover { float: right; width: 7rem; height: 5rem; margin: 0 0 var(--space-2) var(--space-3); object-fit: cover; border-radius: var(--radius); }
+.post-date { margin: 0 0 var(--space-1); color: var(--color-muted); text-transform: none; letter-spacing: 0.06em; }
+.page-header .post-date { margin-bottom: var(--space-3); }
+.notice-title { margin: 0; font-size: 1.5rem; font-weight: 400; line-height: 1.25; }
+.notice-note { margin: var(--space-1) 0 0; font-size: 1.0625rem; color: var(--color-muted); }
+.tags { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.tags li { min-width: 0; overflow-wrap: anywhere; }
+.cover { display: block; width: 100%; height: auto; max-height: 26rem; object-fit: cover; border-radius: var(--radius); }
+.way-out { padding-left: 1.25em; }
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); font-size: var(--text-small); }
+.pagination span { color: var(--color-muted); }
+
+/* THE NIGHT BELL — the signature. The jamb beside the door is one painted,
+   moulded panel: a small white enamel plate, one round push in a lit orange
+   ring on a nickel rosette, and the number beside it in large serif figures.
+   The push and the number are one tel: link, so pressing the bell rings. */
+
+.jamb {
+  container-type: inline-size;
+  margin: 0 0 var(--space-5);
+  padding: 1.75rem 1.625rem 1.875rem;
+  background: var(--color-door);
+  color: var(--color-door-ink);
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 0.5rem var(--color-door), inset 0 0 0 0.5625rem var(--color-moulding-lo), inset 0 0 0 0.625rem var(--color-moulding-hi), 0 0 0 1px var(--color-moulding-lo);
+}
+.jamb .label { color: var(--color-door-muted); }
+.jamb a { text-decoration-color: var(--color-door-muted); }
+.jamb a:hover { text-decoration-color: currentColor; }
+@media (min-width: 64rem) {
+  .jamb { margin: var(--space-4) 0 var(--space-5); }
+}
+
+/* the enamel plate: white vitreous enamel, a lined border, two screws */
+.plate {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  margin: 0 0 var(--space-3);
+  padding: 0.4375rem 1.75rem 0.4375rem calc(1.75rem + 0.22em);
+  background: var(--color-enamel);
+  color: var(--color-enamel-ink);
+  border-radius: 0.3125rem;
+  box-shadow: inset 0 0 0 0.1875rem var(--color-enamel), inset 0 0 0 0.25rem var(--color-enamel-ink), 0 1px 2px var(--color-moulding-lo);
+  font-family: var(--font-plate);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.22em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.plate::before, .plate::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0.5625rem;
+  width: 0.4375rem;
+  height: 0.4375rem;
+  margin-top: -0.21875rem;
+  border-radius: 50%;
+  background: linear-gradient(45deg, transparent 42%, var(--color-enamel-ink) 42% 58%, transparent 58%), var(--color-bezel);
+}
+.plate::after { left: auto; right: 0.5625rem; }
+
+.bell { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) 1.25rem; color: inherit; text-decoration: none; }
+.push {
+  --halo: 0.375rem;
+  flex: none;
+  width: var(--push-size);
+  height: var(--push-size);
+  margin: 0.8125rem;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 41% 37%, var(--color-sheen), transparent 21%),
+    radial-gradient(circle closest-side, var(--color-push) 64%, var(--color-lamp) 67%, var(--color-ring) 86%, var(--color-ring) 96%, var(--color-moulding-lo) 100%);
+  box-shadow: 0 0 0.5rem var(--halo) var(--color-glow), 0 0 0 0.6875rem var(--color-bezel), 0 0 0 0.8125rem var(--color-moulding-lo), 0 0 1.75rem 1.375rem var(--color-glow);
+  transition: box-shadow 0.2s, transform 0.08s;
+}
+.bell:hover .push, .bell:focus-visible .push { --halo: 0.625rem; }
+.bell:active .push { transform: scale(0.97); }
+.bell-say {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: clamp(1.1875rem, 8cqi, 2.5rem);
+  line-height: 1.1;
+  font-variant-numeric: lining-nums;
+  text-decoration: underline;
+  text-decoration-color: var(--color-door-muted);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.16em;
+  overflow-wrap: anywhere;
+}
+.bell:hover .bell-say { text-decoration-color: currentColor; }
+.bell-mail .bell-say { font-size: clamp(1.125rem, 5.5cqi, 1.375rem); }
+.bell-words .bell-say { font-size: 1.5rem; overflow-wrap: break-word; hyphens: auto; }
+.bell-note { margin: var(--space-3) 0 0; font-size: 1.0625rem; line-height: 1.5; }
+
+.jamb-field { margin: var(--space-3) 0 0; padding-top: 0.875rem; border-top: 1px solid var(--color-door-rule); font-size: 1.0625rem; line-height: 1.45; }
+.jamb-field h3 { margin: 0 0 var(--space-1); }
+.hours { margin: 0; }
+.hours div { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); padding: 0.25rem 0; }
+.hours dt { flex: 1 1 8rem; min-width: 0; }
+.hours dd { flex: 1 1 7rem; min-width: 0; margin: 0; font-style: italic; }
+
+/* Colophon ------------------------------------------------------------------ */
+
+.colophon { padding: var(--space-3) 0 var(--space-4); border-top: 4px double var(--color-rule); color: var(--color-muted); font-size: var(--text-small); line-height: 1.5; }
+.colophon p { margin: 0 0 var(--space-2); max-width: 52rem; }
+.colophon-name { font-family: var(--font-plate); font-weight: 600; letter-spacing: var(--track); text-transform: uppercase; color: var(--color-text); }
+
+/* Motion & print ----------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after { transition: none !important; scroll-behavior: auto; }
+  .bell:active .push { transform: none; }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff; --color-text: #000000; --color-muted: #333333; --color-rule: #999999; --color-shade: #eeeeee;
+    --color-door: #ffffff; --color-door-ink: #000000; --color-door-muted: #333333; --color-door-rule: #999999;
+    --color-enamel: #ffffff; --color-enamel-ink: #000000;
+  }
+  body { padding: 0; background: none; font-size: 11pt; }
+  .fascia nav, .fascia-call, .skip-link, .push, .block-more, .pagination, .crumb { display: none; }
+  .doorway { display: block; }
+  .page { max-width: none; padding-bottom: var(--space-3); }
+  a { text-decoration: none; }
+  .jamb { margin: 0 0 var(--space-3); box-shadow: none; border: 1px solid var(--color-text); }
+  .plate { box-shadow: none; border: 1px solid var(--color-text); }
+  .plate::before, .plate::after { display: none; }
+  .rite, .person, .notice, .jamb { break-inside: avoid; }
+}

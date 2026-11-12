@@ -1,0 +1,24 @@
+<section class="work">
+  {{#if page.slug}}<header class="intro">
+    <div class="intro-head">
+      <p class="kicker"><span>{{ strings.labelSheet }} 01</span> <span>{{ strings.labelPractice }}</span></p>
+      <h1>{{ page.title }}</h1>
+    </div>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>{{/if}}
+  </header>
+  {{#if collections.projects}}<ul class="cards">
+  {{#each collections.projects as item}}{{> project-sheet}}
+  {{/each}}</ul>{{/if}}
+  {{else}}<header class="page-head">
+    <h1>{{#if tag}}{{ strings.taggedWith }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}<ul class="cards">
+  {{#each items as item}}{{> project-sheet}}
+  {{/each}}</ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{> pagination}}
+  {{/if}}
+</section>
+{{> tb-sheet}}

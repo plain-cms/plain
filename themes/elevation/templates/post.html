@@ -1,0 +1,11 @@
+<article class="post">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    <p class="post-meta"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{#if page.tagLinks}}<span class="tags">{{#each page.tagLinks as tag}} <a href="{{ tag.url }}">{{ tag.name }}</a>{{/each}}</span>{{/if}}</p>
+  </header>
+  {{#if page.cover}}<figure class="post-cover"><img src="{{ page.cover }}" alt="" decoding="async"></figure>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>
+{{> tb-sheet}}

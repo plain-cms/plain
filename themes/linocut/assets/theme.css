@@ -1,0 +1,497 @@
+/* Linocut — a relief printmaker's portfolio.
+   Point of view: the pulled proof. The page is the uncut lino on the bench;
+   every project is a sheet of proofing paper with one block printed on it in
+   burnt umber — a fixed width, as tall as its title needs, the title cut out
+   of the ink in heavy capitals so the paper shows through — and the pencil
+   line under the print: year, client, signature. Everything else stays quiet.
+   All design decisions are the tokens below (cms-spec.md §10.1). */
+
+:root {
+  /* Colour — lino, paper, one ink */
+  --color-bg: #b59b7f;
+  --color-text: #241811;
+  --color-muted: #3a3430;
+  --color-accent: #6b3219;
+  --color-sheet: #fbf9f4;
+  --color-pencil: #625d58;
+  --color-rule: #d8d2c9;
+  --color-shadow: rgba(58, 36, 20, 0.34);
+
+  /* Type — a heavy grotesque to cut, an old-style face to write with */
+  --font-block: "Arial Black", "Helvetica Neue", "Arial Nova", Arial, "Liberation Sans", sans-serif;
+  --font-text: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-pencil: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-block: 1.3125rem;
+  --text-block-l: clamp(1.5rem, 1rem + 2.6vw, 2.75rem);
+  --text-xl: clamp(1.5rem, 0.9rem + 2.4vw, 2.5rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.08;
+  --tracking-caps: 0.02em;
+  --weight-block: 900;
+
+  /* Proportion */
+  --measure: 38em;
+  --block-width: 15rem;
+  --block-width-l: 36rem;
+  --sheet-min: 18rem;
+  --sheet-pad: 2.25rem;
+  --grid-gap: 1.5rem;
+  --block-edge: 3px 7px 2px 6px;
+  --underline: 0.17em;
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+}
+
+/* After dark the lino is inked up, the sheets are a dark umber paper and the
+   block is pulled in a pale tan ink: the cut letters still show the paper. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1e1713;
+    --color-text: #efe6da;
+    --color-muted: #bcae9d;
+    --color-accent: #dcc3a2;
+    --color-sheet: #2d231d;
+    --color-pencil: #b6a998;
+    --color-rule: #4a3e34;
+    --color-shadow: rgba(0, 0, 0, 0.55);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  font-family: var(--font-text);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+::selection { background: var(--color-accent); color: var(--color-sheet); }
+
+a {
+  color: inherit;
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: var(--underline);
+  text-underline-offset: 0.2em;
+  text-decoration-skip-ink: none;
+}
+a:hover { text-decoration-color: currentColor; }
+
+/* An address or a number may wrap anywhere rather than push the page */
+a[href^="mailto:"], a[href^="tel:"], a[href^="http"] { overflow-wrap: anywhere; }
+
+:focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; }
+
+img { max-width: 100%; height: auto; }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-sheet);
+  color: var(--color-text);
+}
+.skip-link:focus { left: var(--space-2); }
+
+.frame {
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: var(--space-3);
+}
+
+/* Heavy capitals — the voice of the cutting tool */
+.site-title,
+.site-head nav,
+.page-head h1,
+.intro h1,
+.block,
+.prose h2,
+.prose th,
+.spec dt,
+.more-work h2,
+.pagination {
+  font-family: var(--font-block);
+  font-weight: var(--weight-block);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+/* Big capitals in narrow places: words wrap whole; a word too long for its
+   line is hyphenated, and only cut as the last resort. The block, below,
+   holds about twelve capitals a line: only a longer word is hyphenated,
+   so a word that fits moves whole to the next line. */
+.page-head h1,
+.intro h1,
+.prose h2,
+.prose h3,
+.site-title,
+.more-work a,
+.proof-note,
+.pencil > span {
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
+  overflow-wrap: break-word;
+  min-width: 0;
+}
+
+/* Header — on the bare lino --------------------------------------------- */
+
+.site-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  padding-block: var(--space-2);
+}
+
+.site-title {
+  display: inline-block;
+  padding-block: var(--space-2);
+  font-size: 1.125rem;
+  line-height: var(--leading-tight);
+  text-decoration: none;
+}
+
+.site-head nav { font-size: 0.8125rem; }
+.site-head ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+  margin: 0 calc(-1 * var(--space-1));
+  padding: 0;
+  list-style: none;
+}
+.site-head nav a {
+  display: inline-block;
+  padding: var(--space-1);
+  line-height: 1.2;
+}
+/* The page you are on is inked: the label is cut out of a small block */
+.site-head nav a[aria-current="page"] {
+  background: var(--color-accent);
+  color: var(--color-sheet);
+  text-decoration: none;
+  border-radius: var(--block-edge);
+}
+
+main { min-height: 60vh; }
+
+/* Footer --------------------------------------------------------------- */
+
+.colophon {
+  margin-top: var(--space-5);
+  padding-block: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--text-s);
+}
+.colophon p { margin: 0 0 var(--space-1); max-width: var(--measure); }
+.colophon-name { font-style: italic; color: var(--color-text); }
+
+/* Page heads on the lino ------------------------------------------------ */
+
+.page-head { margin: var(--space-4) 0 var(--space-4); max-width: 52rem; }
+.page-head h1,
+.intro h1 {
+  margin: 0;
+  font-size: var(--text-xl);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+.page-head .pencil { margin-top: var(--space-2); color: var(--color-muted); }
+
+/* Sheets of proofing paper --------------------------------------------- */
+
+.sheet {
+  background: var(--color-sheet);
+  box-shadow: 0 1px 0 var(--color-shadow), 0 10px 18px -12px var(--color-shadow);
+  padding: clamp(1.25rem, 5vw, 3.5rem) clamp(1.25rem, 5vw, 4rem) clamp(1.75rem, 7vw, 5rem);
+  max-width: calc(var(--measure) + 8rem);
+}
+
+/* The pencil line: written, not set */
+.pencil {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--space-3);
+  margin: var(--space-1) 0 0;
+  font-family: var(--font-pencil);
+  font-style: italic;
+  font-size: var(--text-s);
+  line-height: 1.4;
+  color: var(--color-pencil);
+}
+.pencil-client { flex: 0 1 auto; }
+.pencil-sign { margin-left: auto; text-align: right; }
+.pencil-sign .year { margin-left: 0.35em; }
+
+/* A date shown as its year: the first four figures of YYYY-MM-DD */
+.year {
+  display: inline-block;
+  width: 4ch;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: bottom;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-style: normal;
+}
+
+/* The block — the signature ---------------------------------------------
+   One width for every block; the title decides the height. The ink carries
+   a faint grain, the cut edge is a little uneven. */
+.block {
+  margin: 0;
+  padding: 1.1rem 1rem 1.35rem;
+  background-color: var(--color-accent);
+  background-image:
+    radial-gradient(circle at 30% 40%, color-mix(in srgb, var(--color-sheet) 14%, transparent) 0 0.7px, transparent 1.3px),
+    radial-gradient(circle at 70% 20%, color-mix(in srgb, var(--color-sheet) 11%, transparent) 0 0.5px, transparent 1.1px),
+    radial-gradient(circle at 45% 80%, color-mix(in srgb, var(--color-sheet) 12%, transparent) 0 0.9px, transparent 1.4px),
+    radial-gradient(ellipse at 15% 0%, color-mix(in srgb, var(--color-sheet) 7%, transparent), transparent 65%);
+  background-size: 13px 17px, 23px 19px, 37px 29px, 100% 100%;
+  border-radius: var(--block-edge);
+  color: var(--color-sheet);
+  font-size: var(--text-block);
+  line-height: var(--leading-tight);
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
+  overflow-wrap: break-word;
+}
+.block a { color: inherit; text-decoration: none; }
+
+/* The print: block (and picture) with its pencil line, one fixed width */
+.print { width: min(var(--block-width), 100%); margin-inline: auto; }
+.print-cut {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--block-edge);
+  border-end-start-radius: 0;
+  border-end-end-radius: 0;
+}
+.print-cut + .block { border-start-start-radius: 0; border-start-end-radius: 0; }
+
+/* The work: proofs laid out on the bench -------------------------------- */
+
+.proofs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--sheet-min), 100%), 1fr));
+  gap: var(--grid-gap);
+}
+
+.proof {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--sheet-pad) clamp(1.25rem, 6%, var(--sheet-pad)) calc(1.5 * var(--sheet-pad));
+  background: var(--color-sheet);
+  box-shadow: 0 1px 0 var(--color-shadow), 0 10px 18px -12px var(--color-shadow);
+}
+.proof .block a::after { content: ""; position: absolute; inset: 0; }
+.proof .block a:focus-visible { outline: none; }
+.proof .block a:focus-visible::after { outline: 3px solid var(--color-text); outline-offset: 3px; }
+.proof:hover .block a { text-decoration: underline; text-decoration-thickness: 0.08em; text-underline-offset: 0.12em; }
+
+.proof-note {
+  hyphenate-limit-chars: 12 5 5;
+  width: min(var(--block-width), 100%);
+  margin: var(--space-3) auto 0;
+  font-size: var(--text-s);
+  line-height: 1.5;
+  color: var(--color-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .proof { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .proof:hover { transform: translateY(-2px); box-shadow: 0 1px 0 var(--color-shadow), 0 16px 22px -12px var(--color-shadow); }
+}
+
+/* Home: a short statement on the lino, then the proofs */
+.intro { margin: var(--space-4) 0 var(--space-4); }
+.intro h1 { max-width: 26ch; }
+.intro .prose { max-width: var(--measure); margin-top: var(--space-3); }
+.intro .prose p { margin: 0 0 var(--space-2); }
+.intro .prose table { background: none; }
+
+/* Project page ------------------------------------------------------------ */
+
+.project-sheet { margin-top: var(--space-4); max-width: none; }
+.project-sheet .print { width: min(var(--block-width-l), 100%); }
+.project-sheet .block { font-size: var(--text-block-l); padding: 1.4rem 1.25rem 1.75rem; }
+.project-sheet .print-cut { aspect-ratio: auto; max-height: 75vh; object-fit: contain; background: var(--color-rule); }
+.project-sheet .pencil { font-size: 1rem; }
+
+.notes { max-width: var(--measure); margin: var(--space-5) auto 0; }
+.notes + .notes { margin-top: 0; }
+.lede { font-size: var(--text-l); line-height: 1.45; margin: 0 0 var(--space-4); text-wrap: pretty; }
+
+.spec { margin: 0 0 var(--space-4); padding: var(--space-2) 0; border-block: 1px solid var(--color-rule); }
+.spec dt { font-size: 0.75rem; color: var(--color-pencil); margin-bottom: var(--space-1); }
+.spec dd { display: inline; margin: 0; }
+.spec dd + dd::before { content: " · "; color: var(--color-pencil); }
+
+/* The way on to more work: an index on the lino */
+.more-work { margin-top: var(--space-5); max-width: 56rem; }
+.more-work h2 { font-size: 0.875rem; margin: 0 0 var(--space-2); }
+.more-work ul { list-style: none; margin: 0; padding: 0; columns: 16rem 2; column-gap: var(--space-4); }
+.more-work li { break-inside: avoid; }
+.more-work li:nth-child(n+9) { display: none; }
+.more-work li a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-block: var(--space-1);
+  border-bottom: 1px solid color-mix(in srgb, var(--color-text) 30%, transparent);
+  text-decoration: none;
+}
+.more-work li a:hover span { text-decoration: underline var(--underline) var(--color-accent); }
+.more-work .year { flex: none; font-style: italic; color: var(--color-muted); font-size: var(--text-s); }
+.more-work p { margin: var(--space-3) 0 0; }
+
+/* Prose ------------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose h2 { font-size: 1rem; line-height: 1.25; margin: var(--space-4) 0 var(--space-2); }
+.prose h3 { font-size: 1.125rem; line-height: 1.3; margin: var(--space-4) 0 var(--space-1); }
+.prose h4 { font-size: 1rem; font-style: italic; margin: var(--space-3) 0 var(--space-1); }
+.prose img { display: block; margin: var(--space-4) 0; }
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: 0 0 0 var(--space-3);
+  border-left: 0.35rem solid var(--color-accent);
+  font-style: italic;
+}
+.prose hr {
+  width: 3rem;
+  height: 0.5rem;
+  margin: var(--space-4) 0;
+  border: 0;
+  background: var(--color-accent);
+  border-radius: var(--block-edge);
+}
+.prose code { font-family: var(--font-mono); font-size: 0.88em; }
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-3);
+  border: 1px solid var(--color-rule);
+  line-height: 1.5;
+}
+.prose pre code { font-size: 0.8125rem; }
+
+/* A table scrolls in its own box — never the page */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
+  hyphens: manual;
+  /* A table wider than its box shows a soft shadow at the edge that scrolls */
+  background:
+    linear-gradient(to right, var(--color-sheet) 30%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-sheet) 30%, transparent) right / 2rem 100% no-repeat local,
+    radial-gradient(farthest-side at 0 50%, color-mix(in srgb, var(--color-text) 24%, transparent), transparent) left / 0.75rem 100% no-repeat scroll,
+    radial-gradient(farthest-side at 100% 50%, color-mix(in srgb, var(--color-text) 24%, transparent), transparent) right / 0.75rem 100% no-repeat scroll;
+}
+.prose th, .prose td {
+  min-width: 7em;
+  padding: var(--space-1) var(--space-3) var(--space-1) 0;
+  border-bottom: 1px solid var(--color-rule);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th { font-size: 0.75rem; }
+
+/* Posts and lists --------------------------------------------------------- */
+
+.entries { list-style: none; margin: 0; padding: 0; }
+.entry { padding-block: var(--space-3); border-bottom: 1px solid var(--color-rule); }
+.entry:first-child { padding-top: 0; }
+.entry:last-child { border-bottom: 0; padding-bottom: 0; }
+.entry h2 { margin: 0; font-size: var(--text-l); line-height: 1.25; }
+.entry .pencil { margin-top: var(--space-1); }
+.entry p:last-child { margin: var(--space-1) 0 0; }
+
+.tags { list-style: none; display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-2) 0 0; padding: 0; font-size: var(--text-s); }
+.post-cover { display: block; margin: 0 0 var(--space-4); }
+
+.empty { margin: 0; color: var(--color-muted); font-style: italic; }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-4);
+  font-size: 0.8125rem;
+}
+.pagination a { display: inline-block; padding-block: var(--space-1); }
+
+.not-found .sheet p:last-child { margin-bottom: 0; }
+
+/* Wide screens -------------------------------------------------------------- */
+
+@media (min-width: 48rem) {
+  .frame { padding-inline: var(--space-4); }
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: var(--space-4);
+    align-items: end;
+  }
+  .intro .prose { margin-top: 0; }
+}
+
+/* Print ------------------------------------------------------------------- */
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-sheet: #ffffff;
+    --color-pencil: #333333;
+    --color-rule: #999999;
+    --color-shadow: rgba(0, 0, 0, 0);
+  }
+  body { font-size: 11pt; }
+  .site-head nav, .skip-link, .pagination, .more-work { display: none; }
+  .sheet, .proof { box-shadow: none; padding: 0; margin-top: var(--space-3); }
+  .proof { break-inside: avoid; border: 1px solid var(--color-rule); padding: var(--space-3); }
+  .block { background: none; color: var(--color-text); border: 2px solid var(--color-text); }
+  .proofs { grid-template-columns: repeat(2, 1fr); }
+  .prose pre { white-space: pre-wrap; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; }
+}

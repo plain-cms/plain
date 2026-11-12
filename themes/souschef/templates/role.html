@@ -1,0 +1,28 @@
+<article class="role">
+  <p class="pass-label">{{ strings.experience }}</p>
+  <div class="role-layout">
+    <div class="dockets rails role-rail">
+      <div class="slot">
+        <div class="docket">
+          <h1 class="docket-station">{{ page.title }}</h1>
+          <div class="docket-head">
+            {{#if page.organization}}<p class="docket-org">{{ page.organization }}</p>
+            {{/if}}<p class="docket-when">{{#if page.period}}{{ page.period }}{{else}}<time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{/if}}</p>
+          </div>
+          {{#if page.location}}<p class="docket-loc"><span>{{ page.location }}</span></p>
+          {{/if}}{{#if page.summary}}<p class="docket-summary">{{ page.summary }}</p>
+          {{/if}}{{#if page.highlights}}<ul class="docket-mods">
+            {{#each page.highlights as point}}<li>{{ point }}</li>
+            {{/each}}
+          </ul>
+          {{/if}}
+        </div>
+      </div>
+    </div>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </div>
+  <p class="backlink"><a href="/experience/">{{ strings.backToCv }}</a></p>
+</article>

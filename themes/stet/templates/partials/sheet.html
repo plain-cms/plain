@@ -1,0 +1,12 @@
+<li class="sheet{{#if item.cover}} has-print{{/if}}">
+  <dl class="slug">
+    {{#if item.client}}<div><dt>{{ strings.client }}</dt><dd>{{ item.client }}</dd></div>
+    {{/if}}<div><dt>{{ strings.date }}</dt><dd><time class="year" datetime="{{ item.date }}">{{ item.date }}</time></dd></div>
+    {{#if item.services}}<div><dt>{{ strings.forLabel }}</dt><dd><ul class="for">{{#each item.services as service}}<li>{{ service }}</li>{{/each}}</ul></dd></div>
+    {{/if}}
+  </dl>
+  {{#if item.cover}}<img class="print" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">
+  {{/if}}<h2 class="headline"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.description}}<p class="copy">{{ item.description }}</p>
+  {{/if}}<p class="ends"><span>{{ strings.ends }}</span></p>
+</li>

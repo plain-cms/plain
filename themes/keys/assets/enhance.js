@@ -1,16 +1,11 @@
-// enhance.js — progressive enhancement only (cms-spec.md C5).
-// The photo gallery on a listing works as a scrollable grid without this.
-// With it, arrow keys step focus between photos once one is focused.
+// enhance.js — progressive enhancement only; every page works without it.
+// On a property page, the "Email us" button opens a message whose subject is
+// already the property's name, so the agent knows which listing it is about.
 
-const photos = [...document.querySelectorAll('.gallery img')];
-if (photos.length > 1) {
-  photos.forEach((img, i) => {
-    img.tabIndex = 0;
-    img.addEventListener('keydown', (event) => {
-      const step = event.key === 'ArrowRight' ? 1 : event.key === 'ArrowLeft' ? -1 : 0;
-      if (!step) return;
-      event.preventDefault();
-      photos[(i + step + photos.length) % photos.length].focus();
-    });
-  });
+const title = document.querySelector('.listing h1');
+if (title) {
+  const subject = encodeURIComponent(title.textContent.trim());
+  for (const link of document.querySelectorAll('.inquiry a[href^="mailto:"]')) {
+    if (!link.href.includes('?')) link.href += `?subject=${subject}`;
+  }
 }

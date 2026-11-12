@@ -2,20 +2,20 @@
 title: Junior developer
 date: 2015-08-01
 organization: Koppel & Zn.
-period: 2015 — 2017
+period: 2015–2017
 location: Rotterdam
-summary: First job — internal tools for a 90-year-old logistics firm mid-digitization.
-description: First job — internal tools for a 90-year-old logistics firm mid-digitization.
+summary: First job. Internal tools for a 90-year-old logistics firm moving off paper.
+description: Sam Kessler's first job, building booking and dispatch tools for the Rotterdam logistics firm Koppel & Zn. from 2015 to 2017.
 highlights:
-  - Replaced the fax-based booking flow with a web form the dispatchers actually preferred
+  - Replaced the fax-based booking flow with a web form the dispatchers preferred to the fax
 example: true
 ---
 
-My first job: a family logistics firm digitizing under protest. I built
-internal tools — booking, dispatch boards, driver manifests — for users who
-sat ten meters away and told me immediately when something was wrong.
+A family logistics firm, digitising under protest. I built booking screens,
+dispatch boards and driver manifests for people who sat ten metres away and
+told me straight away when something was wrong.
 
-It was the best possible training. When your user can walk over, "it works
-on my machine" is not a sentence you get to say, and you learn that the
-dispatchers' paper system encoded twenty years of edge cases the spec
-didn't mention. I've interviewed users before writing code ever since.
+It was the best training I could have had. When your user can walk over to
+your desk, "it works on my machine" is not an answer. The dispatchers' paper
+system held twenty years of edge cases that no specification mentioned, and
+I have interviewed users before writing code ever since.

@@ -1,0 +1,19 @@
+<section class="page is-sheet">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+  <div class="posts">
+    {{#if items}}<ul class="post-list">
+      {{#each items as item}}<li class="post-row">
+        {{#if item.dateFormatted}}<p class="post-date"><time class="entry" datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>{{/if}}
+        <div class="box-what">
+          <h2 class="box-caption"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+          {{#if item.description}}<p class="box-note">{{ item.description }}</p>{{/if}}
+        </div>
+        {{#if item.cover}}<img class="post-thumb" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+      </li>
+      {{/each}}
+    </ul>{{else}}<p class="empty">{{ strings.nothingHere }}</p>{{/if}}
+    {{> pagination}}
+  </div>
+</section>

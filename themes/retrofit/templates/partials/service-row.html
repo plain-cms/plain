@@ -1,0 +1,5 @@
+<li class="row">
+        <p class="row-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+        {{#if item.description}}<p class="row-note">{{ item.description }}</p>{{/if}}
+        {{#if item.fee}}<p class="fee"><span class="visually-hidden">{{ strings.feeLabel }} </span>{{ item.fee }}</p>{{/if}}
+      </li>

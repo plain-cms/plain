@@ -1,0 +1,13 @@
+<article class="sheet">
+  <header class="head">
+    <h1 class="frieze"><span>{{ page.title }}</span></h1>
+  </header>
+  {{#if page.description}}<p class="lede">{{ page.description }}</p>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}<div class="side">
+    {{> call}}
+    {{> jobs}}
+  </div>
+</article>

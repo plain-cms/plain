@@ -1,31 +1,33 @@
 ---
-title: mkweb
-description: A single-binary command-line tool that turns a folder of Markdown into a fast, boring, reliable website.
+title: The mkweb manual
+description: mkweb is a single-binary command-line tool that turns a folder of Markdown into a fast, boring, reliable website.
 example: true
 ---
 
-**mkweb** turns a folder of Markdown files into a website. One binary, no runtime, no plugins to babysit. You write files; it writes HTML.
+You write files; mkweb writes HTML. One binary, no runtime, no plugins to babysit.
 
 ```sh
 mkweb new my-site && cd my-site
-mkweb dev        # live preview at http://localhost:8080
-mkweb build      # static output in ./public
+mkweb dev     # live preview
+mkweb build   # writes ./public
 ```
 
-Three reasons people keep it around:
+## How to read this manual
+
+The sections are numbered and short. Read them in order the first time and you will have a site online before the coffee is cold; after that, the contents list on every page takes you straight to the part you need.
+
+| If you want to…                 | Read |
+| ------------------------------- | ---- |
+| Build a first site in minutes   | [Getting started](/docs/getting-started/) |
+| Add pages, pictures, downloads  | [Writing pages](/docs/writing-pages/), then [Images and files](/docs/images-and-files/) |
+| Look up an option or a flag     | [Configuration](/docs/configuration/) and [Commands](/docs/commands/) |
+| Put the site online             | [Deploying](/docs/deploying/) |
+| Understand an error message     | [Troubleshooting](/docs/troubleshooting/) |
+
+## Why people keep it around
 
 - **Nothing to install but itself.** A single static binary for every major platform.
 - **Nothing to configure to start.** Sensible defaults; one small `mkweb.json` when you outgrow them.
 - **Nothing surprising in the output.** Plain HTML and CSS you can read, host anywhere, and diff.
 
-## Read the manual
-
-The documentation is short by design and ordered like a checklist — start at the top and you'll have a site before you finish your coffee.
-
-1. [Getting started](/docs/getting-started/) — what mkweb is and a five-minute first build
-2. [Installation](/docs/installation/) — every platform, plus verifying the binary
-3. [Configuration](/docs/configuration/) — the complete `mkweb.json` reference
-4. [Commands](/docs/commands/) — every command and flag
-5. [Troubleshooting](/docs/troubleshooting/) — the errors you'll actually see, decoded
-
-Looking for something specific? [Search the manual](/search/).
+> **Note** — This manual covers mkweb 2.4. Run `mkweb version` to see what you have, and `mkweb upgrade` to catch up.

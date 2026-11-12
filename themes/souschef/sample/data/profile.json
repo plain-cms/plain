@@ -1,0 +1,19 @@
+{
+  "name": "Joss Ferreira",
+  "role": "Senior sous chef — game, butchery and sauce, kitchens of 40 to 140 covers",
+  "email": "joss@jossferreira.example",
+  "links": [
+    { "label": "07700 900318", "url": "tel:+447700900318" },
+    { "label": "jossferreira.example", "url": "https://jossferreira.example" }
+  ],
+  "skills": [
+    "Whole-carcass butchery",
+    "Game and charcuterie",
+    "Stocks and sauces",
+    "Running the pass",
+    "Menu costing and GP",
+    "Rotas and brigade training",
+    "Level 3 food safety",
+    "English, Portuguese"
+  ]
+}

@@ -1,0 +1,549 @@
+/* Carton — removals and storage (trades family). A slate transit blanket;
+   every service a kraft removal box under FRAGILE tape. Edit tokens, never
+   selectors. */
+
+:root {
+  /* Type: heavy grotesque caps as printed on board, mono for figures */
+  --font-display: "Arial Black", "Helvetica Neue", "Arial Nova", "Nimbus Sans", "Liberation Sans", Arial, sans-serif;
+  --font-body: "Helvetica Neue", Helvetica, "Nimbus Sans", "Liberation Sans", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-xs: 0.75rem;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.2rem;
+  --text-xl: 1.55rem;
+  --text-xxl: clamp(1.65rem, 1rem + 2.7vw, 3rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.06;
+  --tracking-caps: 0.1em;
+
+  /* The blanket */
+  --color-bg: #46586e;
+  --color-text: #f6f2e9;
+  --color-muted: #dfe5ed;
+  --color-accent: #ff9484;
+  --color-stitch: #a3b3c6;
+  --color-quilt: rgba(255,255,255,0.11);
+
+  /* The box, its print, the tape */
+  --color-kraft: #cfa672;
+  --color-kraft-end: #b98f5c;
+  --color-print: #17130e;
+  --color-tape: #c5142b;
+  --color-label: #fbf8f1;
+  --color-shade: rgba(0,0,0,0.28);
+
+  /* Measures */
+  --page-width: 78rem;
+  --measure: 38rem;
+  --box-min: 19rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --radius: 2px;
+  --print-rule: 2px;
+  --stitch: 0.5rem;
+  --quilt: 8.5rem;
+  --tape: 1.9rem;
+  --ruled: 1.5rem;
+  --focus-width: 3px;
+}
+
+/* Night: the inside of the van, boxes in torchlight */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #15181d;
+    --color-text: #ebe6da;
+    --color-muted: #aab2bc;
+    --color-accent: #f4655a;
+    --color-stitch: #55606d;
+    --color-quilt: rgba(255,255,255,0.07);
+    --color-kraft: #b18b5a;
+    --color-kraft-end: #9e7a49;
+    --color-tape: #a80f22;
+    --color-label: #e8e2d4;
+    --color-shade: rgba(0,0,0,0.5);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font: var(--text-m)/var(--leading-body) var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+/* The quilting stitch: one zigzag, strong where it stands for a rule, faint
+   in rows across the open cloth of a wide screen. --zc is its thread. */
+body, hr, .masthead::after, .colophon::before {
+  background-image:
+    linear-gradient(135deg, transparent calc(var(--stitch) * 0.707 - 1px), var(--zc) 0 calc(var(--stitch) * 0.707 + 1px), transparent 0),
+    linear-gradient(225deg, transparent calc(var(--stitch) * 0.707 - 1px), var(--zc) 0 calc(var(--stitch) * 0.707 + 1px), transparent 0);
+}
+body { --zc: transparent; background-size: calc(2 * var(--stitch)) var(--quilt); }
+@media (min-width: 60em) {
+  body { --zc: var(--color-quilt); }
+}
+hr, .masthead::after, .colophon::before {
+  --zc: var(--color-stitch);
+  content: "";
+  display: block;
+  height: calc(var(--stitch) + 2px);
+  border: 0;
+  background-size: calc(2 * var(--stitch)) 100%;
+  background-repeat: repeat-x;
+}
+hr { margin: var(--space-4) 0; }
+
+/* Headings and the narrow contents panel break long words (ten letters or
+   more); prices, running text and tables wider than a phone keep them whole */
+h1, h2, h3, h4, .panel li {
+  -webkit-hyphens: auto;
+  hyphens: auto;
+  -webkit-hyphenate-limit-before: 4;
+  -webkit-hyphenate-limit-after: 4;
+  hyphenate-limit-chars: 10 4 4;
+}
+
+h1, h2, h3, h4, .site-title, .menu a, .strip, .panel-label, .box-end small, th {
+  font-family: var(--font-display);
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+a { color: inherit; text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 3px; }
+
+:focus-visible { outline: var(--focus-width) solid var(--color-text); outline-offset: 2px; }
+.box a, .call a { text-decoration-color: currentColor; }
+.box :focus-visible, .call :focus-visible, table :focus-visible, blockquote :focus-visible { outline-color: var(--color-print); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 9; padding: var(--space-2) var(--space-3); background: var(--color-label); color: var(--color-print); }
+.skip-link:focus { left: var(--space-2); }
+
+.wrap { max-width: var(--page-width); margin-inline: auto; padding-inline: var(--space-3); }
+main { min-height: 60vh; }
+
+/* Masthead */
+
+.masthead .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-4);
+  padding-block: var(--space-2);
+}
+.site-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  margin-right: auto;
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+  text-decoration: none;
+}
+.menu ul { display: flex; flex-wrap: wrap; gap: 0 0.8rem; margin: 0; padding: 0; list-style: none; }
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps);
+  text-decoration: none;
+}
+.menu a:hover, .site-title:hover { text-decoration: underline; }
+.menu a[aria-current="page"] { box-shadow: inset 0 -0.25rem var(--color-accent); }
+
+/* This way up: two arrows over a bar, in whatever ink surrounds them */
+.up { flex: none; display: flex; gap: 0.2em; width: 1.9em; padding-bottom: 0.2em; border-bottom: 0.2em solid; }
+.up::before, .up::after {
+  content: "";
+  flex: 1;
+  aspect-ratio: 5 / 8;
+  background: currentColor;
+  clip-path: polygon(50% 0, 100% 45%, 70% 45%, 70% 100%, 30% 100%, 30% 45%, 0 45%);
+}
+
+/* Tape: red, lettered white, cut on the dispenser's teeth. On a box it is
+   the FRAGILE strip; torn short it is the call button. */
+.tape, .strip {
+  background: var(--color-tape);
+  clip-path: polygon(4px 0, 0 10%, 4px 20%, 0 30%, 4px 40%, 0 50%, 4px 60%, 0 70%, 4px 80%, 0 90%, 4px 100%, calc(100% - 4px) 100%, 100% 90%, calc(100% - 4px) 80%, 100% 70%, calc(100% - 4px) 60%, 100% 50%, calc(100% - 4px) 40%, 100% 30%, calc(100% - 4px) 20%, 100% 10%, calc(100% - 4px) 0);
+}
+.strip {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0 var(--space-2);
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding: var(--space-1) var(--space-3);
+  color: var(--color-label);
+  font-size: var(--text-xs);
+  line-height: 1.2;
+  letter-spacing: var(--tracking-caps);
+  text-align: center;
+  text-decoration: none;
+}
+.strip span { min-width: 0; }
+.strip b { max-width: 100%; font: 700 var(--text-m)/1.2 var(--font-mono); letter-spacing: 0; overflow-wrap: anywhere; }
+.strip:hover { background: var(--color-label); color: var(--color-tape); }
+/* The teeth would cut an outline off: the ring goes inside the tape */
+.strip:focus-visible { outline: 0; box-shadow: inset 0 0 0 var(--focus-width) currentColor; }
+
+/* Headers */
+
+.page-header { margin: var(--space-4) 0; }
+h1 {
+  margin: 0;
+  font-size: var(--text-xxl);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.lede { max-width: var(--measure); margin: var(--space-2) 0 0; font-size: var(--text-l); line-height: 1.45; text-wrap: pretty; }
+.eyebrow, .more, .pagination, time {
+  font-family: var(--font-mono);
+  font-size: var(--text-s);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.eyebrow { margin: var(--space-3) 0 var(--space-2); color: var(--color-muted); }
+.more { margin: var(--space-3) 0 0; font-weight: 700; }
+.tag { margin-left: var(--space-2); }
+
+@media (min-width: 56em) {
+  .at-index .page-header { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-4); align-items: end; }
+  .at-index .lede { margin: 0; font-size: var(--text-m); }
+}
+
+/* THE SIGNATURE: the box face. .box-sides is the carton seen a little from
+   the right: the face, then the end in shade. The tape runs across both. */
+
+.stack {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, var(--box-min)), 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: var(--color-bg);
+}
+/* Board as wide as the page stands on a plain strip of blanket, edge to
+   edge: no stitch stubs in the gaps and margins */
+.stack, .box-big, .list > .call, .not-found > .call {
+  box-shadow: 0 0 0 100vmax var(--color-bg);
+  clip-path: inset(calc(-1 * var(--space-2)) -100vmax);
+}
+.box { position: relative; display: flex; flex-direction: column; container-type: inline-size; color: var(--color-print); }
+.box-sides, .call {
+  background-color: var(--color-kraft);
+  background-image: repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-print) 5%, transparent) 0 1px, transparent 0 5px);
+  border-radius: var(--radius);
+  box-shadow: 0 var(--space-1) 0 var(--color-shade);
+}
+.box-sides { flex: 1; display: flex; }
+.box-face, .box-end { padding: calc(var(--tape) + 1.4rem) var(--space-3) var(--space-3); }
+.stack :is(.box-face, .box-end) { padding-inline: calc(var(--space-2) + var(--print-rule)); }
+.box-face { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+.tape {
+  position: absolute;
+  inset: 0.55rem -0.3rem auto;
+  z-index: 1;
+  height: var(--tape);
+  overflow: hidden;
+  border-block: 3px solid var(--color-tape);
+  background-image: linear-gradient(var(--color-label) 0 2px, transparent 0 calc(100% - 2px), var(--color-label) 0);
+  color: var(--color-label);
+  font: 900 var(--text-xs)/calc(var(--tape) - 6px) var(--font-display);
+  letter-spacing: 0.16em;
+  word-spacing: 1.6em;
+  text-indent: 1.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* Each strip came off the roll at a different word */
+.stack .box:nth-child(2n) .tape { text-indent: -2.4em; }
+.stack .box:nth-child(4n+3) .tape { text-indent: 3.6em; }
+.stack .box:nth-child(5n) .tape { text-indent: -4.6em; }
+.tape::before { content: attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape) " " attr(data-tape); }
+
+/* The printed panel: ROOM over CONTENTS, keylined in black */
+.panel { flex: 1; display: flex; flex-direction: column; border: var(--print-rule) solid; }
+.panel > * { padding: var(--space-2); }
+.panel > :last-child { flex: 1; }
+.panel > * + * { border-top: var(--print-rule) solid; }
+.panel .panel-label {
+  display: block;
+  width: fit-content;
+  max-width: calc(100% + var(--space-2));
+  margin: calc(-1 * var(--space-2)) 0 var(--space-2) calc(-1 * var(--space-2));
+  padding: 0.15rem var(--space-2);
+  background: var(--color-print);
+  color: var(--color-kraft);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  letter-spacing: 0.16em;
+}
+.panel-label small { font: 400 1em var(--font-mono); letter-spacing: 0.02em; text-transform: none; }
+.box h2, .call h2 { margin: 0; font-size: var(--text-l); line-height: 1.1; letter-spacing: -0.01em; }
+.box h2 a { text-decoration: none; }
+.box h2 a::after { content: ""; position: absolute; inset: 0; z-index: 2; }
+.box:hover h2 a { text-decoration: underline; }
+.box-note { margin: var(--space-2) 0 0; font-size: var(--text-s); line-height: 1.4; }
+
+/* A panel taller than its lines keeps ruling */
+.panel-contents { display: flex; flex-direction: column; }
+.panel-contents ul {
+  --r: var(--ruled);
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font: var(--text-s)/var(--r) var(--font-mono);
+  background-image: repeating-linear-gradient(transparent 0 calc(var(--r) - 1px), color-mix(in srgb, var(--color-print) 40%, transparent) 0 var(--r));
+}
+.panel-contents li { padding-left: 1.2em; text-indent: -1.2em; }
+.stack .panel-contents li:nth-child(n+5) { display: none; }
+
+/* The end: arrows up top, the price at the foot. Its width is a share of the
+   box, never a size the price must fit: a long price wraps and the box grows. */
+.box-end {
+  flex: 0 0 min(35.5%, 8.75rem);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0;
+  background-color: var(--color-kraft-end);
+  background-image: repeating-linear-gradient(90deg, color-mix(in srgb, var(--color-print) 6%, transparent) 0 1px, transparent 0 5px);
+  border-left: 1px solid color-mix(in srgb, var(--color-print) 45%, transparent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.box-end::after { order: 1; align-self: center; max-width: 100%; height: 1.2rem; margin: var(--space-4) 0 auto; }
+.box-end > :not(.up) { order: 2; }
+.box-end .up { font-size: var(--text-l); }
+.box-end small { display: block; font-size: var(--text-xs); letter-spacing: 0.16em; }
+.box-end strong, .box-end time { display: block; font: 700 var(--text-m)/1.2 var(--font-mono); letter-spacing: 0; text-transform: none; }
+
+/* A box too narrow for a side: the end folds under the face */
+@container (max-width: 24rem) {
+  .box-sides { flex-direction: column; }
+  .box-end {
+    flex: none;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: var(--space-2) var(--space-3);
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-print) 45%, transparent);
+    border-radius: 0 0 var(--radius) var(--radius);
+    text-align: right;
+  }
+  .box-end-bare, .box-end::after { display: none; }
+}
+
+/* The service page: one box, full width, with everything printed on it */
+.box-big h1 { font-size: var(--text-xxl); }
+.box-big .box-note { max-width: var(--measure); font-size: var(--text-m); line-height: var(--leading-body); }
+.box-big .panel-contents ul { --r: calc(var(--ruled) * 1.3); font-size: var(--text-m); }
+.box-big .box-end { flex-basis: min(30%, 15rem); }
+.box-big .box-end .up { font-size: var(--text-xl); }
+.box-big .box-end strong { font-size: var(--text-xl); }
+@container (max-width: 30rem) {
+  .box-big .box-sides { flex-direction: column; }
+  .box-big .box-end {
+    flex: none;
+    flex-direction: row;
+    align-items: flex-end;
+    padding: var(--space-2) var(--space-3);
+    border-left: 0;
+    border-top: 1px solid color-mix(in srgb, var(--color-print) 45%, transparent);
+    text-align: right;
+  }
+  .box-big .box-end-bare, .box-big .box-end::after { display: none; }
+}
+@container (min-width: 54rem) {
+  .box-big .panel { display: grid; grid-template-columns: 1fr 1fr; }
+  .box-big .panel > * + * { border-top: 0; border-left: var(--print-rule) solid; }
+}
+
+/* The pile: boxes on the home page and the 404, six at most */
+.pile .box:nth-child(n+7) { display: none; }
+@media (max-width: 40em) {
+  .pile .box:nth-child(n+4) { display: none; }
+}
+.pile .more { text-align: right; }
+
+/* Text beside the call box */
+
+.columns { display: grid; gap: var(--space-4); margin-top: var(--space-4); }
+.columns > * { min-width: 0; }
+@media (min-width: 60em) {
+  .columns { grid-template-columns: minmax(0, var(--measure)) minmax(17rem, 22rem); justify-content: space-between; align-items: start; }
+}
+
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose :is(h2, h3, h4) { margin: var(--space-4) 0 var(--space-2); line-height: 1.1; }
+.prose h2 { font-size: var(--text-xl); letter-spacing: -0.01em; }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-s); letter-spacing: var(--tracking-caps); }
+.prose :is(p, ul, ol, pre, table) { margin: 0 0 var(--space-3); }
+.prose blockquote { margin: var(--space-4) 0 var(--space-3); }
+.prose :is(ul, ol) { padding-left: 1.3em; }
+.prose li::marker { color: var(--color-accent); }
+.prose img, .cover { display: block; max-width: 100%; height: auto; margin-bottom: var(--space-2); border: var(--space-1) solid var(--color-label); }
+.cover { width: 100%; max-height: 26rem; object-fit: cover; }
+
+/* A number or an address: typed, sentence-sized, inline. One wider than
+   the line breaks where it must, so its full stop stays with it. */
+.prose a[href^="tel:"], .prose a[href^="mailto:"], .call-facts a, .colophon-facts a {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+/* A customer's words: a white label taped to the blanket */
+blockquote, table { background: var(--color-label); color: var(--color-print); box-shadow: 0 var(--space-1) 0 var(--color-shade); }
+blockquote { position: relative; padding: var(--space-3); font-size: var(--text-l); line-height: 1.4; border-radius: var(--radius); }
+blockquote::before {
+  content: "";
+  position: absolute;
+  top: -0.5rem;
+  left: var(--space-3);
+  width: 4.5rem;
+  height: 1.1rem;
+  background: var(--color-tape);
+  transform: rotate(-3deg);
+}
+blockquote p { margin: 0 0 var(--space-2); text-wrap: pretty; }
+blockquote p:last-child { margin: 0; }
+blockquote p:last-child:not(:first-child) { font: 700 var(--text-s)/1.4 var(--font-mono); letter-spacing: 0.04em; text-transform: uppercase; }
+blockquote a, table a { text-decoration-color: var(--color-tape); }
+
+/* Prices and hours: the inventory sheet */
+table { width: 100%; border-collapse: collapse; line-height: 1.35; font-variant-numeric: tabular-nums; }
+th, td {
+  min-width: 5.5em;
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--color-print) 28%, transparent);
+  text-align: left;
+  vertical-align: baseline;
+  overflow-wrap: anywhere;
+}
+th { border-bottom: var(--print-rule) solid; font-size: var(--text-xs); letter-spacing: 0.14em; vertical-align: bottom; }
+tr:last-child td { border-bottom: 0; }
+thead:not(:has(th:not(:empty))) { display: none; }
+[align="right"] { min-width: 0; text-align: right; overflow-wrap: break-word; -webkit-hyphens: manual; hyphens: manual; }
+td[align="right"] { font-family: var(--font-mono); font-weight: 700; }
+@media (min-width: 40em) {
+  td[align="right"] { white-space: nowrap; }
+}
+@media (max-width: 40em) {
+  /* On a phone the sheet is a narrow box: long words in its text hyphenate */
+  table { -webkit-hyphens: auto; hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+  /* Three columns: smaller type, tighter cells, all on the sheet */
+  table:has(:is(th, td):nth-child(3)) { font-size: var(--text-s); hyphenate-limit-chars: 6 3 3; }
+  table:has(:is(th, td):nth-child(3)) :is(th, td) { min-width: 5em; padding: 0.5rem 0.4rem; letter-spacing: 0; }
+  /* Four or more cannot fit: that sheet alone slides sideways */
+  table:has(:is(th, td):nth-child(4)) { display: block; overflow-x: auto; }
+  table:has(:is(th, td):nth-child(4)) :is(th, td) { min-width: 0; overflow-wrap: normal; -webkit-hyphens: manual; hyphens: manual; }
+  table:has(:is(th, td):nth-child(4)) td[align="right"] { white-space: nowrap; }
+}
+
+code { font: 0.9em var(--font-mono); background: var(--color-shade); padding: 0.1em 0.3em; border-radius: var(--radius); }
+pre { padding: var(--space-3); background: var(--color-shade); border-radius: var(--radius); overflow-x: auto; }
+pre code { padding: 0; background: none; font-size: var(--text-s); }
+
+/* The call box: a carton's end, hand-hole and all */
+
+.call {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: var(--space-3) var(--space-4);
+  align-items: center;
+  position: relative;
+  padding: 3.4rem var(--space-3) var(--space-3);
+  color: var(--color-print);
+}
+.call::before, .box-end::after {
+  content: "";
+  width: 5.5rem;
+  height: 1.5rem;
+  border-radius: 1rem;
+  background: var(--color-print);
+  opacity: 0.8;
+  box-shadow: inset 0 0.3rem 0 var(--color-shade);
+}
+.call::before { position: absolute; top: var(--space-3); left: calc(50% - 2.75rem); }
+.list > .call, .not-found > .call { margin-top: var(--space-5); box-shadow: 0 var(--space-1) 0 var(--color-shade), 0 0 0 100vmax var(--color-bg); }
+.call h2 { font-size: var(--text-l); }
+.call-ask p { margin: var(--space-1) 0 var(--space-3); }
+.call .strip { min-width: min(100%, 17rem); padding-inline: var(--space-2); }
+.call-facts { align-self: start; }
+.call-facts:empty { display: none; }
+.call-facts p { margin: 0; font: var(--text-s)/1.5 var(--font-mono); }
+
+/* Lists, pagination, footer */
+
+.pagination { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: var(--space-2) var(--space-3); margin-top: var(--space-4); color: var(--color-muted); }
+.pagination a { color: var(--color-text); font-weight: 700; }
+.empty { color: var(--color-muted); }
+
+.colophon { margin-top: var(--space-5); padding-bottom: var(--space-4); color: var(--color-muted); font-size: var(--text-s); }
+.colophon .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-4); padding-top: var(--space-3); }
+.colophon p { margin: 0; min-width: 0; }
+.colophon strong { display: block; color: var(--color-text); }
+.colophon-facts { font-family: var(--font-mono); display: flex; flex-wrap: wrap; gap: 0 var(--space-3); }
+.colophon-facts > * { min-width: 0; }
+.colophon-note { flex-basis: 100%; }
+.colophon-note > * { margin: 0 0 var(--space-1); }
+
+/* Motion */
+
+@media (prefers-reduced-motion: no-preference) {
+  .stack .box { transition: transform 0.15s; }
+  .stack .box:hover { transform: translateY(-3px); }
+}
+
+/* Print: black on white, no blanket, no tape */
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-stitch: #999;
+    --color-quilt: #fff;
+    --color-kraft: #fff;
+    --color-kraft-end: #fff;
+    --color-print: #000;
+    --color-tape: #fff;
+    --color-label: #fff;
+    --color-shade: #fff;
+  }
+  body { font-size: 11pt; background: none; }
+  main { min-height: 0; }
+  .menu, .skip-link, .tape, .pile, .pagination, .more, .masthead .strip, .call::before, .box-end::after, blockquote::before, .up { display: none; }
+  .box-sides, .call, blockquote, table, pre, .strip { background: none; box-shadow: none; border: 1px solid; }
+  .strip, .panel .panel-label { color: var(--color-print); background: none; clip-path: none; }
+  .box-face, .box-end, .call { padding-top: var(--space-3); background: none; }
+  .box, .call, blockquote, tr { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  pre { white-space: pre-wrap; }
+}

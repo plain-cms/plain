@@ -1,0 +1,53 @@
+{
+  "name": "calzone",
+  "title": "Calzone",
+  "description": "A takeaway pizzeria theme printed like its own box: the whole page sits inside the lid's one fat border in a single basil-green ink on white board, and the menu is the flap's order panel — an empty printed tick square before every dish, prices ranged right, section names in underscored oblique capitals, ending in the fluted kraft edge of the cardboard.",
+  "family": "restaurant",
+  "bestFor": [
+    "pizzeria",
+    "pizza takeaway",
+    "pizza delivery",
+    "kebab and pizza shop",
+    "calzone and pasta takeaway",
+    "late-night takeaway",
+    "phone-order kitchen",
+    "neighbourhood takeaway"
+  ],
+  "mood": [
+    "blunt",
+    "cheerful",
+    "one-colour",
+    "printed"
+  ],
+  "tokens": {
+    "--font-display": "the box print, in heavy slanted capitals: site title, menu links, page and panel titles, headings, section names, prices, table heads, hours labels, the order button, post titles in the list, dates, tags",
+    "--font-body": "body text, dish names and descriptions, and the values on the hours card",
+    "--font-mono": "inline code and code blocks in page text",
+    "--weight-display": "weight of the box-print lettering",
+    "--text-base": "size of ordinary body text",
+    "--leading": "line spacing of body text",
+    "--tracking-caps": "letter spacing of the slanted capitals",
+    "--color-bg": "the board: page background (white by day, deep basil green at night)",
+    "--color-text": "all text — the one ink — and the ground of selected text",
+    "--color-muted": "secondary text: dish descriptions, dates, quotations, page numbers, the footer",
+    "--color-accent": "everything printed that is not a letter: the lid's fat border, tick squares and ticks, the rules, the order button's outline, focus rings — and links",
+    "--color-tint": "a pale screen of the ink: code backgrounds, and the order button on hover",
+    "--color-kraft": "the pale cardboard fill of the cut edge at the foot of the order panel",
+    "--color-flute": "the darker cardboard lines of that edge: its two liners and the wave of flutes between them",
+    "--measure": "maximum width of the text column on pages, posts and the post list",
+    "--measure-lid": "maximum width of the lid, the bordered frame that holds the page",
+    "--measure-flap": "maximum width of the order panel on the menu page, on a dish's own page and on the not-found page",
+    "--rule-lid": "weight of the lid's fat border on a wide screen (it thins on a phone)",
+    "--rule": "weight of the medium rules: under the masthead and the panel title, above the footer, the hours card and the post list, the underscore of section names, the bar beside a quotation, the order button's outline, focus rings",
+    "--keyline": "weight of the thin printed lines: tick squares, the order panel's outline, the liners of the cut edge, table heads, the dashed divider",
+    "--radius-lid": "corner rounding of the lid's border; the order button takes a little under half of it",
+    "--radius": "the small corner rounding of tick squares, the order panel, code and images",
+    "--tick": "side of the tick square before a dish; the menu links use a smaller one and a dish's own page a larger one",
+    "--flute": "half the height of the corrugation at the foot of the order panel; one wave is four times as long",
+    "--space-1": "hairline gap: between a dish and its description, between an hours label and its value",
+    "--space-2": "small gap: above and below each dish line and each hours row, under the panel title",
+    "--space-3": "gap between paragraphs, around section names on the panel, and inside the panel's top edge",
+    "--space-4": "gap between blocks, and above page titles",
+    "--space-5": "large gap: above the footer, and between the home page's text and its order panel"
+  }
+}

@@ -1,0 +1,41 @@
+{{#if page.hero}}
+<article class="page has-hero">
+  <section class="sheet{{#if data.impact.stat.number}} has-tally{{/if}}{{#if page.heroImage}} has-photo{{/if}}" aria-labelledby="demand">
+    {{#if data.impact.stat.number}}<p class="tally"><strong class="tally-number">{{ data.impact.stat.number }}</strong>{{#if data.impact.stat.unit}} <span class="tally-unit">{{ data.impact.stat.unit }}</span>{{/if}}{{#if data.impact.stat.verb}} <span class="tally-verb">{{ data.impact.stat.verb }}</span>{{/if}}</p>
+    {{/if}}<div class="sheet-demand">
+      <p class="undersigned">{{ strings.undersigned }}</p>
+      <h1 id="demand">{{ page.title }}</h1>
+    </div>
+    {{#if page.description}}<p class="mission">{{ page.description }}</p>
+    {{/if}}    {{#if page.heroImage}}<figure class="sheet-photo"><img src="{{ page.heroImage }}" alt="{{ page.heroAlt }}" decoding="async"></figure>
+    {{/if}}<div class="sheet-lines">
+      <h2 class="lines-head"><span aria-hidden="true">{{ strings.lineNo }}</span><span>{{ strings.waysToHelp }}</span><span class="lines-sign" aria-hidden="true">{{ strings.signature }}</span></h2>
+      {{> lines}}
+      <ol class="lines-blank" aria-hidden="true"><li></li><li></li><li></li></ol>
+    </div>
+  </section>
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+  {{#if collections.programs}}<section class="points" aria-labelledby="points">
+    <h2 id="points">{{ strings.pointByPoint }}</h2>
+    <ul class="entries">
+      {{#each collections.programs as item}}{{> entry}}
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+</article>
+{{else}}
+<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.donateCta}}{{#if data.impact.donateUrl}}<p class="page-actions"><a class="btn" href="{{ data.impact.donateUrl }}">{{ strings.donateOnline }}</a>{{#if data.impact.donatePrompt}} <span class="note">{{ data.impact.donatePrompt }}</span>{{/if}}</p>
+  {{/if}}{{/if}}<div class="prose">
+{{{ page.content }}}
+  </div>
+</article>
+{{/if}}

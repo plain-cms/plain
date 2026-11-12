@@ -1,5 +1,5 @@
 ---
-title: The Tidemill Hotel
+title: Nine decisions
 date: 2026-02-03
 description: Wayfinding and signage for a seventeen-room harbour hotel spread across three listed buildings.
 cover: /media/project-tidemill.svg

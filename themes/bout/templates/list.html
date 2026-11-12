@@ -1,0 +1,17 @@
+<section class="listing">
+  <header class="poster-head">
+    <h1>{{#if tag}}{{ strings.taggedTitle }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}<ul class="roster">
+    {{#each items as item}}{{> entry}}
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>
+    {{/if}}<span>{{ strings.page }} {{ pagination.page }} {{ strings.pageOf }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>
+    {{/if}}
+  </nav>
+  {{/if}}
+</section>

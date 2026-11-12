@@ -1,0 +1,32 @@
+{{#if page.url.4}}<article class="canvas">
+  <header class="canvas-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
+{{else}}<div class="vest">
+  <article class="canvas backpatch">
+    <header class="canvas-head">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="lede">{{ page.description }}</p>
+      {{/if}}
+    </header>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </article>
+  <ul class="vest-patches vest-front" role="list" aria-label="{{ strings.vestLabel }}">
+    {{#if data.band.tagline}}<li class="patch patch-wide patch-tagline"><p>{{ data.band.tagline }}</p></li>
+    {{/if}}{{#each nav as entry}}<li class="patch patch-link"{{#if entry.current}} hidden{{/if}}><a class="patch-city" href="{{ entry.url }}">{{ entry.label }}</a></li>
+    {{/each}}{{#if data.band.bookingEmail}}<li class="patch patch-wide patch-contact"><span class="patch-date">{{ strings.bookings }}</span><a class="patch-mail" href="mailto:{{ data.band.bookingEmail }}">{{ data.band.bookingEmail }}</a></li>
+    {{/if}}{{#if data.band.pressEmail}}<li class="patch patch-wide patch-contact"><span class="patch-date">{{ strings.press }}</span><a class="patch-mail" href="mailto:{{ data.band.pressEmail }}">{{ data.band.pressEmail }}</a></li>
+    {{/if}}
+  </ul>
+</div>
+{{/if}}

@@ -1,13 +1,11 @@
 <section class="page not-found">
   <header class="page-header">
     <p class="show-meta"><span class="status-chip">404</span></p>
-    <h1>This page left the stage.</h1>
+    <h1>{{ strings.notFoundTitle }}</h1>
+    <p class="lede">{{ strings.notFoundBody }}</p>
   </header>
-  <div class="prose">
-    <p>The address may be old, or a letter went wrong on the way in. Nothing on your end is broken.</p>
-    <ul>
-      <li><a href="/shows/">See the shows</a></li>
-      <li><a href="/">Back to the front</a></li>
-    </ul>
-  </div>
+  <p class="actions">
+    <a class="btn-tickets" href="/shows/">{{ strings.seeShows }}</a>
+    <a href="/">{{ strings.goHome }}</a>
+  </p>
 </section>

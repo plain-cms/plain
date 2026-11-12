@@ -1,0 +1,522 @@
+/* Pushrim: the sports-hall floor (honey beech, black ink, court tapes as the
+   only rules) and one loud thing, the tabletop flip scoreboard. Blue is on
+   the stand alone. Restyle by editing tokens, never selectors. */
+
+:root {
+  --font-display: "Arial Rounded MT Bold", ui-rounded, "SF Pro Rounded", "Varela Round", "Nunito", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: ui-rounded, "SF Pro Rounded", "Hiragino Maru Gothic ProN", "Varela Round", "Nunito", "Segoe UI", system-ui, sans-serif;
+  --font-figures: ui-monospace, "SF Mono", Menlo, "Cascadia Mono", "Roboto Mono", Consolas, "DejaVu Sans Mono", "Liberation Mono", monospace;
+  --text-s: 0.9375rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-xl: 1.6875rem;
+  --text-xxl: clamp(2rem, 1.3rem + 3.2vw, 3.25rem);
+  --text-score: 7rem;
+  --leading-body: 1.62;
+  --leading-tight: 1.12;
+
+  --color-bg: #e6c088;
+  --color-text: #1b1510;
+  --color-muted: #5a3d1c;
+  --color-accent: #1f4db3;
+  --color-accent-ink: #ffffff;
+  --color-accent-deep: #14367f;
+  --color-card: #141414;
+  --color-card-ink: #ffffff;
+  --color-card-edge: #6a6a6a;
+  --color-ring: #d4d8de;
+  --color-tape-white: #fbf9f3;
+  --color-tape-yellow: #ffd21a;
+  --color-tape-red: #b3201b;
+  --color-grain: rgba(120,64,8,0.05);
+  --color-joint: rgba(92,52,12,0.22);
+  --color-wash: rgba(255,248,232,0.45);
+
+  --measure: 62ch;
+  --page-width: 76rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --radius: 3px;
+  --tape: 4px;
+  --tap-target: 2.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #2d2a26;
+    --color-text: #efe6d8;
+    --color-muted: #b8ab98;
+    --color-accent: #5585e6;
+    --color-accent-ink: #0a1530;
+    --color-accent-deep: #3463c4;
+    --color-card: #0c0c0c;
+    --color-card-ink: #ffffff;
+    --color-card-edge: #7c7c7c;
+    --color-ring: #c3c8cf;
+    --color-tape-white: #d8d3c8;
+    --color-tape-yellow: #e9bd12;
+    --color-tape-red: #e8564b;
+    --color-grain: rgba(255,240,220,0.025);
+    --color-joint: rgba(0,0,0,0.4);
+    --color-wash: rgba(255,255,255,0.06);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+
+html { position: relative; min-height: 100%; color-scheme: light dark; background: var(--color-bg); }
+
+body {
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+  max-width: var(--page-width);
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: transparent;
+  overflow-wrap: break-word;
+}
+
+/* The strip floor: boards, a tone shifting board to board, staggered joints. */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    conic-gradient(from 270deg at 1px 2.5rem, var(--color-joint) 0 25%, transparent 0) 0 0 / 43rem 7.5rem,
+    conic-gradient(from 270deg at 1px 2.5rem, var(--color-joint) 0 25%, transparent 0) 17rem 2.5rem / 43rem 7.5rem,
+    conic-gradient(from 270deg at 1px 2.5rem, var(--color-joint) 0 25%, transparent 0) 31rem 5rem / 43rem 7.5rem,
+    repeating-linear-gradient(180deg, transparent 0 calc(2.5rem - 1px), var(--color-joint) 0 2.5rem),
+    repeating-linear-gradient(180deg, transparent 0 2.5rem, var(--color-grain) 0 5rem, transparent 0 7.5rem),
+    repeating-linear-gradient(180deg, var(--color-grain) 0 2.5rem, transparent 0 12.5rem),
+    repeating-linear-gradient(180deg, var(--color-grain) 0 1px, transparent 0 7px),
+    var(--color-bg);
+}
+
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height: var(--leading-tight); letter-spacing: -0.01em; text-wrap: balance; }
+
+h1, h2, h3, h4, .score-verb, .stand-foot { -webkit-hyphens: auto; hyphens: auto; }
+@media (max-width: 36em) { .lede, .mission, .get-involved p { -webkit-hyphens: auto; hyphens: auto; } }
+
+a { color: var(--color-text); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 3px; text-decoration-color: var(--color-tape-red); }
+a[href^="mailto:"], a[href^="tel:"], .prose a { overflow-wrap: anywhere; -webkit-hyphens: manual; hyphens: manual; }
+strong, b { font-family: var(--font-display); font-weight: 700; }
+
+:focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; border-radius: var(--radius); }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-card);
+  color: var(--color-card-ink);
+}
+.skip-link:focus { left: var(--space-2); }
+
+main { display: block; min-height: 50vh; container-type: inline-size; }
+
+/* Masthead */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  padding: var(--space-2) 0;
+  border-bottom: var(--tape) solid var(--color-tape-white);
+}
+
+.site-title {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  text-decoration: none;
+}
+
+.masthead ul { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  font-family: var(--font-display);
+  text-decoration: none;
+  border-bottom: var(--tape) solid transparent;
+  padding-top: var(--tape);
+}
+.masthead nav a:hover { border-bottom-color: var(--color-text); }
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-tape-red); }
+
+/* The last entry is the ask (Donate in the starter): a black card. */
+.masthead nav li:last-child a {
+  min-height: calc(var(--tap-target) - var(--space-1));
+  padding: var(--space-1) var(--space-3) 0;
+  background: var(--color-card);
+  color: var(--color-card-ink);
+  border-radius: var(--radius);
+  border-bottom-color: var(--color-card-edge);
+}
+.masthead nav li:last-child a:hover { border-bottom-color: var(--color-card-edge); text-decoration: underline; }
+.masthead nav li:last-child a[aria-current="page"] { box-shadow: 0 var(--tape) 0 0 var(--color-tape-red); }
+
+/* The Donate button: a flip card off the scoreboard, rings and stack. */
+
+.card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  padding: 1.15rem var(--space-4) 0.6rem;
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-card-ink);
+  background:
+    radial-gradient(circle at calc(50% - 0.75rem) 0.6rem, transparent 0.11rem, var(--color-ring) 0.13rem 0.25rem, transparent 0.27rem),
+    radial-gradient(circle at calc(50% + 0.75rem) 0.6rem, transparent 0.11rem, var(--color-ring) 0.13rem 0.25rem, transparent 0.27rem),
+    var(--color-card);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 0 0 var(--color-card-edge), 0 4px 0 0 var(--color-card), 0 6px 0 0 var(--color-card-edge);
+}
+.card-btn:hover { color: var(--color-card-ink); text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--color-card-ink); }
+
+.give { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); margin: var(--space-4) 0 0; }
+.give-prompt { flex: 1 1 14rem; max-width: 32rem; color: var(--color-text); }
+
+/* Scoreboard: one card per character, no script. The figure is fixed-pitch
+   and letter-spaced; the background repeats one card (face, rings, stacked
+   edges) and one strip of stand at that pitch, so every wrapped line gets
+   its own row. The face is nudged right by half the card's overhang. */
+
+.score { display: flex; flex-direction: column; align-items: flex-start; margin: 0; font-size: min(var(--text-score), 11.4cqi); line-height: 1; }
+
+.stand {
+  position: relative;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  margin-bottom: 0.5em;
+  padding: 0.07em 0.14em 0 0.28em;
+  background: var(--color-accent);
+  border-top: 0.07em solid var(--color-accent-deep);
+  border-radius: 0.06em 0.06em 0 0;
+  line-height: 1.6;
+}
+/* The A-frame's front legs, splayed, standing on the court line. */
+.stand::before, .stand::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  width: 0.13em;
+  height: 0.5em;
+  background: var(--color-accent-deep);
+  transform-origin: top;
+}
+.stand::before { left: 0.5em; transform: skewX(-16deg); }
+.stand::after { right: 0.5em; transform: skewX(16deg); }
+
+.cards {
+  font-family: var(--font-figures);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0.56em;
+  color: var(--color-card-ink);
+  word-break: break-all;
+  padding: 0.15em 0 0.2em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  background:
+    linear-gradient(90deg, transparent calc(1ch + 0.42em), var(--color-accent) 0),
+    radial-gradient(circle at calc(1ch * 0.3 + 0.13em) 0.13em, transparent 0.035em, var(--color-ring) 0.042em 0.068em, transparent 0.075em),
+    radial-gradient(circle at calc(1ch * 0.7 + 0.29em) 0.13em, transparent 0.035em, var(--color-ring) 0.042em 0.068em, transparent 0.075em),
+    linear-gradient(180deg, var(--color-card) calc(100% - 0.17em), var(--color-card-edge) 0 calc(100% - 0.14em), var(--color-card) 0 calc(100% - 0.1em), var(--color-card-edge) 0 calc(100% - 0.07em), var(--color-card) 0 calc(100% - 0.03em), var(--color-accent) 0);
+  background-size: calc(1ch + 0.56em) 100%;
+  background-repeat: repeat-x;
+}
+.cards-face { position: relative; left: 0.21em; }
+
+/* The foot strip: what the figure counts, painted on the stand's crossbar. */
+.stand-foot {
+  display: block;
+  width: 0;
+  min-width: calc(100% + 0.42em);
+  margin: 0.02em 0 0 -0.28em;
+  padding: 0.55rem 0.9rem 0.5rem;
+  border-top: 0.04em solid var(--color-accent-deep);
+  font-family: var(--font-display);
+  font-size: var(--text-m);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-ink);
+}
+
+/* The court line the legs stand on, then the caption. */
+.score::after { content: ""; order: 1; align-self: stretch; height: var(--tape); background: var(--color-tape-white); }
+.score-verb {
+  order: 2;
+  width: 0;
+  min-width: 100%;
+  padding-top: var(--space-2);
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  line-height: var(--leading-tight);
+}
+
+.score-small { font-size: min(5rem, 22cqi); margin-bottom: var(--space-3); }
+.score-small::after { display: none; }
+
+/* Hero */
+
+.hero { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-4) var(--space-5); margin: var(--space-4) 0 var(--space-5); }
+.hero .score { flex: 0 1 auto; min-width: 0; max-width: 100%; }
+.hero-mission { flex: 1 1 24rem; min-width: 0; max-width: 46rem; }
+.hero-mission h1 { margin: 0; font-size: var(--text-xxl); }
+.mission { margin: var(--space-3) 0 0; font-size: var(--text-l); line-height: 1.45; max-width: var(--measure); }
+
+.hero-photo {
+  flex: 1 1 100%;
+  margin: 0;
+  height: clamp(14rem, 34vw, 24rem);
+  background: var(--color-wash);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.hero-photo img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero-has-photo:not(.hero-has-stat) .hero-photo { flex: 1 1 20rem; }
+
+@media (min-width: 56em) {
+  .hero-mission { order: -1; padding-bottom: var(--space-3); }
+  .hero-has-stat .hero-mission h1 { font-size: clamp(2rem, 1rem + 2.4vw, 3rem); }
+}
+
+/* Beside the mission body on a wide screen, the floor is court: the baseline
+   in white tape and the key, its free-throw line and half circle, in yellow. */
+@media (min-width: 64em) {
+  .mission-page > .prose {
+    max-width: none;
+    min-height: 16rem;
+    background:
+      linear-gradient(var(--color-tape-white), var(--color-tape-white)) right top / var(--tape) 100% no-repeat,
+      linear-gradient(var(--color-tape-yellow), var(--color-tape-yellow)) right 0 top 3rem / 9rem var(--tape) no-repeat,
+      linear-gradient(var(--color-tape-yellow), var(--color-tape-yellow)) right 0 top 13rem / 9rem var(--tape) no-repeat,
+      linear-gradient(var(--color-tape-yellow), var(--color-tape-yellow)) right 9rem top 3rem / var(--tape) calc(10rem + var(--tape)) no-repeat,
+      radial-gradient(circle at 100% 50%, transparent calc(5rem - var(--tape)), var(--color-tape-yellow) 0 5rem, transparent 0) right calc(9rem + var(--tape)) top 3rem / 5rem calc(10rem + var(--tape)) no-repeat;
+  }
+  .mission-page > .prose > * { max-width: var(--measure); }
+}
+
+/* Page headers */
+
+.page-header { margin: var(--space-5) 0 var(--space-4); max-width: 48rem; }
+.page-header h1 { margin: 0; font-size: var(--text-xxl); }
+.lede { margin: var(--space-3) 0 0; font-size: var(--text-l); line-height: 1.45; max-width: var(--measure); }
+.eyebrow, .post-date, .entry time {
+  display: block;
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-figures);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.eyebrow { font-family: var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; }
+
+.give-cta { margin: 0 0 var(--space-4); }
+
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+.tags a::before { content: "#"; color: var(--color-muted); }
+
+/* Prose */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); }
+.prose h2 { font-size: var(--text-xl); }
+.prose h2::after { content: ""; display: block; width: 4.5rem; height: calc(var(--tape) * 1.5); margin-top: var(--space-2); background: var(--color-tape-yellow); }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { font-size: var(--text-m); }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.3em; }
+.prose li > ul, .prose li > ol { margin-bottom: 0; }
+.prose li { margin-bottom: var(--space-1); }
+.prose img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: var(--space-1) 0 var(--space-1) var(--space-3);
+  border-left: calc(var(--tape) * 1.5) solid var(--color-tape-red);
+  font-size: var(--text-l);
+  line-height: 1.45;
+}
+.prose blockquote p:last-child { margin-bottom: 0; }
+
+.prose code { font-family: var(--font-figures); font-size: 0.88em; background: var(--color-wash); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { overflow-x: auto; padding: var(--space-3); background: var(--color-wash); border-radius: var(--radius); line-height: 1.5; }
+.prose pre code { background: none; padding: 0; font-size: var(--text-s); }
+
+.prose hr { border: 0; border-top: var(--tape) solid var(--color-tape-white); margin: var(--space-4) 0; }
+
+/* Tables: the figure first, in scoreboard figures, on one line. */
+.prose table { width: 100%; margin: var(--space-4) 0; border-collapse: collapse; -webkit-hyphens: manual; hyphens: manual; }
+.prose th, .prose td {
+  padding: var(--space-2) 0 var(--space-2) var(--space-3);
+  vertical-align: baseline;
+  border-bottom: 2px solid var(--color-tape-white);
+}
+.prose th { font-family: var(--font-display); font-size: var(--text-s); color: var(--color-muted); }
+.prose th:not([align]) { text-align: left; }
+.prose thead th { border-bottom-width: var(--tape); }
+.prose :is(th, td):first-child { padding-left: 0; white-space: nowrap; }
+.prose td:first-child { font-family: var(--font-figures); font-size: var(--text-l); font-weight: 700; }
+.prose :is(th, td):not(:first-child) { min-width: 7em; overflow-wrap: anywhere; }
+
+/* Four columns or more are data: the table scrolls in its own box. */
+.prose table:has(tr > :nth-child(4)) { display: block; width: fit-content; max-width: 100%; overflow-x: auto; }
+.prose table:has(tr > :nth-child(4)) :is(th, td) { overflow-wrap: normal; }
+
+/* Three columns on a phone: figure and label on a line, the rest beneath. */
+@media (max-width: 36em) {
+  .prose table:has(tr > :nth-child(3):last-child),
+  .prose :is(thead, tbody):has(> tr > :nth-child(3):last-child) { display: block; }
+  .prose tr:has(> :nth-child(3):last-child) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 var(--space-3);
+    padding: var(--space-2) 0;
+    border-bottom: 2px solid var(--color-tape-white);
+  }
+  .prose tr:has(> :nth-child(3):last-child) > * { flex: 1 1 6em; min-width: 0; padding: 0; border: 0; white-space: normal; }
+  .prose tr:has(> :nth-child(3):last-child) > :first-child { flex: 0 1 auto; }
+  .prose tr:has(> :nth-child(3):last-child) > :last-child { flex-basis: 100%; -webkit-hyphens: auto; hyphens: auto; }
+}
+
+.cover { display: block; width: 100%; max-height: 32rem; object-fit: cover; height: auto; margin: 0 0 var(--space-4); border-radius: var(--radius); }
+
+/* Lists: each entry a lane marked off by yellow court tape. */
+
+.board { margin-top: var(--space-5); }
+.board > h2 { font-size: var(--text-xl); margin: 0 0 var(--space-3); }
+
+.entries {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+  gap: 0 var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.entry { min-width: 0; padding: var(--space-3) 0 var(--space-4); border-top: calc(var(--tape) * 1.5) solid var(--color-tape-yellow); }
+.entry h2, .entry h3 { margin: 0; font-size: var(--text-xl); }
+.entry p { margin: var(--space-2) 0 0; color: var(--color-muted); max-width: var(--measure); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-4);
+  padding-top: var(--space-3);
+  border-top: var(--tape) solid var(--color-tape-white);
+  font-family: var(--font-display);
+}
+.pagination a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+.pagination span { display: inline-flex; align-items: center; color: var(--color-muted); }
+
+.empty { color: var(--color-muted); }
+
+/* Program page */
+
+.get-involved {
+  max-width: var(--measure);
+  margin: var(--space-5) 0 0;
+  padding: clamp(1rem, 5vw, 2rem);
+  border: var(--tape) solid var(--color-tape-white);
+  border-radius: var(--radius);
+}
+.get-involved h2 { margin: 0 0 var(--space-2); font-size: var(--text-xl); }
+.get-involved p { margin: 0; }
+.get-involved .give { margin-top: var(--space-4); }
+
+.back-link { margin: var(--space-4) 0 0; font-family: var(--font-display); }
+.back-link a::before { content: "← "; }
+
+@media (min-width: 60em) {
+  .program { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); column-gap: var(--space-5); align-items: start; }
+  .program > * { grid-column: 1; }
+  .program > .page-header { grid-column: 1 / -1; }
+  .program > .get-involved { grid-column: 2; grid-row: 2 / span 3; margin: 0; }
+}
+
+/* 404 */
+
+.way-out { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); margin: 0; padding: 0; list-style: none; font-family: var(--font-display); }
+
+/* Footer */
+
+.colophon {
+  margin-top: var(--space-5);
+  padding: var(--space-4) 0;
+  border-top: var(--tape) solid var(--color-tape-white);
+  color: var(--color-muted);
+  font-size: var(--text-s);
+}
+.colophon p { margin: 0 0 var(--space-2); }
+.colophon strong { color: var(--color-text); font-family: var(--font-display); }
+.colophon-note { max-width: var(--measure); }
+
+/* Motion & print */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .card-btn { transition: transform 0.12s ease-out; }
+  .card-btn:active { transform: translateY(2px); }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #ffffff;
+    --color-accent-ink: #000000;
+    --color-accent-deep: #000000;
+    --color-card: #ffffff;
+    --color-card-ink: #000000;
+    --color-card-edge: #000000;
+    --color-ring: #000000;
+    --color-tape-white: #999999;
+    --color-tape-yellow: #999999;
+    --color-tape-red: #000000;
+    --color-wash: #ffffff;
+  }
+  body { max-width: none; padding: 0; font-size: 11pt; }
+  body::before, .masthead nav, .skip-link, .back-link, .pagination, .way-out, .card-btn:not([href^="http"]) { display: none; }
+  main { min-height: 0; }
+  .stand { border: 2px solid var(--color-text); }
+  .stand::before, .stand::after { display: none; }
+  .card-btn { display: inline; padding: 0; min-height: 0; background: none; box-shadow: none; color: var(--color-text); font-size: inherit; }
+  .card-btn::after, .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-weight: 400; }
+  .give { display: block; }
+  h1, h2, h3 { break-after: avoid; }
+  .entry, .get-involved, tr { break-inside: avoid; }
+  .prose pre { white-space: pre-wrap; }
+}

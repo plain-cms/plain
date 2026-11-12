@@ -1,0 +1,58 @@
+{
+  "trialNote": "Your first session is free — come fifteen minutes early in trainers, bring a water bottle, and we will lend you gloves and wraps.",
+  "days": [
+    {
+      "day": "Monday",
+      "classes": [
+        { "time": "06:30", "name": "Early Bell Boxfit", "who": "Aisha", "level": "All levels" },
+        { "time": "17:00", "name": "Juniors", "who": "Sunita", "level": "Ages 8–11" },
+        { "time": "18:15", "name": "Fundamentals", "who": "Delroy", "level": "Beginner" },
+        { "time": "19:30", "name": "Bagwork & Pads", "who": "Tomasz", "level": "Intermediate" }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "classes": [
+        { "time": "17:00", "name": "Youth Squad", "who": "Liam", "level": "Ages 12–16" },
+        { "time": "18:15", "name": "Women’s Boxing", "who": "Kerry", "level": "All levels" },
+        { "time": "19:30", "name": "Conditioning Circuit", "who": "Kerry", "level": "All levels" }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "classes": [
+        { "time": "06:30", "name": "Early Bell Boxfit", "who": "Aisha", "level": "All levels" },
+        { "time": "18:15", "name": "Fundamentals", "who": "Delroy", "level": "Beginner" },
+        { "time": "19:30", "name": "Sparring Night", "who": "Tomasz & Delroy", "level": "Experienced" }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "classes": [
+        { "time": "17:00", "name": "Juniors", "who": "Sunita", "level": "Ages 8–11" },
+        { "time": "18:15", "name": "Over-40s Boxing", "who": "Frank", "level": "Beginner" },
+        { "time": "19:30", "name": "Ring Craft", "who": "Liam", "level": "Intermediate" }
+      ]
+    },
+    {
+      "day": "Friday",
+      "classes": [
+        { "time": "06:30", "name": "Early Bell Boxfit", "who": "Aisha", "level": "All levels" },
+        { "time": "18:00", "name": "Sparring Night", "who": "Tomasz", "level": "Experienced" },
+        { "time": "19:30–21:00", "name": "Open Gym", "who": "", "level": "" }
+      ]
+    },
+    {
+      "day": "Saturday",
+      "classes": [
+        { "time": "09:30", "name": "Family Pads", "who": "Sunita", "level": "Ages 8+ with an adult" },
+        { "time": "10:45", "name": "Fundamentals", "who": "Delroy", "level": "Beginner" },
+        { "time": "12:00", "name": "Competition Squad", "who": "Tomasz", "level": "Carded boxers" }
+      ]
+    },
+    {
+      "day": "Sunday",
+      "classes": []
+    }
+  ]
+}

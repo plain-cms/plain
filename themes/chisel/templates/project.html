@@ -1,0 +1,16 @@
+<article class="project">
+  <header class="tablet tablet-plaque">
+    <h1 class="inscription">{{ page.title }}</h1>
+    {{#if page.services}}<ul class="services" aria-label="{{ strings.services }}">{{#each page.services as service}}<li>{{ service }}</li> {{/each}}</ul>
+    {{/if}}{{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}<dl class="particulars">
+      {{#if page.client}}<div><dt>{{ strings.client }}</dt><dd>{{ page.client }}</dd></div>
+      {{/if}}<div><dt>{{ strings.year }}</dt><dd><time class="year" datetime="{{ page.date }}">{{ page.date }}</time></dd></div>
+    </dl>
+  </header>
+  {{#if page.cover}}<figure class="cover"><img src="{{ page.cover }}" alt="" decoding="async"></figure>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{> roll}}
+</article>

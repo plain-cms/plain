@@ -1,0 +1,272 @@
+:root {
+  --font-display: Optima, Candara, "URW Classico", "Noto Sans", "Segoe UI", sans-serif;
+  --font-text: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-xs: 0.78rem;
+  --text-s: 0.9rem;
+  --text-m: 1.0625rem;
+  --text-l: clamp(1.15rem, 1.05rem + 0.45vw, 1.35rem);
+  --text-xl: clamp(1.45rem, 1.15rem + 1.2vw, 2rem);
+  --text-display: clamp(1.7rem, 1rem + 3vw, 2.9rem);
+  --leading: 1.55;
+  --leading-tight: 1.08;
+  --tracking-caps: 0.09em;
+  --color-bg: #142a4d;
+  --color-band: #0f2140;
+  --color-text: #ffffff;
+  --color-muted: #bccae0;
+  --color-accent: #93bcff;
+  --color-rule: rgba(255,255,255,0.3);
+  --color-rule-strong: #ffffff;
+  --color-seam: rgba(255,255,255,0.035);
+  --color-row-hover: rgba(255,255,255,0.07);
+  --color-panel: #ffffff;
+  --color-panel-text: #142a4d;
+  --color-panel-muted: #4a5b78;
+  --color-panel-link: #1b4ea8;
+  --color-panel-rule: #d2d9e5;
+  --color-sticker-open: #2f9e55;
+  --color-sticker-pending: #f2a51e;
+  --color-sticker-closed: #e4483a;
+  --color-sheen: rgba(255,255,255,0.26);
+  --shadow-sticker: 1px 2px 1px rgba(0,0,0,0.3);
+  --sticker: 2.1rem;
+  --measure: 66ch;
+  --page-width: 75rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --seam-width: 20rem;
+  --radius: 2px;
+  --tap: 2.75rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #09162d;
+    --color-band: #050e1f;
+    --color-text: #e9eef7;
+    --color-muted: #a5b3cb;
+    --color-accent: #86aef2;
+    --color-rule: rgba(233,238,247,0.24);
+    --color-rule-strong: #e9eef7;
+    --color-seam: rgba(255,255,255,0.025);
+    --color-row-hover: rgba(255,255,255,0.05);
+    --color-panel: #142340;
+    --color-panel-text: #e9eef7;
+    --color-panel-muted: #aab7ce;
+    --color-panel-link: #9fc2ff;
+    --color-panel-rule: #2c3d5e;
+    --color-sticker-open: #35a65c;
+    --color-sticker-pending: #e89d1a;
+    --color-sticker-closed: #e2533f;
+    --color-sheen: rgba(255,255,255,0.2);
+  }
+}
+
+/* Show Home: the release price list from a sales cabin, pinned to a navy
+   site hoarding. Rows are ruled in white; a round sticker, stuck a little
+   askew, marks each plot that is offered, reserved or gone. */
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background-color:var(--color-bg);background-image:repeating-linear-gradient(90deg,transparent 0 calc(var(--seam-width) - 2px),var(--color-seam) calc(var(--seam-width) - 2px) var(--seam-width));color:var(--color-text);font:var(--text-m)/var(--leading) var(--font-text);font-variant-numeric:lining-nums}
+a{color:inherit;text-underline-offset:0.18em;text-decoration-thickness:1px}
+a:hover{text-decoration-thickness:2px}
+:focus-visible{outline:3px solid var(--color-accent);outline-offset:2px;box-shadow:0 0 0 2px var(--color-bg)}
+.panel :focus-visible,.plate :focus-visible{outline-color:var(--color-panel-link);box-shadow:0 0 0 2px var(--color-panel)}
+img{max-width:100%;height:auto;display:block}
+h1,h2,h3,h4{margin:0;line-height:var(--leading-tight);hyphens:auto;overflow-wrap:break-word}
+.fig,.c-fig,.c-area,.c-price,.facts dd,.plate-price{font-variant-numeric:tabular-nums lining-nums;hyphens:manual}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.skip{position:absolute;left:var(--gutter);top:-4rem;padding:0.6rem 1rem;background:var(--color-panel);color:var(--color-panel-text);z-index:2}
+.skip:focus{top:0.5rem}
+
+/* shared lettering: hoarding capitals and small printed labels */
+.brand,.menu a,.board h1,.plot-name h1,.sheet-top h2,.prose h2,.ask h2,.foot-name{font-family:var(--font-display);text-transform:uppercase}
+.brand,.menu a,.sheet-top h2,.foot-name,.mast-call,.plots thead th,.status,.facts dt,.ask-label,.prose th{letter-spacing:var(--tracking-caps)}
+.mast-call,.plots thead th,.facts dt,.ask-label,.prose th{font-size:var(--text-xs);font-weight:600;text-transform:uppercase}
+.mast-call,.plots thead th,.facts dt,.ask-label,.c-addr,.unit,.dash,.lede,.meta,.notes time,.notes p,.pager span,.foot-hours,.foot-note,.ask-hours,.ask-note,.empty{color:var(--color-muted)}
+
+/* masthead: the hoarding's name board */
+.mast,.foot{background:var(--color-band);border:0 solid var(--color-rule-strong)}
+.mast{border-bottom-width:2px}
+.mast-in,main>*,.foot-in{max-width:var(--page-width);margin-inline:auto;padding-inline:var(--gutter)}
+.mast-in{display:flex;flex-wrap:wrap;align-items:center;gap:0.25rem 1.75rem;padding-block:0.85rem}
+.brand{font-weight:700;font-size:var(--text-l);text-decoration:none;display:inline-flex;align-items:center;gap:0.6rem;min-height:var(--tap);min-width:0;hyphens:auto;overflow-wrap:break-word}
+.brand::before{content:"";flex:none;width:0.95rem;height:0.95rem;border-radius:50%;background:var(--color-sticker-open);transform:rotate(-12deg);box-shadow:var(--shadow-sticker)}
+.mast-tel{order:3;margin-left:auto;text-decoration:none;font-size:var(--text-l);font-weight:600;white-space:nowrap;min-height:var(--tap);display:inline-flex;align-items:center;gap:0.5rem}
+.menu{order:2}
+.menu ul,.tags,.notes,.gallery{list-style:none;margin:0;padding:0}
+.menu ul{display:flex;flex-wrap:wrap;gap:0 1.4rem}
+.menu a{display:inline-flex;align-items:center;min-height:var(--tap);text-decoration:none;font-size:var(--text-s);font-weight:600;border-bottom:3px solid transparent;padding-top:3px}
+.menu a:hover{border-bottom-color:var(--color-rule)}
+.menu a[aria-current="page"]{border-bottom-color:var(--color-accent)}
+
+/* the board: page titles lettered on the hoarding */
+.board{padding-block:clamp(2rem,5vw,3.25rem) clamp(1.5rem,3vw,2.25rem)}
+.board h1,.plot-name h1{font-weight:700;font-size:var(--text-display);letter-spacing:0.015em;max-width:30ch}
+.lede{margin:0.8rem 0 0;max-width:64ch;font-size:var(--text-l);overflow-wrap:break-word}
+.meta{margin:0 0 0.75rem;font-size:var(--text-s)}
+.home .board{padding-block-end:1.25rem}
+
+/* the price list: one ruled row per plot, figures in columns */
+.sheet{padding-bottom:1rem}
+.sheet-top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:0.25rem 1rem;padding-block:0.5rem;border-top:2px solid var(--color-rule-strong)}
+.sheet-top h2{font-size:var(--text-s)}
+.sheet-all,.back a,.pager a{display:inline-flex;align-items:center;gap:0.3em;min-height:var(--tap);font-weight:600;color:var(--color-accent)}
+.sheet-all{font-size:var(--text-s)}
+.plots{width:100%;border-collapse:collapse}
+.plots thead th{text-align:left;vertical-align:bottom;padding:0.4rem 0.7rem 0.5rem;border-bottom:2px solid var(--color-rule-strong);white-space:nowrap}
+.home .plots thead th{border-top:1px solid var(--color-rule)}
+.plots tbody tr{position:relative;border-bottom:1px solid var(--color-rule)}
+.plots tbody tr:hover,.tags a:hover{background:var(--color-row-hover)}
+.plots tbody th,.plots td{padding:0.75rem 0.7rem;vertical-align:baseline;text-align:left;font-weight:400}
+.plots .c-title{padding-left:0;hyphens:manual;overflow-wrap:break-word}
+.plots .c-status{padding-right:0;text-align:right}
+.c-title a{font-weight:600;font-size:1.1rem;text-decoration:none}
+.c-title a::after{content:"";position:absolute;inset:0}
+.c-title a:hover,.notes h2 a:hover{text-decoration:underline}
+.c-addr{display:block;margin-top:0.15rem;font-size:var(--text-s)}
+.c-fig,.c-area{font-size:1.1rem}
+.c-fig{white-space:nowrap}
+.c-area{min-width:6.5rem}
+.plots .c-price{text-align:right}
+.plots td.c-price{font-size:1.3rem;font-weight:700;min-width:8rem}
+.c-fig b,.facts dd b{font-weight:600}
+.unit{font-size:var(--text-s)}
+.plots tr[data-status="Sold"],.plots tr[data-status="Booked"]{color:var(--color-muted)}
+
+/* status: the word in the site's language, then the sticker */
+.status{display:inline-flex;align-items:center;gap:0.65rem;margin:0;font-size:var(--text-xs);font-weight:700;text-transform:uppercase;white-space:nowrap;color:var(--color-text)}
+.status [data-for],[data-status="For sale"] .status-raw,[data-status="Under offer"] .status-raw,[data-status="Sold"] .status-raw,[data-status="To let"] .status-raw,[data-status="Let agreed"] .status-raw,[data-status="Available"] .status-raw,[data-status="Booked"] .status-raw{display:none}
+[data-status="For sale"] [data-for="For sale"],[data-status="Under offer"] [data-for="Under offer"],[data-status="Sold"] [data-for="Sold"],[data-status="To let"] [data-for="To let"],[data-status="Let agreed"] [data-for="Let agreed"],[data-status="Available"] [data-for="Available"],[data-status="Booked"] [data-for="Booked"]{display:inline}
+.sticker{flex:none;display:inline-block;width:var(--sticker);height:var(--sticker);border-radius:50%;background-color:var(--color-sticker-open);background-image:linear-gradient(150deg,var(--color-sheen),transparent 55%);box-shadow:var(--shadow-sticker);transform:translate(1px,-2px) rotate(-9deg);print-color-adjust:exact;-webkit-print-color-adjust:exact}
+[data-status="Under offer"] .sticker,[data-status="Let agreed"] .sticker{background-color:var(--color-sticker-pending)}
+[data-status="Sold"] .sticker,[data-status="Booked"] .sticker{background-color:var(--color-sticker-closed)}
+tr:nth-child(3n+2) .sticker{transform:translate(-3px,4px) rotate(14deg)}
+tr:nth-child(3n) .sticker{transform:translate(0,-5px) rotate(-22deg)}
+tr:nth-child(4n) .sticker{transform:translate(-1px,6px) rotate(31deg)}
+
+/* a listing: its title on the hoarding, the price on a white plate */
+.plot-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1.75rem 3rem;align-items:start;padding-block:clamp(2rem,5vw,3.25rem) 1.5rem}
+.plot-name h1{font-size:var(--text-xl);max-width:none}
+.plot-addr{margin:0.6rem 0 0;font-weight:600;overflow-wrap:break-word}
+.plate,.panel{background:var(--color-panel);color:var(--color-panel-text);border-radius:var(--radius);min-width:0}
+.plate{position:relative;min-width:15rem;max-width:22rem;padding:1.1rem 1.4rem 1.25rem}
+.plate .status{color:var(--color-panel-text);padding-right:2.5rem;white-space:normal}
+.plate .sticker{--sticker:3.6rem;position:absolute;top:-1rem;right:-0.9rem;transform:rotate(-13deg)}
+.plate-price{margin:0.35rem 0 0;font-size:var(--text-xl);font-weight:700;line-height:1.15;overflow-wrap:break-word}
+.plate .status+.plate-price{margin-top:0.6rem}
+.facts{grid-column:1/-1;margin:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(7.5rem,1fr));border-top:2px solid var(--color-rule-strong);border-bottom:1px solid var(--color-rule)}
+.facts>div{padding:0.65rem 1rem 0.8rem 0}
+.facts dd{margin:0.2rem 0 0;font-size:1.3rem;overflow-wrap:break-word}
+.gallery{margin-top:0.5rem;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,16rem),1fr));gap:0.6rem}
+.gallery li:first-child{grid-column:1/-1}
+.gallery img,.cover img{width:100%;background:var(--color-band);border-radius:var(--radius)}
+.gallery li:not(:first-child) img{aspect-ratio:4/3;object-fit:cover}
+.cover{margin:0.5rem 0 0}
+.cover img,.gallery li:first-child img{max-height:75vh;object-fit:cover}
+.back{margin:0 0 3rem}
+
+/* white reading panels and the inquiry board */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) minmax(16rem,21rem);gap:1.75rem 2.5rem;align-items:start;padding-block:1.5rem 3rem}
+.panel{padding:clamp(1.25rem,4vw,2.75rem)}
+.prose>*{max-width:var(--measure)}
+.prose>:first-child{margin-top:0}
+.prose>:last-child{margin-bottom:0}
+.prose p,.prose li{overflow-wrap:break-word}
+.prose a{color:var(--color-panel-link)}
+.prose a[href^="http"],.prose a[href^="mailto:"],.prose a[href^="tel:"],.mail{overflow-wrap:anywhere}
+.prose h2{letter-spacing:0.04em;font-size:var(--text-l);margin:2rem 0 0.6rem}
+.prose h3,.prose h4{font-size:var(--text-m);margin:1.5rem 0 0.4rem}
+.prose h4,.prose blockquote{color:var(--color-panel-muted)}
+.prose blockquote{margin:1.25rem 0;padding:0.1rem 0 0.1rem 1.1rem;border-left:3px solid var(--color-panel-text)}
+.prose hr{border:0;border-top:2px solid var(--color-panel-rule);margin:2rem 0}
+.prose table{display:block;overflow-x:auto;border-collapse:collapse;margin:1.25rem 0;font-variant-numeric:tabular-nums;hyphens:manual}
+.prose th,.prose td{text-align:left;vertical-align:top;padding:0.5rem 1.25rem 0.5rem 0;border-bottom:1px solid var(--color-panel-rule);min-width:7rem}
+.prose th{border-bottom:2px solid var(--color-panel-text)}
+.prose code{font-family:var(--font-mono);font-size:0.9em}
+.prose pre{overflow-x:auto;padding:1rem;background:var(--color-bg);color:var(--color-text);border-radius:var(--radius)}
+.ask{border:2px solid var(--color-rule-strong);padding:1.25rem 1.4rem 1.4rem;min-width:0}
+.ask h2{letter-spacing:0.05em;font-size:var(--text-l)}
+.ask p{margin:0.9rem 0 0}
+.ask-label{display:block}
+.ask-tel a{display:inline-block;text-decoration:none;font-size:var(--text-l);font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.ask-tel a:hover .fig,.ask-contact a{text-decoration:underline}
+.ask-mail a{color:var(--color-accent);font-weight:600}
+.ask-hours,.ask-note{font-size:var(--text-s)}
+.ask-hours{padding-top:0.75rem;border-top:1px solid var(--color-rule)}
+.cols>.ask:only-child{grid-column:1/-1;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,14rem),1fr));gap:0 2rem;align-items:end}
+.empty{margin:0 0 2rem;padding:1.25rem 0;border-block:1px solid var(--color-rule)}
+
+/* blog index, tags, pager */
+.notes{border-top:2px solid var(--color-rule-strong)}
+.notes li{display:grid;grid-template-columns:11rem minmax(0,1fr);gap:0.25rem 1.5rem;padding-block:1.1rem;border-bottom:1px solid var(--color-rule)}
+.notes time{font-size:var(--text-s);padding-top:0.2rem}
+.notes h2{font-size:var(--text-l)}
+.notes h2 a{text-decoration:none}
+.notes p{margin:0.35rem 0 0;overflow-wrap:break-word}
+.tags{margin-top:1rem;display:flex;flex-wrap:wrap;gap:0.5rem}
+.tags a{display:inline-flex;align-items:center;min-height:2rem;padding:0 0.7rem;border:1px solid var(--color-rule-strong);border-radius:var(--radius);font-size:var(--text-s);text-decoration:none}
+.pager{display:flex;flex-wrap:wrap;align-items:center;gap:0.5rem 1.5rem;padding-block:1rem 0.5rem;font-size:var(--text-s)}
+.blog,.lost{padding-bottom:3rem}
+.blog .pager{padding-top:1.5rem}
+
+/* footer: the foot of the hoarding */
+.foot{border-top-width:2px;font-size:var(--text-s)}
+.foot-in{display:flex;flex-wrap:wrap;align-items:baseline;gap:0.4rem 2rem;padding-block:1.5rem 2rem}
+.foot p{margin:0}
+.foot-name{flex-basis:100%;font-weight:700;font-size:var(--text-m);overflow-wrap:break-word}
+.foot a{display:inline-block;padding-block:0.4rem}
+.foot .mail{display:inline}
+.foot-note{flex-basis:100%}
+.foot-note a{color:var(--color-text)}
+
+@media (max-width:52rem){
+  .cols,.plot-head{grid-template-columns:minmax(0,1fr)}
+  .plate{max-width:none;margin-right:0.9rem}
+  .mast-tel{order:1}
+  .menu{order:4;flex-basis:100%}
+}
+@media (max-width:47.99rem){
+  .plots,.plots tbody{display:block}
+  .plots thead{display:none}
+  .plots tbody tr{display:flex;flex-wrap:wrap;align-items:baseline;gap:0.15rem 1rem;padding-block:0.9rem}
+  .plots tbody tr::before{content:"";flex-basis:100%;order:2}
+  .plots tbody th,.plots td{display:block;padding:0}
+  .plots .c-title{flex-basis:100%;hyphens:auto}
+  .plots .c-fig,.plots .c-area{order:1;font-size:var(--text-m);min-width:0}
+  .plots .is-gap{display:none}
+  .plots .c-price{order:3;flex:1 1 5rem;text-align:left;min-width:0;margin-top:0.3rem;overflow-wrap:break-word}
+  .plots .c-status{order:3;margin-left:auto;align-self:center}
+  .notes li{grid-template-columns:minmax(0,1fr)}
+  .mast-in{gap:0 1rem}
+  .mast-tel{margin-left:0}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important;scroll-behavior:auto!important}
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-band: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-rule: #999999;
+    --color-rule-strong: #000000;
+    --color-seam: rgba(0,0,0,0);
+    --color-row-hover: rgba(0,0,0,0);
+    --color-panel: #ffffff;
+    --color-panel-text: #000000;
+    --color-panel-muted: #333333;
+    --color-panel-link: #000000;
+  }
+  body{font-size:11pt}
+  .menu,.skip,.back,.sheet-all,.pager a{display:none}
+  .panel{padding:0}
+  .ask{border-width:1px;break-inside:avoid}
+  .plots tbody tr{break-inside:avoid}
+  .c-title a::after{display:none}
+  .prose a[href^="http"]::after{content:" (" attr(href) ")";font-size:0.85em}
+}

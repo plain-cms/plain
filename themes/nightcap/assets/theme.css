@@ -1,0 +1,452 @@
+/* Nightcap — a cocktail-bar theme built around one object: the matchbook from
+   the bowl on the bar. The masthead is its closed cover (printed teal, the
+   name in deco capitals, the sandpaper striker and its staple); the page
+   below is the cream inside cover. Restyle by editing tokens, never selectors. */
+
+:root {
+  /* Type — geometric deco capitals over an old-style serif and its italic */
+  --font-display: Futura, "Century Gothic", "URW Gothic", "Avant Garde", "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  --font-body: "Hoefler Text", "Goudy Old Style", Garamond, "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1.125rem;
+  --leading: 1.55;
+  --tracking-title: 0.2em;
+  --tracking-caps: 0.14em;
+
+  /* Colour — light: cream card printed in teal ink */
+  --color-bg: #f3e9d2;
+  --color-text: #0b3a40;
+  --color-muted: #47605f;
+  --color-accent: #046a73;
+  --color-card: #f9f2e1;
+  --color-rule: #cfc3a4;
+  --color-code-bg: #e9dec3;
+  --color-mark: #ecd590;
+  --color-shadow: rgba(20,12,6,0.32);
+
+  /* The matchbook — the same in both schemes */
+  --color-cover: #046a73;
+  --color-cover-ray: #035e66;
+  --color-cover-ink: #f6edd6;
+  --color-striker: #5b4332;
+  --color-striker-grit: #33241a;
+  --color-striker-fleck: #9a7d63;
+  --color-brass: #c9a550;
+  --color-brass-light: #f3dc9c;
+  --color-brass-dark: #7a5f22;
+
+  /* Layout */
+  --measure: 36rem;
+  --measure-wide: 46rem;
+  --striker-height: clamp(2.4rem, 5vw, 3.6rem);
+  --radius: 2px;
+  --rule: 2px;
+  --space-1: 0.3rem;
+  --space-2: 0.6rem;
+  --space-3: 1rem;
+  --space-4: 1.75rem;
+  --space-5: 3rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* After dark — the matchbook on a black-walnut bar top */
+    --color-bg: #1b1410;
+    --color-text: #f1e7d0;
+    --color-muted: #c0b299;
+    --color-accent: #6cc6cb;
+    --color-card: #251b15;
+    --color-rule: #54432f;
+    --color-code-bg: #2b2019;
+    --color-mark: #5c4a1a;
+    --color-shadow: rgba(0,0,0,0.6);
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+  /* the footer always reaches the foot of the window */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* headings, descriptions and the hours card hyphenate, and page text on a phone;
+   wide page text, tables and prices do not */
+h1, h2, h3, h4, .note, dt, dd { hyphens: auto; hyphenate-limit-chars: 10 4 4; }
+@media (max-width: 34em) { .prose { hyphens: auto; hyphenate-limit-chars: 10 4 4; } }
+/* an address, a number, a table cell or a line of code reads exactly as written */
+.prose a, .prose td, .prose th, .hours-card a, code { hyphens: manual; }
+/* a phone number or e-mail address too long for the line breaks inside itself */
+a[href^="tel:"], a[href^="mailto:"] { overflow-wrap: anywhere; }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 3px; }
+.matchbook :focus-visible, .hours-card :focus-visible, .colophon :focus-visible { outline-color: var(--color-cover-ink); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); z-index: 2; padding: var(--space-2) var(--space-3); background: var(--color-card); }
+.skip-link:focus { left: var(--space-2); }
+
+/* The deco voice: tracked geometric capitals */
+.site-title, .matchbook nav a, .cover-warning, h1, h2, h3, .meta, .drink-price, .hours-card dt, .btn-reserve,
+.back, .pagination, .tags, .colophon-name {
+  font-family: var(--font-display);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+/* The stepped rule: three lines, each shorter and finer than the last */
+.site-title::before, .site-title::after, .page-header::after, .prose hr {
+  content: "";
+  display: block;
+  width: min(11rem, 60%);
+  height: 11px;
+  margin-inline: auto;
+  background:
+    linear-gradient(currentColor, currentColor) 50% 0 / 100% 3px,
+    linear-gradient(currentColor, currentColor) 50% 5px / 56% 2px,
+    linear-gradient(currentColor, currentColor) 50% 100% / 24% 1px;
+  background-repeat: no-repeat;
+}
+
+/* THE MATCHBOOK — the signature ------------------------------------------
+   A closed cover the full width of the page: a sunburst printed tone on tone,
+   a keyline frame that runs down under the flap, and the flap itself — the
+   sandpaper striker with one brass staple through it. */
+
+.matchbook {
+  position: relative;
+  padding: clamp(0.6rem, 1.6vw, 1.1rem) clamp(0.6rem, 1.6vw, 1.1rem) var(--striker-height);
+  color: var(--color-cover-ink);
+  background: var(--color-cover) repeating-conic-gradient(from 267.75deg at 50% 100%, var(--color-cover-ray) 0 4.5deg, transparent 4.5deg 9deg);
+}
+
+/* the flap: card edge, striker, card edge */
+.matchbook::after, .colophon::before {
+  content: "";
+  display: block;
+  background:
+    radial-gradient(circle at 20% 30%, var(--color-striker-fleck) 0.7px, transparent 1.2px) 0 0 / 17px 13px,
+    radial-gradient(circle at 70% 60%, var(--color-striker-grit) 1px, transparent 1.5px) 0 0 / 13px 19px,
+    radial-gradient(circle at 40% 80%, var(--color-striker-fleck) 0.5px, transparent 1px) 0 0 / 11px 7px,
+    radial-gradient(circle at 80% 20%, var(--color-striker-grit) 0.7px, transparent 1.2px) 0 0 / 7px 11px,
+    radial-gradient(circle at 10% 70%, var(--color-striker-fleck) 0.9px, transparent 1.4px) 0 0 / 29px 23px,
+    radial-gradient(circle at 55% 45%, var(--color-striker-grit) 1.2px, transparent 1.7px) 0 0 / 23px 31px,
+    radial-gradient(circle at 90% 90%, var(--color-striker-fleck) 0.6px, transparent 1.1px) 0 0 / 19px 17px,
+    radial-gradient(circle at 30% 10%, var(--color-striker-grit) 0.6px, transparent 1.1px) 0 0 / 9px 14px,
+    var(--color-striker);
+  background-clip: padding-box;
+}
+.matchbook::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: var(--striker-height);
+  border: solid var(--color-cover);
+  border-width: 0.5rem 0 0.3rem;
+  box-shadow: 0 -1px 0 var(--color-cover-ray), 0 -4px 5px -3px var(--color-shadow), 0 2px 5px var(--color-shadow);
+}
+/* the staple */
+.matchbook::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  bottom: calc(var(--striker-height) / 2 - 0.38rem);
+  width: clamp(3.5rem, 8vw, 5.5rem);
+  height: 0.55rem;
+  transform: translateX(-50%);
+  border-radius: 0.3rem;
+  background: linear-gradient(var(--color-brass-light), var(--color-brass) 45%, var(--color-brass-dark));
+  box-shadow: 0 0 0 1px var(--color-striker-grit), 0 2px 2px var(--color-shadow);
+}
+
+.cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: min(34vh, 24vw);
+  padding: clamp(1.1rem, 3vw, 2.25rem) clamp(0.6rem, 3vw, 2rem) var(--space-2);
+  border: solid currentColor;
+  border-width: var(--rule) var(--rule) 0;
+  text-align: center;
+}
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 4px 4px 0;
+  border: solid currentColor;
+  border-width: 1px 1px 0;
+  pointer-events: none;
+}
+
+.site-title {
+  position: relative;
+  max-width: 100%;
+  padding-left: var(--tracking-title); /* the last letter's tracking, balanced */
+  font-size: clamp(1.3rem, 7vw, 4.75rem);
+  line-height: 1.08;
+  letter-spacing: var(--tracking-title);
+  color: inherit;
+  text-decoration: none;
+  hyphens: auto;
+}
+.site-title::before { margin-bottom: 0.3em; transform: scaleY(-1); }
+.site-title::after { margin-top: 0.3em; }
+
+.matchbook nav ul { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 var(--space-4); margin: 0; padding: 0; list-style: none; }
+.matchbook nav a {
+  position: relative;
+  display: block;
+  padding: var(--space-2) 0 var(--space-2) var(--tracking-caps);
+  font-size: 0.82rem;
+  color: inherit;
+  text-decoration: none;
+}
+.matchbook nav a:hover { text-decoration: underline; }
+.matchbook nav a[aria-current="page"] { box-shadow: inset 0 calc(-1 * var(--rule)) 0 var(--color-brass-light); }
+
+.cover-warning { margin: 0; font-size: 0.62rem; letter-spacing: 0.32em; }
+
+/* The inside cover --------------------------------------------------------- */
+
+main { flex: 1 0 auto; min-height: 50vh; padding: 0 var(--space-3) var(--space-5); }
+main > * { max-width: var(--measure-wide); margin-inline: auto; }
+.prose, .inside, .post-list, .pagination, .tags, .cover-image { max-width: var(--measure); margin-inline: auto; }
+
+.page-header { margin: 2.6rem 0 var(--space-4); text-align: center; color: var(--color-accent); }
+.page-header::after { margin-top: 1.2rem; }
+h1 { margin: 0; font-size: clamp(1.4rem, 3.6vw, 2.1rem); line-height: 1.2; letter-spacing: 0.1em; color: var(--color-text); text-wrap: balance; }
+
+.meta { margin: 0 0 var(--space-2); font-size: 0.78rem; color: var(--color-muted); }
+.note { margin: 0; font-style: italic; color: var(--color-muted); }
+.empty { text-align: center; font-style: italic; color: var(--color-muted); }
+
+/* Prose */
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose ul, .prose ol, .prose pre, .prose table, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose ::marker { color: var(--color-accent); }
+.prose em { font-size: 1.04em; }
+
+.prose h2 { display: flex; align-items: center; gap: var(--space-3); margin: var(--space-4) 0 var(--space-2); font-size: 1rem; line-height: 1.3; }
+.prose h2::after { content: ""; flex: 1; min-width: var(--space-3); height: 4px; border: solid var(--color-accent); border-width: var(--rule) 0 1px; }
+.prose h3 { margin: var(--space-4) 0 var(--space-1); font-size: 0.85rem; line-height: 1.3; color: var(--color-accent); }
+.prose h4 { margin: var(--space-3) 0 var(--space-1); font-size: 1em; font-style: italic; }
+
+.prose img, .cover-image { display: block; max-width: 100%; height: auto; border-radius: var(--radius); }
+.cover-image { width: 100%; margin-bottom: var(--space-4); }
+
+.prose blockquote { padding: 0 var(--space-3); border-left: var(--rule) solid var(--color-accent); font-style: italic; color: var(--color-muted); }
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.prose code { font-family: var(--font-mono); font-size: 0.82em; background: var(--color-code-bg); padding: 0.1em 0.35em; border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); background: var(--color-code-bg); border-radius: var(--radius); overflow-x: auto; line-height: 1.45; }
+.prose pre code { padding: 0; background: none; }
+
+/* a wide table scrolls inside its own box, never the page */
+.prose table { display: block; width: max-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.prose td { min-width: 6em; } /* past the column, the table scrolls rather than squeeze its cells */
+.prose th, .prose td { padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { font-family: var(--font-display); font-size: 0.74rem; font-weight: 500; text-transform: uppercase; letter-spacing: var(--tracking-caps); color: var(--color-muted); border-bottom: var(--rule) solid var(--color-accent); }
+
+.prose hr { height: 11px; margin: var(--space-4) auto; border: 0; color: var(--color-accent); }
+
+/* The back cover — hours, address, how to book (classes written in pages) -- */
+
+.hours-card {
+  position: relative;
+  margin: var(--space-4) 0;
+  padding: clamp(1.5rem, 5vw, 2.25rem) clamp(1.25rem, 5vw, 2.25rem);
+  color: var(--color-cover-ink);
+  background: var(--color-cover);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 5px var(--color-shadow);
+}
+.hours-card::before, .hours-card::after { content: ""; position: absolute; inset: 0.4rem; border: var(--rule) solid currentColor; pointer-events: none; }
+.hours-card::after { inset: calc(0.4rem + var(--rule) + 3px); border-width: 1px; }
+.hours-card > * { position: relative; z-index: 1; }
+
+/* label | value, either side of the centre line the staple sits on */
+.hours-card dl {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: baseline;
+  margin: 0;
+  background: linear-gradient(currentColor, currentColor) 41.667% 0 / 1px 100% no-repeat;
+}
+.hours-card dt { padding: var(--space-1) var(--space-3) var(--space-1) 0; text-align: right; font-size: 0.72rem; line-height: 1.35; }
+.hours-card dd { margin: 0; padding: var(--space-1) 0 var(--space-1) var(--space-3); font-size: 1.08em; font-style: italic; line-height: 1.35; }
+.hours-card a { color: inherit; }
+
+.btn-reserve {
+  display: inline-block;
+  max-width: 100%;
+  padding: 0.95em 1.7em 0.9em;
+  font-size: 0.82rem;
+  line-height: 1.3;
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-cover-ink);
+  background: var(--color-cover);
+  border-radius: var(--radius);
+  box-shadow: inset 0 0 0 3px var(--color-cover), inset 0 0 0 4px var(--color-cover-ink);
+}
+.btn-reserve:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.hours-card .btn-reserve { color: var(--color-cover); background: var(--color-cover-ink); box-shadow: inset 0 0 0 3px var(--color-cover-ink), inset 0 0 0 4px var(--color-cover); }
+.reserve, .prose p:where(:has(> .btn-reserve:only-child)) { margin: var(--space-4) 0; text-align: center; }
+.hours-card .reserve { margin: var(--space-3) 0 0; }
+
+@media (max-width: 34em) {
+  /* on a phone the back cover runs edge to edge and each pair stacks on the centre line */
+  .hours-card { margin-inline: calc(-1 * var(--space-3)); border-radius: 0; text-align: center; }
+  .hours-card dl { display: block; background: none; }
+  .hours-card dt { padding: var(--space-2) 0 0; text-align: center; }
+  .hours-card dd { padding: 0; }
+}
+
+/* The list of drinks ------------------------------------------------------- */
+
+.inside {
+  padding: clamp(1.5rem, 5vw, 2.75rem) clamp(1.1rem, 5vw, 2.75rem);
+  background: var(--color-card);
+  border: var(--rule) solid var(--color-accent);
+  outline: 1px solid var(--color-accent);
+  outline-offset: -7px;
+}
+
+/* Items arrive sorted by section name; `order` seats the sections in service
+   order (enhance.js then moves them in the document to match). An item with
+   no section, or one outside these ten, keeps order 0 and comes first. */
+.drinks { display: flex; flex-direction: column; gap: var(--space-3); margin: 0; padding: 0; list-style: none; }
+.drink[data-section="Breakfast"] { order: 1; }
+.drink[data-section="Bread"] { order: 2; }
+.drink[data-section="Pastries"] { order: 3; }
+.drink[data-section="Starters"] { order: 4; }
+.drink[data-section="Mains"] { order: 5; }
+.drink[data-section="Sides"] { order: 6; }
+.drink[data-section="Desserts"] { order: 7; }
+.drink[data-section="Hot drinks"] { order: 8; }
+.drink[data-section="Drinks"] { order: 9; }
+.drink[data-section="Snacks"] { order: 10; }
+
+/* The section name: a small label by default; on the first item of each of
+   the ten sections it is the heading, flanked by thick-and-thin rules, and
+   the later items of that section keep quiet. */
+.drink-section { --flank: none; display: flex; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-1); font-size: 0.72rem; line-height: 1.3; color: var(--color-muted); }
+.drink-section::before, .drink-section::after { content: ""; display: var(--flank); flex: 1; min-width: var(--space-3); height: 4px; border: solid currentColor; border-width: var(--rule) 0 1px; }
+.drink:is([data-section="Breakfast"], [data-section="Bread"], [data-section="Pastries"], [data-section="Starters"], [data-section="Mains"], [data-section="Sides"], [data-section="Desserts"], [data-section="Hot drinks"], [data-section="Drinks"], [data-section="Snacks"]) .drink-section {
+  --flank: block;
+  margin: var(--space-3) 0;
+  font-size: 0.95rem;
+  letter-spacing: var(--tracking-title);
+  text-align: center;
+  color: var(--color-accent);
+}
+.drink[data-section="Breakfast"] ~ .drink[data-section="Breakfast"] .drink-section,
+.drink[data-section="Bread"] ~ .drink[data-section="Bread"] .drink-section,
+.drink[data-section="Pastries"] ~ .drink[data-section="Pastries"] .drink-section,
+.drink[data-section="Starters"] ~ .drink[data-section="Starters"] .drink-section,
+.drink[data-section="Mains"] ~ .drink[data-section="Mains"] .drink-section,
+.drink[data-section="Sides"] ~ .drink[data-section="Sides"] .drink-section,
+.drink[data-section="Desserts"] ~ .drink[data-section="Desserts"] .drink-section,
+.drink[data-section="Hot drinks"] ~ .drink[data-section="Hot drinks"] .drink-section,
+.drink[data-section="Drinks"] ~ .drink[data-section="Drinks"] .drink-section,
+.drink[data-section="Snacks"] ~ .drink[data-section="Snacks"] .drink-section { display: none; }
+
+/* name left, price right; a price too long for the line drops below it */
+.drink-row { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0 var(--space-3); }
+.drink-name { flex: 1 1 50%; min-width: 0; margin: 0; font-size: 0.95rem; line-height: 1.35; }
+.drink-name a { color: var(--color-text); text-decoration: none; }
+.drink-name a:hover { color: var(--color-accent); text-decoration: underline; }
+.drink-price { max-width: 100%; margin: 0 0 0 auto; font-size: 0.95rem; line-height: 1.35; letter-spacing: 0.04em; text-transform: none; text-align: right; font-variant-numeric: tabular-nums; color: var(--color-accent); }
+.drink .note { max-width: 30rem; margin-top: var(--space-1); line-height: 1.4; }
+
+/* One drink, and the 404: a single card, set on the centre line */
+.drink-page, .not-found { margin-top: var(--space-5); }
+.drink-page .inside, .not-found .inside { text-align: center; }
+.inside .page-header { margin: 0 0 var(--space-3); }
+.inside > .note { font-size: 1.12em; }
+.drink-page .drink-price { margin: var(--space-3) 0 0; font-size: 1.3rem; text-align: center; }
+.inside .prose { margin-top: var(--space-4); padding-top: var(--space-4); border-top: 1px solid var(--color-rule); text-align: left; }
+.back { margin: var(--space-4) auto 0; font-size: 0.78rem; text-align: center; }
+.back a { display: inline-block; margin: 0 var(--space-2); padding: var(--space-1) 0; }
+
+/* News list, tags, pagination ---------------------------------------------- */
+
+.post-list { margin-block: 0; padding: 0; list-style: none; }
+.post-list li { padding: var(--space-4) 0; border-bottom: 1px solid var(--color-rule); text-align: center; }
+.post-list li:first-child { padding-top: 0; }
+.post-list h2 { margin: 0 0 var(--space-2); font-size: 1.1rem; line-height: 1.3; }
+.post-list h2 a { color: var(--color-text); text-decoration: none; }
+.post-list h2 a:hover { color: var(--color-accent); text-decoration: underline; }
+
+.tags { display: flex; flex-wrap: wrap; justify-content: center; gap: var(--space-1) var(--space-3); margin-block: var(--space-4) 0; padding: var(--space-3) 0 0; border-top: 1px solid var(--color-rule); list-style: none; font-size: 0.78rem; }
+.tags li { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-3); margin-block: var(--space-4) 0; font-size: 0.78rem; color: var(--color-muted); }
+.pagination a { padding: var(--space-1) 0; }
+.pagination span ~ a { margin-left: auto; } /* the next link stays on the right when it wraps */
+
+/* Footer — the matchbook's other end --------------------------------------- */
+
+.colophon { padding-bottom: var(--space-4); text-align: center; color: var(--color-cover-ink); background: var(--color-cover); }
+.colophon::before { height: 0.7rem; margin-bottom: var(--space-4); border-bottom: 1px solid var(--color-cover-ray); }
+.colophon > * { max-width: var(--measure); margin: 0 auto; padding: 0 var(--space-3); }
+.colophon-name { font-size: 0.85rem; }
+.colophon-line, .colophon-note { font-size: 0.95rem; font-style: italic; }
+.colophon-note p { margin: var(--space-1) 0 0; }
+.colophon a { color: inherit; }
+
+/* Motion & print ------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  a, .btn-reserve { transition: color 0.15s, text-decoration-thickness 0.15s; }
+}
+
+@media print {
+  /* one ink on white, whichever scheme the screen was in */
+  :root {
+    --color-bg: #fff;
+    --color-card: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-rule: #999;
+    --color-code-bg: #fff;
+    --color-cover: #fff;
+    --color-cover-ray: #fff;
+    --color-cover-ink: #000;
+    --color-shadow: rgba(0,0,0,0);
+  }
+  body { display: block; font-size: 11pt; }
+  .matchbook { padding: 0; }
+  .matchbook::before, .matchbook::after, .colophon::before, .matchbook nav, .cover-warning, .skip-link, .reserve, a.btn-reserve, .back, .pagination { display: none; }
+  .cover { min-height: 0; border: 0; }
+  .cover::before { display: none; }
+  .colophon { margin-top: var(--space-4); padding-top: var(--space-3); border-top: 1px solid var(--color-rule); }
+  main { min-height: 0; }
+  a { color: inherit; text-decoration: none; }
+  .drink, .hours-card, .post-list li { break-inside: avoid; }
+  .drink-section { break-after: avoid; }
+}

@@ -1,0 +1,6 @@
+<li class="book" data-status="{{ item.status }}"><div class="spine">
+  <h2 class="spine-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  <div class="tail"><p class="imprint">{{ item.category }}</p>
+  {{#if item.price}}<p class="label"><span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}</p>{{/if}}
+  {{#if item.status}}<p class="status"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ item.status }}</span></p>{{/if}}</div>
+</div></li>

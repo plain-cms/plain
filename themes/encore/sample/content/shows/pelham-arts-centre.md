@@ -1,6 +1,6 @@
 ---
 title: Pelham Arts Centre
-date: 2026-06-19
+date: 2027-06-18
 city: Pelham
 venue: The Arts Centre
 ticketsUrl: https://tickets.example.com/pelham

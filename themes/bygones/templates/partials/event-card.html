@@ -1,0 +1,12 @@
+<li class="card ev"{{#if item.status}} data-status="{{ item.status }}"{{/if}}>
+  <p class="tab"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  <div class="card-body">
+    <p class="card-head"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    <div class="card-lines">
+      {{#if item.status}}{{> stamp}}{{/if}}<p class="held" hidden>{{ strings.eventHeld }}</p>
+      {{#if item.time}}<p class="ev-when"><span class="ev-time">{{ item.time }}</span>{{#if item.place}} <span class="ev-place">{{ item.place }}</span>{{/if}}</p>
+      {{else}}{{#if item.place}}<p class="ev-when"><span class="ev-place">{{ item.place }}</span></p>
+      {{/if}}{{/if}}{{#if item.description}}<p class="ev-desc">{{ item.description }}</p>{{/if}}
+    </div>
+  </div>
+</li>

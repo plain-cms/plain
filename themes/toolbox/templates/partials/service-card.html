@@ -2,6 +2,5 @@
   <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
   {{#if item.dateFormatted}}<p class="meta"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
   {{/if}}{{#if item.description}}<p class="summary">{{ item.description }}</p>
-  {{/if}}{{#if item.priceFrom}}<p class="price"><span>from</span> <strong>{{ item.priceFrom }}</strong></p>
-  {{/if}}
+  {{/if}}<p class="price">{{#if item.priceFrom}}<span>{{ strings.from }}</span> <strong>{{ item.priceFrom }}</strong> {{/if}}<b aria-hidden="true">→</b></p>
 </li>

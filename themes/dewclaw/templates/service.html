@@ -1,0 +1,20 @@
+<article class="service">
+  <p class="back"><a href="/care/">{{ strings.backToCare }}</a></p>
+  <header class="box box-infor">
+    <p class="caption">{{ strings.inFor }}</p>
+    <h1 class="marker">{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.preparation}}<section class="box box-prep" aria-labelledby="prep-caption">
+    <h2 class="caption" id="prep-caption">{{ strings.beforeYouCome }}</h2>
+    <ul class="ticks">
+      {{#each page.preparation as step}}<li>{{ step }}</li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{> book-box}}
+</article>

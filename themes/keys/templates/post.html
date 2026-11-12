@@ -5,7 +5,7 @@
     {{#if page.description}}<p class="lede">{{ page.description }}</p>
     {{/if}}
   </header>
-  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="{{ page.title }}" loading="lazy" decoding="async">
   {{/if}}<div class="prose">
 {{{ page.content }}}
   </div>

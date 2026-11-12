@@ -1,0 +1,334 @@
+/* Bygones — the card-index drawer. Restyle by editing the tokens below,
+   never selectors. */
+
+:root {
+  /* Type — typewriter text, small grotesque capitals on the tabs */
+  --font-type: "American Typewriter", "Courier Prime", "Courier New", Courier, "Nimbus Mono PS", "Liberation Mono", monospace;
+  --font-caps: "Helvetica Neue", Helvetica, Arial, "Nimbus Sans", "Liberation Sans", sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-base: 1rem;
+  --leading: 1.6;
+  --line: 1.625rem;
+  --tracking-caps: 0.09em;
+
+  /* Colour — catalogue card, ribbon black, feint blue, one red rule, manila */
+  --color-bg: #f6f3eb;
+  --color-text: #1f1d1a;
+  --color-muted: #5b554b;
+  --color-accent: #2b5c9a;
+  --color-rule: #d4ccbb;
+  --color-card: #f3e9cd;
+  --color-card-ink: #1f1d1a;
+  --color-card-muted: #5a5142;
+  --color-card-link: #24528c;
+  --color-feint: #b9cbe0;
+  --color-red: #b1302a;
+  --color-tab: #e2c47f;
+  --color-drawer: #d6ccb6;
+  --color-cabinet: #55605f;
+  --color-brass: #a7853f;
+  --color-code-bg: #ebe5d6;
+  --color-focus: #1c3f6e;
+  --color-focus-ring: #ffffff;
+  --shadow-card: 0 -0.35rem 0.6rem -0.3rem rgba(40,30,10,0.35);
+  --shadow-edge: 0 1px 2px rgba(40,30,10,0.3);
+  --shadow-well: inset 0 0.5rem 0.8rem -0.5rem rgba(0,0,0,0.45);
+
+  /* Shape and measure */
+  --radius: 3px;
+  --radius-tab: 0.6rem;
+  --tab-h: 1.75rem;
+  --tab-min: 12.5rem;
+  --hole: 0.8rem;
+  --measure-wide: 76rem;
+  --measure-text: 38rem;
+  --side: 23rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* the reading room after dark: a steel cabinet, cards under the lamp */
+    --color-bg: #171a1e;
+    --color-text: #ece6d6;
+    --color-muted: #b0a896;
+    --color-accent: #8db4e6;
+    --color-rule: #3a3e44;
+    --color-card: #ddd1b1;
+    --color-card-ink: #1c1a16;
+    --color-card-muted: #4c4334;
+    --color-card-link: #1e4a83;
+    --color-feint: #9fb4cb;
+    --color-red: #9e2720;
+    --color-tab: #cdae69;
+    --color-drawer: #0d0f12;
+    --color-cabinet: #39434a;
+    --color-brass: #b69550;
+    --color-code-bg: #262a30;
+    --color-focus: #f4efe1;
+    --color-focus-ring: #111317;
+    --shadow-card: 0 -0.35rem 0.7rem -0.3rem rgba(0,0,0,0.7);
+    --shadow-edge: 0 1px 2px rgba(0,0,0,0.6);
+    --shadow-well: inset 0 0.5rem 0.8rem -0.5rem rgba(0,0,0,0.9);
+  }
+}
+
+/* Base */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+
+body { margin: 0; font-family: var(--font-type); font-size: var(--text-base); line-height: var(--leading); color: var(--color-text); background: var(--color-bg); overflow-wrap: break-word; }
+
+.masthead-in, main, .foot-in { max-width: var(--measure-wide); margin-inline: auto; padding-inline: clamp(1rem, 4vw, 2rem); }
+main { min-height: 60vh; padding-bottom: 3rem; }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { text-decoration-thickness: 2px; }
+
+/* a dark and a light ring: one shows on any ground */
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; box-shadow: 0 0 0 2px var(--color-focus-ring); }
+
+.skip-link { position: absolute; left: -100vw; top: 0.5rem; z-index: 3; padding: 0.5rem 1rem; background: var(--color-tab); color: var(--color-card-ink); }
+.skip-link:focus { left: 0.5rem; }
+
+/* The tab voice: small grotesque capitals */
+.tab, .founded, .masthead nav a, .tab-link, .kicker, .filed-label, .pagination, .back, .guide-body a, .prose th { font-family: var(--font-caps); font-weight: 700; text-transform: uppercase; letter-spacing: var(--tracking-caps); }
+
+h1, h2, h3, .card-head, .meet-what, .meet-day, .holder { hyphens: auto; }
+a[href^="mailto:"] { hyphens: manual; overflow-wrap: anywhere; }
+a[href^="tel:"] { white-space: nowrap; }
+
+/* Masthead: the name typed on a card in a brass label holder */
+
+.masthead { border-bottom: 1px solid var(--color-rule); }
+.masthead-in { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; padding-block: 1rem; }
+.brand { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; min-width: 0; margin: 0; }
+.holder { position: relative; display: block; min-width: 0; max-width: 100%; margin-inline: 0.7rem; padding: 0.3rem 0.85rem 0.25rem; border: 3px solid var(--color-brass); border-radius: var(--radius); background: var(--color-card); color: var(--color-card-ink); font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.3rem); font-weight: 700; line-height: 1.25; text-decoration: none; }
+/* the holder's two rivets */
+.holder::before, .holder::after { content: ""; position: absolute; top: 50%; width: 0.45rem; height: 0.45rem; margin-top: -0.225rem; border-radius: 50%; background: var(--color-brass); }
+.holder::before { left: -0.75rem; }
+.holder::after { right: -0.75rem; }
+.holder:hover { text-decoration: underline; }
+.founded { font-size: 0.72rem; line-height: 1.3; color: var(--color-muted); }
+
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 clamp(0.8rem, 2.4vw, 1.4rem); margin: 0; padding: 0; list-style: none; }
+.masthead nav a { display: block; padding: 0.5rem 0 0.2rem; border-bottom: 3px solid transparent; color: var(--color-text); font-size: 0.78rem; text-decoration: none; }
+.masthead nav a:hover { border-color: var(--color-rule); }
+.masthead nav a[aria-current="page"] { border-color: var(--color-accent); }
+
+/* Page head */
+
+.page-head { margin: 2.5rem 0 2rem; }
+h1 { max-width: 24ch; margin: 0; font-size: clamp(1.75rem, 1.2rem + 2.1vw, 2.75rem); line-height: 1.12; text-wrap: balance; }
+.intro { max-width: var(--measure-text); margin: 1rem 0 0; font-size: 1.1rem; line-height: 1.5; }
+.kicker { margin: 0 0 0.5rem; font-size: 0.75rem; color: var(--color-muted); }
+
+/* THE CARD: manila tab, title on the red head line, feint ruling, rod hole */
+
+.card { position: relative; min-width: 0; list-style: none; }
+.tab { display: block; width: min(100%, max(33.34%, var(--tab-min))); min-height: var(--tab-h); margin: 0; padding: 0.42rem 0.85rem 0.2rem; border-radius: var(--radius-tab) var(--radius-tab) 0 0; background: var(--color-tab); color: var(--color-card-ink); box-shadow: var(--shadow-card); font-size: 0.7rem; line-height: 1.1rem; }
+.card-body { display: block; border-radius: 0 0 var(--radius) var(--radius); background: var(--color-card); color: var(--color-card-ink); box-shadow: var(--shadow-card), var(--shadow-edge); }
+.tab + .card-body { border-top-right-radius: var(--radius); }
+.card-head { display: block; margin: 0; padding: 0.75rem 1rem 0.2rem; border-bottom: 2px solid var(--color-red); font-family: var(--font-type); font-size: 1.15rem; font-weight: 700; line-height: 1.35; text-wrap: balance; }
+.card-head a { color: inherit; text-decoration: none; }
+.card-head a:hover { color: var(--color-card-link); text-decoration: underline; }
+.card-lines { position: relative; display: flow-root; padding: 0 1rem calc(var(--hole) + 0.8rem); background: repeating-linear-gradient(transparent 0, transparent calc(var(--line) - 1px), var(--color-feint) calc(var(--line) - 1px), var(--color-feint) var(--line)); font-size: 0.94rem; line-height: var(--line); }
+.card-lines > *, .card-lines .line { display: block; margin: 0; }
+.card-lines::after { content: ""; position: absolute; left: 50%; bottom: 0.4rem; width: var(--hole); height: var(--hole); margin-left: calc(var(--hole) / -2); border-radius: 50%; background: var(--color-drawer); box-shadow: var(--shadow-well); }
+.card-lines a { color: var(--color-card-link); }
+.ev-desc, .person-role { color: var(--color-card-muted); }
+.ev-time { font-weight: 700; }
+.ev-time:has(+ .ev-place)::after { content: "\00a0·"; }
+
+/* THE DRAWER: each card stands in front of the last, its tab stepping
+   left, centre, right over the foot of the card behind */
+
+.drawer { min-width: 0; margin: 0 0 2rem; padding: 1rem clamp(0.45rem, 2vw, 1.1rem) 0; border: solid var(--color-cabinet); border-width: 0 clamp(0.35rem, 1vw, 0.6rem); border-radius: var(--radius) var(--radius) 0 0; background: var(--color-drawer); box-shadow: var(--shadow-well); }
+.drawer::after {
+  content: "";
+  display: block;
+  height: 3.6rem;
+  margin: 0 calc(-1 * clamp(0.8rem, 3vw, 1.7rem));
+  border-radius: 0 0 var(--radius) var(--radius);
+  background:
+    radial-gradient(circle at 50% 2.75rem, var(--color-brass) 0, var(--color-brass) 0.4rem, transparent 0.45rem),
+    linear-gradient(var(--color-tab), var(--color-tab)) 50% 0.75rem / 5.4rem 1.1rem no-repeat,
+    linear-gradient(var(--color-brass), var(--color-brass)) 50% 0.55rem / 6.2rem 1.5rem no-repeat,
+    var(--color-cabinet);
+  box-shadow: var(--shadow-card);
+}
+.cards { margin: 0; padding: 0; list-style: none; }
+.cards > .card + .card, .guide-in + .cards > .card:first-child { margin-top: calc(-1 * var(--tab-h)); }
+.cards > .card:nth-child(3n+2) > .tab { margin-left: calc((100% - min(100%, max(33.34%, var(--tab-min)))) / 2); }
+.cards > .card:nth-child(3n) > .tab { margin-left: calc(100% - min(100%, max(33.34%, var(--tab-min)))); }
+.cards > .card:last-child > .card-body { margin-bottom: 1rem; }
+/* the rod hole sits in a narrow margin just under the last typed line */
+.cards .card-lines { padding-bottom: calc(var(--hole) + 0.4rem + var(--tab-h)); }
+.cards .card-lines::after { bottom: calc(var(--tab-h) + 0.2rem); }
+.cards > .card:last-child .card-lines { padding-bottom: calc(var(--hole) + 0.4rem); }
+.cards > .card:last-child .card-lines::after { bottom: 0.2rem; }
+.cards .card-head { padding-top: 0.7rem; }
+
+/* a news card with a picture */
+.card-cover { float: right; width: min(9rem, 35%); height: auto; margin: 0.6rem 0 0.4rem 0.9rem; border: 4px solid var(--color-bg); box-shadow: var(--shadow-edge); }
+
+/* Guide cards: manila, a tab with the heading */
+.guide > .tab { width: fit-content; min-width: min(100%, var(--tab-min)); max-width: 100%; font-size: 0.78rem; line-height: 1.2rem; padding-top: 0.38rem; }
+.guide-plain::after { content: ""; display: block; height: 0.9rem; border-radius: 0 var(--radius) 0 0; background: var(--color-tab); }
+/* the programme guide: its link stands beside the tab, on the drawer floor;
+   the guide card's body shows only as a strip behind the first card's tab */
+.guide-in { display: flex; flex-wrap: wrap; align-items: flex-end; column-gap: 1rem; }
+.guide-in > .tab { flex: 0 0 auto; }
+.guide-body { margin: 0 0 0 auto; padding: 0 0.15rem 0.3rem; line-height: 1.2rem; }
+.guide-body a { color: var(--color-text); font-size: 0.72rem; }
+.guide-in::after { content: ""; flex: 1 0 100%; height: calc(var(--tab-h) + 0.6rem); border-radius: 0 var(--radius) 0 0; background: var(--color-tab); }
+
+/* Status: the three known values are stamps (data-status); any other value
+   is a plain typed line. A past event (enhance.js) is stamped HELD in place
+   of its status stamp, unless CANCELLED. Nothing is hidden or greyed */
+.stamp b, .held { display: none; float: right; max-width: 55%; margin: 0.2rem 0 0.2rem 0.8rem; padding: 0.12rem 0.45rem 0.04rem; border: 2px solid; border-radius: 2px; font: 700 0.66rem/1rem var(--font-caps); text-transform: uppercase; letter-spacing: var(--tracking-caps); text-align: center; transform: rotate(-3deg); }
+[data-status="Open to all"] .s-open, [data-status="Members only"] .s-members, [data-status="Cancelled"] .s-off, .ev[data-past]:not([data-status="Cancelled"]) .held { display: block; }
+:is([data-status="Open to all"], [data-status="Members only"], [data-status="Cancelled"]) .stamp span, .ev[data-past] :is(.s-open, .s-members) { display: none; }
+.stamp .s-open { color: var(--color-card-link); }
+.stamp .s-members { color: var(--color-card-ink); background: var(--color-tab); }
+.stamp .s-off { color: var(--color-red); border: 4px double; padding-top: 0.08rem; }
+.held { color: var(--color-card-muted); border-style: dashed; transform: rotate(2deg); }
+[data-status="Cancelled"] :is(.card-head, .card-head a) { text-decoration: line-through; text-decoration-thickness: 2px; text-decoration-color: var(--color-red); }
+
+/* The regular week: a guide card of typed rows */
+.meets { margin: 0 0 2rem; }
+.meets-list { margin: 0; padding: 0.25rem 1rem 1rem; border-radius: 0 var(--radius) var(--radius) var(--radius); background: var(--color-tab); color: var(--color-card-ink); list-style: none; }
+.meet { padding: 0.6rem 0; border-bottom: 1px dashed var(--color-card-muted); }
+.meet:last-child { border-bottom: 0; }
+.meet p { margin: 0; }
+.meet-when { line-height: 1.4; }
+.meet-day { display: block; font-weight: 700; }
+.meet-what { line-height: 1.4; }
+.meet-place { display: block; color: var(--color-card-muted); font-size: 0.9rem; }
+
+/* People: small record cards, no tab */
+.people-block { margin: 0 0 2rem; }
+.people { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(19rem, 100%), 1fr)); gap: 1rem; margin: 1rem 0 0; padding: 0; }
+.person .card-body { display: flex; flex-direction: column; height: 100%; border-radius: var(--radius); }
+.person .card-lines { flex: 1 0 auto; font-size: 0.88rem; }
+
+/* Item pages: one large card, the text below it on the ground */
+.item { margin-top: 3rem; }
+.item-card { max-width: 46rem; margin-bottom: 2rem; }
+.item-card .card-head { max-width: none; padding: 0.9rem 1.25rem 0.3rem; font-size: clamp(1.5rem, 1.15rem + 1.6vw, 2.3rem); line-height: 1.15; }
+.item-card .card-lines { padding-inline: 1.25rem; font-size: 1rem; }
+.item-card .stamp b { font-size: 0.74rem; }
+.filed a { margin-right: 1ch; }
+.filed-label { margin-right: 1ch; font-size: 0.68rem; color: var(--color-card-muted); }
+.cover { display: block; max-width: min(100%, 46rem); height: auto; margin: 0 0 2rem; border: 6px solid var(--color-card); box-shadow: var(--shadow-edge); }
+.lost .card-lines a { font-weight: 700; }
+
+/* Links on the ground */
+.back, .pagination { font-size: 0.78rem; }
+.back { margin: 2rem 0 0; }
+.pagination { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.5rem 1rem; margin: 0; }
+.pagination span { color: var(--color-muted); }
+.listing .drawer { max-width: 52rem; }
+.page-text { margin-bottom: 2rem; }
+.empty { margin: 0; max-width: var(--measure-text); }
+
+/* Prose */
+
+.prose { max-width: var(--measure-text); hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .prose h3, .prose h4 { margin: 2rem 0 0.5rem; line-height: 1.25; }
+.prose h2 { font-size: 1.35rem; }
+.prose h3 { font-size: 1.12rem; }
+.prose h4 { font-size: 1rem; }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 1rem; }
+.prose ul, .prose ol { padding-left: 1.5em; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose img { display: block; max-width: 100%; height: auto; }
+.prose blockquote { padding-left: 1rem; border-left: 3px solid var(--color-accent); color: var(--color-muted); }
+.prose code { font-family: var(--font-mono); font-size: 0.88em; background: var(--color-code-bg); padding: 0.1em 0.3em; border-radius: var(--radius); }
+.prose pre { padding: 1rem; background: var(--color-code-bg); border-radius: var(--radius); overflow-x: auto; line-height: 1.5; }
+.prose pre code { padding: 0; background: none; }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; hyphens: manual; }
+.prose th, .prose td { min-width: 8rem; padding: 0.4rem 1rem 0.4rem 0; text-align: left; vertical-align: top; border-bottom: 1px solid var(--color-rule); }
+.prose th { font-size: 0.72rem; border-bottom: 2px solid var(--color-text); }
+.prose hr { border: 0; border-top: 1px solid var(--color-rule); margin: 2rem 0; }
+
+/* Footer: the society's own record card */
+
+.foot { border-top: 1px solid var(--color-rule); }
+.foot-in { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr)); gap: 2rem; align-items: start; padding-block: 2rem 3rem; }
+.foot-in > * { min-width: 0; margin: 0; }
+.club-card { max-width: 30rem; font-style: normal; }
+.club-card .card-head { border-radius: var(--radius) var(--radius) 0 0; background: var(--color-card); color: var(--color-card-ink); }
+.club-card .card-lines { border-radius: 0 0 var(--radius) var(--radius); background-color: var(--color-card); color: var(--color-card-ink); box-shadow: var(--shadow-edge); }
+.club-card .line { width: fit-content; max-width: 100%; }
+.join-note { max-width: 32rem; margin: 0 0 1rem; }
+.tab-link { display: inline-block; max-width: 100%; padding: 0.55rem 1rem 0.4rem; border-radius: var(--radius-tab) var(--radius-tab) 0 0; border-bottom: 3px solid var(--color-card-ink); background: var(--color-tab); color: var(--color-card-ink); font-size: 0.8rem; line-height: 1.25; text-decoration: none; }
+.tab-link:hover { text-decoration: underline; }
+.footer-note { grid-column: 1 / -1; font-size: 0.9rem; color: var(--color-muted); }
+.footer-note p { margin: 0; }
+
+/* Wide screens: the drawer beside a column for the society's own words */
+
+@media (min-width: 64em) {
+  .page { display: grid; grid-template: repeat(4, auto) 1fr / minmax(0, 1fr) var(--side); align-items: start; column-gap: 3rem; }
+  .page > * { grid-column: 1 / -1; }
+  /* the lede's first line sits on the headline's first baseline */
+  .page:has(> .drawer-block) > .page-head { display: grid; grid-template-columns: subgrid; align-items: baseline; }
+  .page:has(> .drawer-block) > .page-head h1 { max-width: 20ch; font-size: clamp(2.5rem, 1.2rem + 2.3vw, 3.15rem); }
+  .page:has(> .drawer-block) > .page-head .intro { grid-column: 2; margin: 0; }
+  .page:has(> .drawer-block) > .drawer-block { grid-column: 1; grid-row: 2 / -1; }
+  .page:has(> .drawer-block) > :is(.page-text, .meets, .people-block) { grid-column: 2; }
+  .page:has(> .drawer-block) .people { grid-template-columns: minmax(0, 1fr); }
+  .page:not(:has(> .drawer-block)):has(> .page-text) > .meets { grid-column: 2; grid-row: 2 / -1; }
+  .page:not(:has(> .drawer-block)):has(> .meets) > :is(.page-text, .people-block) { grid-column: 1; }
+}
+
+/* Small screens */
+
+@media (max-width: 40em) {
+  .intro, .prose, .card-lines, .join-note { hyphens: auto; }
+  .masthead nav a { font-size: 0.74rem; }
+  .stamp b, .held { float: none; width: fit-content; max-width: 100%; height: calc(var(--line) - 0.3rem); margin: 0.15rem 0; padding-block: 0; line-height: calc(var(--line) - 0.3rem - 4px); }
+  .stamp .s-off { line-height: calc(var(--line) - 0.3rem - 8px); }
+}
+
+/* Motion & print */
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  .cards > .card > .card-body, .cards > .card > .tab { transition: transform 0.15s ease-out; }
+  .cards > .card:hover > :is(.card-body, .tab) { transform: translateY(-3px); }
+}
+
+@media print {
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-card: #fff;
+    --color-card-ink: #000;
+    --color-card-muted: #333;
+    --color-card-link: #000;
+    --color-feint: #ccc;
+    --color-red: #000;
+    --color-tab: #fff;
+    --color-drawer: #fff;
+    --color-code-bg: #fff;
+    --shadow-card: none;
+    --shadow-edge: none;
+    --shadow-well: none;
+  }
+  body { font-size: 11pt; }
+  main { min-height: 0; }
+  .masthead nav, .skip-link, .back, .pagination, .guide-body, .drawer::after, .card-lines::after, .holder::before, .holder::after { display: none; }
+  .drawer { padding: 0; border: 0; box-shadow: none; }
+  .cards > .card + .card, .guide-in + .cards > .card:first-child { margin-top: 1rem; }
+  .cards .card-lines { padding-bottom: 0.5rem; }
+  .tab, .card-body, .meets-list, .tab-link, .stamp b, .held { border: 1px solid var(--color-text); box-shadow: none; }
+  .card, .meet, .prose tr, .prose blockquote { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  .prose pre { white-space: pre-wrap; }
+}

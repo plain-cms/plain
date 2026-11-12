@@ -1,8 +1,10 @@
 /* Gazette — a modern digital newsroom.
    Point of view: today's local digital-first paper, not a 1900s broadsheet.
    Bold sans headlines carry the hierarchy; a serif carries the reading; press
-   blue signs the masthead, the kickers, and the links. The one bold move is
-   the front page: a grid whose type scale lets twelve stories breathe.
+   blue is kept for the masthead rule, the links and the stories the editor
+   leads with. The one bold move is the front page: a grid whose type scale
+   ranks twelve stories — a lead, five secondaries, six briefs — with no
+   pictures needed.
    All design decisions are the tokens below — restyle by editing tokens,
    never selectors (cms-spec.md §10.1). */
 
@@ -16,13 +18,15 @@
   --text-m: 1.0625rem;
   --text-l: 1.25rem;
   --text-xl: clamp(1.75rem, 4vw, 2.5rem);
-  --text-lead: clamp(1.625rem, 3.5vw, 2.375rem);
-  --text-masthead: clamp(1.875rem, 5vw, 2.75rem);
+  --text-lead: clamp(1.875rem, 4.7vw, 3.75rem);
+  --text-masthead: clamp(1.75rem, 5.5vw, 3rem);
   --leading-body: 1.65;
   --leading-tight: 1.12;
   --leading-standfirst: 1.45;
   --tracking-kicker: 0.08em;
+  --tracking-headline: -0.015em;
   --weight-headline: 800;
+  --weight-strong: 700;
 
   /* Color — paper white, near-black ink, press blue */
   --color-bg: #fdfdfb;
@@ -34,7 +38,7 @@
 
   /* Layout */
   --page-max: 72rem;
-  --measure: 66ch;
+  --measure: 58ch;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
   --space-3: 1rem;
@@ -43,17 +47,20 @@
   --space-6: 5rem;
   --front-gap: 1.75rem;
   --masthead-rule: 0.14em;
+  --rule: 1px;
+  --rule-heavy: 3px;
   --radius: 4px;
 }
 
-/* The late edition — charcoal newsprint, ink softened, blue lifted */
+/* The late edition — charcoal newsprint, ink softened, the blue relit so it
+   still reads as press ink rather than a default link colour */
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: #16181d;
-    --color-text: #eceef1;
+    --color-text: #e6e8ec;
     --color-muted: #a4adba;
-    --color-accent: #8fb4f4;
-    --color-border: #2e323a;
+    --color-accent: #6b9dff;
+    --color-border: #3a3f49;
     --color-code-bg: #21252c;
   }
 }
@@ -71,6 +78,8 @@ body {
   line-height: var(--leading-body);
   color: var(--color-text);
   background: var(--color-bg);
+  /* A word longer than its column breaks rather than widening the page */
+  overflow-wrap: anywhere;
 }
 
 a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
@@ -81,7 +90,7 @@ img { max-width: 100%; height: auto; border-radius: var(--radius); }
 :focus-visible {
   outline: 2px solid var(--color-accent);
   outline-offset: 2px;
-  border-radius: 2px;
+  border-radius: var(--radius);
 }
 
 .skip-link {
@@ -99,10 +108,10 @@ main {
   max-width: var(--page-max);
   margin-inline: auto;
   padding-inline: var(--space-3);
-  min-height: 60vh;
+  min-height: 50vh;
 }
 
-/* Masthead — the paper's name, set with confidence -------------------------- */
+/* Masthead — the paper's name over a press-blue rule the width of the page */
 
 .masthead {
   max-width: var(--page-max);
@@ -110,78 +119,128 @@ main {
   padding: var(--space-4) var(--space-3) 0;
 }
 
-.site-title {
-  display: inline-block;
+/* The font size is set here so the em-based rule keeps step with the name */
+.masthead-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-4);
   font-size: var(--text-masthead);
-  font-weight: var(--weight-headline);
   line-height: var(--leading-tight);
-  letter-spacing: -0.02em;
+  padding-bottom: var(--space-2);
+  border-bottom: var(--masthead-rule) solid var(--color-accent);
+}
+
+.site-title {
+  font-weight: var(--weight-headline);
+  letter-spacing: var(--tracking-headline);
   color: var(--color-text);
   text-decoration: none;
-  border-bottom: var(--masthead-rule) solid var(--color-accent);
-  padding-bottom: var(--space-1);
-  margin-bottom: var(--space-3);
 }
 .site-title:hover { color: var(--color-accent); }
 
-/* The section bar — small, tracked, held between two hairlines */
-.section-nav {
-  border-block: 1px solid var(--color-border);
+.masthead-motto {
+  margin: 0;
+  max-width: 26rem;
+  font-size: var(--text-s);
+  line-height: var(--leading-standfirst);
+  color: var(--color-muted);
 }
-.section-nav ul {
+
+/* The section bar — small, tracked, closed by a hairline */
+.section-nav { border-bottom: var(--rule) solid var(--color-border); }
+.section-nav ul,
+.colophon-links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2) var(--space-4);
+  gap: 0 var(--space-4);
   margin: 0;
-  padding: var(--space-2) 0;
+  padding: 0;
   list-style: none;
 }
-.section-nav a {
+.section-nav a,
+.colophon-links a,
+.story-return a,
+.front-more a {
   display: inline-block;
   font-size: var(--text-xs);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
   text-transform: uppercase;
   letter-spacing: var(--tracking-kicker);
   color: var(--color-text);
   text-decoration: none;
-  padding-block: var(--space-1);
+  padding-block: calc(var(--space-2) + var(--space-1));
 }
-.section-nav a:hover { color: var(--color-accent); }
+.section-nav a:hover,
+.colophon-links a:hover { color: var(--color-accent); }
 .section-nav a[aria-current="page"] {
   color: var(--color-accent);
-  box-shadow: inset 0 -3px var(--color-accent);
+  box-shadow: inset 0 calc(var(--rule-heavy) * -1) var(--color-accent);
 }
 
+/* Colophon — the nameplate again, small, over the paper's own small print */
 .colophon {
   max-width: var(--page-max);
   margin: var(--space-6) auto 0;
-  padding: var(--space-3) var(--space-3) var(--space-4);
-  border-top: 1px solid var(--color-border);
+  padding-inline: var(--space-3);
+}
+.colophon-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  padding-block: var(--space-3) var(--space-5);
+  border-top: var(--rule) solid var(--color-text);
   font-size: var(--text-s);
   color: var(--color-muted);
 }
-.colophon p { margin: 0; }
+.colophon-title {
+  margin: 0;
+  font-size: var(--text-l);
+  font-weight: var(--weight-headline);
+  letter-spacing: var(--tracking-headline);
+  color: var(--color-text);
+}
+.colophon-note { flex-basis: 100%; margin-top: var(--space-2); }
+.colophon-note p { margin: 0; }
+.colophon-note a { color: inherit; }
 
 /* Shared newsroom voice ------------------------------------------------------ */
 
 .kicker {
   font-size: var(--text-xs);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
   text-transform: uppercase;
   letter-spacing: var(--tracking-kicker);
   color: var(--color-accent);
   margin: 0 0 var(--space-1);
 }
+/* A section is a fixed key. The templates print the five labels (hidden) and
+   the value as written; a known key shows its label in the site's language,
+   an unknown one stays as written. */
+[data-section="News"] .section-news,
+[data-section="Business"] .section-business,
+[data-section="Culture"] .section-culture,
+[data-section="Sport"] .section-sport,
+[data-section="Opinion"] .section-opinion { display: inline; }
+[data-section="News"] .section-raw,
+[data-section="Business"] .section-raw,
+[data-section="Culture"] .section-raw,
+[data-section="Sport"] .section-raw,
+[data-section="Opinion"] .section-raw { display: none; }
 .kicker a { color: var(--color-accent); text-decoration: none; }
 .kicker a:hover { text-decoration: underline; }
 .kicker-tags a { margin-right: var(--space-2); }
 
 .dateline {
   font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
   color: var(--color-muted);
   margin: 0;
 }
-.dateline .byline { font-weight: 700; color: var(--color-text); }
+.dateline .byline { font-weight: var(--weight-strong); color: var(--color-text); }
 
 .standfirst {
   font-size: var(--text-l);
@@ -190,16 +249,30 @@ main {
   text-wrap: pretty;
 }
 
-/* The front page — the signature --------------------------------------------
-   One lead story, a tier of secondaries, then the briefs. All hierarchy is
-   structural (:first-child, :nth-child) so the newest story always leads. */
-
-.front-head {
-  margin: var(--space-4) 0 var(--space-2);
+/* Long words (twelve letters and up) hyphenate in the page's language, so a
+   compound noun breaks at a syllable before it has to break anywhere */
+.story-card-headline,
+.story-head h1,
+.standfirst,
+.dateline,
+.prose {
+  hyphens: auto;
+  hyphenate-limit-chars: 12 4 4;
 }
+/* …but never an address or code: an added hyphen would read as part of it */
+.prose a, .prose code { hyphens: manual; }
+
+/* The front page — the signature --------------------------------------------
+   One lead story, five secondaries, then the briefs. All hierarchy is
+   structural (:first-child, :nth-child) so the newest story always leads, and
+   it is carried by type alone: a cover photo is welcome on the lead, never
+   needed. Breakpoints (768px, 1100px) cannot be tokens — media queries do not
+   read custom properties — and they are screen-only, so paper gets one column. */
+
+.front-head { margin: var(--space-4) 0 var(--space-2); }
 .front-label {
   font-size: var(--text-xs);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
   text-transform: uppercase;
   letter-spacing: var(--tracking-kicker);
   color: var(--color-muted);
@@ -211,123 +284,282 @@ main {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   column-gap: var(--front-gap);
 }
 
 .story-card {
-  border-top: 1px solid var(--color-border);
+  position: relative;
+  border-top: var(--rule) solid var(--color-border);
   padding-block: var(--space-3) var(--space-4);
 }
 .story-card article { max-width: var(--measure); }
+.story-card .kicker { color: var(--color-muted); }
 .story-card .standfirst {
   font-size: var(--text-m);
   color: var(--color-muted);
-  margin: 0 0 var(--space-2);
 }
+.story-card-cover { display: none; }
 
 .story-card-headline {
   font-size: var(--text-l);
   font-weight: var(--weight-headline);
   line-height: var(--leading-tight);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-headline);
   margin: 0 0 var(--space-2);
   text-wrap: balance;
 }
 .story-card-headline a { color: var(--color-text); text-decoration: none; }
-.story-card-headline a:hover { color: var(--color-accent); }
-.story-card-headline a:hover { text-decoration: underline; text-decoration-thickness: 2px; }
+.story-card-headline a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
 
-/* Tier 1 — the lead: the biggest type on the page */
-.front-grid > li:first-child { border-top: 3px solid var(--color-text); }
-.front-grid > li:first-child .story-card-headline { font-size: var(--text-lead); }
-.front-grid > li:first-child .standfirst { font-size: var(--text-l); }
+/* Tier 1 — the lead: an ink rule, then the biggest type on the page */
+.front-grid > li:first-child { border-top: var(--rule-heavy) solid var(--color-text); }
+.front-grid > li:first-child article { max-width: none; }
+.front-grid > li:first-child .story-card-headline {
+  font-size: var(--text-lead);
+  margin-bottom: var(--space-3);
+}
+.front-grid > li:first-child .standfirst {
+  max-width: 34rem;
+  font-size: var(--text-l);
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+}
+.front-grid > li:first-child .story-card-cover {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  margin-bottom: var(--space-3);
+}
+.front-grid > li.has-cover:first-child .story-card-headline { font-size: var(--text-xl); }
 
-/* A featured story is signed with press blue instead of ink */
-.front-grid > li.is-featured { border-top-color: var(--color-accent); border-top-width: 3px; }
+/* The editor's pick: the lead and any featured story are signed in press blue */
+.front-grid > li:first-child .kicker,
+.front-grid > li.is-featured .kicker { color: var(--color-accent); }
 
-/* Tier 3 — the briefs: compact headline list, standfirsts tucked away */
-.front-grid > li:nth-child(n+6) { padding-block: var(--space-2) var(--space-3); }
-.front-grid > li:nth-child(n+6) .story-card-headline { font-size: var(--text-m); }
-.front-grid > li:nth-child(n+6) .standfirst { display: none; }
+/* A paper with no sections has no kicker to sign: its featured stories carry
+   the press-blue square where the kicker would sit */
+.front-grid > li.is-featured[data-section=""]:not(:first-child) article::before {
+  content: "\25A0";
+  content: "\25A0" / "";
+  display: block;
+  font-size: var(--text-xs);
+  line-height: var(--leading-body);
+  color: var(--color-accent);
+  margin-bottom: var(--space-1);
+}
 
-/* Two columns: the lead goes full width, the rest pair up */
-@media (min-width: 768px) {
-  .front-grid { grid-template-columns: repeat(2, 1fr); }
+/* Tier 3 — the briefs: one headline and one line of detail each, opened by
+   an ink rule and a label (the card's data-tier text) */
+.front-grid > li:nth-child(n+7) { padding-block: var(--space-2) var(--space-3); }
+.front-grid > li:nth-child(n+7) article {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-2);
+}
+.front-grid > li:nth-child(n+7) .story-card-headline {
+  order: -2;
+  flex-basis: 100%;
+  font-size: var(--text-m);
+  margin-bottom: var(--space-1);
+}
+.front-grid > li:nth-child(n+7) .kicker,
+.front-grid > li.is-featured[data-section=""]:nth-child(n+7) article::before { margin: 0; }
+.front-grid > li:nth-child(n+7) .standfirst { display: none; }
+/* …except a featured brief, which keeps its secondary size and standfirst */
+.front-grid > li.is-featured:nth-child(n+7) .story-card-headline { font-size: var(--text-l); }
+.front-grid > li.is-featured:nth-child(n+7) .standfirst {
+  display: block;
+  order: -1;
+  flex-basis: 100%;
+}
+
+.front-grid > li:nth-child(7) { border-top-color: var(--color-text); }
+.front-grid > li:nth-child(7)::before {
+  content: attr(data-tier);
+  display: block;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-strong);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-kicker);
+  margin-bottom: var(--space-2);
+}
+
+/* A page that borrows this template (the home page) shows the latest twelve */
+.front-latest > li:nth-child(n+13),
+.front-more { display: none; }
+.front-latest:has(> li:nth-child(13)) + .front-more {
+  display: block;
+  margin: 0;
+  border-top: var(--rule) solid var(--color-border);
+}
+
+/* The home page's own words, set small under the stories */
+.front-note {
+  columns: 2 22rem;
+  column-gap: var(--front-gap);
+  margin-top: var(--space-2);
+  padding-top: var(--space-3);
+  border-top: var(--rule) solid var(--color-border);
+  font-family: var(--font-serif);
+  font-size: var(--text-s);
+}
+.front-note p { break-inside: avoid; }
+
+/* Six tracks from tablet up: the lead runs full width, two secondaries share
+   the next row, three the row after, and the briefs pair up. A hairline in the
+   gutter separates neighbours. */
+@media screen and (min-width: 768px) {
+  .front-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .story-card { grid-column: span 3; }
   .front-grid > li:first-child { grid-column: 1 / -1; }
-}
+  .front-grid > li:nth-child(n+4):nth-child(-n+6) { grid-column: span 2; }
+  /* Few stories still make a whole page: a last row of one or two fills out */
+  .front-grid > li:nth-child(4):last-child { grid-column: 1 / -1; }
+  .front-grid > li:nth-child(4):nth-last-child(2),
+  .front-grid > li:nth-child(5):last-child { grid-column: span 3; }
 
-/* Three columns: the lead takes a 2×2 block; secondaries stack beside and
-   below it; the briefs regroup on a fresh row */
-@media (min-width: 1100px) {
-  .front-grid { grid-template-columns: repeat(3, 1fr); }
-  .front-grid > li:first-child {
-    grid-column: span 2;
-    grid-row: span 2;
-    padding-right: var(--front-gap);
-    border-right: 1px solid var(--color-border);
+  .front-grid > li:nth-child(5)::after,
+  .front-grid > li:nth-child(6)::after,
+  .front-grid > li:nth-child(2n+8)::after,
+  .front-grid > li:nth-child(3)::after {
+    content: "";
+    position: absolute;
+    inset-block: var(--space-3);
+    left: calc(var(--front-gap) / -2);
+    border-left: var(--rule) solid var(--color-border);
   }
-  .front-grid > li:nth-child(4) { grid-column: span 2; }
-  .front-grid > li:nth-child(6) { grid-column: 1; }
+
+  .front-grid > li:nth-child(8) { border-top-color: var(--color-text); }
+  .front-grid > li:nth-child(8)::before,
+  .front-grid > li:nth-child(9)::before {
+    content: attr(data-tier);
+    display: block;
+    font-size: var(--text-xs);
+    margin-bottom: var(--space-2);
+    visibility: hidden;
+  }
+  .front-grid > li:nth-child(9)::before { display: none; }
 }
 
-/* Story pages ----------------------------------------------------------------- */
+@media screen and (min-width: 768px) and (max-width: 1099.98px) {
+  .front-grid > li:nth-child(2):last-child,
+  .front-grid > li:nth-child(2n+7):last-child { grid-column: 1 / -1; }
+}
 
-.story-head {
+/* Wide screens: the lead takes two thirds of the page and two rows, with two
+   secondaries in the rail beside it; three more run beneath; the briefs go
+   three across. The lead is sized to fill its block with words. */
+@media screen and (min-width: 1100px) {
+  .story-card { grid-column: span 2; }
+  .front-grid > li:first-child {
+    grid-column: span 4;
+    grid-row: span 2;
+    display: flex;
+    padding-right: var(--front-gap);
+    border-right: var(--rule) solid var(--color-border);
+  }
+  .front-grid > li:first-child article {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .front-grid > li:first-child .dateline { margin-top: auto; }
+  .front-grid > li:first-child:last-child {
+    grid-column: 1 / -1;
+    padding-right: 0;
+    border-right: 0;
+  }
+
+  /* With a cover photo the lead grows a row, a third story joins the rail and
+     the last two secondaries share the row beneath */
+  .front-grid:has(> .has-cover:first-child) > li:first-child { grid-row: span 3; }
+  .front-grid:has(> .has-cover:first-child) > li:nth-child(5),
+  .front-grid:has(> .has-cover:first-child) > li:nth-child(6) { grid-column: span 3; }
+
+  .front-grid > li:nth-child(3)::after,
+  .front-grid > li:nth-child(2n+8)::after,
+  .front-grid:has(> .has-cover:first-child) > li:nth-child(5)::after { content: none; }
+  .front-grid > li:nth-child(n+8):not(:nth-child(3n+1))::after {
+    content: "";
+    position: absolute;
+    inset-block: var(--space-3);
+    left: calc(var(--front-gap) / -2);
+    border-left: var(--rule) solid var(--color-border);
+  }
+
+  .front-grid > li:nth-child(9) { border-top-color: var(--color-text); }
+  .front-grid > li:nth-child(9)::before { display: block; }
+
+  /* A last row of one or two briefs fills out, like the rows above it */
+  .front-grid > li:nth-child(3n+7):last-child { grid-column: 1 / -1; }
+  .front-grid > li:nth-child(3n+7):nth-last-child(2),
+  .front-grid > li:nth-child(3n+8):last-child { grid-column: span 3; }
+}
+
+/* Story pages — one column, one left edge ------------------------------------- */
+
+.story {
   max-width: var(--measure);
-  margin: var(--space-5) auto var(--space-3);
+  margin-inline: auto;
 }
+.story-head { margin: var(--space-5) 0 var(--space-3); }
 .story-head h1 {
   font-size: var(--text-xl);
   font-weight: var(--weight-headline);
   line-height: var(--leading-tight);
-  letter-spacing: -0.015em;
+  letter-spacing: var(--tracking-headline);
   margin: 0 0 var(--space-2);
   text-wrap: balance;
 }
 .story-head .standfirst { color: var(--color-muted); }
 .story-head .dateline {
-  border-block: 1px solid var(--color-border);
+  border-block: var(--rule) solid var(--color-border);
   padding-block: var(--space-2);
   margin-top: var(--space-3);
 }
 
-.story-cover {
-  max-width: var(--measure);
-  margin: var(--space-4) auto;
-}
+.story-cover { margin: var(--space-4) 0; }
 .story-cover img { display: block; width: 100%; }
 .story-cover figcaption,
 .prose figcaption {
   font-size: var(--text-xs);
   color: var(--color-muted);
-  padding-top: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
-  padding-bottom: var(--space-2);
+  padding-block: var(--space-2);
+  border-bottom: var(--rule) solid var(--color-border);
+}
+
+/* The end mark: a story closes on a small press-blue square */
+.story-copy > p:last-child::after {
+  content: " \25A0";
+  content: " \25A0" / "";
+  font-size: 0.7em;
+  color: var(--color-accent);
 }
 
 .story-return {
-  max-width: var(--measure);
-  margin: var(--space-5) auto 0;
+  margin: var(--space-4) 0 0;
+  border-top: var(--rule) solid var(--color-border);
 }
-.story-return a {
-  font-size: var(--text-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-kicker);
-  text-decoration: none;
-}
-.story-return a:hover { text-decoration: underline; }
+.story-return a,
+.front-more a { color: var(--color-accent); }
+.story-return a:hover,
+.front-more a:hover { text-decoration: underline; }
 
 /* Prose — the reading column, set in the serif ------------------------------- */
 
-.story-body {
-  max-width: var(--measure);
-  margin-inline: auto;
-  font-family: var(--font-serif);
-}
+.story-body { font-family: var(--font-serif); }
 
 .prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose li { margin-bottom: var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; padding-left: 1.25em; }
 
 /* Crossheads return to the house sans, so structure reads at a glance */
 .prose h2 {
@@ -335,24 +567,29 @@ main {
   font-size: var(--text-l);
   font-weight: var(--weight-headline);
   line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-headline);
   margin: var(--space-4) 0 var(--space-2);
 }
 .prose h3, .prose h4 {
   font-family: var(--font-sans);
   font-size: var(--text-m);
-  font-weight: 700;
+  font-weight: var(--weight-strong);
   line-height: var(--leading-tight);
   margin: var(--space-4) 0 var(--space-2);
 }
 
+/* A pull quote speaks in the headline voice, beside a press-blue bar */
 .prose blockquote {
   margin: var(--space-4) 0;
   padding-left: var(--space-3);
-  border-left: 3px solid var(--color-accent);
+  border-left: var(--rule-heavy) solid var(--color-accent);
+  font-family: var(--font-sans);
   font-size: var(--text-l);
+  font-weight: var(--weight-strong);
   line-height: var(--leading-standfirst);
+  text-wrap: balance;
 }
-.prose blockquote p { margin-bottom: var(--space-2); }
+.prose blockquote p:last-child { margin-bottom: 0; }
 
 .prose img {
   display: block;
@@ -376,9 +613,12 @@ main {
 }
 .prose pre code { background: none; padding: 0; font-size: var(--text-s); }
 
+/* A table is as wide as its words need. Cells wrap between words first; a
+   table still too wide for the column scrolls inside its own box. */
 .prose table {
+  display: block;
+  overflow-x: auto;
   border-collapse: collapse;
-  width: 100%;
   margin: 0 0 var(--space-3);
   font-family: var(--font-sans);
   font-size: var(--text-s);
@@ -386,9 +626,12 @@ main {
 }
 .prose th, .prose td {
   text-align: left;
-  padding: var(--space-2) var(--space-3);
-  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+  overflow-wrap: break-word;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  border-bottom: var(--rule) solid var(--color-border);
 }
+.prose th:last-child, .prose td:last-child { padding-right: 0; }
 .prose th {
   font-size: var(--text-xs);
   text-transform: uppercase;
@@ -398,7 +641,7 @@ main {
 
 .prose hr {
   border: 0;
-  border-top: 1px solid var(--color-border);
+  border-top: var(--rule) solid var(--color-border);
   margin: var(--space-5) auto;
   width: 5rem;
 }
@@ -407,21 +650,28 @@ main {
 
 .pagination {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: baseline;
-  gap: var(--space-4);
-  padding: var(--space-4) 0 var(--space-2);
-  border-top: 1px solid var(--color-border);
+  gap: 0 var(--space-4);
+  padding: var(--space-3) 0 var(--space-2);
+  border-top: var(--rule) solid var(--color-border);
   font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
   color: var(--color-muted);
 }
-.pagination a { font-weight: 700; text-decoration: none; }
+.pagination a {
+  font-weight: var(--weight-strong);
+  text-decoration: none;
+  padding-block: var(--space-2);
+}
 .pagination a:hover { text-decoration: underline; }
 
 .empty {
   color: var(--color-muted);
-  border-top: 1px solid var(--color-border);
+  border-top: var(--rule-heavy) solid var(--color-text);
   padding-block: var(--space-4);
+  margin: 0;
 }
 
 /* Motion & print ------------------------------------------------------------ */
@@ -430,14 +680,26 @@ main {
   html { scroll-behavior: smooth; }
 }
 
+/* On paper every token goes to black on white, whichever scheme is active */
 @media print {
-  body { font-size: 11pt; color: #000; background: #fff; }
-  .section-nav, .skip-link, .colophon, .pagination, .story-return { display: none; }
-  .site-title { border-bottom-color: #000; }
+  :root {
+    --color-bg: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-border: #999;
+    --color-code-bg: #fff;
+  }
+  body { font-size: 11pt; }
+  main { min-height: 0; }
+  .section-nav, .skip-link, .colophon, .pagination, .story-return, .front-more { display: none; }
   a { color: inherit; }
   .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
   .prose pre { white-space: pre-wrap; }
+  .prose table { overflow-x: visible; }
+  .prose th, .prose td { overflow-wrap: anywhere; }
   .front-grid { display: block; }
-  .story-card { break-inside: avoid; }
-  .front-grid > li:nth-child(n+6) .standfirst { display: block; }
+  .story-card, .story-cover, .prose blockquote { break-inside: avoid; }
+  h1, h2, h3, .story-card-headline { break-after: avoid; }
+  .front-grid > li:nth-child(n+7) .standfirst { display: block; order: -1; flex-basis: 100%; }
 }

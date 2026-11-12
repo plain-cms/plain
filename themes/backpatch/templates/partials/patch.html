@@ -1,0 +1,7 @@
+<li class="patch" data-status="{{ item.status }}">
+        <time class="patch-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time>
+        <a class="patch-city" href="{{ item.url }}">{{#if item.city}}{{ item.city }}{{else}}{{ item.title }}{{/if}}</a>
+        {{#if item.venue}}<span class="patch-venue">{{ item.venue }}</span>
+        {{/if}}{{#if item.support}}<span class="patch-support">{{ strings.withSupport }} {{ item.support }}</span>
+        {{/if}}<span class="patch-foot">{{#if item.status}}<span class="status"><span class="status-raw">{{ item.status }}</span><span class="status-on">{{ strings.statusOnSale }}</span><span class="status-sold">{{ strings.statusSoldOut }}</span><span class="status-free">{{ strings.statusFreeEntry }}</span></span>{{/if}}{{#if item.ticketsUrl}}<a class="tickets" href="{{ item.ticketsUrl }}" aria-label="{{ strings.tickets }}: {{ item.title }}">{{ strings.tickets }}</a>{{/if}}</span>
+      </li>

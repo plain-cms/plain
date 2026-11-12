@@ -1,0 +1,15 @@
+<article class="program">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" loading="lazy" decoding="async">
+  {{/if}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  <aside class="involved" aria-labelledby="involved">
+    <h2 class="lines-head" id="involved"><span aria-hidden="true">{{ strings.lineNo }}</span><span>{{ strings.getInvolved }}</span></h2>
+    {{> lines}}
+  </aside>
+</article>

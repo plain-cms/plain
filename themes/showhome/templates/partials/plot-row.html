@@ -1,0 +1,8 @@
+<tr data-status="{{ item.status }}">
+          <th scope="row" class="c-title"><a href="{{ item.url }}">{{ item.title }}</a>{{#if item.address}}<span class="c-addr">{{ item.address }}</span>{{/if}}</th>
+          <td class="c-fig{{#if item.beds}}{{else}} is-gap{{/if}}">{{#if item.beds}}<b>{{ item.beds }}</b> <span class="unit">{{ strings.beds }}</span>{{else}}{{> gap}}{{/if}}</td>
+          <td class="c-fig{{#if item.baths}}{{else}} is-gap{{/if}}">{{#if item.baths}}<b>{{ item.baths }}</b> <span class="unit">{{ strings.baths }}</span>{{else}}{{> gap}}{{/if}}</td>
+          <td class="c-area{{#if item.area}}{{else}} is-gap{{/if}}">{{#if item.area}}{{ item.area }}{{else}}{{> gap}}{{/if}}</td>
+          <td class="c-price{{#if item.price}}{{else}} is-gap{{/if}}">{{#if item.price}}{{ item.price }}{{else}}{{> gap}}{{/if}}</td>
+          <td class="c-status">{{#if item.status}}<span class="status" data-status="{{ item.status }}"><span class="status-raw">{{ item.status }}</span>{{> status-words}}<span class="sticker" aria-hidden="true"></span></span>{{/if}}</td>
+        </tr>

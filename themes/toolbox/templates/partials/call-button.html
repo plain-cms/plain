@@ -1,0 +1,1 @@
+{{#if data.business.phone}}<a class="btn-call" href="tel:{{ data.business.phone }}">{{ strings.call }} {{ data.business.phone }}</a>{{else}}{{#if data.business.email}}<a class="btn-call btn-mail" href="mailto:{{ data.business.email }}">{{ data.business.email }}</a>{{/if}}{{/if}}

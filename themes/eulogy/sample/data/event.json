@@ -1,0 +1,51 @@
+{
+  "dateLabel": "Friday 20 November 2026",
+  "date": "2026-11-20",
+  "time": "2 pm",
+  "venue": "St Petroc’s Church, Otterbrook",
+  "address": "Church Street, Otterbrook, near Tiverford, Devon EX16 9RW",
+  "entry": "Wear something bright if you can. Ruth never liked black.",
+  "replyBy": "Monday 9 November 2026",
+  "replyEmail": "family@ellacott.example",
+  "ticketsUrl": "",
+  "peopleLabel": "Taking part in the service",
+  "programme": [
+    {
+      "day": "The service",
+      "items": [
+        { "time": "", "title": "Music on entering", "place": "", "note": "Nimrod, from Elgar’s Enigma Variations, played by Martin Bale." },
+        { "time": "", "title": "Welcome", "place": "", "note": "The Revd Philippa Gale, Rector of Otterbrook." },
+        { "time": "", "title": "Hymn: The Lord’s my shepherd", "place": "", "note": "Sung to Crimond. The words are on the sheet you are given at the door." },
+        { "time": "", "title": "Reading: Ecclesiastes 3, verses 1 to 8", "place": "", "note": "“To every thing there is a season.” Read by Ana Ellacott, Ruth’s granddaughter." },
+        { "time": "", "title": "A life remembered", "place": "", "note": "Tom Ellacott, Ruth’s son, with words from some of the children she taught." },
+        { "time": "", "title": "Poem: Crossing the Bar", "place": "", "note": "By Alfred, Lord Tennyson. Read by Jean Pascoe, who swam in the sea with Ruth every Sunday morning for forty years." },
+        { "time": "", "title": "Song: The Parting Glass", "place": "", "note": "Sung by the Otterbrook Singers." },
+        { "time": "", "title": "Prayers", "place": "", "note": "" },
+        { "time": "", "title": "Hymn: Morning has broken", "place": "", "note": "Ruth’s own choice." },
+        { "time": "", "title": "Commendation and blessing", "place": "", "note": "" },
+        { "time": "", "title": "Music on leaving", "place": "", "note": "Sheep may safely graze, by Bach. The retiring collection is for the Otterbrook School library, which Ruth started." }
+      ]
+    },
+    {
+      "day": "Afterwards",
+      "items": [
+        { "time": "3 pm", "title": "Tea in the village hall", "place": "Otterbrook Village Hall, Mill Lane", "note": "Everyone is welcome. Her friends from the garden club are baking saffron buns to Ruth’s recipe." },
+        { "time": "5.30 pm", "title": "A drink at the Otter Inn", "place": "Fore Street", "note": "For anyone not ready to go home." }
+      ]
+    },
+    {
+      "day": "Saturday 21 November",
+      "items": [
+        { "time": "10.30 am", "title": "A walk to Ruth’s bench above the river", "place": "From the church gate", "note": "About an hour there and back on a field path. Boots, and dogs on leads, are welcome." }
+      ]
+    }
+  ],
+  "people": [
+    { "name": "The Revd Philippa Gale", "role": "Rector of Otterbrook", "note": "Leads the service." },
+    { "name": "Tom Ellacott", "role": "Ruth’s son", "note": "Gives the tribute." },
+    { "name": "Ana Ellacott", "role": "Ruth’s granddaughter", "note": "Reads from Ecclesiastes." },
+    { "name": "Jean Pascoe", "role": "A friend of forty years", "note": "Reads Crossing the Bar." },
+    { "name": "The Otterbrook Singers", "role": "Village choir", "note": "Ruth sang alto with them for thirty-one years." },
+    { "name": "Martin Bale", "role": "Organist", "note": "" }
+  ]
+}

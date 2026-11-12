@@ -1,0 +1,8 @@
+{{#if data.impact.stat.number}}<p class="rosette">
+      <span class="rosette-body"><span class="rosette-tails" aria-hidden="true"><span>{{#if strings.rosetteTail}}<span class="rosette-tail-word">{{ strings.rosetteTail }}</span>{{/if}}</span><span>{{#if strings.rosetteTail}}<span class="rosette-tail-word">{{ strings.rosetteTail }}</span>{{/if}}</span></span><span class="rosette-ring"><strong class="rosette-button">{{ data.impact.stat.number }}</strong></span></span>
+      {{#if data.impact.stat.unit}}<span class="rosette-caption"><span class="rosette-unit">{{ data.impact.stat.unit }}</span>{{#if data.impact.stat.verb}} {{ data.impact.stat.verb }}{{/if}}</span>
+      {{else}}{{#if data.impact.stat.verb}}<span class="rosette-caption">{{ data.impact.stat.verb }}</span>
+      {{/if}}{{/if}}
+    </p>{{else}}<div class="rosette" aria-hidden="true">
+      <span class="rosette-body"><span class="rosette-tails"><span>{{#if strings.rosetteTail}}<span class="rosette-tail-word">{{ strings.rosetteTail }}</span>{{/if}}</span><span>{{#if strings.rosetteTail}}<span class="rosette-tail-word">{{ strings.rosetteTail }}</span>{{/if}}</span></span><span class="rosette-ring"><span class="rosette-button rosette-plain"></span></span></span>
+    </div>{{/if}}

@@ -1,0 +1,18 @@
+<section class="board card">
+  <h2 class="board-h">{{ strings.programme }}</h2>
+  {{#each data.event.programme as part}}<div class="part">
+    {{#if part.day}}<h3 class="part-day">{{ part.day }}</h3>
+    {{/if}}<ol class="doors" role="list">
+      {{#each part.items as item}}<li class="door">
+        <div class="door-head"><span class="door-num" aria-hidden="true"></span>{{#if item.time}}<p class="door-time">{{ item.time }}</p>{{else}}<span class="door-star" aria-hidden="true"></span>{{/if}}</div>
+        <div class="door-text">
+          <p class="door-title">{{ item.title }}</p>
+          {{#if item.place}}<p class="door-place">{{ item.place }}</p>
+          {{/if}}{{#if item.note}}<p class="door-note">{{ item.note }}</p>
+        {{/if}}</div>
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+  {{/each}}
+</section>

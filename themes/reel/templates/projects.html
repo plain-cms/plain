@@ -1,0 +1,25 @@
+<section class="work">
+  {{#if page.slug}}<header class="intro">
+    <h1>{{ page.title }}</h1>
+    {{#if page.content}}<div class="prose intro-text">
+{{{ page.content }}}
+    </div>{{/if}}
+  </header>
+  {{#if collections.projects}}<ul class="reels">
+    {{#each collections.projects as item}}{{> reel}}
+    {{/each}}
+  </ul>
+  {{/if}}{{else}}<header class="intro intro-list">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if items}}
+  <ul class="reels">
+    {{#each items as item}}{{> reel}}
+    {{/each}}
+  </ul>
+  {{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{> pagination}}
+  {{/if}}
+</section>

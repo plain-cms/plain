@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
+{{#if page.description}}<meta name="description" content="{{ page.description }}">
+{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+{{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
+{{#if page.description}}<meta property="og:description" content="{{ page.description }}">
+{{/if}}{{#if page.date}}<meta property="og:type" content="article">
+{{else}}<meta property="og:type" content="website">
+{{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
+<meta name="twitter:card" content="summary_large_image">
+{{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
+<meta name="twitter:card" content="summary_large_image">
+{{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
+{{/each}}<meta name="color-scheme" content="light dark">
+{{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
+{{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+{{/if}}{{#if site.appleTouchIcon}}<link rel="apple-touch-icon" href="{{ site.appleTouchIcon }}">
+{{/if}}<link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
+<div class="act">
+<div class="binding" aria-hidden="true"><span class="seal"><span class="seal-disc"></span></span></div>
+<header class="masthead">
+  <a class="site-title" href="/">{{ site.title }}</a>
+  <nav aria-label="{{ strings.mainNav }}">
+    <ul>
+      {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
+      {{/each}}
+    </ul>
+  </nav>
+  {{#if data.firm.phone}}<p class="call"><span class="field-label">{{ strings.phoneLabel }}</span> <a href="tel:{{ data.firm.phone }}">{{ data.firm.phone }}</a></p>{{/if}}
+</header>
+<main id="main">
+{{{ body }}}
+</main>
+<aside class="consult" aria-labelledby="consult-heading">
+  <div class="consult-lead">
+    <h2 id="consult-heading">{{ strings.consultHeading }}</h2>
+    {{#if data.firm.consultNote}}<p class="consult-note">{{ data.firm.consultNote }}</p>{{/if}}
+  </div>
+  <div class="consult-reach">
+    {{#if data.firm.phone}}<p class="field"><span class="field-label">{{ strings.phoneLabel }}</span> <a class="phone" href="tel:{{ data.firm.phone }}">{{ data.firm.phone }}</a></p>{{/if}}
+    {{#if data.firm.email}}<p class="field"><span class="field-label">{{ strings.emailLabel }}</span> <a href="mailto:{{ data.firm.email }}">{{ data.firm.email }}</a></p>{{/if}}
+    {{#if data.firm.phone}}{{else}}{{#if data.firm.email}}{{else}}<p class="field"><a href="/contact/">{{ strings.contactLink }}</a></p>{{/if}}{{/if}}
+    {{#if data.firm.address}}<p class="field"><span class="field-label">{{ strings.addressLabel }}</span> {{ data.firm.address }}</p>{{/if}}
+  </div>
+  {{#if data.firm.hours}}<div class="consult-hours">
+    <h3 class="field-label">{{ strings.hoursLabel }}</h3>
+    <dl class="hours">
+      {{#each data.firm.hours as row}}<div><dt>{{ row.days }}</dt><dd>{{ row.time }}</dd></div>
+      {{/each}}
+    </dl>
+  </div>{{/if}}
+</aside>
+<footer class="colophon">
+  <p class="colophon-name">{{ site.title }}</p>
+  {{#if data.firm.registration}}<p class="registration">{{ data.firm.registration }}</p>{{/if}}
+  {{#if data.footer.html}}<div class="colophon-note">{{{ data.footer.html }}}</div>{{/if}}
+</footer>
+</div>
+</body>
+</html>

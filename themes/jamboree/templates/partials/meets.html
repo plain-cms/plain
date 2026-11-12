@@ -1,0 +1,12 @@
+<section class="blk blk-meets" aria-labelledby="meets-h">
+  <h2 class="blk-title" id="meets-h">{{ strings.meetsHeading }}</h2>
+  <ul class="meets" role="list">
+    {{#each data.club.meets as meet}}<li class="meet">
+      {{#if meet.day}}<p class="meet-day">{{ meet.day }}</p>
+      {{/if}}{{#if meet.time}}<p class="meet-time">{{ meet.time }}</p>
+      {{/if}}<p class="meet-what">{{ meet.what }}</p>
+      {{#if meet.place}}<p class="meet-place">{{ meet.place }}</p>
+      {{/if}}</li>
+    {{/each}}
+  </ul>
+</section>

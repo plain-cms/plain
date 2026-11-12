@@ -1,0 +1,16 @@
+<section class="page list">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if items}}<ol class="entries">
+    {{#each items as item}}<li class="entry">
+      <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      <p class="page-meta"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+      {{#if item.description}}<p class="entry-text">{{ item.description }}</p>{{/if}}
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{> pagination}}
+</section>

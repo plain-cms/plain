@@ -1,0 +1,8 @@
+<li class="drawer" data-status="{{ item.status }}">
+  <p class="plate">{{ item.category }}</p>
+  <div class="card">
+    <h2 class="card-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+    {{#if item.price}}<p class="card-price"><span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}</p>{{/if}}
+    {{#if item.status}}<p class="stamp"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ item.status }}</span></p>{{/if}}
+  </div>
+</li>

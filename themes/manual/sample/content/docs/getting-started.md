@@ -7,7 +7,7 @@ nextTitle: Installation
 example: true
 ---
 
-mkweb is a command-line tool that turns a folder of Markdown files into a static website. There is no server, no database, and no plugin ecosystem to maintain — the entire mental model fits in one sentence: **every file in `pages/` becomes a page at the matching URL.**
+There is no server, no database, and no plugin ecosystem to maintain. The entire mental model fits in one sentence: **every file in `pages/` becomes a page at the matching URL.**
 
 ## The five-minute version
 
@@ -33,10 +33,10 @@ A new project is four things:
 
 ```
 my-site/
-├── mkweb.json      # configuration (optional to start)
-├── pages/          # Markdown in, HTML out
-├── static/         # copied to the output as-is
-└── public/         # the build output (never edit by hand)
+├── mkweb.json   # optional settings
+├── pages/       # Markdown in, HTML out
+├── static/      # copied as-is
+└── public/      # the build output
 ```
 
 The rules are deliberately dull:
@@ -49,4 +49,4 @@ The rules are deliberately dull:
 
 ## Where to next
 
-Work through the manual in order — it's numbered like a checklist. The next section covers [installing mkweb](/docs/installation/) on every platform; after that, [configuration](/docs/configuration/) and the full [command reference](/docs/commands/).
+Work through the manual in order — it's numbered like a checklist. The next section covers [installing mkweb](/docs/installation/) on every platform; after that, [writing pages](/docs/writing-pages/) and adding [images and files](/docs/images-and-files/).

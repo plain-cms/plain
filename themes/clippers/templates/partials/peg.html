@@ -1,0 +1,10 @@
+<li class="hang">
+  <div class="hang-text">
+    <p class="hang-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    {{#if item.description}}<p class="summary">{{ item.description }}</p>
+    {{/if}}
+  </div>
+  {{#if item.priceFrom}}<p class="guard" data-price="{{ item.priceFrom }}"><small>{{ strings.from }}</small> <b>{{ item.priceFrom }}</b></p>
+  {{else}}<span class="guard guard-blank" aria-hidden="true"></span>
+  {{/if}}
+</li>

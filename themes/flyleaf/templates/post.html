@@ -1,0 +1,14 @@
+<article class="spread post">
+  <header class="verso">
+    {{#if page.dateFormatted}}<p class="meta"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>{{/if}}
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>{{/if}}
+    {{#if page.tagLinks}}<ul class="tags" role="list">{{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>{{/each}}</ul>{{/if}}
+  </header>
+  {{#if page.cover}}<div class="recto prose">
+    <img class="cover" src="{{ page.cover }}" alt="" decoding="async">
+{{{ page.content }}}
+  </div>{{else}}{{#if page.content}}<div class="recto prose">
+{{{ page.content }}}
+  </div>{{/if}}{{/if}}
+</article>

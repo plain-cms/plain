@@ -1,0 +1,13 @@
+<section class="page">
+  <header class="page-header split">
+    <h1>{{ page.title }}</h1>
+    {{#if items}}<p class="lead">{{ strings.servicesNote }}</p>{{/if}}
+  </header>
+  {{#if items}}<div class="sheet">
+    <ol class="rows">
+      {{#each items as item}}{{> service-row}}
+      {{/each}}
+    </ol>
+  </div>{{else}}<p class="empty">{{ strings.servicesEmpty }}</p>{{/if}}
+  {{> pagination}}
+</section>

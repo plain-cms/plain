@@ -1,5 +1,6 @@
 {
   "starter": "keys",
+  "sampleTitle": "Harber & Voss",
   "collections": {
     "listings": {
       "path": "content/listings",
@@ -15,11 +16,12 @@
         { "name": "title", "type": "text", "required": true },
         { "name": "date", "type": "date", "required": true },
         { "name": "price", "type": "text" },
-        { "name": "status", "type": "select", "options": ["For sale", "Under offer", "Sold"] },
+        { "name": "status", "type": "select", "options": ["For sale", "Under offer", "Sold", "To let", "Let agreed", "Available", "Booked"] },
         { "name": "beds", "type": "text" },
         { "name": "baths", "type": "text" },
         { "name": "area", "type": "text" },
         { "name": "address", "type": "text" },
+        { "name": "description", "type": "text" },
         { "name": "cover", "type": "image" },
         { "name": "photos", "type": "list" },
         { "name": "draft", "type": "boolean", "default": false }

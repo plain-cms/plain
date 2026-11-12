@@ -1,0 +1,16 @@
+<article class="item">
+  <div class="flap">
+    <header class="item-head">
+      {{#if page.section}}<p class="sec">{{ page.section }}</p>{{/if}}
+      <div class="line">
+        <h1 class="name">{{ page.title }}</h1>
+        {{#if page.price}}<p class="price">{{ page.price }}</p>{{/if}}
+      </div>
+      {{#if page.description}}<p class="desc">{{ page.description }}</p>{{/if}}
+    </header>
+    {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+    </div>{{/if}}
+  </div>
+  <p class="back"><a href="/menu/">{{ strings.backToMenu }}</a></p>
+</article>

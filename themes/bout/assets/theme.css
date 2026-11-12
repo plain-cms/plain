@@ -1,0 +1,443 @@
+/* Bout — a boxing gym theme (classes family).
+   The object is the letterpress fight poster: wood-type names stacked in red
+   and black on yellow stock, small slab lines and stars between. The page is
+   the poster sheet; the timetable is the bill. Each day is a bill under its
+   day name, every class one equal centred line of poster capitals, black and
+   red in turn, with time, coach and level in a small slab line and a row of
+   stars between. Red is kept to those large capitals. No cards, no boxes.
+   All design decisions are the tokens below: edit tokens, never selectors. */
+
+:root {
+  /* Type: wood-type condensed capitals over a slab body */
+  --font-poster: Impact, Haettenschweiler, "Franklin Gothic Demi Cond", "Arial Narrow", "Liberation Sans Narrow", "Nimbus Sans Narrow", sans-serif-condensed, sans-serif;
+  --font-slab: Rockwell, "Rockwell Nova", "Roboto Slab", "Zilla Slab", "DejaVu Serif", Georgia, serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --weight-poster: 700;
+  --weight-slab: 700;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  --text-head: clamp(1.9rem, 0.9rem + 5vw, 4.75rem);
+  --text-hero: clamp(2.4rem, 0.4rem + 8.5vw, 7.5rem);
+  --text-bout: clamp(1.6rem, 11cqi, 2.75rem);
+  --leading-body: 1.6;
+  --leading-poster: 1.12;
+  --tracking-caps: 0.14em;
+
+  /* Colour: poster-yellow stock, wood-type black, fight-bill red */
+  --color-bg: #f2c12e;
+  --color-text: #16130e;
+  --color-muted: #4a3a0c;
+  --color-accent: #a8141c;
+  --color-rule: #16130e;
+  --color-panel: rgba(22,19,14,0.08);
+  --color-selection: rgba(168,20,28,0.25);
+
+  /* Measures */
+  --measure: 40rem;
+  --page-width: 76rem;
+  --bill-min: 19rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --rule-heavy: 6px;
+  --rule-thin: 2px;
+  --tap-target: 2.75rem;
+  --photo-width: 15rem;
+  --photo-ratio: 0.8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The poster at night: black stock, yellow ink, a warmer red */
+    --color-bg: #14110d;
+    --color-text: #f2c94c;
+    --color-muted: #cbb98c;
+    --color-accent: #f0573a;
+    --color-rule: #f2c94c;
+    --color-panel: rgba(242,201,76,0.08);
+    --color-selection: rgba(240,87,58,0.35);
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: light dark; }
+
+body {
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+  max-width: var(--page-width);
+  font-family: var(--font-slab);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+::selection { background: var(--color-selection); }
+
+a { color: var(--color-text); text-decoration-thickness: var(--rule-thin); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: calc(var(--rule-thin) * 2); }
+
+:focus-visible { outline: 3px solid var(--color-text); outline-offset: 3px; }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 5;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+.skip-link:focus { left: var(--space-2); }
+
+main { min-height: 50vh; }
+
+/* Poster capitals: one rule for every wood-type line. Impact has one weight,
+   so the browser is told not to fake a bolder one. */
+.site-title, .poster-head h1, .bout-name, .entry-name, .prose h2, .prose h3,
+.on-the-bill h2, .imprint-name, .eyebrow {
+  font-family: var(--font-poster);
+  font-weight: var(--weight-poster);
+  font-synthesis: none;
+  line-height: var(--leading-poster);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  hyphens: auto;
+  text-wrap: balance;
+}
+
+/* Small slab capitals: the poster's set lines */
+.menu a, .ticket, .bill-day, .bill-heading, .discipline, .pagination, .post-meta, .entry-date {
+  font-family: var(--font-slab);
+  font-weight: var(--weight-slab);
+  font-size: var(--text-s);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+
+/* Masthead: venue name, the menu, a ticket to the first class -------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  padding: var(--space-3) 0 var(--space-2);
+  border-bottom: var(--rule-heavy) solid var(--color-rule);
+  box-shadow: 0 4px 0 var(--color-bg), 0 calc(4px + var(--rule-thin)) 0 var(--color-rule);
+}
+.site-title {
+  flex: 1 1 8.5rem;
+  min-width: 0;
+  font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.1rem);
+  color: var(--color-text);
+  text-decoration: none;
+}
+.menu { order: 1; flex: 1 0 100%; }
+.menu ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.menu a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+.menu a:hover { border-bottom-color: var(--color-muted); }
+@media (max-width: 56em) {
+  .menu ul { justify-content: space-between; column-gap: var(--space-2); }
+  .menu a { font-size: clamp(0.75rem, 0.35rem + 2.3vw, var(--text-s)); letter-spacing: 0.02em; }
+}
+.menu a[aria-current="page"] { border-bottom-color: var(--color-rule); }
+
+@media (min-width: 56em) {
+  .masthead { flex-wrap: nowrap; column-gap: var(--space-4); }
+  .site-title { flex: 0 1 auto; max-width: 24rem; }
+  .menu { order: 0; flex: 1 1 0; min-width: 0; }
+  .menu ul { justify-content: center; gap: 0 var(--space-4); }
+  .masthead > .ticket { flex: none; }
+}
+
+/* The ticket: a black block printed in the stock colour */
+.ticket {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap-target);
+  padding: var(--space-1) var(--space-3);
+  text-align: center;
+  text-decoration: none;
+  color: var(--color-bg);
+  background: var(--color-text);
+}
+.masthead > .ticket { margin-left: auto; }
+.ticket:hover { color: var(--color-text); background: var(--color-bg); box-shadow: inset 0 0 0 var(--rule-thin) var(--color-text); }
+
+/* Page heads: the poster's headline, centred, under a row of stars --------- */
+
+.poster-head { max-width: 62rem; margin: var(--space-4) auto var(--space-3); text-align: center; }
+/* On a page that carries the bill, the headline is the poster's top line: full measure */
+.poster-head.top-line { max-width: none; margin-top: var(--space-3); }
+.poster-head.top-line h1 { font-size: var(--text-hero); letter-spacing: 0; }
+.poster-head::before {
+  content: "★ ★ ★" / "";
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-s);
+  letter-spacing: 0.6em;
+  padding-left: 0.6em;
+}
+.poster-head h1 { margin: 0; font-size: var(--text-head); overflow-wrap: break-word; }
+.lede { max-width: 44rem; margin: var(--space-2) auto 0; font-size: var(--text-l); line-height: 1.45; text-wrap: balance; }
+.discipline { margin: var(--space-3) 0 0; hyphens: auto; }
+.eyebrow { margin: 0 0 var(--space-2); font-size: calc(var(--text-head) * 1.5); color: var(--color-accent); }
+.post-meta { margin: var(--space-3) 0 0; }
+.tag { margin-left: var(--space-2); }
+
+/* THE SIGNATURE: the week as a fight bill ----------------------------------
+   Day bills sit side by side on a wide screen, one above the other on a
+   phone. Inside a bill every class is the same size, centred, black then red
+   in turn; the type is sized from the bill's own width so a long name wraps
+   in balanced lines instead of shrinking. Stars are drawn between bouts. */
+
+.fight-card { margin: var(--space-4) 0 var(--space-5); }
+.poster-head + .fight-card { margin-top: var(--space-3); }
+
+.bill-heading { display: flex; align-items: center; gap: var(--space-3); margin: 0 0 var(--space-3); text-align: center; }
+.bill-heading::before, .bill-heading::after { content: ""; flex: 1 1 0; border-top: var(--rule-thin) solid var(--color-rule); }
+.bill-heading span { flex: 0 1 auto; min-width: 0; }
+
+.week {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--bill-min), 100%), 1fr));
+  gap: var(--space-5) var(--space-4);
+}
+
+.bill { container-type: inline-size; min-width: 0; text-align: center; }
+
+.bill-day {
+  margin: 0 0 var(--space-2);
+  padding: var(--space-2) 0;
+  font-size: var(--text-m);
+  line-height: 1.3;
+  border-top: var(--rule-heavy) solid var(--color-rule);
+  border-bottom: var(--rule-thin) solid var(--color-rule);
+  hyphens: auto;
+}
+
+.today-flag { display: inline-block; margin-left: var(--space-2); padding: 0.15em 0.5em; font-size: 0.75em; line-height: 1.2; vertical-align: 0.1em; color: var(--color-bg); background: var(--color-text); }
+.today-flag[hidden] { display: none; }
+
+.bouts { margin: 0; padding: 0; list-style: none; }
+
+.bout + .bout::before {
+  content: "★ ★ ★" / "";
+  display: block;
+  margin: 0.75rem 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.7em;
+  padding-left: 0.7em;
+  line-height: 1;
+}
+
+.bout-name {
+  display: block;
+  font-size: var(--text-bout);
+  overflow-wrap: break-word;
+}
+.bout:nth-child(even) .bout-name { color: var(--color-accent); }
+
+.bout-line {
+  display: block;
+  margin-top: var(--space-1);
+  font-size: var(--text-s);
+  line-height: 1.4;
+  hyphens: manual;
+  text-wrap: balance;
+}
+.bout-line:empty { display: none; }
+.bout-time { font-weight: var(--weight-slab); }
+.bout-line > :not(:last-child)::after { content: "\00a0·" / ""; margin-right: 0.2em; font-weight: var(--weight-slab); }
+
+.bill-none { margin: 0; font-style: italic; color: var(--color-muted); }
+
+.trial-note {
+  max-width: var(--measure);
+  margin: var(--space-5) auto 0;
+  padding: var(--space-3) 0;
+  text-align: center;
+  font-weight: var(--weight-slab);
+  border-top: var(--rule-thin) solid var(--color-rule);
+  border-bottom: var(--rule-thin) solid var(--color-rule);
+  hyphens: manual;
+  text-wrap: balance;
+}
+
+/* Prose -------------------------------------------------------------------- */
+
+.prose { max-width: var(--measure); margin: var(--space-4) auto 0; hyphens: manual; }
+.prose h2, .prose h3 { margin: var(--space-4) 0 var(--space-2); }
+.prose h2 { font-size: var(--text-xl); }
+.prose h3 { font-size: var(--text-l); }
+.prose h4 { margin: var(--space-4) 0 var(--space-1); font-size: var(--text-m); }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-3); }
+.prose li { margin-bottom: var(--space-1); }
+.prose a { overflow-wrap: anywhere; }
+@media (max-width: 30em) { .prose { hyphens: auto; } .prose a, .prose code, .prose table { hyphens: manual; } }
+.prose img { max-width: 100%; height: auto; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: var(--rule-thin) solid var(--color-rule); }
+
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: 0 0 0 var(--space-3);
+  border-left: var(--rule-heavy) solid var(--color-rule);
+  font-style: italic;
+}
+
+.prose code { font-family: var(--font-mono); font-size: 0.9em; background: var(--color-panel); padding: 0.1em 0.3em; }
+.prose pre { max-width: 100%; overflow-x: auto; padding: var(--space-3); background: var(--color-panel); }
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); }
+
+/* Tables scroll inside their own box; the page never does */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0 0 var(--space-3);
+  border-collapse: collapse;
+  font-variant-numeric: tabular-nums;
+  /* an inked edge shows on the side that has more table to scroll to */
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) left / 1.5rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) right / 1.5rem 100% no-repeat local,
+    linear-gradient(to right, var(--color-rule), transparent) left / 5px 100% no-repeat scroll,
+    linear-gradient(to left, var(--color-rule), transparent) right / 5px 100% no-repeat scroll;
+}
+.prose th, .prose td {
+  min-width: 6.5em;
+  padding: var(--space-2) var(--space-3) var(--space-2) 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: var(--rule-thin) solid var(--color-panel);
+}
+.prose th {
+  font-size: var(--text-s);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border-bottom: var(--rule-thin) solid var(--color-rule);
+}
+.prose td:first-child { font-weight: var(--weight-slab); }
+.prose td:last-child { min-width: 12em; }
+
+.cover { display: block; width: 100%; max-width: 52rem; height: auto; margin: 0 auto var(--space-4); }
+
+/* Coaches: the undercard ------------------------------------------------- */
+
+.roster {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+  gap: var(--space-5) var(--space-4);
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+.entry { min-width: 0; padding-top: var(--space-3); text-align: center; border-top: var(--rule-heavy) solid var(--color-rule); }
+.entry-name { margin: 0; font-size: var(--text-xl); }
+.entry-name a { text-decoration: none; }
+.entry-name a:hover { text-decoration: underline; }
+.entry:nth-child(even) .entry-name a { color: var(--color-accent); }
+.entry .discipline { margin-top: var(--space-2); }
+.entry-date { margin: var(--space-2) 0 0; }
+.entry-summary { max-width: 30rem; margin: var(--space-2) auto 0; text-wrap: pretty; }
+
+.entry-photo, .coach-photo {
+  display: block;
+  margin: 0 auto var(--space-3);
+  aspect-ratio: var(--photo-ratio);
+  object-fit: cover;
+  border: var(--rule-heavy) solid var(--color-rule);
+  filter: grayscale(1);
+}
+.entry-photo { width: 7rem; }
+.coach-photo { width: min(100%, var(--photo-width)); }
+
+.on-the-bill {
+  max-width: var(--measure);
+  margin: var(--space-5) auto 0;
+  padding-top: var(--space-3);
+  text-align: center;
+  border-top: var(--rule-heavy) solid var(--color-rule);
+}
+.on-the-bill h2 { margin: 0 0 var(--space-2); font-size: var(--text-xl); color: var(--color-accent); }
+.on-the-bill p { margin: 0 0 var(--space-3); }
+
+.empty { text-align: center; font-style: italic; color: var(--color-muted); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-5);
+}
+.pagination a { display: inline-flex; align-items: center; min-height: var(--tap-target); }
+
+.exits { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: var(--space-3) var(--space-4); margin: var(--space-4) 0; padding: 0; list-style: none; }
+
+/* Imprint ------------------------------------------------------------------ */
+
+.imprint {
+  margin-top: var(--space-5);
+  padding: var(--space-4) 0;
+  text-align: center;
+  border-top: var(--rule-thin) solid var(--color-rule);
+  box-shadow: inset 0 calc(4px + var(--rule-thin)) 0 var(--color-bg), inset 0 calc(4px + var(--rule-thin) + var(--rule-heavy)) 0 var(--color-rule);
+  padding-top: calc(var(--space-4) + var(--rule-heavy));
+}
+.imprint p { margin: 0 0 var(--space-2); }
+.imprint-name { font-size: var(--text-l); }
+.imprint-note { font-size: var(--text-s); color: var(--color-muted); }
+.imprint-note > * { margin: 0 0 var(--space-1); }
+
+/* Motion ------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  a, .ticket { transition: color 0.15s, background-color 0.15s; }
+}
+
+/* Print: the bill pinned on the noticeboard, black on white paper ---------- */
+
+@media print {
+  html:root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #a8141c;
+    --color-rule: #000000;
+    --color-panel: rgba(0,0,0,0.08);
+  }
+  body { max-width: none; padding: 0; font-size: 10pt; }
+  main { min-height: 0; }
+  .menu, .ticket, .skip-link, .pagination, .on-the-bill, .today-flag, .exits { display: none; }
+  .masthead { padding: 0 0 var(--space-2); box-shadow: none; }
+  .poster-head { margin: var(--space-3) auto; }
+  .poster-head h1 { font-size: 26pt; }
+  .week { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4) var(--space-3); }
+  .bill { break-inside: avoid; }
+  .bout-name { font-size: 15pt; }
+  .bout + .bout::before { margin: var(--space-2) 0; }
+  .imprint { box-shadow: none; padding-top: var(--space-3); }
+  a { text-decoration: none; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

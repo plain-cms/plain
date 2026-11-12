@@ -1,5 +1,6 @@
 {
   "starter": "gazette",
+  "sampleTitle": "The Westhaven Gazette",
   "collections": {
     "stories": {
       "path": "content/stories",
@@ -17,6 +18,7 @@
         { "name": "date", "type": "date", "required": true },
         { "name": "section", "type": "select", "options": ["News", "Business", "Culture", "Sport", "Opinion"] },
         { "name": "standfirst", "type": "text" },
+        { "name": "description", "type": "text" },
         { "name": "byline", "type": "text" },
         { "name": "cover", "type": "image" },
         { "name": "featured", "type": "boolean", "default": false },

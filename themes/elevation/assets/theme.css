@@ -1,0 +1,554 @@
+/* Elevation — every page is an architect's drawing sheet.
+   The ground is a cyanotype print: white line on Prussian blue. A ruled
+   border carries zone figures and letters; a block of ruled cells closes the
+   sheet bottom-right and grows to fit what it holds. The home page pins up a
+   set of small sheets, one per project, each with its own title block.
+   Blue is the default; where the reader prefers light (the
+   prefers-color-scheme: dark default inverted) the sheet becomes a dyeline:
+   off-white paper, blue-violet line. Restyle by editing tokens. */
+
+:root {
+  --font-text: "Helvetica Neue", Helvetica, "Nimbus Sans", "Liberation Sans", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --text-label: 0.6875rem;
+  --text-s: 0.8125rem;
+  --text-m: 1rem;
+  --text-l: 1.1875rem;
+  --text-xl: clamp(1.625rem, 1.05rem + 2.3vw, 2.625rem);
+  --leading: 1.6;
+  --leading-tight: 1.2;
+  --tracking-caps: 0.08em;
+
+  --color-bg: #163f6e;
+  --color-text: #f4f7fb;
+  --color-muted: #b8cbe2;
+  --color-accent: #c3cbff;
+  --color-line: #e3ebf5;
+  --color-rule: rgba(227, 235, 245, 0.38);
+  --color-plate: #113762;
+  --color-cover: #163f6e;
+  --cover-filter: grayscale(1) contrast(1.1);
+  --cover-blend: screen;
+
+  --trim: clamp(0.375rem, 1vw, 0.875rem);
+  --band: clamp(1rem, 1.6vw, 1.5rem);
+  --zone-min: 9rem;
+  --frame: clamp(0.75rem, 2.6vw, 2.25rem);
+  --line-frame: 2px;
+  --line-cell: 1px;
+  --measure: 38rem;
+  --tb-width: 27rem;
+  --tile-min: 19rem;
+  --tile-ratio: 1.414;
+  --gap: clamp(1rem, 2vw, 1.75rem);
+  --space-s: 0.5rem;
+  --space-m: 1rem;
+  --space-l: 2rem;
+}
+
+/* The dyeline: off-white print paper, blue-violet line */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: #f1f1ec;
+    --color-text: #221f5c;
+    --color-muted: #55528f;
+    --color-accent: #4a3fc9;
+    --color-line: #3b37a0;
+    --color-rule: rgba(59, 55, 160, 0.35);
+    --color-plate: #e5e4ec;
+    --color-cover: #3b37a0;
+  }
+}
+
+/* Base ---------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark light; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  overflow-x: clip;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--text-m);
+  line-height: var(--leading);
+  overflow-wrap: break-word;
+}
+
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--color-accent); text-decoration-thickness: 2px; }
+::selection { background: var(--color-text); color: var(--color-bg); }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+img { max-width: 100%; height: auto; }
+
+.skip-link {
+  position: absolute;
+  top: var(--space-s);
+  left: -100vw;
+  z-index: 3;
+  padding: var(--space-s) var(--space-m);
+  background: var(--color-bg);
+  border: var(--line-cell) solid var(--color-line);
+}
+.skip-link:focus { left: var(--space-s); }
+
+/* Monoline capitals: the drawing office's lettering */
+.site-title, .site-head nav, dt, dd, .tb-label, .tb-practice, .kicker,
+.register h2, .prose h2, .prose th, .post-meta, .pagination, .zone {
+  font-family: var(--font-mono);
+  letter-spacing: var(--tracking-caps);
+}
+.site-title, .site-head nav, dt, dd, .tb-label, .tb-practice,
+.register h2, .prose h2, .prose th, .pagination { text-transform: uppercase; }
+
+h1, h2, h3, h4, dd, .tb-practice {
+  hyphens: auto;
+  overflow-wrap: break-word;
+}
+
+.year {
+  display: inline-block;
+  width: 4ch;
+  overflow: hidden;
+  white-space: nowrap;
+  vertical-align: top;
+  letter-spacing: 0;
+  font-family: var(--font-mono);
+}
+
+/* The sheet: trim line, zone band, frame ---------------------------------- */
+
+.sheet {
+  position: relative;
+  margin: var(--trim);
+  padding: var(--band);
+  border: var(--line-cell) solid var(--color-line);
+}
+
+.frame {
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - 2 * var(--trim) - 2 * var(--band) - 2 * var(--line-cell));
+  padding: var(--frame) var(--frame) 0;
+  border: var(--line-frame) solid var(--color-line);
+}
+
+/* Zones: as many as the edge has room for, each at least --zone-min long,
+   figures along the top and bottom, letters down the sides */
+.zone {
+  position: absolute;
+  display: grid;
+  overflow: hidden;
+  font-size: var(--text-label);
+  line-height: 1;
+  color: var(--color-muted);
+}
+.zone i { min-width: 0; min-height: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; font-style: normal; }
+.zone-n, .zone-s {
+  left: var(--band);
+  right: var(--band);
+  height: var(--band);
+  grid-template-columns: repeat(auto-fill, minmax(var(--zone-min), 1fr));
+  grid-template-rows: 100%;
+  grid-auto-flow: column;
+  grid-auto-columns: 0;
+  counter-reset: zone-x;
+}
+.zone-n { top: 0; }
+.zone-s { bottom: 0; }
+.zone-w, .zone-e {
+  top: var(--band);
+  bottom: var(--band);
+  width: var(--band);
+  grid-template-rows: repeat(auto-fill, minmax(var(--zone-min), 1fr));
+  grid-template-columns: 100%;
+  grid-auto-rows: 0;
+  counter-reset: zone-y;
+}
+.zone-w { left: 0; }
+.zone-e { right: 0; }
+.zone-n i + i, .zone-s i + i { border-left: var(--line-cell) solid var(--color-muted); }
+.zone-w i + i, .zone-e i + i { border-top: var(--line-cell) solid var(--color-muted); }
+.zone-n i::before, .zone-s i::before { counter-increment: zone-x; content: counter(zone-x); }
+.zone-w i::before, .zone-e i::before { counter-increment: zone-y; content: counter(zone-y, upper-alpha); }
+
+/* Header ------------------------------------------------------------------ */
+
+.site-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-s) var(--space-l);
+  padding-bottom: var(--space-m);
+  margin-bottom: var(--space-l);
+  border-bottom: var(--line-cell) solid var(--color-rule);
+}
+.site-title {
+  min-width: 0;
+  font-size: var(--text-s);
+  font-weight: 700;
+  text-decoration: none;
+  hyphens: auto;
+}
+.site-head nav { font-size: var(--text-s); }
+.site-head ul { display: flex; flex-wrap: wrap; gap: var(--space-s); margin: 0; padding: 0; list-style: none; }
+.site-head nav a { display: inline-block; padding: 0.25rem 0.5rem; }
+.site-head nav a[aria-current="page"] { text-decoration: none; box-shadow: inset 0 0 0 var(--line-cell) var(--color-line); }
+
+main { flex: 1; display: flex; flex-direction: column; gap: var(--space-l); }
+main > * { min-width: 0; }
+
+/* Headings and text ---------------------------------------------------------- */
+
+h1 {
+  margin: 0;
+  font-size: var(--text-xl);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.01em;
+  max-width: 24em;
+  text-wrap: balance;
+}
+.page-head { margin-bottom: var(--space-l); }
+
+.prose { max-width: var(--measure); hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose > :last-child { margin-bottom: 0; }
+.prose p, .prose ul, .prose ol { margin: 0 0 var(--space-m); }
+.prose ul, .prose ol { padding-left: 1.25em; }
+.prose li > ul, .prose li > ol { margin: 0.25rem 0 0; }
+.prose h2 {
+  margin: 2.25rem 0 var(--space-m);
+  padding-top: var(--space-s);
+  border-top: var(--line-cell) solid var(--color-line);
+  font-size: var(--text-s);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.prose h3 { margin: 1.75rem 0 var(--space-s); font-size: var(--text-l); font-weight: 600; line-height: var(--leading-tight); }
+.prose h4 { margin: 1.5rem 0 var(--space-s); font-size: var(--text-m); font-weight: 700; }
+.prose blockquote { margin: 1.5rem 0; padding-left: var(--space-m); border-left: var(--line-frame) solid var(--color-line); }
+.prose code { font-family: var(--font-mono); font-size: 0.875em; padding: 0.1em 0.3em; background: var(--color-plate); }
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-m);
+  background:
+    linear-gradient(to right, var(--color-plate) 40%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-plate) 40%, transparent) right / 2rem 100% no-repeat local,
+    linear-gradient(to right, var(--color-rule), transparent) left / 0.75rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--color-rule), transparent) right / 0.75rem 100% no-repeat scroll,
+    var(--color-plate);
+  border: var(--line-cell) solid var(--color-rule); font-size: var(--text-s); line-height: 1.5; }
+.prose pre code { padding: 0; background: none; font-size: inherit; }
+.prose hr { margin: var(--space-l) 0; border: 0; border-top: var(--line-cell) solid var(--color-line); }
+.prose img { display: block; border: var(--line-cell) solid var(--color-line); }
+.prose a[href^="mailto:"], .prose a[href^="tel:"] { overflow-wrap: anywhere; hyphens: manual; }
+/* A table wider than the column scrolls in its own box; a shadow at the
+   cut edge shows there is more */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: 0 0 var(--space-m);
+  border-collapse: collapse;
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) right / 2rem 100% no-repeat local,
+    linear-gradient(to right, var(--color-rule), transparent) left / 0.75rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--color-rule), transparent) right / 0.75rem 100% no-repeat scroll;
+}
+.prose th, .prose td { min-width: 4.5rem; padding: var(--space-s) var(--space-m) var(--space-s) 0; text-align: left; vertical-align: top; border-bottom: var(--line-cell) solid var(--color-rule); }
+.prose th { font-size: var(--text-label); font-weight: 400; color: var(--color-muted); border-bottom-color: var(--color-line); }
+
+/* Title blocks: ruled cells drawn by a 1px gap over the line colour, so
+   any set of cells is ruled without an empty one ----------------------------- */
+
+.tb, .card-tb, .tb-foot {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--line-cell);
+  margin: 0;
+  background: var(--color-line);
+}
+.tb > div, .card-tb > div, .tb-foot > div {
+  grid-column: 1 / -1;
+  min-width: 0;
+  padding: 0.375rem 0.625rem 0.5rem;
+  background: var(--color-bg);
+}
+.tb > .tb-client, .card-tb > .tb-client { grid-column: 1; }
+.tb > .tb-client + .tb-date, .card-tb > .tb-client + .tb-date { grid-column: 2; }
+dt, .tb-label { margin: 0; font-size: var(--text-label); line-height: 1.3; color: var(--color-muted); }
+dd { margin: 0.125rem 0 0; font-size: var(--text-s); line-height: 1.35; letter-spacing: 0.03em; }
+.tb-title { font-size: var(--text-l); font-weight: 600; line-height: 1.25; }
+.tb-scope { display: flex; flex-wrap: wrap; gap: 0 1.25em; margin: 0; padding: 0; list-style: none; }
+.tb-scope li { min-width: 0; padding-left: 0.9em; text-indent: -0.9em; }
+.tb-scope li::before { content: ""; display: inline-block; width: 0.4em; height: 0.4em; margin-right: 0.5em; background: var(--color-line); vertical-align: 0.15em; }
+
+/* The sheet's own block sits in the frame's bottom-right corner: its right
+   and bottom edges are the frame line */
+.tb, .tb-foot {
+  width: min(var(--tb-width), 100% + 2 * var(--frame));
+  margin-right: calc(-1 * var(--frame));
+  margin-left: max(-1 * var(--frame), 100% + var(--frame) - var(--tb-width));
+  padding: var(--line-frame) 0 0 var(--line-frame);
+}
+main > .tb { margin-top: auto; }
+.tb-foot { padding-top: var(--line-cell); }
+.tb-foot p { margin: 0; }
+.tb-practice { margin-top: 0.125rem; font-size: var(--text-m); font-weight: 700; line-height: 1.3; letter-spacing: 0.04em; }
+.tb-note { margin-top: 0.25rem; font-size: var(--text-s); line-height: 1.45; }
+.tb-extra { font-size: var(--text-s); line-height: 1.45; }
+.tb-extra > :first-child { margin-top: 0; }
+.tb-extra > :last-child { margin-bottom: 0; }
+
+/* Home and /work/: a set of sheets ---------------------------------------- */
+
+/* The home statement: the sheet's number and its practice over the
+   headline, ruled off from the pinned-up sheets below */
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-m) var(--gap);
+  align-items: start;
+  padding-bottom: var(--space-l);
+  margin-bottom: var(--space-l);
+  border-bottom: var(--line-cell) solid var(--color-rule);
+}
+.intro .kicker { margin-bottom: var(--space-m); font-size: var(--text-label); text-transform: uppercase; }
+.intro .kicker span + span::before { content: ""; display: inline-block; width: 2.5em; margin: 0 0.75em; vertical-align: 0.3em; border-top: var(--line-cell) solid var(--color-line); }
+.intro .prose > :last-child { margin-bottom: 0; }
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(var(--tile-min), 100%), 1fr));
+  gap: 0 var(--gap);
+  margin: 0 0 calc(-1 * var(--gap));
+  padding: 0;
+  list-style: none;
+}
+
+/* One small sheet: trim line, a 5px margin, then the frame line drawn inset.
+   Each sheet spans three rows of the set (drawing field, PROJECT cell,
+   CLIENT/DATE cells) as a subgrid, so the title blocks across a row line up
+   cell for cell. The gap between sheets is the sheet's own bottom margin:
+   a subgrid takes its margin into its edge rows, its gap would split them. */
+.card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-row: span 3;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+  grid-template-rows: auto auto auto;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  min-width: 0;
+  margin-bottom: var(--gap);
+  padding: 5px;
+  border: var(--line-cell) solid var(--color-line);
+  background: var(--color-cover);
+  box-shadow: inset 0 0 0 4px var(--color-bg), inset 0 0 0 5px var(--color-line);
+}
+.card:not(.card-cover) { background: var(--color-bg); }
+
+/* The drawing field keeps the sheet near --tile-ratio; words make it taller */
+.card::before {
+  content: "";
+  grid-row: 1;
+  grid-column: 1 / -1;
+  padding-top: max(3rem, 100% / var(--tile-ratio) - 8.5rem);
+}
+
+.card-img {
+  position: absolute;
+  inset: 5px;
+  z-index: -1;
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  max-width: none;
+  object-fit: cover;
+  filter: var(--cover-filter);
+  mix-blend-mode: var(--cover-blend);
+}
+
+.card-note {
+  grid-row: 1;
+  grid-column: 1 / -1;
+  max-width: 40ch;
+  margin: var(--space-s) 0.75rem var(--space-m);
+  font-size: var(--text-s);
+  line-height: 1.5;
+}
+
+/* Drawing marks in the corner the title block leaves: a north point over a
+   scale bar */
+.card-mark {
+  grid-row: 2 / 4;
+  grid-column: 1;
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.625rem;
+  min-width: 0;
+  margin: 0 0.5rem 0.5rem;
+}
+.card-mark::before {
+  content: "";
+  width: 1.75rem;
+  height: 1.75rem;
+  margin-left: 0.25rem;
+  border: var(--line-cell) solid var(--color-line);
+  border-radius: 50%;
+  background: conic-gradient(from 160deg at 50% 12%, var(--color-rule) 0 20deg, var(--color-line) 0 40deg, transparent 0);
+}
+.card-mark::after {
+  content: "";
+  width: 4.5rem;
+  max-width: 100%;
+  height: 0.375rem;
+  border: var(--line-cell) solid var(--color-line);
+  background: linear-gradient(90deg, var(--color-line) 25%, transparent 25% 50%, var(--color-line) 50% 75%, transparent 75%);
+}
+
+.card-tb {
+  grid-row: 2 / 4;
+  grid-column: 2;
+  grid-template-rows: auto auto;
+  grid-template-rows: subgrid;
+  row-gap: var(--line-cell);
+  padding: var(--line-cell) 0 0 var(--line-cell);
+}
+.card-tb > .tb-project { grid-row: 1; }
+.card-title { font-size: 0.9375rem; font-weight: 600; line-height: 1.3; text-wrap: balance; }
+.card-title a { text-decoration-thickness: 1px; }
+.card-title a::after { content: ""; position: absolute; inset: 0; }
+.card-title a:focus-visible { outline: none; }
+.card-title a:focus-visible::after { outline: 2px solid var(--color-accent); outline-offset: 3px; }
+.card:hover .card-title a { color: var(--color-accent); text-decoration-thickness: 2px; }
+
+.empty { margin: 0; color: var(--color-muted); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-s) var(--space-l);
+  margin-top: var(--space-l);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.pagination a { display: inline-block; padding-block: var(--space-s); color: var(--color-text); }
+
+/* A project sheet ---------------------------------------------------------------- */
+
+.kicker { margin: 0 0 var(--space-s); font-size: var(--text-s); color: var(--color-muted); }
+.lede { max-width: var(--measure); margin: var(--space-m) 0 0; font-size: var(--text-l); line-height: 1.45; }
+.project-head { margin-bottom: var(--space-l); }
+
+.project-cover, .post-cover {
+  isolation: isolate;
+  margin: 0 0 var(--space-l);
+  padding: 4px;
+  border: var(--line-cell) solid var(--color-line);
+  background: var(--color-cover);
+}
+.project-cover img, .post-cover img {
+  display: block;
+  width: 100%;
+  max-height: 75vh;
+  object-fit: cover;
+  filter: var(--cover-filter);
+  mix-blend-mode: var(--cover-blend);
+}
+
+.project-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-l) var(--gap); align-items: start; }
+
+.register h2 {
+  margin: 0;
+  padding: var(--space-s) 0;
+  border-top: var(--line-frame) solid var(--color-line);
+  border-bottom: var(--line-cell) solid var(--color-line);
+  font-size: var(--text-label);
+  font-weight: 400;
+  color: var(--color-muted);
+}
+.register ol { margin: 0; padding: 0; list-style: none; }
+.register li:nth-child(n+9) { display: none; }
+.register li a {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-m);
+  padding: var(--space-s) 0;
+  border-bottom: var(--line-cell) solid var(--color-rule);
+  font-size: var(--text-s);
+  line-height: 1.4;
+  text-decoration: none;
+}
+.register li span { min-width: 0; hyphens: auto; overflow-wrap: anywhere; }
+.register li a:hover span { text-decoration: underline; }
+.register .year { flex: none; color: var(--color-muted); }
+.register p { margin: var(--space-s) 0 0; font-size: var(--text-s); }
+
+/* Posts and lists ------------------------------------------------------------- */
+
+.post-meta { margin: var(--space-s) 0 0; font-size: var(--text-s); color: var(--color-muted); }
+.post-meta .tags a { display: inline-block; margin-left: var(--space-m); color: var(--color-text); }
+.entries { margin: 0; padding: 0; list-style: none; max-width: var(--measure); }
+.entry { padding: var(--space-m) 0; border-top: var(--line-cell) solid var(--color-rule); }
+.entry h2 { margin: 0; font-size: var(--text-l); font-weight: 600; line-height: var(--leading-tight); }
+.entry-text { margin: var(--space-s) 0 0; }
+
+/* Wider sheets ---------------------------------------------------------------------- */
+
+@media (min-width: 60rem) {
+  .intro { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .project-body { grid-template-columns: minmax(0, var(--measure)) minmax(14rem, 20rem); justify-content: space-between; }
+  .project-body > .register:only-child { grid-column: 2; }
+}
+
+/* A sheet too narrow for drawing marks: the title block spans it */
+@media (max-width: 26rem) {
+  .card-mark { display: none; }
+  .card-tb { grid-column: 1 / -1; }
+}
+
+@media (max-width: 30.5rem) {
+  .tb, .tb-foot { padding-left: 0; }
+  .tb-title { font-size: var(--text-m); }
+  .prose, .card-note { hyphens: auto; hyphenate-limit-chars: 12 5 5; }
+  .site-head ul { margin-left: -0.5rem; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a { transition: color 0.15s ease; }
+}
+
+/* Print: dark line on white paper, no zones, no menu -------------------------- */
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-line: #000000;
+    --color-rule: #999999;
+    --color-plate: #ffffff;
+    --color-cover: #ffffff;
+    --cover-blend: normal;
+    --frame: 0rem;
+  }
+  body { font-size: 10.5pt; }
+  .zone, .site-head nav, .skip-link, .pagination, .register { display: none; }
+  .sheet, .frame { margin: 0; padding: 0; border: 0; min-height: 0; }
+  .card { break-inside: avoid; }
+  .card::before { padding-top: 0; }
+  .tb, .tb-foot { break-inside: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

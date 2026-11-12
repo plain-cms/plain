@@ -1,0 +1,14 @@
+{{#if collections.changelog}}<section class="latest">
+  <header class="latest-head">
+    <h2 class="eyebrow">{{ strings.latestReleases }}</h2>
+    <a href="/changelog/">{{ strings.allReleases }}</a>
+  </header>
+  <ol class="timeline rail is-live" role="list">
+    {{#each collections.changelog as item}}<li class="release-item" data-tag="{{ item.tag }}">
+      {{> release-meta}}
+      <h3 class="release-title"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+    </li>
+    {{/each}}
+  </ol>
+</section>
+{{/if}}

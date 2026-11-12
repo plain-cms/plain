@@ -1,0 +1,19 @@
+<section class="programme">
+  <header class="programme-head">
+    {{#if tag}}<h1 class="programme-title"><span class="programme-kicker">{{ strings.filedUnder }}</span> <span class="programme-tag">{{ tag }}</span></h1>
+    {{else}}<h1 class="programme-title">{{ page.title }}</h1>
+    {{/if}}
+  </header>
+  {{#if items}}<ol role="list" class="bills">
+    {{#each items as item}}{{> billing}}
+    {{/each}}
+  </ol>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}<nav class="pager" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a class="pager-newer" href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span class="pager-count">{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a class="pager-older" href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

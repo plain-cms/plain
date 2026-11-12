@@ -1,0 +1,7 @@
+<li class="sign">
+  <h2 class="sign-name"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.dateFormatted}}<p class="sign-date"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  {{/if}}{{#if item.description}}<p class="sign-note">{{ item.description }}</p>
+  {{/if}}{{#if item.priceFrom}}<p class="route"><span>{{ strings.from }}</span> {{ item.priceFrom }}</p>
+  {{/if}}
+</li>

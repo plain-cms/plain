@@ -1,0 +1,21 @@
+<article class="page">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="intro">{{ page.description }}</p>{{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  {{#if page.showMeets}}{{#if data.club.meets}}{{> meets}}{{/if}}{{/if}}
+  {{#if page.showEvents}}{{#if collections.events}}<section class="notice">
+    <header class="notice-head">
+    {{> notice-head}}
+      <div class="notice-sub"><h2>{{ strings.eventsHeading }}</h2> <a href="/events/">{{ strings.eventsLink }}</a></div>
+    </header>
+    <ul class="rows" role="list">
+    {{#each collections.events as item}}{{> event-row}}{{/each}}
+    </ul>
+  {{> notice-foot}}
+  </section>{{/if}}{{/if}}
+  {{#if page.showPeople}}{{#if collections.people}}{{> people}}{{/if}}{{/if}}
+</article>

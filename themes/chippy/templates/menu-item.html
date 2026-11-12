@@ -1,0 +1,14 @@
+<article class="item-page">
+  <header class="board">
+    {{#if page.section}}<p class="peg-section">{{ page.section }}</p>{{/if}}
+    <div class="peg-line peg-big">
+      <h1 class="peg-name">{{ page.title }}</h1>
+      {{#if page.price}}<p class="peg-price">{{ page.price }}</p>{{/if}}
+    </div>
+    {{#if page.description}}<p class="peg-desc">{{ page.description }}</p>{{/if}}
+  </header>
+  <div class="prose">
+{{{ page.content }}}
+  </div>
+  <p class="back"><a href="/menu/">{{ strings.backToMenu }}</a></p>
+</article>

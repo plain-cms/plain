@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
+<title>{{#if tag}}{{ strings.tagged }} #{{ tag }} · {{else}}{{#if page.title}}{{ page.title }} · {{/if}}{{/if}}{{ site.title }}</title>
 {{#if page.description}}<meta name="description" content="{{ page.description }}">
 {{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
 <meta property="og:url" content="{{ site.url }}{{ page.url }}">
-{{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
+{{/if}}<meta property="og:title" content="{{#if tag}}{{ strings.tagged }} #{{ tag }}{{else}}{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}{{/if}}">
 {{#if page.description}}<meta property="og:description" content="{{ page.description }}">
 {{/if}}{{#if page.date}}<meta property="og:type" content="article">
 {{else}}<meta property="og:type" content="website">
@@ -16,17 +16,18 @@
 {{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
 <meta name="twitter:card" content="summary_large_image">
 {{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
 {{/each}}<meta name="color-scheme" content="dark light">
 {{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
 {{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 {{/if}}{{#if site.appleTouchIcon}}<link rel="apple-touch-icon" href="{{ site.appleTouchIcon }}">
 {{/if}}<link rel="stylesheet" href="/assets/theme.css">
 </head>
-<body>
-<a class="skip-link" href="#main">Skip to content</a>
+<body data-copy="{{ strings.copy }}" data-copied="{{ strings.copied }}" data-contents="{{ strings.contents }}">
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
 <header class="masthead">
   <a class="site-title" href="/"><span class="prompt" aria-hidden="true">❯</span>{{ site.title }}</a>
-  <nav aria-label="Main">
+  <nav aria-label="{{ strings.mainNav }}">
     <ul>
       {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
       {{/each}}
@@ -36,9 +37,12 @@
 <main id="main">
 {{{ body }}}
 </main>
-<footer class="colophon">
-  <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
-  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
+{{> subscribe}}<footer class="colophon">
+  <div>
+    <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
+    {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
+  </div>
+  {{#if feeds}}{{#if data.newsletter.formAction}}<p>{{> feed-link}}</p>{{else}}{{#if data.newsletter.email}}<p>{{> feed-link}}</p>{{/if}}{{/if}}{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

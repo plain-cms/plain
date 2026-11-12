@@ -1,0 +1,20 @@
+<article class="project">
+  <div class="sheet project-sheet">
+    <div class="print">
+      {{#if page.cover}}<img class="print-cut" src="{{ page.cover }}" alt="" decoding="async">
+      {{/if}}<h1 class="block">{{ page.title }}</h1>
+      <p class="pencil">{{#if page.client}}<span class="pencil-client">{{ page.client }}</span> {{/if}}<span class="pencil-sign">{{ site.title }} <time class="year" datetime="{{ page.date }}">{{ page.date }}</time></span></p>
+    </div>
+    {{#if page.description}}<div class="notes">
+      <p class="lede">{{ page.description }}</p>
+    </div>
+    {{/if}}{{#if page.services}}<div class="notes">
+      <dl class="spec"><dt>{{ strings.services }}</dt>{{#each page.services as service}}<dd>{{ service }}</dd>{{/each}}</dl>
+    </div>
+    {{/if}}{{#if page.content}}<div class="notes prose">
+{{{ page.content }}}
+    </div>
+    {{/if}}
+  </div>
+  {{> more-work}}
+</article>

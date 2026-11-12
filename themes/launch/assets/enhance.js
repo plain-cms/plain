@@ -1,24 +1,23 @@
-// enhance.js — progressive enhancement only (cms-spec.md C5).
-// Adds a copy-link button beside each release on the changelog so a teammate
-// can paste "the release where we fixed that" into chat. The links work
-// without it; this just puts them on the clipboard.
+// Progressive enhancement only (cms-spec.md C5): a quiet "#" beside each
+// release on the changelog copies its link. Its label comes from the template
+// (data-copy-label), so it translates with the rest of the theme.
 
-if (navigator.clipboard) {
-  for (const release of document.querySelectorAll('.timeline .release-title a')) {
+const timeline = document.querySelector('.timeline[data-copy-label]');
+
+if (timeline && navigator.clipboard) {
+  for (const release of timeline.querySelectorAll('.release-title a')) {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'copy-link';
     button.textContent = '#';
-    button.title = 'Copy link to this release';
-    button.setAttribute('aria-label', `Copy link to ${release.textContent}`);
-    button.style.font = 'inherit';
-    button.style.cursor = 'pointer';
-    button.style.marginLeft = '0.5rem';
+    button.setAttribute('aria-label', `${timeline.dataset.copyLabel}: ${release.textContent}`);
     button.addEventListener('click', async () => {
-      await navigator.clipboard.writeText(release.href);
-      button.textContent = '✓';
-      setTimeout(() => { button.textContent = '#'; }, 1200);
+      try {
+        await navigator.clipboard.writeText(release.href);
+        button.textContent = '✓';
+        setTimeout(() => { button.textContent = '#'; }, 1200);
+      } catch { /* Clipboard refused: the link still works. */ }
     });
-    release.after(button);
+    release.closest('.release-item').querySelector('.release-meta').append(button);
   }
 }

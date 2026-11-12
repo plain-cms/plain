@@ -1,0 +1,18 @@
+<aside class="card-details" aria-label="{{ strings.practiceDetails }}">
+  {{#if data.practice.hours}}<div class="box box-hours">
+    <p class="caption">{{ strings.openingHours }}</p>
+    <ul class="hours">
+      {{#each data.practice.hours as slot}}<li><span class="days">{{ slot.days }}</span> <span class="time">{{ slot.time }}</span></li>
+      {{/each}}
+    </ul>
+  </div>
+  {{/if}}{{#if data.practice.address}}<div class="box">
+    <p class="caption">{{ strings.findUs }}</p>
+    <address>{{ data.practice.address }}</address>
+  </div>
+  {{/if}}{{#if data.practice.email}}<div class="box">
+    <p class="caption">{{ strings.writeToUs }}</p>
+    <p class="mail"><a href="mailto:{{ data.practice.email }}">{{ data.practice.email }}</a></p>
+  </div>
+  {{/if}}
+</aside>

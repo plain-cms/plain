@@ -1,0 +1,12 @@
+{
+  "starter": "lanyard",
+  "sampleTitle": "Paper & Parchment Forum 2027",
+  "collections": {},
+  "navigation": [
+    { "label": "Home", "url": "/" },
+    { "label": "Programme", "url": "/programme/" },
+    { "label": "Getting there", "url": "/getting-there/" },
+    { "label": "Join us", "url": "/join/" }
+  ],
+  "sampleContent": "sample/"
+}

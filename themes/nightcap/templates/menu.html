@@ -1,0 +1,29 @@
+<section class="menu-page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+  </header>
+  <div class="inside">
+    {{#if items}}
+    <ol class="drinks" role="list">
+      {{#each items as item}}<li class="drink" data-section="{{ item.section }}">
+        {{#if item.section}}<h2 class="drink-section">{{ item.section }}</h2>{{/if}}
+        <div class="drink-row">
+          <h3 class="drink-name"><a href="{{ item.url }}">{{ item.title }}</a></h3>
+          {{#if item.price}}<p class="drink-price">{{ item.price }}</p>{{/if}}
+        </div>
+        {{#if item.description}}<p class="note">{{ item.description }}</p>{{/if}}
+      </li>
+      {{/each}}
+    </ol>
+    {{else}}
+    <p class="empty">{{ strings.menuEmpty }}</p>
+    {{/if}}
+  </div>
+  {{#if pagination.multiple}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.menuPrevious }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.menuNext }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

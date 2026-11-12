@@ -1,0 +1,41 @@
+<article class="cv">
+  <div class="sheet">
+    <header class="sheet-head">
+      {{#if data.profile}}<div class="cell cell-wide">
+        <p class="cell-label">{{ strings.nameLabel }}</p>
+        <h1 class="sheet-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</h1>
+      </div>
+      {{#if data.profile.role}}<div class="cell">
+        <p class="cell-label">{{ strings.roleLabel }}</p>
+        <p class="sheet-role">{{ data.profile.role }}</p>
+      </div>
+      {{/if}}{{#if data.profile.email}}{{> contact-cell}}{{else}}{{#if data.profile.links}}{{> contact-cell}}{{/if}}{{/if}}
+      {{else}}<div class="cell cell-wide">
+        <h1 class="sheet-name">{{ page.title }}</h1>
+      </div>
+      {{/if}}
+    </header>
+    {{#if items}}{{> log-head}}
+    <ol class="log" role="list">
+      {{#each items as entry}}{{> stratum}}{{/each}}
+    </ol>
+    {{else}}<p class="empty">{{ strings.noEntries }}</p>
+    {{/if}}{{#if data.profile.skills}}<section class="sheet-skills" aria-labelledby="skills-title">
+      <h2 class="cell-label" id="skills-title">{{ strings.skills }}</h2>
+      <ul class="skills" role="list">
+        {{#each data.profile.skills as skill}}<li>{{ skill }}</li>
+        {{/each}}
+      </ul>
+    </section>
+    {{/if}}
+  </div>
+  {{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}<div class="print-note">
+    <p>{{ strings.printNote }} <span class="print-hint">{{ strings.printHint }}</span></p>
+    <button type="button" class="print-button" hidden>{{ strings.printButton }}</button>
+  </div>
+</article>

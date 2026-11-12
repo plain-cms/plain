@@ -1,0 +1,20 @@
+{{#if page.url.4}}{{> plain-page}}{{else}}{{#if page.slug.2}}<article class="page home">
+  <header class="page-head">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if collections.shows}}<section class="panel" aria-labelledby="panel-title">
+    <h2 class="panel-title" id="panel-title">{{ strings.showsHeading }}</h2>
+    <ol class="tracks home-tracks" role="list">
+    {{#each collections.shows as item}}{{> track}}
+    {{/each}}
+    </ol>
+    <p class="panel-foot"><a href="/shows/">{{ strings.allShows }}</a></p>
+  </section>
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}
+</article>
+{{else}}{{> plain-page}}{{/if}}{{/if}}

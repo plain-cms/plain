@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="{{ site.language }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{#if page.title}}{{ page.title }} · {{/if}}{{ site.title }}</title>
+{{#if page.description}}<meta name="description" content="{{ page.description }}">
+{{/if}}{{#if page.url}}<link rel="canonical" href="{{ site.url }}{{ page.url }}">
+<meta property="og:url" content="{{ site.url }}{{ page.url }}">
+{{/if}}<meta property="og:title" content="{{#if page.title}}{{ page.title }}{{else}}{{ site.title }}{{/if}}">
+{{#if page.description}}<meta property="og:description" content="{{ page.description }}">
+{{/if}}{{#if page.date}}<meta property="og:type" content="article">
+{{else}}<meta property="og:type" content="website">
+{{/if}}{{#if page.cover}}<meta property="og:image" content="{{ site.url }}{{ page.cover }}">
+<meta name="twitter:card" content="summary_large_image">
+{{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
+<meta name="twitter:card" content="summary_large_image">
+{{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
+{{/each}}<meta name="color-scheme" content="dark light">
+{{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
+{{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+{{/if}}{{#if site.appleTouchIcon}}<link rel="apple-touch-icon" href="{{ site.appleTouchIcon }}">
+{{/if}}<link rel="stylesheet" href="/assets/theme.css">
+</head>
+<body>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
+<header class="masthead">
+  <div class="wrap">
+    <a class="site-title" href="/">{{ site.title }}</a>
+    <nav class="menu" aria-label="{{ strings.mainNav }}">
+      <ul>
+        {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
+        {{/each}}
+      </ul>
+    </nav>
+    {{#if data.business.phone}}<a class="ring" href="tel:{{ data.business.phone }}"><span>{{ strings.call }}</span> {{ data.business.phone }}</a>
+    {{else}}{{#if data.business.email}}<a class="ring" href="mailto:{{ data.business.email }}">{{ strings.emailUs }}</a>
+    {{/if}}{{/if}}
+  </div>
+</header>
+<main id="main" class="wrap">
+{{{ body }}}
+</main>
+<footer class="colophon">
+  <div class="wrap">
+    <p class="colophon-name"><strong>{{ site.title }}</strong>{{#if site.description}} <span>{{ site.description }}</span>{{/if}}</p>
+    {{#if data.business.hours}}<p class="colophon-contact">{{else}}{{#if data.business.phone}}<p class="colophon-contact">{{else}}{{#if data.business.email}}<p class="colophon-contact">{{else}}{{#if data.business.area}}<p class="colophon-contact">{{/if}}{{/if}}{{/if}}{{/if}}{{#if data.business.hours}}<span>{{ data.business.hours }}</span> {{/if}}{{#if data.business.phone}}<a href="tel:{{ data.business.phone }}">{{ data.business.phone }}</a> {{/if}}{{#if data.business.email}}<a href="mailto:{{ data.business.email }}">{{ data.business.email }}</a> {{/if}}{{#if data.business.area}}<span>{{ data.business.area }}</span>{{/if}}{{#if data.business.hours}}</p>{{else}}{{#if data.business.phone}}</p>{{else}}{{#if data.business.email}}</p>{{else}}{{#if data.business.area}}</p>{{/if}}{{/if}}{{/if}}{{/if}}
+    {{#if data.footer.html}}<div class="colophon-note">{{{ data.footer.html }}}</div>{{/if}}
+  </div>
+</footer>
+</body>
+</html>

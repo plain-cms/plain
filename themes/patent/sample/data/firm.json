@@ -1,0 +1,12 @@
+{
+  "phone": "01632 960584",
+  "email": "office@pellowstrand.example",
+  "address": "Unit 6, The Ropeworks, Canal Street, Wrexley WX3 2RL",
+  "hours": [
+    { "days": "Monday to Thursday", "time": "8:30 to 17:30" },
+    { "days": "Friday", "time": "8:30 to 16:00" },
+    { "days": "Early evening meetings", "time": "By appointment" }
+  ],
+  "registration": "Pellow & Strand Ltd, patent and trade mark attorneys, is regulated by the Intellectual Property Regulation Board, entity no. 7461. Registered in England no. 09284716. VAT no. GB 284 1937 06.",
+  "consultNote": "The first meeting about an invention, a brand or a design is free, lasts up to an hour and is confidential from the moment you sit down. Ring or write and an attorney will call you back within one working day."
+}

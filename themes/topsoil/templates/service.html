@@ -1,0 +1,20 @@
+<article class="service">
+  <p class="eyebrow back"><a href="/services/">← {{ strings.allServices }}</a></p>
+  <header class="lawn patch">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}{{#if page.priceFrom}}<p class="price"><span>{{ strings.from }}</span> <b>{{ page.priceFrom }}</b></p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if page.included}}<section class="prose included" aria-labelledby="included-heading">
+    <h2 id="included-heading">{{ strings.includedHeading }}</h2>
+    <ul class="ticks">
+      {{#each page.included as point}}<li>{{ point }}</li>
+      {{/each}}
+    </ul>
+  </section>
+  {{/if}}
+</article>

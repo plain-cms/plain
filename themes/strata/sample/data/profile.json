@@ -1,0 +1,19 @@
+{
+  "name": "Morwenna Treloar",
+  "role": "Chartered geotechnical engineer — ground investigation, soft ground, earthworks",
+  "email": "morwenna@treloar-geo.example",
+  "links": [
+    { "label": "07700 900318", "url": "tel:+447700900318" },
+    { "label": "treloar-geo.example", "url": "https://treloar-geo.example" }
+  ],
+  "skills": [
+    "Ground investigation design and supervision",
+    "Soil and rock logging to BS 5930",
+    "Soft ground, embankments and wick drains",
+    "Pile and ground-improvement design",
+    "Slope stability and earthwork risk",
+    "Finite element analysis",
+    "Site laboratory testing",
+    "Full UK driving licence"
+  ]
+}

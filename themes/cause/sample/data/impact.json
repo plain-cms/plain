@@ -1,10 +1,10 @@
 {
   "stat": {
     "number": "1,142",
-    "unit": "adult readers",
-    "verb": "learning right now"
+    "unit": "adults",
+    "verb": "taught to read since 2011"
   },
   "donateUrl": "",
-  "donatePrompt": "£10 buys a learner's first three books.",
+  "donatePrompt": "$10 buys a learner's first three books.",
   "volunteerEmail": "volunteer@example.org"
 }

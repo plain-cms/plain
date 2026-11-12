@@ -1,6 +1,6 @@
 ---
 title: Union Chapel — acoustic evening
-date: 2026-05-09
+date: 2027-05-09
 city: Milltown
 venue: Union Chapel
 ticketsUrl: https://tickets.example.com/chapel

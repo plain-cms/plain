@@ -1,0 +1,7 @@
+<li class="cell" data-status="{{ item.status }}"><div class="part">
+  {{#if item.cover}}<img class="part-cover" src="{{ item.cover }}" alt="" loading="lazy" decoding="async">{{/if}}
+  <p class="part-head"><span class="part-cat">{{ item.category }}</span>{{#if item.status}} <span class="status"><span class="st st-in">{{ strings.statusInStock }}</span><span class="st st-order">{{ strings.statusToOrder }}</span><span class="st st-season">{{ strings.statusSeasonal }}</span><span class="st st-out">{{ strings.statusSoldOut }}</span><span class="st st-raw">{{ item.status }}</span></span>{{/if}}</p>
+  <h2 class="part-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.description}}<p class="part-desc">{{ item.description }}</p>{{/if}}
+  <p class="part-foot">{{#if item.price}}<span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}{{/if}}</p>
+</div></li>

@@ -1,0 +1,18 @@
+<section class="programme">
+  <h2 class="section-h">{{ strings.programme }}</h2>
+  {{#each data.event.programme as part}}<div class="part">
+    {{#if part.day}}<h3 class="part-day">{{ part.day }}</h3>
+    {{/if}}<ol class="slots" role="list">
+      {{#each part.items as item}}<li class="slot">
+        {{#if item.time}}<p class="slot-time">{{ item.time }}</p>
+        {{/if}}<div class="slot-what">
+          <p class="slot-title">{{ item.title }}</p>
+          {{#if item.place}}<p class="slot-place"><span>{{ item.place }}</span></p>
+          {{/if}}{{#if item.note}}<p class="slot-note">{{ item.note }}</p>
+        {{/if}}</div>
+      </li>
+      {{/each}}
+    </ol>
+  </div>
+  {{/each}}
+</section>

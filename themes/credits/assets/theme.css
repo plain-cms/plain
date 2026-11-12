@@ -1,0 +1,616 @@
+/* Credits — an actor's CV as the billing block at the foot of a film poster.
+   Home and CV open on an aubergine panel: the name, then every part in one
+   centred block of condensed capitals, each led by its production as a tiny
+   stacked label. The dated rows beneath are what prints. Restyle by editing
+   tokens, never selectors (cms-spec.md §10.1). */
+
+:root {
+  /* Type */
+  --font-body: "Helvetica Neue", Helvetica, Arial, "Liberation Sans", "Nimbus Sans", sans-serif;
+  --font-billing: "Avenir Next Condensed", "Bahnschrift Condensed", "Roboto Condensed", "Arial Narrow", "Liberation Sans Narrow", "Nimbus Sans Narrow", "Helvetica Neue", sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --text-label: 0.6875rem;
+  --text-s: 0.875rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.25rem;
+  --text-xl: clamp(2rem, 6vw, 3.5rem);
+  --text-billing: clamp(1.25rem, 3.4vw, 2.125rem);
+  --text-name: clamp(2.75rem, 12.5vw, 7.25rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.02;
+  --tracking-caps: 0.14em;
+  --tracking-billing: 0.015em;
+
+  /* Colour — white stock, aubergine ink, a lilac billing panel */
+  --color-bg: #ffffff;
+  --color-text: #21142a;
+  --color-muted: #66596c;
+  --color-accent: #6a2b6e;
+  --color-rule: #d9c7dc;
+  --color-panel: #3a163f;
+  --color-name: #ffffff;
+  --color-billing: #d4bcec;
+  --color-label: #ebdff4;
+  --color-panel-muted: #c3aed2;
+  --color-panel-rule: #7d5585;
+  --color-code-bg: #f5eff6;
+  --color-mark: #ecdcf2;
+
+  /* Layout */
+  --measure: 62ch;
+  --page-width: 68rem;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --label-width: 12em;
+  --when-width: 10rem;
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1.25rem;
+  --space-4: 2rem;
+  --space-5: clamp(2.25rem, 6vw, 4rem);
+  --radius: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #26102b;
+    --color-text: #f4ecf6;
+    --color-muted: #c4b1ca;
+    --color-accent: #d6b6f2;
+    --color-rule: #553060;
+    --color-panel: #3a1942;
+    --color-name: #ffffff;
+    --color-billing: #d9c2f0;
+    --color-label: #efe4f7;
+    --color-panel-muted: #c9b4d8;
+    --color-panel-rule: #7b5486;
+    --color-code-bg: #351a3c;
+    --color-mark: #5a2f66;
+  }
+}
+
+/* Base ------------------------------------------------------------------ */
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+main { flex: 1 0 auto; }
+
+.wrap { width: 100%; max-width: var(--page-width); margin-inline: auto; padding-inline: var(--gutter); }
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-accent); text-decoration-thickness: 1px; text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+
+:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
+.masthead :focus-visible,
+.bill :focus-visible,
+.card :focus-visible { outline-color: var(--color-billing); }
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-1);
+  z-index: 2;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.skip-link:focus { left: var(--space-1); }
+
+/* Headings, the part names and the billing: tall condensed capitals. A long
+   word is hyphenated where the language allows, broken as a last resort. */
+h1, h2, h3, h4,
+.bill-name, .card-name, .credit, .row-part { hyphens: auto; overflow-wrap: break-word; }
+
+/* The billing voice: tall condensed capitals. Dates keep their own case. */
+.site-title, .masthead nav a, .bill-tagline, .bill-name, .card-name, .bill-role, .card-role,
+.billing, .contacts, .to-cv a,
+.page-header h1, .eyebrow, .role-org, .row-org, .cv-label, .card-label,
+.prose h2, .prose h3, .prose h4, .prose th, .row-part, .card .skills, .row-when {
+  font-family: var(--font-billing);
+  font-stretch: condensed;
+  text-transform: uppercase;
+}
+.row-when { text-transform: none; }
+
+/* An address has no spaces: it may break anywhere, never with a hyphen,
+   so it never sets the width of its column. */
+.contacts a,
+.colophon a,
+.prose a[href^="mailto:"],
+.prose a[href^="tel:"],
+.prose a[href^="http"] { overflow-wrap: anywhere; hyphens: manual; }
+
+/* Masthead: a strip of the panel on every page ------------------------- */
+
+.masthead { background: var(--color-panel); color: var(--color-panel-muted); }
+
+.masthead-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  padding-block: var(--space-2);
+}
+
+.site-title,
+.masthead nav a {
+  letter-spacing: var(--tracking-caps);
+  text-decoration: none;
+}
+
+.site-title { min-width: 0; padding-block: var(--space-1); font-size: var(--text-s); font-weight: 700; color: var(--color-name); }
+
+.masthead nav ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-block;
+  padding: var(--space-1) 0;
+  font-size: var(--text-s);
+  font-weight: 600;
+  color: var(--color-panel-muted);
+  border-bottom: 2px solid transparent;
+}
+.masthead nav a:hover { color: var(--color-name); }
+.masthead nav a[aria-current="page"] { color: var(--color-name); border-bottom-color: var(--color-billing); }
+
+/* The billing panel — the signature ------------------------------------- */
+
+.bill { background: var(--color-panel); color: var(--color-panel-muted); text-align: center; }
+
+.bill-inner { display: flex; flex-direction: column; align-items: center; padding-block: var(--space-4); }
+
+/* The line above the title, as on a poster: small, spaced, quiet. */
+.bill-tagline {
+  max-width: 44em;
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-s);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-label);
+  text-wrap: balance;
+}
+
+.bill-name,
+.card-name {
+  max-width: 100%;
+  margin: 0;
+  font-size: var(--text-name);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: 0;
+  color: var(--color-name);
+  text-wrap: balance;
+}
+
+.bill-role,
+.card-role {
+  max-width: 44em;
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-s);
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-panel-muted);
+  text-wrap: balance;
+}
+
+/* The billing: one block of tall capitals between two rules. Credits run on
+   like the words of one paragraph, balanced into lines of one measure, each
+   part led by its production stacked small against its first word. The eight newest
+   take full billing; anything older closes the block on a smaller line. */
+.billing {
+  width: 100%;
+  max-width: 62rem;
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3) 0;
+  border-block: 1px solid var(--color-panel-rule);
+  list-style: none;
+  font-size: var(--text-billing);
+  line-height: var(--leading-tight);
+  text-align: center;
+  text-wrap: balance;
+}
+
+.credit { display: inline; white-space: nowrap; }
+.credit:nth-child(9)::before { content: "\A"; white-space: pre; }
+.credit:nth-child(n+9) { font-size: 0.6em; }
+
+.credit-org {
+  display: inline-block;
+  max-width: var(--label-width);
+  margin: 0 0.3rem 0 0.75rem;
+  font-size: var(--text-label);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: 0.05em;
+  text-align: right;
+  text-wrap: balance;
+  white-space: normal;
+  vertical-align: middle;
+  color: var(--color-label);
+}
+
+.credit-part { font-weight: 500; letter-spacing: var(--tracking-billing); white-space: normal; color: var(--color-billing); }
+
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 var(--space-3);
+  max-width: 100%;
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+}
+.contacts li { min-width: 0; }
+.contacts a {
+  display: inline-block;
+  padding: var(--space-1) 0;
+  text-decoration-color: var(--color-panel-rule);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.3em;
+}
+.contacts a:hover { text-decoration-color: var(--color-billing); }
+.bill a,
+.card a { color: var(--color-label); }
+.bill a:hover,
+.card a:hover { color: var(--color-name); }
+
+.to-cv { margin: var(--space-3) 0 0; }
+.to-cv a {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  border: 1px solid var(--color-billing);
+  border-radius: var(--radius);
+  font-size: var(--text-s);
+  font-weight: 600;
+  letter-spacing: var(--tracking-caps);
+  text-decoration: none;
+}
+.to-cv a:hover { background: var(--color-billing); color: var(--color-panel); }
+
+/* Page headers on white stock -------------------------------------------- */
+
+.page-header { padding-block: var(--space-5) var(--space-4); text-align: center; }
+
+.page-header h1 {
+  max-width: 22ch;
+  margin: 0 auto;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+}
+
+.eyebrow,
+.role-org,
+.row-org,
+.cv-label,
+.card-label {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-s);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: var(--tracking-caps);
+  color: var(--color-muted);
+}
+.eyebrow a { color: var(--color-accent); text-decoration: none; }
+.eyebrow a:hover { text-decoration: underline; }
+
+.role-org { max-width: 56ch; margin-inline: auto; text-wrap: balance; }
+
+.role-meta { margin: var(--space-2) 0 0; color: var(--color-muted); font-size: var(--text-s); }
+
+.row-when {
+  font-weight: 700;
+  font-size: var(--text-l);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+}
+.row-where { display: block; margin-top: 0.2em; }
+
+.tags { margin-left: 0.25em; }
+.tag { margin-left: 0.5em; }
+
+/* Prose ------------------------------------------------------------------ */
+
+.prose { max-width: var(--measure); margin: 0 auto var(--space-5); hyphens: manual; }
+
+.prose h2, .prose h3, .prose h4 {
+  margin: var(--space-4) 0 var(--space-2);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  text-wrap: balance;
+}
+.prose h2 { font-size: 1.75rem; }
+.prose h3 { font-size: 1.375rem; }
+.prose h4 { font-size: var(--text-m); letter-spacing: var(--tracking-caps); }
+
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose li { margin: 0 0 var(--space-1); }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+
+/* A page opens with its most important sentence, a size up. */
+.page .prose > p:first-child { font-size: var(--text-l); line-height: 1.5; }
+
+.prose ul, .highlights { padding-left: 1.3em; list-style: square; }
+.prose li::marker, .highlights li::marker { color: var(--color-accent); }
+
+.prose blockquote { margin-inline: 0; padding: 0 0 0 var(--space-3); border-left: 3px solid var(--color-accent); font-style: italic; }
+
+.prose hr { border: 0; border-top: 1px solid var(--color-accent); width: 6rem; margin: var(--space-4) auto; }
+
+.prose img, .cover { display: block; max-width: 100%; height: auto; }
+.cover { margin: 0 auto var(--space-4); }
+
+.prose code, .prose kbd { font-family: var(--font-mono); font-size: 0.88em; hyphens: manual; }
+.prose code { padding: 0.1em 0.3em; background: var(--color-code-bg); border-radius: var(--radius); }
+.prose pre {
+  padding: var(--space-2) var(--space-3);
+  overflow-x: auto;
+  background: var(--color-code-bg);
+  border-left: 3px solid var(--color-accent);
+  line-height: 1.45;
+}
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); }
+
+/* A table wraps as far as its words allow, then scrolls inside its own box. */
+.prose table {
+  display: block;
+  width: max-content;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--text-s);
+  font-variant-numeric: tabular-nums;
+}
+.prose th, .prose td {
+  min-width: 8em;
+  padding: var(--space-1) var(--space-3) var(--space-1) 0;
+  border-bottom: 1px solid var(--color-rule);
+  text-align: left;
+  vertical-align: top;
+}
+.prose th {
+  border-bottom: 2px solid var(--color-accent);
+  letter-spacing: 0.06em;
+  vertical-align: bottom;
+}
+
+.lede { font-size: var(--text-l); line-height: 1.5; }
+.highlights { margin: 0 0 var(--space-4); }
+.highlights li { margin: 0 0 var(--space-1); }
+.backlink { margin-top: var(--space-4); font-size: var(--text-s); }
+
+.prose .actions { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); padding: 0; list-style: none; }
+
+/* The CV: dated rows on white stock -------------------------------------- */
+
+.sheet { padding-block: var(--space-4) var(--space-5); }
+
+.rows { margin: 0; padding: 0; list-style: none; }
+
+.row,
+.cv-skills {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-1) var(--space-4);
+  padding-block: var(--space-3);
+  border-top: 1px solid var(--color-rule);
+}
+.row:first-child { border-top: 2px solid var(--color-accent); }
+
+.row-meta { margin: 0; color: var(--color-muted); font-size: var(--text-s); }
+
+.row-what { display: flex; flex-direction: column; min-width: 0; }
+
+.row-part {
+  margin: 0;
+  font-size: clamp(1.375rem, 3vw, 1.875rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0.01em;
+}
+.row-part a { color: var(--color-text); text-decoration-color: var(--color-accent); text-decoration-thickness: 2px; }
+.row-part a:hover { color: var(--color-accent); }
+
+/* The production sits above the part, as on the billing. */
+.row-org { order: -1; margin-bottom: 0.2em; }
+
+.row-summary { max-width: var(--measure); margin: var(--space-1) 0 0; hyphens: manual; }
+.row .highlights { max-width: var(--measure); margin: var(--space-1) 0 0; hyphens: manual; }
+.row .highlights li { margin: 0; }
+
+.cv-skills { border-top-width: 2px; border-top-color: var(--color-accent); }
+.cv-label { margin: 0; padding-top: 0.3em; }
+
+.skills { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: 0; padding: 0; list-style: none; }
+.skills li { min-width: 0; max-width: 100%; hyphens: auto; }
+.skills li::before { content: "■"; margin-right: 0.45em; font-size: 0.5em; vertical-align: 0.25em; color: var(--color-accent); }
+.card .skills li::before { color: var(--color-label); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--color-rule);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+
+.print-note {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-4);
+  color: var(--color-muted);
+  font-size: var(--text-s);
+}
+.print-note p { flex: 1 1 16rem; margin: 0; }
+
+.print-button {
+  min-height: 2.75rem;
+  padding: var(--space-1) var(--space-3);
+  font: inherit;
+  font-weight: 600;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.print-button:hover { color: var(--color-bg); background: var(--color-accent); }
+
+.empty { color: var(--color-muted); }
+
+@media screen and (min-width: 760px) {
+  .row,
+  .cv-skills { grid-template-columns: var(--when-width) minmax(0, 1fr); }
+  .row-meta { padding-top: 0.15em; }
+}
+
+/* Posts ------------------------------------------------------------------ */
+
+.post-list { max-width: var(--measure); margin: 0 auto; padding: 0; list-style: none; }
+.post-card { padding-block: var(--space-3); border-top: 1px solid var(--color-rule); }
+.post-card:first-child { border-top: 2px solid var(--color-accent); }
+.post-card .row-meta { margin-bottom: 0.2em; }
+.post-card .row-part a { color: var(--color-text); text-decoration: none; }
+.post-card .row-part a:hover { color: var(--color-accent); text-decoration: underline; }
+.list .empty, .list .pagination { max-width: var(--measure); margin-inline: auto; }
+.list .wrap { padding-bottom: var(--space-5); }
+
+/* The profile card: a small billing at the foot of every other page ------ */
+
+.card { background: var(--color-panel); color: var(--color-panel-muted); text-align: center; }
+.card-inner { display: flex; flex-direction: column; align-items: center; padding-block: var(--space-5); }
+.card-name { font-size: clamp(2.25rem, 7vw, 4rem); }
+.card-label { margin: var(--space-4) 0 var(--space-1); font-size: var(--text-label); color: var(--color-label); }
+.card .skills {
+  justify-content: center;
+  max-width: 48rem;
+  font-size: var(--text-l);
+  line-height: 1.15;
+  color: var(--color-billing);
+}
+.card .contacts { margin-top: var(--space-3); }
+.card .to-cv { margin-top: var(--space-4); }
+
+/* Footer ----------------------------------------------------------------- */
+
+.colophon { border-top: 1px solid var(--color-rule); color: var(--color-muted); font-size: var(--text-s); }
+.colophon-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 var(--space-4); padding-block: var(--space-3); }
+.colophon p { margin: 0; min-width: 0; }
+.colophon a { color: inherit; }
+.colophon-note { flex-basis: 100%; }
+.card + .colophon { border-top: 0; }
+
+/* On a phone narrow boxes hyphenate and each credit takes its own line;
+   on the smallest, its label sits above it. */
+@media (max-width: 30rem) {
+  .row-summary, .row .highlights { hyphens: auto; }
+  .credit { display: block; }
+  .credit + .credit { margin-top: 0.12em; }
+  .credit:nth-child(9)::before { content: none; }
+  .credit:nth-child(9) { margin-top: 0.5em; }
+  .credit-org { font-size: calc(var(--text-label) * 1.1); }
+}
+@media (max-width: 22rem) {
+  .prose { hyphens: auto; }
+  .credit-org { display: block; max-width: none; margin: 0.35rem 0 0.1rem; text-align: center; }
+}
+.bill + .wrap { padding-top: var(--space-4); }
+
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+/* Print: black on white; the panel becomes a letterhead, the billing stays
+   on screen, and the dated rows are the record. */
+
+@media print {
+  @page { size: A4; margin: 12mm; }
+
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #000000;
+    --color-rule: #b3b3b3;
+    --color-panel: #ffffff;
+    --color-name: #000000;
+    --color-billing: #000000;
+    --color-label: #000000;
+    --color-panel-muted: #333333;
+    --color-panel-rule: #b3b3b3;
+    --color-code-bg: #ffffff;
+    --color-mark: #ffffff;
+  }
+
+  html { font-size: 9pt; }
+  body { display: block; min-height: 0; line-height: 1.35; }
+  .wrap { max-width: none; padding: 0; }
+
+  .masthead, .colophon, .skip-link, .card .skills, .card-label, .billing, .to-cv,
+  .print-note, .pagination, .backlink, .tags, .actions { display: none; }
+
+  a { color: inherit; text-decoration: none; }
+
+  .bill { text-align: left; border-bottom: 1.5pt solid var(--color-text); margin-bottom: 4mm; }
+  .bill-inner { align-items: flex-start; padding: 0 0 3mm; }
+  .bill-tagline { margin: 0 0 2mm; font-size: 11pt; }
+  .bill-name { font-size: 24pt; }
+  .bill-role, .card-role { max-width: none; margin-top: 1mm; }
+  .contacts { justify-content: flex-start; gap: 0 5mm; margin-top: 1.5mm; }
+  .contacts a { padding: 0; }
+
+  .card { text-align: left; border-top: 1.5pt solid var(--color-text); }
+  .card-inner { align-items: flex-start; padding: 3mm 0 0; }
+  .card-name { font-size: 16pt; }
+
+  .page-header { padding: 0 0 4mm; text-align: left; }
+  .page-header h1 { max-width: none; margin: 0; font-size: 20pt; }
+  .role-org { margin-inline: 0; }
+
+  .sheet, .bill + .wrap { padding: 0; }
+  .row:first-child { border-top: 0; }
+  .skills { gap: 0 4mm; }
+  .row,
+  .cv-skills { grid-template-columns: 28mm minmax(0, 1fr); gap: 0 5mm; padding-block: 2mm; break-inside: avoid; }
+  .row-what { display: block; }
+  .row-part, .row-org { display: inline; }
+  .row-org { margin-left: 2.5mm; }
+  .row-when { font-size: 10.5pt; }
+  .row-part { font-size: 12pt; }
+  .row-summary, .row .highlights { max-width: none; margin-top: 0.6mm; }
+
+  .prose { max-width: 160mm; margin: 0; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+  .prose table { overflow: visible; }
+}

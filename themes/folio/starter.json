@@ -1,5 +1,6 @@
 {
   "starter": "folio",
+  "sampleTitle": "Sam Kessler",
   "collections": {
     "experience": {
       "path": "content/experience",
@@ -18,6 +19,7 @@
         { "name": "period", "type": "text" },
         { "name": "location", "type": "text" },
         { "name": "summary", "type": "text" },
+        { "name": "description", "type": "text" },
         { "name": "highlights", "type": "list" },
         { "name": "draft", "type": "boolean", "default": false }
       ]

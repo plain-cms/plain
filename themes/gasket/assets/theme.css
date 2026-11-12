@@ -1,0 +1,429 @@
+/* gasket — a garage site built on the pressed front number plate.
+   Every design decision is a token in this first block; restyle here. */
+:root {
+  --font-plate: ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace;
+  --font-body: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "DejaVu Sans", source-sans-pro, sans-serif;
+  --text-s: 0.8125rem;
+  --text-m: 1.0625rem;
+  --text-l: 1.3125rem;
+  --text-xl: clamp(1.5rem, 0.9rem + 3vw, 3rem);
+  --text-h: 1.125rem;
+  --text-plate: 1.375rem;
+  --text-band: 0.6875rem;
+  --leading: 1.6;
+  --tracking: 0.05em;
+  --color-bg: #131416;
+  --color-panel: #212326;
+  --color-text: #f6f6f3;
+  --color-muted: #b4b7ba;
+  --color-accent: #2a66e0;
+  --color-on-accent: #ffffff;
+  --color-tread: #464a50;
+  --color-tyre: #131416;
+  --color-on-tyre: #f6f6f3;
+  --color-on-tyre-muted: #b4b7ba;
+  --plate: #fdfdf8;
+  --plate-ink: #0c0c0d;
+  --plate-edge: #fdfdf8;
+  --keyline: 0.125rem;
+  --plate-radius: 0.3125rem;
+  --plate-width: 31rem;
+  --plate-cell: 9.5rem;
+  --band-width: 0.5rem;
+  --tread-height: 1.75rem;
+  --page-width: 70rem;
+  --measure: 40rem;
+  --label-col: 15rem;
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1.25rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --radius: 0.25rem;
+  --focus-width: 0.1875rem;
+  --tap: 2.75rem;
+}
+
+/* Night is the default. Where another theme has a (prefers-color-scheme: dark) block,
+   this one has day: the painted workshop floor, black ink, plates keylined. The
+   header and footer stay tyre black in both, so by day a tyre lies across the floor. */
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-bg: #bcbfc0;
+    --color-panel: #d3d6d7;
+    --color-text: #0c0c0d;
+    --color-muted: #2e3032;
+    --color-accent: #1f5ed9;
+    --color-tread: #131416;
+    --plate-edge: #0c0c0d;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  --edge: max(var(--gutter), calc((100% - var(--page-width)) / 2));
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font: var(--text-m)/var(--leading) var(--font-body);
+  overflow-wrap: break-word;
+  hyphens: manual;
+  hyphenate-limit-chars: 12 4 4;
+}
+a {
+  color: inherit;
+  text-decoration: underline var(--color-accent) 0.125rem;
+  text-underline-offset: 0.2em;
+}
+a:hover { text-decoration-color: currentColor; }
+:focus-visible {
+  outline: var(--focus-width) solid var(--color-text);
+  outline-offset: var(--focus-width);
+  box-shadow: 0 0 0 var(--focus-width) var(--color-bg);
+}
+::selection { background: var(--color-accent); color: var(--color-on-accent); }
+h1, h2, h3, h4, .site-title, .masthead nav, .meta, .back, .facts dt, .pagination, .actions, th, .colophon-name {
+  font-family: var(--font-plate);
+  font-weight: 800;
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+/* only headings and narrow boxes hyphenate; wide text, tables and figures do not */
+h1, h2, h3, h4, .job, .included li { hyphens: auto; }
+a[href^="mailto:"], a[href^="tel:"], code, .plate { hyphens: manual; }
+h1 { margin: 0; font-size: var(--text-xl); line-height: 1.12; text-wrap: balance; }
+img { max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.skip {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 2;
+  padding: var(--space-1) var(--space-2);
+  background: var(--plate);
+  color: var(--plate-ink);
+  border-radius: var(--plate-radius);
+  transform: translateY(-400%);
+}
+.skip:focus { transform: none; }
+
+/* ---------- masthead and the tread band (the only rule) ---------- */
+/* the tyre: header and footer are tyre black in both schemes, so everything
+   inside them reads the tyre's colours through the ordinary tokens */
+.masthead, .colophon {
+  --color-bg: var(--color-tyre);
+  --color-text: var(--color-on-tyre);
+  --color-muted: var(--color-on-tyre-muted);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--space-4);
+  padding: var(--space-2) var(--edge);
+}
+.site-title { padding: var(--space-1) 0; font-size: var(--text-l); line-height: 1.2; text-decoration: none; }
+.masthead ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-size: var(--text-s);
+  text-decoration: none;
+}
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current]::before { content: ""; width: var(--band-width); height: 1.25rem; margin-right: var(--space-2); background: var(--color-accent); }
+/* tread: two rows of slanted shoulder blocks, a groove each side, one unbroken rib down the middle */
+.tread, .prose hr {
+  --shoulder: calc(var(--tread-height) * 9 / 28);
+  --pitch: calc(var(--tread-height) * 0.6);
+  flex: none;
+  height: var(--tread-height);
+  margin-inline: 0;
+  border: 0;
+  background:
+    linear-gradient(var(--color-tread), var(--color-tread)) center / 100% calc(var(--tread-height) / 7) no-repeat,
+    repeating-linear-gradient(115deg, var(--color-tread) 0 calc(var(--pitch) * 0.72), transparent 0 var(--pitch)) top / 100% var(--shoulder) no-repeat,
+    repeating-linear-gradient(65deg, var(--color-tread) 0 calc(var(--pitch) * 0.72), transparent 0 var(--pitch)) bottom / 100% var(--shoulder) no-repeat;
+}
+.tread { margin: 0; }
+
+/* ---------- the sheet: heading, plate, text ---------- */
+main { flex: 1 0 auto; padding: var(--space-4) var(--edge) var(--space-5); }
+.page-header > * { margin-block: 0 var(--space-2); }
+.page-header > :last-child { margin-bottom: 0; }
+.lede { max-width: var(--measure); font-size: var(--text-l); line-height: 1.45; }
+.meta, .back { color: var(--color-muted); font-size: var(--text-s); }
+.meta { display: flex; flex-wrap: wrap; gap: 0 var(--space-2); }
+.back a, .actions a, .pagination a { display: inline-flex; align-items: center; min-height: var(--tap); }
+.actions { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); font-size: var(--text-s); }
+.price { padding-top: var(--space-1); }
+.cover { display: block; width: 100%; margin-bottom: var(--space-3); }
+
+/* ---------- plates: every number on the site lives on one ---------- */
+.plate {
+  display: inline-flex;
+  max-width: 100%;
+  overflow: hidden;
+  vertical-align: middle;
+  background: var(--plate);
+  color: var(--plate-ink);
+  border: var(--keyline) solid var(--plate-edge);
+  border-radius: var(--plate-radius);
+  font: 800 var(--text-plate)/1.2 var(--font-plate);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.band {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: var(--band-width);
+  padding: 0.25rem 0.3rem;
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  font-size: var(--text-band);
+  line-height: 1;
+}
+.band:empty { padding-inline: 0; min-width: calc(var(--band-width) * 1.5); }
+.plate > b { align-self: center; min-width: 0; padding: 0.2em 0.5em; text-transform: none; }
+.plate-mid { font-size: clamp(var(--text-plate), 1rem + 2vw, calc(var(--text-plate) * 1.36)); }
+.plate-mid .band { padding: 0.35rem; }
+
+.call { max-width: var(--plate-width); margin-block: var(--space-3) var(--space-4); container-type: inline-size; }
+.plate-full { display: flex; font-size: clamp(var(--text-plate), 9.6cqi, calc(var(--text-plate) * 2.36)); }
+.plate-full .band { justify-content: space-between; padding: 0.45rem 0.35rem; letter-spacing: var(--tracking); }
+/* where the ring of stars used to be: a gasket */
+.plate-full .band::before { content: ""; width: 1.5em; aspect-ratio: 1; border: 0.3em solid; border-radius: 50%; }
+.face {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  padding: 0.36em 0.22em 0.2em;
+  text-align: center;
+}
+.face strong { max-width: 100%; font-weight: inherit; line-height: 1.1; overflow-wrap: anywhere; text-wrap: balance; }
+.face small { padding-top: 0.25rem; font: 600 var(--text-band)/1.3 var(--font-body); letter-spacing: 0.08em; text-wrap: balance; }
+/* an address or a few words in place of the number: the same plate, lettered smaller */
+.plate-mail strong { font-size: max(1rem, 0.4em); line-height: 1.25; letter-spacing: 0; text-transform: none; }
+.plate-words strong { font-size: max(1.1rem, 0.58em); line-height: 1.2; overflow-wrap: break-word; }
+/* enhance.js wraps each hyphen of a phone number in .gap: a plate has a space
+   between its groups, not a dash. The hyphen stays in the text (and in the link). */
+.gap { margin-inline: -0.1em; color: transparent; }
+.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: var(--space-1) var(--space-3); margin: var(--space-2) 0 0; }
+.facts div { display: grid; grid-template-columns: subgrid; grid-column: 1 / -1; align-items: baseline; }
+.facts dt { font-size: var(--text-s); }
+.facts dd { margin: 0; }
+
+/* a phone number in running text: a plate the size of the sentence, left inline
+   so a number longer than the line breaks instead of stranding the full stop */
+a[href^="tel:"]:not(.plate) {
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding: 0 0.4em;
+  background: var(--plate);
+  color: var(--plate-ink);
+  border: 0.0625rem solid var(--plate-edge);
+  border-left: 0.4em solid var(--color-accent);
+  border-radius: 0.2em;
+  font: 800 0.92em/1.35 var(--font-plate);
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- page text ---------- */
+.prose { max-width: var(--measure); }
+.prose > * { margin-block: 0 var(--space-3); }
+.prose > :last-child { margin-bottom: 0; }
+.prose h2, .included h2 { margin-top: var(--space-4); font-size: var(--text-h); line-height: 1.5; }
+.prose h3 { margin-top: var(--space-4); font-size: var(--text-m); }
+.prose h4 { color: var(--color-muted); font-size: var(--text-s); }
+.prose > :first-child { margin-top: 0; }
+.prose ul, .prose ol { padding-left: 1.25rem; }
+.prose ul { list-style: square; }
+.prose li { margin-block: var(--space-1); }
+.prose li::marker { color: var(--color-accent); font-weight: 700; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose blockquote { margin-inline: 0; padding: var(--space-3); background: var(--color-panel); border-radius: var(--radius); }
+.prose blockquote p { margin: 0; font-size: var(--text-l); line-height: 1.45; }
+.prose blockquote p:last-child:not(:first-child) {
+  margin-top: var(--space-2);
+  color: var(--color-muted);
+  font: 700 var(--text-s)/1.5 var(--font-plate);
+  letter-spacing: var(--tracking);
+  text-transform: uppercase;
+}
+.prose code { font: 0.875em var(--font-plate); }
+.prose :not(pre) > code { padding: 0.1em 0.3em; background: var(--color-panel); border-radius: var(--radius); }
+.prose pre { padding: var(--space-3); overflow-x: auto; background: var(--color-panel); border-radius: var(--radius); line-height: 1.5; }
+.prose p:has(> img + img) { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-2); align-items: start; }
+
+/* tables: each row a bar, no rules; a right-aligned figure is a plate at the end of its bar.
+   The plate is wide enough to keep a ten-character figure ("1.145,00 €") on one line;
+   anything longer wraps and the plate grows taller, like the price plates in a list. */
+.prose table { width: 100%; border-collapse: separate; border-spacing: 0 var(--space-1); font-variant-numeric: tabular-nums; }
+.prose th { padding: 0 var(--space-2); font-size: var(--text-s); text-align: left; vertical-align: bottom; }
+.prose td { padding: var(--space-2); background: var(--color-panel); vertical-align: top; }
+.prose td:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.prose td:last-child { border-radius: 0 var(--radius) var(--radius) 0; }
+.prose td[align="right"] {
+  width: var(--plate-cell);
+  min-width: var(--plate-cell);
+  padding-block: calc(var(--space-2) - var(--keyline));
+  background: var(--plate);
+  color: var(--plate-ink);
+  border: var(--keyline) solid var(--plate-edge);
+  border-left: var(--band-width) solid var(--color-accent);
+  border-radius: var(--plate-radius);
+  font: 800 var(--text-m)/var(--leading) var(--font-plate);
+  letter-spacing: var(--tracking);
+  text-align: center;
+  vertical-align: middle;
+}
+.prose th[align="right"] { text-align: center; }
+
+/* ---------- the price board (list pages) ---------- */
+.jobs { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-1); margin: 0 0 var(--space-4); padding: 0; list-style: none; }
+.job {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) fit-content(42%);
+  column-gap: var(--space-4);
+  align-items: center;
+  padding: var(--space-3);
+  background: var(--color-panel);
+  border-radius: var(--radius);
+}
+.job > * { grid-column: 1; margin: 0; }
+.job h2 { margin-bottom: var(--space-1); font-size: var(--text-h); line-height: 1.3; }
+.job h2 a { text-decoration: none; }
+.job h2 a::after { content: ""; position: absolute; inset: 0; }
+.job:hover h2 a { text-decoration: underline; }
+.job p { max-width: var(--measure); color: var(--color-muted); }
+.job .job-price { grid-column: 2; grid-row: 1 / span 3; justify-self: end; }
+.empty { color: var(--color-muted); }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 0 var(--space-3); font-size: var(--text-s); }
+
+.included { margin-top: var(--space-4); }
+.included ul { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-1); max-width: var(--measure); margin: var(--space-2) 0 0; padding: 0; list-style: none; }
+.included li { position: relative; padding: var(--space-2) var(--space-2) var(--space-2) 2.75rem; background: var(--color-panel); border-radius: var(--radius); }
+.included li::before {
+  content: "";
+  position: absolute;
+  top: 1.15rem;
+  left: 0.9rem;
+  width: 0.95rem;
+  height: 0.5rem;
+  border: solid var(--color-accent);
+  border-width: 0 0 0.2rem 0.2rem;
+  transform: rotate(-45deg);
+}
+
+/* ---------- footer ---------- */
+.colophon { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-2); padding: var(--space-4) var(--edge) var(--space-5); font-size: var(--text-s); }
+.colophon > * { margin: 0; }
+.colophon-name { font-size: var(--text-m); }
+.colophon-facts { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); }
+.colophon-facts > * { min-width: 0; }
+.colophon ul { margin: 0; padding: 0; list-style: none; columns: 14rem 4; column-gap: var(--space-4); }
+.colophon li { padding-block: 0.4rem; break-inside: avoid; }
+.colophon li a { text-decoration-thickness: 0.0625rem; }
+.colophon-note, .colophon nav { color: var(--color-muted); }
+
+/* ---------- narrow: tables scroll in their own box, board rows stack ---------- */
+@media (max-width: 40rem) {
+  .prose table { display: block; width: fit-content; max-width: 100%; overflow-x: auto; }
+  .prose td:not([align="right"]) { min-width: 6em; }
+  .prose p, .prose li, .lede, .prose table:not(:has(th:nth-child(3))) td:not([align="right"]) { hyphens: auto; }
+  /* three columns or more may have to scroll: their words stay whole, and the last
+     column, where the long cell usually is, gets room to be read */
+  .prose table:has(th:nth-child(3)) :is(th, td) { overflow-wrap: normal; -webkit-hyphens: manual; hyphens: manual; }
+  .prose table:has(th:nth-child(3)) td:not([align="right"]) { min-width: 10em; }
+  .prose table:has(th:nth-child(3)) td:last-child:not([align="right"]) { min-width: 14em; }
+  /* a price list fills the screen, and its first column gives way so the plate stays in view */
+  .prose table:not(:has(th:nth-child(3))):has(td[align="right"]) td:first-child { width: 100%; overflow-wrap: anywhere; }
+  .masthead ul { column-gap: var(--space-2); }
+  .job { display: block; }
+  .job .job-price { margin-top: var(--space-2); }
+}
+
+/* ---------- wide: plate beside the heading, section labels in their own column ---------- */
+@media (min-width: 64rem) {
+  .sheet {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, var(--plate-width));
+    gap: var(--space-4) var(--space-5);
+    align-items: start;
+  }
+  .sheet > * { grid-column: 1 / -1; }
+  .sheet > .page-header { grid-column: 1; }
+  .sheet > .call { grid-column: 2; margin-block: 0; }
+  .prose, .included {
+    display: grid;
+    grid-template-columns: var(--label-col) minmax(0, var(--measure)) minmax(0, 1fr);
+    column-gap: var(--space-4);
+    align-items: start;
+    max-width: none;
+  }
+  .prose > *, .included > * { grid-column: 2; }
+  /* tables, dividers, code and the checklist run on to the page edge, under the big plate */
+  .prose > :is(table, hr, pre), .included > ul { grid-column: 2 / -1; }
+  .included > ul { grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: none; }
+  .prose > h2, .included > h2 { grid-column: 1; }
+  .prose > h2, .prose > h2 + *, .included > h2, .included > ul { margin-top: var(--space-4); }
+  .prose > h2:first-child, .prose > h2:first-child + * { margin-top: 0; }
+  .included { margin-top: 0; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skip { transition: transform 0.15s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  /* ink on paper: every dark ground and the band reset to black on white */
+  :root {
+    --color-bg: #fff;
+    --color-panel: #fff;
+    --color-text: #000;
+    --color-muted: #333;
+    --color-accent: #000;
+    --color-on-accent: #000;
+    --color-tyre: #fff;
+    --color-on-tyre: #000;
+    --color-on-tyre-muted: #333;
+    --plate: #fff;
+    --plate-ink: #000;
+    --plate-edge: #000;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .skip, .tread, .back, .actions, .pagination, .colophon nav { display: none; }
+  main, .masthead, .colophon { padding-inline: 0; }
+  .band { background: none; border-right: var(--keyline) solid; }
+  .prose td:not([align="right"]), .job, .included li, .prose blockquote, .prose pre { border: 0.0625rem solid var(--color-muted); }
+  .prose td[align="right"] { border-left-width: var(--keyline); }
+  .gap { margin: 0; color: inherit; }
+  .job, .included li, .prose blockquote, .prose tr, .call { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+  .prose hr { height: 0; border-top: 0.0625rem solid; background: none; }
+  /* enhance.js marks a link whose text is already its address, so it is not printed twice */
+  .prose a[href^="http"]:not(.bare)::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+}

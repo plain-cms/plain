@@ -1,0 +1,73 @@
+{
+  "starter": "credits",
+  "sampleTitle": "Mara Ellingham",
+  "collections": {
+    "experience": {
+      "path": "content/experience",
+      "urlPattern": "/experience/:slug/",
+      "template": "role",
+      "listUrl": "/experience/",
+      "listTemplate": "cv",
+      "label": "Experience",
+      "sortBy": "date",
+      "sortOrder": "desc",
+      "pageSize": 50,
+      "fields": [
+        {
+          "name": "title",
+          "type": "text",
+          "required": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "required": true
+        },
+        {
+          "name": "organization",
+          "type": "text"
+        },
+        {
+          "name": "period",
+          "type": "text"
+        },
+        {
+          "name": "location",
+          "type": "text"
+        },
+        {
+          "name": "summary",
+          "type": "text"
+        },
+        {
+          "name": "description",
+          "type": "text"
+        },
+        {
+          "name": "highlights",
+          "type": "list"
+        },
+        {
+          "name": "draft",
+          "type": "boolean",
+          "default": false
+        }
+      ]
+    }
+  },
+  "navigation": [
+    {
+      "label": "Home",
+      "url": "/"
+    },
+    {
+      "label": "CV",
+      "url": "/experience/"
+    },
+    {
+      "label": "Contact",
+      "url": "/contact/"
+    }
+  ],
+  "sampleContent": "sample/"
+}

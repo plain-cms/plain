@@ -1,0 +1,28 @@
+{{#if page.url.4}}<article class="page">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>{{else}}<article class="page front{{#if collections.services}} has-chart{{/if}}">
+  <header class="page-header">
+    <h1>{{ page.title }}</h1>
+    {{#if page.description}}<p class="lede">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if collections.services}}<section class="chart" data-list="/care/" aria-labelledby="chart-heading">
+    <h2 class="visually-hidden" id="chart-heading">{{ strings.careIndex }}</h2>
+    <ol class="rows" role="list">
+      {{#each collections.services as item}}<li class="row"><a class="row-title" href="{{ item.url }}">{{ item.title }}</a></li>
+      {{/each}}
+    </ol>
+    <p class="chart-more"><a href="/care/">{{ strings.allCare }}</a></p>
+    {{> duochrome}}
+  </section>{{/if}}
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>{{/if}}

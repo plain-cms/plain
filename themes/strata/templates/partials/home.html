@@ -1,0 +1,23 @@
+<div class="home{{#if collections.experience}} has-log{{/if}}">
+  <header class="home-head">
+    {{#if data.profile}}<p class="home-kicker"><span class="kicker-name">{{#if data.profile.name}}{{ data.profile.name }}{{else}}{{ site.title }}{{/if}}</span>{{#if data.profile.role}}
+      <span class="kicker-role">{{ data.profile.role }}</span>{{/if}}</p>
+    {{/if}}<h1 class="home-title">{{ page.title }}</h1>
+  </header>
+  {{#if page.content}}<div class="prose home-text">
+{{{ page.content }}}
+  </div>
+  {{/if}}{{#if collections.experience}}<section class="home-log" aria-labelledby="home-log-title">
+    <div class="log-bar">
+      <h2 class="log-title" id="home-log-title">{{ strings.experience }}</h2>
+      <a class="to-cv" href="/experience/">{{ strings.readTheCv }}</a>
+    </div>
+    <div class="sheet">
+    {{> log-head}}
+      <ol class="log" role="list">
+      {{#each collections.experience as entry}}{{> stratum-brief}}{{/each}}
+      </ol>
+    </div>
+  </section>
+  {{/if}}
+</div>

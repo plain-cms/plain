@@ -1,33 +1,32 @@
 <section class="menu-page">
-  <header class="page-header menu-header">
-    <h1>{{ page.title }}</h1>
-    {{#if page.description}}<p class="menu-standfirst">{{ page.description }}</p>{{/if}}
-  </header>
-
-  {{#if items}}
   <div class="carte">
-    <ol class="carte-list">
-      {{#each items as item}}<li class="dish">
+    <header class="page-header menu-header">
+      <h1>{{ page.title }}</h1>
+      {{#if page.description}}<p class="menu-standfirst">{{ page.description }}</p>{{/if}}
+    </header>
+    {{#if items}}
+    <ol class="carte-list" role="list">
+      {{#each items as item}}<li class="dish" data-course="{{ item.section }}">
+        {{#if item.section}}<h2 class="dish-course">{{ item.section }}</h2>{{/if}}
         <p class="dish-line">
-          <a class="dish-name" href="{{ item.url }}">{{ item.title }}</a>
-          <span class="dish-leader" aria-hidden="true"></span>
+          <span class="dish-what"><a class="dish-name" href="{{ item.url }}">{{ item.title }}</a>{{#if item.price}}<span class="dish-leader" aria-hidden="true"></span>{{/if}}</span>
           {{#if item.price}}<span class="dish-price">{{ item.price }}</span>{{/if}}
         </p>
         {{#if item.description}}<p class="dish-desc">{{ item.description }}</p>{{/if}}
-        {{#if item.section}}<p class="dish-course">{{ item.section }}</p>{{/if}}
       </li>
       {{/each}}
     </ol>
+    {{#if strings.carteNote}}<p class="carte-note">{{ strings.carteNote }}</p>{{/if}}
+    {{else}}
+    <p class="empty">{{ strings.menuEmpty }}</p>
+    {{/if}}
   </div>
-  {{else}}
-  <p class="empty">The menu is being written. Check back soon.</p>
-  {{/if}}
 
   {{#if pagination.multiple}}
-  <nav class="pagination" aria-label="Pages">
-    {{#if pagination.newer}}<a href="{{ pagination.newer }}">← Previous</a>{{/if}}
-    <span>Page {{ pagination.page }} of {{ pagination.totalPages }}</span>
-    {{#if pagination.older}}<a href="{{ pagination.older }}">More →</a>{{/if}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.menuPrevious }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.menuMore }}</a>{{/if}}
   </nav>
   {{/if}}
 </section>

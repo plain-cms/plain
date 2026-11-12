@@ -1,17 +1,28 @@
 {
   "name": "Sam Kessler",
-  "role": "Product engineer — web platforms & developer tools",
+  "role": "Product engineer, web platforms and developer tools",
   "email": "sam@example.com",
   "links": [
-    { "label": "samkessler.example.com", "url": "https://samkessler.example.com" },
-    { "label": "github.com/skessler", "url": "https://github.com/skessler" }
+    {
+      "label": "+31 6 5550 0142",
+      "url": "tel:+31655500142"
+    },
+    {
+      "label": "samkessler.example.com",
+      "url": "https://samkessler.example.com"
+    },
+    {
+      "label": "github.com/skessler",
+      "url": "https://github.com/skessler"
+    }
   ],
   "skills": [
-    "TypeScript & Node",
+    "TypeScript and Node",
     "Postgres",
     "Design systems",
     "Accessibility (WCAG)",
-    "CI/CD & observability",
-    "Technical writing"
+    "CI/CD and observability",
+    "Technical writing",
+    "Dutch, English, German"
   ]
 }

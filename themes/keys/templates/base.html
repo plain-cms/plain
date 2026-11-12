@@ -16,6 +16,7 @@
 {{else}}{{#if site.socialImage}}<meta property="og:image" content="{{ site.url }}{{ site.socialImage }}">
 <meta name="twitter:card" content="summary_large_image">
 {{/if}}{{/if}}{{#each feeds as feed}}<link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ feed }}">
+{{/each}}{{#each alternates as alt}}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.url }}{{ alt.url }}">
 {{/each}}<meta name="color-scheme" content="light dark">
 {{#if site.favicon}}<link rel="icon" href="{{ site.favicon }}">
 {{else}}<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
@@ -23,10 +24,10 @@
 {{/if}}<link rel="stylesheet" href="/assets/theme.css">
 </head>
 <body>
-<a class="skip-link" href="#main">Skip to content</a>
+<a class="skip-link" href="#main">{{ strings.skipToContent }}</a>
 <header class="masthead">
   <a class="site-title" href="/">{{ site.title }}</a>
-  <nav aria-label="Main">
+  <nav aria-label="{{ strings.mainNav }}">
     <ul>
       {{#each nav as entry}}<li><a href="{{ entry.url }}"{{#if entry.current}} aria-current="page"{{/if}}>{{ entry.label }}</a></li>
       {{/each}}
@@ -39,17 +40,12 @@
 {{{ body }}}
 </main>
 <footer class="colophon">
-  {{#if data.agency.name}}
-  <p class="colophon-name">{{ data.agency.name }}</p>
-  <p class="colophon-line">
-    {{#if data.agency.hours}}<span>{{ data.agency.hours }}</span>{{/if}}
-    {{#if data.agency.phone}}<span><a href="tel:{{ data.agency.phone }}">{{ data.agency.phone }}</a></span>{{/if}}
-    {{#if data.agency.email}}<span><a href="mailto:{{ data.agency.email }}">{{ data.agency.email }}</a></span>{{/if}}
-  </p>
-  {{else}}
-  <p>{{ site.title }}{{#if site.description}} — {{ site.description }}{{/if}}</p>
+  <p class="colophon-name">{{#if data.agency.name}}{{ data.agency.name }}{{else}}{{ site.title }}{{/if}}</p>
+  {{#if data.agency.hours}}<p class="colophon-hours">{{ data.agency.hours }}</p>
+  {{/if}}{{#if data.agency.phone}}<p class="colophon-contact"><a href="tel:{{ data.agency.phone }}">{{ data.agency.phone }}</a></p>
+  {{/if}}{{#if data.agency.email}}<p class="colophon-contact"><a href="mailto:{{ data.agency.email }}">{{ data.agency.email }}</a></p>
+  {{/if}}{{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>
   {{/if}}
-  {{#if data.footer.html}}<p class="colophon-note">{{{ data.footer.html }}}</p>{{/if}}
 </footer>
 <script type="module" src="/assets/enhance.js"></script>
 </body>

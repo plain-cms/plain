@@ -1,0 +1,7 @@
+<li class="slate">
+  <h2><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.description}}<p class="gist">{{ item.description }}</p>
+  {{/if}}{{#if item.priceFrom}}<p class="tail"><span>{{ strings.from }}</span> <b>{{ item.priceFrom }}</b></p>
+  {{else}}{{#if item.dateFormatted}}<p class="tail"><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  {{/if}}{{/if}}
+</li>

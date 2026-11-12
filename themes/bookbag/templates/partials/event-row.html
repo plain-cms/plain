@@ -1,0 +1,9 @@
+<li class="event-row"{{#if item.status}} data-status="{{ item.status }}"{{/if}}>
+  <p class="when"><span class="day" aria-hidden="true"><span data-d="{{ item.date.8 }}">{{ item.date.8 }}</span>{{ item.date.9 }}</span><time datetime="{{ item.date }}">{{ item.dateFormatted }}</time></p>
+  <div class="what">
+    <p class="row-title"><a href="{{ item.url }}">{{ item.title }}</a></p>
+    {{#if item.time}}<p class="row-meta"><span class="row-time">{{ item.time }}</span>{{#if item.place}} <span class="row-place">{{ item.place }}</span>{{/if}}</p>
+    {{else}}{{#if item.place}}<p class="row-meta"><span class="row-place">{{ item.place }}</span></p>
+    {{/if}}{{/if}}{{#if item.status}}<p class="status"><span>{{ item.status }}</span><b class="s-open">{{ strings.statusOpen }}</b><b class="s-members">{{ strings.statusMembers }}</b><b class="s-off">{{ strings.statusCancelled }}</b></p>{{/if}}
+  </div>
+</li>

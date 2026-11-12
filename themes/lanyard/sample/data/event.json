@@ -1,0 +1,48 @@
+{
+  "dateLabel": "Thursday 9 and Friday 10 September 2027",
+  "date": "2027-09-09",
+  "time": "Registration from 8.30 am both days",
+  "venue": "The Cloth Hall, Halbridge",
+  "address": "Weavers Yard, Market Street, Halbridge HD7 2LQ",
+  "entry": "£185 for both days, £110 for one, £60 for students and retired members. Lunch included.",
+  "replyBy": "Friday 13 August 2027",
+  "replyEmail": "",
+  "ticketsUrl": "https://tickets.example.com/paper-parchment-2027",
+  "peopleLabel": "Speakers",
+  "programme": [
+    {
+      "day": "Day 1 — Thursday 9 September",
+      "items": [
+        { "time": "8.30", "title": "Registration and coffee", "place": "Foyer", "note": "Collect your badge and delegate pack at the front desk." },
+        { "time": "9.30", "title": "Welcome", "place": "Main hall", "note": "Ruth Ellery, chair of the Guild." },
+        { "time": "9.45", "title": "Keynote: after the flood, the Halbridge borough archive ten years on", "place": "Main hall", "note": "Dr Imogen Saltley." },
+        { "time": "11.00", "title": "Wheat starch paste, again", "place": "Main hall", "note": "Peter Lumb on why the old recipe still wins, with six pastes to try at the bench." },
+        { "time": "12.30", "title": "Lunch", "place": "The Long Room", "note": "" },
+        { "time": "2.00", "title": "Workshops: Japanese tissue repairs, or consolidating red rot", "place": "Studios 1 and 2", "note": "Choose one when you book. Twelve places in each." },
+        { "time": "4.15", "title": "Guild members’ meeting", "place": "Main hall", "note": "" },
+        { "time": "7.00", "title": "Conference dinner", "place": "The Old Dye Works", "note": "Booked separately. A coach leaves the Cloth Hall at 6.40." }
+      ]
+    },
+    {
+      "day": "Day 2 — Friday 10 September",
+      "items": [
+        { "time": "9.00", "title": "Mould: what the air in the strongroom tells you", "place": "Main hall", "note": "Tomasz Wierzbicki." },
+        { "time": "10.15", "title": "Short papers: five projects, fifteen minutes each", "place": "Main hall", "note": "" },
+        { "time": "12.00", "title": "Lunch and posters", "place": "The Long Room", "note": "Poster authors stand by their boards from 12.30." },
+        { "time": "1.30", "title": "Digitising fragile ledgers without taking them apart", "place": "Main hall", "note": "Hannah Oduya." },
+        { "time": "3.00", "title": "Panel: who will train the next bench conservators?", "place": "Main hall", "note": "Chaired by Marcus Fenby." },
+        { "time": "4.15", "title": "Poster prize and close", "place": "Main hall", "note": "" }
+      ]
+    }
+  ],
+  "people": [
+    { "name": "Dr Imogen Saltley", "role": "Keynote", "note": "Led the salvage of the Halbridge borough archive after the 2017 flood." },
+    { "name": "Peter Lumb", "role": "Wheat starch paste", "note": "Forty years at the bench, and still makes his own paste every Monday." },
+    { "name": "Tomasz Wierzbicki", "role": "Mould and air", "note": "Environmental scientist who has monitored record stores across the north for twenty years." },
+    { "name": "Hannah Oduya", "role": "Digitising ledgers", "note": "Head of imaging at the Wolds County Record Office." },
+    { "name": "Aiko Brandreth", "role": "Workshop: Japanese tissue", "note": "" },
+    { "name": "Gwen Hartas", "role": "Workshop: red rot", "note": "Bookbinder and conservator in private practice in Thornby." },
+    { "name": "Marcus Fenby", "role": "Panel chair", "note": "Runs the Guild’s apprenticeship scheme." },
+    { "name": "Ruth Ellery", "role": "Chair of the Guild", "note": "" }
+  ]
+}

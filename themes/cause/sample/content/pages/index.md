@@ -1,16 +1,11 @@
 ---
 title: Every adult in this city can learn to read here, free
-description: Page & Chapter is an adult-literacy charity. One-to-one tutoring, no waiting list longer than two weeks, no cost, no judgment.
+description: Page & Chapter is an adult-literacy nonprofit. One-to-one tutoring, no waiting list longer than two weeks, no cost, no judgment.
 hero: true
 heroImage: ""
 heroAlt: A tutor and a learner reading together at a library table
 example: true
 ---
-
-*Replace this page with your own mission. Keep the shape: the photograph,
-the one number, what you do in plain words, and the donate button. Set
-`heroImage` to a photo of the work — one person, mid-task, not a group
-shot. Restraint is what reads as trust.*
 
 ## What we do
 
@@ -32,6 +27,6 @@ English-as-a-second-language tracks.
 ## Why it costs money at all
 
 Tutors volunteer. What your money buys is everything around the table: books
-learners keep, room hire in the neighborhoods, tutor training, and childcare
-during sessions — the single biggest reason people stop coming. The
-[donate page](/donate/) shows exactly where a pound goes.
+learners keep, room rental in the neighborhoods, tutor training, and
+childcare during sessions — the single biggest reason people stop coming.
+The [donate page](/donate/) shows exactly where a dollar goes.

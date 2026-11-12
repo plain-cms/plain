@@ -1,0 +1,12 @@
+<aside class="card-lines" aria-label="{{ strings.phoneLines }}">
+  {{#if data.practice.phone}}<div class="box box-call">
+    <p class="caption">{{ strings.callUs }}</p>
+    <p class="phone"><a href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></p>
+  </div>
+  {{/if}}{{#if data.practice.emergencyPhone}}<div class="box box-ooh">
+    <p class="caption">{{ strings.outOfHours }}</p>
+    {{#if data.practice.emergencyNote}}<p class="ooh-note">{{ data.practice.emergencyNote }}</p>
+    {{/if}}<p class="phone"><a href="tel:{{ data.practice.emergencyPhone }}">{{ data.practice.emergencyPhone }}</a></p>
+  </div>
+  {{/if}}
+</aside>

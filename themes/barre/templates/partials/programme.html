@@ -1,0 +1,21 @@
+{{#if data.schedule.days}}
+<section class="programme" aria-labelledby="programme-heading">
+  <h2 class="programme-heading" id="programme-heading"><span>{{ strings.programmeHeading }}</span></h2>
+  {{#each data.schedule.days as day}}
+  <section class="act" data-day="{{ day.day }}">
+    <h3 class="act-title"><span class="act-no" aria-hidden="true">{{ strings.act }}</span> <span class="act-name">{{ day.day }}</span> <span class="today-flag" hidden>{{ strings.today }}</span></h3>
+    {{#if day.classes}}<ul class="cast">
+      {{#each day.classes as session}}<li class="cast-line session">
+        <span class="cast-left"><span class="session-time">{{ session.time }}</span></span>
+        <span class="cast-right"><span class="session-name">{{ session.name }}</span>{{#if session.who}}<span class="session-who">{{ strings.withInstructor }} {{ session.who }}</span>{{/if}}{{#if session.level}}<span class="session-level">{{ session.level }}</span>{{/if}}</span>
+      </li>
+      {{/each}}
+    </ul>
+    {{else}}<p class="act-closed">{{ strings.noClasses }}</p>
+    {{/if}}
+  </section>
+  {{/each}}
+  {{#if data.schedule.trialNote}}<p class="trial-note">{{ data.schedule.trialNote }}</p>
+  {{/if}}
+</section>
+{{/if}}

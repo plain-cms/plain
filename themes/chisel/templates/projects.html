@@ -1,0 +1,26 @@
+{{#if page.slug}}<section class="tablet tablet-home">
+  <header class="tablet-head">
+    <h1 class="inscription">{{ page.title }}</h1>
+    {{#if page.content}}<div class="intro">
+{{{ page.content }}}
+    </div>{{/if}}
+  </header>
+  {{#if collections.projects}}<ul class="stones">
+    {{#each collections.projects as item}}{{> stone-entry}}
+    {{/each}}
+  </ul>
+  {{/if}}
+</section>
+{{else}}<section class="tablet">
+  <header class="tablet-head">
+    <h1 class="inscription">{{ page.title }}</h1>
+  </header>
+  {{#if items}}<ul class="stones">
+    {{#each items as item}}{{> stone-entry}}
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+</section>
+{{> pagination}}
+{{/if}}

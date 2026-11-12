@@ -1,0 +1,10 @@
+<li class="entry">
+  <p class="entry-when">{{#if entry.period}}{{ entry.period }}{{else}}<time datetime="{{ entry.date }}">{{ entry.dateFormatted }}</time>{{/if}}</p>
+  <div class="entry-what">
+    <h3 class="entry-title">{{#if entry.content}}<a href="{{ entry.url }}">{{ entry.title }}</a>{{else}}{{ entry.title }}{{/if}}</h3>
+    {{#if entry.organization}}<p class="entry-at"><span>{{ entry.organization }}</span>{{#if entry.location}} <span class="entry-place">{{ entry.location }}</span>{{/if}}</p>
+    {{else}}{{#if entry.location}}<p class="entry-at"><span class="entry-place">{{ entry.location }}</span></p>
+    {{/if}}{{/if}}{{#if entry.summary}}<p class="entry-summary">{{ entry.summary }}</p>
+    {{/if}}
+  </div>
+</li>

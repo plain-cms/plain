@@ -1,0 +1,3 @@
+{{#if data.practice.phone}}<p class="duo duo-green"><span class="duo-label">{{ strings.callUs }}</span> <a class="duo-value" href="tel:{{ data.practice.phone }}">{{ data.practice.phone }}</a></p>
+{{else}}{{#if data.practice.email}}<p class="duo duo-green"><span class="duo-label">{{ strings.writeToUs }}</span> <a class="duo-value mail" href="mailto:{{ data.practice.email }}">{{ data.practice.email }}</a></p>
+{{/if}}{{/if}}

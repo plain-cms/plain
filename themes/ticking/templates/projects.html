@@ -1,0 +1,28 @@
+{{#if page.slug}}<section class="book">
+  <div class="band selvedge" aria-hidden="true"></div>
+  <header class="book-intro wrap">
+    <div class="book-title">
+      <p class="typed kicker">{{ strings.sampleBook }}</p>
+      <h1>{{ page.title }}</h1>
+    </div>
+    {{#if page.content}}<div class="prose intro-text">
+{{{ page.content }}}
+    </div>{{/if}}
+  </header>
+  {{#if collections.projects}}<ul class="swatches wrap">
+    {{#each collections.projects as item}}{{> swatch}}
+    {{/each}}
+  </ul>{{/if}}
+</section>{{else}}<section class="book">
+  <div class="band selvedge" aria-hidden="true"></div>
+  <header class="book-head wrap">
+    <p class="typed kicker">{{ strings.sampleBook }}</p>
+    <h1>{{ page.title }}</h1>
+  </header>
+  {{#if items}}<ul class="swatches wrap">
+    {{#each items as item}}{{> swatch}}
+    {{/each}}
+  </ul>
+  {{else}}<p class="empty wrap">{{ strings.nothingHere }}</p>
+  {{/if}}{{> pagination}}
+</section>{{/if}}

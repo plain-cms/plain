@@ -1,0 +1,5 @@
+<li class="label"><div class="plate" data-status="{{ item.status }}">
+  <p class="plate-top"><span class="family">{{ item.category }}</span>{{#if item.status}}<span class="status">{{> status}}<span class="st st-raw">{{ item.status }}</span></span>{{/if}}</p>
+  <h2 class="name"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  <div class="plate-foot">{{#if item.details}}<ul class="engraved" role="list" aria-label="{{ strings.details }}">{{#each item.details as fact}}<li>{{ fact }}</li>{{/each}}</ul>{{/if}}{{#if item.price}}<p class="cost"><span class="price">{{ item.price }}</span>{{#if item.unit}} <span class="unit">{{ item.unit }}</span>{{/if}}</p>{{/if}}</div>
+</div></li>

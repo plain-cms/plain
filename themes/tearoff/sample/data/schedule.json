@@ -1,0 +1,43 @@
+{
+  "trialNote": "Your first evening is half price — ring or email to save a place, as most classes stop at twelve.",
+  "days": [
+    {
+      "day": "Monday",
+      "classes": [
+        { "time": "18:00–19:15", "name": "Italian for travellers", "who": "Carla", "level": "Beginners" },
+        { "time": "19:30–21:30", "name": "Life drawing (long poses)", "who": "Ruth", "level": "All levels" }
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "classes": [
+        { "time": "18:00–19:15", "name": "French from scratch", "who": "Hélène", "level": "Beginners" },
+        { "time": "19:30–20:45", "name": "French conversation", "who": "Hélène", "level": "Improvers" }
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "classes": [
+        { "time": "18:30–21:00", "name": "Clay hand-building", "who": "Tomasz", "level": "All levels" }
+      ]
+    },
+    {
+      "day": "Thursday",
+      "classes": [
+        { "time": "18:00–20:00", "name": "Watercolour", "who": "Devika", "level": "All levels" },
+        { "time": "20:15–21:30", "name": "Life drawing (quick poses)", "who": "Ruth", "level": "Beginners welcome" }
+      ]
+    },
+    {
+      "day": "Friday",
+      "classes": []
+    },
+    {
+      "day": "Saturday",
+      "classes": [
+        { "time": "10:00–13:00", "name": "Spoon carving", "who": "Joe", "level": "Beginners" },
+        { "time": "14:00–16:30", "name": "Lino printing", "who": "Gwen", "level": "All levels" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,495 @@
+/* Undersigned — a theme for residents' campaigns and petitions.
+   The object is the photocopied petition sheet on the campaign stall: the
+   demand in heavy capitals, the running total in a box at the top, then
+   numbered ruled lines with the next ones swiped in highlighter. Copier-white
+   ground with a streaky toner shadow down both edges of the glass, black ink and rules, and one
+   colour: highlighter yellow, behind links and never as type. At night the
+   ground turns charcoal and the yellow becomes the link colour.
+   Every decision is a token below; restyle by editing tokens, never selectors. */
+
+:root {
+  --font-display: "Arial Black", "Helvetica Neue", Helvetica, Arial, "Liberation Sans", sans-serif;
+  --font-body: Baskerville, "Baskerville Old Face", "Libre Baskerville", Charter, Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --weight-display: 900;
+  --text-s: 0.875rem;
+  --text-m: 1.125rem;
+  --text-l: 1.3125rem;
+  --text-xl: clamp(1.4375rem, 1.15rem + 0.9vw, 1.625rem);
+  --text-title: clamp(1.625rem, 1rem + 2.6vw, 2.75rem);
+  --text-demand: clamp(1.75rem, 0.9rem + 3.6vw, 3.5rem);
+  --text-tally: clamp(1.875rem, 0.6rem + 8vw, 4.25rem);
+  --leading-body: 1.55;
+  --leading-tight: 1.04;
+  --tracking-caps: 0.06em;
+
+  --color-bg: #fcfcfb;
+  --color-text: #161615;
+  --color-muted: #55554f;
+  --color-accent: #735c00;
+  --color-link: #161615;
+  --color-highlight: #ffe83d;
+  --color-rule: #1f1f1d;
+  --color-toner: #5f5f5a;
+  --color-haze: rgba(95,95,90,0.3);
+  --color-panel: #f0f0ec;
+
+  --measure: 38rem;
+  --page-width: 72rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --line-height: 3.25rem;
+  --line-no: 2.25rem;
+  --edge-width: 0.625rem;
+  --sign-col: 17rem;
+  --rule-heavy: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #1c1c1a;
+    --color-text: #ecebe4;
+    --color-muted: #a8a79e;
+    --color-accent: #ffd83a;
+    --color-link: #ffd83a;
+    --color-highlight: rgba(255,216,58,0.16);
+    --color-rule: #9a998f;
+    --color-toner: #060606;
+    --color-haze: rgba(0,0,0,0.45);
+    --color-panel: #262624;
+  }
+}
+
+/* Base ---------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; background: var(--color-bg); }
+
+/* The toner shadow a copier leaves along both edges of the glass: a hard
+   dark line that fades out, broken by the streaks a dirty drum prints. */
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 0 calc(var(--space-3) + var(--edge-width) / 2);
+  font-family: var(--font-body);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background:
+    linear-gradient(to right, var(--color-toner), var(--color-toner) calc(var(--edge-width) * 0.3), var(--color-haze) var(--edge-width), transparent calc(var(--edge-width) * 2)) left top / calc(var(--edge-width) * 2) 100% no-repeat,
+    linear-gradient(to left, var(--color-toner), var(--color-toner) calc(var(--edge-width) * 0.2), var(--color-haze) calc(var(--edge-width) * 0.8), transparent calc(var(--edge-width) * 1.7)) right top / calc(var(--edge-width) * 1.7) 100% no-repeat,
+    repeating-linear-gradient(to bottom, var(--color-haze) 0 46px, transparent 46px 53px, var(--color-haze) 53px 58px, transparent 58px 131px, var(--color-haze) 131px 212px, transparent 212px 229px, var(--color-haze) 229px 233px, transparent 233px 307px) left top / var(--edge-width) 100% no-repeat,
+    repeating-linear-gradient(to bottom, transparent 0 71px, var(--color-haze) 71px 152px, transparent 152px 160px, var(--color-haze) 160px 163px, transparent 163px 251px, var(--color-haze) 251px 289px, transparent 289px 337px) right top / calc(var(--edge-width) * 0.8) 100% no-repeat,
+    var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+.masthead, main, .colophon { max-width: var(--page-width); margin-inline: auto; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  line-height: var(--leading-tight);
+  text-wrap: balance;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
+}
+h2 { font-size: var(--text-xl); margin: var(--space-5) 0 var(--space-3); }
+h3 { font-size: var(--text-l); margin: var(--space-4) 0 var(--space-2); }
+h4 { font-size: var(--text-m); margin: var(--space-4) 0 var(--space-2); }
+
+/* Every link sits on a highlighter stroke; the underline is the cue that
+   does not rely on colour. */
+a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  background: linear-gradient(var(--color-highlight), var(--color-highlight)) 0 92% / 100% 0.55em no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+a:hover { background-size: 100% 100%; }
+a[href^="mailto:"], a[href^="tel:"], .prose a { overflow-wrap: anywhere; }
+
+:focus-visible {
+  outline: 3px solid var(--color-text);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-bg);
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 2;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg);
+}
+.skip-link:focus { left: calc(var(--edge-width) * 1.5); }
+
+/* Masthead ------------------------------------------------------------- */
+
+.masthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) 0 var(--space-2);
+  border-bottom: 1px solid var(--color-rule);
+}
+.site-title {
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-m);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: none;
+  line-height: 1.15;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+.masthead ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.masthead nav a {
+  display: inline-block;
+  padding: var(--space-1) var(--space-1) 0.15rem;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+.masthead nav a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+.masthead nav li:last-child a { background-size: 100% 100%; font-weight: 700; }
+
+/* The petition sheet (hero) -------------------------------------------- */
+
+.sheet {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3) var(--space-4);
+  margin: var(--space-4) 0 var(--space-5);
+  padding: var(--space-3) 0.75rem var(--space-4);
+  border: var(--rule-heavy) solid var(--color-rule);
+}
+.undersigned {
+  margin: 0 0 var(--space-2);
+  font-style: italic;
+  font-size: var(--text-l);
+}
+.sheet h1 {
+  margin: 0;
+  font-size: var(--text-demand);
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+}
+.mission { margin: 0; max-width: var(--measure); font-size: var(--text-l); line-height: 1.45; }
+
+/* The running total: a framed box that exists only with a number. */
+.tally {
+  margin: 0;
+  padding: var(--space-2) 0.75rem 0.75rem;
+  border: 2px solid var(--color-rule);
+  align-self: start;
+  line-height: 1.3;
+}
+.tally-number {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-tally);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+.tally-unit { font-family: var(--font-display); font-weight: var(--weight-display); text-transform: uppercase; letter-spacing: var(--tracking-caps); font-size: var(--text-s); }
+.tally-verb { font-style: italic; hyphens: auto; -webkit-hyphens: auto; }
+
+.sheet-photo { margin: 0; }
+.sheet-photo img, .cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-rule);
+  filter: grayscale(1) contrast(1.2);
+}
+.sheet-photo img { aspect-ratio: 3 / 2; object-fit: cover; }
+
+/* Numbered ruled lines, counted by CSS; the live ones carry the stroke. */
+.sheet-lines, .involved, .involved-lines { counter-reset: line; }
+.lines-head {
+  display: grid;
+  grid-template-columns: var(--line-no) minmax(0, 1fr);
+  margin: 0;
+  padding-bottom: var(--space-1);
+  border-bottom: var(--rule-heavy) solid var(--color-rule);
+  font-size: var(--text-s);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+.lines-head > span:nth-child(2) { padding-left: var(--space-3); }
+.lines-sign { display: none; }
+.lines, .lines-blank { margin: 0; padding: 0; list-style: none; }
+.lines li, .lines-blank li {
+  counter-increment: line;
+  display: grid;
+  grid-template-columns: var(--line-no) minmax(0, 1fr);
+  align-items: end;
+  min-height: var(--line-height);
+  border-bottom: 1px solid var(--color-rule);
+}
+.lines li::before, .lines-blank li::before {
+  content: counter(line) ".";
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  padding: 0 var(--space-2) 0.55rem 0;
+  border-right: 1px solid var(--color-rule);
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+.line-cell { display: block; min-width: 0; padding: var(--space-2) 0 0.3rem var(--space-2); }
+.line-body {
+  position: relative;
+  isolation: isolate;
+  display: inline-block;
+  max-width: 100%;
+  margin-right: var(--space-2);
+  padding: 0.1rem var(--space-2) 0.2rem;
+}
+.line-body::after {
+  content: "";
+  position: absolute;
+  inset: 0.3rem -0.35rem 0.15rem -0.2rem;
+  z-index: -1;
+  background: var(--color-highlight);
+  border-radius: 0.25rem 0.9rem 0.4rem 1rem / 0.9rem 0.3rem 0.8rem 0.4rem;
+  transform: rotate(-0.5deg) skewX(-6deg);
+}
+.line-addr { overflow-wrap: anywhere; }
+.line-link {
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  background: none;
+}
+.line-link:hover { text-decoration: underline; }
+.lines .line-link { overflow-wrap: break-word; }
+.line-note { font-style: italic; font-size: 1rem; }
+.lines-blank li:nth-child(n+3) { display: none; }
+.sheet-lines { margin-top: var(--space-3); }
+
+/* On a phone the address takes its own line, a size down, so it breaks
+   once instead of letter by letter. */
+@media (max-width: 39.99rem) {
+  .line-addr { display: block; font-size: var(--text-s); }
+  .line-body { margin-right: 0; }
+}
+
+@media (min-width: 40rem) {
+  .sheet { padding: var(--space-4); }
+  .tally { padding: var(--space-2) var(--space-3) var(--space-3); }
+  .line-cell { padding-left: var(--space-3); }
+  .line-link { font-size: var(--text-l); }
+  .line-note { font-size: var(--text-m); }
+  .lines-blank li:nth-child(n+3) { display: grid; }
+}
+
+@media (min-width: 54rem) {
+  .sheet { grid-template-areas: "demand" "mission" "lines"; }
+  .sheet.has-tally { grid-template-columns: minmax(0, 1fr) fit-content(24rem); grid-template-areas: "demand tally" "demand mission" "lines lines"; grid-template-rows: auto 1fr; }
+  .sheet.has-photo { grid-template-columns: minmax(0, 1fr) 17rem; grid-template-areas: "demand photo" "mission photo" "lines photo"; }
+  .sheet.has-tally.has-photo { grid-template-columns: minmax(0, 1fr) fit-content(20rem); grid-template-areas: "demand tally" "demand photo" "mission photo" "lines photo"; grid-template-rows: auto 1fr auto auto; }
+  .sheet .tally { grid-area: tally; }
+  .sheet-demand { grid-area: demand; }
+  .mission { grid-area: mission; }
+  .sheet-photo { grid-area: photo; }
+  .sheet-photo img { aspect-ratio: 4 / 5; }
+  .sheet-lines { grid-area: lines; margin-top: var(--space-4); }
+  /* The running total sits in the top corner; the campaign note drops to
+     close on the demand's last line, as on a printed sheet. */
+  .sheet.has-tally:not(.has-photo) .mission { margin: 0; font-size: var(--text-m); align-self: end; }
+  /* A signature column: the empty lines wait for names. */
+  .sheet .lines-head, .sheet .lines li, .sheet .lines-blank li { grid-template-columns: var(--line-no) minmax(0, 1fr) var(--sign-col); }
+  .sheet .lines-sign { display: block; padding-left: var(--space-3); color: var(--color-muted); }
+  .sheet .lines li::after, .sheet .lines-blank li::after {
+    content: "";
+    grid-column: 3;
+    align-self: stretch;
+    border-left: 1px dashed var(--color-rule);
+  }
+}
+
+/* Page heads and text --------------------------------------------------- */
+
+.page-header { padding: var(--space-4) 0 var(--space-3); border-bottom: var(--rule-heavy) solid var(--color-rule); margin-bottom: var(--space-4); }
+.page-header h1 { margin: 0; font-size: var(--text-title); text-transform: uppercase; }
+.lede { margin: var(--space-3) 0 0; max-width: var(--measure); font-size: var(--text-l); line-height: 1.45; font-style: italic; }
+.post-date { display: block; margin-bottom: var(--space-2); color: var(--color-muted); font-size: var(--text-s); }
+
+.page-actions { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-3); margin: 0 0 var(--space-4); }
+.btn {
+  display: inline-block;
+  padding: 0.55rem var(--space-3);
+  border: 2px solid var(--color-rule);
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+  text-decoration: none;
+  background-size: 100% 100%;
+}
+.btn:hover { text-decoration: underline; }
+.note { font-style: italic; }
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose img { max-width: 100%; height: auto; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li + li { margin-top: var(--space-1); }
+.prose blockquote {
+  margin: var(--space-4) 0;
+  padding: var(--space-1) 0 var(--space-1) var(--space-3);
+  border-left: 6px solid var(--color-rule);
+  font-style: italic;
+  font-size: var(--text-l);
+}
+.prose blockquote p { margin: 0 0 var(--space-2); }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose hr { margin: var(--space-4) 0; border: 0; border-top: 2px dashed var(--color-rule); }
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-3);
+  background: var(--color-panel);
+  border-left: var(--rule-heavy) solid var(--color-rule);
+  font-size: var(--text-s);
+  line-height: 1.5;
+}
+.prose code { font-family: var(--font-mono); font-size: 0.9em; }
+/* Cells wrap long words rather than push the table past the measure; a
+   table that is still too wide scrolls, with a toner shadow at the edge
+   that has more to show. */
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  margin: var(--space-4) 0;
+  border-collapse: collapse;
+  hyphens: manual;
+  -webkit-hyphens: manual;
+  background:
+    linear-gradient(to right, var(--color-bg) 40%, transparent) left / 2rem 100% no-repeat local,
+    linear-gradient(to left, var(--color-bg) 40%, transparent) right / 2rem 100% no-repeat local,
+    linear-gradient(to right, var(--color-haze), transparent) left / 0.75rem 100% no-repeat scroll,
+    linear-gradient(to left, var(--color-haze), transparent) right / 0.75rem 100% no-repeat scroll;
+}
+.prose th, .prose td { min-width: 4.5rem; overflow-wrap: anywhere; }
+.prose th {
+  padding: 0 var(--space-2) var(--space-1) 0;
+  border-bottom: var(--rule-heavy) solid var(--color-rule);
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: var(--weight-display);
+  font-size: var(--text-s);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  vertical-align: bottom;
+}
+.prose td { padding: var(--space-2) var(--space-2) var(--space-2) 0; border-bottom: 1px solid var(--color-rule); vertical-align: baseline; }
+/* The first column holds the figure: a sum never splits from its currency. */
+.prose td:first-child { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-m); }
+.prose td:first-child, .prose th:first-child { white-space: nowrap; }
+/* On a phone the text columns keep a readable width; a table with more of
+   them scrolls instead of squeezing to a syllable a line. */
+@media (max-width: 39.99rem) {
+  .prose td + td, .prose th + th { min-width: 9rem; }
+}
+@media (min-width: 40rem) {
+  .prose th, .prose td { min-width: 6.5rem; padding-right: var(--space-3); }
+  .prose th { overflow-wrap: break-word; }
+  .prose td:first-child { font-size: var(--text-l); }
+}
+
+/* Lists: the same ruled, numbered lines --------------------------------- */
+
+.points { margin-top: var(--space-5); }
+.points > h2 { margin: 0; padding-bottom: var(--space-1); border-bottom: var(--rule-heavy) solid var(--color-rule); font-size: var(--text-s); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.entries { margin: 0; padding: 0; list-style: none; counter-reset: line; }
+.entry {
+  counter-increment: line;
+  display: grid;
+  grid-template-columns: var(--line-no) minmax(0, 1fr);
+  border-bottom: 1px solid var(--color-rule);
+}
+.entry::before {
+  content: counter(line) ".";
+  padding: var(--space-3) var(--space-2) 0 0;
+  border-right: 1px solid var(--color-rule);
+  text-align: right;
+  color: var(--color-muted);
+  font-variant-numeric: tabular-nums;
+}
+.entry article { padding: var(--space-3) 0 var(--space-3) var(--space-3); min-width: 0; }
+.entry h2 { margin: 0; font-size: var(--text-xl); line-height: 1.2; }
+.entry h2 a { text-decoration: none; }
+.entry h2 a:hover { text-decoration: underline; }
+.entry p { margin: var(--space-2) 0 0; max-width: var(--measure); }
+.entry time { display: block; margin-bottom: var(--space-1); color: var(--color-muted); font-size: var(--text-s); }
+.tag-word { font-family: var(--font-display); font-weight: var(--weight-display); text-transform: uppercase; font-style: normal; }
+.empty { font-style: italic; color: var(--color-muted); }
+
+.pagination { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); align-items: baseline; margin-top: var(--space-4); }
+.pagination span { color: var(--color-muted); }
+
+.tags { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); margin: var(--space-3) 0 0; padding: 0; list-style: none; font-size: var(--text-s); }
+
+.cover { margin: 0 0 var(--space-4); max-width: var(--measure); }
+
+/* The get-involved block on a program: a strip of the same sheet. */
+.involved { max-width: var(--measure); margin-top: var(--space-5); padding: var(--space-3); border: var(--rule-heavy) solid var(--color-rule); }
+
+.not-found .lines-head { margin-top: var(--space-4); max-width: var(--measure); }
+.not-found .lines { max-width: var(--measure); }
+
+/* Footer ---------------------------------------------------------------- */
+
+.colophon {
+  margin-top: var(--space-5);
+  padding: var(--space-3) 0 var(--space-4);
+  border-top: var(--rule-heavy) solid var(--color-rule);
+  font-size: var(--text-s);
+}
+.colophon p { margin: 0 0 var(--space-2); max-width: var(--measure); }
+.colophon strong { font-family: var(--font-display); font-weight: var(--weight-display); text-transform: uppercase; letter-spacing: 0.02em; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none; animation: none; scroll-behavior: auto; }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-link: #000000;
+    --color-accent: #000000;
+    --color-highlight: #eeeeee;
+    --color-rule: #000000;
+    --color-panel: #ffffff;
+  }
+  body { background: var(--color-bg); padding: 0; }
+  .masthead nav, .skip-link { display: none; }
+  .sheet, .involved { break-inside: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: var(--text-s); }
+}
