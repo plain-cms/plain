@@ -171,7 +171,29 @@ Using a different agent? The skills are plain Markdown — point any tool at
 
 First sign in and the admin greets you with a five-step wizard: pick what you're building, name it, see it (a live preview already wearing your name), write your first words, and go live. Under the hood it applies a **starter** — a theme plus the right content types, menu, and example content.
 
-Fifteen starters ship in the box: **Journal** (blog), **Toolbox** (trades & local services), **Studio** (portfolio), **Bistro** (restaurant), **Manual** (documentation), **Terminal** (developer blog), **Letters** (newsletter & essays), **Launch** (startup/SaaS), **Gazette** (local news & magazine), **Folio** (résumé/CV), **Keys** (real estate), **Cause** (nonprofit), **Practice** (clinic), **Form** (fitness studio), and **Encore** (band & artist). The Appearance screen lets you try any of them on *your own pages* — with device widths and a light/dark toggle — before committing, and a customizer exposes each theme's colors and fonts as live controls. Your tweaks survive theme updates.
+115 starters ship in the box, in 17 families. A family is one kind of site with one content model, so you can switch between its themes without touching your content. Every theme looks finished without a single photo and comes with its interface words in eight languages.
+
+| Family | Themes |
+| ------ | ------ |
+| Restaurant and café (11) | bistro, chippy, slurp, calzone, crumb, alehouse, kerbside, saucer, tandoor, nightcap, fryup |
+| Trades and local services (11) | toolbox, eggshell, clippers, eaves, dualcontrol, carton, grout, topsoil, dovetail, suntrap, gasket |
+| Shop window (10) | cleaver, punnet, flyleaf, gatefold, rivet, skein, perennial, kiln, loupe, diecast |
+| Clinic and practice (8) | practice, eyechart, apothecary, lumbar, syllable, trimester, dewclaw, decibel |
+| Studio and classes (8) | form, lanes, bout, crux, lexicon, etude, tearoff, barre |
+| Portfolio (8) | studio, elevation, roughs, ticking, reel, stet, chisel, linocut |
+| Personal page and CV (7) | folio, mariner, credits, souschef, jotter, strata, mandate |
+| Club and community group (8) | hydrant, vestry, quorum, bookbag, switchback, jamboree, bygones, dugout |
+| Event (6) | tombola, vows, lanyard, advent, eulogy, wristband |
+| Property, accommodation and rental (7) | keys, tenancy, buzzer, seaview, fieldgate, hideaway, showhome |
+| Nonprofit and campaign (7) | cause, undersigned, cairn, bequest, pushrim, hustings, dropin |
+| Musician and performer (6) | encore, bandstand, backpatch, squeezebox, mixtape, drawstop |
+| Professional services (7) | taxreturn, chambers, apostille, patent, vigil, lintel, retrofit |
+| Newsletter and writing (8) | default (Journal), letters, terminal, datestamp, seedtime, doublebill, backissue, footpath |
+| News and magazine (1) | gazette |
+| Manual and handbook (1) | manual |
+| Product and software (1) | launch |
+
+[`themes/CATALOGUE.md`](themes/CATALOGUE.md) has a one-line brief for each theme, and [`themes/CONTACT-SHEET.html`](themes/CONTACT-SHEET.html) shows every home page side by side. The Appearance screen lets you try any of them on *your own pages* — with device widths and a light/dark toggle — before committing, and a customizer exposes each theme's colors and fonts as live controls. Your tweaks survive theme updates.
 
 ## Sites running plain
 
@@ -201,7 +223,7 @@ plain is one repo — the engine you clone. Three sibling repos in the [plain-cm
 | Repo | What it is | When you need it |
 | ---- | ---------- | ---------------- |
 | [**plain-cms/plugins**](https://github.com/plain-cms/plugins) | Curated registry of optional plugins — comments, table of contents, lightbox, related posts, GitHub stars, CV. Every entry is reviewed, because plugins are code that runs in your build or your visitors' browsers. | The admin's **Plugins** screen reads this registry: Install copies the folder into your `plugins/` and enables it in `site.config.json`, as one commit. |
-| [**plain-cms/starters**](https://github.com/plain-cms/starters) | Catalog of community themes and starters beyond the fifteen in the box — each entry points at a theme folder in some repo. | **Appearance → Browse more** in the admin: preview a theme on your own pages, then Install to copy it into your site. |
+| [**plain-cms/starters**](https://github.com/plain-cms/starters) | Catalog of community themes and starters beyond the 115 in the box — each entry points at a theme folder in some repo. | **Appearance → Browse more** in the admin: preview a theme on your own pages, then Install to copy it into your site. |
 | [**plain-cms/backend**](https://github.com/plain-cms/backend) | Two interchangeable reference backends (.NET 10 and vanilla Node), same API, one SQLite file. Deploy one and point your site's `services.backend` at it. | Only for the handful of opt-in plugins that need somewhere to send data — analytics beacons, contact submissions, feedback. Everything else stays fully static. |
 
 Adding to any of them is a pull request: a plugin folder (see the plugins repo's [CONTRIBUTING.md](https://github.com/plain-cms/plugins/blob/main/CONTRIBUTING.md)), a registry entry that passes the theme quality floor, or a backend route.
@@ -224,7 +246,8 @@ config.defaults.json  engine-owned defaults, merged under your config
 content/           your words (Markdown, one file per page/post)
 data/              navigation, redirects (JSON)
 media/             images and files
-themes/            fifteen starters ship in the box; add your own
+themes/            115 starters ship in the box; add your own
+families/          one content contract per family of themes
 plugins/           a plugin is a folder; install = copy + enable in config
 admin/             the browser editor (static, vanilla ES modules)
 .claude/skills/    recipes for Claude Code: write a post, run the site, extend it

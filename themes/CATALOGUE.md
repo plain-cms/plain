@@ -31,6 +31,15 @@ Each family section below starts with a sketch of its content contract — the f
 
 The rows went through three review rounds (218, then 92, then 47 findings, each fixed, replaced or dropped), and again when each family's contract was written: a row whose signature the contract could not carry was reworded to fit it.
 
+### How the hundred came out
+
+All hundred rows were built and none was dropped. Each theme went through the same steps: built to its row and its family contract. Two independent checks followed: a design review that saw only `screenshot.png` and the row, and a technical check against the contract and the theme rules. Up to two rounds of fixes, each followed by a fresh check, came next, and last a polish pass over the checker's small findings.
+
+- **Final design scores:** 84 themes at 8 out of 10 and 16 at 7, the pass mark: `loupe`, `dewclaw`, `crux`, `roughs`, `reel`, `linocut`, `dugout`, `advent`, `tenancy`, `seaview`, `hideaway`, `showhome`, `backpatch`, `chambers`, `datestamp`, `doublebill`. They were kept because each carries its row's object and nothing in them is broken, but they are the first candidates for a second design pass.
+- **First reviews:** three themes failed theirs, all at 6: `loupe`, `souschef` and `advent`. Each passed after fixes. In all, 32 themes needed no fix round, 61 needed one and 7 needed two.
+- **Dark-first screenshots:** the 17 themes designed dark first (`advent`, `alehouse`, `bandstand`, `chisel`, `crux`, `drawstop`, `elevation`, `eyechart`, `gasket`, `hideaway`, `loupe`, `rivet`, `souschef`, `suntrap`, `slurp`, `vigil`, `wristband`) were reviewed from screenshots of their light scheme. Their `screenshot.png` was retaken afterwards in their own dark scheme and checked by eye, not by a fresh review.
+- **Limits every theme shares:** the template language cannot slice a list, so a home page that shows a collection shows all of it (themes cap it with CSS or a fade). A page whose slug has one or two letters counts as the home page in themes that test `page.url.4`.
+
 ### Decisions the family contracts rest on
 
 - **`property` is one family.** `keys`' `status` select gained To let, Let agreed, Available and Booked after its three sale values. The contract groups the seven into three states (open, pending, closed), and a theme styles states, not values. There is still no availability calendar and no sleeps or amenities field.
