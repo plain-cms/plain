@@ -1,0 +1,26 @@
+<section class="archive">
+  <header class="sheet-head">
+    <h1 class="sheet-title">{{#if tag}}{{ strings.filedUnder }} {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+    {{#if items}}<p class="slip-note">{{ strings.slipNote }}</p>{{/if}}
+  </header>
+  {{#if items}}
+  <ol role="list" class="slip-grid">
+    {{#each items as item}}<li class="slip-cell">
+      <time class="stamp" datetime="{{ item.date }}">{{#if item.dateFormatted}}{{ item.dateFormatted }}{{else}}{{ item.date }}{{/if}}</time>
+      <h2 class="cell-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+      {{#if item.description}}<p class="cell-note">{{ item.description }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

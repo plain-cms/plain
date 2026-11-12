@@ -1,0 +1,376 @@
+/* Double Bill — a repertory cinema's monthly programme: primrose stock printed
+   in one teal ink. The signature is the archive: every review is a billing,
+   its title in bold capitals beside its date, its tags billed after it behind
+   a large + as supporting features, its description the programme note.
+   Every colour, face and measure is a token below; restyle there. */
+:root {
+  --font-display: Futura, "Futura PT", "Century Gothic", "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+  --font-text: Baskerville, "Baskerville Old Face", "Libre Baskerville", "Hoefler Text", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --text-xs: 0.78rem;
+  --text-s: 0.95rem;
+  --text-m: 1.16rem;
+  --text-l: 1.3rem;
+  --text-bill: clamp(1.3rem, 0.9rem + 1.5vw, 2.05rem);
+  --text-xl: clamp(2rem, 1rem + 3.4vw, 3.9rem);
+  --text-code: 0.86em;
+  --leading-body: 1.58;
+  --leading-tight: 1.12;
+  --tracking-caps: 0.12em;
+  --tracking-title: 0.015em;
+  --weight-display: 700;
+  --color-bg: #f6efc3;
+  --color-text: #0c4a4e;
+  --color-muted: #2e6966;
+  --color-accent: #0f6a6c;
+  --color-tint: #e6e5b6;
+  --color-rule: #7aa39a;
+  --color-mark: #cfe0c4;
+  --color-solid: #0c4a4e;
+  --color-on-solid: #f6efc3;
+  --color-still-shadow: #0c4a4e;
+  --color-still-paper: #f6efc3;
+  --measure: 27.5em;
+  --page-width: 76rem;
+  --date-col: 9.5rem;
+  --plus-size: 1.45em;
+  --plus-bar: 27%;
+  --rule: 1px;
+  --rule-heavy: 5px;
+  --space-1: 0.3rem;
+  --space-2: 0.6rem;
+  --space-3: 1.1rem;
+  --space-4: 2rem;
+  --space-5: 3.6rem;
+  --radius: 2px;
+}
+
+/* House lights down: primrose type on teal-black. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #0a1b1c;
+    --color-text: #f3ebbf;
+    --color-muted: #c9c39b;
+    --color-accent: #f0d97a;
+    --color-tint: #13302f;
+    --color-rule: #4f7c74;
+    --color-mark: #29504c;
+    --color-solid: #163b39;
+    --color-on-solid: #f3ebbf;
+    --color-still-shadow: #0a1b1c;
+    --color-still-paper: #d9cf9e;
+  }
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  display: flex; flex-direction: column; min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  overflow-wrap: break-word;
+}
+::selection { background: var(--color-mark); color: var(--color-text); }
+a { color: inherit; text-decoration-line: underline; text-decoration-thickness: var(--rule); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+h1, h2, h3, h4 { hyphens: auto; overflow-wrap: break-word; }
+
+.skip-link { position: absolute; left: var(--space-3); top: -10rem; padding: var(--space-2) var(--space-3); background: var(--color-text); color: var(--color-bg); font-family: var(--font-display); font-weight: var(--weight-display); z-index: 2; }
+.skip-link:focus { top: var(--space-2); }
+.frame { display: block; width: 100%; max-width: var(--page-width); margin-inline: auto; padding-inline: var(--space-3); }
+
+/* The plus: two bars of ink, drawn rather than typed, so it is the same
+   heavy geometric + in every font. */
+.support li::before, .programme-tag::before, .sheet-home .sheet-body > ul:first-of-type > li + li::before, .prose hr {
+  background:
+    linear-gradient(var(--color-accent), var(--color-accent)) center / 100% var(--plus-bar) no-repeat,
+    linear-gradient(var(--color-accent), var(--color-accent)) center / var(--plus-bar) 100% no-repeat;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+/* Masthead: the programme's cover line — the house name, then a double rule. */
+.masthead-inner {
+  display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  max-width: var(--page-width); margin-inline: auto;
+  padding: var(--space-4) var(--space-3) var(--space-3);
+}
+.masthead::after {
+  content: ""; display: block;
+  max-width: calc(var(--page-width) - 2 * var(--space-3));
+  margin: 0 var(--space-3);
+  height: calc(var(--rule-heavy) + 3px + var(--rule));
+  border-top: var(--rule-heavy) solid var(--color-text);
+  border-bottom: var(--rule) solid var(--color-text);
+}
+@media (min-width: 78.2rem) { .masthead::after { margin-inline: auto; } }
+.site-title {
+  font-family: var(--font-display); font-weight: var(--weight-display);
+  font-size: clamp(1.55rem, 1rem + 2.3vw, 2.7rem); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title); text-transform: uppercase;
+  text-decoration: none; min-width: 0; hyphens: auto;
+}
+.site-nav ul { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); margin: 0; padding: 0; list-style: none; }
+.site-nav a {
+  display: inline-block; padding: var(--space-1) 0;
+  font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps); text-transform: uppercase; text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+.site-nav a:hover { border-bottom-color: var(--color-rule); }
+.site-nav a[aria-current="page"] { border-bottom-color: var(--color-accent); }
+
+main.frame { flex: 1 0 auto; padding-block: var(--space-4) var(--space-5); }
+
+/* Page and piece headings: bold geometric capitals; notes in the serif. */
+.sheet-title, .review-title, .programme-title {
+  margin: 0;
+  font-family: var(--font-display); font-weight: var(--weight-display);
+  font-size: var(--text-xl); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title); text-transform: uppercase;
+  text-wrap: balance;
+}
+.sheet-standfirst, .review-note {
+  margin: var(--space-3) 0 0; max-width: var(--measure);
+  font-size: var(--text-l); font-style: italic; line-height: 1.4;
+}
+.sheet-head, .programme-head { margin-bottom: var(--space-4); }
+.sheet-body, .review-body { max-width: var(--measure); }
+
+/* The home page is the programme's front: the headline on the left over the
+   box-office panel, and the pieces chosen by hand billed down the right, a +
+   between each. The right column is exactly one measure wide and ends on the
+   masthead's rule. */
+@media (min-width: 60rem) {
+  .sheet-home { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, var(--measure)); grid-template-rows: auto 1fr; column-gap: var(--space-5); align-items: start; }
+  .sheet-home .sheet-head { grid-column: 1; grid-row: 1; margin: 0; padding-top: var(--space-3); border-top: var(--rule-heavy) solid var(--color-text); }
+  .sheet-home .sheet-body { grid-column: 2; grid-row: 1 / span 2; }
+  .sheet-home .playbill { grid-column: 1; grid-row: 2; margin-top: var(--space-4); }
+  .sheet-home .sheet-body > :first-child { margin-top: 0; }
+}
+/* The box office: the archive and the mailing list billed as a double bill,
+   reversed out of a solid of the ink, a + between and a note under each. */
+.playbill {
+  margin-top: var(--space-4); padding: var(--space-3) var(--space-3) var(--space-4);
+  background: var(--color-solid); color: var(--color-on-solid);
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+.playbill-head {
+  margin: 0 0 var(--space-3); padding-bottom: var(--space-2);
+  border-bottom: var(--rule) solid currentColor;
+  font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xs);
+  line-height: 1.35; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+}
+.playbill-list { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-4); margin: 0; padding: 0; list-style: none; }
+.playbill-list > li { flex: 1 1 11rem; min-width: 0; }
+.playbill-list > li + li { position: relative; padding-left: 2.4rem; }
+.playbill-list > li + li::before {
+  content: ""; position: absolute; left: 0; top: 0.05em; width: 1.5rem; height: 1.5rem;
+  background:
+    linear-gradient(currentColor, currentColor) center / 100% var(--plus-bar) no-repeat,
+    linear-gradient(currentColor, currentColor) center / var(--plus-bar) 100% no-repeat;
+}
+.playbill-link {
+  display: block; color: inherit; text-decoration: none;
+  font-family: var(--font-display); font-weight: var(--weight-display);
+  font-size: var(--text-bill); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title); text-transform: uppercase; hyphens: auto;
+}
+.playbill-link:hover { text-decoration: underline; text-decoration-thickness: 3px; }
+.playbill-link:focus-visible { outline-color: var(--color-on-solid); }
+.playbill-note { display: block; margin-top: var(--space-1); font-style: italic; line-height: 1.4; }
+.sheet-home .sheet-body > ul:first-of-type {
+  list-style: none; margin: var(--space-3) 0 var(--space-4); padding: 0;
+  border-top: var(--rule-heavy) solid var(--color-text);
+  border-bottom: var(--rule) solid var(--color-text);
+}
+.sheet-home .sheet-body > ul:first-of-type > li { margin: 0; padding: var(--space-3) 0; font-style: italic; line-height: 1.4; }
+.sheet-home .sheet-body > ul:first-of-type > li > a:first-child {
+  display: block; margin-bottom: var(--space-1);
+  font-family: var(--font-display); font-weight: var(--weight-display); font-style: normal;
+  font-size: var(--text-bill); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title); text-transform: uppercase;
+  text-decoration: none; hyphens: auto; text-wrap: balance;
+}
+.sheet-home .sheet-body > ul:first-of-type > li + li { padding-top: 0; }
+.sheet-home .sheet-body > ul:first-of-type > li + li::before {
+  content: ""; display: block; width: 2.4rem; height: 2.4rem; margin-bottom: var(--space-3);
+}
+.sheet-home .sheet-body > ul:first-of-type > li > a:first-child:hover { text-decoration: underline; text-decoration-thickness: 3px; }
+
+/* The programme: one billing per review. */
+.programme-kicker {
+  display: block; margin-bottom: var(--space-2);
+  font-size: var(--text-xs); letter-spacing: var(--tracking-caps);
+}
+.programme-tag { display: inline-flex; align-items: center; gap: 0.3em; max-width: 100%; min-width: 0; }
+.programme-tag::before { content: ""; flex: none; width: 0.8em; height: 0.8em; }
+.bills { list-style: none; margin: 0; padding: 0; border-top: var(--rule-heavy) solid var(--color-text); }
+.bill {
+  display: grid; grid-template-columns: minmax(0, 1fr); row-gap: var(--space-1);
+  padding: var(--space-3) 0 var(--space-4);
+  border-bottom: var(--rule) solid var(--color-text);
+}
+@media (min-width: 46rem) {
+  .bill { grid-template-columns: var(--date-col) minmax(0, 1fr); column-gap: var(--space-4); }
+}
+.bill-date, .review-date {
+  margin: 0;
+  font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xs);
+  line-height: 1.35; letter-spacing: var(--tracking-caps); text-transform: uppercase;
+}
+@media (min-width: 46rem) { .bill-date { padding-top: 0.7em; } }
+.bill-body { min-width: 0; }
+.bill-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-3); }
+.bill-title {
+  margin: 0; min-width: 0; max-width: 100%;
+  font-family: var(--font-display); font-weight: var(--weight-display);
+  font-size: var(--text-bill); line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-title); text-transform: uppercase;
+  text-wrap: balance;
+}
+.bill-title a { text-decoration: none; }
+.bill-title a:hover { text-decoration: underline; text-decoration-thickness: 3px; }
+.bill-note { margin: var(--space-2) 0 0; max-width: var(--measure); font-style: italic; line-height: 1.45; }
+
+/* Supporting features: each tag billed behind a large +. */
+.support { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-1) var(--space-3); margin: 0; padding: 0; list-style: none; min-width: 0; max-width: 100%; }
+.support li { display: flex; align-items: baseline; gap: 0.4em; min-width: 0; max-width: 100%; }
+.support li::before { content: ""; flex: none; align-self: center; width: var(--plus-size); height: var(--plus-size); }
+.support a {
+  min-width: 0;
+  font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-s);
+  line-height: 1.2; letter-spacing: 0.06em; text-transform: uppercase;
+  hyphens: auto; overflow-wrap: break-word;
+  text-decoration-thickness: var(--rule); text-underline-offset: 0.22em;
+}
+.support-big { margin-top: var(--space-3); }
+.support-big a { font-size: var(--text-l); }
+
+.empty { font-style: italic; color: var(--color-muted); }
+.pager {
+  display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: var(--space-2) var(--space-4);
+  margin-top: var(--space-4);
+  font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps); text-transform: uppercase;
+}
+.pager-count { color: var(--color-muted); }
+.pager-older { margin-left: auto; }
+
+/* A single review: the billing again, at full size. */
+.review-head { max-width: 58rem; margin-bottom: var(--space-4); padding-top: var(--space-3); border-top: var(--rule-heavy) solid var(--color-text); }
+.review-date { margin-bottom: var(--space-3); }
+.review-back {
+  margin: var(--space-5) 0 0; padding-top: var(--space-3); max-width: var(--measure);
+  border-top: var(--rule) solid var(--color-text);
+  font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xs);
+  letter-spacing: var(--tracking-caps); text-transform: uppercase;
+}
+/* A cover is printed in the same one ink: grey, then screened onto the stock. */
+.still { position: relative; isolation: isolate; max-width: 58rem; margin: 0 0 var(--space-4); background: var(--color-still-shadow); }
+.still img { display: block; width: 100%; height: auto; filter: grayscale(1) contrast(1.08); mix-blend-mode: screen; }
+.still::after { content: ""; position: absolute; inset: 0; background: var(--color-still-paper); mix-blend-mode: multiply; pointer-events: none; }
+
+/* Body text: long reading in the serif. */
+.prose { hyphens: manual; }
+.prose > * { margin-block: 0; }
+.prose > * + * { margin-block-start: 1em; }
+.prose h2, .prose h3 {
+  margin-block-start: 1.9em; margin-bottom: 0;
+  font-family: var(--font-display); font-weight: var(--weight-display);
+  line-height: 1.15; letter-spacing: 0.03em; text-transform: uppercase;
+}
+.prose h2 { font-size: 1.25rem; }
+.prose h3 { font-size: 1.02rem; letter-spacing: 0.06em; }
+.prose h4 { margin-block-start: 1.6em; margin-bottom: 0; font-size: 1em; font-style: italic; }
+.prose h2 + *, .prose h3 + *, .prose h4 + * { margin-top: 0.5em; }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li + li { margin-top: 0.3em; }
+.prose li > ul, .prose li > ol { margin-top: 0.3em; }
+.prose ul > li::marker { color: var(--color-accent); }
+.prose a { overflow-wrap: anywhere; }
+.prose a[href^="mailto:"], .prose a[href^="tel:"], .mailing-mail { overflow-wrap: anywhere; }
+.prose blockquote {
+  margin-inline: 0; padding: 0.1em 0 0.1em var(--space-3);
+  border-left: var(--rule-heavy) solid var(--color-accent);
+  font-style: italic; font-size: var(--text-l); line-height: 1.45;
+}
+.prose blockquote p + p { margin-top: 0.7em; }
+.prose code { font-family: var(--font-mono); font-size: var(--text-code); background: var(--color-tint); padding: 0.08em 0.3em; border-radius: var(--radius); }
+.prose pre { max-width: 100%; overflow-x: auto; padding: var(--space-3); background: var(--color-tint); border-left: var(--rule-heavy) solid var(--color-text); line-height: 1.45; }
+.prose pre code { padding: 0; background: none; font-size: var(--text-code); }
+.prose table { display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-size: var(--text-s); }
+.prose th, .prose td { min-width: 8em; padding: 0.45em 0.8em 0.45em 0; text-align: left; vertical-align: top; border-bottom: var(--rule) solid var(--color-rule); }
+.prose th { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xs); letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 2px solid var(--color-text); }
+.prose hr { width: 1.6rem; height: 1.6rem; margin: 2.2em auto; border: 0; }
+.prose img { display: block; max-width: 100%; height: auto; }
+
+/* The mailing list: the slip at the foot of the programme. */
+.mailing { margin-bottom: var(--space-5); }
+.mailing-slip {
+  display: grid; gap: var(--space-2) var(--space-4); align-items: baseline;
+  padding: var(--space-3) var(--space-3) var(--space-4);
+  background: var(--color-tint);
+  border-top: var(--rule-heavy) solid var(--color-text);
+}
+@media (min-width: 52rem) { .mailing-slip { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); padding-inline: var(--space-4); } }
+.mailing-prompt {
+  margin: 0; font-family: var(--font-display); font-weight: var(--weight-display);
+  font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.3rem); line-height: 1.15; letter-spacing: 0.02em; text-transform: uppercase;
+  hyphens: manual;
+}
+.mailing-alt { margin: 0; font-size: var(--text-l); }
+.mailing-label { display: block; font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-xs); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
+.mailing-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--space-2); min-width: 0; }
+.mailing-form .mailing-label { flex-basis: 100%; }
+.mailing-input {
+  flex: 1 1 14rem; min-width: 0; padding: 0.55em 0.7em;
+  font: inherit; font-size: var(--text-m); color: var(--color-text); background: var(--color-bg);
+  border: 2px solid var(--color-text); border-radius: 0;
+}
+.mailing-input::placeholder { color: var(--color-muted); opacity: 1; }
+.mailing-button {
+  flex: 0 1 auto; max-width: 100%; padding: 0.7em 1.1em;
+  font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-s);
+  letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.2; overflow-wrap: break-word;
+  color: var(--color-bg); background: var(--color-text); border: 2px solid var(--color-text); border-radius: 0; cursor: pointer;
+}
+.mailing-button:hover { background: var(--color-accent); border-color: var(--color-accent); }
+.mailing-button:focus-visible { outline-color: var(--color-text); }
+
+/* Colophon: the back page, reversed out of a solid of the ink. */
+.colophon { background: var(--color-solid); color: var(--color-on-solid); }
+.colophon-inner { padding-block: var(--space-4) var(--space-5); }
+.colophon p { margin: 0; }
+.colophon-title { font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-l); letter-spacing: var(--tracking-title); text-transform: uppercase; line-height: 1.1; }
+.colophon .colophon-line { margin-top: var(--space-2); max-width: var(--measure); font-style: italic; }
+.colophon-note { margin-top: var(--space-3); font-size: var(--text-s); max-width: var(--measure); }
+.colophon a { color: inherit; }
+
+.lost-links { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: 0; padding: var(--space-3) 0 0; list-style: none; border-top: var(--rule-heavy) solid var(--color-text); font-family: var(--font-display); font-weight: var(--weight-display); font-size: var(--text-s); letter-spacing: 0.06em; text-transform: uppercase; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
+
+@media print {
+  :root { --color-bg: #ffffff; --color-text: #0c4a4e; --color-muted: #2e6966; --color-accent: #0c4a4e; --color-tint: #ffffff; --color-rule: #0c4a4e; }
+  body { font-size: 11pt; }
+  .skip-link, .site-nav, .mailing, .review-back, .pager, .playbill { display: none; }
+  .masthead-inner { padding-top: 0; }
+  main.frame { padding-block: 1rem 0; }
+  .colophon { background: none; color: var(--color-text); border-top: var(--rule) solid var(--color-text); }
+  .still { background: none; }
+  .still img { filter: grayscale(1); mix-blend-mode: normal; }
+  .still::after { display: none; }
+  .prose pre { white-space: pre-wrap; overflow: visible; }
+  .prose table { display: table; overflow: visible; }
+  .bill, .prose pre, .prose blockquote { break-inside: avoid; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+}

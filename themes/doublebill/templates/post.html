@@ -1,0 +1,17 @@
+<article class="review">
+  <header class="review-head">
+    <p class="review-date"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time></p>
+    <h1 class="review-title">{{ page.title }}</h1>
+    {{#if page.tagLinks}}<ul role="list" class="support support-big" aria-label="{{ strings.filedUnder }}">
+      {{#each page.tagLinks as t}}<li><a href="{{ t.url }}">{{ t.name }}</a></li>
+      {{/each}}
+    </ul>
+    {{/if}}{{#if page.description}}<p class="review-note">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.cover}}<div class="still"><img src="{{ page.cover }}" alt="" decoding="async"></div>
+  {{/if}}{{#if page.content}}<div class="prose review-body">
+{{{ page.content }}}
+  </div>
+  {{/if}}<p class="review-back"><a href="/blog/">{{ strings.backToArchive }}</a></p>
+</article>

@@ -1,0 +1,16 @@
+<article>
+  <header class="head">
+    <h1 class="title">{{ page.title }}</h1>
+    {{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}<div class="post-calendar">
+      <span class="strip strip-m" aria-hidden="true" data-date="{{ page.date }}">{{> months}}</span>
+      <div class="meta"><time datetime="{{ page.date }}">{{ page.dateFormatted }}</time>{{#if page.tagLinks}}
+        <span class="visually-hidden">{{ strings.filedUnder }}</span><ul class="tags">{{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>{{/each}}</ul>{{/if}}</div>
+    </div>
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" decoding="async">
+  {{/if}}<div class="prose">
+{{{ page.content }}}
+  </div>
+  <p class="back"><a href="/blog/">{{ strings.backToArchive }}</a></p>
+</article>

@@ -1,0 +1,12 @@
+{
+  "starter": "seedtime",
+  "sampleTitle": "Five Rods",
+  "collections": {},
+  "navigation": [
+    { "label": "Home", "url": "/" },
+    { "label": "Archive", "url": "/blog/" },
+    { "label": "About", "url": "/about/" },
+    { "label": "Subscribe", "url": "/subscribe/" }
+  ],
+  "sampleContent": "sample/"
+}

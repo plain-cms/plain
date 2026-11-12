@@ -1,0 +1,16 @@
+<article class="review">
+  <header class="sheet-head">
+    <p class="review-stamp"><time class="stamp" datetime="{{ page.date }}">{{#if page.dateFormatted}}{{ page.dateFormatted }}{{else}}{{ page.date }}{{/if}}</time></p>
+    <h1 class="sheet-title">{{ page.title }}</h1>
+    {{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}{{#if page.tagLinks}}<ul class="classmarks" aria-label="{{ strings.filedUnder }}">
+      {{#each page.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>
+      {{/each}}
+    </ul>{{/if}}
+  </header>
+  {{#if page.cover}}<img class="cover" src="{{ page.cover }}" alt="" decoding="async">
+  {{/if}}{{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+  <p class="back"><a href="/blog/">{{ strings.backToArchive }}</a></p>
+</article>

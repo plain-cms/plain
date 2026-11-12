@@ -1,0 +1,8 @@
+<li class="entry">
+  <div class="entry-when"><span class="strip strip-s" aria-hidden="true" data-date="{{ item.date }}">{{> months}}</span>
+  <time class="entry-date" datetime="{{ item.date }}">{{ item.dateFormatted }}</time></div>
+  <h2 class="entry-title"><a href="{{ item.url }}">{{ item.title }}</a></h2>
+  {{#if item.description}}<p class="entry-desc">{{ item.description }}</p>
+  {{/if}}{{#if item.tagLinks}}<ul class="tags" aria-label="{{ strings.filedUnder }}">{{#each item.tagLinks as tag}}<li><a href="{{ tag.url }}">{{ tag.name }}</a></li>{{/each}}</ul>
+  {{/if}}
+</li>

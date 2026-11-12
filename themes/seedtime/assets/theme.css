@@ -1,0 +1,380 @@
+/* Seedtime — the garden-diary theme, set like the back of a seed packet.
+   Manila stock printed in one black ink: slab capitals for names and
+   headings, a humanist sans for the reading. The signature is the packet's
+   sowing calendar: a strip of twelve ruled boxes, J to D, with the month an
+   entry is dated blocked in leaf green. Green fills those boxes and nothing
+   else — never type. Restyle by editing tokens, never selectors. */
+
+:root {
+  --font-slab: Rockwell, "Rockwell Nova", "Roboto Slab", "Zilla Slab", Arvo, "Clarendon", "DejaVu Serif", Georgia, serif;
+  --font-sans: Seravek, "Gill Sans Nova", Ubuntu, Calibri, "Segoe UI", "DejaVu Sans", sans-serif;
+  --font-mono: ui-monospace, Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.125rem;
+  --text-l: 1.375rem;
+  --text-xl: clamp(1.875rem, 1.1rem + 3vw, 3rem);
+  --text-cell: clamp(0.95rem, 0.4rem + 2vw, 1.75rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.12;
+  --tracking-caps: 0.07em;
+
+  --color-bg: #e6d3a3;
+  --color-text: #1b1810;
+  --color-muted: #4e4430;
+  --color-accent: #3a7328;
+  --color-on-accent: #e6d3a3;
+  --color-rule: #1b1810;
+  --color-panel: #ddc78f;
+  --color-mark: #cbb377;
+
+  --page-width: 62rem;
+  --measure: 66ch;
+  --strip-small: 15rem;
+  --gutter: 1rem;
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --rule-thin: 1px;
+  --rule: 2px;
+  --rule-heavy: 6px;
+  --radius: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* The packet on the potting-shed shelf at dusk: creosote-brown ground,
+       the print gone pale, the green box catching the last light. */
+    --color-bg: #221e17;
+    --color-text: #ecdfbd;
+    --color-muted: #bcac86;
+    --color-accent: #6fa64b;
+    --color-on-accent: #1a1610;
+    --color-rule: #cdbd94;
+    --color-panel: #2d281f;
+    --color-mark: #4d4433;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  overflow-wrap: break-word;
+}
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a { color: var(--color-text); text-decoration-thickness: var(--rule-thin); text-underline-offset: 0.18em; }
+a:hover { text-decoration-thickness: var(--rule); }
+
+:focus-visible {
+  outline: 3px solid var(--color-text);
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--color-bg);
+}
+
+.wrap { max-width: calc(var(--page-width) + 2 * var(--gutter)); margin: 0 auto; padding: 0 var(--gutter); }
+
+.skip-link { position: absolute; left: -100vw; top: var(--space-2); padding: var(--space-2) var(--space-3); background: var(--color-bg); }
+.skip-link:focus { left: var(--space-2); }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* Slab capitals: names, headings, the menu, the strip ---------------------- */
+
+.site-title, .masthead a, .title, .entry-title, .prose h2, .calendar-label, .colophon-title, .strip, .prose th {
+  font-family: var(--font-slab);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-caps);
+}
+
+.title, .entry-title, .prose :is(h2, h3, h4), .subscribe-title {
+  hyphens: auto;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+}
+
+/* Masthead: the packet's top panel, closed by a heavy printed rule -------- */
+
+.masthead-in {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-3);
+  border-bottom: var(--rule-heavy) solid var(--color-rule);
+}
+
+.site-title {
+  font-size: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  line-height: var(--leading-tight);
+  text-decoration: none;
+  min-width: 0;
+}
+
+.masthead ul { display: flex; flex-wrap: wrap; gap: 0 var(--space-3); margin: 0; padding: 0; list-style: none; }
+.masthead nav a {
+  display: inline-block;
+  padding: var(--space-1) 0;
+  font-size: var(--text-s);
+  text-decoration: none;
+}
+.masthead nav a:hover { text-decoration: underline; }
+.masthead nav a[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 3px;
+  text-underline-offset: 0.35em;
+}
+
+/* Headings of every page ---------------------------------------------------- */
+
+main { padding-bottom: var(--space-4); }
+
+.head { margin: var(--space-4) 0 var(--space-3); }
+.title { margin: 0; font-size: var(--text-xl); line-height: var(--leading-tight); }
+.standfirst { margin: var(--space-2) 0 0; max-width: var(--measure); font-size: var(--text-l); line-height: 1.35; }
+.meta { margin: 0 0 var(--space-2); color: var(--color-muted); font-size: var(--text-s); }
+
+/* The sowing calendar — the signature ---------------------------------------
+   Twelve equal ruled boxes, a slab capital in each (aria-hidden: the date is
+   printed as text beside it). The strip carries the entry's date; one of the
+   twelve attribute rules below matches its month ("-03-" is March, a day
+   never ends in a dash) and blocks that box in green, the letter reversed
+   out of it. On the home page the calendar holds every entry's date, and a
+   month is blocked in when any entry falls in it (:has(); without it the
+   boxes stay empty, which is still a calendar). */
+
+.strip {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  border: var(--rule) solid var(--color-rule);
+  line-height: 1;
+  letter-spacing: 0;
+  text-align: center;
+}
+.strip > b {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  min-width: 0;
+  border-left: var(--rule-thin) solid var(--color-rule);
+}
+.strip > b:first-child { border-left: 0; }
+
+.strip[data-date*="-01-"] > b:nth-of-type(1), .strip[data-date*="-02-"] > b:nth-of-type(2),
+.strip[data-date*="-03-"] > b:nth-of-type(3), .strip[data-date*="-04-"] > b:nth-of-type(4),
+.strip[data-date*="-05-"] > b:nth-of-type(5), .strip[data-date*="-06-"] > b:nth-of-type(6),
+.strip[data-date*="-07-"] > b:nth-of-type(7), .strip[data-date*="-08-"] > b:nth-of-type(8),
+.strip[data-date*="-09-"] > b:nth-of-type(9), .strip[data-date*="-10-"] > b:nth-of-type(10),
+.strip[data-date*="-11-"] > b:nth-of-type(11), .strip[data-date*="-12-"] > b:nth-of-type(12),
+.key-box {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+.calendar:has([data-date*="-01-"]) > b:nth-of-type(1), .calendar:has([data-date*="-02-"]) > b:nth-of-type(2),
+.calendar:has([data-date*="-03-"]) > b:nth-of-type(3), .calendar:has([data-date*="-04-"]) > b:nth-of-type(4),
+.calendar:has([data-date*="-05-"]) > b:nth-of-type(5), .calendar:has([data-date*="-06-"]) > b:nth-of-type(6),
+.calendar:has([data-date*="-07-"]) > b:nth-of-type(7), .calendar:has([data-date*="-08-"]) > b:nth-of-type(8),
+.calendar:has([data-date*="-09-"]) > b:nth-of-type(9), .calendar:has([data-date*="-10-"]) > b:nth-of-type(10),
+.calendar:has([data-date*="-11-"]) > b:nth-of-type(11), .calendar:has([data-date*="-12-"]) > b:nth-of-type(12) {
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.strip-s { width: 20rem; max-width: 100%; font-size: 0.8125rem; }
+.strip-m { max-width: var(--measure); font-size: clamp(0.85rem, 0.5rem + 1.3vw, 1.25rem); }
+.strip-l { border-width: 3px; font-size: var(--text-cell); }
+.strip-l > b { border-left-width: var(--rule); }
+@media (min-width: 40rem) { .strip-l > b { aspect-ratio: 5 / 4; } }
+
+.calendar-block { margin: var(--space-4) 0; }
+.calendar-label, .key {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-s);
+}
+.key { margin: var(--space-2) 0 0; color: var(--color-muted); }
+.key-box { flex: none; width: 1.1em; height: 1.1em; border: var(--rule-thin) solid var(--color-rule); }
+
+.post-calendar { margin: var(--space-3) 0 var(--space-4); }
+.post-calendar .meta { margin: var(--space-2) 0 0; }
+
+/* Meta line: date, tags, reading time ---------------------------------------- */
+
+.tags, .tags li { display: inline; margin: 0; padding: 0; list-style: none; }
+.meta time { white-space: nowrap; }
+.meta > time:not(:last-child)::after, .tags li:not(:last-child)::after { content: "\00a0· "; }
+.tags a { color: var(--color-muted); }
+
+/* The archive ---------------------------------------------------------------- */
+
+.entries { margin: 0; padding: 0; list-style: none; border-bottom: var(--rule) solid var(--color-rule); }
+.entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  padding: var(--space-3) 0 var(--space-3);
+  border-top: var(--rule) solid var(--color-rule);
+}
+.entry-when { display: grid; grid-template-columns: minmax(0, 1fr); }
+.entry-date { margin-top: var(--space-1); color: var(--color-muted); font-size: var(--text-s); }
+.entry-title { margin: var(--space-2) 0 0; font-size: var(--text-l); line-height: var(--leading-tight); }
+.entry-title a { text-decoration: none; }
+.entry-title a:hover { text-decoration: underline; }
+.entry-desc { margin: var(--space-1) 0 0; max-width: var(--measure); }
+.entry .tags { margin-top: var(--space-1); font-size: var(--text-s); }
+.entry .tags { display: block; }
+
+@media (min-width: 50rem) {
+  .entry {
+    grid-template-columns: var(--strip-small) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    grid-template-areas: "when title" "when desc" "when tags";
+    column-gap: var(--space-4);
+    align-items: start;
+  }
+  .entry-when { grid-area: when; }
+  .entry-when > .strip { width: var(--strip-small); font-size: 0.75rem; }
+  .entry-title { grid-area: title; margin-top: 0; }
+  .entry-desc { grid-area: desc; }
+  .entry .tags { grid-area: tags; }
+}
+
+.empty { margin: var(--space-4) 0; color: var(--color-muted); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-3);
+  font-size: var(--text-s);
+}
+
+.back { margin: var(--space-4) 0 0; font-size: var(--text-s); }
+
+/* Text of a piece or a page -------------------------------------------------- */
+
+.prose { max-width: var(--measure); }
+.prose > :first-child { margin-top: 0; }
+.prose p, .prose ul, .prose ol, .prose table, .prose pre, .prose blockquote { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose ul { list-style: square; }
+.prose li > ul, .prose li > ol { margin: 0; }
+.prose li::marker { color: var(--color-text); }
+
+.prose h2, .prose h3, .prose h4 { margin: var(--space-4) 0 var(--space-2); line-height: var(--leading-tight); }
+.prose h2 { padding-top: var(--space-2); border-top: var(--rule) solid var(--color-rule); font-size: var(--text-m); }
+.prose h3 { font-family: var(--font-slab); font-size: var(--text-m); }
+.prose h4 { font-size: var(--text-m); }
+
+.prose blockquote { padding-left: var(--space-3); border-left: var(--rule-heavy) solid var(--color-rule); font-style: italic; }
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.prose code { font-family: var(--font-mono); font-size: 0.85em; padding: 0.05em 0.3em; background: var(--color-panel); border-radius: var(--radius); overflow-wrap: anywhere; }
+.prose pre { overflow-x: auto; padding: var(--space-3); background: var(--color-panel); border-left: var(--rule) solid var(--color-rule); line-height: 1.5; }
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); overflow-wrap: normal; }
+
+/* A table wider than the column scrolls in its own box. A bar shaded at the
+   right edge says there is more; a strip of ground at the far end of the
+   content scrolls in to cover it once the last column is reached. */
+.prose table {
+  display: block; max-width: 100%; overflow-x: auto; border-collapse: collapse; font-variant-numeric: tabular-nums; hyphens: manual;
+  background: linear-gradient(var(--color-bg), var(--color-bg)) right / 1.5em 100% no-repeat local, linear-gradient(to left, var(--color-rule), transparent) right / 0.6em 100% no-repeat scroll;
+}
+.prose th, .prose td { min-width: 7em; padding: var(--space-2) var(--space-3) var(--space-2) 0; text-align: left; vertical-align: top; border-bottom: var(--rule-thin) solid var(--color-rule); }
+.prose th { font-size: var(--text-s); border-bottom-width: var(--rule); }
+
+.prose hr { height: 0; margin: var(--space-4) 0; border: 0; border-top: var(--rule-thin) dashed var(--color-rule); }
+.prose img, .cover { display: block; max-width: 100%; height: auto; }
+.cover { width: 100%; margin: 0 0 var(--space-4); border: var(--rule) solid var(--color-rule); }
+.prose a[href^="mailto:"], .prose a[href^="tel:"], .subscribe-mail { overflow-wrap: anywhere; }
+
+/* 404 ------------------------------------------------------------------------ */
+
+.ways { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); margin: var(--space-3) 0 0; padding: 0; list-style: none; }
+
+/* The subscribe box: the packet's ruled panel of small print ---------------- */
+
+.subscribe-box {
+  margin: var(--space-4) 0 0;
+  padding: var(--space-3);
+  border: var(--rule) solid var(--color-rule);
+  border-top-width: var(--rule-heavy);
+}
+.subscribe-title { margin: 0 0 var(--space-2); max-width: 40rem; font-family: var(--font-slab); font-size: clamp(var(--text-m), 0.8rem + 1.5vw, var(--text-l)); line-height: 1.25; }
+.subscribe-alt { margin: 0; }
+.subscribe-form { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.subscribe-input {
+  flex: 1 1 16rem;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--rule) solid var(--color-rule);
+  border-radius: var(--radius);
+}
+.subscribe-input::placeholder { color: var(--color-muted); opacity: 1; }
+.subscribe-button {
+  flex: 0 1 auto;
+  min-width: 0;
+  padding: var(--space-2) var(--space-3);
+  font-family: var(--font-slab);
+  font-size: var(--text-m);
+  font-weight: 700;
+  color: var(--color-bg);
+  background: var(--color-text);
+  border: var(--rule) solid var(--color-rule);
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.subscribe-button:hover { text-decoration: underline; }
+
+/* Footer: the small print ---------------------------------------------------- */
+
+.colophon { margin-top: var(--space-4); padding-bottom: var(--space-5); font-size: var(--text-s); }
+.colophon-in { padding-top: var(--space-2); border-top: var(--rule-heavy) solid var(--color-rule); }
+.colophon p { margin: 0 0 var(--space-1); }
+.colophon-title { margin-right: var(--space-2); }
+.colophon-note { color: var(--color-muted); }
+.colophon-note a { color: inherit; }
+
+@media (forced-colors: active) {
+  .strip > b { forced-color-adjust: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { scroll-behavior: auto !important; transition: none !important; animation: none !important; }
+}
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-rule: #000000;
+    --color-panel: #ffffff;
+    --color-accent: #3a7328;
+    --color-on-accent: #ffffff;
+  }
+  body { font-size: 11pt; }
+  .masthead nav, .subscribe-box, .skip-link, .back, .pagination, .ways { display: none; }
+  .strip > b, .key-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .prose pre { white-space: pre-wrap; border: var(--rule-thin) solid var(--color-rule); }
+  .entry, .prose pre, .prose blockquote { break-inside: avoid; }
+  h1, h2, h3 { break-after: avoid; }
+}

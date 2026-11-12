@@ -1,0 +1,18 @@
+<section>
+  <header class="head">
+    <h1 class="title">{{#if tag}}{{ strings.taggedBefore }}{{ tag }}{{ strings.taggedAfter }}{{else}}{{ page.title }}{{/if}}</h1>
+    {{#if items}}<p class="key"><span class="key-box" aria-hidden="true"></span>{{ strings.keyEntry }}</p>
+    {{/if}}
+  </header>
+  {{#if items}}<ol class="entries" role="list">
+    {{#each items as item}}{{> entry}}
+    {{/each}}
+  </ol>
+  {{else}}<p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}{{#if pagination.multiple}}<nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>

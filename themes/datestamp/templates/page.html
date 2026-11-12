@@ -1,0 +1,10 @@
+<article class="sheet{{#if page.url.4}}{{else}} sheet-home{{/if}}">
+  <header class="sheet-head">
+    <h1 class="sheet-title">{{ page.title }}</h1>
+    {{#if page.description}}<p class="standfirst">{{ page.description }}</p>
+    {{/if}}
+  </header>
+  {{#if page.content}}<div class="prose">
+{{{ page.content }}}
+  </div>{{/if}}
+</article>

@@ -1,0 +1,589 @@
+/* Footpath — a walking diary set as a waymark fingerpost.
+   The ground is weathered oak; waymark yellow is kept for the arms alone.
+   The masthead is the post itself: the site's name on the white place plate,
+   the menu as enamel arms cut to a point, left and right by turns, the
+   current one black-tipped. The archive is a second post: every stage an
+   arm, its date ranged right where a sign prints the walking time.
+   Every decision is a token below (cms-spec.md §10.1). */
+
+:root {
+  --font-sign: Seravek, Frutiger, "Frutiger Next", "Segoe UI", "Myriad Pro", "Gill Sans Nova", Ubuntu, "Fira Sans", "Source Sans Pro", "Noto Sans", Candara, sans-serif;
+  --font-text: "Hoefler Text", "Garamond Premier Pro", "Adobe Garamond Pro", "EB Garamond", Garamond, "Sabon", "Goudy Old Style", "Book Antiqua", Georgia, serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --text-s: 0.875rem;
+  --text-m: 1.1875rem;
+  --text-arm: clamp(1.0625rem, 0.95rem + 0.4vw, 1.25rem);
+  --text-l: 1.3125rem;
+  --text-xl: clamp(1.375rem, 1.05rem + 1.4vw, 2rem);
+  --text-xxl: clamp(1.75rem, 1.15rem + 2.6vw, 2.875rem);
+  --leading-body: 1.6;
+  --leading-tight: 1.15;
+
+  --color-bg: #c4bcae;
+  --color-text: #1a1714;
+  --color-muted: #443b32;
+  --color-accent: #5c4e3f;
+  --color-grain: rgba(0,0,0,0.2);
+  --color-sheen: rgba(255,255,255,0.1);
+  --color-ground: #4d5530;
+  --color-arm: #f5c400;
+  --color-arm-ink: #15130f;
+  --color-arm-edge: #4a3f33;
+  --color-tip: #15130f;
+  --color-bolt: #6b6355;
+  --color-plate: #f8f7f2;
+  --color-plate-ink: #15130f;
+  --color-focus: #15130f;
+  --color-rule: #8a8072;
+  --color-panel: #d2cbbf;
+  --color-mark: #f2e08a;
+
+  --measure: 38rem;
+  --post-w: 1.375rem;
+  --arm-length: 17rem;
+  --arm-point: 0.95em;
+  --space-1: 0.375rem;
+  --space-2: 0.75rem;
+  --space-3: 1rem;
+  --space-4: 2rem;
+  --space-5: 3.5rem;
+  --radius: 2px;
+  --rule: 2px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dusk: the oak gone slate-blue in the last light, the enamel still catching it */
+    --color-bg: #24272c;
+    --color-text: #ece7dc;
+    --color-muted: #b4ac9f;
+    --color-accent: #8b7d6a;
+    --color-grain: rgba(0,0,0,0.3);
+    --color-sheen: rgba(255,255,255,0.08);
+    --color-ground: #7d8656;
+    --color-arm: #e9b900;
+    --color-arm-ink: #15130f;
+    --color-arm-edge: #0d0e10;
+    --color-tip: #15130f;
+    --color-bolt: #5a5448;
+    --color-plate: #e4e1d8;
+    --color-plate-ink: #15130f;
+    --color-focus: #f6dd7a;
+    --color-rule: #6a6458;
+    --color-panel: #2f3339;
+    --color-mark: #5a4b12;
+  }
+}
+
+/* Base ------------------------------------------------------------------- */
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-m);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  overflow-wrap: break-word;
+}
+
+::selection { background: var(--color-mark); color: var(--color-text); }
+
+a {
+  color: var(--color-text);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.17em;
+}
+a:hover { text-decoration-thickness: var(--rule); }
+
+:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -100vw;
+  top: var(--space-2);
+  z-index: 3;
+  background: var(--color-plate);
+  color: var(--color-plate-ink);
+  padding: var(--space-1) var(--space-3);
+  font-family: var(--font-sign);
+  font-weight: 700;
+}
+.skip-link:focus { left: var(--space-2); }
+
+main, .notice, .colophon {
+  max-width: calc(var(--measure) + 2 * var(--space-3));
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+}
+
+/* The post: one timber strip, drawn wherever a sign stands --------------- */
+
+.sign::before, .trail::before, .is-home .prose > ul:has(> li > a:first-child)::before {
+  content: "";
+  position: absolute;
+  width: var(--post-w);
+  background-color: var(--color-accent);
+  background-image:
+    repeating-linear-gradient(90deg, transparent 0 0.17rem, var(--color-grain) 0.17rem 0.23rem, transparent 0.23rem 0.41rem, var(--color-sheen) 0.41rem 0.45rem, transparent 0.45rem 0.62rem),
+    repeating-linear-gradient(90deg, transparent 0 0.33rem, var(--color-grain) 0.33rem 0.37rem, transparent 0.37rem 0.83rem),
+    linear-gradient(90deg, var(--color-sheen), transparent 30%, transparent 70%, var(--color-grain));
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* The arm: one clipped link. Its face, bevelled lower edge, bolt and tip are
+   all background layers, so the lettering always sits on the enamel. Arms
+   point right unless told otherwise; the current one is black enamel. --- */
+
+.arms a, .stage-arm, .arm-back, .is-home .prose > ul > li > a:first-child {
+  --shape: polygon(0 0, calc(100% - var(--arm-point)) 0, 100% 50%, calc(100% - var(--arm-point)) 100%, 0 100%);
+  --tip-dir: to left;
+  --tip: var(--color-arm);
+  --bolt-at: 0.55em;
+  display: block;
+  padding: 0.42em calc(var(--arm-point) + 0.75em) 0.58em 1.05em;
+  font-family: var(--font-sign);
+  font-size: var(--text-arm);
+  font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.01em;
+  color: var(--color-arm-ink);
+  text-decoration: none;
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
+  clip-path: var(--shape);
+  background-color: var(--color-arm);
+  background-image:
+    radial-gradient(circle at var(--bolt-at) calc(50% - 0.08em), var(--color-bolt) 0.15em, transparent 0.19em),
+    linear-gradient(to top, var(--color-arm-edge) 0.16em, transparent 0.16em),
+    linear-gradient(var(--tip-dir), var(--tip) calc(var(--arm-point) + 0.3em), transparent 0);
+  transition: transform 0.15s ease-out;
+}
+.arms a:focus-visible, .stage-arm:focus-visible, .arm-back:focus-visible, .is-home .prose > ul > li > a:first-child:focus-visible {
+  outline: 3px solid var(--color-arm-ink);
+  outline-offset: -0.42em;
+}
+.arms a:hover, .stage-arm:hover, .arm-back:hover, .is-home .prose > ul > li > a:first-child:hover {
+  transform: translateX(0.18em);
+}
+.arms a:hover, .stage-arm:hover .stage-name, .arm-back:hover, .is-home .prose > ul > li > a:first-child:hover {
+  text-decoration: underline;
+  text-decoration-thickness: var(--rule);
+}
+
+.arms li:nth-child(odd) a, .arm-back {
+  --shape: polygon(var(--arm-point) 0, 100% 0, 100% 100%, var(--arm-point) 100%, 0 50%);
+  --tip-dir: to right;
+  --bolt-at: calc(100% - 0.55em);
+  padding: 0.42em 1.05em 0.58em calc(var(--arm-point) + 0.75em);
+}
+.arms li:nth-child(odd) a:hover, .arm-back:hover { transform: translateX(-0.18em); }
+
+/* You are here: the current arm is black enamel with yellow lettering, and a
+   yellow keyline drawn round its cut shape so it holds on the dusk ground. */
+.arms a[aria-current] {
+  --tip: var(--color-tip);
+  color: var(--color-arm);
+  background-color: var(--color-tip);
+}
+.arms a[aria-current]:focus-visible { outline-color: var(--color-arm); }
+.arms li:has(> a[aria-current]) {
+  filter: drop-shadow(0.13rem 0 0 var(--color-arm)) drop-shadow(-0.13rem 0 0 var(--color-arm)) drop-shadow(0 0.13rem 0 var(--color-arm)) drop-shadow(0 -0.13rem 0 var(--color-arm));
+}
+
+/* Masthead: the fingerpost ------------------------------------------------ */
+
+.signpost { padding: var(--space-3) var(--space-3) 0; }
+
+.sign {
+  position: relative;
+  max-width: calc(2 * var(--arm-length) + var(--post-w));
+  margin: 0 auto;
+  padding: var(--space-2) 0 var(--space-4);
+  /* the ground line the post is planted in */
+  background: linear-gradient(var(--color-ground), var(--color-ground)) bottom center / min(100%, calc(var(--arm-length) + 6 * var(--post-w))) 0.25rem no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.sign::before { top: 0; bottom: 0.2rem; left: calc(50% - var(--post-w) / 2); }
+/* a tuft of grass round the foot of the post */
+.sign::after {
+  content: "";
+  position: absolute;
+  bottom: 0.2rem;
+  left: 50%;
+  width: calc(5 * var(--post-w));
+  height: 0.8rem;
+  transform: translateX(-50%);
+  background: conic-gradient(from 158deg at 50% 0, var(--color-ground) 0 44deg, transparent 0) bottom left / 0.42rem 0.8rem repeat-x;
+  -webkit-mask: linear-gradient(90deg, transparent, var(--color-ground) 25%, var(--color-ground) 75%, transparent);
+  mask: linear-gradient(90deg, transparent, var(--color-ground) 25%, var(--color-ground) 75%, transparent);
+}
+
+.plate {
+  position: relative;
+  max-width: 100%;
+  padding: 0.3em 0.75em 0.36em;
+  font-family: var(--font-sign);
+  font-size: var(--text-xl);
+  font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: 0.005em;
+  text-align: center;
+  text-decoration: none;
+  hyphens: auto;
+  color: var(--color-plate-ink);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.16rem var(--color-plate), inset 0 0 0 0.25rem var(--color-plate-ink), 0 0.2rem 0 var(--color-arm-edge);
+  border-radius: var(--radius);
+}
+.plate:hover { text-decoration: underline; text-decoration-thickness: var(--rule); }
+
+.arms { width: 100%; }
+.arms ul {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+.arms li {
+  position: relative;
+  display: flex;
+  width: calc(50% - var(--post-w) / 2);
+}
+.arms li + li { margin-top: -0.85rem; }
+.arms li:nth-child(odd) { align-self: flex-start; justify-content: flex-end; }
+.arms li:nth-child(even) { align-self: flex-end; justify-content: flex-start; }
+.arms a { width: min(100%, var(--arm-length)); }
+
+/* Pages ------------------------------------------------------------------ */
+
+.leaf { padding-top: var(--space-4); }
+.leaf-head { margin-bottom: var(--space-4); }
+.is-home .leaf-head { margin-bottom: var(--space-3); }
+
+.leaf-title, .trail-plate, .notice-head, .prose :is(h1, h2, h3, h4) {
+  font-family: var(--font-sign);
+  line-height: var(--leading-tight);
+  hyphens: auto;
+  hyphenate-limit-chars: 10 4 4;
+  text-wrap: balance;
+}
+.leaf-title {
+  margin: 0;
+  font-size: var(--text-xxl);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+.standfirst {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-l);
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--color-muted);
+  text-wrap: pretty;
+}
+
+.stage-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 var(--space-3);
+  margin: 0 0 var(--space-2);
+  padding-bottom: var(--space-1);
+  border-bottom: var(--rule) solid var(--color-rule);
+  font-family: var(--font-sign);
+  font-size: var(--text-s);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+.walk-time { color: var(--color-muted); }
+
+.tags {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  font-family: var(--font-sign);
+  font-size: var(--text-s);
+  font-weight: 600;
+}
+.tags a { text-decoration-thickness: var(--rule); }
+
+.cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0 0 var(--space-4);
+  border-radius: var(--radius);
+}
+
+.back { margin: var(--space-5) 0 0; }
+.arm-back { display: inline-block; width: min(100%, var(--arm-length)); }
+
+/* The archive: a post of arms, dates ranged right ------------------------ */
+
+.trailhead { padding-top: var(--space-4); }
+.trail-head { position: relative; z-index: 1; margin-bottom: var(--space-4); }
+.trail-plate {
+  display: table;
+  max-width: 100%;
+  margin: 0;
+  padding: 0.3em 0.7em 0.36em;
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: var(--color-plate-ink);
+  background: var(--color-plate);
+  box-shadow: inset 0 0 0 0.16rem var(--color-plate), inset 0 0 0 0.25rem var(--color-plate-ink), 0 0.2rem 0 var(--color-arm-edge);
+  border-radius: var(--radius);
+}
+.trail-kicker { font-weight: 600; }
+
+.trail {
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-3) calc(var(--space-4) + var(--post-w));
+}
+.trail::before { top: calc(-1 * var(--space-4)); bottom: 0; left: var(--space-4); }
+.trail-entry { padding-bottom: var(--space-3); }
+
+.stage-arm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.15em 1em;
+  max-width: 36rem;
+}
+.stage-name { flex: 1 1 12em; min-width: 0; }
+.stage-when {
+  margin-left: auto;
+  font-size: var(--text-s);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  hyphens: manual;
+}
+.stage-note {
+  max-width: 34rem;
+  margin: var(--space-2) 0 0 1.05rem;
+  font-size: var(--text-m);
+  line-height: 1.45;
+  text-wrap: pretty;
+}
+
+.empty { font-style: italic; color: var(--color-muted); }
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  margin-top: var(--space-3);
+  font-family: var(--font-sign);
+  font-size: var(--text-s);
+  font-weight: 700;
+}
+.pagination span { color: var(--color-muted); }
+
+/* The home page: its hand-picked pieces stand on a post of their own ----- */
+
+.is-home .prose > ul:has(> li > a:first-child) {
+  position: relative;
+  list-style: none;
+  padding: var(--space-1) 0 var(--space-1) calc(var(--space-4) + var(--post-w));
+}
+.is-home .prose > ul:has(> li > a:first-child)::before { top: 0; bottom: 0; left: var(--space-4); }
+.is-home .prose > ul > li { margin-bottom: var(--space-3); padding-left: 1.05rem; }
+.is-home .prose > ul > li > a:first-child {
+  width: min(calc(100% + 1.05rem), 26rem);
+  margin: 0 0 var(--space-1) -1.05rem;
+}
+
+/* 404: two arms on a short post ------------------------------------------ */
+
+.sign-small { margin: var(--space-4) 0 0; max-width: calc(2 * var(--arm-length) + var(--post-w)); }
+.sign-small .arms ul { margin-top: 0; }
+
+/* Body text: long reading ------------------------------------------------- */
+
+.prose { hyphens: manual; }
+.prose > :first-child { margin-top: 0; }
+.prose p, .prose ul, .prose ol, .prose blockquote, .prose pre, .prose table { margin: 0 0 var(--space-3); }
+.prose ul, .prose ol { padding-left: 1.4em; }
+.prose li > ul, .prose li > ol { margin: var(--space-1) 0 0; }
+.prose li + li { margin-top: 0.2em; }
+.prose li::marker { color: var(--color-muted); }
+.prose h2 { font-size: calc(var(--text-l) * 1.2); font-weight: 800; margin: var(--space-4) 0 var(--space-2); }
+.prose h3 { font-size: var(--text-l); font-weight: 700; margin: var(--space-4) 0 var(--space-1); }
+.prose h4 { font-size: var(--text-m); font-weight: 700; margin: var(--space-3) 0 var(--space-1); }
+.prose h1 { font-size: var(--text-xl); }
+
+.prose blockquote {
+  margin-left: 0;
+  padding: 0 0 0 var(--space-3);
+  border-left: 0.3rem solid var(--color-accent);
+  font-style: italic;
+}
+.prose blockquote > :last-child { margin-bottom: 0; }
+
+.prose img { display: block; max-width: 100%; height: auto; border-radius: var(--radius); }
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.82em;
+  padding: 0.08em 0.3em;
+  background: var(--color-panel);
+  border-radius: var(--radius);
+}
+.prose pre {
+  overflow-x: auto;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-panel);
+  border-radius: var(--radius);
+  line-height: 1.45;
+}
+.prose pre code { padding: 0; background: none; font-size: var(--text-s); overflow-wrap: normal; }
+
+.prose table {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  font-size: var(--text-s);
+  font-family: var(--font-sign);
+  font-variant-numeric: tabular-nums;
+}
+.prose th, .prose td {
+  min-width: 7rem;
+  padding: 0.4em 0.9em 0.4em 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-rule);
+}
+.prose th { font-weight: 700; border-bottom-width: var(--rule); }
+
+.prose hr {
+  width: 5rem;
+  height: 0.3rem;
+  margin: var(--space-4) 0;
+  border: 0;
+  background: var(--color-accent);
+}
+
+.prose a[href^="mailto:"], .prose a[href^="tel:"], .notice-mail { overflow-wrap: anywhere; }
+
+/* The subscribe notice ---------------------------------------------------- */
+
+.notice { margin-top: var(--space-5); }
+.notice > * { max-width: 100%; }
+.notice-head {
+  margin: 0;
+  padding: var(--space-3) var(--space-3) 0;
+  font-size: var(--text-l);
+  font-weight: 800;
+  background: var(--color-panel);
+  border-top: 0.3rem solid var(--color-accent);
+}
+.notice-line, .notice-form {
+  margin: 0;
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  background: var(--color-panel);
+  font-family: var(--font-sign);
+}
+.notice-mail, .notice-feed { font-weight: 700; text-decoration-thickness: var(--rule); }
+.notice-form { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-2); align-items: end; }
+.notice-label { flex: 1 0 100%; font-size: var(--text-s); font-weight: 600; }
+.notice-input, .notice-button { font: inherit; font-size: 1rem; min-height: 2.75rem; border-radius: var(--radius); }
+.notice-input {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding: 0.4em 0.6em;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--rule) solid var(--color-muted);
+}
+.notice-button {
+  flex: 0 1 auto;
+  max-width: 100%;
+  padding: 0.4em 1em;
+  font-weight: 700;
+  color: var(--color-bg);
+  background: var(--color-text);
+  border: var(--rule) solid var(--color-text);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+/* Footer ----------------------------------------------------------------- */
+
+.colophon {
+  margin-top: var(--space-5);
+  padding-top: var(--space-3);
+  padding-bottom: var(--space-4);
+  font-size: var(--text-s);
+  color: var(--color-muted);
+}
+.colophon > * { margin: 0 0 var(--space-1); }
+.colophon-name {
+  font-family: var(--font-sign);
+  font-weight: 800;
+  color: var(--color-text);
+  border-top: var(--rule) solid var(--color-rule);
+  padding-top: var(--space-3);
+}
+.colophon a { color: var(--color-muted); }
+
+/* Phones ------------------------------------------------------------------ */
+
+@media (max-width: 30rem) {
+  .signpost { padding-top: var(--space-3); }
+  .trail { padding-left: calc(var(--space-2) + var(--post-w)); }
+  .trail::before { left: var(--space-2); }
+  .is-home .prose > ul:has(> li > a:first-child) { padding-left: calc(var(--space-2) + var(--post-w)); }
+  .is-home .prose > ul:has(> li > a:first-child)::before { left: var(--space-2); }
+  .stage-note { margin-left: 0.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+  .arms a:hover, .stage-arm:hover, .arm-back:hover, .is-home .prose > ul > li > a:first-child:hover { transform: none !important; }
+}
+
+/* Print: the words, dark on white; no menu, no post ---------------------- */
+
+@media print {
+  :root {
+    --color-bg: #ffffff;
+    --color-text: #000000;
+    --color-muted: #333333;
+    --color-accent: #555555;
+    --color-arm: #ffffff;
+    --color-arm-ink: #000000;
+    --color-arm-edge: #ffffff;
+    --color-tip: #ffffff;
+    --color-plate: #ffffff;
+    --color-plate-ink: #000000;
+    --color-rule: #777777;
+    --color-panel: #ffffff;
+  }
+  .arms, .notice, .back, .skip-link, .sign::before, .sign::after, .trail::before, .is-home .prose > ul::before { display: none; }
+  .signpost { padding: 0 0 var(--space-3); }
+  .sign { align-items: flex-start; padding: 0; background: none; }
+  .plate, .trail-plate { box-shadow: none; padding: 0; }
+  .trail, .is-home .prose > ul:has(> li > a:first-child) { padding-left: 0; }
+  .stage-arm, .is-home .prose > ul > li > a:first-child { padding-left: 0; text-decoration: underline; }
+  .prose a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 0.85em; }
+  .prose pre { white-space: pre-wrap; }
+  main, .colophon { max-width: none; }
+}

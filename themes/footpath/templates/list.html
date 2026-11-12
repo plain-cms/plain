@@ -1,0 +1,24 @@
+<section class="trailhead">
+  <header class="trail-head">
+    <h1 class="trail-plate">{{#if tag}}<span class="trail-kicker">{{ strings.tagged }}</span> {{ strings.quoteOpen }}{{ tag }}{{ strings.quoteClose }}{{else}}{{ page.title }}{{/if}}</h1>
+  </header>
+  {{#if items}}
+  <ol class="trail" role="list">
+    {{#each items as item}}<li class="trail-entry">
+      <a class="stage-arm" href="{{ item.url }}"><span class="stage-name">{{ item.title }}</span> <time class="stage-when" datetime="{{ item.date }}">{{#if item.dateFormatted}}{{ item.dateFormatted }}{{else}}{{ item.date }}{{/if}}</time></a>
+      {{#if item.description}}<p class="stage-note">{{ item.description }}</p>
+      {{/if}}
+    </li>
+    {{/each}}
+  </ol>
+  {{else}}
+  <p class="empty">{{ strings.nothingHere }}</p>
+  {{/if}}
+  {{#if pagination.multiple}}
+  <nav class="pagination" aria-label="{{ strings.pagination }}">
+    {{#if pagination.newer}}<a href="{{ pagination.newer }}">{{ strings.newer }}</a>{{/if}}
+    <span>{{ strings.page }} {{ pagination.page }} {{ strings.of }} {{ pagination.totalPages }}</span>
+    {{#if pagination.older}}<a href="{{ pagination.older }}">{{ strings.older }}</a>{{/if}}
+  </nav>
+  {{/if}}
+</section>
