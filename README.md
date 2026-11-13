@@ -86,6 +86,26 @@ If pasting tokens is awkward (a team, or a client), deploy the optional ~60-line
 
 A plain-language walkthrough of both options, including the GitHub App screens and the one-Worker-per-site gotcha: **[Signing in to Plain: a pasted token, or one click with GitHub](https://victorantos.com/posts/two-ways-to-sign-in-to-your-plain-admin/)**.
 
+### Site in a subfolder of a repository
+
+The site can be a folder of a larger repository, say `site/` inside your application's repo. Tell the admin where it is in `site.config.json`:
+
+```json
+"site": { "repoDir": "site", "buildWorkflow": "site.yml" }
+```
+
+- **`repoDir`** (default `""`, the repository root): the admin reads, saves, lists, restores and uploads inside that folder (`site/content/…`, images in `site/media/YYYY/MM/`), and History shows only changes to it. Site URLs don't change: an image is still `/media/2026/01/lake.jpg`.
+- **`buildWorkflow`** (default `"build-deploy.yml"`): the workflow file, in the repository's root `.github/workflows/`, that builds and deploys the site; the "Building… → Live" pill follows it. GitHub only runs workflows from the root, so give the site its own there: the usual build steps with `defaults: run: working-directory: site`, `cache-dependency-path: site/package-lock.json`, `path: site/dist` for the upload, and `on: push: paths: ["site/**"]`.
+- The token (or the OAuth app) needs access to the whole repository. GitHub can't scope it to one folder.
+- **Updates aren't one click.** The admin still tells you when a new version is out, but the update workflow works on the repository root. Update from inside the folder instead, then review and commit the changes:
+
+  ```sh
+  cd site
+  git clone --depth 1 https://github.com/plain-cms/plain.git .upstream
+  node tools/update.js .upstream && rm -rf .upstream
+  npm test && node build.js
+  ```
+
 **AI assist (optional, BYOK):** paste an Anthropic API key in Settings and the editor grows ✨ buttons — improve writing, suggest titles, generate the meta description, write image alt text, translate a page into a new draft. Every suggestion shows a before/after and asks before applying. The key stays in your browser and is sent only to Anthropic.
 
 ## Try it locally (about 20 seconds)

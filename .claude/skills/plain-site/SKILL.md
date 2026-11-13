@@ -67,6 +67,9 @@ The `site` block of `site.config.json`:
   `socialImage` is the site-wide link preview for pages with no `cover`.
 - `oauthUrl` — set only if the OAuth Worker in `workers/oauth/` is deployed; it
   turns the admin's sign-in into a "Sign in with GitHub" button.
+- `repoDir`, `buildWorkflow` — only when the site is a folder of a larger
+  repository (`"repoDir": "site"`): the admin then reads and writes inside that
+  folder and follows the named publish workflow. Leave both out otherwise.
 
 Commit as `settings: update site settings`.
 
