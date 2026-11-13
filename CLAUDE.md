@@ -62,6 +62,10 @@ Field types: `text`, `textarea`, `date`, `boolean`, `image`, `list`, `select` (n
 
 **`site.oauthUrl`** (optional): the deployed OAuth Worker URL (`workers/oauth/`). When set, the admin sign-in screen shows a **"Sign in with GitHub"** button (the paste-a-token form moves under "or use an access token"); writers with repo write access click it, authorize once, and publish — no PAT. Leave it out for token-only sign-in (v1). The admin opens `<oauthUrl>/login` in a popup and accepts the token only from a `postMessage` matching that origin.
 
+**`site.repoDir`** (optional, default `""` = the repository root): the folder that holds this site inside its GitHub repository, e.g. `"site"` when the site lives in `site/` of an application repo. Only the admin reads it: `admin/js/github.js` prefixes every contents/tree/commit/history/upload path with it and strips it from what comes back, so the rest of the admin keeps working in site-relative paths (`content/posts/x.md`, `media/2026/01/a.jpg`) and site URLs don't change. Validated and normalized at build time (no leading/trailing `/`, no `..`). Ignored in demo mode. With it set the admin's update banner only *reports* a new version — `update.yml` and `tools/update.js` work on the repository root, so the update is run by hand inside the folder (§8.7).
+
+**`site.buildWorkflow`** (optional, default `"build-deploy.yml"`): the file name in the repository's `.github/workflows/` whose runs the admin's build-status pill follows. Set it when the repo's publish workflow has another name — typical for a `repoDir` site, whose workflow must live at the repository root next to the application's own.
+
 **`site.noindex`** (optional, default `false`): keep a preview or staging site out of search engines. Every page gets `<meta name="robots" content="noindex">` and `robots.txt` stops naming the sitemap; crawling stays allowed so search engines can read the tag. Remove it when the site goes live under its real name.
 
 **`site.demo`** (optional, default `false`): turn the admin into a try-it-first demo (§8.6). The sign-in screen leads with **Try the editor**, and `/admin/?demo=1` drops a visitor straight in with no account: `admin/js/demo.js` stands in for the GitHub API with a repository held in `sessionStorage`, seeded from the site's own `api/site.json` + `api/<collection>/index.json` (they already carry every item's raw Markdown). Editing, publishing, the build pill, History and Restore all really run; nothing leaves the tab, a real sign-in on the same device is untouched, and the site pays nothing (no GitHub calls, no keys). Off by default — `demo.js` isn't even fetched — and this repo's own `site.config.json` sets it because this repo is the public demo. Remove it on a site that doesn't want the button.
@@ -158,7 +162,7 @@ the static API (`/api/site.json` for the schema, `/api/<collection>/index.json`
 for published items) and writes through the GitHub contents API — every save
 is a commit; there is no other backend.
 
-- `js/github.js` — GitHub REST calls, token in localStorage (never sent anywhere but api.github.com)
+- `js/github.js` — GitHub REST calls, token in localStorage (never sent anywhere but api.github.com). Callers pass site-relative paths; `toRepo`/`fromRepo` apply `site.repoDir` at this one boundary (set by `configureSite` at boot)
 - `js/app.js` — router + dashboard, collection lists, navigation editor, settings, sign-in
 - `js/editor.js` — the schema-driven editor: fields come from config (empty optional ones fold into “More fields”), preview renders with `lib/markdown.js` inside an iframe carrying the site's theme + plugin CSS, so it looks like the page it will become
 - `js/media.js` — media library + uploads to `media/YYYY/MM/` (≤5 MB, resize offer over 1 MB)

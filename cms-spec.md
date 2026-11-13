@@ -356,6 +356,31 @@ Rules:
 - **Off by default.** Sites that don't set the flag behave exactly as before, and
   `demo.js` is never even fetched.
 
+### 8.7 A site in a subfolder of a repository
+
+A site need not be a whole repository: it can be a folder (`site/`, `apps/web/`)
+of a larger one, e.g. an application's. Two optional keys in the `site` block
+tell the admin where it is; the build ignores both (it runs inside the folder).
+
+| Key | Default | Meaning |
+| --- | --- | --- |
+| `repoDir` | `""` (repository root) | Folder holding the site. Every path the admin reads, writes, lists, restores or uploads to is prefixed with it; tree listings are filtered to it and stripped of it; History (`commits?path=`) uses the prefixed path, and the dashboard's "last change" is the last commit touching the folder. Uploads land in `<repoDir>/media/YYYY/MM/`; site URLs stay `/media/…`. Normalized and validated at build time (no leading or trailing `/`, no `..`). |
+| `buildWorkflow` | `"build-deploy.yml"` | File name in `.github/workflows/` whose runs the publish pill and the dashboard status follow. |
+
+The mapping lives in one place, `admin/js/github.js` (`toRepo`/`fromRepo`); every
+other admin module works in site-relative paths. Demo mode (§8.6) ignores
+`repoDir` — its in-tab repository is the site alone.
+
+**Updates (§14.5).** The updater finds engine files relative to its working
+directory and `update.yml` runs it at the repository root, where a subfolder
+site's engine files are not; GitHub also runs workflows only from the root
+`.github/workflows/`, so the shipped `update.yml` never runs from the folder. With
+`repoDir` set, the admin's banner still reports a newer version (it reads
+`<repoDir>/engine.json`) but offers no *Prepare update* / *Complete upgrade*
+buttons — it says the update is the repository maintainer's job. The maintainer
+runs `tools/update.js` inside the folder (README, "Site in a subfolder of a
+repository"); everything in 14.2–14.4 then applies unchanged.
+
 ## 9. Plugin system
 
 **A plugin is a folder. Install = copy the folder + add its name to config. No npm, no registry, no build step.** This makes "write me a plugin that does X" a one-prompt AI task.
@@ -541,7 +566,7 @@ A release may also bring a path under engine ownership that sites already have t
 
 **14.4 Migrations.** Breaking changes ship as idempotent scripts in `migrations/NNN-description.js` (plain Node, no deps). The updater runs every migration between the installed and target version — e.g. renaming a config key, moving a folder. `engine.json` records the last applied migration.
 
-**14.5 Delivery: one button.** The admin shows an "Update available — v1.5" banner by fetching upstream's raw `engine.json` and comparing semver (a plain `fetch`, no server). Clicking it triggers `update.yml` via `workflow_dispatch`; the Action downloads the release tarball, applies 14.2–14.4, runs the test suite and a full build, and opens a PR with the changelog, migration notes, and any flagged files. Merge = upgraded; revert the PR = rollback. An optional weekly cron opens the PR automatically (Dependabot-style), so unattended sites still receive security fixes as reviewable PRs.
+**14.5 Delivery: one button.** The admin shows an "Update available — v1.5" banner by fetching upstream's raw `engine.json` and comparing semver (a plain `fetch`, no server). Clicking it triggers `update.yml` via `workflow_dispatch`; the Action downloads the release tarball, applies 14.2–14.4, runs the test suite and a full build, and opens a PR with the changelog, migration notes, and any flagged files. Merge = upgraded; revert the PR = rollback. An optional weekly cron opens the PR automatically (Dependabot-style), so unattended sites still receive security fixes as reviewable PRs. A site in a subfolder of a larger repository (§8.7) gets the banner without the button.
 
 **14.6 Compatibility.** The engine follows semver; hook and template-variable changes are the public API. Plugins declare `"engine": ">=1 <2"` in `plugin.json`; the updater lists incompatible plugins in the PR body rather than failing.
 
