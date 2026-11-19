@@ -43,6 +43,7 @@ Collections are defined in `site.config.json`. A collection = a folder of `.md` 
   "listUrl": "/blog/",            // optional: emit a paginated list page
   "listTemplate": "list",         // required if listUrl is set
   "label": "Blog",                // optional: heading for list pages
+  "labels": { "fr": "Journal" },  // optional: that heading per language, for translated list pages (i18n)
   "sortBy": "date", "sortOrder": "desc",
   "pageSize": 10,                 // pagination size for list pages
   "rss": true,                    // emit <listUrl>rss.xml
@@ -107,8 +108,9 @@ Every `data/*.json` is available to templates as `data.<filename>` (e.g. `{{#eac
 
 Off by default: i18n activates only when `site.languages` lists 2+ lowercase codes **and** includes `site.language` (e.g. `"languages": ["en", "fr"]`; `config.defaults.json` ships `[]`). Set them in the admin's **Settings → Additional languages** (or by hand). Every i18n code path short-circuits when the list is empty — a monolingual build is byte-identical.
 
-- **Translations are sibling files:** `about.fr.md` next to `about.md` (slug = filename minus `.<lang>.md`) renders to `/fr/about/`; default-language URLs never change. No ghost pages: `/fr/about/` exists only if `about.fr.md` does; list/tag pages, RSS, `llms.txt`, and the 404 stay default-language only.
-- **Merged views:** a page rendering in language L sees `collections.<name>` with each item's L variant where one exists, else the default item — lists and data-only collections are always complete. Nav URLs localize per entry only when the target translation exists; nav **labels** translate via `data/navigation.<lang>.json` (a per-language `[{label, url}]` matched on the default url, per-entry fallback). `base.html` emits an `hreflang` link per available language version (the `alternates` variable).
+- **Translations are sibling files:** `about.fr.md` next to `about.md` (slug = filename minus `.<lang>.md`) renders to `/fr/about/`; default-language URLs never change. No ghost pages: `/fr/about/` exists only if `about.fr.md` does; tag pages, RSS, `llms.txt`, and the 404 stay default-language only.
+- **Translated list pages:** a collection's list (`listUrl`) is also built at `/<lang><listUrl>` (paginated the same way) for every language that translates **at least one** of its items — so a translated post never links back to a list that isn't there. It is the merged view (below), titled by the collection's `labels.<lang>` (falling back to `label`), with `hreflang` links between the versions. Themes link to a list with `{{ lists.<collection> }}` — its URL in the page's language (`/fr/blog/` on a French page when that list exists, else `/blog/`) — never a hardcoded `/blog/`.
+- **Merged views:** a page rendering in language L sees `collections.<name>` with each item's L variant where one exists, else the default item — lists and data-only collections are always complete. Nav URLs localize per entry only when the target translation (or translated list page) exists; nav **labels** translate via `data/navigation.<lang>.json` (a per-language `[{label, url}]` matched on the default url, per-entry fallback). `base.html` emits an `hreflang` link per available language version (the `alternates` variable).
 - **UI strings:** themes say `{{ strings.readMore }}`; the dictionary merges per key: engine defaults in `lib/i18n.js` ← theme `strings.json` ← `data/strings.<default>.json` ← `data/strings.<lang>.json` (missing keys fall back to the default language). Every shipped theme is converted: a theme's own words live in its `strings.json` — English as flat `"key": "text"` pairs at the top level (the only part the engine reads), plus one object per language (`de`, `fr`, `it`, `ro`, `es`, `pt`, `nl`) translating every key its templates use. The engine ignores those blocks; a site (or a platform setting one up) copies the block for its language into `data/strings.<lang>.json`. Two-letter keys are therefore reserved for languages.
 - **Outputs when active:** sitemap gains translated URLs; API items carry `language`; translated items publish as `api/<collection>/<slug>.<lang>.json` and originals list `translations: ["fr", …]`; search-index entries gain `lang`. Dates format per item language.
 - **Date locale (`site.locales`, optional):** the language code is both the URL prefix and the date locale, so `/en/` pages print US dates ("July 5, 2026"). Map a language to a fuller locale to change only the dates: `"locales": { "en": "en-GB" }` → "5 July 2026". Keys must be site languages (`site.language` on a monolingual site); values are BCP 47 locales. Works with i18n off too.
@@ -132,7 +134,7 @@ Variables available in every template:
 - `nav` — navigation entries with `current: true` on the active one
 - `data` — all data files; `collections` — all items by collection name
 - `feeds` — RSS feed URLs (for `<link rel="alternate">`)
-- `strings` — the UI-string dictionary for the page's language (see i18n above); `alternates` — `[{lang, url}]` hreflang links, only on pages with translations
+- `strings` — the UI-string dictionary for the page's language (see i18n above); `alternates` — `[{lang, url}]` hreflang links, only on pages with translations; `lists` — each collection's list URL in the page's language (`{{ lists.posts }}`)
 - List templates also get: `items` (this page's slice), `pagination` (`page`, `totalPages`, `multiple`, `newer`, `older`), `tag` (on tag pages)
 
 Every page template renders into `base.html`'s `{{{ body }}}` slot.
