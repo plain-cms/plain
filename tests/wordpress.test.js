@@ -44,7 +44,10 @@ const uploadsArgs = [`--uploads=${path.join(fixtures, 'uploads')}`];
 
 test('every imported file parses and validates against plain’s own schema', async () => {
   const r = await run('schema', uploadsArgs);
-  const config = JSON.parse(fs.readFileSync(path.join(root, 'site.config.json'), 'utf8'));
+  // The fixture site's schema, not the repo's own site.config.json: this test ships into every site, and a
+  // site is free to have no "posts" collection.
+  const config = JSON.parse(fs.readFileSync(path.join(root, 'tests/fixtures/site/site.config.json'), 'utf8'));
+  config.collections.posts.fields.push({ name: 'cover', type: 'image' });
   for (const collection of ['posts', 'pages']) {
     const dir = path.join(r.out, 'content', collection);
     const files = fs.readdirSync(dir);
