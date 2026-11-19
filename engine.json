@@ -151,7 +151,7 @@
     "tests/update-goldens.js": "e16fda04bc1f5fe7e3da3022b417f6577a65fca6af6a51a5948ee38b55e21c34",
     "tests/update.test.js": "5ca83c5cf1e7f4168656151c7acfe076f9383244ad663be69917a24b8f8cb967",
     "tests/vuepress.test.js": "4e4e079e4e74f2f4ee3b627af5c4aac5df8bc3dd9fa28dd42a9f1ec995d12e77",
-    "tests/wordpress.test.js": "ae73ae33a115d94bc376cc420e1d1ea0365572a4093f5a3b0fd9e7aa9e83bc27",
+    "tests/wordpress.test.js": "1e7b11ea6a517b7f54087c9618b87c52065931f07a7a8469f16e43c8d2df5acd",
     "themes/default/assets/enhance.js": "a1af77d9511b65d4132805dda1945723fdad16e7b69bfc7a38d6faa57e9efeed",
     "themes/default/assets/favicon.svg": "dd3765de5afd1751a09be814fc072b74c4aa8e67a672acf44a5352d6ec59d703",
     "themes/default/assets/theme.css": "155d38abe6fc9b3765787172a766373d81e9e238872f62aecfae332c89035a9e",
