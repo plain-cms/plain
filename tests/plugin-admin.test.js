@@ -18,6 +18,15 @@ const withAdmin = (dir) => ({
 });
 
 
+/** Just enough of an element for h() and replaceChildren(), with its tree inspectable. */
+function fakeElement(tag) {
+  const el = { tag, attrs: {}, children: [],
+    setAttribute(k, v) { el.attrs[k] = v; }, addEventListener() {},
+    append(...c) { el.children.push(...c); }, replaceChildren(...c) { el.children = c; } };
+  return el;
+}
+const tags = (el) => (typeof el === 'object' && el ? [el.tag, ...el.children.flatMap(tags)] : []);
+
 /** Load backend-data.js with just enough browser to import cleanly. */
 async function loadBackendData(store) {
   globalThis.localStorage = {
@@ -25,7 +34,7 @@ async function loadBackendData(store) {
     setItem: (k, v) => { store[k] = String(v); },
     removeItem: (k) => { delete store[k]; },
   };
-  globalThis.document = { createElement: () => ({ setAttribute() {}, append() {}, addEventListener() {} }) };
+  globalThis.document = { createElement: (tag) => fakeElement(tag) };
   return import(`../admin/js/backend-data.js?t=${Math.random()}`);
 }
 
@@ -105,4 +114,68 @@ test('apiFetch turns a refused request into a readable error', async () => {
   const { apiFetch } = await loadBackendData({ 'plain.token': 't' });
   globalThis.fetch = async () => new Response('', { status: 403 });
   await assert.rejects(() => apiFetch({ services: { backend: 'https://b.test' } }, '/x'), /refused that request/);
+});
+
+// --- an expired GitHub sign-in ----------------------------------------------
+// A GitHub App's user tokens last about eight hours. When the backend refuses
+// the GitHub sign-in, the admin asks GitHub whether that sign-in still works:
+// if not, it signs out (back to the sign-in screen) instead of offering the
+// backend-token form, which left the writer stuck until they signed out by hand.
+
+/** A fetch that answers the backend with `backend` and GitHub with `github`. */
+function fakeFetch(calls, { backend, github }) {
+  return async (url) => {
+    calls.push(String(url));
+    return new Response('{}', { status: String(url).startsWith('https://api.github.com') ? github : backend });
+  };
+}
+const signedOut = () => { const seen = []; globalThis.dispatchEvent = (e) => { seen.push(e.type); }; return seen; };
+const tick = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+test('apiFetch signs out when the backend refuses an expired GitHub sign-in', async () => {
+  const store = { 'plain.token': 'ghu_old', 'plain.repo': 'o/r' };
+  const { apiFetch } = await loadBackendData(store);
+  const events = signedOut();
+  const calls = [];
+  globalThis.fetch = fakeFetch(calls, { backend: 401, github: 401 });
+
+  await assert.rejects(() => apiFetch({ services: { backend: 'https://b.test' } }, '/x'), /GitHub sign-in has expired/);
+  assert.deepEqual(events, ['plain:signed-out']);
+  assert.equal(store['plain.token'], undefined, 'the dead token is dropped');
+  assert.ok(calls.includes('https://api.github.com/repos/o/r'));
+});
+
+test('dataScreen goes back to sign-in, not the token form, when the GitHub sign-in expired', async () => {
+  const { dataScreen } = await loadBackendData({ 'plain.token': 'ghu_old', 'plain.repo': 'o/r' });
+  const events = signedOut();
+  globalThis.fetch = fakeFetch([], { backend: 401, github: 401 });
+
+  const screen = dataScreen({ services: { backend: 'https://b.test' } }, { title: 'Feedback', path: '/x', render: () => null });
+  await tick(); await tick();
+  assert.deepEqual(events, ['plain:signed-out']);
+  assert.ok(!tags(screen).includes('form'), 'no backend-token form');
+});
+
+test('dataScreen still asks for a backend token when GitHub accepts the sign-in', async () => {
+  const { dataScreen } = await loadBackendData({ 'plain.token': 'ghu_live', 'plain.repo': 'o/r' });
+  const events = signedOut();
+  globalThis.fetch = fakeFetch([], { backend: 401, github: 200 });
+
+  const screen = dataScreen({ services: { backend: 'https://b.test' } }, { title: 'Feedback', path: '/x', render: () => null });
+  await tick(); await tick();
+  assert.deepEqual(events, []);
+  assert.ok(tags(screen).includes('form'), 'a static-token backend gets its token form');
+});
+
+test('a refused pasted backend token never touches the GitHub sign-in', async () => {
+  const store = { 'plain.token': 'ghu_live', 'plain.repo': 'o/r', 'plain.backend.token': 'static' };
+  const { apiFetch } = await loadBackendData(store);
+  const events = signedOut();
+  const calls = [];
+  globalThis.fetch = fakeFetch(calls, { backend: 403, github: 401 });
+
+  await assert.rejects(() => apiFetch({ services: { backend: 'https://b.test' } }, '/x'), /refused that request/);
+  assert.deepEqual(calls, ['https://b.test/x']);
+  assert.deepEqual(events, []);
+  assert.equal(store['plain.token'], 'ghu_live');
 });

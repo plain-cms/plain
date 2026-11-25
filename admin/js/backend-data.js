@@ -11,14 +11,27 @@
 // as ordinary consumers of this factory, which is what any plugin can be.
 
 import { h } from './ui.js';
-import { auth } from './github.js';
+import { auth, repoInfo } from './github.js';
 
 const TOKEN_KEY = 'plain.backend.token';   // fallback static token for backends not in GitHub mode
 
 // The one place either credential is read. A pasted backend token wins when
 // present (static-token backends); otherwise the GitHub sign-in is used.
-function backendToken() {
-  try { return localStorage.getItem(TOKEN_KEY) || auth.token; } catch { return auth.token; }
+function pastedToken() {
+  try { return localStorage.getItem(TOKEN_KEY) || ''; } catch { return ''; }
+}
+function backendToken() { return pastedToken() || auth.token; }
+
+// A refusal while the GitHub sign-in is the credential usually means that
+// sign-in has expired (a GitHub App's user tokens last about eight hours) —
+// not that the backend wants a token of its own. Ask GitHub: on a 401, gh()
+// drops the token and fires `plain:signed-out`, so the admin goes back to the
+// sign-in screen and, once signed in, to the screen you were on. Without this
+// the screen offered the backend-token form, and the only way out was to sign
+// out by hand.
+async function signInExpired() {
+  if (pastedToken() || !auth.token) return false;
+  try { await repoInfo(); return false; } catch (error) { return error.status === 401; }
 }
 
 /**
@@ -47,6 +60,7 @@ export async function apiFetch(siteInfo, path, { service = 'backend', headers, .
     headers: { ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(headers || {}) },
   });
   if (response.status === 401 || response.status === 403) {
+    if (await signInExpired()) throw new Error('Your GitHub sign-in has expired — sign in again.');
     throw new Error('Your backend refused that request — sign in again, or set its admin token on a screen that reads from it.');
   }
   return response;
@@ -92,7 +106,7 @@ export function dataScreen(siteInfo, { title, path, hint, render, service = 'bac
     const token = backendToken();
     try {
       const res = await fetch(`${api}${path}`, { headers: token ? { Authorization: `Bearer ${token}` } : {} });
-      if (res.status === 401 || res.status === 403) return askToken();
+      if (res.status === 401 || res.status === 403) return (await signInExpired()) ? undefined : askToken();
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       body.replaceChildren(bar(), render(await res.json()));
     } catch (error) {
